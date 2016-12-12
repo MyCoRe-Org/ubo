@@ -465,7 +465,7 @@
             <goals><goal>run</goal></goals>
             <configuration>
               <target>
-                <echo>Setting additional properties MCR.datadir and MIL.Build.TimeStamp...</echo>
+                <echo>Setting additional properties MCR.datadir and UBO.Build.TimeStamp...</echo>
                 <condition property="dir.sep" value="\\"><os family="windows"></os></condition>
                 <condition property="dir.sep" value="/"><os family="unix"></os></condition>
                 <pathconvert dirsep="${dir.sep}" property="datadir" targetos="unix">
@@ -473,7 +473,7 @@
                 </pathconvert>
                 <echo append="true" file="${project.build.directory}/${project.build.finalName}/WEB-INF/classes/local.properties">
                   ${line.separator}MCR.datadir=${datadir}
-                  ${line.separator}MIL.Build.TimeStamp=${timestamp}</echo>
+                  ${line.separator}UBO.Build.TimeStamp=${timestamp}</echo>
               </target>
             </configuration>
           </execution>

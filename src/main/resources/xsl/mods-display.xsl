@@ -197,11 +197,11 @@
     <xsl:if test="position() != last()"> / </xsl:if>
   </xsl:template>
   
-  <xsl:param name="LSF.PID.Link" />
+  <xsl:param name="UBO.LSF.Link" />
   
   <xsl:template match="mods:nameIdentifier[@type='lsf']">
     <span class="nameIdentifier" title="LSF ID: {.}">
-      <a href="{$LSF.PID.Link}{.}">LSF</a>
+      <a href="{$UBO.LSF.Link}{.}">LSF</a>
     </span>
   </xsl:template>
   
@@ -223,11 +223,11 @@
     </span>
   </xsl:template>
 
-  <xsl:param name="MIL.Scopus.Author.Link" />
+  <xsl:param name="UBO.Scopus.Author.Link" />
   
   <xsl:template match="mods:nameIdentifier[@type='scopus']">
     <span class="nameIdentifier" title="SCOPUS Author ID: {.}">
-      <a href="{$MIL.Scopus.Author.Link}{.}">SCOPUS</a>
+      <a href="{$UBO.Scopus.Author.Link}{.}">SCOPUS</a>
     </span>
   </xsl:template>
 
@@ -667,28 +667,28 @@
   </xsl:template>
   
   <!-- ========== PubMed ID ========== -->
-  <xsl:param name="MIL.PubMed.Link" />
+  <xsl:param name="UBO.PubMed.Link" />
   
   <xsl:template match="mods:identifier[@type='pubmed']">
-    <a href="{$MIL.PubMed.Link}{text()}">
+    <a href="{$UBO.PubMed.Link}{text()}">
       <xsl:value-of select="text()" />
     </a>
   </xsl:template>
 
   <!-- ========== Scopus ID ========== -->
-  <xsl:param name="MIL.Scopus.Link" />
+  <xsl:param name="UBO.Scopus.Link" />
   
   <xsl:template match="mods:identifier[@type='scopus']">
-    <a href="{$MIL.Scopus.Link}{text()}">
+    <a href="{$UBO.Scopus.Link}{text()}">
       <xsl:value-of select="text()" />
     </a>
   </xsl:template>
 
   <!-- ========== Web of Science ID ========== -->
-  <xsl:param name="MIL.WebOfScience.Link" />
+  <xsl:param name="UBO.WebOfScience.Link" />
   
   <xsl:template match="mods:identifier[@type='isi']">
-    <a href="{$MIL.WebOfScience.Link}{text()}">
+    <a href="{$UBO.WebOfScience.Link}{text()}">
       <xsl:value-of select="text()" />
     </a>
   </xsl:template>

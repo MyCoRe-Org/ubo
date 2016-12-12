@@ -14,8 +14,8 @@
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form">
   
       <xed:source uri="xslStyle:mods-preprocessor:ubo:{$id}" />
-      <xed:source uri="xslStyle:scopus2mods,mods2bibentry,mods-preprocessor:{$MIL.Scopus.API.URL}abstract/{$scopusField}/{$ScopusID}?apikey={$MIL.Scopus.API.Key}" />
-      <xed:source uri="xslStyle:pubmed2mods,mods2bibentry,mods-preprocessor:{$MIL.PubMed.REST.URL}{$pubMedField}:{$PubMedID}" />
+      <xed:source uri="xslStyle:scopus2mods,mods2bibentry,mods-preprocessor:{$UBO.Scopus.API.URL}abstract/{$scopusField}/{$ScopusID}?apikey={$UBO.Scopus.API.Key}" />
+      <xed:source uri="xslStyle:pubmed2mods,mods2bibentry,mods-preprocessor:{$UBO.PubMed.REST.URL}{$pubMedField}:{$PubMedID}" />
       <xed:source uri="xslStyle:crossref2mods,mods2bibentry,mods-preprocessor:http://api.crossref.org/works/{$CrossRefDOI}/transform/application/rdf+xml" />
       <xed:source uri="xslStyle:primo2mods,mods2bibentry,mods-preprocessor:http://primo.ub.uni-due.de/PrimoWebServices/xservice/search/brief?institution=UDE&amp;loc=adaptor,primo_central_multiple_fe&amp;query={$primoField},{$PrimoID}" />
       <xed:cancel url="servlets/DozBibEntryServlet?mode=show&amp;id={$id}" />

@@ -78,7 +78,7 @@
 <!-- ============ Aktionen ============ -->
 
 <xsl:variable name="actions">
-  <xsl:if test="$permission.admin and (string-length($step) = 0) and not ($MIL.System.ReadOnly = 'true')">
+  <xsl:if test="$permission.admin and (string-length($step) = 0) and not ($UBO.System.ReadOnly = 'true')">
     <action label="{i18n:translate('button.edit')}" target="{$WebApplicationBaseURL}edit-publication.xed">
       <param name="id"     value="{/bibentry/@id}" />
     </action>

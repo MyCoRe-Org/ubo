@@ -58,11 +58,11 @@ public class DozBibEntryServlet extends MCRServlet {
     }
 
     public static boolean systemInReadOnlyMode() {
-        return MCRConfiguration.instance().getBoolean("MIL.System.ReadOnly", false);
+        return MCRConfiguration.instance().getBoolean("UBO.System.ReadOnly", false);
     }
 
     public static void sendReadOnlyError(HttpServletResponse res) throws IOException {
-        String msg = MCRConfiguration.instance().getString("MIL.System.ReadOnly.Message");
+        String msg = MCRConfiguration.instance().getString("UBO.System.ReadOnly.Message");
         res.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, msg);
         LOGGER.info("rejected editing because system is in read-only mode");
     }

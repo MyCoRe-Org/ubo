@@ -31,10 +31,10 @@ public class EvalunaConnection {
 
     static {
         MCRConfiguration config = MCRConfiguration.instance();
-        API_URL = config.getString("MIL.UBO.Evaluna.URL");
-        API_KEY = config.getString("MIL.UBO.Evaluna.APIKey");
-        API_USER = config.getString("MIL.UBO.Evaluna.UserName");
-        API_PASSWORD = config.getString("MIL.UBO.Evaluna.Password");
+        API_URL = config.getString("UBO.Evaluna.URL");
+        API_KEY = config.getString("UBO.Evaluna.APIKey");
+        API_USER = config.getString("UBO.Evaluna.UserName");
+        API_PASSWORD = config.getString("UBO.Evaluna.Password");
     }
 
     private List<Element> requests = new ArrayList<Element>();

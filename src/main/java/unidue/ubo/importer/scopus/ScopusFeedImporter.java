@@ -52,9 +52,9 @@ public class ScopusFeedImporter extends MCRAbstractCommands {
     private final static Pattern scopusIDFinder = Pattern.compile(".+eid%3D2-s2\\.0-(\\d+)%26.+");
 
     static {
-        API_KEY = MCRConfiguration.instance().getString("MIL.Scopus.API.Key");
-        API_URL = MCRConfiguration.instance().getString("MIL.Scopus.API.URL");
-        FEED_URL = MCRConfiguration.instance().getString("MIL.Scopus.RSSFeedURL");
+        API_KEY = MCRConfiguration.instance().getString("UBO.Scopus.API.Key");
+        API_URL = MCRConfiguration.instance().getString("UBO.Scopus.API.URL");
+        FEED_URL = MCRConfiguration.instance().getString("UBO.Scopus.RSSFeedURL");
     }
 
     @MCRCommand(syntax = "ubo import scopus publications from RSS feed", help = "Reads an RSS feed from Scopus referencing new publications and imports those publications that are not stored yet.")

@@ -64,7 +64,7 @@
   </xsl:copy>
 </xsl:template>
 
-<xsl:param name="LSF.PID.Link" />
+<xsl:param name="UBO.LSF.Link" />
 
 <xsl:template match="mods:nameIdentifier[@type='lsf']" mode="copy-mods">
   <xsl:copy>

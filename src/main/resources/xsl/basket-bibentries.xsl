@@ -20,7 +20,7 @@
   <xsl:call-template name="basketClearButton" />
   <xsl:for-each select="/basket[entry]">
     <xsl:choose>
-      <xsl:when test="$MIL.System.ReadOnly = 'true'" />
+      <xsl:when test="$UBO.System.ReadOnly = 'true'" />
       <xsl:when xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()">
         <action label="Personen zuordnen" target="{$WebApplicationBaseURL}edit-contributors.xed" />
         <xsl:if test="entry/bibentry[@changed='true']">

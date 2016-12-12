@@ -75,8 +75,8 @@ public class LSFClient {
 
     private LSFClient() {
         try {
-            maxAge = MCRConfiguration.instance().getLong("MIL.LSFClient.Cache.MaxAge");
-            int capacity = MCRConfiguration.instance().getInt("MIL.LSFClient.Cache.Capacity");
+            maxAge = MCRConfiguration.instance().getLong("UBO.LSFClient.Cache.MaxAge");
+            int capacity = MCRConfiguration.instance().getInt("UBO.LSFClient.Cache.Capacity");
             cache = new MCRCache<String, Element>(capacity, "LSF Client");
 
             soapsearch = new SOAPSearchServiceLocator().getsoapsearch();

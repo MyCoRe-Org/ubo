@@ -68,7 +68,7 @@ public class DozBibServlet extends MCRServlet {
     private static String defaultSearchField;
 
     static {
-        defaultSearchField = MCRConfiguration.instance().getString("MIL.UBO.DefaultSearchField");
+        defaultSearchField = MCRConfiguration.instance().getString("UBO.DefaultSearchField");
     }
 
     public void doGetPost(MCRServletJob job) throws Exception {

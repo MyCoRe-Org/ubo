@@ -147,20 +147,20 @@
     </dc:identifier>
   </xsl:template>
 
-  <xsl:param name="MIL.PubMed.Link" />
+  <xsl:param name="UBO.PubMed.Link" />
 
   <xsl:template match="mods:identifier[@type='pubmed']" mode="qdc">
     <dc:identifier scheme="dcterms:URI">
-      <xsl:value-of select="$MIL.PubMed.Link" />
+      <xsl:value-of select="$UBO.PubMed.Link" />
       <xsl:value-of select="text()" />
     </dc:identifier>
   </xsl:template>
 
-  <xsl:param name="MIL.Scopus.Link" />
+  <xsl:param name="UBO.Scopus.Link" />
 
   <xsl:template match="mods:identifier[@type='scopus']" mode="qdc">
     <dc:identifier scheme="dcterms:URI">
-      <xsl:value-of select="$MIL.Scopus.Link" />
+      <xsl:value-of select="$UBO.Scopus.Link" />
       <xsl:value-of select="text()" />
     </dc:identifier>
   </xsl:template>

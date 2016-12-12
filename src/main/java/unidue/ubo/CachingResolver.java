@@ -36,8 +36,8 @@ import org.mycore.common.xml.MCRURIResolver;
 /**
  * Resolves XML content from a given URI and caches it for re-use.
  * If the URI was already resolved within the last
- * MIL.CachingResolver.MaxAge milliseconds, the cached version is returned.
- * The cache capacity is configured via MIL.CachingResolver.Capacity
+ * UBO.CachingResolver.MaxAge milliseconds, the cached version is returned.
+ * The cache capacity is configured via UBO.CachingResolver.Capacity
  * 
  * @author Frank L\u00FCtzenkirchen
  */
@@ -52,8 +52,8 @@ public class CachingResolver implements URIResolver {
     private MCRCache<String, Element> cache;
 
     public CachingResolver() {
-        int capacity = MCRConfiguration.instance().getInt("MIL.CachingResolver.Capacity", 100);
-        maxAge = MCRConfiguration.instance().getLong("MIL.CachingResolver.MaxAge", DEFAULT_MAX_AGE);
+        int capacity = MCRConfiguration.instance().getInt("UBO.CachingResolver.Capacity", 100);
+        maxAge = MCRConfiguration.instance().getLong("UBO.CachingResolver.MaxAge", DEFAULT_MAX_AGE);
         cache = new MCRCache<String, Element>(capacity, "Caching Resolver");
     }
 

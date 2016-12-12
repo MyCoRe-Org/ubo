@@ -11,7 +11,7 @@
 
 <xsl:include href="layout.xsl" />
 
-<xsl:param name="LSF.PID.Link" />
+<xsl:param name="UBO.LSF.Link" />
 
 <!--  page title  -->
 <xsl:variable name="page.title" select="i18n:translate('lsf.search')" />
@@ -169,7 +169,7 @@
       </a>
     </td>
     <td>
-      <a target="_blank" href="{$LSF.PID.Link}{id}" onclick="return popup(this.href);">
+      <a target="_blank" href="{$UBO.LSF.Link}{id}" onclick="return popup(this.href);">
         <xsl:value-of select="nachname" />
         <xsl:if test="vorname">
           <xsl:text>, </xsl:text>

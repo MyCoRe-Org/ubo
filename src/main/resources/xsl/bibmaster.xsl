@@ -15,7 +15,7 @@
 <xsl:include href="output-category.xsl" />
 
 <xsl:param name="ServletsBaseURL" />
-<xsl:param name="LSF.PID.Link" />
+<xsl:param name="UBO.LSF.Link" />
 <xsl:param name="CurrentLang" />
 
 <!-- ============ Katalogsuche Basis-URLs ============ -->

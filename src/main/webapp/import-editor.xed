@@ -272,7 +272,7 @@
         <xed:choose>
           <xed:when test="string-length(mods:nameIdentifier[@type='lsf']) &gt; 0">
             <xed:bind xpath="mods:nameIdentifier[@type='lsf']">
-              <a target="_blank" href="{$LSF.PID.Link}{.}">
+              <a target="_blank" href="{$UBO.LSF.Link}{.}">
                 <xed:output value="concat('LSF: ',.)" />
               </a>
             </xed:bind>

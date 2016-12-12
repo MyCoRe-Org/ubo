@@ -25,8 +25,8 @@
   <xsl:param name="WritePermission" />
   <xsl:param name="ReadPermission" />
   <xsl:param name="TicketID" />
-  <xsl:param name="MIL.System.ReadOnly" />
-  <xsl:param name="MIL.Build.TimeStamp" select="''" />
+  <xsl:param name="UBO.System.ReadOnly" />
+  <xsl:param name="UBO.Build.TimeStamp" select="''" />
 
   <xsl:param name="MCR.Users.Guestuser.UserName" />
 
@@ -345,7 +345,7 @@
     <link rel="stylesheet" href="{$WebApplicationBaseURL}external/jquery-ui-theme/jquery-ui-1.8.21.custom.css" />
     <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/style.css" />
     <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/legacy.css" />
-    <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/duepublico.css?v={$MIL.Build.TimeStamp}" />
+    <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/duepublico.css?v={$UBO.Build.TimeStamp}" />
     <link rel="stylesheet" href="{$WebApplicationBaseURL}external/chosen/chosen.css" />
     <xsl:text disable-output-escaping="yes">
       &lt;!--[if gte IE 9]&gt;
@@ -706,12 +706,12 @@
 
   <!-- print out message that the system is in read only mode -->
 
-  <xsl:param name="MIL.System.ReadOnly.Message" />
+  <xsl:param name="UBO.System.ReadOnly.Message" />
   <xsl:template name="local.readonly.message">
-    <xsl:if test="($WritePermission = 'true') and ($MIL.System.ReadOnly = 'true')">
+    <xsl:if test="($WritePermission = 'true') and ($UBO.System.ReadOnly = 'true')">
       <div class="section">
         <span style="color:red">
-          <xsl:value-of select="$MIL.System.ReadOnly.Message" />
+          <xsl:value-of select="$UBO.System.ReadOnly.Message" />
         </span>
       </div>
     </xsl:if>

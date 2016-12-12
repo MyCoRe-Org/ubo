@@ -75,7 +75,7 @@
   </div>
 </xsl:template>
 
-<xsl:param name="LSF.PID.Link" />
+<xsl:param name="UBO.LSF.Link" />
 
 <xsl:template match="table[@charttype='TopList']">
   <div class="ubo-chart">
@@ -91,7 +91,7 @@
         <xsl:if test="position() &lt; 200">
           <tr>
             <td>
-              <a href="{$LSF.PID.Link}{@key}">
+              <a href="{$UBO.LSF.Link}{@key}">
                 <xsl:value-of select="@label" />
               </a>
             </td>

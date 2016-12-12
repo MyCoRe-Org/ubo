@@ -258,19 +258,19 @@
     </url>
   </xsl:template>
 
-  <xsl:param name="MIL.PubMed.Link" />
+  <xsl:param name="UBO.PubMed.Link" />
 
   <xsl:template match="mods:identifier[@type='pubmed']">
     <url>
-      <xsl:value-of select="concat($MIL.PubMed.Link,text())" />
+      <xsl:value-of select="concat($UBO.PubMed.Link,text())" />
     </url>
   </xsl:template>
 
-  <xsl:param name="MIL.Scopus.Link" />
+  <xsl:param name="UBO.Scopus.Link" />
 
   <xsl:template match="mods:identifier[@type='scopus']">
     <url>
-      <xsl:value-of select="concat($MIL.Scopus.Link,text())" />
+      <xsl:value-of select="concat($UBO.Scopus.Link,text())" />
     </url>
   </xsl:template>
   

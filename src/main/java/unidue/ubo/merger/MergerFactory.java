@@ -28,7 +28,7 @@ import org.mycore.common.config.MCRConfiguration;
 public class MergerFactory {
 
     private static Merger getEntryInstance(String name) {
-        String prefix = "MIL.UBO.MODSMerger.";
+        String prefix = "UBO.MODSMerger.";
         String defaultClass = MCRConfiguration.instance().getString(prefix + "default");
         return (Merger) (MCRConfiguration.instance().getInstanceOf(prefix + name, defaultClass));
     }
