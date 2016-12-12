@@ -1,0 +1,27 @@
+
+td.editorPMUD input,
+.editorButton,
+.roundedButton,
+#buttons .action {
+  background-image: url('/images/rb_normal_gradient.svg');
+  background-size: 100% 100%;
+  filter: none !important;
+}
+
+td.editorPMUD input:hover,
+td.editorPMUD input:focus,
+td.editorPMUD input:active,
+.editorButton:hover,
+.editorButton:focus,
+.editorButton:active,
+.roundedButton:hover,
+.roundedButton:focus,
+.roundedButton:active,
+#buttons .action:hover,
+#buttons .action:focus, 
+#buttons .action:active {
+  background-image: url('/images/rb_highlight_gradient.svg');
+  background-size: 100% 100%;
+  filter: none !important;
+  color: #004C93;
+}

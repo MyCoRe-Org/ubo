@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<webpage lastModified="$Date$" id="dozbib.search-expert">
+  <title xml:lang="de">Universitätsbibliographie Online: Expertensuche</title>
+  <title xml:lang="en">University Bibliography Online: Expert search</title>
+ 
+ <script type="text/javascript" src="/external/jquery-tools-1.2.7/jquery.tools.min.js"></script>
+ <script type="text/javascript" src="/js/editor.validation.failed.tooltip.js"></script>
+  
+ <section class="highlight2">
+    <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form" style="margin:0; padding:0;">
+      <fieldset style="margin:0; padding:0;">
+        <legend>
+          <xed:output i18n="search.dozbib" />
+        </legend>
+
+        <xed:if test="$xed-validation-failed">
+          <div class="validation-failures">
+            <h3>
+              <xed:output i18n="form.validation.failed" />
+            </h3>
+            <ul>
+              <xed:display-validation-messages />
+            </ul>
+          </div>
+        </xed:if>
+
+        <div style="padding:1ex;">
+          <xed:multi-lang>
+            <xed:lang xml:lang="de">
+              Hier können Sie einen Suchausdruck in der Syntax der <strong>MyCoRe Abfragesprache (MCRQL)</strong> 
+              eingeben und so auch komplexere Suchanfragen stellen.
+              Eine <a href="searchfields.xml">Liste aller verfügbaren Suchfelder und Operatoren finden Sie hier.</a>
+              
+            </xed:lang>
+            <xed:lang xml:lang="en">
+              Here you can enter a search term in the syntax of <strong>MyCoRe query language (MCRQL)</strong> 
+              and put that way an even more complex query. 
+              A <a href="searchfields.xml">list of all available search fields and operators you can find here.</a>
+            </xed:lang>
+          </xed:multi-lang>
+        </div>
+
+        <xed:bind xpath="/query">
+          
+          <xed:bind xpath="conditions[@format='text']">
+            <div>
+              <label>
+                <xed:output i18n="search.dozbib.term" />
+              </label>
+              <textarea class="{$xed-validation-marker}" style="width:520px; height:8ex;" />
+              <xed:validate required="true" class="org.mycore.services.fieldquery.MCRQueryParser" method="validateQueryExpression" i18n="condition.syntax" display="global" />
+            </div>
+          </xed:bind>
+          <div>
+            <label>Syntax:</label>
+            <div style="display:inline-block; width:520px; font-family:monospace; font-size:11px;">
+              <ul>
+                <xed:multi-lang>
+                  <xed:lang xml:lang="de">
+                    <li>Suchfeld Operator Zielwert</li>
+                    <li>(Suchfeld1 Operator1 Zielwert1) and (Suchfeld2 Operator2 Zielwert2) ...</li>
+                    <li>(Suchfeld1 Operator1 Zielwert1) or (Suchfeld2 Operator2 Zielwert2) ...</li>
+                  </xed:lang>
+                  <xed:lang xml:lang="en">
+                    <li>searchField operator targetValue</li>
+                    <li>(searchField1 operator1 targetValue1) and (searchField2 operator2 targetValue2) ...</li>
+                    <li>(searchField1 operator1 targetValue1) or (searchField2 operator2 targetValue2) ...</li>
+                  </xed:lang>
+                </xed:multi-lang>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <label>
+              <xed:multi-lang>
+                <xed:lang xml:lang="de">Beispiele:</xed:lang>
+                <xed:lang xml:lang="en">Examples:</xed:lang>
+              </xed:multi-lang>
+            </label>
+            <div style="display:inline-block; width:520px; font-family:monospace; font-size:11px;">
+              <ul>
+                <li>ubo_title contains Faktoren</li>
+                <li>(ubo_title contains Faktoren) or (ubo_pid = 2809)</li>
+                <li>((ubo_title contains Faktoren) or (ubo_pid = 2809)) <br/> and (ubo_year = 2006)</li>
+                <li>(ubo_pid = 2809) and ((ubo_year = 2010) or (ubo_year = 2011))</li>
+                <li>(ubo_role_pid = author_2809) or ((ubo_type = book) <br/> and (ubo_role_pid = publisher_2809))</li>
+              </ul>
+            </div>
+          </div>
+
+          <xed:include uri="webapp:import-search.xed" ref="sortby" /> 
+          <xed:include uri="webapp:import-search.xed" ref="numhits" /> 
+          <xed:include uri="webapp:import-search.xed" ref="submit" />
+          
+        </xed:bind>
+        
+      </fieldset>
+    </xed:form>
+  </section>
+</webpage>

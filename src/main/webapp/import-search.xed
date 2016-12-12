@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xed:templates xmlns:xed="http://www.mycore.de/xeditor">
+
+  <xed:template id="validation">
+    <xed:if test="$xed-validation-failed">
+      <div class="validation-failures">
+        <h3>
+          <xed:output i18n="form.validation.failed" />
+        </h3>
+        <ul>
+          <xed:display-validation-messages />
+        </ul>
+      </div>
+    </xed:if>
+  </xed:template>
+
+  <xed:template id="name">
+    <xed:repeat xpath="condition2[@operator='contains']">
+      <div>
+        <xed:bind xpath="@field">
+          <select class="label" style="margin-left:6px; width:182px;">
+            <option value="ubo_contributor">Person:</option>
+            <option value="ubo_author"     ><xed:output i18n="search.dozbib.author" /></option>
+            <option value="ubo_publisher"  ><xed:output i18n="search.dozbib.publisher" /></option>
+            <option value="ubo_advisor"    ><xed:output i18n="search.dozbib.advisor" /></option>         
+          </select>
+        </xed:bind>
+        <xed:bind xpath="@value">
+          <input type="text" style="width:450px" />
+        </xed:bind>
+        <xed:controls>insert remove</xed:controls>
+      </div>
+    </xed:repeat>
+  </xed:template>
+
+  <xed:template id="year">
+    <xed:repeat xpath="condition5[@field='ubo_year']">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:output i18n="search.dozbib.year" />
+        </label>
+        <xed:bind xpath="@operator" initially="&gt;=">
+          <select>
+            <option>=</option>
+            <option>&gt;</option>
+            <option>&gt;=</option>
+            <option>&lt;</option>
+            <option>&lt;=</option>
+          </select> 
+        </xed:bind>
+        <xed:bind xpath="@value">
+          <input type="text" class="{$xed-validation-marker}" style="width:5em;" placeholder="{i18n:edit.year.placeholder}" />
+          <xed:validate matches="[\d]{4}" display="global" i18n="condition.yearDoz" />
+        </xed:bind>
+        <xed:controls>insert remove</xed:controls>
+      </div>
+    </xed:repeat>
+  </xed:template>
+
+  <xed:template id="sortby"> 
+    <div>
+      <label>
+        <xed:output i18n="search.sort" />
+      </label>
+      <div style="display:inline-block;">
+        <xed:repeat xpath="sortBy/field" max="3">
+          <div>
+            <xed:output i18n="search.sort.by" />
+            <xed:bind xpath="@name">
+              <select>
+                <option value="ubo_year"        ><xed:output i18n="search.sort.year" /></option>
+                <option value="ubo_sortby_name" ><xed:output i18n="document.creators.one" /></option>
+                <option value="ubo_sortby_title"><xed:output i18n="document.title" /></option>
+              </select>
+            </xed:bind>
+            <xed:bind xpath="@order">
+              <select>
+                <option value="descending"><xed:output i18n="search.sort.desc" /></option>
+                <option value="ascending" ><xed:output i18n="search.sort.asc" /></option>
+              </select>
+            </xed:bind>
+            <xed:controls />
+          </div>
+        </xed:repeat>
+      </div>
+    </div>
+  </xed:template>
+
+  <xed:template id="numhits"> 
+    <div>
+      <label>
+        <xed:output i18n="search.numHits" />
+      </label>
+      <span>max.</span>
+      <xed:bind xpath="@maxResults">
+        <select>
+          <option>100</option>
+          <option>250</option>
+          <option>500</option>
+          <option value="999999"><xed:output i18n="search.hits.all" /></option>
+        </select>
+      </xed:bind>
+      <xed:output i18n="search.hits.with" />
+      <xed:bind xpath="@numPerPage">
+        <select>
+          <option>10</option>
+          <option>25</option>
+          <option>50</option>
+        </select>
+      </xed:bind>
+      <xed:output i18n="search.hits.page" />
+    </div>
+  </xed:template>
+
+  <xed:template id="submit"> 
+    <div class="cancel-submit" style="margin-top:2ex;">
+      <button class="roundedButton" type="submit" xed:target="servlet" xed:href="DozBibServlet">
+        <xed:output i18n="button.search" />
+      </button>
+      <button class="roundedButton" type="reset">
+        <xed:output i18n="button.reset" />
+      </button>
+    </div>
+  </xed:template>
+  
+</xed:templates>

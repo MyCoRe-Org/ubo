@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<webpage lastModified="$Date$" id="dozbib.searchfields">
+  <title xml:lang="de">Suchfelder und Operatoren</title>
+  <title xml:lang="en">Search fields and operators</title>
+    
+<section xml:lang="de">
+<p>
+  Die folgenden Suchfelder sind verfügbar:
+</p>
+<p>
+<table class="editor">
+
+  <tr class="background1"><th>Suchfeld:</th><th>Datentyp:</th><th>Beschreibung:</th><th>Operator</th></tr>
+  <tr class="background2"><td>ubo_all</td><td>Text</td><td>Suche in allen Datenfeldern</td><td>=, contains, like, phrase</td></tr>
+  <tr class="background1"><td>ubo_title</td><td>Text</td><td>Titel</td><td>=, contains, like, phrase</td></tr>
+  <tr class="background2"><td>ubo_author</td><td>Name</td><td>Autor</td><td>=, contains, like</td></tr>
+  <tr class="background1"><td>ubo_pid</td><td>ID</td><td>Personen-ID aus HIS LSF</td><td> = </td></tr>
+  <tr class="background2"><td>ubo_role_pid</td><td>ID</td><td>Kombination Rolle + Personen-ID aus HIS LSF, z. B. advisor_2809 findet Doktorvater</td><td> = </td></tr>
+  <tr class="background1"><td>ubo_orcid</td><td>ID</td><td>ORCID</td><td> = </td></tr>
+  <tr class="background1"><td>ubo_researcherid</td><td>ID</td><td>ResearcherID</td><td> = </td></tr>
+  <tr class="background1"><td>ubo_gnd</td><td>ID</td><td>GND</td><td> = </td></tr>
+  <tr class="background1"><td>ubo_publisher</td><td>Name</td><td>Herausgeber, Verlag</td><td>=, contains, like</td></tr>
+  <tr class="background2"><td>ubo_contributor</td><td>Name</td><td>Personenname (Autoren, Herausgeber oder andere)</td><td>=, contains, like</td></tr>
+  <tr class="background1"><td>ubo_advisor</td><td>Name</td><td>Doktorvater, BetreuerIn bei Dissertationen</td><td>=, contains, like</td></tr>  
+  <tr class="background1"><td>ubo_year</td><td>Zahl</td><td>Jahr</td><td>=, &lt;, &gt;, &lt;=, &gt;=</td></tr>
+  <tr class="background2"><td>ubo_journal</td><td>Text</td><td>Titel der Zeitschrift</td><td>=, contains, like, phrase</td></tr>
+  <tr class="background1"><td>ubo_issn</td><td>ID</td><td>ISSN</td><td> = </td></tr>
+  <tr class="background2"><td>ubo_isbn</td><td>ID</td><td>ISBN</td><td> = </td></tr>
+  <tr class="background1"><td>ubo_series</td><td>Text</td><td>Bezeichnung der Serie</td><td>=, contains, like, phrase</td></tr>
+  <tr class="background1"><td>ubo_conference</td><td>Text</td><td>Konferenz</td><td>=, contains, like, phrase</td></tr>
+  <tr class="background2"><td>ubo_abstract</td><td>Text</td><td>Abstract, Zusammenfassung</td><td>=, contains, like, phrase</td></tr>
+  <tr class="background1"><td>ubo_comment</td><td>Text</td><td>Kommentarfeld</td><td>=, contains, like, phrase</td></tr>
+  <tr class="background2"><td>ubo_type</td><td>ID</td><td>Typ des Eintrages, mögliche Werte: <b>article chapter book dissertation</b></td><td> = </td></tr>
+  <tr class="background1"><td>ubo_subject</td><td>ID</td><td>Fach, vgl. <a href="fachreferate.xed">diese Liste</a></td><td> = </td></tr>
+  <tr class="background2"><td>ubo_origin</td><td>ID</td><td>Fakultät / Einrichtung</td><td> = </td></tr>
+  <tr class="background1"><td>ubo_id</td><td>ID</td><td>ID des Eintrages</td><td> = </td></tr>
+  <tr class="background2"><td>ubo_lastModified</td><td>Datum</td><td>Datum der letzten Änderung des Eintrages</td><td>=, &lt;, &gt;, &lt;=, &gt;=</td></tr>
+  <tr class="background1"><td>ubo_signature</td><td>ID</td><td>Signatur der Universitätsbibliothek</td><td> = </td></tr>
+  <tr class="background2"><td>ubo_doi</td><td>ID</td><td>DOI</td><td> = </td></tr>
+  <tr class="background2"><td>ubo_urn</td><td>ID</td><td>URN</td><td> = </td></tr>
+  <tr class="background2"><td>ubo_documentID</td><td>ID</td><td>ID eines verknüpften DuEPublico-Dokumentes</td><td> = </td></tr>
+
+</table>
+</p>
+</section>
+
+<section xml:lang="en">
+<p>
+  The following search fields are available:
+</p>
+<p>
+
+<table class="editor">
+  <tr class="background1"><th>search field:</th><th>data type:</th><th>description:</th><th>operator</th></tr>
+  <tr class="background2"><td>ubo_all</td><td>text</td><td>search in all data fields</td><td>=, contains, like, phrase</td></tr>
+  <tr class="background1"><td>ubo_title</td><td>text</td><td>title</td><td>=, contains, like, phrase</td></tr>
+  <tr class="background2"><td>ubo_author</td><td>name</td><td>author</td><td>=, contains, like</td></tr>
+  <tr class="background1"><td>ubo_pid</td><td>ID</td><td>person ID from HIS LSF</td><td> = </td></tr>
+  <tr class="background2"><td>ubo_role_pid</td><td>ID</td><td>Combined role plus person ID from HIS LSF, e.g. advisor_2809 finds thesis advisor</td><td> = </td></tr>
+  <tr class="background1"><td>ubo_orcid</td><td>ID</td><td>ORCID</td><td> = </td></tr>
+  <tr class="background1"><td>ubo_researcherid</td><td>ID</td><td>ResearcherID</td><td> = </td></tr>
+  <tr class="background1"><td>ubo_gnd</td><td>ID</td><td>GND</td><td> = </td></tr>
+  <tr class="background2"><td>ubo_publisher</td><td>name</td><td>publisher</td><td>=, contains, like</td></tr>
+  <tr class="background1"><td>ubo_contributor</td><td>name</td><td>name (authors, editors or others)</td><td>=, contains, like</td></tr>
+  <tr class="background2"><td>ubo_advisor</td><td>name</td><td>advisor of thesis paper</td><td>=, contains, like</td></tr>
+  <tr class="background1"><td>ubo_referee</td><td>name</td><td>referee of thesis pater</td><td>=, contains, like</td></tr>
+  <tr class="background2"><td>ubo_year</td><td>number</td><td>year</td><td>=, &lt;, &gt;, &lt;=, &gt;=</td></tr>
+  <tr class="background1"><td>ubo_journal</td><td>text</td><td>title of the journal</td><td>=, contains, like, phrase</td></tr>
+  <tr class="background2"><td>ubo_issn</td><td>ID</td><td>ISSN</td><td> = </td></tr>
+  <tr class="background1"><td>ubo_isbn</td><td>ID</td><td>ISBN</td><td> = </td></tr>
+  <tr class="background2"><td>ubo_series</td><td>text</td><td>name of the series</td><td>=, contains, like, phrase</td></tr>
+  <tr class="background2"><td>ubo_conference</td><td>text</td><td>conference</td><td>=, contains, like, phrase</td></tr>
+  <tr class="background1"><td>ubo_abstract</td><td>text</td><td>abstract, summary</td><td>=, contains, like, phrase</td></tr>
+  <tr class="background2"><td>ubo_comment</td><td>text</td><td>comment field</td><td>=, contains, like, phrase</td></tr>
+  <tr class="background1"><td>ubo_type</td><td>ID</td><td>type of the entry, possible values: <b>article chapter book dissertation</b></td><td> = </td></tr>
+  <tr class="background2"><td>ubo_subject</td><td>ID</td><td>subject, cf. <a href="fachreferate.xed">attribute value in this list</a></td><td> = </td></tr>
+  <tr class="background1"><td>ubo_origin</td><td>ID</td><td>faculty / institution</td><td> = </td></tr>
+  <tr class="background2"><td>ubo_id</td><td>text</td><td>ID of the entry</td><td> = </td></tr>
+  <tr class="background2"><td>ubo_doi</td><td>ID</td><td>DOI</td><td> = </td></tr>
+  <tr class="background2"><td>ubo_urn</td><td>ID</td><td>URN</td><td> = </td></tr>
+  <tr class="background1"><td>ubo_lastModified</td><td>date</td><td>date of the last modification of the entry</td><td>=, &lt;, &gt;, &lt;=, &gt;=</td></tr>
+  <tr class="background2"><td>ubo_signature</td><td>ID</td><td>signature from the  university library</td><td> = </td></tr>
+  <tr class="background1"><td>ubo_documentID</td><td>ID</td><td>ID of a linked DuEPublico document</td><td> = </td></tr>
+
+</table>
+</p>
+</section>
+  
+</webpage>

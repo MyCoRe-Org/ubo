@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xed:template xmlns:xed="http://www.mycore.de/xeditor">
+
+  <xed:template id="validation">
+    <xed:if test="$xed-validation-failed">
+      <div class="validation-failures">
+        <h3>
+          <xed:output i18n="form.validation.failed" />
+        </h3>
+        <ul>
+          <xed:display-validation-messages />
+        </ul>
+      </div>
+    </xed:if>
+    <xed:validate xpath="//mods:classification[@classID='fachreferate']" required="true" i18n="condition.subject" display="global" />
+    <xed:validate xpath="/bibentry/mods:mods/mods:titleInfo/mods:title" required="true" i18n="ubo.title.validation" display="global" />
+    <xed:validate xpath="//mods:mods/mods:name[@type='personal'][1]" test="string-length(mods:namePart[@type='family']) &gt; 0" i18n="ubo.role.author.validation" display="global" />
+    <xed:validate xpath="//mods:originInfo/mods:dateIssued[@encoding='w3cdtf']" matches="[\d]{4}" required="true" i18n="ubo.date.issued.4.validation" display="global" />
+    <xed:validate xpath="//mods:identifier[@type='doi']" matches="10\.\d+.*" i18n="ubo.identifier.doi.validation" display="global" />
+    <xed:validate xpath="//mods:identifier[@type='urn']" matches="urn:nbn:[a-z]{2}:\S*" i18n="ubo.identifier.urn.validation" display="global" />
+    <xed:validate xpath="//mods:identifier[@type='issn']" matches="[0-9X]{4}\-[0-9X]{4}" i18n="ubo.identifier.issn.validation" display="global" />
+    <xed:validate xpath="//mods:identifier[@type='isbn']" matches="^((978|979)-?)?([\d -]{12}|\d{9})(\d|X)$" i18n="ubo.identifier.isbn.validation" display="global" />
+    <xed:validate xpath="//mods:identifier[@type='duepublico']" matches="\d+" display="global" />
+    <xed:validate xpath="//mods:location/mods:url" matches="(f|ht)tp(s?)://[\w\d.]+\S*" i18n="ubo.link.validation" display="global" />
+    <xed:validate xpath="//mods:location/mods:url" matches="^((?!doi.org/10).)*$" i18n="ubo.link.validation.not.doi" display="global" />
+    <xed:validate xpath="//mods:location/mods:shelfLocator" matches="([ED]\d\d\/\d\d\s[A-Za-z]+\s\d+)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
+  </xed:template>
+  
+  <xed:template id="status">
+    <xed:bind xpath="../@status">
+      <xed:choose>
+        <xed:when test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+          <xed:bind xpath="." default="confirmed" />
+          <div>
+            <label for="{xed:generate-id()}">
+              <xed:output i18n="ubo.status" />:
+            </label>
+            <select id="{xed:generate-id()}" style="width:100px;">
+              <xed:include uri="xslStyle:items2options:resource:status.xml" />
+            </select>
+          </div>
+        </xed:when>
+        <xed:otherwise>
+          <xed:bind xpath="." default="submitted" />
+        </xed:otherwise>
+      </xed:choose>
+    </xed:bind>
+  </xed:template>
+  
+  <xed:template id="tags">
+    <div>
+      <label for="{xed:generate-id()}">Tags:</label>
+      <div style="width:520px; margin:0; padding:0; display:inline-block;">
+        <xed:repeat xpath="../tag" min="3">
+          <input type="text" style="width:150px;" placeholder="Tag" />
+          <xed:controls>append</xed:controls>
+        </xed:repeat>
+      </div>
+    </div>
+  </xed:template>
+  
+  <xed:template id="subject">
+    <xed:repeat xpath="mods:classification[@classID='fachreferate']" max="5">
+      <div>
+        <label for="{xed:generate-id()}">
+          *<xed:output i18n="ubo.subject" />:
+        </label>
+        <select id="{xed:generate-id()}" class="{$xed-validation-marker}" style="width:400px;">
+          <option value=""><xed:output i18n="search.select" /></option>
+          <xed:include uri="xslStyle:fachref2options:resource:fachreferate.xml" />
+        </select>
+        <xed:controls />
+      </div>
+    </xed:repeat>
+  </xed:template>
+  
+  <xed:template id="origin">
+    <xed:repeat xpath="mods:classification[@classID='ORIGIN']" max="5">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:if test="$genre_intern = 'dissertation'">
+            <xed:output value="'*'" />
+            <xed:validate xpath="//mods:classification[@classID='ORIGIN']" required="true" i18n="condition.institution" display="global" />
+          </xed:if>
+          <xed:output i18n="ubo.department" />:
+        </label>
+        <span class="{$xed-validation-marker}">
+          <select id="{xed:generate-id()}" style="width:400px;" class="autocomplete {$xed-validation-marker}">
+            <option value=""><xed:output i18n="search.select" /></option>
+            <xed:include uri="xslStyle:items2options:classification:editor:-1:children:ORIGIN" />
+          </select>
+        </span>
+        <xed:controls />
+      </div>
+    </xed:repeat>
+    <script type="text/javascript">
+      jQuery(document).ready(function() { jQuery('select[class*="autocomplete"]').chosen({search_contains: true}); });
+    </script>
+  </xed:template>
+  
+  <xed:template id="genre">
+    <xed:bind xpath="mods:genre[@type='intern']">
+      <div>
+        <label for="{xed:generate-id()}">
+          *<xed:output i18n="ubo.genre" />:
+        </label>
+        <select id="{xed:generate-id()}" style="width:200px;">
+          <xed:include uri="xslStyle:genre-filter,items2options:classification:editor:-1:children:ubogenre" />
+        </select>
+      </div>
+    </xed:bind>
+  </xed:template>
+  
+  <xed:template id="host">
+    <xed:bind xpath="mods:genre[@type='intern']">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:output i18n="ubo.genre" />:
+        </label>
+        <select id="{xed:generate-id()}" style="width:200px;">
+          <option value=""><xed:output i18n="search.select" /></option>
+          <xed:include uri="xslStyle:host-filter,items2options:classification:editor:-1:children:ubogenre" />
+        </select>
+      </div>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="title">
+    <xed:bind xpath="mods:titleInfo">
+      <xed:bind xpath="mods:title">
+        <div>
+          <label for="{xed:generate-id()}">
+            *<xed:output i18n="ubo.title" />:
+          </label>
+          <textarea id="{xed:generate-id()}" class="{$xed-validation-marker}" type="text" style="width:520px; height:40px;" />
+        </div>
+      </xed:bind>
+      <xed:bind xpath="mods:subTitle">
+        <div>
+          <label for="{xed:generate-id()}">
+            <xed:output i18n="ubo.title.subTitle" />:
+          </label>
+          <input id="{xed:generate-id()}" class="{$xed-validation-marker}" type="text" style="width:520px" />
+        </div>
+      </xed:bind>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="title.complex">
+    <xed:repeat xpath="mods:titleInfo" max="6">
+      <div>
+        <label for="{xed:generate-id()}">
+          *<xed:output i18n="ubo.title" />:
+        </label>
+        <div style="width:520px; display:inline-block;">
+          <div style="width:520px; display:inline-block;">
+            <xed:bind xpath="@type">
+              <select>
+                <option value=""><xed:output i18n="ubo.title.type.main" /></option>
+                <option value="abbreviated"><xed:output i18n="ubo.title.type.abbreviated" /></option>
+                <option value="translated"><xed:output i18n="ubo.title.type.translated" /></option>
+                <option value="alternative"><xed:output i18n="ubo.title.type.alternative" /></option>
+                <option value="uniform"><xed:output i18n="ubo.title.type.uniform" /></option>
+              </select>
+            </xed:bind>
+            <span> in </span>
+            <xed:bind xpath="@xml:lang">
+              <select style="width:200px;">
+                <option value=""><xed:output i18n="search.select" /></option>
+                <xed:include uri="xslStyle:items2options:classification:editor:0:parents:rfc4646:de" />
+                <xed:include uri="xslStyle:items2options:classification:editor:0:parents:rfc4646:en" />
+                <xed:include uri="xslStyle:items2options:classification:editor:0:parents:rfc4646:fr" />
+                <xed:include uri="xslStyle:items2options:classification:editor:-1:children:rfc4646" />
+              </select>
+            </xed:bind>
+            <xed:controls />
+          </div>
+          <xed:bind xpath="mods:title">
+            <div style="width:520px; display:inline-block;">
+              <textarea id="{xed:generate-id()}" class="{$xed-validation-marker}" type="text" placeholder="{i18n:ubo.title}" style="width:520px; height:40px; padding:0.5ex" />
+            </div>
+          </xed:bind>
+          <xed:bind xpath="mods:subTitle">
+            <div style="width:520px; display:inline-block;">
+              <input class="{$xed-validation-marker}" type="text" placeholder="{i18n:ubo.title.subTitle}" style="width:520px" />
+            </div>
+          </xed:bind>
+        </div>
+      </div>
+    </xed:repeat>
+  </xed:template>
+
+  <xed:template id="host.title">
+    <xed:bind xpath="mods:titleInfo/mods:title">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:output i18n="ubo.title" />
+          <xed:output value="$genres//category[@ID=$host_intern]/label[lang($CurrentLang)]/@text" />:
+        </label>
+        <input id="{xed:generate-id()}" class="{$xed-validation-marker}" type="text" style="width:520px" />
+      </div>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="conference">
+    <xed:bind xpath="mods:name[@type='conference']/mods:namePart">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:output i18n="ubo.conference" />:
+        </label>
+        <input id="{xed:generate-id()}" type="text" style="width:400px" placeholder="{i18n:ubo.conference.placeholder}" />
+      </div>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="author">
+    <xed:repeat xpath="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='aut']" max="99">
+      <div>
+        <label for="{xed:generate-id()}">
+          *<xed:output i18n="ubo.role.author" />:
+        </label>
+        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+        <xed:controls />
+      </div>
+    </xed:repeat>
+  </xed:template>
+  
+  <xed:template id="editor">
+    <xed:repeat xpath="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='edt']" max="99">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:output i18n="ubo.role.editor" />:
+        </label>
+        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+        <xed:controls />
+      </div>
+    </xed:repeat>
+  </xed:template>
+
+  <xed:template id="interviewee">
+    <xed:repeat xpath="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='ive']" max="99">
+      <div>
+        <label for="{xed:generate-id()}">
+          *<xed:output i18n="ubo.role.interviewee" />:
+        </label>
+        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+        <xed:controls />
+      </div>
+    </xed:repeat>
+  </xed:template>
+
+  <xed:template id="honoree">
+    <xed:bind xpath="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='hnr']">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:output i18n="ubo.role.honoree" />:
+        </label>
+        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+      </div>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="person">
+    <div style="display:inline-block; width:400px; border-bottom:1px solid black; padding-bottom:1ex;">
+      <span id="{xed:generate-id()}" style="display:inline-block; width:195px;" class="{$xed-validation-marker}">
+        <xed:if test="string-length(mods:namePart[@type='family']) &gt; 0">
+          <xed:output value="mods:namePart[@type='family']" /><xed:if test="mods:namePart[@type='given']"><xed:output value="concat(', ',mods:namePart[@type='given'])" /></xed:if>
+        </xed:if>
+      </span>
+      <span style="display:inline-block; width:80px;">
+        <xed:choose>
+          <xed:when test="string-length(mods:nameIdentifier[@type='lsf']) &gt; 0">
+            <xed:bind xpath="mods:nameIdentifier[@type='lsf']">
+              <a target="_blank" href="{$LSF.PID.Link}{.}">
+                <xed:output value="concat('LSF: ',.)" />
+              </a>
+            </xed:bind>
+          </xed:when>
+          <xed:when test="string-length(mods:namePart[@type='family']) &gt; 0">
+            <xed:load-resource uri="lsf:lastName={xed:call-java('java.net.URLEncoder','encode',string(mods:namePart[@type='family']),'UTF-8')}&amp;firstname={xed:call-java('java.net.URLEncoder','encode',string(mods:namePart[@type='given']),'UTF-8')}" name="lsfResults" />
+            <xed:if test="count($lsfResults/person) &gt; 0">
+              <xed:output value="concat('(',count($lsfResults/person),' in LSF)')" />
+            </xed:if>
+          </xed:when>
+        </xed:choose>
+      </span>
+      <span style="display:inline-block; width:115px;">
+        <button class="roundedButton" type="submit" xed:target="subselect" xed:href="../lsfpidsearch.html?lastName={mods:namePart[@type='family']}&amp;firstName={mods:namePart[@type='given']}&amp;pid={mods:nameIdentifier[@type='lsf']}">
+          <xed:output i18n="search.select" />
+        </button>
+      </span>
+      <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+        <xed:repeat xpath="mods:nameIdentifier[not(@type='lsf')]">
+          <div style="margin:0; padding:0; padding-top:1ex; display:inline-block;">
+            <xed:bind xpath="@type">
+              <select>
+                <option value="orcid">ORCID</option>
+                <option value="researcherid">ResearcherID</option>
+                <option value="gnd">GND</option>
+                <option value="scopus">SCOPUS</option>
+              </select>
+            </xed:bind>
+            <input type="text" style="width:200px;" />
+            <xed:controls>insert remove</xed:controls>
+          </div>
+        </xed:repeat>
+        <div style="margin:0; padding:0; padding-top:1ex; display:inline-block; width:520px;">
+          <xed:repeat xpath="mods:affiliation">
+            <textarea style="width:520px; height:40px;" placeholder="Institutionelle Zugeh�rigkeit" />
+          </xed:repeat>
+        </div>
+      </xed:if>
+    </div>
+  </xed:template>
+
+  <xed:template id="book.contributors">
+    <xed:repeat xpath="mods:name[@type='personal']">
+      <div>
+        <xed:bind xpath="mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']" initially="author">
+          <label>*
+            <select class="label" style="width:152px;">
+              <xed:include uri="xslStyle:items2options:webapp:rollen.xml" />
+            </select>:
+          </label>
+        </xed:bind>
+        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+        <xed:controls />
+      </div>
+    </xed:repeat>
+  </xed:template>
+
+  <xed:template id="person.role">
+    <xed:repeat xpath="mods:name[@type='personal']">
+      <div>
+        <xed:bind xpath="mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']" initially="author">
+          <label>*
+            <select class="label" style="width:152px;">
+            <xed:include uri="xslStyle:items2options:classification:editor:-1:children:marcrelator" />
+            </select>:
+          </label>
+        </xed:bind>
+        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+        <xed:controls />
+      </div>
+    </xed:repeat>
+  </xed:template>
+
+  <xed:template id="place">
+    <xed:bind xpath="mods:originInfo/mods:place/mods:placeTerm[@type='text']">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:output i18n="ubo.place" />:
+        </label>
+        <input id="{xed:generate-id()}" type="text" style="width:200px" />
+      </div>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="year">
+    <xed:bind xpath="mods:originInfo/mods:dateIssued[@encoding='w3cdtf']">
+      <div>
+        <label for="year">
+          *<xed:output i18n="ubo.date.issued.4" />:
+        </label>
+        <input id="{xed:generate-id()}" class="{$xed-validation-marker}" type="text" style="width:7ex" placeholder="{i18n:ubo.date.issued.4.placeholder}" />
+      </div>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="publisher">
+    <xed:bind xpath="mods:originInfo/mods:publisher">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:output i18n="ubo.publisher" />:
+        </label>
+        <input id="{xed:generate-id()}" type="text" style="width:200px" />
+      </div>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="volume">
+    <xed:bind xpath="mods:part/mods:detail[@type='volume']/mods:number">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:output i18n="ubo.volume" />:
+        </label>
+        <input id="{xed:generate-id()}" type="text" style="width:100px" />
+      </div>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="issue">
+    <xed:bind xpath="mods:part/mods:detail[@type='issue']/mods:number">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:output i18n="ubo.issue" />:
+        </label>
+        <input id="{xed:generate-id()}" type="text" style="width:100px" />
+      </div>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="edition">
+    <xed:bind xpath="mods:originInfo/mods:edition">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:output i18n="ubo.edition" />:
+        </label>
+        <input id="{xed:generate-id()}" type="text" style="width:200px" placeholder="{i18n:ubo.edition.placeholder}" />
+      </div>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="series">
+    <xed:repeat xpath="mods:relatedItem[@type='series']" max="3">
+      <xed:bind xpath="mods:genre[@type='intern']" default="series" />
+      <xed:bind xpath="mods:titleInfo/mods:title">
+        <div>
+          <label for="{xed:generate-id()}">
+            <xed:output i18n="ubo.series.title" />:
+          </label>
+          <input id="{xed:generate-id()}" type="text" style="width:400px" placeholder="{i18n:ubo.series.title.placeholder}" />
+        </div>
+      </xed:bind>
+      <xed:bind xpath="mods:part/mods:detail[@type='volume']/mods:number">
+        <div>
+          <label for="{xed:generate-id()}">
+            <xed:output i18n="ubo.series.volume" />:
+          </label>
+          <input id="{xed:generate-id()}" type="text" style="width:100px" placeholder="{i18n:ubo.series.volume.placeholder}" />
+          <xed:controls />
+        </div>
+      </xed:bind>
+    </xed:repeat>
+  </xed:template>
+
+  <xed:template id="size">
+    <xed:bind xpath="mods:physicalDescription/mods:extent">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:output i18n="ubo.extent" />:
+        </label>
+        <input id="{xed:generate-id()}" type="text" style="width:400px" placeholder="{i18n:ubo.extent.placeholder}" />
+      </div>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="comment">
+    <xed:bind xpath="mods:note">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:output i18n="ubo.comment" />:
+        </label>
+        <input id="{xed:generate-id()}" type="text" style="width:400px" />
+      </div>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="pages">
+    <xed:bind xpath="mods:part/mods:extent[@unit='pages']/mods:list">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:output i18n="ubo.pages" />:
+        </label>
+        <input id="{xed:generate-id()}" type="text" style="width:200px" placeholder="{i18n:ubo.pages.placeholder}" />
+      </div>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="issn">
+    <xed:repeat xpath="mods:identifier[@type='issn']">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:output i18n="ubo.identifier.issn" />:
+        </label>
+        <input id="{xed:generate-id()}" class="{$xed-validation-marker}" type="text" style="width:200px" placeholder="{i18n:ubo.identifier.issn.placeholder}" />
+        <xed:controls />
+      </div>
+    </xed:repeat>
+  </xed:template>
+
+  <xed:template id="isbn">
+    <xed:repeat xpath="mods:identifier[@type='isbn']">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:output i18n="ubo.identifier.isbn" />:
+        </label>
+        <input id="{xed:generate-id()}" class="{$xed-validation-marker}" type="text" style="width:200px" />
+        <xed:controls />
+      </div>
+    </xed:repeat>
+  </xed:template>
+
+  <xed:template id="doi.urn.duepublico">
+    <xed:repeat xpath="mods:identifier[contains('doi urn pubmed scopus duepublico',@type)]">
+      <div>
+        <xed:bind xpath="@type" default="doi">
+          <select class="label" style="margin-left:6px; width:167px;">
+            <option value="doi">DOI</option>
+            <option value="urn">URN</option>
+            <option value="pubmed">PubMed ID</option>
+            <option value="scopus">Scopus ID</option>
+            <option value="duepublico">DuEPublico ID</option>
+          </select>
+          <span style="display:inline-block; width:auto; margin-right:1ex;">:</span>
+        </xed:bind>
+        <input class="{$xed-validation-marker}" type="text" style="width:400px;" />
+        <xed:controls /> 
+      </div>
+    </xed:repeat>
+  </xed:template>
+
+  <xed:template id="identifier">
+    <xed:repeat xpath="mods:identifier[contains('doi urn pubmed scopus evaluna isi isbn issn duepublico',@type)]">
+      <div>
+        <xed:bind xpath="@type" default="doi">
+          <select class="label" style="margin-left:6px; width:167px;">
+            <option value="doi">DOI</option>
+            <option value="urn">URN</option>
+            <option value="isbn">ISBN</option>
+            <option value="issn">ISSN</option>
+            <option value="pubmed">PubMed ID</option>
+            <option value="scopus">Scopus ID</option>
+            <option value="isi">Web of Science ID</option>
+            <option value="evaluna">EVALuna ID</option>
+            <option value="duepublico">DuEPublico ID</option>
+          </select>
+          <span style="display:inline-block; width:auto; margin-right:1ex;">:</span>
+        </xed:bind>
+        <input class="{$xed-validation-marker}" type="text" style="width:400px;" />
+        <xed:controls /> 
+      </div>
+    </xed:repeat>
+  </xed:template>
+
+  <xed:template id="url">
+    <xed:bind xpath="mods:location">
+      <xed:repeat xpath="mods:url" max="3">
+        <div>
+          <label for="{xed:generate-id()}">
+            <xed:output i18n="ubo.link" />:
+          </label>
+          <input id="{xed:generate-id()}" class="{$xed-validation-marker}" type="text" style="width:400px;" placeholder="http://" />
+          <xed:controls />
+        </div>
+      </xed:repeat>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="shelfmark">
+    <xed:bind xpath="mods:location/mods:shelfLocator">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:output i18n="ubo.shelfmark" />:
+        </label>
+        <input id="{xed:generate-id()}" class="{$xed-validation-marker}" type="text" style="width:200px;" />
+        <a target="_blank" href="http://primo.ub.uni-due.de/">
+          <xed:output i18n="ubo.shelfmark.search" />
+        </a>
+      </div>
+    </xed:bind>
+  </xed:template>
+  
+  <xed:template id="topics">
+    <xed:repeat xpath="mods:subject">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:output i18n="ubo.subject.topic" />:
+        </label>
+        <xed:bind xpath="mods:topic">
+          <input id="{xed:generate-id(..)}" type="text" style="width:250px;" />
+        </xed:bind>
+        <xed:controls />
+      </div>
+    </xed:repeat>
+  </xed:template>
+  
+  <xed:template id="languages">
+    <xed:repeat xpath="mods:language">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:output i18n="ubo.language" />:
+        </label>
+        <xed:bind xpath="mods:languageTerm[@type='code'][@authority='rfc4646']">
+          <select id="{xed:generate-id(..)}" style="width:400px;">
+            <option value=""><xed:output i18n="search.select" /></option>
+            <xed:include uri="xslStyle:items2options:classification:editor:0:parents:rfc4646:de" />
+            <xed:include uri="xslStyle:items2options:classification:editor:0:parents:rfc4646:en" />
+            <xed:include uri="xslStyle:items2options:classification:editor:0:parents:rfc4646:fr" />
+            <xed:include uri="xslStyle:items2options:classification:editor:-1:children:rfc4646" />
+          </select>
+        </xed:bind>
+        <xed:controls />
+      </div>
+    </xed:repeat>
+  </xed:template>
+
+  <xed:template id="abstract">
+    <xed:bind xpath="mods:abstract">
+      <div>
+        <label for="{xed:generate-id()}">
+          <xed:output i18n="ubo.abstract" />:
+        </label>
+        <textarea id="{xed:generate-id()}" style="width:520px; height:200px;" linewrap="on" />
+      </div>
+    </xed:bind>
+  </xed:template>  
+  
+  <xed:template id="cleanup">
+    <xed:cleanup-rule xpath="//mods:*"
+      relevant-if="(string-length(normalize-space(text())) &gt; 0) or mods:* or (string-length(@xlink:href) &gt; 0) or (string-length(@valueURIxEditor) &gt; 0) or (string-length(@mcr:categId) &gt; 0)" />
+    <xed:cleanup-rule xpath="//mods:name" relevant-if="(mods:namePart|mods:displayForm) or (string-length(@valueURI) &gt; 0) or (string-length(@valueURIxEditor) &gt; 0)" />
+    <xed:cleanup-rule xpath="//mods:name/@authorityURI" relevant-if="(string-length(../@valueURI) &gt; 0) or (string-length(../@valueURIxEditor) &gt; 0)" />
+    <xed:cleanup-rule xpath="//mods:name/mods:namePart" relevant-if="not(../mods:displayForm) and string-length(text()) &gt; 0" />
+    <xed:cleanup-rule xpath="//mods:*/@xlink:type" relevant-if="text()!='simple'" />
+    <xed:cleanup-rule xpath="//mods:detail" relevant-if="mods:number|mods:caption|mods:title" />
+    <xed:cleanup-rule xpath="//mods:relatedItem" relevant-if="mods:titleInfo" />
+  </xed:template>
+
+  <xed:template id="cancel.submit">
+    <div class="cancel-submit">
+      <button class="roundedButton" type="submit" xed:target="servlet" xed:href="DozBibEntryServlet">
+        <xed:output i18n="button.submit" />
+      </button>
+      <button class="roundedButton" type="submit" xed:target="cancel">
+        <xed:output i18n="button.cancel" />
+      </button>
+      <!-- <button class="roundedButton" type="submit" xed:target="debug">Debug</button> -->
+    </div>
+  </xed:template>
+
+</xed:template>

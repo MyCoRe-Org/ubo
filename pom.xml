@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>mycore-parent</artifactId>
+    <groupId>org.mycore</groupId>
+    <version>26</version>
+    <relativePath />
+  </parent>
+  
+  <groupId>unidue</groupId>
+  <artifactId>ubo</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>Universitätsbibliographie</name>
+  <description>Universitätsbibliographie der Universität Duisburg-Essen</description>
+  <url>http://duepublico.uni-duisburg-essen.de/dozbib/</url>
+  <inceptionYear>1998</inceptionYear>
+
+  <organization>
+    <name>Universitätsbibliothek Duisburg-Essen</name>
+    <url>http://www.uni-due.de/ub/</url>
+  </organization>
+
+  <licenses>
+    <license>
+      <name>GPL</name>
+      <url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>mcrfluet</id>
+      <name>Frank Lützenkirchen</name>
+      <email>frank.luetzenkirchen (at) uni-due.de</email>
+      <organization>Universität Duisburg-Essen, Universitätsbibliothek</organization>
+      <organizationUrl>http://www.uni-due.de/ub/</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
+    <developer>
+      <id>mcrnverh</id>
+      <name>Nils Verheyen</name>
+      <email>nils.verheyen (at) uni-due.de</email>
+      <organization>Universität Duisburg-Essen, Universitätsbibliothek</organization>
+      <organizationUrl>http://www.uni-due.de/ub/</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
+    <developer>
+      <id>mcrkpont</id>
+      <name>Kerstin Ponten</name>
+      <email>kerstin.ponten (at) uni-due.de</email>
+      <organization>Universität Duisburg-Essen, Universitätsbibliothek</organization>
+      <organizationUrl>http://www.uni-due.de/ub/</organizationUrl>
+      <roles>
+        <role>tester</role>
+        <role>support</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
+    <developer>
+      <id>mcrkfafe</id>
+      <name>Katrin Falkenstein-Feldhoff</name>
+      <email>katrin.falkenstein-feldhoff (at) uni-due.de</email>
+      <organization>Universität Duisburg-Essen, Universitätsbibliothek</organization>
+      <organizationUrl>http://www.uni-due.de/ub/</organizationUrl>
+      <roles>
+        <role>support</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:svn:http://server.mycore.de/svn/miless/trunk/miless-dozbib</connection>
+    <developerConnection>scm:svn:https://server.mycore.de/svn/miless/trunk/miless-dozbib</developerConnection>
+    <url>http://www.mycore.de/viewvc/viewvc.cgi/miless/trunk/miless-dozbib</url>
+  </scm>
+
+  <issueManagement>
+    <system>Redmine</system>
+    <url>http://redmine.ub.uni-due.de/projects/dozbib/issues</url>
+  </issueManagement>
+
+  <properties>
+    <java.target.version>1.8</java.target.version>
+    <hibernate.version>4.3.8.Final</hibernate.version>
+    <mycore.version>2015.05.0.1-SNAPSHOT</mycore.version>
+    <axis1.version>1.4</axis1.version>
+    <timestamp>${maven.build.timestamp}</timestamp>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.rometools</groupId>
+      <artifactId>rome</artifactId>
+      <version>1.5.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.10</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-discovery</groupId>
+      <artifactId>commons-discovery</artifactId>
+      <version>0.5</version>
+      <scope>runtime</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+      <version>1.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-httpclient</groupId>
+      <artifactId>commons-httpclient</artifactId>
+      <version>3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>2.3.2</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.1.12</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>9.1-901.jdbc4</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.mchange</groupId>
+      <artifactId>c3p0</artifactId>
+      <version>0.9.2.1</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+        <version>3.8</version>
+        <exclusions>
+          <exclusion>
+            <artifactId>commons-codec</artifactId>
+            <groupId>commons-codec</groupId>
+          </exclusion>
+        </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-c3p0</artifactId>
+      <version>${hibernate.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-ehcache</artifactId>
+      <version>${hibernate.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.0.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>jaxen</groupId>
+      <artifactId>jaxen</artifactId>
+      <version>1.1.6</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.17</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>jmxtools</artifactId>
+          <groupId>com.sun.jdmk</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>jmxri</artifactId>
+          <groupId>com.sun.jmx</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>jms</artifactId>
+          <groupId>javax.jms</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.axis</groupId>
+      <artifactId>axis</artifactId>
+      <version>${axis1.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.axis</groupId>
+      <artifactId>axis-jaxrpc</artifactId>
+      <version>${axis1.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>wsdl4j</groupId>
+      <artifactId>wsdl4j</artifactId>
+      <version>1.6.3</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.bibsonomy</groupId>
+      <artifactId>bibsonomy-bibtex-parser</artifactId>
+      <version>3.2.1</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>jtidy</artifactId>
+          <groupId>jtidy</groupId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.jtidy</groupId>
+      <artifactId>jtidy</artifactId>
+      <version>r938</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jdom</groupId>
+      <artifactId>jdom2</artifactId>
+        <version>2.0.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-base</artifactId>
+      <version>${mycore.version}</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-base</artifactId>
+      <version>${mycore.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-mods</artifactId>
+      <version>${mycore.version}</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-oai</artifactId>
+      <version>${mycore.version}</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-xeditor</artifactId>
+      <version>${mycore.version}</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore.legacy</groupId>
+      <artifactId>mycore-legacy-search</artifactId>
+      <version>1.1.1-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>poi</artifactId>
+          <groupId>poi</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-restapi</artifactId>
+      <version>${mycore.version}</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-user2</artifactId>
+      <version>${mycore.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>xalan</groupId>
+      <artifactId>xalan</artifactId>
+      <version>2.7.2</version>
+    </dependency>
+    <dependency>
+      <groupId>xml-apis</groupId>
+      <artifactId>xml-apis</artifactId>
+      <version>1.0.b2</version>
+    </dependency>
+  </dependencies>
+
+  <repositories>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>MyCoRe HQ</id>
+      <url>http://artifactory.mycore.de/mycore-releases</url>
+    </repository>
+    <repository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>MyCoRe HQ Snapshots</id>
+      <url>http://artifactory.mycore.de/mycore-snapshots</url>
+    </repository>
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>Remote repositories</id>
+      <url>http://artifactory.mycore.de/remote-repos/</url>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>MyCoRe HQ</id>
+      <url>http://artifactory.mycore.de/mycore-releases</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>MyCoRe HQ Snapshots</id>
+      <url>http://artifactory.mycore.de/mycore-snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>axistools-maven-plugin</artifactId>
+        <version>${axis1.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>wsdl2java</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <packageSpace>unidue.ubo.lsf</packageSpace>
+          <subPackageByFileName>false</subPackageByFileName>
+          <testCases>false</testCases>
+          <serverSide>false</serverSide>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>appassembler-maven-plugin</artifactId>
+        <version>1.10</version>
+        <configuration>
+          <programs>
+            <program>
+              <mainClass>org.mycore.frontend.cli.MCRCommandLineInterface</mainClass>
+              <id>ubo</id>
+            </program>
+          </programs>
+          <binFileExtensions>
+            <unix>.sh</unix>
+            <windows>.cmd</windows>
+          </binFileExtensions>
+          <assembleDirectory>${project.build.directory}</assembleDirectory>
+          <configurationDirectory>${project.build.finalName}/WEB-INF/classes</configurationDirectory>
+          <repositoryName>${project.build.finalName}/WEB-INF/lib</repositoryName>
+          <endorsedDir>bin</endorsedDir>
+          <extraJvmArguments>-Xms512m -Xmx1024m -DMCR.AppName=ubo</extraJvmArguments>
+          <repositoryLayout>flat</repositoryLayout>
+          <generateRepository>false</generateRepository>
+          <useWildcardClassPath>true</useWildcardClassPath>
+        </configuration>
+        <executions>
+          <execution>
+            <id>assemble</id>
+            <phase>prepare-package</phase>
+            <goals><goal>assemble</goal></goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-servlet-api</id>
+            <phase>prepare-package</phase>
+            <goals><goal>copy</goal></goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>javax.servlet</groupId>
+                  <artifactId>javax.servlet-api</artifactId>
+                  <version>3.0.1</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${project.build.directory}/bin/</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals><goal>run</goal></goals>
+            <configuration>
+              <target>
+                <echo>Setting additional properties MCR.datadir and MIL.Build.TimeStamp...</echo>
+                <condition property="dir.sep" value="\\"><os family="windows"></os></condition>
+                <condition property="dir.sep" value="/"><os family="unix"></os></condition>
+                <pathconvert dirsep="${dir.sep}" property="datadir" targetos="unix">
+                  <path location="${project.build.directory}/${project.build.finalName}"></path>
+                </pathconvert>
+                <echo append="true" file="${project.build.directory}/${project.build.finalName}/WEB-INF/classes/local.properties">
+                  ${line.separator}MCR.datadir=${datadir}
+                  ${line.separator}MIL.Build.TimeStamp=${timestamp}</echo>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>9.3.7.v20160115</version>
+        <configuration>
+          <classesDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</classesDirectory>
+          <webAppSourceDirectory>${project.build.directory}/${project.build.finalName}</webAppSourceDirectory>
+          <webApp>
+            <tempDirectory>${project.build.directory}/tmp</tempDirectory>
+          </webApp>
+          <contextXml>${basedir}/src/jetty/jetty-context.xml</contextXml>
+          <systemProperties>
+            <systemProperty>
+              <name>com.sun.management.jmxremote</name>
+            </systemProperty>
+          </systemProperties>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+    <pluginManagement>
+      <plugins>
+      		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>
+                      axistools-maven-plugin
+                    </artifactId>
+                    <versionRange>[1.4,)</versionRange>
+                    <goals>
+                      <goal>wsdl2java</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute />
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>hibernate.cfg.xml</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+        <excludes>
+          <exclude>hibernate.cfg.xml</exclude>
+        </excludes>
+      </resource>
+    </resources>
+  
+    <filters>
+      <filter>src/main/resources/mycore.properties</filter>
+      <filter>src/main/resources/local.properties</filter>
+    </filters>
+
+  </build>
+
+</project>

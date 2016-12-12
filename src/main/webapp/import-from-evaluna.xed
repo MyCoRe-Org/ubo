@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<webpage lastModified="$Date: 2016-05-24 10:13:56 +0200 (Di, 24 Mai 2016) $" id="dozbib.import.evaluna">
+  <title xml:lang="de">Publikation aus EVALuna Biblio Datenbank importieren</title>
+  <title xml:lang="en">Import publication from EVALuna Biblio database</title>
+  
+  <script type="text/javascript" src="external/jquery-tools-1.2.7/jquery.tools.min.js"></script>
+  <script type="text/javascript" src="js/editor.validation.failed.tooltip.js"></script>
+     
+  <section>
+    <script type="text/javascript" src="external/jquery-ui-1.8.21.custom.min.js"></script>
+    <script type="text/javascript" src="external/chosen/chosen.jquery.min.js"></script>
+
+    <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form">
+    
+      <xed:cleanup-rule xpath="//limit" relevant-if="string-length(text()) &gt; 0" />
+    
+      <xed:bind xpath="/import">
+        
+        <xed:if test="$xed-validation-failed">
+          <div class="validation-failures">
+            <h3>
+              <xed:output i18n="form.validation.failed" />
+            </h3>
+            <ul>
+              <xed:display-validation-messages />
+            </ul>
+          </div>
+        </xed:if>
+        
+        <fieldset>
+          <legend>Ziel-Institut/Klinik wählen:</legend>
+          
+          <xed:bind xpath="subject" default="med" /> <!-- Fach ist fix "Medizin"  -->
+          
+          <xed:bind xpath="origin">
+            <div>
+              <label for="{xed:generate-id()}">Institut / Klinik:</label>
+              <span class="{$xed-validation-marker}">
+                <select id="{xed:generate-id()}" style="width:400px;" class="autocomplete {$xed-validation-marker}">
+                  <option value=""><xed:output i18n="search.select" /></option>
+                  <xed:include uri="xslStyle:items2options:classification:editor:-1:children:ORIGIN:14" />
+                </select>
+              </span>
+            </div>
+          </xed:bind>
+          <script type="text/javascript">
+            jQuery(document).ready(function() { jQuery('select[class*="autocomplete"]').chosen({search_contains: true}); });
+          </script>
+          
+        </fieldset>
+
+        <xed:bind xpath="request">        
+          <fieldset>
+            <legend>Welche Publikationen sollen importiert werden?</legend>
+            
+            <xed:bind xpath="limit[@type='institute']">
+              <div>
+                <label for="{xed:generate-id()}">Institut / Klinik:</label>
+                <select id="{xed:generate-id()}">
+                  <option value=""><xed:output i18n="search.select" /></option>
+                  <xed:include uri="cache:xslStyle:evaluna-institutions2select-options:evaluna:institutions" />
+                </select>
+              </div>
+            </xed:bind>
+            
+            <xed:bind xpath="limit[@type='pubyear']">
+              <div>
+                <label for="year">
+                  <xed:output i18n="ubo.date.issued.4" />:
+                </label>
+                <input id="year" class="{$xed-validation-marker}" type="text" style="width:7ex" placeholder="{i18n:ubo.date.issued.4.placeholder}" />
+                <xed:validate matches="[\d]{4}" i18n="ubo.date.issued.4.validation" display="global" />
+              </div>
+            </xed:bind>
+  
+            <xed:bind xpath="limit[@type='updated-since']">
+              <div>
+                <label for="updated">Aktualisiert seit:</label>
+                <input id="updated" class="{$xed-validation-marker}" type="text" />
+                <span>z. B. 2016-11-01 12:00:00</span>
+                <xed:validate matches="[\d]{4}-[\d]{2}-[\d]{2} [\d]{2}:[\d]{2}:[\d]{2}"  display="global">Aktualisierungsdatum bitte im Format 2016-11-01 12:00:00</xed:validate>
+              </div>
+            </xed:bind>
+  
+            <xed:bind xpath="limit[@type='ids']">
+              <div>
+                <label for="id">oder Evaluna Publikations-ID:</label>
+                <input id="id" class="{$xed-validation-marker}" type="text" />
+                <xed:validate matches="[\d]+"  display="global">Bitte nur Ziffern eingeben!</xed:validate>
+              </div>
+            </xed:bind>
+  
+            <div class="cancel-submit">
+              <button class="roundedButton" type="submit" xed:target="servlet" xed:href="DozBibImportServlet">
+                <xed:output i18n="button.submit" />
+              </button>
+              <button class="roundedButton" type="submit" xed:target="debug">Debug</button>
+            </div>
+            
+          </fieldset>
+        </xed:bind>
+        
+      </xed:bind>
+    </xed:form>
+  </section>
+    
+</webpage>

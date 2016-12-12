@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<items>
+  <item value="confirmed">
+    <label xml:lang="de">freigegeben</label>
+    <label xml:lang="en">confirmed</label>
+  </item>
+  <item value="submitted">
+    <label xml:lang="de">eingereicht</label>
+    <label xml:lang="en">submitted</label>
+  </item>
+  <item value="imported">
+    <label xml:lang="de">importiert</label>
+    <label xml:lang="en">imported</label>
+  </item>
+</items>

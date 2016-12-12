@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<webpage lastModified="$Date: 2016-05-20 08:54:29 +0200 (Fr, 20 Mai 2016) $" id="dozbib.search-simple">
+ <title xml:lang="de">Suche in der Universitätsbibliographie</title>
+ <title xml:lang="en">Search in University bibliography</title>
+ 
+ <script type="text/javascript" src="/external/jquery-tools-1.2.7/jquery.tools.min.js"></script>
+ <script type="text/javascript" src="/js/editor.validation.failed.tooltip.js"></script>
+ 
+ <section class="highlight2">
+    <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form" style="margin:0; padding:0;">
+      <fieldset style="margin:0; padding:0;">
+        <legend>
+          <xed:output i18n="search.dozbib" />
+        </legend>
+        
+        <xed:include uri="webapp:import-search.xed" ref="validation" />
+  
+        <div style="padding:1ex;">
+          <xed:multi-lang>
+            <xed:lang xml:lang="de">
+              Alle Bedingungen werden UND-verknüpft. Durch klicken auf 
+              <img class="roundedButton" style="width:12px; margin:0 1ex; 0 1ex;" src="{$WebApplicationBaseURL}images/pmud-plus.png" /> 
+              können Sie ein <strong>Suchfeld wiederholen</strong>!
+            </xed:lang>
+            <xed:lang xml:lang="en">
+              All search terms are connected with AND. By click on 
+              <img class="roundedButton" style="width:12px; margin:0 1ex; 0 1ex;" src="{$WebApplicationBaseURL}images/pmud-plus.png" /> 
+              you can <strong>repeat a  search field</strong>!
+            </xed:lang>
+          </xed:multi-lang>
+        </div>
+      
+        <xed:bind xpath="/query">
+          <xed:bind xpath="conditions[@format='xml']/boolean[@operator='and']">
+          
+            <xed:repeat xpath="condition1[@operator='contains']">
+              <div>
+                <xed:bind xpath="@field">
+                  <select class="label" style="margin-left:6px; width:182px;">
+                    <option value="ubo_title"     ><xed:output i18n="search.title" /></option>
+                    <option value="ubo_journal"   ><xed:output i18n="search.dozbib.journal" /></option>
+                    <option value="ubo_series"    ><xed:output i18n="search.dozbib.series" /></option>         
+                    <option value="ubo_conference"><xed:output i18n="ubo.conference" /></option>
+                    <option value="ubo_comment"   ><xed:output i18n="edit.comment" /></option>
+                    <option value="ubo_abstract"  >Abstract:</option>
+                    <option value="ubo_all"       ><xed:output i18n="search.dozbib.fields" /></option>
+                  </select>
+                </xed:bind>
+                <xed:bind xpath="@value">
+                  <input type="text" style="width:450px" /> />
+                </xed:bind>
+                <xed:controls>insert remove</xed:controls>
+              </div>
+            </xed:repeat>
+  
+            <xed:include uri="webapp:import-search.xed" ref="name" />
+            
+            <xed:repeat xpath="condition3[@operator='=']">
+              <div>
+                <xed:bind xpath="@field">
+                  <select class="label" style="margin-left:6px; width:182px;">
+                    <option value="ubo_pid"  ><xed:output i18n="search.dozbib.pid" /></option>
+                    <option value="ubo_orcid">ORCID:</option>
+                    <option value="ubo_researcherid">ResearcherID:</option>
+                    <option value="ubo_gnd">GND:</option>
+                  </select>
+                </xed:bind>
+                <xed:bind xpath="@value">
+                  <input type="text" style="width:450px" /> />
+                </xed:bind>
+                <xed:controls>insert remove</xed:controls>
+              </div>
+            </xed:repeat>
+
+            <xed:repeat xpath="condition9[@operator='=']">
+              <div>
+                <xed:bind xpath="@field">
+                  <select class="label" style="margin-left:6px; width:182px;">
+                    <option value="ubo_doi"       >DOI:</option>
+                    <option value="ubo_urn"       >URN:</option>
+                    <option value="ubo_issn"      >ISSN:</option>
+                    <option value="ubo_isbn"      >ISBN:</option>
+                    <option value="ubo_signature" >Signatur:</option>
+                    <option value="ubo_documentID">DuEPublico ID:</option>
+                    <option value="ubo_tag"       >Tag:</option>         
+                  </select>
+                </xed:bind>
+                <xed:bind xpath="@value">
+                  <input type="text" style="width:450px" /> />
+                </xed:bind>
+                <xed:controls>insert remove</xed:controls>
+              </div>
+            </xed:repeat>
+            
+            <xed:bind xpath="condition4[@field='ubo_subject'][@operator='=']/@value">
+              <div>
+                <label for="{xed:generate-id()}">
+                  <xed:output i18n="search.dozbib.subject" />
+                </label>
+                <select id="{xed:generate-id()}" style="width:450px;">
+                  <option value=""><xed:output i18n="search.select" /></option>
+                  <xed:include uri="xslStyle:fachref2options:resource:fachreferate.xml" />
+                </select>
+              </div>
+            </xed:bind>
+  
+            <xed:include uri="webapp:import-search.xed" ref="year" />
+            
+            <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+              <xed:bind xpath="condition6[@field='ubo_status'][@operator='=']/@value">
+                <div>
+                  <label>
+                    <strong>
+                      <xed:output i18n="search.dozbib.status"/>
+                    </strong>
+                  </label>
+                  <input type="checkbox" value="submitted" /><strong><xed:output i18n="search.dozbib.status.submitted" /></strong>
+                  <input type="checkbox" value="imported"  /><strong><xed:output i18n="search.dozbib.status.imported" /></strong>
+                  <input type="checkbox" value="confirmed" /><strong><xed:output i18n="search.dozbib.status.confirmed" /></strong>
+                </div>
+              </xed:bind>
+            </xed:if>
+            
+            <xed:bind xpath="condition7[@field='ubo_type'][@operator='=']/@value">
+              <div style="margin-bottom:4ex;">
+                <label for="{xed:generate-id()}">
+                  <xed:output i18n="search.dozbib.type" />
+                </label>
+                <select id="{xed:generate-id()}" style="width:450px;">
+                  <option value=""><xed:output i18n="search.select" /></option>
+                  <xed:include uri="xslStyle:genre-filter,items2options:classification:editor:-1:children:ubogenre" />
+                </select>
+              </div>
+            </xed:bind>
+            
+          </xed:bind>
+
+          <xed:include uri="webapp:import-search.xed" ref="sortby" /> 
+          <xed:include uri="webapp:import-search.xed" ref="numhits" /> 
+          <xed:include uri="webapp:import-search.xed" ref="submit" />
+          
+        </xed:bind>
+      </fieldset>
+      
+      <xed:cleanup-rule xpath="//*[@field]" relevant-if="string-length(@value) &gt; 0" />
+      
+    </xed:form>
+  </section>
+
+  <section xml:lang="de" class="highlight1">
+    <h5>Erstellen einer persönlichen Publikationsliste</h5>
+    <p>
+      Wenn Sie eine Liste Ihrer Publikationen zusammenstellen möchten, empfiehlt es sich, über die
+      <strong>Personen-ID</strong>
+      zu suchen. Hierbei wird mit Ihrer HIS-LSF-PID nach Einträgen in der Universitätsbibliographie gesucht.
+    </p>
+    <p>
+      Voraussetzung hierfür ist natürlich, dass die entsprechenden Einträge in der Bibliographie mit Ihrer PID
+      verknüpft sind. In der Regel ist das der Fall. Sollten Sie Bedenken haben, ob alle Einträge korrekt mit
+      Ihrer PID verbunden sind, wenden Sie sich bitte an unsere
+      <a href="index.xml#help">Ansprechpartner</a>.
+      Wir können die Einträge gerne für Sie prüfen und ggf. fehlende Verknüpfungen erstellen.
+    </p>
+  </section>
+
+  <section xml:lang="en" class="highlight1">
+    <h5>Preparing a personal publication list</h5>
+    <p>
+      If you wish to compile a list of your own publications, it is advisable to do a search using your
+      <strong>Personal ID</strong>.
+      A search is then conducted for entries in the university bibliography on the basis of your HIS-LSF-PID-
+    </p>
+    <p>
+      A precondition for this, of course, is that the relevant entries in the bibliography are linked with your PID.
+      Usually this is the case. If you have any misgivings whether all the entries are correctly linked with your PID,
+      please contact our
+      <a href="index.xml#help">staff</a> .
+      We will be glad to check your entries for you and, if necessary, provide any missing links.
+    </p>
+  </section>
+
+  <section xml:lang="de" class="highlight2">
+    <h5>Weitere Suchfunktionen</h5>
+    <p>
+      Sie k�nnen au�erdem
+      <ul>
+        <li>
+          <a href="search-expert.xed">komplexe Suchanfragen �ber die Expertensuche durchf�hren</a>
+        </li>
+        <li>
+          <a href="search-url.xml">dynamische Suchen als Link, als PDF-Dokument oder in anderen Formaten in eigene
+            Webseiten einbinden
+          </a>
+        </li>
+      </ul>
+    </p>
+  </section>
+
+  <section xml:lang="en" class="highlight2">
+    <h5>Further search functions</h5>
+    <p>
+      Furthermore you can
+      <ul>
+        <li>
+          <a href="search-expert.xed">perform a complex query using the expert-search-mask</a>
+        </li>
+        <li>
+          <a href="search-url.xml">integrate a dynamic search as a link, as a pdf document or in various other formats into own
+            webpages
+          </a>
+        </li>
+      </ul>
+    </p>
+  </section>    
+  
+</webpage>

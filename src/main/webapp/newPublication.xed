@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<webpage lastModified="$Date$" id="dozbib.new.publication">
+  <title xml:lang="de">Publikation melden</title>
+  <title xml:lang="en">Registering publication</title>
+  
+  <section class="highlight2" title="Hier können Sie Ihre Publikation an die Universitätsbibliographie melden:" xml:lang="de">
+    <form class="ubo-form" style="margin-bottom:0;" action="edit-publication.xed" method="get" id="submit_publication">
+      <fieldset>
+        <legend>Bitte wählen Sie den Publikationstyp:</legend>
+      <div style="display:inline-block; margin-left:1ex;"><select id="genre" name="genre" size="1" /></div>
+      <div style="display:inline-block;"> erschienen in <select id="host" name="host" size="1" /></div>
+      <input type="submit" class="roundedButton" value="eintragen" />
+      </fieldset>
+    </form>
+  </section>
+    
+  <section class="highlight2" title="Here you can register your publication at the university bibliography:" xml:lang="en">
+    <form class="ubo-form" style="margin-bottom:0;" action="edit-publication.xed" method="post" id="submit_publication">
+      <fieldset>
+        <legend>Please choose the type of publication:</legend>
+      <div style="display:inline-block; margin-left:1ex; margin-bottom:1ex;"><select id="genre" name="genre" size="1" /></div>
+      <div style="display:inline-block;"> published in <select id="host" name="host" size="1" /></div>
+      <input type="submit" class="roundedButton" value="enter" />
+      </fieldset>
+    </form>
+  </section>
+
+  <section style="display:none;">
+    <xed:form xmlns:xed="http://www.mycore.de/xeditor">
+      <xed:bind xpath="/dummy">
+        <script type="text/javascript">
+          var GenreXML;
+          
+          function findCategory(id) {
+            return jQuery(GenreXML).find('[ID="' + id + '"]')[0];
+          }
+          
+          function getLabel(category, lang) {
+            return jQuery(category).children('label[xml\\:lang="' + lang + '"]').attr('text');
+          }
+          
+          function createOption(id,mode) {
+            var category = findCategory(id);
+            var hosts = getLabel(category,'x-hosts');
+            var title = getLabel(category,'<xed:output value="$CurrentLang" />');
+          
+            if ((typeof hosts === 'undefined') &amp;&amp; mode == 'genre') 
+              return ''; 
+            else 
+              return '&lt;option value="' + id + '"&gt;' + title + '&lt;/option&gt;';
+          }
+          
+          function createGenreOptions() {
+            var options = "";
+            jQuery(GenreXML).find('categories &gt; category').each(function() {
+              options += createOption(jQuery(this).attr('ID'),'genre');
+          
+              jQuery(this).find('category').each(function() {
+                options += createOption(jQuery(this).attr('ID'),'genre');
+              });
+          
+            });
+            jQuery('#genre').append(options);
+          }
+          
+          function changeHostOptions() {
+            jQuery('#host').empty();
+            jQuery('#host').parent().show();
+          
+            var id = jQuery('#genre option:selected')[0].value;
+            var category = findCategory(id);
+            var host = getLabel(category,'x-hosts');
+          
+            if (!(typeof host === 'undefined')) {
+              var hosts = host.split(' ');
+              jQuery.each( hosts, function(ind, val) {
+                if (val == 'standalone') {
+                  jQuery('#host').prepend('&lt;option value="standalone" selected="selected"&gt;(<xed:output value="i18n:form.select.optional" />)&lt;/option&gt;');
+                } else {
+                  jQuery('#host').append( createOption(val,'host') );
+                }
+              });
+              if (hosts.length == '1' &amp;&amp; hosts[0] == 'standalone') {
+                jQuery('#host').parent().hide();
+              }
+            } else {
+              jQuery('#host').parent().hide();
+            }
+          }
+          
+          jQuery(document).ready(function() {
+            jQuery('#genre').change(function() {
+              changeHostOptions();
+            });
+            jQuery.ajax({
+              method : "GET",
+              url : "api/v1/classifications/ubogenre",
+              dataType : "xml"
+            }).done(function(xml) {
+              GenreXML = xml;
+              createGenreOptions();
+              changeHostOptions();
+            });
+          });
+        </script>
+    
+      </xed:bind>
+    </xed:form>
+  </section>
+  
+  <section class="highlight1" xml:lang="de" title="Literaturlisten">    
+    <p>
+      Sollten Sie über <strong>Literaturlisten</strong> verfügen, die Sie mit Hilfe von
+      Literaturverwaltungsprogrammen, wie z.B. 
+      <a href="http://www.uni-due.de/ub/abisz/refworks.shtml" target="_blank">RefWorks</a>, 
+      BibTeX oder <a href="http://www.uni-due.de/ub/abisz/refworks.shtml" target="_blank">Citavi</a> 
+      erstellt haben, können Sie diese Listen gerne bei uns abliefern. Die Daten werden dann von uns in
+      DuEPublico importiert. <br />
+      Bitte schicken Sie eine
+      E-Mail an: <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a><br/><br />
+    </p>
+    <p>
+      Weitere <a target="_blank" href="http://www.uni-due.de/ub/abisz/literaturverwaltung.shtml">Informationen
+      zu Literaturverwaltungsprogrammen</a> finden Sie auf den Seiten der
+      Universitätsbibliothek.       
+    </p>             
+  </section>
+  <section class="highlight1" xml:lang="en" title="Lists of literature">    
+    <p>
+      If you have <strong>lists of literature</strong> at your disposal that you have compiled with the aid 
+      of literature management programs such as 
+      <a href="http://www.uni-due.de/ub/en/erefworks.shtml" target="_blank">RefWorks</a>, BibTex, or 
+      <a href="http://www.uni-due.de/ub/en/ecitavi.shtml" target="_blank">Citavi</a>, you are welcome to 
+      submit these lists to us. We will then import the data into DuEPublico.<br />
+      Please send an e-mail to:
+      <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a><br/><br />     
+    </p>    
+    <p>
+      You will find further <a target="_blank" href="http://www.uni-due.de/ub/en/eliteraturverwaltung.shtml">information
+      about reference management software</a> on the pages of the university library.     
+    </p>           
+  </section> 
+    
+  <section class="highlight2" xml:lang="de" title="Folgende Publikationen können erfasst werden">
+    <ul>
+      <li>Monographien, Sammelwerke, Tagungsbände, Lexika</li>
+      <li>Aufsätze in Zeitschriften oder auf Publikationsservern</li>
+      <li>Beiträge in Sammelwerken (d.h. in Büchern mit Beiträgen mehrerer Autoren)</li>
+      <li>Beiträge in Kongressschriften / Tagungsbänden</li>
+      <li>Lexikoneinträge</li>
+      <li>Herausgebertätigkeiten für Sammelwerke, Zeitschriften und Serien</li>
+      <li>Vorträge</li>
+      <li>Interviews</li>
+      <li>Poster</li>
+      <li>Preprints</li>
+      <li>Vorworte, Nachworte</li>
+      <li>Wissenschaftliche Rezensionen</li>
+    </ul>    
+    <p><strong>Dissertationen und Habilitationsschriften werden von der Universitätsbibliothek
+    selbst erfasst.</strong></p>
+   </section>
+  <section class="highlight2" xml:lang="en" title="The following publications can be registered">
+    <ul>
+      <li>Monographs, collection, proceedings, lexica</li>
+      <li>Essays in periodicals or on publication servers</li>
+      <li>Contributions to collected editions (i.e. books incl. contributions of several authors)</li>
+      <li>Contributions to conference proceedings / publications</li>
+      <li>Encyclopedia entries</li>
+      <li>Editorial functions for collected editions, journals and serial publications</li>  
+      <li>Lectures</li>
+      <li>Interviews</li>
+      <li>Poster</li>       
+      <li>Preprints</li>
+      <li>Prefaces (forewords), Postfaces</li>
+      <li>Scientific reviews</li>
+    </ul>    
+    <p><strong>Dissertations and postdoctoral theses are registered by the university
+    library itself.</strong></p>    
+  </section>  
+  
+  <section class="highlight1" xml:lang="de" title="Personengruppen, die Publikationen melden können bzw. sollten">
+ 	    <p>
+ 	    Folgende Personengruppen sollten als Angehörige der Universität Duisburg-Essen 
+ 	    ihre Publikationen der Universitätsbibliographie melden: <strong>HochschullehrerInnen, 
+ 	    wissenschaftliche und künstlerische MitarbeiterInnen, PrivatdozentInnen, außerplanmäßige
+ 	    ProfessorInnen, HonorarprofessorInnen, GastdozentInnen sowie Lehrbeauftragte</strong>.
+ 	    Desweiteren können auch ehemalige Angehörige der Universität Duisburg-Essen, wie z.B. <strong>emeritierte
+ 	    Professorinnen und Professoren</strong> ihre Publikationen melden.
+ 	    </p>
+ 	    
+ 	  </section>
+ 	  <section class="highlight1" xml:lang="en" title="Groups of persons which can -  or should - register their publications">
+ 	    <p>
+ 	    The following groups of persons as members of Duisburg Essen University should
+ 	    register their publications with the university bibliography:
+ 	    <strong>university professors, scientific and artistic staff members,
+ 	    privat lecturers, extraordinary professors, honorary professors, guest lecturers, as well as
+ 	    assistant lecturers</strong>.
+ 	    Furthermore, former members of the university of Duisburg-Essen, such as <strong>emeritus professors</strong>,
+ 	    can register their publications.
+ 	    </p> 	    
+ 	  </section>
+ 	  
+ 	  <section class="highlight2" xml:lang="de" title="Zeitraum der Erfassung">
+ 	    <p>
+ 	    Grundsätzlich können Sie <strong>alle</strong> Ihre Veröffentlichungen der Universitätsbibliographie melden 
+ 	    und so Ihre <strong>gesamte persönliche Bibliographie</strong> erstellen und pflegen.
+ 	    </p> 	      
+ 	  </section>
+ 	  <section class="highlight2" xml:lang="en" title="Period of Registration">
+ 	    <p>
+ 	    Basically, you can register <strong>all</strong> your publications with the university
+ 	    bibliography and thus establish and maintain your <strong>complete personal bibliography</strong>.
+ 	    </p> 	    
+ 	  </section>
+    
+</webpage>

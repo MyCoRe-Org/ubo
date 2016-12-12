@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="year" type="xs:string"/>
+  <xs:element name="vorname" type="xs:string"/>
+  <xs:element name="volume" type="xs:string"/>
+  <xs:element name="title" type="xs:string"/>
+  <xs:element name="titel" type="xs:string"/>
+  <xs:element name="source_id">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="schwerpunkte">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="schwerpunkt"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="schwerpunkt">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="pos"/>
+        <xs:element ref="name"/>
+        <xs:element ref="description"/>
+        <xs:element minOccurs="0" ref="markers"/>
+      </xs:sequence>
+      <xs:attribute name="id" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="response">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element maxOccurs="unbounded" ref="institution"/>
+        <xs:element maxOccurs="unbounded" ref="publication"/>
+      </xs:choice>
+      <xs:attribute name="request_id" use="required"/>
+      <xs:attribute name="type" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="schwerpunkte"/>
+            <xs:enumeration value="publications"/>
+            <xs:enumeration value="profiles"/>
+            <xs:enumeration value="institutions"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="pubtypes">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="pubtype"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="pubtype">
+    <xs:complexType mixed="true">
+      <xs:attribute name="source" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="publication">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="source_id"/>
+        <xs:element ref="citation"/>
+        <xs:element ref="authors"/>
+        <xs:element ref="keywords"/>
+      </xs:sequence>
+      <xs:attribute name="id" use="required"/>
+      <xs:attribute name="last_update" use="required"/>
+      <xs:attribute name="version" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="profiles">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="profile"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="profile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="nachname"/>
+        <xs:element ref="vorname"/>
+        <xs:element ref="titel"/>
+        <xs:element ref="schwerpunkte"/>
+      </xs:sequence>
+      <xs:attribute name="id" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="pos" type="xs:string"/>
+  <xs:element name="pmid" type="xs:string"/>
+  <xs:element name="pages" type="xs:string"/>
+  <xs:element name="name" type="xs:string"/>
+  <xs:element name="nachname" type="xs:string"/>
+  <xs:element name="markers">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="marker"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="marker">
+    <xs:complexType mixed="true">
+      <xs:attribute name="id" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="lastname" type="xs:string"/>
+  <xs:element name="language" type="xs:string"/>
+  <xs:element name="keywords">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="keyword"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="keyword">
+    <xs:complexType mixed="true">
+      <xs:attribute name="source" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="journal">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="abbreviation"/>
+        <xs:element ref="year"/>
+        <xs:element ref="volume"/>
+        <xs:element ref="issue"/>
+        <xs:element ref="issn"/>
+        <xs:element ref="essn"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="issue" type="xs:string"/>
+  <xs:element name="issn" type="xs:string"/>
+  <xs:element name="isi_loc" type="xs:string"/>
+  <xs:element name="interface">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="response"/>
+      </xs:sequence>
+      <xs:attribute name="version" default="1.0">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="1.0"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="institution">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="abbreviation"/>
+        <xs:element ref="fullname"/>
+        <xs:choice minOccurs="0">
+          <xs:element ref="profiles"/>
+          <xs:element ref="schwerpunkte"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="id" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="initials" type="xs:string"/>
+  <xs:element name="fullname" type="xs:string"/>
+  <xs:element name="firstname">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="essn">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="description" type="xs:string"/>
+  <xs:element name="citation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="pmid"/>
+        <xs:element ref="isi_loc"/>
+        <xs:element ref="title"/>
+        <xs:element ref="journal"/>
+        <xs:element ref="pages"/>
+        <xs:element ref="language"/>
+        <xs:element ref="abstract"/>
+        <xs:element ref="affiliations"/>
+        <xs:element ref="pubtypes"/>
+      </xs:sequence>
+      <xs:attribute name="pubmedstatus" use="required"/>
+      <xs:attribute name="type" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="authors">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="author"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="author">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="lastname"/>
+        <xs:element ref="firstname"/>
+        <xs:element ref="initials"/>
+      </xs:sequence>
+      <xs:attribute name="collective" use="required"/>
+      <xs:attribute name="institution" use="required"/>
+      <xs:attribute name="pos" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="affiliations">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="affiliation"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="affiliation">
+    <xs:complexType mixed="true">
+      <xs:attribute name="source" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="abstract" type="xs:string"/>
+  <xs:element name="abbreviation" type="xs:string"/>
+</xs:schema>

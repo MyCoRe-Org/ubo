@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<webpage lastModified="$Date$" id="dozbib">
+ <title xml:lang="de">Universitätsbibliographie Online der Universität Duisburg-Essen</title>
+ <title xml:lang="en">University Bibliography Online of Duisburg-Essen University</title>
+
+  <section class="highlight2" xml:lang="de">
+    <ul style="margin-bottom:0; padding-bottom:0;">
+      <li><a href="search.xed">Suche in der Universitätsbibliographie</a></li>      
+      <li><a href="newPublication.xed">Eigene Publikation melden</a></li>      
+    </ul>
+   </section>
+   <section class="highlight2" xml:lang="en">
+    <ul style="margin-bottom:0; padding-bottom:0;">
+      <li><a href="search.xed">Search University Bibliography</a></li>
+      <li><a href="newPublication.xed">Registering own publication - information</a></li>      
+    </ul>
+   </section>
+   <section class="highlight1" xml:lang="de">
+    <p>
+    Die Universitätsbibliographie weist <strong>Monographien, Aufsätze, Herausgebertätigkeiten und 
+    elektronische Veröffentlichungen von Angehörigen der Universität Duisburg-Essen</strong> nach. 
+    </p>
+    <p>
+    Enthalten sind ebenfalls <strong>Dissertationen und Habilitationsschriften</strong> sowie sogenannte
+    <strong>"graue Literatur"</strong>, die außerhalb des Buchhandels publiziert wird und dadurch oftmals schwer
+    recherchierbar ist.
+    </p>
+    <p>
+    Die Einträge der Bibliographie beruhen großenteils auf den Angaben der Autoren selbst, 
+    seit September 2010 überarbeitet und vervollständigt ein Redaktionsteam die Neueinträge. 
+    Es gibt ggf. einen direkten Verweis von der Universitätsbibliographie zu
+    <a target="_blank" href="http://primo.ub.uni-due.de/">Primo, dem Katalog der Bibliothek</a>, 
+    bzw. zum Volltext der Publikation.
+    </p>
+    <p>
+    Die Universitätsbibliographie versteht sich als <strong>zentraler Publikationsnachweis</strong> der Hochschule, der
+    als Online-Dienst tagesaktuell und zeitnah die Publikationstätigkeit der Hochschulangehörigen verzeichnet.
+    Gegenüber Wissenschaft, Forschung und der interessierten Öffentlichkeit stellt die Hochschule so
+    ihre Forschungsergebnisse dar, beweist Transparenz und legt Rechenschaft über ihre Tätigkeit ab.
+    Gleichzeitig entsteht die Möglichkeit, <strong>persönliche Publikationsverzeichnisse einzelner Autoren oder
+    Lehrstühle "on demand"</strong> zu erstellen und zu exportieren. 
+    Ein spezieller <a href="storeBrowser/ubo/index.html">Zugang für Suchmaschinen-Robots</a>
+    ermöglicht die Indizierung durch Suchmaschinen wie Google. 
+    </p>
+    <a name="help"></a>
+  </section>
+  <section class="highlight1" xml:lang="en">
+    <p>
+    The university bibliography lists <strong>monographs, articles, editorial activities and
+    electronic publications of members of Duisburg-Essen University</strong>.
+    </p>
+    <p>
+    It additionally includes 
+    <strong>dissertations and university teacher qualification theses</strong> as well as so-called
+    <strong>"grey literature"</strong> that is published outside the book trade and, therefore, is
+    difficult to research.
+    </p>
+    <p>
+    The bibliography entries are based mainly on the information provided by the
+    authors themselves, since september, 2010 an editoral team revises and 
+    completes the new entries. There is, where necessary, a direct reference link 
+    from the university bibliography to 
+    <a target="_blank" href="http://primo.ub.uni-due.de/">Primo, the catalogue of the library</a>, 
+    or to the full text of the publication.
+    </p>
+    <p>
+    The university bibliography is a <strong>central resource</strong> of the university that chronicles all 
+    the publication activities of the university members and provides online service that is updated daily 
+    and in real time.
+    In this way the university presents its research results to the science and research communities and to 
+    the interested public, shows transparency and renders account regarding its activity.
+    The possibility is there, at the same time, to prepare and export a <strong>list of personal
+    publications of individual authors or chairs "on demand"</strong>.
+    The automatically built <a href="storeBrowser/ubo/index.html">index for search engine robots</a>
+    enables search engines like Google to index the bibligraphic entries. 
+    </p>
+    <a name="help"></a>
+  </section>
+  
+  <section class="highlight2" xml:lang="de" title="Beschluss des Rektorats">  
+  <!--<script type="text/javascript">function FensterOeffnen (Adresse)
+  {MeinFenster = window.open(Adresse, "Zweitfenster", "width=788,height=570,left=100,top=100,resizable=no");
+  MeinFenster.focus();}
+  </script>    -->
+    <p>
+    In den Beschlüssen der 3. Sitzung des Rektorats vom 7. Februar 2007 heißt es in
+    Anlage 2, Ziffer 7.1:
+    </p>
+    <p>
+    "<strong>Die Fachbereiche dokumentieren ihre Publikationen (ggfs. mit Volltexten) im zentralen
+    Dokumentenserver der UDE (DuEPublico).</strong>"
+    </p><p>
+    Als Angehöriger der Universität Duisburg-Essen sollten Sie daher Ihre Veröffentlichungen an dieser
+    Stelle <strong>der Universitätsbibliographie melden</strong>. Wenn möglich, sollten Sie
+    auch den Volltext in DuEPublico verfügbar machen.
+    Damit unterstützen Sie den "grünen Weg" des <a href="https://www.uni-due.de/ub/openaccess/gruen.php">Open Access</a>,
+    indem Sie parallel zu Ihrer Verlagspublikation den Text auf diesem Server kostenfrei zugänglich machen.
+    </p>    
+  </section>
+  <section class="highlight2" xml:lang="en" title="Rectorate's resolution">
+  <!--<script type="text/javascript">function FensterOeffnen (Adresse)
+  {MeinFenster = window.open(Adresse, "Zweitfenster", "width=788,height=570,left=100,top=100,resizable=no");
+  MeinFenster.focus();}
+  </script>  -->
+    <p>
+    It is stated in the rectorate's resolution from the 3rd session of February 7th
+    2007, Appendix 2, Numeral 7.1, that:
+    </p>
+    <p>
+    "<strong>The faculties keep records of their publications (in full text, if
+    necessary) on the central UDE document server (DuEPublico).</strong>"
+    </p>
+    <p>
+    As a member of the university of Duisburg-Essen you should, therefore, <strong>register</strong>
+    your publications with this element of the <strong>university bibliography</strong>.
+    If possibly, you should also make the full text available in DuEPublico<!--</a>-->. This way you will support the "green
+    way" of <a href="https://www.uni-due.de/ub/en/openaccess_gruen.php">Open Access</a>, by making the text
+    available on this server free of charge in parallel with your publication at a
+    publishing company.
+    </p>    
+  </section>
+  
+  
+    <section class="highlight1" xml:lang="de" title="Ansprechpartner">    
+      <p>      
+       Kerstin Ponten<br/>
+       <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a><br/>
+       Tel.: 0201 / 183 - 37 03 <br/>      
+      </p>    
+    </section> 
+     
+    <section class="highlight1" xml:lang="en" title="Contact">     
+      <p>
+      Kerstin Ponten<br/>
+       <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a><br/>
+       Phone: 0201 / 183 - 37 03 <br/>       
+      </p>   
+    </section>
+  
+  
+</webpage>

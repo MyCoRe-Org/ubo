@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<webpage lastModified="$Date: 2016-02-01 15:05:21 +0100 (Mo, 01 Feb 2016) $" id="dozbib.edit.publication">
+  <title xml:lang="de">Publikation bearbeiten</title>
+ 
+  <script type="text/javascript" src="external/jquery-tools-1.2.7/jquery.tools.min.js"></script>
+  <script type="text/javascript" src="js/editor.validation.failed.tooltip.js"></script>
+     
+  <section id="form">
+  
+    <script type="text/javascript" src="external/jquery-ui-1.8.21.custom.min.js"></script>
+    <script type="text/javascript" src="external/chosen/chosen.jquery.min.js"></script>
+
+    <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form">
+  
+      <xed:source uri="xslStyle:mods-preprocessor:ubo:{$id}" />
+      <xed:source uri="xslStyle:scopus2mods,mods2bibentry,mods-preprocessor:{$MIL.Scopus.API.URL}abstract/{$scopusField}/{$ScopusID}?apikey={$MIL.Scopus.API.Key}" />
+      <xed:source uri="xslStyle:pubmed2mods,mods2bibentry,mods-preprocessor:{$MIL.PubMed.REST.URL}{$pubMedField}:{$PubMedID}" />
+      <xed:source uri="xslStyle:crossref2mods,mods2bibentry,mods-preprocessor:http://api.crossref.org/works/{$CrossRefDOI}/transform/application/rdf+xml" />
+      <xed:source uri="xslStyle:primo2mods,mods2bibentry,mods-preprocessor:http://primo.ub.uni-due.de/PrimoWebServices/xservice/search/brief?institution=UDE&amp;loc=adaptor,primo_central_multiple_fe&amp;query={$primoField},{$PrimoID}" />
+      <xed:cancel url="servlets/DozBibEntryServlet?mode=show&amp;id={$id}" />
+      <xed:cancel url="newPublication.xed" />
+        
+      <xed:post-processor xsl="mods-postprocessor.xsl" />    
+    
+      <xed:bind xpath="/bibentry">
+        <xed:choose>
+          <xed:when test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+            <xed:include uri="webapp:edit-admin.xed" ref="editor" />
+          </xed:when>
+          <xed:otherwise>
+            <p>Sie sind nicht berechtigt, dieses Formular zu verwenden.</p>
+          </xed:otherwise>
+        </xed:choose>
+      </xed:bind>
+
+      <xed:template id="editor">
+        <input type="hidden" name="mode" value="save" />
+        <xed:include uri="webapp:import-editor.xed" ref="validation" />
+        <xed:bind xpath="mods:mods">
+          <fieldset>
+            <legend>
+              <xed:bind xpath="../@id" default="0">
+                <xed:choose>
+                  <xed:when test=". &gt; 0">Eintrag <xed:output /> korrigieren: </xed:when>
+                  <xed:otherwise>Neue Publikation erfassen: </xed:otherwise>
+                </xed:choose>
+              </xed:bind>
+            </legend>
+            <xed:include uri="webapp:import-editor.xed" ref="status" />    
+            <xed:include uri="webapp:import-editor.xed" ref="subject" />    
+            <xed:include uri="webapp:import-editor.xed" ref="origin" />    
+            <xed:include uri="webapp:import-editor.xed" ref="tags" />    
+          </fieldset>
+          <fieldset>
+            <legend>Publikation:</legend>
+            <xed:include uri="webapp:import-editor.xed" ref="genre" />
+            <xed:include uri="webapp:import-editor.xed" ref="title.complex" />
+            <xed:include uri="webapp:import-editor.xed" ref="person.role" />
+            <xed:include uri="webapp:import-editor.xed" ref="conference" />
+            <xed:include uri="webapp:import-editor.xed" ref="place" />
+            <xed:include uri="webapp:import-editor.xed" ref="year" />
+            <xed:include uri="webapp:import-editor.xed" ref="publisher" />
+            <xed:include uri="webapp:import-editor.xed" ref="edition" />
+            <xed:include uri="webapp:import-editor.xed" ref="series" />
+            <xed:include uri="webapp:import-editor.xed" ref="size" />
+            <xed:include uri="webapp:import-editor.xed" ref="comment" />
+            <xed:include uri="webapp:import-editor.xed" ref="identifier" />
+            <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
+            <xed:include uri="webapp:import-editor.xed" ref="url" />
+            <xed:include uri="webapp:import-editor.xed" ref="languages" />    
+          </fieldset>
+          <fieldset>
+            <legend>erschienen in:</legend>
+            <xed:bind xpath="mods:relatedItem[@type='host']">
+              <xed:include uri="webapp:import-editor.xed" ref="host" />
+              <xed:include uri="webapp:import-editor.xed" ref="title.complex" />
+              <xed:include uri="webapp:import-editor.xed" ref="conference" />
+              <xed:include uri="webapp:import-editor.xed" ref="person.role" />
+              <xed:include uri="webapp:import-editor.xed" ref="volume" />
+              <xed:include uri="webapp:import-editor.xed" ref="issue" />
+              <xed:include uri="webapp:import-editor.xed" ref="place" />
+              <xed:include uri="webapp:import-editor.xed" ref="year" />
+              <xed:include uri="webapp:import-editor.xed" ref="publisher" />
+              <xed:include uri="webapp:import-editor.xed" ref="edition" />
+              <xed:include uri="webapp:import-editor.xed" ref="series" />
+              <xed:include uri="webapp:import-editor.xed" ref="pages" />
+              <xed:include uri="webapp:import-editor.xed" ref="identifier" />
+              <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
+            </xed:bind>
+          </fieldset>
+          <fieldset>
+            <xed:include uri="webapp:import-editor.xed" ref="topics" />    
+            <xed:include uri="webapp:import-editor.xed" ref="abstract" />    
+          </fieldset>
+        </xed:bind>
+  
+        <xed:include uri="webapp:import-editor.xed" ref="cleanup" />
+        <xed:include uri="webapp:import-editor.xed" ref="cancel.submit" />
+      </xed:template>
+    
+    </xed:form>
+  </section>
+</webpage>

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<searchfields xmlns="http://www.mycore.org/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mycore.org/ searchfields.xsd" 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:mcr="http://www.mycore.org/"
+  xmlns:mods="http://www.loc.gov/mods/v3"
+>
+
+  <index id="ubo">
+    <field objects="bibentry" source="xml" name="ubo_id"           type="identifier" xpath="/bibentry" value="@id" />
+    <field objects="bibentry" source="xml" name="ubo_status"       type="identifier" xpath="/bibentry" value="@status" />
+    <field objects="bibentry" source="xml" name="ubo_tag"          type="identifier" xpath="/bibentry/tag" value="text()" />
+    <field objects="bibentry" source="xml" name="ubo_dedup"        type="identifier" xpath="/bibentry/dedup" value="@key" />
+    <field objects="bibentry" source="xml" name="ubo_lastModified" type="timestamp"  xpath="/bibentry" value="@lastModified" sortable="true" />
+    <field objects="bibentry" source="xml" name="ubo_datemodified" type="date"       xpath="/bibentry" value="substring-before(@lastModified,' ')" sortable="true" />
+    <field objects="bibentry" source="xml" name="ubo_type"         type="identifier" xpath="/bibentry/mods:mods/mods:genre[@type='intern']" sortable="true" />
+    <field objects="bibentry" source="xml" name="ubo_pid"          type="identifier" xpath="/bibentry/mods:mods/mods:name/mods:nameIdentifier[@type='lsf']" value="text()" />
+    <field objects="bibentry" source="xml" name="ubo_orcid"        type="identifier" xpath="/bibentry/mods:mods/mods:name/mods:nameIdentifier[@type='orcid']" value="text()" />
+    <field objects="bibentry" source="xml" name="ubo_researcherid" type="identifier" xpath="/bibentry/mods:mods/mods:name/mods:nameIdentifier[@type='researcherid']" value="text()" />
+    <field objects="bibentry" source="xml" name="ubo_gnd"          type="identifier" xpath="/bibentry/mods:mods/mods:name/mods:nameIdentifier[@type='gnd']" value="text()" />
+    <field objects="bibentry" source="xml" name="ubo_year"         type="integer"    xpath="/bibentry/mods:mods//mods:dateIssued[1]" value="text()" sortable="true" />
+    <field objects="bibentry" source="xml" name="ubo_journal"      type="text"       xpath="/bibentry/mods:mods/mods:relatedItem[@type='host'][mods:genre='journal']/mods:titleInfo" value="concat(mods:title,' ',mods:subTitle)" />
+    <field objects="bibentry" source="xml" name="ubo_series"       type="text"       xpath="/bibentry/mods:mods/mods:relatedItem[@type='series']/mods:titleInfo" value="concat(mods:title,' ',mods:subTitle)" />
+    <field objects="bibentry" source="xml" name="ubo_conference"   type="text"       xpath="/bibentry/descendant::mods:name[@type='conference']" value="mods:namePart" />
+    <field objects="bibentry" source="xml" name="ubo_comment"      type="text"       xpath="/bibentry/mods:mods/mods:note" value="text()" />
+    <field objects="bibentry" source="xml" name="ubo_abstract"     type="text"       xpath="/bibentry/mods:mods/mods:abstract" value="text()" />
+    <field objects="bibentry" source="xml" name="ubo_isbn"         type="identifier" xpath="/bibentry/mods:mods//mods:identifier[@type='isbn']" value="text()" />
+    <field objects="bibentry" source="xml" name="ubo_issn"         type="identifier" xpath="/bibentry/mods:mods//mods:identifier[@type='issn']" value="text()" />
+    <field objects="bibentry" source="xml" name="ubo_signature"    type="identifier" xpath="/bibentry/mods:mods//mods:shelfLocator" value="text()" />
+    <field objects="bibentry" source="xml" name="ubo_doi"          type="identifier" xpath="/bibentry/mods:mods//mods:identifier[@type='doi']" value="text()" />
+    <field objects="bibentry" source="xml" name="ubo_urn"          type="identifier" xpath="/bibentry/mods:mods//mods:identifier[@type='urn']" value="text()" />
+    <field objects="bibentry" source="xml" name="ubo_pubmed"       type="identifier" xpath="/bibentry/mods:mods//mods:identifier[@type='pubmed']" value="text()" />
+    <field objects="bibentry" source="xml" name="ubo_scopus"       type="identifier" xpath="/bibentry/mods:mods//mods:identifier[@type='scopus']" value="text()" />
+    <field objects="bibentry" source="xml" name="ubo_documentID"   type="identifier" xpath="/bibentry/mods:mods//mods:identifier[@type='duepublico']" value="text()" />
+    <field objects="bibentry" source="xml" name="ubo_all"          type="text"       xpath="/bibentry/mods:mods//mods:*" value="concat(text(),lastName,', ',firstName)" />
+
+    <field objects="bibentry" source="xml" name="ubo_role_pid" type="identifier">
+      <xsl:for-each select="/bibentry/mods:mods/mods:name[mods:nameIdentifier[@type='lsf']]/mods:role/mods:roleTerm">
+        <mcr:ubo_role_pid>
+          <xsl:value-of select="concat(.,'_',../../mods:nameIdentifier[@type='lsf'])" />
+        </mcr:ubo_role_pid>
+        <mcr:ubo_role_pid>
+          <xsl:choose>
+            <xsl:when test=".='aut'">author</xsl:when>
+            <xsl:when test=".='edt'">publisher</xsl:when>
+            <xsl:when test=".='ths'">advisor</xsl:when>
+            <xsl:when test=".='rev'">referee</xsl:when>
+            <xsl:when test=".='trl'">translator</xsl:when>
+            <xsl:when test=".='ctb'">contributor</xsl:when>
+            <xsl:otherwise>contributor</xsl:otherwise>
+          </xsl:choose>
+          <xsl:value-of select="concat('_',../../mods:nameIdentifier[@type='lsf'])" />
+        </mcr:ubo_role_pid>
+      </xsl:for-each>
+    </field>
+
+    <field objects="bibentry" source="xml" name="ubo_diss_year" type="integer">
+      <xsl:for-each select="/bibentry/mods:mods/mods:note">
+        <xsl:if test="contains(.,'Univ') and contains(.,'Diss') and ( contains(.,'Essen') or contains(.,'Duisburg') ) and contains( translate(.,'0123456789','JJJJJJJJJJ'),'JJJJ')">
+          <xsl:variable name="jjjj" select="translate(.,'0123456789','JJJJJJJJJJ')" />
+          <xsl:variable name="before" select="substring-before($jjjj,'JJJJ')" />
+          <mcr:ubo_diss_year>
+            <xsl:value-of select="substring(substring-after(.,$before),1,4)" />
+          </mcr:ubo_diss_year>
+        </xsl:if>
+      </xsl:for-each>
+    </field>
+
+    <field objects="bibentry" source="xml" name="ubo_title" type="text">
+      <xsl:for-each select="/bibentry/mods:mods//mods:titleInfo">
+        <mcr:ubo_title>
+          <xsl:value-of select="concat(mods:nonSort,' ',mods:title,' ',mods:subTitle)" />
+        </mcr:ubo_title>
+      </xsl:for-each>
+    </field>
+    
+    <field objects="bibentry" source="xml" name="ubo_sortby_title" type="text" sortable="true">
+      <mcr:ubo_sortby_title>
+        <xsl:for-each select="/bibentry/mods:mods//mods:titleInfo">
+          <xsl:value-of select="concat(mods:title,' ',mods:subTitle)" />
+          <xsl:text>          </xsl:text>
+        </xsl:for-each>
+      </mcr:ubo_sortby_title>
+    </field>
+
+    <field objects="bibentry" source="xml" name="ubo_sortby_name" type="name" sortable="true">
+      <mcr:ubo_sortby_name>
+        <xsl:for-each select="/bibentry/mods:mods/mods:name">
+          <xsl:value-of select="concat(mods:namePart[@type='family'],' ',mods:namePart[@type='given'],' ')" />
+        </xsl:for-each>
+      </mcr:ubo_sortby_name>
+    </field>
+
+    <field objects="bibentry" source="xml" name="ubo_contributor" type="name">
+      <xsl:for-each select="/bibentry/mods:mods/mods:name">
+        <mcr:ubo_contributor>
+          <xsl:value-of select="concat(mods:namePart[@type='family'],', ',mods:namePart[@type='given'])" />
+        </mcr:ubo_contributor>
+        <mcr:ubo_contributor>
+          <xsl:value-of select="concat(mods:namePart[@type='family'],', ',substring(mods:namePart[@type='given'],1,1),'.')" />
+        </mcr:ubo_contributor>
+        <mcr:ubo_contributor>
+          <xsl:value-of select="concat(substring(mods:namePart[@type='given'],1,1), '. ',mods:namePart[@type='family'])" />
+        </mcr:ubo_contributor>
+        <mcr:ubo_contributor>
+          <xsl:value-of select="concat(mods:namePart[@type='given'],' ',mods:namePart[@type='family'])" />
+        </mcr:ubo_contributor>
+      </xsl:for-each>
+    </field>
+
+    <field objects="bibentry" source="xml" name="ubo_author" type="name">
+      <xsl:for-each select="/bibentry/mods:mods/mods:name[mods:role/mods:roleTerm='aut']">
+        <mcr:ubo_author>
+          <xsl:value-of select="concat(mods:namePart[@type='family'],', ',mods:namePart[@type='given'])" />
+        </mcr:ubo_author>
+        <mcr:ubo_author>
+          <xsl:value-of select="concat(mods:namePart[@type='family'],', ',substring(mods:namePart[@type='given'],1,1),'.')" />
+        </mcr:ubo_author>
+        <mcr:ubo_author>
+          <xsl:value-of select="concat(substring(mods:namePart[@type='given'],1,1), '. ',mods:namePart[@type='family'])" />
+        </mcr:ubo_author>
+        <mcr:ubo_author>
+          <xsl:value-of select="concat(mods:namePart[@type='given'],' ',mods:namePart[@type='family'])" />
+        </mcr:ubo_author>
+      </xsl:for-each>
+    </field>
+
+    <field objects="bibentry" source="xml" name="ubo_advisor" type="name">
+      <xsl:for-each select="/bibentry/mods:mods/mods:name[mods:role/mods:roleTerm='ths']">
+        <mcr:ubo_advisor>
+          <xsl:value-of select="concat(mods:namePart[@type='family'],', ',mods:namePart[@type='given'])" />
+        </mcr:ubo_advisor>
+        <mcr:ubo_advisor>
+          <xsl:value-of select="concat(mods:namePart[@type='family'],', ',substring(mods:namePart[@type='given'],1,1),'.')" />
+        </mcr:ubo_advisor>
+        <mcr:ubo_advisor>
+          <xsl:value-of select="concat(substring(mods:namePart[@type='given'],1,1), '. ',mods:namePart[@type='family'])" />
+        </mcr:ubo_advisor>
+        <mcr:ubo_advisor>
+          <xsl:value-of select="concat(mods:namePart[@type='given'],' ',mods:namePart[@type='family'])" />
+        </mcr:ubo_advisor>
+      </xsl:for-each>
+    </field>
+
+    <field objects="bibentry" source="xml" name="ubo_referee" type="name">
+      <xsl:for-each select="/bibentry/mods:mods/mods:name[mods:role/mods:roleTerm='rev']">
+        <mcr:ubo_referee>
+          <xsl:value-of select="concat(mods:namePart[@type='family'],', ',mods:namePart[@type='given'])" />
+        </mcr:ubo_referee>
+        <mcr:ubo_referee>
+          <xsl:value-of select="concat(mods:namePart[@type='family'],', ',substring(mods:namePart[@type='given'],1,1),'.')" />
+        </mcr:ubo_referee>
+        <mcr:ubo_referee>
+          <xsl:value-of select="concat(substring(mods:namePart[@type='given'],1,1), '. ',mods:namePart[@type='family'])" />
+        </mcr:ubo_referee>
+        <mcr:ubo_referee>
+          <xsl:value-of select="concat(mods:namePart[@type='given'],' ',mods:namePart[@type='family'])" />
+        </mcr:ubo_referee>
+      </xsl:for-each>
+    </field>
+
+    <field objects="bibentry" source="xml" name="ubo_publisher" type="name">
+      <xsl:for-each select="/bibentry/mods:mods/mods:name[mods:role/mods:roleTerm='edt']">
+        <mcr:ubo_publisher>
+          <xsl:value-of select="concat(mods:namePart[@type='family'],', ',mods:namePart[@type='given'])" />
+        </mcr:ubo_publisher>
+        <mcr:ubo_publisher>
+          <xsl:value-of select="concat(mods:namePart[@type='family'],', ',substring(mods:namePart[@type='given'],1,1),'.')" />
+        </mcr:ubo_publisher>
+        <mcr:ubo_publisher>
+          <xsl:value-of select="concat(substring(mods:namePart[@type='given'],1,1), '. ',mods:namePart[@type='family'])" />
+        </mcr:ubo_publisher>
+        <mcr:ubo_publisher>
+          <xsl:value-of select="concat(mods:namePart[@type='given'],' ',mods:namePart[@type='family'])" />
+        </mcr:ubo_publisher>
+      </xsl:for-each>
+      <xsl:for-each select="/bibentry/mods:mods/mods:originInfo/mods:publisher">
+        <mcr:ubo_publisher>
+          <xsl:value-of select="text()" />
+        </mcr:ubo_publisher>
+      </xsl:for-each>
+    </field>
+
+    <field objects="bibentry" source="xml" name="ubo_origin" type="identifier">
+      <xsl:for-each select="/bibentry/mods:mods/mods:classification[contains(@authorityURI,'ORIGIN')]">
+        <xsl:variable name="category" select="substring-after(@valueURI,'#')" /> 
+        <xsl:for-each select="document(concat('classification:editor:0:parents:ORIGIN:',$category))/descendant::item">
+          <mcr:ubo_origin>
+            <xsl:value-of select="@value" />
+          </mcr:ubo_origin>
+        </xsl:for-each>
+      </xsl:for-each>
+    </field>
+    
+    <field objects="bibentry" source="xml" name="ubo_subject" type="identifier">
+      <xsl:for-each select="/bibentry/mods:mods/mods:classification[contains(@authorityURI,'fachreferate')]">
+        <mcr:ubo_subject>
+          <xsl:value-of select="substring-after(@valueURI,'#')" />
+        </mcr:ubo_subject>
+      </xsl:for-each>
+    </field>
+
+    <field name="score" source="searcherHitMetadata" type="decimal" sortable="true" />
+
+  </index>
+  
+</searchfields>

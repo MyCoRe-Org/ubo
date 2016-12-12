@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<items>
+  <item value="aut">
+    <label xml:lang="de">AutorIn</label>
+    <label xml:lang="en">Author</label>
+  </item>
+  <item value="edt">
+    <label xml:lang="de">HerausgeberIn</label>
+    <label xml:lang="en">Editor</label>
+  </item>
+  <item value="ths">
+    <label xml:lang="de">BetreuerIn/Doktorvater</label>
+    <label xml:lang="en">Thesis advisor</label>
+  </item>  
+  <item value="red">
+    <label xml:lang="de">RedakteurIn</label>
+    <label xml:lang="en">Redaktor</label>
+  </item>
+  <item value="trl">
+    <label xml:lang="de">ÜbersetzerIn</label>
+    <label xml:lang="en">Translator</label>
+  </item>
+  <item value="ctb">
+    <label xml:lang="de">Beitragende(r)</label>
+    <label xml:lang="en">Contributor</label>
+  </item>
+</items>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<wsdl:definitions targetNamespace="http://www.lsf.uni-due.de/lsf/services/soapsearch" xmlns:apachesoap="http://xml.apache.org/xml-soap"
+  xmlns:impl="http://www.lsf.uni-due.de/lsf/services/soapsearch" xmlns:intf="http://www.lsf.uni-due.de/lsf/services/soapsearch"
+  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <wsdl:message name="searchResponse">
+    <wsdl:part name="searchReturn" type="soapenc:string">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:message name="getFormResponse">
+    <wsdl:part name="getFormReturn" type="soapenc:string">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:message name="getForm4AuthUserRequest">
+    <wsdl:part name="searchXML" type="soapenc:string">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:message name="searchRequest">
+    <wsdl:part name="searchXML" type="soapenc:string">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:message name="getForm4AuthUserResponse">
+    <wsdl:part name="getForm4AuthUserReturn" type="soapenc:string">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:message name="getFormRequest">
+    <wsdl:part name="searchXML" type="soapenc:string">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:portType name="SOAPSearch">
+    <wsdl:operation name="search" parameterOrder="searchXML">
+      <wsdl:input message="impl:searchRequest" name="searchRequest">
+      </wsdl:input>
+      <wsdl:output message="impl:searchResponse" name="searchResponse">
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="getForm" parameterOrder="searchXML">
+      <wsdl:input message="impl:getFormRequest" name="getFormRequest">
+      </wsdl:input>
+      <wsdl:output message="impl:getFormResponse" name="getFormResponse">
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="getForm4AuthUser" parameterOrder="searchXML">
+      <wsdl:input message="impl:getForm4AuthUserRequest" name="getForm4AuthUserRequest">
+      </wsdl:input>
+      <wsdl:output message="impl:getForm4AuthUserResponse" name="getForm4AuthUserResponse">
+      </wsdl:output>
+    </wsdl:operation>
+
+  </wsdl:portType>
+
+  <wsdl:binding name="soapsearchSoapBinding" type="impl:SOAPSearch">
+    <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="search">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="searchRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.his.de"
+          use="encoded" />
+      </wsdl:input>
+      <wsdl:output name="searchResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.lsf.uni-due.de/lsf/services/soapsearch"
+          use="encoded" />
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="getForm">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getFormRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.his.de"
+          use="encoded" />
+      </wsdl:input>
+
+      <wsdl:output name="getFormResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.lsf.uni-due.de/lsf/services/soapsearch"
+          use="encoded" />
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="getForm4AuthUser">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getForm4AuthUserRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.his.de"
+          use="encoded" />
+      </wsdl:input>
+
+      <wsdl:output name="getForm4AuthUserResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.lsf.uni-due.de/lsf/services/soapsearch"
+          use="encoded" />
+      </wsdl:output>
+    </wsdl:operation>
+
+  </wsdl:binding>
+
+  <wsdl:service name="SOAPSearchService">
+    <wsdl:port binding="impl:soapsearchSoapBinding" name="soapsearch">
+      <wsdlsoap:address location="http://www.lsf.uni-due.de/lsf/services/soapsearch" />
+    </wsdl:port>
+  </wsdl:service>
+
+</wsdl:definitions>

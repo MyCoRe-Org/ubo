@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<webpage lastModified="$Date: 2011-08-03 12:16:35 +0200 (Mi, 03 Aug 2011) $" id="dozbib.search-mdiss">
+  <title xml:lang="de">Suche nach Dissertationen der medizinischen Fakult�t</title>
+  <title xml:lang="en">Search for doctoral thesis in medical faculty</title>
+
+  <section xml:lang="de">
+    <p>
+      Hier k�nnen Sie nach Dissertationen suchen, die in der medizinischen Fakult�t
+      geschrieben wurden. Die Suche basiert auf den Eintr�gen
+      der Universit�tsbibliographie, daher werden sowohl elektronische Dissertationen 
+      mit Volltext, als auch herk�mmliche Publikationen als reine Nachweise gefunden.  
+    </p>
+  </section>
+
+  <section xml:lang="en">
+    <p>
+      Here you can search for thesis papers, written at the medical faculty. 
+      The search is based on the entries in the
+      university bibliography, therefore electronic dissertations including full text
+      online as well as ordinary publications as reference are found.  
+    </p>
+  </section>
+
+  <section class="highlight2">
+    <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form" style="margin:0; padding:0;">
+      <fieldset style="margin:0; padding:0;">
+        <legend>
+          <xed:output i18n="search.dozbib.mdiss" />
+        </legend>
+
+        <xed:include uri="webapp:import-search.xed" ref="validation" />
+
+        <xed:bind xpath="/query">
+          <xed:bind xpath="conditions[@format='xml']/boolean[@operator='and']">
+
+            <xed:bind xpath="condition6[@field='ubo_origin'][@operator='=']/@value" default="14">
+              <div>
+                <label>
+                  <xed:output i18n="search.dozbib.origin" />
+                </label>
+                <select class="autocomplete">
+                  <option value="14"><xed:output i18n="search.select" /></option>
+                  <xed:include uri="xslStyle:items2options:classification:editor:-1:children:ORIGIN:14" />
+                </select>
+                <script type="text/javascript">
+                  jQuery(document).ready(function() { jQuery('select[class*="autocomplete"]').chosen({search_contains: true}); });
+                </script>
+              </div>
+            </xed:bind>
+
+            <xed:bind xpath="condition2[@operator='contains']/@field" initially="ubo_advisor" />
+            <xed:include uri="webapp:import-search.xed" ref="name" />
+
+            <xed:bind xpath="condition4[@field='ubo_title'][@operator='contains']/@value">
+              <div>
+                <label>
+                  <xed:output i18n="search.title" />
+                </label>
+                <input type="text" style="width:450px;" />
+              </div>
+            </xed:bind>          
+              
+            <xed:include uri="webapp:import-search.xed" ref="year" /> 
+
+            <xed:bind xpath="condition7[@field='ubo_type'][@operator='='][@value='dissertation']" />
+          </xed:bind>        
+          
+          <xed:include uri="webapp:import-search.xed" ref="sortby" /> 
+          <xed:include uri="webapp:import-search.xed" ref="numhits" /> 
+          <xed:include uri="webapp:import-search.xed" ref="submit" />
+
+        </xed:bind>
+      </fieldset>
+      
+      <xed:cleanup-rule xpath="//*[@field]" relevant-if="string-length(@value) &gt; 0" />
+      
+    </xed:form>
+  </section>
+</webpage>

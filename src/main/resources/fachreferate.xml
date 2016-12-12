@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<fachreferate>
+  <item value="sonst" label="Allgemeines, Sonstiges">
+    <email>burkhard.gutleben@uni-due.de</email>
+  </item>
+  <item value="avslw" label="Allgemeine u. vergleichende Sprach- und Literaturwissenschaften">
+    <email>dorothee.graf@uni-due.de</email>
+  </item>
+  <item value="anko" label="Angewandte Kognitionswissenschaft">
+    <email>anke.petschenka@uni-due.de</email>
+  </item>
+  <item value="ang" label="Anglistik">
+    <email>dorothee.graf@uni-due.de</email>
+  </item>
+  <item value="bau" label="Bauwissenschaften">
+    <email>fachreferat-bauwissenschaften@ub.uni-due.de</email>
+  </item>
+  <item value="bio" label="Biologie">
+    <email>eike.spielberg@uni-due.de</email>
+  </item>
+  <item value="chem" label="Chemie">
+    <email>andreas.sprick@uni-due.de</email>
+  </item>
+  <item value="ele" label="Elektrotechnik">
+    <email>ludovica.rossa@uni-due.de</email>
+  </item>
+  <item value="erz" label="Erziehungswissenschaften">
+    <email>ulrike.scholle@uni-due.de</email>
+  </item>
+  <item value="geo" label="Geowissenschaften">
+    <email>eike.spielberg@uni-due.de</email>
+  </item>
+  <item value="ger" label="Germanistik">
+    <email>dorothee.graf@uni-due.de</email>
+  </item>
+  <item value="gesch" label="Geschichte">
+    <email>rosemarie.kosche@uni-due.de</email>
+  </item>
+  <item value="inf" label="Informatik">
+    <email>frank.luetzenkirchen@uni-due.de</email>
+  </item>
+  <item value="kowi" label="Kommunikationswissenschaft">
+    <email>rosemarie.kosche@uni-due.de</email>
+  </item>
+  <item value="kud" label="Kunst, Design">
+    <email>maria-theresia.kirchberg-jeske@uni-due.de</email>
+  </item>
+  <item value="masch" label="Maschinenbau">
+    <email>ludovica.rossa@uni-due.de</email>
+  </item>
+  <item value="mater" label="Materialtechnik">
+    <email>ludovica.rossa@uni-due.de</email>
+  </item>
+  <item value="math" label="Mathematik">
+    <email>fachreferat-mathematik@ub.uni-due.de</email>
+  </item>
+  <item value="med" label="Medizin">
+    <email>katrin.wibker@uni-due.de</email>
+  </item>
+  <item value="mus" label="Musik">    
+  </item>
+  <item value="nieder" label="Niederlandistik">
+    <email>burkhard.gutleben@uni-due.de</email>    
+  </item>
+  <item value="oawi" label="Ostasienwissenschaften">  
+    <email>toshi.yamada@uni-due.de</email>
+    <email>christina.klaere@uni-due.de</email>
+    <email>dorothee.graf@uni-due.de</email>
+    <email>delia.bauer-krupp@uni-due.de</email>    
+  </item>
+  <item value="philo" label="Philosophie">
+    <email>anke.petschenka@uni-due.de</email>
+  </item>
+  <item value="phys" label="Physik">
+    <email>ludovica.rossa@uni-due.de</email>
+  </item>
+  <item value="pol" label="Politikwissenschaft">
+    <email>delia.bauer-krupp@uni-due.de</email>    
+  </item>
+  <item value="psy" label="Psychologie">
+    <email>anke.petschenka@uni-due.de</email>
+  </item>
+  <item value="recht" label="Rechtswissenschaften">
+    <email>gotthard.hoffmann@uni-due.de</email>
+    <email>doris.pohl@uni-due.de</email>
+  </item>
+  <item value="rom" label="Romanistik">
+    <email>hendrik.friggemann@uni-due.de</email>
+  </item>
+  <item value="sophil" label="Sonstige Philologien">
+    <email>dorothee.graf@uni-due.de</email>
+  </item>
+  <item value="sowi" label="Soziologie, Sozialwissenschaften">
+    <email>delia.bauer-krupp@uni-due.de</email>    
+    <email>hanno.brockmann@uni-due.de</email>
+  </item>
+  <item value="sport" label="Sport- und Bewegungswissenschaften">
+    <email>doris.pohl@uni-due.de</email>
+  </item>
+  <item value="tech" label="Technik">
+    <email>ludovica.rossa@uni-due.de</email>
+  </item>
+  <item value="theo" label="Theologie">
+    <email>rosemarie.kosche@uni-due.de</email>
+  </item>
+  <item value="turk" label="Turkistik, Türkisch">
+    <email>tuerklit@ub.uni-due.de</email>
+  </item>
+  <item value="wiwi"
+    label="Wirtschaftswissenschaften">
+    <email>christina.klaere@uni-due.de</email>
+    <email>hanno.brockmann@uni-due.de</email>
+  </item>
+</fachreferate>

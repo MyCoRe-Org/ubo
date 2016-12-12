@@ -1,0 +1,299 @@
+/* Tag Cloud == Ze */
+div#cloud {
+                 font-size           : 100%;
+                 line-height         : 2em;
+                 margin              : 0px;
+                 float               : left;
+                 background-image    : url(/images/wolken.jpg);
+                 background-repeat   : repeat;
+                 background-position : center;
+                 background-color    : #e8e8f0;
+                 border              : solid 1px #a0a0ff;
+                 -moz-border-radius  : 15px;
+                 padding             : 0.5em 0 0.5em 0;
+}
+div#cloud a {
+                 text-decoration  : none;
+                 border           : 0px;
+}
+
+div#cloud a:hover {
+                 text-decoration  : underline;
+                 border           : 0px;
+}
+
+div#cloud ol {
+                 list-style-type  : none;
+		 margin           : 0 0 0 -30px;
+}
+div#cloud ol li {
+                 float            : left;
+		 margin           : 1px 8px 0px 0px;
+		 display          : inline;
+		 padding          : 0px;
+		 height           : 1.8em;
+		 line-height      : 2.2em;
+		 vertical-align   : baseline;
+}
+
+/* Organigramm /verwaltung/organisation/ */
+
+div#organigramm div { clear: both; }
+
+div#organigramm { width: 728px; padding: 0; }
+
+div#organigramm h2,
+div#organigramm h3,
+div#organigramm h4,
+div#organigramm h5 { display: inline; clear: none; float: left; margin: 0; font-size: 12px; background: #fff; text-align: center; }
+
+/* xx FS xx */
+div#organigramm div.drittel_halbhoch a.oben  { padding-top: 2px ; height: 15px; margin-top: 6px ; font-size : 1em; text-align: center; }
+div#organigramm div.drittel_halbhoch a.unten { padding-top: 2px ; height: 15px; margin-top: 2px ; font-size : 1em; text-align: center; }
+/* xx FS END xx */
+
+div#organigramm a { display: block; color: #103080; margin-top: 6px; margin-right: 10px; padding: 8px 0; border: none; }
+div#organigramm h2 a { margin-top: 15px; background: #a0c0ef; text-decoration : none; font-weight : bold; }
+div#organigramm h3 a { background: #b0d0ff; }
+div#organigramm h4 a { background: #c0d4ff; height: 36px; }
+div#organigramm h5 a { background: #d5daef; }
+
+div#organigramm a.ganz { width: 728px; }
+div#organigramm a.halb { width: 359px; }
+div#organigramm a.drittel { width: 236px; }
+
+div#organigramm a.last { margin-right: 0; }
+
+div#organigramm ul { float: left; width: 215px; font-weight: bold; margin-left:12px;}
+div#organigramm ul li { background: none; }
+div#organigramm ul a { float: none; background: none; padding: 0; }
+
+div#organigramm a:link { text-decoration : none; font-weight : bold; }
+div#organigramm a:hover { text-decoration : underline; font-weight : bold; }
+
+div#organigramm div.faculties {
+   background-color   : #f0f0ff;
+   height             : 130px;
+   width              : 728px;
+   padding            : 0;
+}
+
+
+/* ENDE Organigramm */
+
+/* === Google-Maps Box =========== */
+    div#inh_a div.google_map,
+    div#inh_b div.google_map {
+       font-family    : Arial, Sans-Serif;
+       font-size      : 10px;
+       margin         : 0;
+       padding        : 0;
+       overflow       : hidden;
+       border         : solid 1px #000000;
+    }
+    div#inh_a div.google_map {
+       float          : left;
+       margin         : 0 10px 10px 0;
+    }
+    div#inh_b div.google_map {
+       float          : left;
+       margin         : 0 10px 10px 0;
+    }
+    div#inh_a div.google_map img,
+    div#inh_b div.google_map img {
+       float          : left;
+       margin         : 0px 5px 4px 0px;
+    }
+    div.googlemaptext {
+       text-align     : left;
+    }
+    div.googlemaptextblock{
+       float          : left;
+       width          : 222px;
+    }
+    div.googlemaptextblockbreit{
+       float          : left;
+       width          : 480px;
+    }
+    div.googlemap_preview_hint {
+       background     : white;
+       border         : solid 1px #203080;
+       margin         : 1em;
+       padding        : 0.5em;
+       width          : 200px;
+    }
+    div.google_preview_out    {
+         display            : block;
+         background         : #202020;
+         border             : 1px solid #202020;
+         -moz-border-radius : 5px;
+         position           : relative; 
+         margin             : 0.5em 0em; 
+         left               : 1em; 
+         width              : 200px;
+    }
+    div.google_preview_in     {
+         background         : #fff0c0; 
+         position           : relative; 
+         left               : -.125em; 
+         top                : -.2em;
+         margin             : 0;
+         padding            : 1em 2em;
+         border             : 1px solid #202020;
+         -moz-border-radius : 5px;
+         font-family        : Arial, Sans-Serif;
+         font-size          : 11px;
+    }
+/* =============================== */
+
+/* NEWSFEED */
+ul.newsfeed li {
+         margin-bottom      : 8px;
+}
+ul.newsfeed li p.item_date,
+aside#sidebar ul.newsfeed li p.item_date,
+p.item_date {
+   font-size : 10px;
+   line-height : 1em;
+   padding : 2px 0 0 0;
+   margin : 0;
+   color : #777;
+}
+ul.newsfeed li img,
+img.rss_item_image {
+	 float      : left;
+	 margin     : 2px 8px 5px 0px;
+         width      : auto !important;
+	 max-width  : 100px;
+         height     : auto !important;
+	 max-height : 100px;
+         border     : 0px;
+}
+aside#sidebar ul.newsfeed li img {
+	 float      : left;
+	 margin     : 2px 8px 5px 0px;
+         width      : auto !important;
+	 max-width  : 60px;
+         height     : auto !important;
+	 max-height : 60px;
+         border     : 0px;
+}
+ul.newsfeed li div.item_clear,
+aside#sidebar ul.newsfeed li div.item_clear {
+    clear : both;
+}
+/* /NEWSFEED */
+
+/* === Knowledgebase =========== */
+span.personensuche ul.plain {
+	list-style-image    : none;
+	list-style-type     : none;
+	font-family         : arial,sans-serif;
+	font-size           : 13px;
+}
+span.personensuche ul.plain li {
+	padding             : .2ex;
+}
+span.personensuche div.bibentry {
+	padding             : .5ex;
+}
+span.personensuche div.answer {
+	background-color    : #FFFFFF;
+	padding             : 8px;
+        margin-left         : 20px;
+}
+span.personensuche div.question {
+	background-color    : #EFE4BF;
+	padding             : 8px;
+	margin              : 0px;
+        margin-left         : 20px;
+}
+div#resultbox th {
+        text-align          : left;
+	font-family         : arial,sans-serif;
+	font-size           : 13px;
+}
+div#resultbox tr:nth-child(even) td {
+	background          : #f7f8fc;
+	border              : 1px solid #8a9dd0;
+	font-family         : arial,sans-serif;
+	font-size           : 13px;
+}
+div#resultbox tr:nth-child(odd) td,
+div#resultbox tr:nth-child(odd) th {
+	background          : #dfe4f2;
+	border              : 1px solid #8a9dd0;
+	font-family         : arial,sans-serif;
+	font-size           : 13px;
+}
+/* === /Knowledgebase ========== */
+
+/* VCards ZIM */
+div.vcard_div {
+        background-image:url(/images/vcard.gif);
+        width  : 450px; 
+        height : 244px
+}
+div.vcard_div div.vcard_text {
+        float  : left;
+        padding: 10px;
+        border : 0;
+        width  : 300px;
+}
+div.vcard_div div.vcard_text2 {
+        width  : 440px;
+        height : 103px;
+        border : 0;
+}
+div.vcard_div div.vcard_text2 div.c1 {
+        float  : left;
+        margin : 0;
+        border : 0;
+        padding: 0 0 0 10px;
+}
+div.vcard_div div.sep {
+        clear  : both;
+        height : 10px;
+}
+div.vcard_div div.vcard_text2 div.c2 {
+        float  : left;
+        margin : 0 10px 0 0;
+        border : 0;
+        padding: 0 0 0 10px;
+}
+
+div.vcard_div div.vcard_image {
+        float  : right;
+        padding: 14px 24px 0 0;
+        width  : 102px;
+        height : 102px;
+}
+div.vcard_div div.vcard_image img {
+        width  : 102px;
+        height : 102px;
+}
+div.vcard_div div.vcard_text2 div.c1 table.vcard,
+div.vcard_div div.vcard_text2 div.c2 table.vcard {
+        padding     : 0 10px 0 0;
+        border      : 0;
+        background  : transparent !important;
+        width       : 200px;
+        float       : left;
+}
+
+div.vcard_div div.vcard_text2 div.c1 table.vcard tr td,
+div.vcard_div div.vcard_text2 div.c2 table.vcard tr td,
+div.vcard_div div.vcard_text2 div.c1 table.vcard tr th,
+div.vcard_div div.vcard_text2 div.c2 table.vcard tr th {
+        background  : transparent !important;
+        border      : 0;
+        padding     : 0;
+        text-align  : left;
+}
+div.vcard_div div.vcard_text2 div.c1 table.vcard tr td.titel,
+div.vcard_div div.vcard_text2 div.c2 table.vcard tr td.titel {
+        width  : 60px;
+        background  : transparent !important;
+        border : 0;
+}
+

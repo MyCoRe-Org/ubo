@@ -1,0 +1,72 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
+
+  <display-name>Universitätsbibliographie</display-name>
+
+  <servlet id="DozBibServlet">
+    <servlet-name>DozBibServlet</servlet-name>
+    <servlet-class>unidue.ubo.DozBibServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DozBibServlet</servlet-name>
+    <url-pattern> /servlets/DozBibServlet </url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DozBibServlet</servlet-name>
+    <url-pattern> /servlets/DozBibServlet/* </url-pattern>
+  </servlet-mapping>
+
+  <servlet id="DozBibEntryServlet">
+    <servlet-name>DozBibEntryServlet</servlet-name>
+    <servlet-class>unidue.ubo.DozBibEntryServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DozBibEntryServlet</servlet-name>
+    <url-pattern> /servlets/DozBibEntryServlet </url-pattern>
+  </servlet-mapping>
+
+  <servlet id="DozBibImportServlet">
+    <servlet-name>DozBibImportServlet</servlet-name>
+    <servlet-class>unidue.ubo.importer.DozBibImportServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DozBibImportServlet</servlet-name>
+    <url-pattern> /servlets/DozBibImportServlet </url-pattern>
+  </servlet-mapping>
+
+  <servlet id="BasketName2PIDEditor">
+    <servlet-name>BasketName2PIDEditor</servlet-name>
+    <servlet-class>unidue.ubo.basket.BasketName2PIDEditor</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>BasketName2PIDEditor</servlet-name>
+    <url-pattern> /servlets/BasketName2PIDEditor </url-pattern>
+  </servlet-mapping>
+
+  <servlet id="LSFPIDSearch">
+    <servlet-name>LSFPIDSearch</servlet-name>
+    <servlet-class>unidue.ubo.lsf.LSFPIDSearch</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LSFPIDSearch</servlet-name>
+    <url-pattern> lsfpidsearch.html </url-pattern>
+  </servlet-mapping>
+
+  <servlet id="UBO2Primo">
+    <servlet-name>UBO2Primo</servlet-name>
+    <servlet-class>org.mycore.oai.MCROAIDataProvider</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UBO2Primo</servlet-name>
+    <url-pattern> /primo/ubo </url-pattern>
+  </servlet-mapping>
+
+  <session-config>
+    <session-timeout>30</session-timeout>
+  </session-config>
+
+  <welcome-file-list>
+    <welcome-file>index.xed</welcome-file>
+    <welcome-file>index.xml</welcome-file>
+  </welcome-file-list>
+
+</web-app>
