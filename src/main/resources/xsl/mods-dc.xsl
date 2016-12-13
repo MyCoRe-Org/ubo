@@ -47,7 +47,7 @@
   
   <!-- DC.Creator -->
   
-  <xsl:template match="mods:name[mods:role/mods:roleTerm][contains($creator.roles,mods:role/mods:roleTerm[@type='code'])]" mode="dc">
+  <xsl:template match="mods:name[mods:role/mods:roleTerm][contains($creator.roles,mods:role/mods:roleTerm[@type='code'])]" mode="dc" priority="1">
     <dc:creator>
       <xsl:apply-templates select="." />
     </dc:creator>

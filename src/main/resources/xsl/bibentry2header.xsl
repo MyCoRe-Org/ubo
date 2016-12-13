@@ -7,7 +7,7 @@
   
 <xsl:output method="xml" encoding="UTF-8" indent="yes" />
   
-<xsl:param name="MCR.OAIDataProvider.UBO2Primo.RepositoryIdentifier" />
+<xsl:param name="MCR.OAIDataProvider.OAI.RepositoryIdentifier" />
 
 <xsl:template match="/">
   <header>
@@ -19,7 +19,7 @@
 
   <identifier>
     <xsl:text>oai:</xsl:text>
-    <xsl:value-of select="$MCR.OAIDataProvider.UBO2Primo.RepositoryIdentifier" />
+    <xsl:value-of select="$MCR.OAIDataProvider.OAI.RepositoryIdentifier" />
     <xsl:text>:</xsl:text>
     <xsl:value-of select="@id" />
   </identifier>

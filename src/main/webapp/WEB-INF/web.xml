@@ -51,13 +51,13 @@
     <url-pattern> lsfpidsearch.html </url-pattern>
   </servlet-mapping>
 
-  <servlet id="UBO2Primo">
-    <servlet-name>UBO2Primo</servlet-name>
+  <servlet id="OAI">
+    <servlet-name>OAI</servlet-name>
     <servlet-class>org.mycore.oai.MCROAIDataProvider</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>UBO2Primo</servlet-name>
-    <url-pattern> /primo/ubo </url-pattern>
+    <servlet-name>OAI</servlet-name>
+    <url-pattern> /oai </url-pattern>
   </servlet-mapping>
 
   <session-config>

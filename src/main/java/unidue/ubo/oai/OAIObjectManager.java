@@ -13,9 +13,6 @@ import org.mycore.oai.MCROAIObjectManager;
 
 import unidue.ubo.DozBibManager;
 
-/**
- * @author Frank L\u00FCtzenkirchen
- */
 public class OAIObjectManager extends MCROAIObjectManager {
 
     @Override
