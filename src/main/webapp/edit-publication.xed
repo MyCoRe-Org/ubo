@@ -41,7 +41,7 @@
   <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form">
   
     <xed:source uri="xslStyle:mods-preprocessor:ubo:{$id}" />
-    <xed:source uri="xslStyle:document2bibentry,mods-preprocessor:mcrobject:miless_mods_{$duepublicoID}" /> <!-- E-Dissertation als DuEPublico Volltext -->
+    <xed:source uri="xslStyle:document2bibentry,mods-preprocessor:http://duepublico.uni-duisburg-essen.de/servlets/DocumentServlet?format=mycore&amp;XSL.Style=xml&amp;id={$duepublicoID}" /> <!-- E-Dissertation als DuEPublico Volltext -->
     <xed:source uri="xslStyle:aleph2bibentry,mods-preprocessor:buildxml:_rootName_=request&amp;shelfmark={$shelfmark}" /> <!-- Print-Dissertation aus Aleph -->
     
     <xed:cancel url="servlets/DozBibEntryServlet?mode=show&amp;id={$id}" />
