@@ -102,6 +102,7 @@ public class DozBibEntryServlet extends MCRServlet {
 
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("WebApplicationBaseURL", MCRFrontendUtil.getBaseURL());
+        parameters.put("MCR.Mail.Address", MCRConfiguration.instance().getString("MCR.Mail.Address"));
         MCRMailer.sendMail(doc, "bibentry-e-mail", parameters);
     }
 

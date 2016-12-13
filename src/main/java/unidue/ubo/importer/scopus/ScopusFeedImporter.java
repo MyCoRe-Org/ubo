@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,6 +25,7 @@ import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRMailer;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.xml.MCRURIResolver;
+import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
@@ -89,7 +91,11 @@ public class ScopusFeedImporter extends MCRAbstractCommands {
 
         LOGGER.info("imported " + numPublicationsImported + " publications.");
         if (numPublicationsImported > 0)
-            MCRMailer.sendMail(new Document(bibentries), "scopus-rss-import-e-mail");
+        {
+            HashMap<String, String> parameters = new HashMap<String, String>();
+            parameters.put("MCR.Mail.Address", MCRConfiguration.instance().getString("MCR.Mail.Address"));
+            MCRMailer.sendMail(new Document(bibentries), "scopus-rss-import-e-mail", parameters);
+        }
     }
 
     private static void handlePublication(Element bibentries, String scopusID) throws IOException, JDOMException {

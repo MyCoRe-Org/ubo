@@ -27,14 +27,15 @@
 <xsl:param name="RequestURL" />
 <xsl:param name="WebApplicationBaseURL" />
 <xsl:param name="ServletsBaseURL" />
+<xsl:param name="MCR.Mail.Address" />
 
 <xsl:variable name="br"><xsl:text>
 </xsl:text></xsl:variable>
 
 <xsl:template match="/bibentries">
   <email>
-    <from>"Universitätsbibliographie" &lt;universitaetsbibliographie@ub.uni-due.de&gt;</from>
-    <to>universitaetsbibliographie@ub.uni-due.de</to>
+    <from><xsl:value-of select="$MCR.Mail.Address" /></from>
+    <to><xsl:value-of select="$MCR.Mail.Address" /></to>
     <subject>Universitätsbibliographie: Scopus RSS Feed Import</subject>
     <body>
     <xsl:text>

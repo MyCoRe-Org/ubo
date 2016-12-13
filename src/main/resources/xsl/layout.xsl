@@ -29,6 +29,7 @@
   <xsl:param name="UBO.Build.TimeStamp" select="''" />
 
   <xsl:param name="MCR.Users.Guestuser.UserName" />
+  <xsl:param name="MCR.Mail.Address" />
 
   <!-- additional stylesheets -->
   <xsl:include href="coreFunctions.xsl" />
@@ -672,8 +673,8 @@
       <p>
         <xsl:call-template name="layout.lastModified" />
         <xsl:text>© Universität Duisburg-Essen | - </xsl:text>
-        <a href="mailto:{i18n:translate('navigation.contact.eMail')}">
-          <xsl:value-of select="i18n:translate('navigation.contact.eMail')" />
+        <a href="mailto:{$MCR.Mail.Address}">
+          <xsl:value-of select="$MCR.Mail.Address" />
         </a>
       </p>
     </footer>

@@ -27,10 +27,12 @@
 <xsl:param name="RequestURL" />
 <xsl:param name="WebApplicationBaseURL" />
 <xsl:param name="ServletsBaseURL" />
+<xsl:param name="MCR.Mail.Address" />
 
 <xsl:template match="/bibentry">
   <email>
-    <from>"Universitätsbibliographie" &lt;universitaetsbibliographie@ub.uni-due.de&gt;</from>
+    <from><xsl:value-of select="$MCR.Mail.Address" /></from>
+    <to><xsl:value-of select="$MCR.Mail.Address" /></to>
     <xsl:for-each select="mods:mods">
       <xsl:call-template name="build.to" />
       <xsl:call-template name="build.subject" />
@@ -40,7 +42,6 @@
 </xsl:template>
 
 <xsl:template name="build.to">
-  <to>universitaetsbibliographie@ub.uni-due.de</to>
   <xsl:for-each select="mods:classification[contains(@authorityURI,'fachreferate')]">
     <xsl:variable name="subject" select="substring-after(@valueURI,'#')" />
     <xsl:for-each select="$subjects/item[@value=$subject]/email">
