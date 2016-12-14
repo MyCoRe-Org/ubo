@@ -48,7 +48,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>LSFPIDSearch</servlet-name>
-    <url-pattern> lsfpidsearch.html </url-pattern>
+    <url-pattern> /lsfpidsearch.html </url-pattern>
   </servlet-mapping>
 
   <servlet id="OAI">
