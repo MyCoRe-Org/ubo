@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /servlets/DozBibServlet
+Disallow: /servlets/MCRBasketServlet
+Disallow: /servlets/MCRLoginServlet
+Disallow: /servlets/MCRExportServlet
+Disallow: /api
