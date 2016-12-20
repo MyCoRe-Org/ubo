@@ -74,7 +74,7 @@
 </p>
 <p>  
   <a href="servlets/DozBibServlet?search=Faktoren">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet?<strong>search=Faktoren</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet?<strong>search=Faktoren</strong>
   </a>
 </p>
 <p>
@@ -93,7 +93,7 @@
 </p>
 <p>  
   <a href="servlets/DozBibServlet?search=Faktoren">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet?<strong>search=Faktoren</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet?<strong>search=Faktoren</strong>
   </a>
 </p>
 <p>
@@ -107,11 +107,11 @@
 <section xml:lang="de" title="Komplexere Suchanfragen stellen">
 <p>
   <a href="servlets/DozBibServlet?ubo_title=Faktoren">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet?<strong>ubo_title=Faktoren</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet?<strong>ubo_title=Faktoren</strong>
   </a>
   <br/>
   <a href="servlets/DozBibServlet?ubo_year=2012">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet?<strong>ubo_year=2012</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet?<strong>ubo_year=2012</strong>
   </a>
 </p>
 <p>
@@ -121,7 +121,7 @@
 </p>
 <p>
   <a href="servlets/DozBibServlet?ubo_title=Faktoren&amp;ubo_title=Kritik">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet?<strong>ubo_title=Faktoren&amp;ubo_title=Kritik</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet?<strong>ubo_title=Faktoren&amp;ubo_title=Kritik</strong>
   </a>
   <br/>
 </p>
@@ -132,7 +132,7 @@
 </p>  
 <p>
   <a href="servlets/DozBibServlet?query=(ubo_title+contains+Faktoren)+and+(ubo_year+=+2011)">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet?<strong>query=(ubo_title+contains+Faktoren)+and+(ubo_year+=+2011)</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet?<strong>query=(ubo_title+contains+Faktoren)+and+(ubo_year+=+2011)</strong>
   </a>
 </p>
 <p>
@@ -141,7 +141,7 @@
 </p>
 <p>
   <a href="servlets/DozBibServlet?ubo_title=Faktoren&amp;maxResults=20&amp;numPerPage=10">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet?<strong>ubo_title=Faktoren&amp;maxResults=20&amp;numPerPage=10</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet?<strong>ubo_title=Faktoren&amp;maxResults=20&amp;numPerPage=10</strong>
   </a>
 </p>  
 <a name="pid"></a>
@@ -149,11 +149,11 @@
 <section xml:lang="en" title="More complex queries">
 <p>
   <a href="servlets/DozBibServlet?ubo_title=Faktoren">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet?<strong>ubo_title=Faktoren</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet?<strong>ubo_title=Faktoren</strong>
   </a>
   <br/>
   <a href="servlets/DozBibServlet?ubo_year=2012">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet?<strong>ubo_year=2012</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet?<strong>ubo_year=2012</strong>
   </a>
 </p>
 <p>
@@ -163,7 +163,7 @@
 </p>
 <p>
   <a href="servlets/DozBibServlet?ubo_title=Faktoren&amp;ubo_title=Kritik">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet?<strong>ubo_title=Faktoren&amp;ubo_title=Kritik</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet?<strong>ubo_title=Faktoren&amp;ubo_title=Kritik</strong>
   </a>
   <br/>
 </p>
@@ -174,7 +174,7 @@
 </p>  
 <p>
   <a href="servlets/DozBibServlet?query=(ubo_title+contains+Faktoren)+and+(ubo_year+=+2011)">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet?<strong>query=(ubo_title+contains+Faktoren)+and+(ubo_year+=+2011)</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet?<strong>query=(ubo_title+contains+Faktoren)+and+(ubo_year+=+2011)</strong>
   </a>
 </p>
 <p>
@@ -184,7 +184,7 @@
 </p>
 <p>
   <a href="servlets/DozBibServlet?ubo_title=Faktoren&amp;maxResults=20&amp;numPerPage=10">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet?<strong>ubo_title=Faktoren&amp;maxResults=20&amp;numPerPage=10</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet?<strong>ubo_title=Faktoren&amp;maxResults=20&amp;numPerPage=10</strong>
   </a>
 </p>  
 <a name="pid"></a>
@@ -199,7 +199,7 @@
  </p>
  <p>
   <a href="servlets/DozBibServlet?query=(ubo_role_pid+=+&quot;aut_2809&quot;)+or+((ubo_type+=+&quot;book&quot;)+and+(ubo_role_pid+=+&quot;edt_2809&quot;))"> 
-  http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet?<strong>query=(ubo_role_pid+=+"aut_2809")+or+((ubo_type+=+"book")+and+(ubo_role_pid+=+"edt_2809"))</strong>
+  http://bibliographie.ub.uni-due.de/servlets/DozBibServlet?<strong>query=(ubo_role_pid+=+"aut_2809")+or+((ubo_type+=+"book")+and+(ubo_role_pid+=+"edt_2809"))</strong>
   </a>  
  </p>
  <a name="pdf"></a>
@@ -213,7 +213,7 @@
  </p> 
  <p>
   <a href="servlets/DozBibServlet?query=(ubo_role_pid+=+&quot;aut_2809&quot;)+or+((ubo_type+=+&quot;book&quot;)+and+(ubo_role_pid+=+&quot;edt_2809&quot;))"> 
-  http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet?<strong>query=(ubo_role_pid+=+"aut_2809")+or+((ubo_type+=+"book")+and+(ubo_role_pid+=+"edt_2809"))</strong>
+  http://bibliographie.ub.uni-due.de/servlets/DozBibServlet?<strong>query=(ubo_role_pid+=+"aut_2809")+or+((ubo_type+=+"book")+and+(ubo_role_pid+=+"edt_2809"))</strong>
   </a>  
  </p>
  <a name="pdf"></a>
@@ -226,27 +226,27 @@
 </p>
 <p> 
   <a href="servlets/DozBibServlet/results.html?format=html&amp;ubo_pid=2809">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet/<strong>results.html?format=html&amp;ubo_pid=2809</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet/<strong>results.html?format=html&amp;ubo_pid=2809</strong>
   </a>
   <br/>
   <a href="servlets/DozBibServlet/results.pdf?format=pdf&amp;ubo_pid=2809">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet/<strong>results.pdf?format=pdf&amp;ubo_pid=2809</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet/<strong>results.pdf?format=pdf&amp;ubo_pid=2809</strong>
   </a>
   <br/>
   <a href="servlets/DozBibServlet/mods.xml?format=mods&amp;ubo_pid=2809">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet/<strong>mods.xml?format=mods&amp;ubo_pid=2809</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet/<strong>mods.xml?format=mods&amp;ubo_pid=2809</strong>
   </a>
   <br/>
   <a href="servlets/DozBibServlet/results.bib?format=bibtex&amp;ubo_pid=2809">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet/<strong>results.bib?format=bibtex&amp;ubo_pid=2809</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet/<strong>results.bib?format=bibtex&amp;ubo_pid=2809</strong>
   </a>
   <br/>
   <a href="servlets/DozBibServlet/results.enl?format=endnote&amp;ubo_pid=2809">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet/<strong>results.enl?format=endnote&amp;ubo_pid=2809</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet/<strong>results.enl?format=endnote&amp;ubo_pid=2809</strong>
   </a>
   <br/>
   <a href="servlets/DozBibServlet/results.ris?format=ris&amp;ubo_pid=2809">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet/<strong>results.ris?format=ris&amp;ubo_pid=2809</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet/<strong>results.ris?format=ris&amp;ubo_pid=2809</strong>
   </a>
 </p>
 <a name="list"></a>
@@ -259,27 +259,27 @@
 </p>
 <p> 
   <a href="servlets/DozBibServlet/results.html?format=html&amp;ubo_pid=2809">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet/<strong>results.html?format=html&amp;ubo_pid=2809</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet/<strong>results.html?format=html&amp;ubo_pid=2809</strong>
   </a>
   <br/>
   <a href="servlets/DozBibServlet/results.pdf?format=pdf&amp;ubo_pid=2809">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet/<strong>results.pdf?format=pdf&amp;ubo_pid=2809</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet/<strong>results.pdf?format=pdf&amp;ubo_pid=2809</strong>
   </a>
   <br/>
   <a href="servlets/DozBibServlet/mods.xml?format=mods&amp;ubo_pid=2809">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet/<strong>mods.xml?format=mods&amp;ubo_pid=2809</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet/<strong>mods.xml?format=mods&amp;ubo_pid=2809</strong>
   </a>
   <br/>
   <a href="servlets/DozBibServlet/results.bib?format=bibtex&amp;ubo_pid=2809">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet/<strong>results.bib?format=bibtex&amp;ubo_pid=2809</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet/<strong>results.bib?format=bibtex&amp;ubo_pid=2809</strong>
   </a>
   <br/>
   <a href="servlets/DozBibServlet/results.enl?format=endnote&amp;ubo_pid=2809">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet/<strong>results.enl?format=endnote&amp;ubo_pid=2809</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet/<strong>results.enl?format=endnote&amp;ubo_pid=2809</strong>
   </a>
   <br/>
   <a href="servlets/DozBibServlet/results.ris?format=ris&amp;ubo_pid=2809">
-    http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet/<strong>results.ris?format=ris&amp;ubo_pid=2809</strong>
+    http://bibliographie.ub.uni-due.de/servlets/DozBibServlet/<strong>results.ris?format=ris&amp;ubo_pid=2809</strong>
   </a>
 </p>
 <a name="list"></a>
@@ -348,7 +348,7 @@
   <p>  
   <code>
     &lt;iframe scrolling="yes" width="90%" height="300" 
-      src="http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet/results.html?format=html&amp;ubo_pid=2809" 
+      src="http://bibliographie.ub.uni-due.de/servlets/DozBibServlet/results.html?format=html&amp;ubo_pid=2809" 
     /&gt;
   </code>
   </p>
@@ -367,7 +367,7 @@
   <p>  
   <code>
     &lt;iframe scrolling="yes" width="90%" height="300" 
-      src="http://duepublico.uni-duisburg-essen.de/servlets/DozBibServlet/results.html?format=html&amp;ubo_pid=2809" 
+      src="http://bibliographie.ub.uni-due.de/servlets/DozBibServlet/results.html?format=html&amp;ubo_pid=2809" 
     /&gt;
   </code>
   </p>
