@@ -6,7 +6,7 @@
   <item id="login" />
   <item id="dozbib" />
 
-  <item ref="index.xml">
+  <item ref="index.xed">
     <label xml:lang="de">Allgemeines</label>
     <label xml:lang="en">General</label>
   </item>

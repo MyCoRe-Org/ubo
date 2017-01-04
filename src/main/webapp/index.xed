@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<webpage lastModified="$Date$" id="dozbib">
+ <title xml:lang="de">Willkommen bei der Universitätsbibliographie der UDE</title>
+ <title xml:lang="en">Welcome to Bibliography of UDE</title>
+ 
+ <section class="highlight1" xml:lang="de">  
+   <h3>Die Universitätsbibliographie</h3>
+    <p>
+    ist der zentrale Publikationsnachweis der Universität Duisburg-Essen, der online tagesaktuell und zeitnah die Publikationstätgkeit der Hochschulangehörigen verzeichnet.
+    Die Einträge beruhen großenteils auf den Angaben der Autoren selbst. Seit September 2010 überarbeitet und vervollständigt ein Redaktionsteam die Neueinträge.
+    Derzeit sind ca. 56.000 Publikationen eingetragen.     
+    </p>    
+    <h3>Sie sind Angehöriger der Universität Duisburg-Essen?</h3> 
+    <p>
+    <a href="../newPublication.xed">Hier können Sie Ihre Publikation an die Universitätsbibliographie melden</a>
+    </p>
+  </section>
+  <section class="highlight1" xml:lang="en">   
+    <h3>The University Bibliography</h3> 
+    <p>
+    is the central resource of Duisburg-Essen University that lists all publication activities of the university members and provides 
+    online service that is updated daily and regularly.
+    The bibliography entries are based mainly on the information provided by the authors themselves. Since september, 2010 an editoral team revises and completes the new entries.
+    Currently, about 56,000 publications are listed.     
+    </p>    
+    <h3>
+    As a member of Duisburg Essen University</h3> 
+    <p>
+    <a href="../newPublication.xed">you can register your publication at the university bibliography here</a>
+    </p>
+  </section>
+
+  <section class="highlight2">
+    <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form" style="margin:0; padding:0;">
+
+      <xed:bind xpath="/query">
+        <xed:bind xpath="conditions[@format='xml']/boolean[@operator='and']">
+          <xed:bind xpath="condition[@field='ubo_all'][@operator='=']/@value">
+            <label for="input">
+              <xed:output i18n="ubo.search.simple" />
+            </label>
+            <input id="input" type="text" style="width:300px" />
+          </xed:bind>
+        </xed:bind>
+      </xed:bind>
+
+      <button class="roundedButton" type="submit" xed:target="servlet" xed:href="DozBibServlet">
+        <xed:output i18n="button.search" />
+      </button>
+
+    </xed:form>
+  </section>     
+    
+</webpage>
