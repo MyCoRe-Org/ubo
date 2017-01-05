@@ -57,15 +57,19 @@
 <!--  Suche in HIS LSF  -->
 
 <xsl:template match="lsfpidsearch">
-
+  
   <article class="highlight1">
     <p>
-      <xsl:value-of select="i18n:translate('lsf.searchText')"/>
+      <xsl:value-of select="i18n:translate('lsf.searchText.1')"/>
+      <xsl:if test="not(contains(@referrer,'list-wizard'))">
+        <xsl:value-of select="i18n:translate('lsf.searchText.2')"/>
+      </xsl:if>
     </p>
   </article>
 
   <form action="lsfpidsearch.html" method="post" role="form" class="ubo-form">
     <input type="hidden" name="_xed_subselect_session" value="{@session}" />
+    <input type="hidden" name="_referrer" value="{@referrer}" />
     <div style="margin-bottom:0.5ex;">
       <label for="lastName">
         <xsl:value-of select="i18n:translate('lsf.name')"/>
@@ -89,7 +93,7 @@
       <input type="submit" class="roundedButton" name="search" value="{i18n:translate('button.search')}" />
       <input type="submit" class="roundedButton" style="margin-left:1ex;" name="cancel" value="{i18n:translate('button.cancel')}" />
     </div>
-    <xsl:if test="results">
+    <xsl:if test="results and not(contains(@referrer,'list-wizard'))">
       <div class="cancel-submit">
         <input type="submit" class="roundedButton" name="notLSF" value="{i18n:translate('lsf.buttonFree')}" />
       </div>
@@ -138,24 +142,26 @@
 
     </div>
     
-    <article class="highlight1">
-      <p>
-        <strong>
-          <xsl:value-of select="i18n:translate('lsf.foundNotNow')"/>
-        </strong>
-      </p>
-      <ul>
-        <li>
-          <xsl:value-of select="i18n:translate('lsf.searchNew')"/>
-        </li>
-        <li>
-          <xsl:value-of select="i18n:translate('lsf.searchCancel')"/>
-        </li>
-        <li>
-          <xsl:value-of select="i18n:translate('lsf.nameFree')"/>
-        </li>
-      </ul>
-    </article>
+    <xsl:if test="not(contains(/lsfpidsearch/@referrer,'list-wizard'))">
+      <article class="highlight1">
+        <p>
+          <strong>
+            <xsl:value-of select="i18n:translate('lsf.foundNotNow')"/>
+          </strong>
+        </p>
+        <ul>
+          <li>
+            <xsl:value-of select="i18n:translate('lsf.searchNew')"/>
+          </li>
+          <li>
+            <xsl:value-of select="i18n:translate('lsf.searchCancel')"/>
+          </li>
+          <li>
+            <xsl:value-of select="i18n:translate('lsf.nameFree')"/>
+          </li>
+        </ul>
+      </article>
+    </xsl:if>
     
   </xsl:for-each>
   

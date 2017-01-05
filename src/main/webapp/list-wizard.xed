@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<webpage lastModified="$Date: 2016-05-20 08:54:29 +0200 (Fr, 20 Mai 2016) $" id="dozbib.list-wizard">
+ <title xml:lang="de">Persönliche Publikationsliste erstellen</title>
+ <title xml:lang="en">Build your personal publication list</title>
+
+  <section xml:lang="de" class="highlight1" title="Publikationslisten in Imperia">
+    <p>
+      In UDE-Webseiten, die mit dem Content-Management-System 
+      <a href="https://www.uni-due.de/zim/services/cms/" target="_blank">Imperia</a> erstellt sind, kann ganz einfach durch 
+      Aktivierung des <strong>Moduls "Mitarbeiter-Publikationsliste"</strong> eine Publikationsliste eingebunden werden. 
+    </p>
+  </section>
+  <section xml:lang="en" class="highlight1" title="Publication list in Imperia">
+    <p>
+      On webpages of UDE which are built using the content management system 
+      <a href="https://www.uni-due.de/zim/services/cms/" target="_blank">Imperia</a>, you can easily activate  
+      the <strong>Imperia module "Mitarbeiter-Publikationsliste"</strong> to integrate your personal publication list on any webpage. 
+    </p>
+  </section>
+
+  <section xml:lang="de" class="highlight2" title="Persönliche Publikationsliste erstellen">
+    <p>
+      Alternativ können Sie über das folgende Formular persönliche Publikationslisten direkt aus der Universitätsbibliographie erstellen und 
+      in verschiedenen Formaten verlinken oder ausgeben. Voraussetzung ist, dass die Publikationen mit Ihrer HIS LSF Personen-ID verknüpft sind.
+      Falls Publikationen fehlen, <a href="newPublication.xed">melden Sie diese hier.</a>
+      Falls Einträge korrigiert werden müssen, <a href="index.xed#help">sprechen Sie uns an.</a> 
+    </p>
+  </section>
+  <section xml:lang="en" class="highlight2" title="Create personal publication list">
+    <p>
+      Alternatively, you can use the following form to create your personal publication list directly from university bibliography data to  
+      link it or output it in various formats. This requires that the publications are linked with your own HIS LSF person ID.
+      In case publications are missing, <a href="newPublication.xed">you can enter them here.</a>
+      in case entries have to be corrected, <a href="index.xed#help">contact us.</a> 
+    </p>
+  </section>
+  
+  <section class="highlight2">
+    <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form" style="margin:0; padding:0;">
+      <fieldset>
+        <xed:bind xpath="/list-wizard">
+        
+          <xed:repeat xpath="mods:name">
+            <div>
+              <label for="{xed:generate-id()}">
+                <xed:output i18n="ubo.role.author" /> / <xed:output i18n="ubo.role.editor" />: 
+              </label>
+              <xed:choose>
+                <xed:when test="string-length(mods:nameIdentifier[@type='lsf']) &gt; 0">
+                  <span id="{xed:generate-id()}" style="display:inline-block; width:195px;">
+                    <xed:output value="mods:namePart[@type='family']" /><xed:if test="mods:namePart[@type='given']"><xed:output value="concat(', ',mods:namePart[@type='given'])" /></xed:if>
+                  </span>
+                  <span style="display:inline-block; width:80px;">
+                    <xed:bind xpath="mods:nameIdentifier[@type='lsf']">
+                      <xed:output value="concat('LSF: ',.)" />
+                    </xed:bind>
+                  </span>
+                </xed:when>
+                <xed:otherwise>
+                  <xed:bind xpath="mods:nameIdentifier[@type='lsf']">
+                    <xed:validate required="true" display="global" />
+                    <span style="display:inline-block; width:195px;" class="{$xed-validation-marker}">
+                      <xed:output i18n="listWizard.subselect" />
+                    </span>
+                  </xed:bind>
+                  <span style="display:inline-block; width:115px;">
+                    <button class="roundedButton" type="submit" xed:target="subselect" xed:href="../lsfpidsearch.html">
+                      <xed:output i18n="search.select" />
+                    </button>
+                  </span>
+                </xed:otherwise>
+              </xed:choose>
+              <xed:controls>append remove</xed:controls>
+            </div>
+          </xed:repeat>
+
+          <xed:bind xpath="min-year">
+            <div>
+              <label for="year">
+                <xed:output i18n="search.dozbib.year.publication" />
+                <span>&gt;=</span>
+              </label>
+              <input id="year" type="text" class="{$xed-validation-marker}" style="width:5em;" placeholder="{i18n:edit.year.placeholder}" />
+              <xed:validate matches="[\d]{4}" display="global" i18n="condition.yearDoz" />
+            </div>
+          </xed:bind>
+          
+          <xed:bind xpath="max-results">
+            <div>
+              <label for="max-results">
+                <xed:output i18n="search.numHits" />
+              </label>
+              <select>
+                <option value=""><xed:output i18n="search.hits.all" /></option>
+                <option>100</option>
+                <option>50</option>
+                <option>20</option>
+              </select>
+            </div>
+          </xed:bind>
+          
+          <div>
+            <label>
+              <xed:output i18n="search.sort" />
+            </label>
+            <div style="display:inline-block;">
+              <xed:repeat xpath="sort-by/field" max="3">
+                <div>
+                  <xed:output i18n="search.sort.by" />
+                  <xed:bind xpath="@name">
+                    <select>
+                      <option value="ubo_year"        ><xed:output i18n="ubo.date.issued.4" /></option>
+                      <option value="ubo_sortby_name" ><xed:output i18n="document.creators.one" /></option>
+                      <option value="ubo_sortby_title"><xed:output i18n="document.title" /></option>
+                      <option value="ubo_type"        ><xed:output i18n="ubo.genre" /></option>
+                    </select>
+                  </xed:bind>
+                  <xed:bind xpath="@order">
+                    <select>
+                      <option value="descending"><xed:output i18n="search.sort.desc" /></option>
+                      <option value="ascending" ><xed:output i18n="search.sort.asc" /></option>
+                    </select>
+                  </xed:bind>
+                  <xed:controls />
+                </div>
+              </xed:repeat>
+            </div>
+          </div>
+
+          <xed:bind xpath="format">
+            <div>
+              <label for="format"><xed:output i18n="listWizard.format" />:</label>
+              <select id="format">
+                <option value="pdf">PDF</option>
+                <option value="html">HTML</option>
+                <option value="mods">MODS XML</option>
+                <option value="bibtex">BibTeX</option>
+                <option value="endnote">Endnote</option>
+                <option value="ris">RIS</option>
+                <option value="ubo"><xed:output i18n="listWizard.format.ubo" /></option>
+              </select>
+            </div>
+          </xed:bind>
+
+          <div class="cancel-submit" style="margin-top:2ex;">
+            <button class="roundedButton" type="submit" xed:target="layout">
+              <xed:output i18n="listWizard.submit" />
+            </button>
+          </div>
+        </xed:bind>
+      </fieldset>
+    </xed:form>
+  </section>
+
+</webpage>

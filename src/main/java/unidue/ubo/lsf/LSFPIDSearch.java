@@ -67,6 +67,11 @@ public class LSFPIDSearch extends MCRServlet {
         Element lsfpidsearch = new Element("lsfpidsearch");
         lsfpidsearch.setAttribute("session", session);
 
+        String referrer = req.getParameter("_referrer");
+        if (referrer == null)
+            referrer = req.getHeader("referer"); // Yes, with the legendary misspelling.
+        lsfpidsearch.setAttribute("referrer", referrer);
+        
         String lastName = handleParameter(req, "lastName", lsfpidsearch);
         String firstName = handleParameter(req, "firstName", lsfpidsearch);
         handleParameter(req, "pid", lsfpidsearch);

@@ -7,14 +7,12 @@
 <section xml:lang="de" class="highlight1">
     <p>
     <ul class="nodots">
-      <li><strong><a href="#create">Persönliches Publikationsverzeichnis erstellen und nutzen</a></strong></li>
       <li><strong><a href="#url">Suche in der Universitätsbibliographie über eine URL</a></strong></li>
       <li><strong><a href="#query">Komplexere Suchanfragen stellen</a></strong></li>      
       <li><strong><a href="#pid">Suchanfrage für Autoren und Herausgeber</a></strong></li>
       <li><strong><a href="#pdf">Suchergebnisse direkt als PDF oder in anderen Formaten ausgeben</a></strong></li>
       <li><strong><a href="#list">Trefferliste sortieren</a></strong></li>
       <li><strong><a href="#web">Publikationslisten direkt in eigene Webseiten einbinden</a></strong><br/></li>    
-      <li><strong><a href="#imperia">Publikationslisten direkt in UDE-Imperia-Webseiten einbinden</a></strong></li>     
     </ul>  
     </p>  
     <a name="create"></a>      
@@ -22,49 +20,17 @@
   <section xml:lang="en" class="highlight1">
     <p>
     <ul class="nodots">
-      <li><strong><a href="#create">Preparing a personal publication list</a></strong></li>
       <li><strong><a href="#url">Search in University bibliography with an URL</a></strong></li>
       <li><strong><a href="#query">More complex queries</a></strong></li>      
       <li><strong><a href="#pid">Query for authors and publishers</a></strong></li>
       <li><strong><a href="#pdf">Display search results directly as PDF or in other bibliographic format</a></strong></li>
       <li><strong><a href="#list">Sorting the result list</a></strong></li>
       <li><strong><a href="#web">Integrate publication lists directly into own web pages</a></strong><br/></li>  
-      <li><strong><a href="#imperia">Integrate publication lists directly into  UDE Imperia web pages</a></strong></li>        
     </ul>  
     </p>  
     <a name="create"></a>      
   </section>   
   
-  <section xml:lang="de" title="Persönliches Publikationsverzeichnis erstellen und nutzen">
-  <p>
-      Wenn Sie ganz einfach eine Liste Ihrer Publikationen zusammenstellen möchten, empfiehlt es sich in der 
-      <a href="search.xed">Suchmaske</a> über die <strong>Personen-ID</strong> zu suchen. Dann wird mit Ihrer HIS-LSF-PID 
-      nach Einträgen in der Universitätsbibliographie gesucht. 
-    </p>
-    <p>  
-      Voraussetzung hierfür ist natürlich, dass die entsprechenden Einträge in der Bibliographie mit Ihrer PID 
-      verknüpft sind. In der Regel ist das der Fall. Sollten Sie Bedenken haben, ob alle Einträge korrekt mit 
-      Ihrer PID verbunden sind, wenden Sie sich bitte an unsere  <a href="index.xed#help">Ansprechpartner</a>. 
-      Wir können die Einträge gerne für Sie prüfen und ggf. fehlende Verknüpfungen erstellen.  
-    </p>     
-    <a name="url"></a> 
-  </section>  
-  <section xml:lang="en" id="sectionedit">        
-    <h5>Preparing a personal publication list</h5>
-    <p>
-      If you wish to compile a list of your own publications, it is advisable to do a search using your 
-      <strong>Personal ID</strong>.
-      A search is then conducted for entries in the university bibliography on the basis of your HIS-LSF-PID
-    </p>
-    <p>  
-      A precondition for this, of course, is that the relevant entries in the bibliography are linked with your PID. 
-      Usually this is the case. If you have any misgivings whether all the entries are correctly linked with your PID, 
-      please contact our <a href="index.xed#help">staff</a>. 
-      We will be glad to check your entries for you and, if necessary, provide any missing links.  
-    </p>  
-    <a name="url"></a>
-    </section>
-
 <section xml:lang="de" title="Suche in der Universitätsbibliographie über eine URL">
 <p>
   Sie können <strong>eine Suche</strong> in der Universitätsbibliographie auch direkt über eine URL
@@ -379,19 +345,4 @@
 <a name="imperia"></a>
 </section>
 
-<section xml:lang="de" title="Publikationslisten direkt in UDE-Imperia-Webseiten einbinden">
-<p>
-  In UDE-Webseiten, die mit dem Content-Management-System 
-  <a href="https://www.uni-due.de/zim/services/cms/" target="_blank">Imperia</a> erstellt sind, kann ganz einfach durch 
-  Aktivierung des Moduls "Mitarbeiter-Publikationsliste" eine Publikationsliste eingebunden werden. 
-</p>
-</section>
-<section xml:lang="en" title="Integrate publication lists directly into  UDE Imperia web pages">
-<p>
-  In UDE webpages, which are created by the content management 
-  <a href="https://www.uni-due.de/zim/services/cms/" target="_blank">Imperia</a> you can activate the module 
-  "Mitarbeiter-Publikationsliste" to integrate publication lists.
-</p>
-</section>
- 
 </webpage>
