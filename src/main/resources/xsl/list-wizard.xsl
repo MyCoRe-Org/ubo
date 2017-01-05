@@ -52,12 +52,12 @@
       <p>
         Über einen iframe können Sie diese Publikationsliste auch direkt in Ihre eigene Webseite einbetten, statt nur darauf zu verlinken. 
         Fügen Sie dazu in Ihre Webseite z. B. das folgende Element ein:
-        <code>
-          &lt;![CDATA[ <iframe scrolling="yes" width="90%" height="300" src="{$url}" /> ]]&gt;
-        </code>
-         
       </p>
-      <iframe scrolling="yes" width="90%" height="300" src="{$url}" />
+      <code>
+        &lt;iframe scrolling="yes" width="90%" height="300" <br/>
+        src="<xsl:value-of select="$url" />" /&gt;
+      </code>
+      <iframe style="margin-top:2ex;" scrolling="yes" width="90%" height="300" src="{$url}" />
     </xsl:if>
   </article>
   
