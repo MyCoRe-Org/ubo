@@ -189,9 +189,7 @@
           <a href="search-expert.xed">komplexe Suchanfragen über die Expertensuche durchführen</a>
         </li>
         <li>
-          <a href="search-url.xml">dynamische Suchen als Link, als PDF-Dokument oder in anderen Formaten in eigene
-            Webseiten einbinden
-          </a>
+          <a href="list-wizard.xed">eine persönliche Publikationsliste erstellen und verlinken</a>
         </li>
       </ul>
     </p>
@@ -206,9 +204,7 @@
           <a href="search-expert.xed">perform a complex query using the expert-search-mask</a>
         </li>
         <li>
-          <a href="search-url.xml">integrate a dynamic search as a link, as a pdf document or in various other formats into own
-            webpages
-          </a>
+          <a href="list-wizard.xed">create and link your personal publication list</a>
         </li>
       </ul>
     </p>

@@ -21,10 +21,6 @@
       <label xml:lang="de">Expertensuche</label>
       <label xml:lang="en">Expert search</label>
     </item>
-    <item id="dozbib.search-url" ref="search-url.xml">
-      <label xml:lang="de">Suche als Link</label>
-      <label xml:lang="en">Search as link</label>
-    </item>
     <item id="dozbib.searchfields" ref="searchfields.xml">
       <label xml:lang="de">Suchfelder</label>
       <label xml:lang="en">Search fields</label>
