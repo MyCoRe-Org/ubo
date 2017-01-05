@@ -7,8 +7,8 @@
   <item id="dozbib" />
 
   <item ref="index.xed">
-    <label xml:lang="de">Allgemeines</label>
-    <label xml:lang="en">General</label>
+    <label xml:lang="de">Start</label>
+    <label xml:lang="en">Start</label>
   </item>
   <item ref="search.xed">
     <label xml:lang="de">Suchen</label>
@@ -20,10 +20,6 @@
     <item id="dozbib.search-expert" ref="search-expert.xed">
       <label xml:lang="de">Expertensuche</label>
       <label xml:lang="en">Expert search</label>
-    </item>
-    <item id="dozbib.searchfields" ref="searchfields.xml">
-      <label xml:lang="de">Suchfelder</label>
-      <label xml:lang="en">Search fields</label>
     </item>
     <item id="dozbib.search" />      
   </item>        

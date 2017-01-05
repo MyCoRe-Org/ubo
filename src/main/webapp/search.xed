@@ -149,62 +149,28 @@
   </section>
 
   <section xml:lang="de" class="highlight1">
-    <h5>Erstellen einer persönlichen Publikationsliste</h5>
-    <p>
-      Wenn Sie eine Liste Ihrer Publikationen zusammenstellen möchten, empfiehlt es sich, über die
-      <strong>Personen-ID</strong>
-      zu suchen. Hierbei wird mit Ihrer HIS-LSF-PID nach Einträgen in der Universitätsbibliographie gesucht.
-    </p>
-    <p>
-      Voraussetzung hierfür ist natürlich, dass die entsprechenden Einträge in der Bibliographie mit Ihrer PID
-      verknüpft sind. In der Regel ist das der Fall. Sollten Sie Bedenken haben, ob alle Einträge korrekt mit
-      Ihrer PID verbunden sind, wenden Sie sich bitte an unsere
-      <a href="index.xed#help">Ansprechpartner</a>.
-      Wir können die Einträge gerne für Sie prüfen und ggf. fehlende Verknüpfungen erstellen.
-    </p>
-  </section>
-
-  <section xml:lang="en" class="highlight1">
-    <h5>Preparing a personal publication list</h5>
-    <p>
-      If you wish to compile a list of your own publications, it is advisable to do a search using your
-      <strong>Personal ID</strong>.
-      A search is then conducted for entries in the university bibliography on the basis of your HIS-LSF-PID-
-    </p>
-    <p>
-      A precondition for this, of course, is that the relevant entries in the bibliography are linked with your PID.
-      Usually this is the case. If you have any misgivings whether all the entries are correctly linked with your PID,
-      please contact our
-      <a href="index.xed#help">staff</a> .
-      We will be glad to check your entries for you and, if necessary, provide any missing links.
-    </p>
-  </section>
-
-  <section xml:lang="de" class="highlight2">
-    <h5>Weitere Suchfunktionen</h5>
     <p>
       Sie können außerdem
       <ul>
         <li>
-          <a href="search-expert.xed">komplexe Suchanfragen über die Expertensuche durchführen</a>
+          <a href="list-wizard.xed">eine persönliche Publikationsliste erstellen und verlinken</a>
         </li>
         <li>
-          <a href="list-wizard.xed">eine persönliche Publikationsliste erstellen und verlinken</a>
+          <a href="search-expert.xed">komplexe Suchanfragen über die Expertensuche durchführen</a>
         </li>
       </ul>
     </p>
   </section>
 
-  <section xml:lang="en" class="highlight2">
-    <h5>Further search functions</h5>
+  <section xml:lang="en" class="highlight1">
     <p>
       Furthermore you can
       <ul>
         <li>
-          <a href="search-expert.xed">perform a complex query using the expert-search-mask</a>
+          <a href="list-wizard.xed">create and link your personal publication list</a>
         </li>
         <li>
-          <a href="list-wizard.xed">create and link your personal publication list</a>
+          <a href="search-expert.xed">perform a complex query using the expert-search-mask</a>
         </li>
       </ul>
     </p>

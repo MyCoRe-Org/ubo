@@ -48,6 +48,17 @@
         <xsl:value-of select="$url" />
       </a>
     </p>
+    <xsl:if test="format='html'">
+      <p>
+        Über einen iframe können Sie diese Publikationsliste auch direkt in Ihre eigene Webseite einbetten, statt nur darauf zu verlinken. 
+        Fügen Sie dazu in Ihre Webseite z. B. das folgende Element ein:
+        <code>
+          &lt;![CDATA[ <iframe scrolling="yes" width="90%" height="300" src="{$url}" /> ]]&gt;
+        </code>
+         
+      </p>
+      <iframe scrolling="yes" width="90%" height="300" src="{$url}" />
+    </xsl:if>
   </article>
   
 </xsl:template>
