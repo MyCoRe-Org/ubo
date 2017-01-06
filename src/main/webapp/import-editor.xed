@@ -24,7 +24,7 @@
     <xed:validate xpath="//mods:identifier[@type='duepublico']" matches="\d+" display="global" />
     <xed:validate xpath="//mods:location/mods:url" matches="(f|ht)tp(s?)://[\w\d.]+\S*" i18n="ubo.link.validation" display="global" />
     <xed:validate xpath="//mods:location/mods:url" matches="^((?!doi.org/10).)*$" i18n="ubo.link.validation.not.doi" display="global" />
-    <xed:validate xpath="//mods:location/mods:shelfLocator" matches="([ED]\d\d\/\d\d\s[A-Za-z]+\s\d+)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
+    <xed:validate xpath="//mods:location/mods:shelfLocator" matches="([ED]\d\d\/\d\d\s[A-Za-z]+\s\d+.*)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
   </xed:template>
   
   <xed:template id="status">
@@ -307,7 +307,7 @@
         </xed:repeat>
         <div style="margin:0; padding:0; padding-top:1ex; display:inline-block; width:520px;">
           <xed:repeat xpath="mods:affiliation">
-            <textarea style="width:520px; height:40px;" placeholder="Institutionelle Zugeh�rigkeit" />
+            <textarea style="width:520px; height:40px;" placeholder="Institutionelle Zugehörigkeit" />
           </xed:repeat>
         </div>
       </xed:if>
