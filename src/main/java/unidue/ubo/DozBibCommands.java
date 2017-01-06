@@ -16,11 +16,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.ElementFilter;
@@ -38,7 +40,7 @@ import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.MCRCommand;
 
 public class DozBibCommands extends MCRAbstractCommands {
-    private static final Logger LOGGER = Logger.getLogger(DozBibCommands.class);
+    private static final Logger LOGGER = LogManager.getLogger(DozBibCommands.class);
 
     /** Commands for the MyCoRe Command Line Interface */
     public DozBibCommands() {
@@ -173,11 +175,11 @@ public class DozBibCommands extends MCRAbstractCommands {
                     MCRCategoryID originID = new MCRCategoryID("ORIGIN", origin);
                     if (DAO.exist(originID)) {
                         MCRCategory category = DAO.getCategory(originID, 0);
-                        MCRLabel label = category.getLabel("x-move");
-                        if (label == null)
+                        Optional<MCRLabel> label = category.getLabel("x-move");
+                        if (! label.isPresent() )
                             continue;
 
-                        String newCategory = label.getText();
+                        String newCategory = label.get().getText();
                         LOGGER.info("Moving UBO entry " + ID + " from " + origin + " to " + newCategory);
                         classification.setAttribute("valueURI", authorityURI + "#" + newCategory);
                         DozBibManager.instance().saveEntry(xml);

@@ -17,16 +17,16 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mycore.common.MCRHibTestCase;
+import org.mycore.common.MCRJPATestCase;
 import org.mycore.common.xml.MCRXMLHelper;
-import org.mycore.frontend.xeditor.MCRNodeBuilder;
+import org.mycore.common.xml.MCRNodeBuilder;
 
 import unidue.ubo.merger.Merger;
 import unidue.ubo.merger.MergerFactory;
 
 import static org.junit.Assert.*;
 
-public class TestMerger extends MCRHibTestCase {
+public class TestMerger extends MCRJPATestCase {
 
     @Test
     public void testAddingNew() throws Exception {

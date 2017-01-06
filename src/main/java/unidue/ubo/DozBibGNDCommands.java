@@ -21,7 +21,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Attribute;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -35,7 +36,7 @@ import org.xml.sax.SAXException;
 
 public class DozBibGNDCommands {
 
-    private static final Logger LOGGER = Logger.getLogger(DozBibGNDCommands.class);
+    private static final Logger LOGGER = LogManager.getLogger(DozBibGNDCommands.class);
 
     private static final String XSERVER_BASE = "https://alephprod.ub.uni-due.de/X?op=";
 

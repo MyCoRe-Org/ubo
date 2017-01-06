@@ -10,9 +10,9 @@
 package unidue.ubo.merger;
 
 import org.junit.Test;
-import org.mycore.common.MCRHibTestCase;
+import org.mycore.common.MCRJPATestCase;
 
-public class TestIdentifierMerger extends MCRHibTestCase {
+public class TestIdentifierMerger extends MCRJPATestCase {
 
     @Test
     public void testMergeDifferent() throws Exception {

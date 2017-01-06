@@ -17,7 +17,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -40,7 +41,7 @@ import unidue.ubo.DozBibManager;
  * @author Frank L\u00FCtzenkirchen
  */
 public class BasketName2PIDEditor extends MCRServlet {
-    private final static Logger LOGGER = Logger.getLogger(BasketName2PIDEditor.class);
+    private final static Logger LOGGER = LogManager.getLogger(BasketName2PIDEditor.class);
 
     public void doGetPost(MCRServletJob job) throws Exception {
         HttpServletRequest req = job.getRequest();

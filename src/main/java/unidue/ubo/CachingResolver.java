@@ -13,7 +13,8 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRCache;
@@ -30,7 +31,7 @@ import org.mycore.common.xml.MCRURIResolver;
  */
 public class CachingResolver implements URIResolver {
 
-    private final static Logger LOGGER = Logger.getLogger(CachingResolver.class);
+    private final static Logger LOGGER = LogManager.getLogger(CachingResolver.class);
 
     private final static long DEFAULT_MAX_AGE = 24 * 60 * 60 * 1000;
 

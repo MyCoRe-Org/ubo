@@ -10,7 +10,7 @@
 package unidue.ubo.importer.bibtex;
 
 import org.mycore.common.MCRConstants;
-import org.mycore.common.MCRHibTestCase;
+import org.mycore.common.MCRJPATestCase;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRFileContent;
 import org.mycore.common.content.MCRJDOMContent;
@@ -23,7 +23,7 @@ import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.utils.MCRXMLTransformer;
-import org.mycore.frontend.xeditor.MCRNodeBuilder;
+import org.mycore.common.xml.MCRNodeBuilder;
 
 import unidue.ubo.importer.bibtex.BibTeX2MODSTransformer;
 
@@ -36,7 +36,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.net.URL;
 
-public class TestBibTeX2MODSTransformer extends MCRHibTestCase {
+public class TestBibTeX2MODSTransformer extends MCRJPATestCase {
 
     @Ignore
     @Test

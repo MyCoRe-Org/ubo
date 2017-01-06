@@ -13,7 +13,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.mycore.common.MCRException;
@@ -30,7 +31,7 @@ import org.xml.sax.SAXException;
  */
 class HTML2TextTransformer extends MCRContentTransformer {
 
-    final static Logger LOGGER = Logger.getLogger(HTML2TextTransformer.class);
+    final static Logger LOGGER = LogManager.getLogger(HTML2TextTransformer.class);
 
     public MCRContent transform(MCRContent source) throws IOException {
         return transform(source, System.getProperty("file.encoding"));

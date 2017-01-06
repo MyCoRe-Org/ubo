@@ -12,8 +12,8 @@ package unidue.ubo.merger;
 import org.jaxen.JaxenException;
 import org.jdom2.Element;
 import org.junit.Test;
-import org.mycore.common.MCRHibTestCase;
-import org.mycore.frontend.xeditor.MCRNodeBuilder;
+import org.mycore.common.MCRJPATestCase;
+import org.mycore.common.xml.MCRNodeBuilder;
 
 import unidue.ubo.merger.NameMerger;
 
@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 
-public class TestNameMerger extends MCRHibTestCase {
+public class TestNameMerger extends MCRJPATestCase {
 
     @Test
     public void testIsProbablySameAs() throws Exception {

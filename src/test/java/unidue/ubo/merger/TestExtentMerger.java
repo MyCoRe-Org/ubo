@@ -10,9 +10,9 @@
 package unidue.ubo.merger;
 
 import org.junit.Test;
-import org.mycore.common.MCRHibTestCase;
+import org.mycore.common.MCRJPATestCase;
 
-public class TestExtentMerger extends MCRHibTestCase {
+public class TestExtentMerger extends MCRJPATestCase {
 
     @Test
     public void testPhysicalDescriptionExtent() throws Exception {

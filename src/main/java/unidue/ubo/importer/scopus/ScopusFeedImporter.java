@@ -17,7 +17,8 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -50,7 +51,7 @@ import unidue.ubo.DozBibManager;
 @MCRCommandGroup(name = "Universitätsbibliographie")
 public class ScopusFeedImporter extends MCRAbstractCommands {
 
-    private final static Logger LOGGER = Logger.getLogger(ScopusFeedImporter.class);
+    private final static Logger LOGGER = LogManager.getLogger(ScopusFeedImporter.class);
 
     private final static String API_KEY;
 

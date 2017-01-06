@@ -19,7 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.mycore.common.MCRConstants;
@@ -33,7 +34,7 @@ import unidue.ubo.DozBibManager;
 @MCRCommandGroup(name = "UBO DeDup Commands")
 public class DeDupCommands extends MCRAbstractCommands {
 
-    private final static Logger LOGGER = Logger.getLogger(DeDupCommands.class);
+    private final static Logger LOGGER = LogManager.getLogger(DeDupCommands.class);
 
     @MCRCommand(syntax = "ubo build duplicates report to directory {0}", help = "builds report on possibly duplicate entries and writes it as xml to file duplicates.xml in directory {0}")
     public static void buildDuplicatesReport(String targetDirectory) throws Exception {

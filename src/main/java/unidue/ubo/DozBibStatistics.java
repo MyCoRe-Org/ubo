@@ -24,9 +24,11 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.filter.Filters;
@@ -49,7 +51,7 @@ import org.mycore.datamodel.classifications2.MCRLabel;
  */
 public class DozBibStatistics {
 
-    private static final Logger LOGGER = Logger.getLogger(DozBibStatistics.class);
+    private static final Logger LOGGER = LogManager.getLogger(DozBibStatistics.class);
 
     private static final String INTEGER_PATTERN = "[0-9]+";
 
@@ -191,8 +193,8 @@ public class DozBibStatistics {
     private static String getGenreLabel(String genreID) {
         MCRCategoryID originID = new MCRCategoryID("ubogenre", genreID);
         MCRCategory category = DAO.getCategory(originID, 0);
-        MCRLabel label = category.getLabel("de");
-        return label.getText();
+        Optional<MCRLabel> label = category.getLabel("de");
+        return label.get().getText();
     }
 
     private static void countPublicationYear(Table publicationsByYear, Element root) {

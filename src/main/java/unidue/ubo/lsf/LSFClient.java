@@ -19,7 +19,8 @@ import java.util.Map;
 
 import javax.xml.rpc.ServiceException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;
@@ -55,7 +56,7 @@ public class LSFClient {
     protected DBInterface dbinterface;
 
     /** The Log4J Logger */
-    protected final static Logger LOGGER = Logger.getLogger(LSFClient.class);
+    protected final static Logger LOGGER = LogManager.getLogger(LSFClient.class);
 
     protected MCRCache<String, Element> cache;
 

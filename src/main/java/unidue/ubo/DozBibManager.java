@@ -14,7 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -35,7 +36,7 @@ import unidue.ubo.dedup.DeDupCriteriaBuilder;
 
 public class DozBibManager {
 
-    private static final Logger LOG = Logger.getLogger(DozBibManager.class.getName());
+    private static final Logger LOG = LogManager.getLogger(DozBibManager.class.getName());
 
     /** The type of object that is stored, e.g. Document, LegalEntity */
     private String objectType;

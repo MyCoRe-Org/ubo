@@ -13,9 +13,9 @@ import java.io.IOException;
 
 import org.jaxen.JaxenException;
 import org.junit.Test;
-import org.mycore.common.MCRHibTestCase;
+import org.mycore.common.MCRJPATestCase;
 
-public class TestTitleInfoMerger extends MCRHibTestCase {
+public class TestTitleInfoMerger extends MCRJPATestCase {
 
     @Test
     public void testMerge() throws Exception {

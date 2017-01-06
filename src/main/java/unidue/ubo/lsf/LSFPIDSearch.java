@@ -17,7 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.TransformerException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.frontend.servlets.MCRServlet;
@@ -26,7 +27,7 @@ import org.xml.sax.SAXException;
 
 public class LSFPIDSearch extends MCRServlet {
 
-    private final static Logger LOGGER = Logger.getLogger(LSFPIDSearch.class);
+    private final static Logger LOGGER = LogManager.getLogger(LSFPIDSearch.class);
 
     public void doGetPost(MCRServletJob job) throws IOException, TransformerException, SAXException {
         HttpServletRequest req = job.getRequest();
