@@ -226,7 +226,7 @@
 
   <xsl:template name="layout.h1">
     <h1>
-      <a href="http://www.uni-due.de/">Universität Duisburg-Essen</a>
+      <a href="https://www.uni-due.de/">Universität Duisburg-Essen</a>
     </h1>
   </xsl:template>
 
@@ -363,14 +363,14 @@
   <xsl:template name="layout.shortcutIcons">
     <!-- For iPhone 4 -->
     <link rel="apple-touch-icon-precomposed" sizes="114x114"
-      href="http://www.uni-due.de/imperia/md/images/cms/h/apple-touch-icon.png" />
+      href="https://www.uni-due.de/imperia/md/images/cms/h/apple-touch-icon.png" />
     <!-- For iPad 1 -->
     <link rel="apple-touch-icon-precomposed" sizes="72x72"
-      href="http://www.uni-due.de/imperia/md/images/cms/m/apple-touch-icon.png" />
+      href="https://www.uni-due.de/imperia/md/images/cms/m/apple-touch-icon.png" />
     <!-- For iPhone 3G, iPod Touch and Android -->
-    <link rel="apple-touch-icon-precomposed" href="http://www.uni-due.de/imperia/md/images/cms/l/apple-touch-icon-precomposed.png" />
+    <link rel="apple-touch-icon-precomposed" href="https://www.uni-due.de/imperia/md/images/cms/l/apple-touch-icon-precomposed.png" />
     <!-- For Nokia -->
-    <link rel="shortcut icon" href="http://www.uni-due.de/imperia/md/images/cms/l/apple-touch-icon.png" />
+    <link rel="shortcut icon" href="https://www.uni-due.de/imperia/md/images/cms/l/apple-touch-icon.png" />
     <!-- For everything else -->
     <link rel="shortcut icon" href="{$WebApplicationBaseURL}images/favicon.ico" />
   </xsl:template>
@@ -430,7 +430,7 @@
   <xsl:template name="layout.breadcrumbPath">
     <section id="breadcrumb">
       <span>
-        <a href="http://www.uni-due.de/ub/">
+        <a href="https://www.uni-due.de/ub/">
           <xsl:value-of select="i18n:translate('navigation.UB')" />
         </a>
       </span>
@@ -639,7 +639,7 @@
         <h2>
           <a href="{$WebApplicationBaseURL}">Universitätsbibliographie</a>
         </h2>
-        <a class="containsimage" id="ude-logo" href="http://www.uni-due.de/">
+        <a class="containsimage" id="ude-logo" href="https://www.uni-due.de/">
           <img src="{$WebApplicationBaseURL}images/ude-logo.png" alt="Logo" />
         </a>
       </header>
