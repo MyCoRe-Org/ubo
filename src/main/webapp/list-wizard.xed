@@ -24,7 +24,7 @@
       Alternativ können Sie über das folgende Formular persönliche Publikationslisten direkt aus der Universitätsbibliographie erstellen und 
       in verschiedenen Formaten verlinken oder ausgeben. Voraussetzung ist, dass die Publikationen mit Ihrer HIS LSF Personen-ID verknüpft sind.
       Falls Publikationen fehlen, <a href="newPublication.xed">melden Sie diese hier.</a>
-      Falls Einträge korrigiert werden müssen, <a href="index.xed#help">sprechen Sie uns an.</a> 
+      Falls Einträge korrigiert werden müssen, <a href="contact.xml">sprechen Sie uns an.</a> 
     </p>
   </section>
   <section xml:lang="en" class="highlight2" title="Create personal publication list">
@@ -32,7 +32,7 @@
       Alternatively, you can use the following form to create your personal publication list directly from university bibliography data to  
       link it or output it in various formats. This requires that the publications are linked with your own HIS LSF person ID.
       In case publications are missing, <a href="newPublication.xed">you can enter them here.</a>
-      in case entries have to be corrected, <a href="index.xed#help">contact us.</a> 
+      in case entries have to be corrected, <a href="contact.xml">contact us.</a> 
     </p>
   </section>
   

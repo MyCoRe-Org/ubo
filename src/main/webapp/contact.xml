@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<webpage lastModified="$Date$" id="contact">
+ <title xml:lang="de">Kontakt - Universitätsbibliographie</title>
+ <title xml:lang="en">Contact - University Bibliography</title>
+ 
+ <section class="highlight1" xml:lang="de"><h3>Kontakt</h3>
+    <p>
+    Haben Sie Fragen zur Universitätsbibliographie oder benötigen Hilfe oder Beratung, melden Sie sich bei uns:     
+    </p>
+    <p>      
+    Kerstin Ponten<br/>
+    <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a><br/>
+    Tel.: 0203 / 379 - 20 56 <br/>      
+    </p>
+  </section>
+
+  <section class="highlight1" xml:lang="en">   
+    <h3>Contact</h3> 
+    <p>
+    If you have questions to the university library, or need advice or consultation, please contact us: 
+    </p>
+    <p>      
+    Kerstin Ponten<br/>
+    <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a><br/>
+    Phone: 0203 / 379 - 20 56 <br/>      
+    </p>
+  </section>
+     
+    
+</webpage>
