@@ -65,10 +65,10 @@ public class DozBibCommands extends MCRAbstractCommands {
 
     /** Exports a single entry to a file in the given directory */
     public static void exportEntry(int id, String dir) throws Exception {
-        MCRContent entry = DozBibManager.instance().retrieveContent(id);
+        Document entry = DozBibManager.instance().getEntry(id);
         String fileName = "bibentry-" + id + ".xml";
         File file = new File(dir, fileName);
-        entry.sendTo(file);
+        new MCRJDOMContent(entry).sendTo(file);
     }
 
     /** Exports all entries as MODS dump to a zipped xml file in the given directory */

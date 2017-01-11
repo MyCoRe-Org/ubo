@@ -14,13 +14,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.mycore.common.config.MCRConfigurationException;
-import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.ifs2.MCRMetadataStore;
 import org.mycore.datamodel.ifs2.MCRStore;
@@ -36,8 +33,6 @@ import unidue.ubo.dedup.DeDupCriteriaBuilder;
 
 public class DozBibManager {
 
-    private static final Logger LOG = LogManager.getLogger(DozBibManager.class.getName());
-
     /** The type of object that is stored, e.g. Document, LegalEntity */
     private String objectType;
 
@@ -47,7 +42,7 @@ public class DozBibManager {
     /**
      * Creates (if not already existing) or retrieves the metadata store.
      */
-    public static MCRMetadataStore buildMetadataStore(String storeID) {
+    private static MCRMetadataStore buildMetadataStore(String storeID) {
         MCRMetadataStore ms = (MCRMetadataStore) (MCRStoreManager.getStore(storeID));
 
         if (ms == null) {
@@ -60,20 +55,6 @@ public class DozBibManager {
         }
 
         return ms;
-    }
-
-    /**
-     * Returns the IFS2 metadata store used for persistence.
-     */
-    public MCRMetadataStore getStore() {
-        return store;
-    }
-
-    /**
-     * Returns the object type that is persisted, e.g. Document, LegalEntity
-     */
-    public String getObjectType() {
-        return objectType;
     }
 
     /**
@@ -98,24 +79,6 @@ public class DozBibManager {
      */
     public Iterator<Integer> iterateStoredIDs() {
         return store.listIDs(MCRStore.ASCENDING);
-    }
-
-    /**
-     * Retrieves the xml content stored for the given object.
-     */
-    public MCRContent retrieveContent(int id) throws IOException {
-
-        MCRStoredMetadata metadata = store.retrieve(id);
-        try {
-            return metadata.getMetadata();
-        } catch (NullPointerException e) {
-            /*
-             * throw for compatibility of many other classes that use this
-             * manager
-             */
-            LOG.info("could not find metadata in store: ->" + store.getID() + "<- for id: ->" + id + "<-");
-            throw e;
-        }
     }
 
     private final static DozBibManager manager = new DozBibManager();
