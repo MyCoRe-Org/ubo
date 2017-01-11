@@ -13,7 +13,7 @@
       </p>
       <form action="edit-publication.xed">
         <input type="hidden" name="genre" value="dissertation" />
-        <label style="width:170px; display:inline-block;" for="docID">DuEPublico ID des Volltextes:</label>
+        <label style="width:170px; display:inline-block;" for="docID">DuEPublico ID:</label>
         <input style="margin-right:1ex;" id="docID" type="text" name="duepublicoID" size="10" />
         <input type="submit" class="roundedButton" value="übernehmen" />
         <br/>
