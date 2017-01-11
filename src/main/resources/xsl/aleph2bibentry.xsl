@@ -17,16 +17,18 @@
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:java="http://xml.apache.org/xalan/java"
+  xmlns:encoder="xalan://java.net.URLEncoder"
   exclude-result-prefixes="xsl xalan java">
 
-  <xsl:variable name="xserver.base">https://alephprod.ub.uni-due.de/X?op=</xsl:variable>
+  
 
   <xsl:template match="/request">
     <bibentry status="published" ude="true">
       <mods:mods>
         <mods:genre type="intern">dissertation</mods:genre>
-        <xsl:variable name="url" select="concat($xserver.base,'find&amp;base=edu01&amp;request=psg=',shelfmark)" />
-        <xsl:apply-templates select="document($url)/*" />
+        <xsl:call-template name="call-aleph">
+          <xsl:with-param name="request" select="concat('find&amp;base=edu01&amp;request=psg=',encoder:encode(shelfmark,'UTF-8'))" />
+        </xsl:call-template>
         <mods:location>
           <mods:shelfLocator>
             <xsl:value-of select="translate(shelfmark,'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ')" />
@@ -36,13 +38,28 @@
     </bibentry>
   </xsl:template>
 
+  <xsl:template name="call-aleph">
+    <xsl:param name="request" />
+    <xsl:variable name="url" select="concat('https://alephprod.ub.uni-due.de/X?op=',$request)" />
+    <xsl:message>
+      <xsl:text>Calling </xsl:text>
+      <xsl:value-of select="$url" />
+    </xsl:message>
+    <xsl:apply-templates select="document($url)/*" />
+  </xsl:template>
+
   <xsl:template match="/find">
     <xsl:apply-templates select="set_number|error" />
   </xsl:template>
   
   <xsl:template match="set_number">
-    <xsl:variable name="url" select="concat($xserver.base,'present&amp;set_entry=000000001&amp;base=edu01&amp;set_number=',.)" />
-    <xsl:apply-templates select="document($url)/*" />
+    <xsl:message>
+      <!-- It seems we sometimes have to wait a bit for X-Server to respond -->
+      <xsl:value-of select="java:java.lang.Thread.sleep(500)" />
+    </xsl:message>
+    <xsl:call-template name="call-aleph">
+      <xsl:with-param name="request" select="concat('present&amp;set_entry=000000001&amp;base=edu01&amp;set_number=',.)" />
+    </xsl:call-template>
   </xsl:template>
   
   <xsl:template match="error">
