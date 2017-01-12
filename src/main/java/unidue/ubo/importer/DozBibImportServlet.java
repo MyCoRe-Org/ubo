@@ -87,7 +87,7 @@ public class DozBibImportServlet extends MCRServlet {
         }
     }
 
-    private void doSaveEntries(HttpServletResponse res) throws IOException, JDOMException {
+    private void doSaveEntries(HttpServletResponse res) throws IOException, JDOMException, Exception {
         MCRBasket basket = MCRBasketManager.getOrCreateBasketInSession("import");
         for (Iterator<MCRBasketEntry> iterator = basket.iterator(); iterator.hasNext();) {
             MCRBasketEntry entry = iterator.next();

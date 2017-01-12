@@ -13,6 +13,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
+import org.jdom2.Document;
 import org.jdom2.transform.JDOMSource;
 
 import unidue.ubo.DozBibManager;
@@ -36,7 +37,8 @@ public class DozBibResolver implements URIResolver {
         String id = href.substring(href.indexOf(":") + 1);
         int ID = Integer.parseInt(id);
         try {
-            return new JDOMSource(DozBibManager.instance().getEntry(ID).detachRootElement());
+            Document entry = DozBibManager.instance().getEntry(ID);
+            return new JDOMSource(entry.detachRootElement());
         } catch (Exception ex) {
             throw new TransformerException(ex);
         }

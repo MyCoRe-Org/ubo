@@ -9,63 +9,54 @@
 
 package unidue.ubo;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.mycore.common.config.MCRConfigurationException;
-import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.common.MCRConstants;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs2.MCRMetadataStore;
-import org.mycore.datamodel.ifs2.MCRStore;
-import org.mycore.datamodel.ifs2.MCRStoreManager;
-import org.mycore.datamodel.ifs2.MCRStoredMetadata;
-import org.xml.sax.SAXException;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectService;
+import org.mycore.mods.MCRMODSWrapper;
+
+import java.text.SimpleDateFormat;
 
 import unidue.ubo.dedup.DeDupCriteriaBuilder;
 
 public class DozBibManager {
 
-    /** The IFS2 metadata store that is used for object persistence */
-    private MCRMetadataStore store;
+    private final static String DATE_FORMAT_LASTMODIFIED = "yyyy-MM-dd HH:mm:ss";
 
     /**
      * Iterates over the IDs of all objects in the store.
      */
     public Iterator<Integer> iterateStoredIDs() {
-        return store.listIDs(MCRStore.ASCENDING);
+        MCRObjectID oid = buildMCRObjectID(0);
+        MCRMetadataStore store = MCRXMLMetadataManager.instance().getStore(oid);
+        return store.listIDs(true);
+    }
+
+    public List<String> listStoredIDs() {
+        return MCRXMLMetadataManager.instance().listIDsForBase(buildMCRObjectID(0).getBase());
     }
 
     private final static DozBibManager manager = new DozBibManager();
-
-    private DozBibManager() {
-        String storeID = "ubo";
-        store = (MCRMetadataStore) (MCRStoreManager.getStore(storeID));
-
-        if (store == null) {
-            try {
-                store = MCRStoreManager.createStore(storeID, MCRMetadataStore.class);
-            } catch (Exception ex) {
-                String msg = "Unable to create metadata store " + storeID;
-                throw new MCRConfigurationException(msg, ex);
-            }
-        }
-    }
 
     public static DozBibManager instance() {
         return manager;
     }
 
-    private String dateFormat = "yyyy-MM-dd HH:mm:ss";
-
     /**
      * Checks if an object with the given ID already exists in the store.
      */
     public boolean exists(int id) throws Exception {
-        return store.exists(id);
+        MCRObjectID oid = buildMCRObjectID(id);
+        return MCRMetadataManager.exists(oid);
     }
 
     /**
@@ -78,42 +69,78 @@ public class DozBibManager {
         return exists(Integer.parseInt(id));
     }
 
-    public Document getEntry(int id) throws IOException, JDOMException, SAXException {
-        MCRStoredMetadata sm = store.retrieve(id);
-        return (sm == null ? null : sm.getMetadata().asXML());
+    public Document getEntry(int id) throws Exception {
+        MCRObjectID oid = buildMCRObjectID(id);
+        if (!MCRMetadataManager.exists(oid))
+            return null;
+
+        MCRObject obj = MCRMetadataManager.retrieveMCRObject(oid);
+        MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
+        Element mods = wrapper.getMODS().clone();
+        Element bibentry = new Element("bibentry");
+        bibentry.addContent(mods);
+        bibentry.setAttribute("status", wrapper.getServiceFlag("status"));
+        bibentry.setAttribute("id", String.valueOf(id));
+        Date dateModified = obj.getService().getDate(MCRObjectService.DATE_TYPE_MODIFYDATE);
+        String lastModified = new SimpleDateFormat(DATE_FORMAT_LASTMODIFIED).format(dateModified);
+        bibentry.setAttribute("lastModified", lastModified);
+
+        Document xml = new Document(bibentry);
+        new DeDupCriteriaBuilder().updateDeDupCriteria(xml);
+        return xml;
     }
 
-    public int createEntry(Document xml) throws IOException, JDOMException {
+    public int createEntry(Document xml) throws Exception {
         Element root = xml.getRootElement();
 
-        int id = store.getNextFreeID();
-        root.setAttribute("id", String.valueOf(id));
+        MCRMODSWrapper wrapper = new MCRMODSWrapper();
+        wrapper.setServiceFlag("status", root.getAttributeValue("status"));
+        Element mods = root.getChild("mods", MCRConstants.MODS_NAMESPACE).clone();
+        wrapper.setMODS(mods);
+        MCRObject obj = wrapper.getMCRObject();
+
+        MCRObjectID oid = buildMCRObjectID(0);
+        oid = MCRObjectID.getNextFreeId(oid.getBase());
+        obj.setId(oid);
+
+        MCRMetadataManager.create(obj);
 
         new DeDupCriteriaBuilder().updateDeDupCriteria(xml);
-
-        store.create(new MCRJDOMContent(xml), id);
         DozBibIndexer.instance().add(xml);
 
+        int id = oid.getNumberAsInteger();
+        root.setAttribute("id", String.valueOf(id));
         return id;
     }
 
-    public void updateEntry(Document xml, boolean setLastModified) throws IOException, JDOMException {
+    public void updateEntry(Document xml) throws Exception {
         Element root = xml.getRootElement();
+        int id = Integer.parseInt(root.getAttributeValue("id"));
 
-        if (setLastModified)
-            root.setAttribute("lastModified", new SimpleDateFormat(dateFormat).format(new Date()));
+        MCRObjectID oid = buildMCRObjectID(id);
+        MCRObject obj = MCRMetadataManager.retrieveMCRObject(oid);
+
+        MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
+        wrapper.setServiceFlag("status", root.getAttributeValue("status"));
+        Element mods = root.getChild("mods", MCRConstants.MODS_NAMESPACE).clone();
+        wrapper.setMODS(mods);
+
+        MCRMetadataManager.update(obj);
 
         new DeDupCriteriaBuilder().updateDeDupCriteria(xml);
 
-        int id = Integer.parseInt(root.getAttributeValue("id"));
-        store.retrieve(id).update(new MCRJDOMContent(xml));
-        
         DozBibIndexer.instance().remove(id);
         DozBibIndexer.instance().add(xml);
     }
 
-    public void deleteEntry(int id) throws IOException {
+    public void deleteEntry(int id) throws Exception {
         DozBibIndexer.instance().remove(id);
-        store.delete(id);
+
+        MCRObjectID oid = buildMCRObjectID(id);
+        MCRMetadataManager.deleteMCRObject(oid);
+    }
+
+    public static MCRObjectID buildMCRObjectID(int id) {
+        return MCRObjectID.getInstance(MCRObjectID.formatID("ubo", "mods", id));
     }
 }

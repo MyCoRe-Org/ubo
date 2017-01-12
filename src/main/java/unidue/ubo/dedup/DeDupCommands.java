@@ -84,7 +84,7 @@ public class DeDupCommands extends MCRAbstractCommands {
             LOGGER.info("Updating deduplication keys for entry " + id);
             try {
                 Document entry = DozBibManager.instance().getEntry(id);
-                DozBibManager.instance().updateEntry(entry, false);
+                DozBibManager.instance().updateEntry(entry);
             } catch (Exception ex) {
                 String msg = "Skipping corrupted entry " + id;
                 LOGGER.warn(msg, ex);

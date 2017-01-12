@@ -66,7 +66,7 @@ public class DozBibGNDCommands {
         new DozBibGNDCommands();
     }
 
-    private DozBibGNDCommands() throws IOException, JDOMException, SAXException {
+    private DozBibGNDCommands() throws Exception {
         readBibEntries();
         addGNDsFromAleph();
         buildIDMapping();
@@ -164,7 +164,7 @@ public class DozBibGNDCommands {
         return true; // (distance <= maxDistance);
     }
 
-    private void readBibEntries() throws IOException, JDOMException, SAXException {
+    private void readBibEntries() throws IOException, JDOMException, SAXException, Exception {
         LOGGER.info("Reading in all bibentries...");
 
         for (Iterator<Integer> ids = DozBibManager.instance().iterateStoredIDs(); ids.hasNext();) {

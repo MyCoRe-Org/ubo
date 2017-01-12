@@ -35,27 +35,40 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
+import org.mycore.datamodel.ifs2.MCRMetadataStore;
+import org.mycore.datamodel.ifs2.MCRStore;
+import org.mycore.datamodel.ifs2.MCRStoreManager;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.MCRCommand;
+import org.mycore.mods.MCRMODSWrapper;
 
 public class DozBibCommands extends MCRAbstractCommands {
+
     private static final Logger LOGGER = LogManager.getLogger(DozBibCommands.class);
 
     /** Commands for the MyCoRe Command Line Interface */
     public DozBibCommands() {
-        addCommand(new MCRCommand("ubo mods export all entries to directory {0}", "unidue.ubo.DozBibCommands.exportMODS String",
-                "exports all entries as MODS dump to a zipped xml file in local directory {0}"));
-        addCommand(new MCRCommand("ubo transform entry {0} using xsl {1}", "unidue.ubo.DozBibCommands.transformEntry int String",
-                "Transforms persistent xml of bibentry using XSL stylesheet"));
-        addCommand(new MCRCommand("ubo transform entries using xsl {0}", "unidue.ubo.DozBibCommands.transformEntries String",
-            "Transforms persistent xml of all bibentries using XSL stylesheet"));
+        addCommand(new MCRCommand("ubo mods export all entries to directory {0}",
+            "unidue.ubo.DozBibCommands.exportMODS String",
+            "exports all entries as MODS dump to a zipped xml file in local directory {0}"));
+        addCommand(new MCRCommand("ubo transform entry {0} using xsl {1}",
+            "unidue.ubo.DozBibCommands.transformEntry int String",
+            "Transforms persistent xml of bibentry using XSL stylesheet"));
+        addCommand(
+            new MCRCommand("ubo transform entries using xsl {0}", "unidue.ubo.DozBibCommands.transformEntries String",
+                "Transforms persistent xml of all bibentries using XSL stylesheet"));
         addCommand(new MCRCommand("ubo rebuild search index", "unidue.ubo.DozBibIndexer.rebuildIndex",
-                "rebuilds the search index of all entries"));
+            "rebuilds the search index of all entries"));
         addCommand(new MCRCommand("ubo fix origin", "unidue.ubo.DozBibCommands.fixOrigin",
-                "Fixes all origin fields in entries, by removing non-existing category references and changing moved categories"));
+            "Fixes all origin fields in entries, by removing non-existing category references and changing moved categories"));
         addCommand(new MCRCommand("ubo collect statistics {0}", "unidue.ubo.DozBibStatistics.collectStatistics String",
-                "Counts number of publications by status, type etc. from all entries, web application directory is parameter {0}"));
+            "Counts number of publications by status, type etc. from all entries, web application directory is parameter {0}"));
         addCommand(new MCRCommand("ubo find gnds", "unidue.ubo.DozBibGNDCommands.findGNDs", "Find GNDs"));
+        addCommand(new MCRCommand("ubo migrate to mcrobject", "unidue.ubo.DozBibCommands.migrate2mcrobject",
+            "migrates all bibentries to mycoreobject persistence"));
     }
 
     /** Exports all entries as MODS dump to a zipped xml file in the given directory */
@@ -125,10 +138,11 @@ public class DozBibCommands extends MCRAbstractCommands {
         try {
             MCRJDOMContent source = new MCRJDOMContent(entry);
             MCRContent result = transformer.transform(source);
-            DozBibManager.instance().updateEntry(result.asXML(),true);
+            DozBibManager.instance().updateEntry(result.asXML());
             LOGGER.info("bibentry " + entryID + " transformed");
         } catch (Exception ex) {
-            LOGGER.error("bibentry " + entryID + " NOT transformed: " + ex.getClass().getName() + ": " + ex.getMessage());
+            LOGGER
+                .error("bibentry " + entryID + " NOT transformed: " + ex.getClass().getName() + ": " + ex.getMessage());
         }
     }
 
@@ -143,27 +157,29 @@ public class DozBibCommands extends MCRAbstractCommands {
             try {
                 Document xml = DozBibManager.instance().getEntry(ID);
 
-                for (Element classification : xml.getRootElement().getDescendants( new ElementFilter("classification", MCRConstants.MODS_NAMESPACE) )) {
-                    String authorityURI = classification.getAttributeValue("authorityURI"); 
-                    if( ! authorityURI.contains("ORIGIN") ) continue;
-                    
+                for (Element classification : xml.getRootElement()
+                    .getDescendants(new ElementFilter("classification", MCRConstants.MODS_NAMESPACE))) {
+                    String authorityURI = classification.getAttributeValue("authorityURI");
+                    if (!authorityURI.contains("ORIGIN"))
+                        continue;
+
                     String origin = classification.getAttributeValue("valueURI").split("#")[1];
 
                     MCRCategoryID originID = new MCRCategoryID("ORIGIN", origin);
                     if (DAO.exist(originID)) {
                         MCRCategory category = DAO.getCategory(originID, 0);
                         Optional<MCRLabel> label = category.getLabel("x-move");
-                        if (! label.isPresent() )
+                        if (!label.isPresent())
                             continue;
 
                         String newCategory = label.get().getText();
                         LOGGER.info("Moving UBO entry " + ID + " from " + origin + " to " + newCategory);
                         classification.setAttribute("valueURI", authorityURI + "#" + newCategory);
-                        DozBibManager.instance().updateEntry(xml,true);
+                        DozBibManager.instance().updateEntry(xml);
                     } else {
                         LOGGER.warn("UBO entry " + ID + " contains illegal origin entry, removing: " + origin);
                         classification.detach();
-                        DozBibManager.instance().updateEntry(xml,true);
+                        DozBibManager.instance().updateEntry(xml);
                     }
                 }
 
@@ -172,5 +188,31 @@ public class DozBibCommands extends MCRAbstractCommands {
             }
         }
         LOGGER.info("Finished fixing origin of UBO entries");
+    }
+
+    public static void migrate2mcrobject() throws Exception {
+        MCRMetadataStore store = MCRStoreManager.createStore("ubo", MCRMetadataStore.class);
+        for (Iterator<Integer> IDs = store.listIDs(MCRStore.ASCENDING); IDs.hasNext();) {
+            int id = IDs.next();
+            Document xml = store.retrieve(id).getMetadata().asXML();
+            Element root = xml.getRootElement();
+
+            LOGGER.info("Migrating <bibentry> " + id + " to <mycoreobject>...");
+
+            MCRObjectID oid = DozBibManager.buildMCRObjectID(id);
+            if (MCRMetadataManager.exists(oid)) {
+                LOGGER.info("object " + oid.toString() + " already exists, skipping...");
+                continue;
+            }
+
+            MCRMODSWrapper wrapper = new MCRMODSWrapper();
+            wrapper.setServiceFlag("status", root.getAttributeValue("status"));
+            Element mods = root.getChild("mods", MCRConstants.MODS_NAMESPACE).clone();
+            wrapper.setMODS(mods);
+            MCRObject obj = wrapper.getMCRObject();
+
+            obj.setId(oid);
+            MCRMetadataManager.create(obj);
+        }
     }
 }

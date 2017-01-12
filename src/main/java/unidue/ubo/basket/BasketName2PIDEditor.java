@@ -9,7 +9,6 @@
 
 package unidue.ubo.basket;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +20,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
 import org.mycore.common.MCRConstants;
 import org.mycore.frontend.basket.MCRBasket;
 import org.mycore.frontend.basket.MCRBasketEntry;
@@ -155,11 +153,11 @@ public class BasketName2PIDEditor extends MCRServlet {
     /**
      * Saves an entry from the basket and updates its data in the basket afterwards.
      */
-    private void saveChangedEntry(MCRBasketEntry entry) throws IOException, JDOMException {
+    private void saveChangedEntry(MCRBasketEntry entry) throws Exception {
         Element bibentry = entry.getContent();
         bibentry.removeAttribute("changed");
         bibentry = (Element) (bibentry.clone());
-        DozBibManager.instance().updateEntry(new Document(bibentry),true);
+        DozBibManager.instance().updateEntry(new Document(bibentry));
         entry.setContent((Element) (bibentry.clone())); // some data may have changed when saving!
     }
 }

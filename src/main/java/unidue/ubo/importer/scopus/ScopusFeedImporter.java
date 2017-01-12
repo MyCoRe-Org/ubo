@@ -21,7 +21,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRMailer;
 import org.mycore.common.config.MCRConfiguration;
@@ -98,7 +97,7 @@ public class ScopusFeedImporter extends MCRAbstractCommands {
         }
     }
 
-    private static void handlePublication(Element bibentries, String scopusID) throws IOException, JDOMException {
+    private static void handlePublication(Element bibentries, String scopusID) throws Exception {
         if (isAlreadyStored(scopusID)) {
             LOGGER.info("publication with ID " + scopusID + " already existing, will not import.");
             return;
