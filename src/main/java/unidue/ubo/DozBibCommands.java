@@ -26,7 +26,6 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.ElementFilter;
-import org.jdom2.input.SAXBuilder;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
@@ -44,10 +43,6 @@ public class DozBibCommands extends MCRAbstractCommands {
 
     /** Commands for the MyCoRe Command Line Interface */
     public DozBibCommands() {
-        addCommand(new MCRCommand("ubo import entries from directory {0}", "unidue.ubo.DozBibCommands.importEntries String",
-                "imports entries from xml files in local directory {0}"));
-        addCommand(new MCRCommand("ubo export entry {0} to directory {1}", "unidue.ubo.DozBibCommands.exportEntry int String",
-                "exports entry with ID {0} to xml file in local directory {1}"));
         addCommand(new MCRCommand("ubo mods export all entries to directory {0}", "unidue.ubo.DozBibCommands.exportMODS String",
                 "exports all entries as MODS dump to a zipped xml file in local directory {0}"));
         addCommand(new MCRCommand("ubo transform entry {0} using xsl {1}", "unidue.ubo.DozBibCommands.transformEntry int String",
@@ -61,14 +56,6 @@ public class DozBibCommands extends MCRAbstractCommands {
         addCommand(new MCRCommand("ubo collect statistics {0}", "unidue.ubo.DozBibStatistics.collectStatistics String",
                 "Counts number of publications by status, type etc. from all entries, web application directory is parameter {0}"));
         addCommand(new MCRCommand("ubo find gnds", "unidue.ubo.DozBibGNDCommands.findGNDs", "Find GNDs"));
-    }
-
-    /** Exports a single entry to a file in the given directory */
-    public static void exportEntry(int id, String dir) throws Exception {
-        Document entry = DozBibManager.instance().getEntry(id);
-        String fileName = "bibentry-" + id + ".xml";
-        File file = new File(dir, fileName);
-        new MCRJDOMContent(entry).sendTo(file);
     }
 
     /** Exports all entries as MODS dump to a zipped xml file in the given directory */
@@ -142,16 +129,6 @@ public class DozBibCommands extends MCRAbstractCommands {
             LOGGER.info("bibentry " + entryID + " transformed");
         } catch (Exception ex) {
             LOGGER.error("bibentry " + entryID + " NOT transformed: " + ex.getClass().getName() + ": " + ex.getMessage());
-        }
-    }
-
-    /** Imports entries from xml files in local directory */
-    public static void importEntries(String dir) throws Exception {
-        File[] files = new File(dir).listFiles();
-        for (int i = 0; i < files.length; i++) {
-            Document entry = new SAXBuilder().build(files[i]);
-            int id = DozBibManager.instance().saveEntry(entry);
-            LOGGER.info("UBO imported entry with ID " + id);
         }
     }
 
