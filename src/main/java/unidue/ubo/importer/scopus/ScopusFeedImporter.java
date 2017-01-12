@@ -26,7 +26,6 @@ import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRMailer;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.xml.MCRURIResolver;
-import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
@@ -114,7 +113,7 @@ public class ScopusFeedImporter extends MCRAbstractCommands {
 
         }
         bibentry.setAttribute("status", "imported");
-        DozBibManager.instance().saveEntry(new Document(bibentry));
+        DozBibManager.instance().createEntry(new Document(bibentry));
         bibentries.addContent(bibentry.detach());
     }
 

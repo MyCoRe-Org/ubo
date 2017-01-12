@@ -125,7 +125,7 @@ public class DozBibCommands extends MCRAbstractCommands {
         try {
             MCRJDOMContent source = new MCRJDOMContent(entry);
             MCRContent result = transformer.transform(source);
-            DozBibManager.instance().saveEntry(result.asXML());
+            DozBibManager.instance().updateEntry(result.asXML(),true);
             LOGGER.info("bibentry " + entryID + " transformed");
         } catch (Exception ex) {
             LOGGER.error("bibentry " + entryID + " NOT transformed: " + ex.getClass().getName() + ": " + ex.getMessage());
@@ -159,11 +159,11 @@ public class DozBibCommands extends MCRAbstractCommands {
                         String newCategory = label.get().getText();
                         LOGGER.info("Moving UBO entry " + ID + " from " + origin + " to " + newCategory);
                         classification.setAttribute("valueURI", authorityURI + "#" + newCategory);
-                        DozBibManager.instance().saveEntry(xml);
+                        DozBibManager.instance().updateEntry(xml,true);
                     } else {
                         LOGGER.warn("UBO entry " + ID + " contains illegal origin entry, removing: " + origin);
                         classification.detach();
-                        DozBibManager.instance().saveEntry(xml);
+                        DozBibManager.instance().updateEntry(xml,true);
                     }
                 }
 

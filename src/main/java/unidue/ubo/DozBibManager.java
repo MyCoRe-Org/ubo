@@ -83,11 +83,21 @@ public class DozBibManager {
         return (sm == null ? null : sm.getMetadata().asXML());
     }
 
-    public int saveEntry(Document xml) throws IOException, JDOMException {
-        return saveEntry(xml, true);
+    public int createEntry(Document xml) throws IOException, JDOMException {
+        Element root = xml.getRootElement();
+
+        int id = store.getNextFreeID();
+        root.setAttribute("id", String.valueOf(id));
+
+        new DeDupCriteriaBuilder().updateDeDupCriteria(xml);
+
+        store.create(new MCRJDOMContent(xml), id);
+        DozBibIndexer.instance().add(xml);
+
+        return id;
     }
 
-    public int saveEntry(Document xml, boolean setLastModified) throws IOException, JDOMException {
+    public void updateEntry(Document xml, boolean setLastModified) throws IOException, JDOMException {
         Element root = xml.getRootElement();
 
         if (setLastModified)
@@ -95,22 +105,11 @@ public class DozBibManager {
 
         new DeDupCriteriaBuilder().updateDeDupCriteria(xml);
 
-        int id = Integer.parseInt(root.getAttributeValue("id", "0"));
-        if (id == 0) {
-            id = store.getNextFreeID();
-            root.setAttribute("id", String.valueOf(id));
-        }
-
-        if (store.exists(id)) {
-            store.retrieve(id).update(new MCRJDOMContent(xml));
-            DozBibIndexer.instance().remove(id);
-            DozBibIndexer.instance().add(xml);
-        } else {
-            store.create(new MCRJDOMContent(xml), id);
-            DozBibIndexer.instance().add(xml);
-        }
-
-        return id;
+        int id = Integer.parseInt(root.getAttributeValue("id"));
+        store.retrieve(id).update(new MCRJDOMContent(xml));
+        
+        DozBibIndexer.instance().remove(id);
+        DozBibIndexer.instance().add(xml);
     }
 
     public void deleteEntry(int id) throws IOException {

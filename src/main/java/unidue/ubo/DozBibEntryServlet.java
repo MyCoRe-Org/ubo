@@ -116,7 +116,7 @@ public class DozBibEntryServlet extends MCRServlet {
         if (id > 0) // Existing entry changed
         {
             if (AccessControl.currentUserIsAdmin()) {
-                DozBibManager.instance().saveEntry(doc);
+                DozBibManager.instance().updateEntry(doc,true);
                 LOGGER.info("UBO saved entry with ID " + ID);
                 res.sendRedirect(MCRServlet.getServletBaseURL() + "DozBibEntryServlet?mode=show&id=" + ID);
             } else {
@@ -125,7 +125,7 @@ public class DozBibEntryServlet extends MCRServlet {
         } else
         // New entry submitted
         {
-            int newID = DozBibManager.instance().saveEntry(doc);
+            int newID = DozBibManager.instance().createEntry(doc);
             LOGGER.info("UBO saved entry with ID " + newID);
 
             if (AccessControl.currentUserIsAdmin()) {

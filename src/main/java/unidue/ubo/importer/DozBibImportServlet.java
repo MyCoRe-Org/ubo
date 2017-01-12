@@ -93,7 +93,7 @@ public class DozBibImportServlet extends MCRServlet {
             MCRBasketEntry entry = iterator.next();
             Element root = entry.getContent();
             Document bibentry = new Document(root);
-            DozBibManager.instance().saveEntry(bibentry);
+            DozBibManager.instance().createEntry(bibentry);
         }
         basket.clear();
         res.sendRedirect(getServletBaseURL() + "MCRBasketServlet?type=import&action=show");

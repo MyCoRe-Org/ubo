@@ -18,7 +18,6 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.mycore.common.MCRConstants;
 import org.mycore.frontend.MCRFrontendUtil;
-import org.mycore.frontend.editor.MCREditorSubmission;
 import org.xml.sax.SAXException;
 
 class CategoryAdder {
