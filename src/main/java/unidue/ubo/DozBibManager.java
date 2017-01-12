@@ -23,39 +23,43 @@ import org.mycore.datamodel.ifs2.MCRMetadataStore;
 import org.mycore.datamodel.ifs2.MCRStore;
 import org.mycore.datamodel.ifs2.MCRStoreManager;
 import org.mycore.datamodel.ifs2.MCRStoredMetadata;
-import org.mycore.services.fieldquery.MCRSearcher;
-import org.mycore.services.fieldquery.MCRSearcherFactory;
-import org.mycore.services.fieldquery.data2fields.MCRData2FieldsXML;
-import org.mycore.services.fieldquery.data2fields.MCRIndexEntry;
 import org.xml.sax.SAXException;
 
 import unidue.ubo.dedup.DeDupCriteriaBuilder;
 
 public class DozBibManager {
 
-    /** The type of object that is stored, e.g. Document, LegalEntity */
-    private String objectType;
-
     /** The IFS2 metadata store that is used for object persistence */
     private MCRMetadataStore store;
 
     /**
-     * Creates (if not already existing) or retrieves the metadata store.
+     * Iterates over the IDs of all objects in the store.
      */
-    private static MCRMetadataStore buildMetadataStore(String storeID) {
-        MCRMetadataStore ms = (MCRMetadataStore) (MCRStoreManager.getStore(storeID));
+    public Iterator<Integer> iterateStoredIDs() {
+        return store.listIDs(MCRStore.ASCENDING);
+    }
 
-        if (ms == null) {
+    private final static DozBibManager manager = new DozBibManager();
+
+    private DozBibManager() {
+        String storeID = "ubo";
+        store = (MCRMetadataStore) (MCRStoreManager.getStore(storeID));
+
+        if (store == null) {
             try {
-                ms = MCRStoreManager.createStore(storeID, MCRMetadataStore.class);
+                store = MCRStoreManager.createStore(storeID, MCRMetadataStore.class);
             } catch (Exception ex) {
                 String msg = "Unable to create metadata store " + storeID;
                 throw new MCRConfigurationException(msg, ex);
             }
         }
-
-        return ms;
     }
+
+    public static DozBibManager instance() {
+        return manager;
+    }
+
+    private String dateFormat = "yyyy-MM-dd HH:mm:ss";
 
     /**
      * Checks if an object with the given ID already exists in the store.
@@ -73,28 +77,6 @@ public class DozBibManager {
     public boolean exists(String id) throws Exception {
         return exists(Integer.parseInt(id));
     }
-
-    /**
-     * Iterates over the IDs of all objects in the store.
-     */
-    public Iterator<Integer> iterateStoredIDs() {
-        return store.listIDs(MCRStore.ASCENDING);
-    }
-
-    private final static DozBibManager manager = new DozBibManager();
-
-    private DozBibManager() {
-        this.objectType = "ubo";
-        store = buildMetadataStore(objectType.toLowerCase());
-    }
-
-    public static DozBibManager instance() {
-        return manager;
-    }
-
-    private String dateFormat = "yyyy-MM-dd HH:mm:ss";
-
-    private MCRSearcher searcher = MCRSearcherFactory.getSearcherForIndex("ubo");
 
     public Document getEntry(int id) throws IOException, JDOMException, SAXException {
         MCRStoredMetadata sm = store.retrieve(id);
@@ -121,37 +103,18 @@ public class DozBibManager {
 
         if (store.exists(id)) {
             store.retrieve(id).update(new MCRJDOMContent(xml));
-            searcher.removeFromIndex("ubo:" + id);
-            addToIndex(xml);
+            DozBibIndexer.instance().remove(id);
+            DozBibIndexer.instance().add(xml);
         } else {
             store.create(new MCRJDOMContent(xml), id);
-            addToIndex(xml);
+            DozBibIndexer.instance().add(xml);
         }
 
         return id;
     }
 
     public void deleteEntry(int id) throws IOException {
-        searcher.removeFromIndex("ubo:" + id);
+        DozBibIndexer.instance().remove(id);
         store.delete(id);
-    }
-
-    private void addToIndex(Document entry) {
-        MCRIndexEntry indexEntry = new MCRIndexEntry();
-        indexEntry.setEntryID("ubo:" + entry.getRootElement().getAttributeValue("id"));
-        new MCRData2FieldsXML("ubo", entry).addFieldValues(indexEntry);
-        searcher.addToIndex(indexEntry);
-    }
-
-    /** Rebuilds the search index */
-    public static void rebuildIndex() throws Exception {
-        DozBibManager.instance().searcher.clearIndex();
-
-        Iterator<Integer> IDs = DozBibManager.instance().iterateStoredIDs();
-        while (IDs.hasNext()) {
-            int id = IDs.next();
-            Document entry = DozBibManager.instance().getEntry(id);
-            DozBibManager.instance().addToIndex(entry);
-        }
     }
 }
