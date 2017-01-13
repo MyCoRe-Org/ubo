@@ -31,8 +31,8 @@
 
 <xsl:template name="pubtype">
   <span class="label-info">
-    <xsl:apply-templates select="mods:mods/mods:genre[@type='intern']" />
-    <xsl:for-each select="mods:mods/mods:relatedItem[@type='host']/mods:genre[@type='intern']">
+    <xsl:apply-templates select="mods:genre[@type='intern']" />
+    <xsl:for-each select="mods:relatedItem[@type='host']/mods:genre[@type='intern']">
       <xsl:text> in </xsl:text>
       <xsl:apply-templates select="." />
     </xsl:for-each> 

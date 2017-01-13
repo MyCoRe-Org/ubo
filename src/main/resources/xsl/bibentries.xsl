@@ -244,8 +244,10 @@
   <div class="grid_11">
     <div class="hit">
       <div class="labels">
-        <xsl:call-template name="pubtype" />
-        <xsl:call-template name="label-year" />
+        <xsl:for-each select="mods:mods">
+          <xsl:call-template name="pubtype" />
+          <xsl:call-template name="label-year" />
+        </xsl:for-each>
       </div>
       <div class="content bibentry">  
         <xsl:apply-templates select="mods:mods" mode="cite"> 

@@ -20,6 +20,8 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.common.MCRMailer;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
@@ -61,7 +63,8 @@ public class DozBibEntryServlet extends MCRServlet {
             return;
 
         LOGGER.info("UBO show entry " + ID);
-        Document xml = DozBibManager.instance().getEntry(ID);
+        MCRObjectID oid = DozBibManager.buildMCRObjectID(ID);
+        Document xml = MCRMetadataManager.retrieveMCRObject(oid).createXML();
         getLayoutService().doLayout(req, res, new MCRJDOMContent(xml));
     }
 

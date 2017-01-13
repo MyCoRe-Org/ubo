@@ -89,22 +89,24 @@
 </xsl:template>
 
 <xsl:template match="bibentry" mode="basketContent">
-  <div class="labels">
-    <xsl:call-template name="pubtype" />
-    <xsl:call-template name="label-year" />
-  </div>
-  <div class="content bibentry">  
-    <xsl:apply-templates select="mods:mods" mode="cite"> 
-      <xsl:with-param name="mode">divs</xsl:with-param> 
-    </xsl:apply-templates>
-    <div class="footer">
-      <form action="{$ServletsBaseURL}DozBibEntryServlet" method="get">
-        <input type="hidden" name="mode" value="show"/>
-        <input type="hidden" name="id" value="{@id}"/>
-        <input type="submit" class="roundedButton" value="{i18n:translate('result.dozbib.info')}" />
-      </form>
+  <xsl:for-each select="mods:mods">
+    <div class="labels">
+      <xsl:call-template name="pubtype" />
+      <xsl:call-template name="label-year" />
     </div>
-  </div>
+    <div class="content bibentry">  
+      <xsl:apply-templates select="." mode="cite"> 
+        <xsl:with-param name="mode">divs</xsl:with-param> 
+      </xsl:apply-templates>
+      <div class="footer">
+        <form action="{$ServletsBaseURL}DozBibEntryServlet" method="get">
+          <input type="hidden" name="mode" value="show"/>
+          <input type="hidden" name="id" value="{../@id}"/>
+          <input type="submit" class="roundedButton" value="{i18n:translate('result.dozbib.info')}" />
+        </form>
+      </div>
+    </div>
+  </xsl:for-each>
 </xsl:template>
 
 <xsl:template name="buttons">

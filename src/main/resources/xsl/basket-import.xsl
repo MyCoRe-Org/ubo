@@ -69,12 +69,12 @@
   </xsl:template>
 
   <xsl:template match="bibentry" mode="basketContent">
-    <div class="labels">
-      <xsl:call-template name="pubtype" />
-      <xsl:call-template name="label-year" />
-    </div>
-    <div class="content">
-      <xsl:for-each select="mods:mods">
+    <xsl:for-each select="mods:mods">
+      <div class="labels">
+        <xsl:call-template name="pubtype" />
+        <xsl:call-template name="label-year" />
+      </div>
+      <div class="content">
         <div class="bibentry">
           <xsl:apply-templates select="." mode="cite">
             <xsl:with-param name="mode">divs</xsl:with-param>
@@ -82,8 +82,8 @@
         </div>
         <xsl:apply-templates select="mods:extension/source" />
         <xsl:apply-templates select="mods:extension[@type='fields'][field]" />
-      </xsl:for-each>
-    </div>
+      </div>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="mods:extension/source">

@@ -21,8 +21,10 @@
 <xsl:include href="mods-dc-meta.xsl" />
 <xsl:include href="mods-highwire.xsl" />
 <xsl:include href="mods-display.xsl" />
+
+<xsl:variable name="entryID" select="number(substring-after(/mycoreobject/@ID,'ubo_mods_'))" />
   
-<xsl:param name="Referer" select="concat($ServletsBaseURL,'DozBibEntryServlet?mode=show&amp;id=',/bibentry/@id)" />
+<xsl:param name="Referer" select="concat($ServletsBaseURL,'DozBibEntryServlet?mode=show&amp;id=',$entryID)" />
 <xsl:param name="PageNr"  />
 <xsl:param name="ListKey" />
 <xsl:param name="CurrentUserPID" />
@@ -35,7 +37,7 @@
 <!-- ============ Seitentitel ============ -->
 
 <xsl:variable name="page.title"> 
-  <xsl:for-each select="/bibentry/mods:mods">
+  <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
     <xsl:for-each select="mods:name[@type='personal'][1]">
       <xsl:apply-templates select="mods:namePart[@type='family']"/>
       <xsl:apply-templates select="mods:namePart[@type='given']"/>
@@ -46,14 +48,14 @@
 </xsl:variable>
 
 <xsl:variable name="pageLastModified">
-  <xsl:value-of select="substring-before(/bibentry/@lastModified,' ')" />
+  <xsl:value-of select="substring-before(/mycoreobject/service/servdates/servdate[@type='modifydate'],'T')" />
 </xsl:variable>
 
 <!-- ========== Dublin Core and Highwire Press meta tags ========== -->
 
 <xsl:variable name="head.additional">
-  <xsl:apply-templates select="/bibentry/mods:mods" mode="dc-meta" />
-  <xsl:apply-templates select="/bibentry/mods:mods" mode="highwire" />
+  <xsl:apply-templates select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods" mode="dc-meta" />
+  <xsl:apply-templates select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods" mode="highwire" />
   <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/grid12.css" />
 </xsl:variable>
 
@@ -72,7 +74,7 @@
       </xsl:attribute>
     </xsl:if>
   </item>  
-  <item label="{i18n:translate('result.dozbib.entry')} {/bibentry/@id}" />
+  <item label="{i18n:translate('result.dozbib.entry')} {$entryID}" />
 </xsl:variable>
 
 <!-- ============ Aktionen ============ -->
@@ -80,42 +82,42 @@
 <xsl:variable name="actions">
   <xsl:if test="$permission.admin and (string-length($step) = 0) and not ($UBO.System.ReadOnly = 'true')">
     <action label="{i18n:translate('button.edit')}" target="{$WebApplicationBaseURL}edit-publication.xed">
-      <param name="id"     value="{/bibentry/@id}" />
+      <param name="id"     value="{$entryID}" />
     </action>
     <action label="Admin" target="{$WebApplicationBaseURL}edit-admin.xed">
-      <param name="id"     value="{/bibentry/@id}" />
+      <param name="id"     value="{$entryID}" />
     </action>
     <action label="{i18n:translate('button.delete')}" target="{$ServletsBaseURL}DozBibEntryServlet">
       <param name="mode"       value="show" />
       <param name="XSL.step"   value="ask.delete" />
-      <param name="id"         value="{/bibentry/@id}" />
+      <param name="id"         value="{$entryID}" />
     </action>
   </xsl:if>
   <action label="{i18n:translate('button.basketAdd')}" target="{$ServletsBaseURL}MCRBasketServlet">
     <param name="type"    value="bibentries" />
     <param name="action"  value="add" />
     <param name="resolve" value="true" />
-    <param name="id"      value="{/bibentry/@id}" />
-    <param name="uri"     value="ubo:{/bibentry/@id}" />
+    <param name="id"      value="{$entryID}" />
+    <param name="uri"     value="ubo:{$entryID}" />
   </action>
   <xsl:if test="string-length($step) = 0">
-    <action label="MODS" target="{$ServletsBaseURL}MCRExportServlet/mods-{/bibentry/@id}.xml">
-      <param name="uri"          value="ubo:{/bibentry/@id}" />
+    <action label="MODS" target="{$ServletsBaseURL}MCRExportServlet/mods-{$entryID}.xml">
+      <param name="uri"          value="ubo:{$entryID}" />
       <param name="root"         value="bibentries" />
       <param name="transformer"  value="mods" />
     </action>
-    <action label="BibTeX" target="{$ServletsBaseURL}MCRExportServlet/bibentry-{/bibentry/@id}.bib">
-      <param name="uri"          value="ubo:{/bibentry/@id}" />
+    <action label="BibTeX" target="{$ServletsBaseURL}MCRExportServlet/bibentry-{$entryID}.bib">
+      <param name="uri"          value="ubo:{$entryID}" />
       <param name="root"         value="bibentries" />
       <param name="transformer"  value="bibtex" />
     </action>
-    <action label="EndNote" target="{$ServletsBaseURL}MCRExportServlet/bibentry-{/bibentry/@id}.enl">
-      <param name="uri"          value="ubo:{/bibentry/@id}" />
+    <action label="EndNote" target="{$ServletsBaseURL}MCRExportServlet/bibentry-{$entryID}.enl">
+      <param name="uri"          value="ubo:{$entryID}" />
       <param name="root"         value="bibentries" />
       <param name="transformer"  value="endnote" />
     </action>
-    <action label="RIS" target="{$ServletsBaseURL}MCRExportServlet/bibentry-{/bibentry/@id}.ris">
-      <param name="uri"          value="ubo:{/bibentry/@id}" />
+    <action label="RIS" target="{$ServletsBaseURL}MCRExportServlet/bibentry-{$entryID}.ris">
+      <param name="uri"          value="ubo:{$entryID}" />
       <param name="root"         value="bibentries" />
       <param name="transformer"  value="ris" />
     </action>
@@ -124,9 +126,10 @@
 
 <!-- ============ Rechte Seite: Inhalte ============ -->
 
-<xsl:template match="bibentry">
+<xsl:template match="mycoreobject">
+ <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
   <div class="section bibentry highlight2" style="padding:1ex;">
-    <xsl:apply-templates select="mods:mods" mode="cite">
+    <xsl:apply-templates select="." mode="cite">
       <xsl:with-param name="mode">divs</xsl:with-param>
     </xsl:apply-templates>
   </div>
@@ -134,23 +137,22 @@
     <div class="labels">
       <xsl:call-template name="pubtype" />
       <xsl:call-template name="label-year" />
-      <xsl:apply-templates select="mods:mods/mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info" />
-      <xsl:apply-templates select="mods:mods/mods:extension/tag" />
+      <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info" />
+      <xsl:apply-templates select="mods:extension/tag" />
     </div>
-    <xsl:apply-templates select="mods:mods/mods:classification[contains(@authorityURI,'ORIGIN')]" />
-    <xsl:apply-templates select="@status" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" />
+    <xsl:apply-templates select="/mycoreobject/service/servflags/servflag[@type='status']" />
     <xsl:call-template name="steps.and.actions" /> 
   </div>
   <div class="section highlight2" style="padding-top:2ex; padding-bottom:2ex;">
-    <xsl:for-each select="mods:mods">
-      <div class="container_12 ubo_details">
-        <xsl:apply-templates select="." mode="details_lines" />
-      </div>
-    </xsl:for-each>
+    <div class="container_12 ubo_details">
+      <xsl:apply-templates select="." mode="details_lines" />
+    </div>
   </div>
   <xsl:if test="$permission.admin and dedup">
     <xsl:call-template name="listDuplicates" />
   </xsl:if>
+ </xsl:for-each>
 </xsl:template>
 
 <xsl:template match="mods:extension/tag">
@@ -162,7 +164,7 @@
 <!-- Do internal query for duplicates and show them -->
 <xsl:template name="listDuplicates">
   <xsl:variable name="duplicatesURI">
-    <xsl:for-each select="mods:mods/mods:extension[dedup]">
+    <xsl:for-each select="mods:extension[dedup]">
       <xsl:call-template name="buildFindDuplicatesURI" />
     </xsl:for-each>
   </xsl:variable>
@@ -181,7 +183,7 @@
         </xsl:choose>
         <xsl:text>:</xsl:text> 
       </h3>
-      <xsl:variable name="myOwnHitID" select="concat('ubo:',@id)" />
+      <xsl:variable name="myOwnHitID" select="concat('ubo:',$entryID)" />
       <ul>
         <xsl:for-each select="$duplicates">
           <xsl:sort select="substring-after(@id,'ubo:')" data-type="number" order="descending" />
@@ -192,9 +194,9 @@
                 <xsl:text>Eintrag </xsl:text>
                 <xsl:value-of select="$id" />
               </a>
-              <xsl:for-each select="document(@id)/bibentry">
+              <xsl:for-each select="document(@id)/bibentry/mods:mods">
                 <div class="bibentry">
-                  <xsl:apply-templates select="mods:mods" mode="cite">
+                  <xsl:apply-templates select="." mode="cite">
                     <xsl:with-param name="mode">divs</xsl:with-param>
                   </xsl:apply-templates>
                 </div>
@@ -253,12 +255,12 @@
   </p>  
 
   <input type="button" class="editorButton" name="delete" value="{i18n:translate('button.deleteYes')}" 
-    onclick="self.location.href='{$ServletsBaseURL}DozBibEntryServlet?mode=delete&amp;id={/bibentry/@id}'" />
+    onclick="self.location.href='{$ServletsBaseURL}DozBibEntryServlet?mode=delete&amp;id={$entryID}'" />
   <input type="button" class="editorButton" name="cancel" value="{i18n:translate('button.cancelNo')}" 
     onclick="self.location.href='{$Referer}'" />
 </xsl:template>
 
-<xsl:template match="@status">
+<xsl:template match="servflag[@type='status']">
  <xsl:if test="$permission.admin">
   <p>  
     <strong>    
