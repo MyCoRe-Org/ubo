@@ -21,11 +21,13 @@ import org.jdom2.Document;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.common.MCRMailer;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
+import org.mycore.mods.MCRMODSWrapper;
 
 public class DozBibEntryServlet extends MCRServlet {
     private final static Logger LOGGER = LogManager.getLogger(DozBibEntryServlet.class);
@@ -88,17 +90,22 @@ public class DozBibEntryServlet extends MCRServlet {
         if (ID == 0)
             return;
 
-        Document entry = DozBibManager.instance().getEntry(ID);
         if (!AccessControl.currentUserIsAdmin()) {
             res.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 
         LOGGER.info("UBO delete entry " + ID);
-        entry.getRootElement().setAttribute("status", "deleted");
-        DozBibManager.instance().deleteEntry(ID);
+        DozBibIndexer.instance().remove(ID);
+        
+        MCRObjectID oid = DozBibManager.buildMCRObjectID(ID);
+        MCRObject obj = MCRMetadataManager.retrieveMCRObject(oid);
+        new MCRMODSWrapper(obj).setServiceFlag("status", "deleted");
+        Document xml = obj.createXML();
+
+        MCRMetadataManager.deleteMCRObject(oid);
         req.setAttribute("XSL.step", "confirm.deleted");
-        getLayoutService().doLayout(req, res, new MCRJDOMContent(entry));
+        getLayoutService().doLayout(req, res, new MCRJDOMContent(xml));
     }
 
     private void sendNotificationMail(Document doc) throws Exception {

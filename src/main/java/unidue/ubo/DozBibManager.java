@@ -132,13 +132,6 @@ public class DozBibManager {
         DozBibIndexer.instance().add(xml);
     }
 
-    public void deleteEntry(int id) throws Exception {
-        DozBibIndexer.instance().remove(id);
-
-        MCRObjectID oid = buildMCRObjectID(id);
-        MCRMetadataManager.deleteMCRObject(oid);
-    }
-
     public static MCRObjectID buildMCRObjectID(int id) {
         return MCRObjectID.getInstance(MCRObjectID.formatID("ubo", "mods", id));
     }
