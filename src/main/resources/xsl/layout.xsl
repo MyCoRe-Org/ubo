@@ -8,7 +8,8 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  exclude-result-prefixes="xsl xalan i18n">
+  xmlns:encoder="xalan://java.net.URLEncoder" 
+  exclude-result-prefixes="xsl xalan i18n encoder">
 
   <xsl:output method="html" encoding="UTF-8" media-type="text/html" indent="yes" xalan:indent-amount="2" />
 
@@ -127,8 +128,8 @@
         </div>
         <xsl:call-template name="layout.breadcrumbPath" />
         <div id="leftbar">
-          <xsl:call-template name="layout.login" />
           <xsl:call-template name="layout.mainnavigation" />
+          <xsl:call-template name="layout.login" />
         </div>
         <xsl:call-template name="layout.inhalt" />
         <xsl:apply-templates select="/*/sidebar"/>
@@ -192,7 +193,7 @@
           </xsl:choose>
           <xsl:value-of select="@name"/>
           <xsl:value-of select="'='"/>
-          <xsl:value-of xmlns:encoder="xalan://java.net.URLEncoder" select="encoder:encode(string(@value),'UTF-8')"/>
+          <xsl:value-of select="encoder:encode(string(@value),'UTF-8')"/>
         </xsl:for-each>
       </xsl:attribute>
       <xsl:value-of select="@label"/>
@@ -515,43 +516,20 @@
 
   <!-- current user and login formular-->
   <xsl:template name="layout.login">
-
-    <div id="login">
-      <!-- print current user -->
-      <span class="user">
-        <xsl:text>[</xsl:text>
-        <xsl:choose>
-          <xsl:when test="$CurrentUser = $MCR.Users.Guestuser.UserName">
-            <xsl:value-of select="i18n:translate('login.guest')" />
-          </xsl:when>
-          <xsl:when test="contains($CurrentUser,'@')">
-            <xsl:value-of select="substring-before($CurrentUser,'@')" />
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="$CurrentUser" />
-          </xsl:otherwise>
-        </xsl:choose>
-        <xsl:text>]</xsl:text>
-      </span>
-      <!-- show login formular link if not already on login page -->
-      <xsl:if test="$PageID != 'login'">
-        <xsl:choose>
-          <xsl:when test="$CurrentUser = $MCR.Users.Guestuser.UserName">
-            <form action="{$ServletsBaseURL}MCRLoginServlet" method="post">
-              <input type="hidden" name="url" value="{$RequestURL}" />
-              <input class="roundedButton" type="submit" name="{i18n:translate('login.logOn')}" value="{i18n:translate('login.logOn')}" />
-            </form>
-          </xsl:when>
-          <xsl:otherwise>
-            <form action="{$ServletsBaseURL}logout" method="get">
-              <input type="hidden" name="url" value="{$RequestURL}" />
-              <input class="roundedButton" type="submit" name="{i18n:translate('login.logOut')}" value="{i18n:translate('login.logOut')}" />
-            </form>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:if>
-      <div class="clearfix"/>
-    </div>
+    <xsl:if test="not($CurrentUser = $MCR.Users.Guestuser.UserName)">
+      <div id="login">
+        <span class="user">
+          <xsl:text>[</xsl:text>
+          <xsl:value-of select="$CurrentUser" />
+          <xsl:text>]</xsl:text>
+        </span>
+        <form action="{$ServletsBaseURL}logout" method="get">
+          <input type="hidden" name="url" value="{$RequestURL}" />
+          <input class="roundedButton" type="submit" name="{i18n:translate('login.logOut')}" value="{i18n:translate('login.logOut')}" />
+        </form>
+        <div class="clearfix"/>
+      </div>
+    </xsl:if>
   </xsl:template>
 
   <!-- main navigation -->
@@ -573,6 +551,11 @@
             </xsl:otherwise>
           </xsl:choose>
         </xsl:for-each>
+        <xsl:if test="$CurrentUser = $MCR.Users.Guestuser.UserName">
+          <li>
+            <a href="{$ServletsBaseURL}MCRLoginServlet?url={encoder:encode($RequestURL,'UTF-8')}">Administration</a>
+          </li>
+        </xsl:if>        
       </ul>
       <ul id="languagenav">
         <li>
