@@ -135,7 +135,7 @@
       <xsl:call-template name="pubtype" />
       <xsl:call-template name="label-year" />
       <xsl:apply-templates select="mods:mods/mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info" />
-      <xsl:apply-templates select="tag" />
+      <xsl:apply-templates select="mods:mods/mods:extension/tag" />
     </div>
     <xsl:apply-templates select="mods:mods/mods:classification[contains(@authorityURI,'ORIGIN')]" />
     <xsl:apply-templates select="@status" />
@@ -153,7 +153,7 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="/bibentry/tag">
+<xsl:template match="mods:extension/tag">
   <span class="ubo-tag">
     <xsl:value-of select="text()" />
   </span>
@@ -162,7 +162,9 @@
 <!-- Do internal query for duplicates and show them -->
 <xsl:template name="listDuplicates">
   <xsl:variable name="duplicatesURI">
-    <xsl:call-template name="buildFindDuplicatesURI" />
+    <xsl:for-each select="mods:mods/mods:extension[dedup]">
+      <xsl:call-template name="buildFindDuplicatesURI" />
+    </xsl:for-each>
   </xsl:variable>
   <xsl:variable name="duplicates" select="document($duplicatesURI)/mcr:results/mcr:hit" />
   <xsl:variable name="numDuplicates" select="count($duplicates) - 1" />

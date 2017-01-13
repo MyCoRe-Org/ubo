@@ -38,29 +38,27 @@
   </xsl:template>
 
   <xsl:template name="buttons">
-    <xsl:for-each select="bibentry">
-      <xsl:if test="dedup">
-        <xsl:variable name="duplicatesURI">
-          <xsl:call-template name="buildFindDuplicatesURI" />
-        </xsl:variable>
-        <xsl:variable name="duplicates" select="document($duplicatesURI)/mcr:results/mcr:hit" />
-        <xsl:if test="count($duplicates) &gt; 0">
-          <a class="roundedButton basketButton">
-            <xsl:attribute name="href">
-              <xsl:value-of select="$ServletsBaseURL" />
-              <xsl:text>DozBibServlet?</xsl:text>
-              <xsl:for-each select="dedup">
-                <xsl:text>ubo_dedup=</xsl:text>
-                <xsl:value-of select="@key" />
-                <xsl:if test="position() != last()">&amp;</xsl:if>
-              </xsl:for-each>
-            </xsl:attribute>
-            <xsl:value-of select="count($duplicates)" />
-            <xsl:text> Dublette</xsl:text>
-            <xsl:if test="count($duplicates) &gt; 1">n</xsl:if>
-            <xsl:text>?</xsl:text>
-          </a>
-        </xsl:if>
+    <xsl:for-each select="bibentry/mods:mods/mods:extension[dedup]">
+      <xsl:variable name="duplicatesURI">
+        <xsl:call-template name="buildFindDuplicatesURI" />
+      </xsl:variable>
+      <xsl:variable name="duplicates" select="document($duplicatesURI)/mcr:results/mcr:hit" />
+      <xsl:if test="count($duplicates) &gt; 0">
+        <a class="roundedButton basketButton">
+          <xsl:attribute name="href">
+            <xsl:value-of select="$ServletsBaseURL" />
+            <xsl:text>DozBibServlet?</xsl:text>
+            <xsl:for-each select="dedup">
+              <xsl:text>ubo_dedup=</xsl:text>
+              <xsl:value-of select="@key" />
+              <xsl:if test="position() != last()">&amp;</xsl:if>
+            </xsl:for-each>
+          </xsl:attribute>
+          <xsl:value-of select="count($duplicates)" />
+          <xsl:text> Dublette</xsl:text>
+          <xsl:if test="count($duplicates) &gt; 1">n</xsl:if>
+          <xsl:text>?</xsl:text>
+        </a>
       </xsl:if>
     </xsl:for-each>
     <xsl:call-template name="button">
@@ -82,13 +80,13 @@
             <xsl:with-param name="mode">divs</xsl:with-param>
           </xsl:apply-templates>
         </div>
-        <xsl:apply-templates select="mods:extension[@type='source']" />
+        <xsl:apply-templates select="mods:extension/source" />
         <xsl:apply-templates select="mods:extension[@type='fields'][field]" />
       </xsl:for-each>
     </div>
   </xsl:template>
 
-  <xsl:template match="mods:extension[@type='source']">
+  <xsl:template match="mods:extension/source">
     <div class="ubo-extension-source">
       <h4>Quellformat:</h4>
       <pre><xsl:apply-templates select="*|text()" mode="extension-source" /></pre>

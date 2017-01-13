@@ -85,12 +85,12 @@ public class DozBibManager {
         String lastModified = new SimpleDateFormat(DATE_FORMAT_LASTMODIFIED).format(dateModified);
         bibentry.setAttribute("lastModified", lastModified);
 
-        Document xml = new Document(bibentry);
-        new DeDupCriteriaBuilder().updateDeDupCriteria(xml);
-        return xml;
+        return new Document(bibentry);
     }
 
     public int createEntry(Document xml) throws Exception {
+        new DeDupCriteriaBuilder().updateDeDupCriteria(xml);
+
         Element root = xml.getRootElement();
 
         MCRMODSWrapper wrapper = new MCRMODSWrapper();
@@ -105,7 +105,6 @@ public class DozBibManager {
 
         MCRMetadataManager.create(obj);
 
-        new DeDupCriteriaBuilder().updateDeDupCriteria(xml);
         DozBibIndexer.instance().add(xml);
 
         int id = oid.getNumberAsInteger();
@@ -114,6 +113,8 @@ public class DozBibManager {
     }
 
     public void updateEntry(Document xml) throws Exception {
+        new DeDupCriteriaBuilder().updateDeDupCriteria(xml);
+
         Element root = xml.getRootElement();
         int id = Integer.parseInt(root.getAttributeValue("id"));
 
@@ -126,8 +127,6 @@ public class DozBibManager {
         wrapper.setMODS(mods);
 
         MCRMetadataManager.update(obj);
-
-        new DeDupCriteriaBuilder().updateDeDupCriteria(xml);
 
         DozBibIndexer.instance().remove(id);
         DozBibIndexer.instance().add(xml);

@@ -238,8 +238,10 @@
   </xsl:template>
 
   <xsl:template match="publication" mode="source">
-    <mods:extension type="source" format="evaluna">
-      <xsl:copy-of select="." />
+    <mods:extension>
+      <source format="evaluna">
+        <xsl:copy-of select="." />
+      </source>
     </mods:extension>
   </xsl:template>
   

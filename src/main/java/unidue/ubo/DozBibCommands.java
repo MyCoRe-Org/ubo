@@ -16,6 +16,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
@@ -23,6 +24,8 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jdom2.Attribute;
+import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.ElementFilter;
@@ -44,6 +47,8 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.MCRCommand;
 import org.mycore.mods.MCRMODSWrapper;
+
+import unidue.ubo.dedup.DeDupCriteriaBuilder;
 
 public class DozBibCommands extends MCRAbstractCommands {
 
@@ -194,9 +199,6 @@ public class DozBibCommands extends MCRAbstractCommands {
         MCRMetadataStore store = MCRStoreManager.createStore("ubo", MCRMetadataStore.class);
         for (Iterator<Integer> IDs = store.listIDs(MCRStore.ASCENDING); IDs.hasNext();) {
             int id = IDs.next();
-            Document xml = store.retrieve(id).getMetadata().asXML();
-            Element root = xml.getRootElement();
-
             LOGGER.info("Migrating <bibentry> " + id + " to <mycoreobject>...");
 
             MCRObjectID oid = DozBibManager.buildMCRObjectID(id);
@@ -205,10 +207,35 @@ public class DozBibCommands extends MCRAbstractCommands {
                 continue;
             }
 
+            Document xml = store.retrieve(id).getMetadata().asXML();
+
+            // migrate extension source elements
+            Element root = xml.getRootElement();
+            Element mods = root.getChild("mods", MCRConstants.MODS_NAMESPACE);
+                
+            for (Element extension : mods.getChildren("extension", MCRConstants.MODS_NAMESPACE)) {
+                String type = extension.getAttributeValue("type");
+                extension.removeAttribute("type");
+                if ("source".equals(type)) {
+                    Attribute format = extension.getAttribute("format").detach();
+                    Element source = new Element("source");
+                    source.setAttribute(format);
+                    List<Content> content = extension.removeContent();
+                    source.addContent(content);
+                    extension.addContent(source);
+                }
+            }
+
+            new DeDupCriteriaBuilder().updateDeDupCriteria(xml);
+
+            // migrate tag elements
+            Element extension = mods.getChild("extension", MCRConstants.MODS_NAMESPACE);
+            for (Element tag : root.getChildren("tag"))
+                extension.addContent(tag.clone());
+
             MCRMODSWrapper wrapper = new MCRMODSWrapper();
             wrapper.setServiceFlag("status", root.getAttributeValue("status"));
-            Element mods = root.getChild("mods", MCRConstants.MODS_NAMESPACE).clone();
-            wrapper.setMODS(mods);
+            wrapper.setMODS(mods.detach());
             MCRObject obj = wrapper.getMCRObject();
 
             obj.setId(oid);

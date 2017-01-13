@@ -29,8 +29,10 @@
   </xsl:template>
 
   <xsl:template match="scopus:abstracts-retrieval-response" mode="source">
-    <mods:extension type="source" format="scopus">
-      <xsl:copy-of select="." />
+    <mods:extension>
+      <source format="scopus">
+        <xsl:copy-of select="." />
+      </source>
     </mods:extension>
   </xsl:template>
 

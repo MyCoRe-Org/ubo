@@ -52,7 +52,7 @@
     <div>
       <label for="{xed:generate-id()}">Tags:</label>
       <div style="width:520px; margin:0; padding:0; display:inline-block;">
-        <xed:repeat xpath="../tag" min="3">
+        <xed:repeat xpath="mods:extension/tag" min="3">
           <input type="text" style="width:150px;" placeholder="Tag" />
           <xed:controls>append</xed:controls>
         </xed:repeat>

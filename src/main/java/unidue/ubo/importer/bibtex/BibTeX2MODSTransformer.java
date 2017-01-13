@@ -201,11 +201,13 @@ class BibTeXEntryTransformer {
     }
 
     private Element buildSourceExtension(BibtexEntry entry) {
-        Element source = new Element("extension", MCRConstants.MODS_NAMESPACE);
-        source.setAttribute("type", "source");
+        Element source = new Element("source");
         source.setAttribute("format", "bibtex");
         source.setText(entry.toString());
-        return source;
+
+        Element extension = new Element("extension", MCRConstants.MODS_NAMESPACE);
+        extension.addContent(source);
+        return extension;
     }
 
     private void transformFields(BibtexEntry entry, Element mods) {
@@ -485,7 +487,7 @@ class UnsupportedFieldTransformer extends FieldTransformer {
 
     void buildField(BibtexAbstractValue value, Element parent) {
         MessageLogger.logMessage("Field " + field + " is unsupported: " + value.toString().replaceAll("\\s+", " "));
-        String xPath = "mods:extension[@type='fields']/field[@name='" + field + "']" + FieldTransformer.AS_NEW_ELEMENT;
+        String xPath = "mods:extension/field[@name='" + field + "']" + FieldTransformer.AS_NEW_ELEMENT;
         String content = ((BibtexString) value).getContent();
         content = normalizeValue(content);
         buildElement(xPath, content, parent);

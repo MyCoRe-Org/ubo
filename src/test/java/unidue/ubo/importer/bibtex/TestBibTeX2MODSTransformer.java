@@ -128,7 +128,7 @@ public class TestBibTeX2MODSTransformer extends MCRJPATestCase {
         src = "@book{Doe2015, title={MyCoRe unleashed}, author={Doe, John}, rating={ugly}}";
         res = "mods:mods[mods:genre='book']" + "[mods:titleInfo/mods:title='MyCoRe unleashed']"
             + "[mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='aut'][mods:namePart[@type='family']='Doe'][mods:namePart[@type='given']='John']]"
-            + "[mods:extension[@type='fields'][field[@name='rating']='ugly']]";
+            + "[mods:extension[field[@name='rating']='ugly']]";
         testTransformation(src, res);
     }
 
@@ -137,9 +137,12 @@ public class TestBibTeX2MODSTransformer extends MCRJPATestCase {
         Element resultingMODS = resultingContent.asXML().getRootElement().getChild("mods", MCRConstants.MODS_NAMESPACE)
             .detach();
 
-        for (Element extension : resultingMODS.getChildren("extension", MCRConstants.MODS_NAMESPACE))
-            if ("bibtex".equals(extension.getAttributeValue("format")))
+        for (Element extension : resultingMODS.getChildren("extension", MCRConstants.MODS_NAMESPACE)) {
+            for (Element source : extension.getChildren("source"))
+                source.detach();
+            if (extension.getChildren().isEmpty())
                 extension.detach();
+        }
 
         String result = new MCRJDOMContent(resultingMODS).asString();
         String expected = new MCRJDOMContent(new MCRNodeBuilder().buildElement(expectedMODSXPath, null, null))

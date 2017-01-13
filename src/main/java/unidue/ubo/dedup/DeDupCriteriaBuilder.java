@@ -47,11 +47,17 @@ public class DeDupCriteriaBuilder {
      */
     public void updateDeDupCriteria(Document entry) {
         Element root = entry.getRootElement();
-        root.removeChildren("dedup");
-
         Element mods = root.getChild("mods", MCRConstants.MODS_NAMESPACE);
+        Element extension = mods.getChild("extension", MCRConstants.MODS_NAMESPACE);
+
+        if (extension == null) {
+            extension = new Element("extension", MCRConstants.MODS_NAMESPACE);
+            mods.addContent(extension);
+        }
+
+        extension.removeChildren("dedup");
         for (DeDupCriterion criteria : buildFromMODS(mods))
-            root.addContent(criteria.toXML());
+            extension.addContent(criteria.toXML());
     }
 
     /**

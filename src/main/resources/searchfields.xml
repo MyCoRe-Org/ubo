@@ -9,8 +9,8 @@
   <index id="ubo">
     <field objects="bibentry" source="xml" name="ubo_id"           type="identifier" xpath="/bibentry" value="@id" />
     <field objects="bibentry" source="xml" name="ubo_status"       type="identifier" xpath="/bibentry" value="@status" />
-    <field objects="bibentry" source="xml" name="ubo_tag"          type="identifier" xpath="/bibentry/tag" value="text()" />
-    <field objects="bibentry" source="xml" name="ubo_dedup"        type="identifier" xpath="/bibentry/dedup" value="@key" />
+    <field objects="bibentry" source="xml" name="ubo_tag"          type="identifier" xpath="/bibentry/mods:mods/mods:extension/tag" value="text()" />
+    <field objects="bibentry" source="xml" name="ubo_dedup"        type="identifier" xpath="/bibentry/mods:mods/mods:extension/dedup" value="@key" />
     <field objects="bibentry" source="xml" name="ubo_lastModified" type="timestamp"  xpath="/bibentry" value="@lastModified" sortable="true" />
     <field objects="bibentry" source="xml" name="ubo_datemodified" type="date"       xpath="/bibentry" value="substring-before(@lastModified,' ')" sortable="true" />
     <field objects="bibentry" source="xml" name="ubo_type"         type="identifier" xpath="/bibentry/mods:mods/mods:genre[@type='intern']" sortable="true" />
