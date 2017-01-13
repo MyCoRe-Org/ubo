@@ -308,6 +308,16 @@
       <artifactId>mycore-oai</artifactId>
       <version>${mycore.version}</version>
       <type>jar</type>
+      <exclusions>
+        <exclusion>
+          <groupId>org.mycore</groupId>
+          <artifactId>mycore-solr</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.solr</groupId>
+          <artifactId>solr-solrj</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
