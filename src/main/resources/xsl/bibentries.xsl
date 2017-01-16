@@ -108,7 +108,7 @@
     </xsl:if>
     <xsl:if test="@numHits &gt; 0">
       <ol class="results">
-        <xsl:apply-templates select="bibentry">
+        <xsl:apply-templates select="mycoreobject">
           <xsl:with-param name="hitStartIndex" select="$hitStartIndex"/>
         </xsl:apply-templates>
       </ol>
@@ -131,7 +131,7 @@
 
   <xsl:variable name="resultpage" select="concat('DozBibServlet?mode=list&amp;listKey=',@listKey,'&amp;numPerPage=',@numPerPage,'&amp;page=')" />
   <xsl:variable name="first" select="(number(@page) - 1) * number(@numPerPage) + 1" />
-  <xsl:variable name="last" select="$first - 1 + count(bibentry)" />
+  <xsl:variable name="last" select="$first - 1 + count(mycoreobject)" />
   <xsl:variable name="pageaddition" select="'2'"/>
   
   <xsl:variable name="firstPageIndex">
@@ -233,7 +233,7 @@
 
 <!-- ==================== Anzeige Treffer ==================== -->
 
-<xsl:template match="bibentry">
+<xsl:template match="mycoreobject">
   <xsl:param name="hitStartIndex"/>
   
   <xsl:variable name="index" select="position() + number($hitStartIndex) - 1"/>
@@ -243,24 +243,24 @@
   </div>
   <div class="grid_11">
     <div class="hit">
-      <div class="labels">
-        <xsl:for-each select="mods:mods">
+      <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
+        <div class="labels">
           <xsl:call-template name="pubtype" />
           <xsl:call-template name="label-year" />
-        </xsl:for-each>
-      </div>
-      <div class="content bibentry">  
-        <xsl:apply-templates select="mods:mods" mode="cite"> 
-          <xsl:with-param name="mode">divs</xsl:with-param> 
-        </xsl:apply-templates>
-      </div>
-      <div class="footer">
-        <xsl:call-template name="bibentry.show.details" />
-        <xsl:call-template name="bibentry.add.to.basket" />
-        <xsl:apply-templates select="mods:mods/mods:identifier[@type='duepublico']" mode="bibentry.button" />
-        <xsl:apply-templates select="mods:mods/mods:location/mods:url" mode="bibentry.button" />
-        <span class="floatRight">[ ID <xsl:value-of select="@id"/> ]</span>
-      </div>
+        </div>
+        <div class="content bibentry">  
+          <xsl:apply-templates select="." mode="cite"> 
+            <xsl:with-param name="mode">divs</xsl:with-param> 
+          </xsl:apply-templates>
+        </div>
+        <div class="footer">
+          <xsl:call-template name="bibentry.show.details" />
+          <xsl:call-template name="bibentry.add.to.basket" />
+          <xsl:apply-templates select="mods:identifier[@type='duepublico']" mode="bibentry.button" />
+          <xsl:apply-templates select="mods:location/mods:url" mode="bibentry.button" />
+          <span class="floatRight">[ ID <xsl:value-of select="number(substring-after(ancestor::mycoreobject/@ID,'mods_'))"/> ]</span>
+        </div>
+      </xsl:for-each>
     </div>
   </div>
 </xsl:template>
@@ -270,8 +270,8 @@
     <input type="hidden" name="action" value="add"/>
     <input type="hidden" name="type" value="bibentries"/>
     <input type="hidden" name="resolve" value="true"/>
-    <input type="hidden" name="id" value="{@id}"/>
-    <input type="hidden" name="uri" value="ubo:{@id}"/>
+    <input type="hidden" name="id" value="{number(substring-after(ancestor::mycoreobject/@ID,'mods_'))}"/>
+    <input type="hidden" name="uri" value="ubo:{number(substring-after(ancestor::mycoreobject/@ID,'mods_'))}"/>
     <input type="submit" class="roundedButton" value="{i18n:translate('button.basketAdd')}" />
   </form>
 </xsl:template>
@@ -279,7 +279,7 @@
 <xsl:template name="bibentry.show.details">
   <form action="{$ServletsBaseURL}DozBibEntryServlet" method="get">
     <input type="hidden" name="mode" value="show"/>
-    <input type="hidden" name="id" value="{@id}"/>
+    <input type="hidden" name="id" value="{number(substring-after(ancestor::mycoreobject/@ID,'mods_'))}"/>
     <input type="hidden" name="XSL.ListKey" value="{/bibentries/@listKey}"/>
     <input type="hidden" name="XSL.PageNr" value="{/bibentries/@pageNr}"/>
     <input type="submit" class="roundedButton" value="{i18n:translate('result.dozbib.info')}" />
