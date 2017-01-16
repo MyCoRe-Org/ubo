@@ -11,11 +11,11 @@
   
 <xsl:include href="mods-display.xsl" />
 <xsl:include href="mods-dc.xsl" />
-<xsl:include href="bibentry2record.xsl" />
+<xsl:include href="mycoreobject2record.xsl" />
 
-<xsl:template match="bibentry" mode="metadata">
+<xsl:template match="mycoreobject" mode="metadata">
   <oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/  http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
-    <xsl:apply-templates select="mods:mods" mode="dc" />
+    <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" mode="dc" />
   </oai_dc:dc> 
 </xsl:template>
 

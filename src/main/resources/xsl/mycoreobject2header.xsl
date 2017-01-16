@@ -11,21 +11,21 @@
 
 <xsl:template match="/">
   <header>
-    <xsl:apply-templates select="bibentry" mode="header" />
+    <xsl:apply-templates select="mycoreobject" mode="header" />
   </header>
 </xsl:template>
 
-<xsl:template match="bibentry" mode="header">
+<xsl:template match="mycoreobject" mode="header">
 
   <identifier>
     <xsl:text>oai:</xsl:text>
     <xsl:value-of select="$MCR.OAIDataProvider.OAI.RepositoryIdentifier" />
     <xsl:text>:</xsl:text>
-    <xsl:value-of select="@id" />
+    <xsl:value-of select="@ID" />
   </identifier>
 
   <datestamp>
-    <xsl:value-of select="substring-before(@lastModified,' ')" />
+    <xsl:value-of select="substring-before(service/servdates/servdate[@type='modifydate'],'T')" />
   </datestamp>
 
 </xsl:template>

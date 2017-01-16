@@ -5,15 +5,15 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 >
   
-<xsl:include href="bibentry2header.xsl" />
+<xsl:include href="mycoreobject2header.xsl" />
 
 <xsl:template match="/">
   <record>
     <header>
-      <xsl:apply-templates select="bibentry" mode="header" />
+      <xsl:apply-templates select="mycoreobject" mode="header" />
     </header>
     <metadata>
-      <xsl:apply-templates select="bibentry" mode="metadata" />
+      <xsl:apply-templates select="mycoreobject" mode="metadata" />
     </metadata>
   </record>
 </xsl:template>

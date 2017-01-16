@@ -10,11 +10,11 @@
   
 <xsl:include href="mods-display.xsl" />
 <xsl:include href="mods-qdc.xsl" />
-<xsl:include href="bibentry2record.xsl" />
+<xsl:include href="mycoreobject2record.xsl" />
 
-<xsl:template match="bibentry" mode="metadata">
+<xsl:template match="mycoreobject" mode="metadata">
   <oai_qdc:qualifieddc>
-    <xsl:apply-templates select="mods:mods" mode="qdc" />
+    <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" mode="qdc" />
   </oai_qdc:qualifieddc> 
 </xsl:template>
 
