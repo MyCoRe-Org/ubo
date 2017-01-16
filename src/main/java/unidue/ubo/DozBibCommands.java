@@ -65,8 +65,6 @@ public class DozBibCommands extends MCRAbstractCommands {
         addCommand(
             new MCRCommand("ubo transform entries using xsl {0}", "unidue.ubo.DozBibCommands.transformEntries String",
                 "Transforms persistent xml of all bibentries using XSL stylesheet"));
-        addCommand(new MCRCommand("ubo rebuild search index", "unidue.ubo.DozBibIndexer.rebuildIndex",
-            "rebuilds the search index of all entries"));
         addCommand(new MCRCommand("ubo fix origin", "unidue.ubo.DozBibCommands.fixOrigin",
             "Fixes all origin fields in entries, by removing non-existing category references and changing moved categories"));
         addCommand(new MCRCommand("ubo collect statistics {0}", "unidue.ubo.DozBibStatistics.collectStatistics String",

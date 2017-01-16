@@ -105,8 +105,6 @@ public class DozBibManager {
 
         MCRMetadataManager.create(obj);
 
-        DozBibIndexer.instance().add(xml);
-
         int id = oid.getNumberAsInteger();
         root.setAttribute("id", String.valueOf(id));
         return id;
@@ -127,9 +125,6 @@ public class DozBibManager {
         wrapper.setMODS(mods);
 
         MCRMetadataManager.update(obj);
-
-        DozBibIndexer.instance().remove(id);
-        DozBibIndexer.instance().add(xml);
     }
 
     public static MCRObjectID buildMCRObjectID(int id) {

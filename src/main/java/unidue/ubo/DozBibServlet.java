@@ -90,8 +90,9 @@ public class DozBibServlet extends MCRServlet {
         }
 
         for (int i = 0; i < results.getNumHits(); i++) {
-            String uri = results.getHit(i).getID();
-            String id = uri.split(":")[1];
+            String oid = results.getHit(i).getID();
+            String id = String.valueOf(Integer.parseInt(oid.split("_")[2]));
+            String uri = "ubo:" + id;
             MCRBasketEntry entry = new MCRBasketEntry(id, uri);
             entry.resolveContent();
             MCRBasketManager.getOrCreateBasketInSession("bibentries").add(entry);
@@ -373,7 +374,9 @@ public class DozBibServlet extends MCRServlet {
         root.setAttribute("listKey", key);
 
         for (int i = first; i < last; i++) {
-            String uri = results.getHit(i).getID();
+            String oid = results.getHit(i).getID();
+            String id = String.valueOf(Integer.parseInt(oid.split("_")[2]));
+            String uri = "ubo:" + id;
             Element entry = MCRURIResolver.instance().resolve(uri);
             root.addContent(entry);
         }

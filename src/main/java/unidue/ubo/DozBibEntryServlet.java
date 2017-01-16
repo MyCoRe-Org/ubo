@@ -96,7 +96,6 @@ public class DozBibEntryServlet extends MCRServlet {
         }
 
         LOGGER.info("UBO delete entry " + ID);
-        DozBibIndexer.instance().remove(ID);
         
         MCRObjectID oid = DozBibManager.buildMCRObjectID(ID);
         MCRObject obj = MCRMetadataManager.retrieveMCRObject(oid);
