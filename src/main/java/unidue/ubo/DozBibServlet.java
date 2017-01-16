@@ -28,9 +28,9 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.ElementFilter;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRURIResolver;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.basket.MCRBasket;
 import org.mycore.frontend.basket.MCRBasketEntry;
 import org.mycore.frontend.basket.MCRBasketManager;
@@ -50,14 +50,8 @@ import org.mycore.services.fieldquery.MCRQueryParser;
 import org.mycore.services.fieldquery.MCRResults;
 
 public class DozBibServlet extends MCRServlet {
+    
     public final static Logger LOGGER = LogManager.getLogger(DozBibServlet.class);
-
-    /** Default search field */
-    private static String defaultSearchField;
-
-    static {
-        defaultSearchField = MCRConfiguration.instance().getString("UBO.DefaultSearchField");
-    }
 
     public void doGetPost(MCRServletJob job) throws Exception {
         HttpServletRequest req = job.getRequest();
@@ -223,13 +217,7 @@ public class DozBibServlet extends MCRServlet {
                 sortBy.addContent(sField);
             }
 
-            if (req.getParameter("search") != null) {
-                requestContainsQueryCondition = true;
-                // Search in default field with default operator
-                String defaultSearchOperator = MCRFieldType.getDefaultOperator(MCRFieldDef.getDef(defaultSearchField).getDataType());
-                String value = getReqParameter(req, "search", null);
-                cond = new MCRQueryCondition(defaultSearchField, defaultSearchOperator, value);
-            } else if (req.getParameter("query") != null) {
+            if (req.getParameter("query") != null) {
                 requestContainsQueryCondition = true;
                 // Search for a complex query expression
                 String expr = req.getParameter("query");
@@ -283,15 +271,6 @@ public class DozBibServlet extends MCRServlet {
         if (!AccessControl.currentUserIsAdmin()) {
             MCRCondition extraCond = new MCRQueryCondition("ubo_status", "=", "confirmed");
 
-            // If PID of current login user is in metadata, that user may search his own entries
-            String pid = (String) (req.getSession().getAttribute("XSL.CurrentUserPID"));
-            if ((pid != null) && (pid.trim().length() > 0)) {
-                MCROrCondition oc = new MCROrCondition();
-                oc.addChild(extraCond);
-                oc.addChild(new MCRQueryCondition("ubo_pid", "=", pid));
-                extraCond = oc;
-            }
-
             if (cond instanceof MCRAndCondition) {
                 ((MCRAndCondition) cond).addChild(extraCond);
             } else {
@@ -338,8 +317,9 @@ public class DozBibServlet extends MCRServlet {
             basket.clear();
 
             for (Iterator<MCRHit> hits = results.iterator(); hits.hasNext();) {
-                String uri = hits.next().getID();
-                String id = uri.split(":")[1];
+                String oid = hits.next().getID();
+                String id = String.valueOf(MCRObjectID.getInstance(oid).getNumberAsInteger());
+                String uri = "ubo:" + id;
                 basket.add(new MCRBasketEntry(id, uri));
             }
         }
@@ -375,8 +355,7 @@ public class DozBibServlet extends MCRServlet {
 
         for (int i = first; i < last; i++) {
             String oid = results.getHit(i).getID();
-            String id = String.valueOf(Integer.parseInt(oid.split("_")[2]));
-            String uri = "ubo:" + id;
+            String uri = "mcrobject:" + oid;
             Element entry = MCRURIResolver.instance().resolve(uri);
             root.addContent(entry);
         }
