@@ -287,7 +287,7 @@
 </xsl:template>
 
 <xsl:template match="mods:mods/mods:identifier[@type='duepublico']" mode="bibentry.button">
-  <form action="{$ServletsBaseURL}DocumentServlet" method="get">
+  <form action="http://duepublico.uni-duisburg-essen.de/servlets/DocumentServlet" method="get">
     <input type="hidden" name="id" value="{text()}"/>
     <input type="submit" class="roundedButton" value="{i18n:translate('result.dozbib.fulltext')}" />
   </form>

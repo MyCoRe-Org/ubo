@@ -56,7 +56,7 @@
   <xsl:template match="mods:identifier[@type='duepublico']" mode="html-export">
     <div class="link">
       <xsl:value-of select="i18n:translate('result.dozbib.fulltext')"/>:
-      <a href="{$ServletsBaseURL}DocumentServlet?id={text()}">
+      <a href="http://duepublico.uni-duisburg-essen.de/servlets/DocumentServlet?id={text()}">
         <xsl:value-of select="i18n:translate('document')"/>
         <xsl:value-of select="text()"/>
       </a>
