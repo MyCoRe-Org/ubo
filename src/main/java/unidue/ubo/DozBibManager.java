@@ -11,7 +11,6 @@ package unidue.ubo;
 
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -26,8 +25,6 @@ import org.mycore.mods.MCRMODSWrapper;
 
 import java.text.SimpleDateFormat;
 
-import unidue.ubo.dedup.DeDupCriteriaBuilder;
-
 public class DozBibManager {
 
     private final static String DATE_FORMAT_LASTMODIFIED = "yyyy-MM-dd HH:mm:ss";
@@ -39,10 +36,6 @@ public class DozBibManager {
         MCRObjectID oid = buildMCRObjectID(0);
         MCRMetadataStore store = MCRXMLMetadataManager.instance().getStore(oid);
         return store.listIDs(true);
-    }
-
-    public List<String> listStoredIDs() {
-        return MCRXMLMetadataManager.instance().listIDsForBase(buildMCRObjectID(0).getBase());
     }
 
     private final static DozBibManager manager = new DozBibManager();
@@ -89,8 +82,6 @@ public class DozBibManager {
     }
 
     public int createEntry(Document xml) throws Exception {
-        new DeDupCriteriaBuilder().updateDeDupCriteria(xml);
-
         Element root = xml.getRootElement();
 
         MCRMODSWrapper wrapper = new MCRMODSWrapper();
@@ -111,8 +102,6 @@ public class DozBibManager {
     }
 
     public void updateEntry(Document xml) throws Exception {
-        new DeDupCriteriaBuilder().updateDeDupCriteria(xml);
-
         Element root = xml.getRootElement();
         int id = Integer.parseInt(root.getAttributeValue("id"));
 

@@ -48,6 +48,10 @@ public class DeDupCriteriaBuilder {
     public void updateDeDupCriteria(Document entry) {
         Element root = entry.getRootElement();
         Element mods = root.getChild("mods", MCRConstants.MODS_NAMESPACE);
+        updateDeDupCriteria(mods);
+    }
+
+    public void updateDeDupCriteria(Element mods) {
         Element extension = mods.getChild("extension", MCRConstants.MODS_NAMESPACE);
 
         if (extension == null) {

@@ -77,21 +77,6 @@ public class DeDupCommands extends MCRAbstractCommands {
         LOGGER.info("Wrote report to file " + targetFile.getAbsolutePath());
     }
 
-    @MCRCommand(syntax = "ubo update deduplication keys", help = "updates the deduplication keys stored for every entry")
-    public static void updateDeDuplicationKeys() throws Exception {
-        for (Iterator<Integer> IDs = DozBibManager.instance().iterateStoredIDs(); IDs.hasNext();) {
-            int id = IDs.next();
-            LOGGER.info("Updating deduplication keys for entry " + id);
-            try {
-                Document entry = DozBibManager.instance().getEntry(id);
-                DozBibManager.instance().updateEntry(entry);
-            } catch (Exception ex) {
-                String msg = "Skipping corrupted entry " + id;
-                LOGGER.warn(msg, ex);
-            }
-        }
-    }
-
     private static int removeUniqueEntries(List<DeDupGroup> groups) {
         int numUniqueEntries = 0;
         for (Iterator<DeDupGroup> iterator = groups.iterator(); iterator.hasNext();) {
