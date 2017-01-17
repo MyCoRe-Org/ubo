@@ -224,10 +224,13 @@ public class DozBibCommands extends MCRAbstractCommands {
                 }
             }
 
-            new DeDupCriteriaBuilder().updateDeDupCriteria(xml);
-
-            // migrate tag elements
             Element extension = mods.getChild("extension", MCRConstants.MODS_NAMESPACE);
+            if (extension == null) {
+                extension = new Element("extension", MCRConstants.MODS_NAMESPACE);
+                mods.addContent(extension);
+            }
+            
+            // migrate tag elements
             for (Element tag : root.getChildren("tag"))
                 extension.addContent(tag.clone());
 
