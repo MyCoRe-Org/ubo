@@ -21,13 +21,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRMailer;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.xml.MCRURIResolver;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
+import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.services.fieldquery.MCRQuery;
 import org.mycore.services.fieldquery.MCRQueryCondition;
 import org.mycore.services.fieldquery.MCRQueryManager;
@@ -57,7 +60,7 @@ public class ScopusFeedImporter extends MCRAbstractCommands {
 
     private final static String FEED_URL;
 
-    private final static String importURI = "xslStyle:scopus2mods,mods2bibentry:{0}abstract/scopus_id/{1}?apikey={2}";
+    private final static String importURI = "xslStyle:scopus2mods,mods2mycoreobject:{0}abstract/scopus_id/{1}?apikey={2}";
 
     private final static Pattern scopusIDFinder = Pattern.compile(".+eid%3D2-s2\\.0-(\\d+)%26.+");
 
@@ -89,8 +92,7 @@ public class ScopusFeedImporter extends MCRAbstractCommands {
         int numPublicationsImported = bibentries.getChildren().size();
 
         LOGGER.info("imported " + numPublicationsImported + " publications.");
-        if (numPublicationsImported > 0)
-        {
+        if (numPublicationsImported > 0) {
             HashMap<String, String> parameters = new HashMap<String, String>();
             parameters.put("MCR.Mail.Address", MCRConfiguration.instance().getString("MCR.Mail.Address"));
             MCRMailer.sendMail(new Document(bibentries), "scopus-rss-import-e-mail", parameters);
@@ -104,23 +106,29 @@ public class ScopusFeedImporter extends MCRAbstractCommands {
         }
 
         LOGGER.info("publication with ID " + scopusID + " does not exist yet, retrieving data...");
-        Element bibentry = buildEntryFromScopus(scopusID);
+        Element entry = buildEntryFromScopus(scopusID);
 
-        if (shouldIgnore(bibentry)) {
+        MCRObject obj = new MCRObject(new Document(entry));
+        MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
+        wrapper.setServiceFlag("status", "imported");
+
+        if (shouldIgnore(wrapper)) {
             LOGGER.info("publication will be ignored, do not store.");
             return;
 
         }
-        bibentry.setAttribute("status", "imported");
-        DozBibManager.instance().createEntry(new Document(bibentry));
-        bibentries.addContent(bibentry.detach());
+
+        MCRObjectID oid = DozBibManager.buildMCRObjectID(0);
+        oid = MCRObjectID.getNextFreeId(oid.getBase());
+        obj.setId(oid);
+
+        MCRMetadataManager.create(obj);
+        bibentries.addContent(obj.createXML().detachRootElement());
     }
 
     /** If mods:genre was set to "ignore" by conversion/import function, ignore this publication and do not import */
-    private static boolean shouldIgnore(Element bibentry) {
-        Element mods = bibentry.getChild("mods", MCRConstants.MODS_NAMESPACE);
-        String genre = mods.getChildTextTrim("genre", MCRConstants.MODS_NAMESPACE);
-        return "ignore".equals(genre);
+    private static boolean shouldIgnore(MCRMODSWrapper wrapper) {
+        return "ignore".equals(wrapper.getElementValue("mods:genre"));
     }
 
     private static SyndFeed retrieveFeed() throws IOException, MalformedURLException, FeedException {

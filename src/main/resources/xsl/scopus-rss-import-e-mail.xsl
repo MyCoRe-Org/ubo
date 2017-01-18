@@ -44,11 +44,11 @@ Liebe Kollegin, lieber Kollege,
 die folgenden Publikationen wurden aus Scopus importiert:
 
 </xsl:text>
-      <xsl:for-each select="bibentry">
+      <xsl:for-each select="mycoreobject">
         <xsl:text>&#xa;</xsl:text>
         <xsl:value-of select="$WebApplicationBaseURL" />
         <xsl:text>servlets/DozBibEntryServlet?mode=show&amp;id=</xsl:text>
-        <xsl:value-of select="@id" />
+        <xsl:value-of select="@ID" />
         <xsl:text>&#xa;</xsl:text>
         <xsl:variable name="bibentry.html">
           <xsl:apply-templates select="." mode="html-export" /> 
