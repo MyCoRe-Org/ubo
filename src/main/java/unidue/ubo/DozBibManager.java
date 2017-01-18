@@ -44,24 +44,6 @@ public class DozBibManager {
         return manager;
     }
 
-    /**
-     * Checks if an object with the given ID already exists in the store.
-     */
-    public boolean exists(int id) throws Exception {
-        MCRObjectID oid = buildMCRObjectID(id);
-        return MCRMetadataManager.exists(oid);
-    }
-
-    /**
-     * Checks if an object with the given ID already exists in the store.
-     * 
-     * @param id
-     *            the ID of the object, which must be parseable to int.
-     */
-    public boolean exists(String id) throws Exception {
-        return exists(Integer.parseInt(id));
-    }
-
     public Document getEntry(int id) throws Exception {
         MCRObjectID oid = buildMCRObjectID(id);
         if (!MCRMetadataManager.exists(oid))
