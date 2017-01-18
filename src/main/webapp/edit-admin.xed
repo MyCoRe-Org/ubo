@@ -13,17 +13,19 @@
 
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form">
   
-      <xed:source uri="xslStyle:mods-preprocessor:ubo:{$id}" />
-      <xed:source uri="xslStyle:scopus2mods,mods2bibentry,mods-preprocessor:{$UBO.Scopus.API.URL}abstract/{$scopusField}/{$ScopusID}?apikey={$UBO.Scopus.API.Key}" />
-      <xed:source uri="xslStyle:pubmed2mods,mods2bibentry,mods-preprocessor:{$UBO.PubMed.REST.URL}{$pubMedField}:{$PubMedID}" />
-      <xed:source uri="xslStyle:crossref2mods,mods2bibentry,mods-preprocessor:http://api.crossref.org/works/{$CrossRefDOI}/transform/application/rdf+xml" />
-      <xed:source uri="xslStyle:primo2mods,mods2bibentry,mods-preprocessor:http://primo.ub.uni-due.de/PrimoWebServices/xservice/search/brief?institution=UDE&amp;loc=adaptor,primo_central_multiple_fe&amp;query={$primoField},{$PrimoID}" />
+      <xed:source uri="xslStyle:mods-preprocessor:mcrobject:{$id}" />
+      <xed:source uri="xslStyle:scopus2mods,mods2mycoreobject,mods-preprocessor:{$UBO.Scopus.API.URL}abstract/{$scopusField}/{$ScopusID}?apikey={$UBO.Scopus.API.Key}" />
+      <xed:source uri="xslStyle:pubmed2mods,mods2mycoreobject,mods-preprocessor:{$UBO.PubMed.REST.URL}{$pubMedField}:{$PubMedID}" />
+      <xed:source uri="xslStyle:crossref2mods,mods2mycoreobject,mods-preprocessor:http://api.crossref.org/works/{$CrossRefDOI}/transform/application/rdf+xml" />
+      <xed:source uri="xslStyle:primo2mods,mods2mycoreobject,mods-preprocessor:http://primo.ub.uni-due.de/PrimoWebServices/xservice/search/brief?institution=UDE&amp;loc=adaptor,primo_central_multiple_fe&amp;query={$primoField},{$PrimoID}" />
       <xed:cancel url="servlets/DozBibEntryServlet?mode=show&amp;id={$id}" />
       <xed:cancel url="newPublication.xed" />
         
       <xed:post-processor xsl="mods-postprocessor.xsl" />    
     
-      <xed:bind xpath="/bibentry">
+      <xed:bind xpath="/mycoreobject">
+        <xed:include uri="webapp:import-editor.xed" ref="common.metafields" />
+        
         <xed:choose>
           <xed:when test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
             <xed:include uri="webapp:edit-admin.xed" ref="editor" />
@@ -37,38 +39,35 @@
       <xed:template id="editor">
         <input type="hidden" name="mode" value="save" />
         <xed:include uri="webapp:import-editor.xed" ref="validation" />
-        <xed:bind xpath="mods:mods">
-          <fieldset>
-            <legend>
-              <xed:bind xpath="../@id" default="0">
-                <xed:choose>
-                  <xed:when test=". &gt; 0">Eintrag <xed:output /> korrigieren: </xed:when>
-                  <xed:otherwise>Neue Publikation erfassen: </xed:otherwise>
-                </xed:choose>
-              </xed:bind>
-            </legend>
+        <fieldset>
+          <legend>
+            <xed:include uri="webapp:import-editor.xed" ref="legend.ID" />
+          </legend>
+          <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer/mods:mods">
             <xed:include uri="webapp:import-editor.xed" ref="status" />    
             <xed:include uri="webapp:import-editor.xed" ref="subject" />    
             <xed:include uri="webapp:import-editor.xed" ref="origin" />    
-            <xed:include uri="webapp:import-editor.xed" ref="tags" />    
-          </fieldset>
+            <xed:include uri="webapp:import-editor.xed" ref="tags" />
+          </xed:bind>    
+        </fieldset>
+        <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer/mods:mods">
           <fieldset>
             <legend>Publikation:</legend>
-            <xed:include uri="webapp:import-editor.xed" ref="genre" />
-            <xed:include uri="webapp:import-editor.xed" ref="title.complex" />
-            <xed:include uri="webapp:import-editor.xed" ref="person.role" />
-            <xed:include uri="webapp:import-editor.xed" ref="conference" />
-            <xed:include uri="webapp:import-editor.xed" ref="place" />
-            <xed:include uri="webapp:import-editor.xed" ref="year" />
-            <xed:include uri="webapp:import-editor.xed" ref="publisher" />
-            <xed:include uri="webapp:import-editor.xed" ref="edition" />
-            <xed:include uri="webapp:import-editor.xed" ref="series" />
-            <xed:include uri="webapp:import-editor.xed" ref="size" />
-            <xed:include uri="webapp:import-editor.xed" ref="comment" />
-            <xed:include uri="webapp:import-editor.xed" ref="identifier" />
-            <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
-            <xed:include uri="webapp:import-editor.xed" ref="url" />
-            <xed:include uri="webapp:import-editor.xed" ref="languages" />    
+              <xed:include uri="webapp:import-editor.xed" ref="genre" />
+              <xed:include uri="webapp:import-editor.xed" ref="title.complex" />
+              <xed:include uri="webapp:import-editor.xed" ref="person.role" />
+              <xed:include uri="webapp:import-editor.xed" ref="conference" />
+              <xed:include uri="webapp:import-editor.xed" ref="place" />
+              <xed:include uri="webapp:import-editor.xed" ref="year" />
+              <xed:include uri="webapp:import-editor.xed" ref="publisher" />
+              <xed:include uri="webapp:import-editor.xed" ref="edition" />
+              <xed:include uri="webapp:import-editor.xed" ref="series" />
+              <xed:include uri="webapp:import-editor.xed" ref="size" />
+              <xed:include uri="webapp:import-editor.xed" ref="comment" />
+              <xed:include uri="webapp:import-editor.xed" ref="identifier" />
+              <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
+              <xed:include uri="webapp:import-editor.xed" ref="url" />
+              <xed:include uri="webapp:import-editor.xed" ref="languages" />    
           </fieldset>
           <fieldset>
             <legend>erschienen in:</legend>
@@ -89,11 +88,11 @@
               <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
             </xed:bind>
           </fieldset>
-          <fieldset>
-            <xed:include uri="webapp:import-editor.xed" ref="topics" />    
-            <xed:include uri="webapp:import-editor.xed" ref="abstract" />    
-          </fieldset>
         </xed:bind>
+        <fieldset>
+          <xed:include uri="webapp:import-editor.xed" ref="topics" />    
+          <xed:include uri="webapp:import-editor.xed" ref="abstract" />    
+        </fieldset>
   
         <xed:include uri="webapp:import-editor.xed" ref="cleanup" />
         <xed:include uri="webapp:import-editor.xed" ref="cancel.submit" />

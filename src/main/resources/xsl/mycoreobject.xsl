@@ -24,7 +24,7 @@
 
 <xsl:variable name="entryID" select="number(substring-after(/mycoreobject/@ID,'ubo_mods_'))" />
   
-<xsl:param name="Referer" select="concat($ServletsBaseURL,'DozBibEntryServlet?mode=show&amp;id=',$entryID)" />
+<xsl:param name="Referer" select="concat($ServletsBaseURL,'DozBibEntryServlet?mode=show&amp;id=',/mycoreobject/@ID)" />
 <xsl:param name="PageNr"  />
 <xsl:param name="ListKey" />
 <xsl:param name="CurrentUserPID" />
@@ -82,15 +82,15 @@
 <xsl:variable name="actions">
   <xsl:if test="$permission.admin and (string-length($step) = 0) and not ($UBO.System.ReadOnly = 'true')">
     <action label="{i18n:translate('button.edit')}" target="{$WebApplicationBaseURL}edit-publication.xed">
-      <param name="id"     value="{$entryID}" />
+      <param name="id"     value="{/mycoreobject/@ID}" />
     </action>
     <action label="Admin" target="{$WebApplicationBaseURL}edit-admin.xed">
-      <param name="id"     value="{$entryID}" />
+      <param name="id"     value="{/mycoreobject/@ID}" />
     </action>
     <action label="{i18n:translate('button.delete')}" target="{$ServletsBaseURL}DozBibEntryServlet">
       <param name="mode"       value="show" />
       <param name="XSL.step"   value="ask.delete" />
-      <param name="id"         value="{$entryID}" />
+      <param name="id"         value="{/mycoreobject/@ID}" />
     </action>
   </xsl:if>
   <action label="{i18n:translate('button.basketAdd')}" target="{$ServletsBaseURL}MCRBasketServlet">
@@ -183,18 +183,17 @@
         </xsl:choose>
         <xsl:text>:</xsl:text> 
       </h3>
-      <xsl:variable name="myOwnHitID" select="concat('ubo:',$entryID)" />
+      <xsl:variable name="myOwnHitID" select="/mycoreobject/@ID" />
       <ul>
         <xsl:for-each select="$duplicates">
-          <xsl:sort select="substring-after(@id,'ubo:')" data-type="number" order="descending" />
+          <xsl:sort select="@id" data-type="number" order="descending" />
           <xsl:if test="not(@id = $myOwnHitID)">
             <li>
-              <xsl:variable name="id" select="substring-after(@id,'ubo:')" />
-              <a href="DozBibEntryServlet?mode=show&amp;id={$id}">
+              <a href="DozBibEntryServlet?mode=show&amp;id={@id}">
                 <xsl:text>Eintrag </xsl:text>
-                <xsl:value-of select="$id" />
+                <xsl:value-of select="@id" />
               </a>
-              <xsl:for-each select="document(@id)/bibentry/mods:mods">
+              <xsl:for-each select="document(concat('mcrobject:',@id))/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
                 <div class="bibentry">
                   <xsl:apply-templates select="." mode="cite">
                     <xsl:with-param name="mode">divs</xsl:with-param>
@@ -255,7 +254,7 @@
   </p>  
 
   <input type="button" class="editorButton" name="delete" value="{i18n:translate('button.deleteYes')}" 
-    onclick="self.location.href='{$ServletsBaseURL}DozBibEntryServlet?mode=delete&amp;id={$entryID}'" />
+    onclick="self.location.href='{$ServletsBaseURL}DozBibEntryServlet?mode=delete&amp;id={/mycoreobject/@ID}'" />
   <input type="button" class="editorButton" name="cancel" value="{i18n:translate('button.cancelNo')}" 
     onclick="self.location.href='{$Referer}'" />
 </xsl:template>

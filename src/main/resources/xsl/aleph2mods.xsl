@@ -9,7 +9,7 @@
    </request> 
    
  Output:
-   <bibentry type="doctoralThesis" ... />  
+   <mods:mods ... />  
  ================================================== -->
 
 <xsl:stylesheet version="1.0" 
@@ -20,22 +20,18 @@
   xmlns:encoder="xalan://java.net.URLEncoder"
   exclude-result-prefixes="xsl xalan java">
 
-  
-
   <xsl:template match="/request">
-    <bibentry status="published" ude="true">
-      <mods:mods>
-        <mods:genre type="intern">dissertation</mods:genre>
-        <xsl:call-template name="call-aleph">
-          <xsl:with-param name="request" select="concat('find&amp;base=edu01&amp;request=psg=',encoder:encode(shelfmark,'UTF-8'))" />
-        </xsl:call-template>
-        <mods:location>
-          <mods:shelfLocator>
-            <xsl:value-of select="translate(shelfmark,'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ')" />
-          </mods:shelfLocator>
-        </mods:location>
-      </mods:mods>
-    </bibentry>
+    <mods:mods>
+      <mods:genre type="intern">dissertation</mods:genre>
+      <xsl:call-template name="call-aleph">
+        <xsl:with-param name="request" select="concat('find&amp;base=edu01&amp;request=psg=',encoder:encode(shelfmark,'UTF-8'))" />
+      </xsl:call-template>
+      <mods:location>
+        <mods:shelfLocator>
+          <xsl:value-of select="translate(shelfmark,'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ')" />
+        </mods:shelfLocator>
+      </mods:location>
+    </mods:mods>
   </xsl:template>
 
   <xsl:template name="call-aleph">

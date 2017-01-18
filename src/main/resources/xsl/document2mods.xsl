@@ -16,9 +16,9 @@
   exclude-result-prefixes="xsl mods">
 
   <xsl:template match="/mycoreobject">
-    <bibentry status="published" ude="true">
+    <mods:mods>
       <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" />
-    </bibentry>
+    </mods:mods>
   </xsl:template>
   
   <xsl:template match="mods:mods">

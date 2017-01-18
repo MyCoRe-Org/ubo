@@ -40,23 +40,23 @@
 
   <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form">
   
-    <xed:source uri="xslStyle:mods-preprocessor:ubo:{$id}" />
-    <xed:source uri="xslStyle:document2bibentry,mods-preprocessor:http://duepublico.uni-duisburg-essen.de/servlets/DocumentServlet?format=mycore&amp;XSL.Style=xml&amp;id={$duepublicoID}" /> <!-- E-Dissertation als DuEPublico Volltext -->
-    <xed:source uri="xslStyle:aleph2bibentry,mods-preprocessor:buildxml:_rootName_=request&amp;shelfmark={$shelfmark}" /> <!-- Print-Dissertation aus Aleph -->
+    <xed:source uri="xslStyle:mods-preprocessor:mcrobject:{$id}" />
+    <xed:source uri="xslStyle:document2mods,,mods2mycoreobject,mods-preprocessor:http://duepublico.uni-duisburg-essen.de/servlets/DocumentServlet?format=mycore&amp;XSL.Style=xml&amp;id={$duepublicoID}" /> <!-- E-Dissertation als DuEPublico Volltext -->
+    <xed:source uri="xslStyle:aleph2mods,mods2mycoreobject,mods-preprocessor:buildxml:_rootName_=request&amp;shelfmark={$shelfmark}" /> <!-- Print-Dissertation aus Aleph -->
     
     <xed:cancel url="servlets/DozBibEntryServlet?mode=show&amp;id={$id}" />
     <xed:cancel url="newPublication.xed" />
     
     <xed:post-processor xsl="mods-postprocessor.xsl" />    
     
-    <xed:bind xpath="/bibentry">
-      <xed:bind xpath="@id" default="0" />
-      
+    <xed:bind xpath="/mycoreobject">
+      <xed:include uri="webapp:import-editor.xed" ref="common.metafields" />
+     
       <input type="hidden" name="mode" value="save" />
       
       <xed:include uri="webapp:import-editor.xed" ref="validation" />
 
-      <xed:bind xpath="mods:mods">
+      <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer/mods:mods">
 
         <xed:load-resource name="genres" uri="classification:metadata:-1:children:ubogenre" />
 
@@ -92,16 +92,11 @@
         <fieldset>
 
           <legend>
-            <xed:bind xpath="/bibentry/@id">
-              <xed:choose>
-                <xed:when test=". &gt; 0">Eintrag <xed:output /> korrigieren: </xed:when>
-                <xed:otherwise>Neue Publikation erfassen: </xed:otherwise>
-              </xed:choose>
-              <xed:output value="$genres//category[@ID=$genre_intern]/label[lang($CurrentLang)]/@text" />
-              <xed:if test="not($host_intern='standalone')">
-                <xed:output value="concat(' in ',$genres//category[@ID=$host_intern]/label[lang($CurrentLang)]/@text)" />
-              </xed:if>
-            </xed:bind>
+            <xed:include uri="webapp:import-editor.xed" ref="legend.ID" />
+            <xed:output value="$genres//category[@ID=$genre_intern]/label[lang($CurrentLang)]/@text" />
+            <xed:if test="not($host_intern='standalone')">
+              <xed:output value="concat(' in ',$genres//category[@ID=$host_intern]/label[lang($CurrentLang)]/@text)" />
+            </xed:if>
           </legend>
 
           <xed:include uri="webapp:import-editor.xed" ref="status" />    
