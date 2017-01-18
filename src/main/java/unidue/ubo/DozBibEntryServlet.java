@@ -43,16 +43,12 @@ public class DozBibEntryServlet extends MCRServlet {
        
         if( "show".equals(mode))
             showEntry(req, res);
-        else if (systemInReadOnlyMode()) 
+        else if (AccessControl.systemInReadOnlyMode()) 
             sendReadOnlyError(res);
         else if ("delete".equals(mode))
             deleteEntry(req, res);
         else if ("save".equals(mode))
             saveEntry(req, res);
-    }
-
-    public static boolean systemInReadOnlyMode() {
-        return MCRConfiguration.instance().getBoolean("UBO.System.ReadOnly", false);
     }
 
     public static void sendReadOnlyError(HttpServletResponse res) throws IOException {

@@ -49,7 +49,7 @@ public class BasketName2PIDEditor extends MCRServlet {
             res.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
-        if (DozBibEntryServlet.systemInReadOnlyMode()) {
+        if (AccessControl.systemInReadOnlyMode()) {
             DozBibEntryServlet.sendReadOnlyError(res);
             return;
         }

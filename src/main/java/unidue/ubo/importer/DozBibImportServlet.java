@@ -41,7 +41,7 @@ public class DozBibImportServlet extends MCRServlet {
 
         if (!AccessControl.currentUserIsAdmin())
             res.sendError(HttpServletResponse.SC_FORBIDDEN);
-        else if (DozBibEntryServlet.systemInReadOnlyMode())
+        else if (AccessControl.systemInReadOnlyMode())
             DozBibEntryServlet.sendReadOnlyError(res);
         else if ("save".equals(req.getParameter("action")))
             doSaveEntries(res);

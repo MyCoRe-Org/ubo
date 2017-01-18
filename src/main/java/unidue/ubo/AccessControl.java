@@ -10,10 +10,15 @@
 package unidue.ubo;
 
 import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.config.MCRConfiguration;
 
 public class AccessControl {
 
     public static boolean currentUserIsAdmin() {
         return MCRSessionMgr.getCurrentSession().getUserInformation().isUserInRole("admin");
+    }
+
+    public static boolean systemInReadOnlyMode() {
+        return MCRConfiguration.instance().getBoolean("UBO.System.ReadOnly", false);
     }
 }
