@@ -57,7 +57,7 @@
         &lt;iframe scrolling="yes" width="90%" height="300" <br/>
         src="<xsl:value-of select="$url" />" /&gt;
       </code>
-      <iframe style="margin-top:2ex;" scrolling="yes" width="90%" height="300" src="{$url}" />
+      <iframe style="display:block; margin-top:2ex;" scrolling="yes" width="90%" height="300" src="{$url}" />
     </xsl:if>
   </article>
   
