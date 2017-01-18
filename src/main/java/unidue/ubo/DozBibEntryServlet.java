@@ -39,11 +39,12 @@ public class DozBibEntryServlet extends MCRServlet {
         HttpServletResponse res = job.getResponse();
 
         String mode = req.getParameter("mode");
-        if( ( mode == null ) || mode.isEmpty() ) mode = "show";
-       
-        if( "show".equals(mode))
+        if ((mode == null) || mode.isEmpty())
+            mode = "show";
+
+        if ("show".equals(mode))
             showEntry(req, res);
-        else if (AccessControl.systemInReadOnlyMode()) 
+        else if (AccessControl.systemInReadOnlyMode())
             sendReadOnlyError(res);
         else if ("delete".equals(mode))
             deleteEntry(req, res);
@@ -59,6 +60,11 @@ public class DozBibEntryServlet extends MCRServlet {
 
     private void showEntry(HttpServletRequest req, HttpServletResponse res) throws Exception {
         String ID = req.getParameter("id");
+        if (!isValidID(ID)) {
+            res.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+        
         LOGGER.info("UBO show entry " + ID);
         MCRObjectID oid = MCRObjectID.getInstance(ID);
         Document xml = MCRMetadataManager.retrieveMCRObject(oid).createXML();
@@ -72,8 +78,13 @@ public class DozBibEntryServlet extends MCRServlet {
         }
 
         String ID = req.getParameter("id");
+        if (!isValidID(ID)) {
+            res.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
         LOGGER.info("UBO delete entry " + ID);
-        
+
         MCRObjectID oid = MCRObjectID.getInstance(ID);
         MCRObject obj = MCRMetadataManager.retrieveMCRObject(oid);
         new MCRMODSWrapper(obj).setServiceFlag("status", "deleted");
@@ -82,6 +93,11 @@ public class DozBibEntryServlet extends MCRServlet {
         MCRMetadataManager.deleteMCRObject(oid);
         req.setAttribute("XSL.step", "confirm.deleted");
         getLayoutService().doLayout(req, res, new MCRJDOMContent(xml));
+    }
+
+    private boolean isValidID(String id) throws IOException {
+        return id != null && MCRObjectID.isValid(id)
+            && MCRXMLMetadataManager.instance().exists(MCRObjectID.getInstance(id));
     }
 
     private void sendNotificationMail(Document doc) throws Exception {
@@ -100,8 +116,7 @@ public class DozBibEntryServlet extends MCRServlet {
         MCRObjectID oid = MCRObjectID.getInstance(id);
         MCRObject obj = new MCRObject(doc);
 
-        if( MCRXMLMetadataManager.instance().exists(oid))
-        {
+        if (MCRXMLMetadataManager.instance().exists(oid)) {
             if (AccessControl.currentUserIsAdmin()) {
                 MCRMetadataManager.update(obj);
                 LOGGER.info("UBO saved entry with ID " + oid);
@@ -123,7 +138,8 @@ public class DozBibEntryServlet extends MCRServlet {
             } else {
                 // Notify library staff via e-mail
                 sendNotificationMail(doc);
-                res.sendRedirect(MCRServlet.getServletBaseURL() + "DozBibEntryServlet?mode=show&XSL.step=confirm.submitted&id=" + oid.toString());
+                res.sendRedirect(MCRServlet.getServletBaseURL()
+                    + "DozBibEntryServlet?mode=show&XSL.step=confirm.submitted&id=" + oid.toString());
             }
         }
     }
