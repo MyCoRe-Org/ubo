@@ -149,7 +149,7 @@
       <xsl:apply-templates select="." mode="details_lines" />
     </div>
   </div>
-  <xsl:if test="$permission.admin and dedup">
+  <xsl:if test="$permission.admin and mods:extension[dedup]">
     <xsl:call-template name="listDuplicates" />
   </xsl:if>
  </xsl:for-each>
