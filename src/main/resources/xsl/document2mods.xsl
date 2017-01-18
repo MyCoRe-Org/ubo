@@ -16,9 +16,7 @@
   exclude-result-prefixes="xsl mods">
 
   <xsl:template match="/mycoreobject">
-    <mods:mods>
-      <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" />
-    </mods:mods>
+    <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" />
   </xsl:template>
   
   <xsl:template match="mods:mods">
