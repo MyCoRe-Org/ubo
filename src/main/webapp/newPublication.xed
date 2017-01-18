@@ -8,9 +8,9 @@
     <form class="ubo-form" style="margin-bottom:0;" action="edit-publication.xed" method="get" id="submit_publication">
       <fieldset>
         <legend>Bitte wählen Sie den Publikationstyp:</legend>
-      <div style="display:inline-block; margin-left:1ex;"><select id="genre" name="genre" size="1" /></div>
-      <div style="display:inline-block;"> erschienen in <select id="host" name="host" size="1" /></div>
-      <input type="submit" class="roundedButton" value="eintragen" />
+        <div style="display:inline-block; margin-left:1ex;"><select id="genre" name="genre" size="1" /></div>
+        <div style="display:inline-block;"> erschienen in <select id="host" name="host" size="1" /></div>
+        <input type="submit" class="roundedButton" value="eintragen" />
       </fieldset>
     </form>
   </section>
@@ -19,9 +19,9 @@
     <form class="ubo-form" style="margin-bottom:0;" action="edit-publication.xed" method="post" id="submit_publication">
       <fieldset>
         <legend>Please choose the type of publication:</legend>
-      <div style="display:inline-block; margin-left:1ex; margin-bottom:1ex;"><select id="genre" name="genre" size="1" /></div>
-      <div style="display:inline-block;"> published in <select id="host" name="host" size="1" /></div>
-      <input type="submit" class="roundedButton" value="enter" />
+        <div style="display:inline-block; margin-left:1ex; margin-bottom:1ex;"><select id="genre" name="genre" size="1" /></div>
+        <div style="display:inline-block;"> published in <select id="host" name="host" size="1" /></div>
+        <input type="submit" class="roundedButton" value="enter" />
       </fieldset>
     </form>
   </section>
