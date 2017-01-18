@@ -29,15 +29,15 @@
 <xsl:param name="ServletsBaseURL" />
 <xsl:param name="MCR.Mail.Address" />
 
-<xsl:template match="/bibentry">
+<xsl:template match="/mycoreobject">
   <email>
     <from><xsl:value-of select="$MCR.Mail.Address" /></from>
     <to><xsl:value-of select="$MCR.Mail.Address" /></to>
-    <xsl:for-each select="mods:mods">
+    <xsl:for-each select="metadata/def.modsCollection/modsCollection/mods:mods">
       <xsl:call-template name="build.to" />
       <xsl:call-template name="build.subject" />
+      <xsl:call-template name="build.body" />
     </xsl:for-each>
-    <xsl:call-template name="build.body" />
   </email>
 </xsl:template>
 
@@ -53,7 +53,7 @@
 <xsl:template name="build.subject">
   <subject>
     <xsl:text>Universitätsbibliographie: </xsl:text>
-    <xsl:value-of select="../@id" />
+    <xsl:value-of select="number(substring-after(/mycoreobject/@ID,'_mods_'))" />
     <xsl:text> / </xsl:text>
     <xsl:for-each select="mods:name[mods:role/mods:roleTerm='aut'][1]">
       <xsl:value-of select="mods:namePart[@type='family']" />
@@ -73,22 +73,20 @@ der folgende Eintrag ist per Selbsteingabe an die Universitätsbibliographie geme
 
 </xsl:text>
 
-  <xsl:for-each select="mods:mods"> 
-    <xsl:for-each select="mods:classification[contains(@authorityURI,'fachreferate')]">
-      <xsl:text>Fach: </xsl:text>
-      <xsl:value-of select="$subjects/item[@value=substring-after(current()/@valueURI,'#')]/@label" />
-      <xsl:text>&#xa;</xsl:text>
-    </xsl:for-each>
-    <xsl:for-each select="mods:classification[contains(@authorityURI,'ORIGIN')]">
-      <xsl:text>Fakultät: </xsl:text>
-      <xsl:call-template name="output.category">
-        <xsl:with-param name="classID" select="'ORIGIN'" />
-        <xsl:with-param name="categID" select="substring-after(@valueURI,'#')" />
-      </xsl:call-template>
-      <xsl:text>&#xa;</xsl:text>
-    </xsl:for-each>
+  <xsl:for-each select="mods:classification[contains(@authorityURI,'fachreferate')]">
+    <xsl:text>Fach: </xsl:text>
+    <xsl:value-of select="$subjects/item[@value=substring-after(current()/@valueURI,'#')]/@label" />
     <xsl:text>&#xa;</xsl:text>
   </xsl:for-each>
+  <xsl:for-each select="mods:classification[contains(@authorityURI,'ORIGIN')]">
+    <xsl:text>Fakultät: </xsl:text>
+    <xsl:call-template name="output.category">
+      <xsl:with-param name="classID" select="'ORIGIN'" />
+      <xsl:with-param name="categID" select="substring-after(@valueURI,'#')" />
+    </xsl:call-template>
+    <xsl:text>&#xa;</xsl:text>
+  </xsl:for-each>
+  <xsl:text>&#xa;</xsl:text>
     
   <xsl:variable name="bibentry.html">
     <xsl:apply-templates select="." mode="html-export" /> 
@@ -101,7 +99,7 @@ Bitte folgen Sie diesem Link:
 </xsl:text>
 <xsl:value-of select="$WebApplicationBaseURL" />
 <xsl:text>servlets/DozBibEntryServlet?mode=show&amp;id=</xsl:text>
-<xsl:value-of select="@id" />
+<xsl:value-of select="/mycoreobject/@ID" />
 <xsl:text>
 
 Mit freundlichen Grüßen
