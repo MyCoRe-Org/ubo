@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -55,6 +56,10 @@ public class DozBibStatistics {
 
     private static final String INTEGER_PATTERN = "[0-9]+";
 
+    private static int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
+    private static int MAX_PUB_AGE_IN_YEARS = 5;
+    private static int MIN_PUB_YEAR = THIS_YEAR - MAX_PUB_AGE_IN_YEARS;
+
     private static MCRCategoryDAO DAO;
 
     private static enum ChartTemplateName {
@@ -67,14 +72,14 @@ public class DozBibStatistics {
 
     public static void collectStatistics(String base) throws Exception {
         DAO = MCRCategoryDAOFactory.getInstance();
-        
+
         Table publicationsByType = new Table("Publikationen nach Typ", ChartTemplateName.Piechart,
             Row.COMPARE_BY_NUM_DESC);
         Table publicationsByYear = new Table("Publikationen nach Jahr", ChartTemplateName.PublicationsByYear,
             Row.COMPARE_BY_NUM_LABEL_DESC);
         Table publicationsByField = new Table("Publikationen nach Fachgebiet", ChartTemplateName.Piechart,
             Row.COMPARE_BY_NUM_DESC);
-        Table publicationsByPID = new Table("Am h\u00E4ufigsten verzeichnete AutorInnen", ChartTemplateName.TopList,
+        Table publicationsByPID = new Table("Am h\u00E4ufigsten verzeichnete AutorInnen (Publikationsjahr >= " + MIN_PUB_YEAR + ")", ChartTemplateName.TopList,
             Row.COMPARE_BY_NUM_DESC);
         Table identifiers = new Table("In Publikationen verwendete Autoren-Identifikatoren", ChartTemplateName.Matrix,
             Row.COMPARE_BY_LABEL);
@@ -102,6 +107,7 @@ public class DozBibStatistics {
 
         Element statistics = new Element("ubostatistics");
         statistics.setAttribute("total", String.valueOf(numPublications));
+        statistics.setAttribute("minYear",String.valueOf(MIN_PUB_YEAR));
         statistics.addContent(publicationsByYear.toXML());
         statistics.addContent(publicationsByField.toXML());
         statistics.addContent(publicationsByType.toXML());
@@ -153,7 +159,10 @@ public class DozBibStatistics {
         }
     }
 
+    
     private static void countPublicationsByLSFPID(Table publicationsByPID, Element root) {
+        if( getPublicationYear(root) < MIN_PUB_YEAR ) return;
+        
         Set<String> occurringPIDs = new HashSet<String>(); // Count each PID only once per publication
         for (Element name : getNodes(root, "//mods:name")) {
             for (Element nameIdentifier : getNodes(name, "mods:nameIdentifier[@type='lsf']")) {
@@ -198,17 +207,26 @@ public class DozBibStatistics {
     }
 
     private static void countPublicationYear(Table publicationsByYear, Element root) {
+        int year = getPublicationYear(root);
+        if (year > 1950) {
+            String yearText = String.valueOf(year);
+            publicationsByYear.increaseRowValueforKey(yearText, yearText);
+        }
+    }
+
+    private static int getPublicationYear(Element root) {
         List<Element> datesIssued = getNodes(root, "//mods:originInfo/mods:dateIssued");
         if (datesIssued.isEmpty())
-            return;
+            return 0;
 
         String year = datesIssued.get(0).getTextTrim();
         if ((year == null) || year.isEmpty())
-            return;
+            return 0;
 
-        String yearText = year.toString();
-        if (year.matches(INTEGER_PATTERN) && Integer.valueOf(year) > 1950)
-            publicationsByYear.increaseRowValueforKey(year, yearText);
+        if (year.matches(INTEGER_PATTERN))
+            return Integer.valueOf(year);
+        else
+            return 0;
     }
 
     private static List<Element> getNodes(Element context, String xPath) {
