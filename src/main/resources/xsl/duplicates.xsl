@@ -63,7 +63,7 @@
 
 <xsl:template match="id">
   <a href="{$ServletsBaseURL}DozBibEntryServlet?mode=show&amp;id={text()}">
-    <xsl:value-of select="text()" />
+    <xsl:value-of select="number(substring-after(text(),'mods_'))" />
   </a>
   <xsl:if test="position() != last()">
     <xsl:text> </xsl:text>

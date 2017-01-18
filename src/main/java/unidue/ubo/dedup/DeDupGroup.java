@@ -14,6 +14,8 @@ import java.util.Set;
 
 import org.jdom2.Element;
 
+import unidue.ubo.DozBibManager;
+
 class DeDupGroup implements Comparable<DeDupGroup> {
 
     private Set<DeDupCriterion> criteria = new HashSet<DeDupCriterion>();
@@ -51,7 +53,7 @@ class DeDupGroup implements Comparable<DeDupGroup> {
                 group.addContent(criterion.toXML());
 
         for (Integer id : IDs)
-            group.addContent(new Element("id").setText(id.toString()));
+            group.addContent(new Element("id").setText(DozBibManager.buildMCRObjectID(id).toString()));
 
         return group;
     }
