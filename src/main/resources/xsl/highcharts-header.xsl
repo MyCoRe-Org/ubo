@@ -16,14 +16,13 @@
 
   <script src="{$WebApplicationBaseURL}external/jquery-ui-1.8.12.custom.min.js" type="text/javascript"></script>
   <script src="{$WebApplicationBaseURL}external/jquery.corners.min.js" type="text/javascript"></script>
-  <script src="{$WebApplicationBaseURL}external/highcharts-2.1.9/highcharts.src.js" type="text/javascript"></script>
-  <script src="{$WebApplicationBaseURL}external/highcharts-2.1.9/modules/exporting.src.js" type="text/javascript"></script>
-  <script src="{$WebApplicationBaseURL}external/highcharts-2.1.9/themes/grid.js" type="text/javascript"></script>
+  <script src="{$WebApplicationBaseURL}webjars/github-com-highcharts-highcharts/4.2.5/lib/highcharts.src.js" type="text/javascript"></script>
+  <script src="{$WebApplicationBaseURL}webjars/github-com-highcharts-highcharts/4.2.5/lib/themes/grid.js" type="text/javascript"></script>
   
   <script type="text/javascript">
 <![CDATA[
 jQuery(document).ready(function() {
-  
+
   jQuery('.inner-stats-container').each(function() {
     jQuery(this).corner("round 6px").parent().css('padding', '2px').corner("round 8px");
   });
