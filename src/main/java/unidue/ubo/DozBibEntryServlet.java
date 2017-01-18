@@ -20,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -30,6 +31,7 @@ import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.mods.MCRMODSWrapper;
 
 public class DozBibEntryServlet extends MCRServlet {
+
     private final static Logger LOGGER = LogManager.getLogger(DozBibEntryServlet.class);
 
     public void doGetPost(MCRServletJob job) throws Exception {
@@ -60,44 +62,23 @@ public class DozBibEntryServlet extends MCRServlet {
     }
 
     private void showEntry(HttpServletRequest req, HttpServletResponse res) throws Exception {
-        int ID = checkRequestedID(req, res);
-        if (ID == 0)
-            return;
-
+        String ID = req.getParameter("id");
         LOGGER.info("UBO show entry " + ID);
-        MCRObjectID oid = DozBibManager.buildMCRObjectID(ID);
+        MCRObjectID oid = MCRObjectID.getInstance(ID);
         Document xml = MCRMetadataManager.retrieveMCRObject(oid).createXML();
         getLayoutService().doLayout(req, res, new MCRJDOMContent(xml));
     }
 
-    private int checkRequestedID(HttpServletRequest req, HttpServletResponse res) throws Exception {
-        String id = req.getParameter("id");
-        if ((id == null) || (id.trim().length() == 0)) {
-            res.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter 'id' is missing.");
-            return 0;
-        }
-
-        int ID = Integer.parseInt(id);
-        if (!DozBibManager.instance().exists(ID)) {
-            res.sendError(HttpServletResponse.SC_NOT_FOUND, "There is no entry with ID " + id);
-            return 0;
-        }
-        return ID;
-    }
-
     private void deleteEntry(HttpServletRequest req, HttpServletResponse res) throws Exception {
-        int ID = checkRequestedID(req, res);
-        if (ID == 0)
-            return;
-
         if (!AccessControl.currentUserIsAdmin()) {
             res.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 
+        String ID = req.getParameter("id");
         LOGGER.info("UBO delete entry " + ID);
         
-        MCRObjectID oid = DozBibManager.buildMCRObjectID(ID);
+        MCRObjectID oid = MCRObjectID.getInstance(ID);
         MCRObject obj = MCRMetadataManager.retrieveMCRObject(oid);
         new MCRMODSWrapper(obj).setServiceFlag("status", "deleted");
         Document xml = obj.createXML();
@@ -113,37 +94,40 @@ public class DozBibEntryServlet extends MCRServlet {
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("WebApplicationBaseURL", MCRFrontendUtil.getBaseURL());
         parameters.put("MCR.Mail.Address", MCRConfiguration.instance().getString("MCR.Mail.Address"));
-        MCRMailer.sendMail(doc, "bibentry-e-mail", parameters);
+        MCRMailer.sendMail(doc, "mycoreobject-e-mail", parameters);
     }
 
     private void saveEntry(HttpServletRequest req, HttpServletResponse res) throws Exception {
         Document doc = (Document) req.getAttribute("MCRXEditorSubmission");
 
-        String ID = doc.getRootElement().getAttributeValue("id", "0");
-        int id = Integer.parseInt(ID);
+        String id = doc.getRootElement().getAttributeValue("ID");
+        MCRObjectID oid = MCRObjectID.getInstance(id);
+        MCRObject obj = new MCRObject(doc);
 
-        if (id > 0) // Existing entry changed
+        if( MCRXMLMetadataManager.instance().exists(oid))
         {
             if (AccessControl.currentUserIsAdmin()) {
-                DozBibManager.instance().updateEntry(doc);
-                LOGGER.info("UBO saved entry with ID " + ID);
-                res.sendRedirect(MCRServlet.getServletBaseURL() + "DozBibEntryServlet?mode=show&id=" + ID);
+                MCRMetadataManager.update(obj);
+                LOGGER.info("UBO saved entry with ID " + oid);
+                res.sendRedirect(MCRServlet.getServletBaseURL() + "DozBibEntryServlet?mode=show&id=" + id);
             } else {
                 res.sendError(HttpServletResponse.SC_FORBIDDEN);
             }
         } else
         // New entry submitted
         {
-            int newID = DozBibManager.instance().createEntry(doc);
-            LOGGER.info("UBO saved entry with ID " + newID);
+            oid = MCRObjectID.getNextFreeId(oid.getBase());
+            obj.setId(oid);
+            MCRMetadataManager.create(obj);
+            LOGGER.info("UBO saved entry with ID " + oid);
 
             if (AccessControl.currentUserIsAdmin()) {
-                res.sendRedirect(MCRServlet.getServletBaseURL() + "DozBibEntryServlet?mode=show&id=" + newID);
+                res.sendRedirect(MCRServlet.getServletBaseURL() + "DozBibEntryServlet?mode=show&id=" + oid.toString());
 
             } else {
                 // Notify library staff via e-mail
                 sendNotificationMail(doc);
-                res.sendRedirect(MCRServlet.getServletBaseURL() + "DozBibEntryServlet?mode=show&XSL.step=confirm.submitted&id=" + newID);
+                res.sendRedirect(MCRServlet.getServletBaseURL() + "DozBibEntryServlet?mode=show&XSL.step=confirm.submitted&id=" + oid.toString());
             }
         }
     }
