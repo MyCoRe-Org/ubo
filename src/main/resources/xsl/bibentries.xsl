@@ -279,7 +279,7 @@
 <xsl:template name="bibentry.show.details">
   <form action="{$ServletsBaseURL}DozBibEntryServlet" method="get">
     <input type="hidden" name="mode" value="show"/>
-    <input type="hidden" name="id" value="{number(substring-after(ancestor::mycoreobject/@ID,'mods_'))}"/>
+    <input type="hidden" name="id" value="{ancestor::mycoreobject/@ID}"/>
     <input type="hidden" name="XSL.ListKey" value="{/bibentries/@listKey}"/>
     <input type="hidden" name="XSL.PageNr" value="{/bibentries/@pageNr}"/>
     <input type="submit" class="roundedButton" value="{i18n:translate('result.dozbib.info')}" />

@@ -6,7 +6,8 @@
   xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:mods="http://www.loc.gov/mods/v3"
-  exclude-result-prefixes="xsl xalan i18n mods"
+  xmlns:java="http://xml.apache.org/xalan/java"
+  exclude-result-prefixes="xsl xalan i18n mods java"
 >
 
 <xsl:include href="basket-common.xsl" />
@@ -101,7 +102,7 @@
       <div class="footer">
         <form action="{$ServletsBaseURL}DozBibEntryServlet" method="get">
           <input type="hidden" name="mode" value="show"/>
-          <input type="hidden" name="id" value="{../@id}"/>
+          <input type="hidden" name="id" value="{java:unidue.ubo.DozBibManager.buildMCRObjectID(../@id)}"/>
           <input type="submit" class="roundedButton" value="{i18n:translate('result.dozbib.info')}" />
         </form>
       </div>

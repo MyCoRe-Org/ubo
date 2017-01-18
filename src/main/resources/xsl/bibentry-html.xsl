@@ -17,21 +17,23 @@
 <!-- ============ Einzeltreffer HTML Export ============ -->
 
   <xsl:template match="bibentry" mode="html-export">
-    <xsl:apply-templates select="mods:mods" mode="cite"> 
+    <xsl:apply-templates select="mods:mods" mode="html-export" />
+  </xsl:template>
+
+  <xsl:template match="mods:mods" mode="html-export">
+    <xsl:apply-templates select="." mode="cite"> 
       <xsl:with-param name="mode">divs</xsl:with-param> 
     </xsl:apply-templates>
-    <xsl:for-each select="mods:mods">
-      <xsl:call-template name="ibn-export">
-        <xsl:with-param name="type">isbn</xsl:with-param>
-      </xsl:call-template> 
-      <xsl:call-template name="ibn-export">
-        <xsl:with-param name="type">issn</xsl:with-param>
-      </xsl:call-template>
-      <xsl:apply-templates select="mods:identifier[@type='doi']" mode="html-export" />
-      <xsl:apply-templates select="mods:identifier[@type='urn']" mode="html-export" /> 
-      <xsl:apply-templates select="mods:identifier[@type='duepublico']" mode="html-export" /> 
-      <xsl:apply-templates select="mods:location/mods:url" mode="html-export" /> 
-    </xsl:for-each>
+    <xsl:call-template name="ibn-export">
+      <xsl:with-param name="type">isbn</xsl:with-param>
+    </xsl:call-template> 
+    <xsl:call-template name="ibn-export">
+      <xsl:with-param name="type">issn</xsl:with-param>
+    </xsl:call-template>
+    <xsl:apply-templates select="mods:identifier[@type='doi']" mode="html-export" />
+    <xsl:apply-templates select="mods:identifier[@type='urn']" mode="html-export" /> 
+    <xsl:apply-templates select="mods:identifier[@type='duepublico']" mode="html-export" /> 
+    <xsl:apply-templates select="mods:location/mods:url" mode="html-export" /> 
   </xsl:template>
 
   <!-- ========== Liste von ISBNs oder ISSNs =========== -->
