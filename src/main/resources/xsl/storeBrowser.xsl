@@ -61,22 +61,11 @@
 </xsl:template>
 
 <xsl:template match="object">
-  <xsl:variable name="bibentryID" select="number(substring-after(@id,'ubo_'))" />
-  <xsl:call-template name="object.link">
-    <xsl:with-param name="id" select="$bibentryID" />
-    <xsl:with-param name="url" select="concat($ServletsBaseURL,'DozBibEntryServlet?mode=show&amp;id=',$bibentryID)" />
-  </xsl:call-template>
-</xsl:template>
-
-<xsl:template name="object.link">
-  <xsl:param name="id" />
-  <xsl:param name="url" />
-
   <li>
-    <a href="{$url}">
+    <a href="{concat($ServletsBaseURL,'DozBibEntryServlet?mode=show&amp;id=',@id)}">
       <xsl:value-of select="i18n:translate('storeBrowser.object')" />
       <xsl:text> </xsl:text>
-      <xsl:value-of select="$id" />
+      <xsl:value-of select="@id" />
       <xsl:text>, </xsl:text>
       <xsl:value-of select="i18n:translate('storeBrowser.lastModified')" />
       <xsl:text> </xsl:text>
