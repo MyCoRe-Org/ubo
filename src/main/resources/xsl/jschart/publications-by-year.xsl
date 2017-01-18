@@ -45,7 +45,7 @@ jQuery(document).ready(function() {
          },
          xAxis: {
            type: 'datetime',
-           min: Date.UTC(1970, 0, 1),
+           min: Date.UTC(1980, 0, 1),
            max: Date.UTC(]]><xsl:value-of xmlns:datetime="http://exslt.org/dates-and-times" select="datetime:year() + 1" /><![CDATA[, 11, 31),
            maxZoom: 365 * 24 * 3600 * 1000,
            dateTimeLabelFormats: {
