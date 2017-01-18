@@ -51,7 +51,7 @@ die folgenden Publikationen wurden aus Scopus importiert:
         <xsl:value-of select="@ID" />
         <xsl:text>&#xa;</xsl:text>
         <xsl:variable name="bibentry.html">
-          <xsl:apply-templates select="." mode="html-export" /> 
+          <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" mode="html-export" /> 
         </xsl:variable>
         <xsl:apply-templates select="xalan:nodeset($bibentry.html)" />
         <xsl:text>&#xa;</xsl:text>

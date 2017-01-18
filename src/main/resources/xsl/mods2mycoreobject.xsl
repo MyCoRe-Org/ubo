@@ -8,7 +8,8 @@
   <xsl:include href="copynodes.xsl" />
 
   <xsl:template match="/">
-    <mycoreobject>
+    <mycoreobject ID="ubo_mods_00000000" label="ubo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-mods.xsd">
+      <structure />
       <metadata>
         <def.modsContainer class="MCRMetaXML">
           <modsContainer>
