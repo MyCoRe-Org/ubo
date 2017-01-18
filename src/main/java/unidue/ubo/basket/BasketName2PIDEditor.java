@@ -157,7 +157,10 @@ public class BasketName2PIDEditor extends MCRServlet {
         Element bibentry = entry.getContent();
         bibentry.removeAttribute("changed");
         bibentry = (Element) (bibentry.clone());
+        int id = Integer.parseInt(bibentry.getAttributeValue("id"));
         DozBibManager.instance().updateEntry(new Document(bibentry));
-        entry.setContent((Element) (bibentry.clone())); // some data may have changed when saving!
+        
+        bibentry = DozBibManager.instance().getEntry(id).detachRootElement();
+        entry.setContent(bibentry); // some data may have changed when saving!
     }
 }
