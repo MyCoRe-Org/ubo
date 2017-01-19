@@ -30,7 +30,6 @@ import org.jdom2.Element;
 import org.jdom2.filter.ElementFilter;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRURIResolver;
-import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.basket.MCRBasket;
 import org.mycore.frontend.basket.MCRBasketEntry;
 import org.mycore.frontend.basket.MCRBasketManager;
@@ -85,9 +84,8 @@ public class DozBibServlet extends MCRServlet {
 
         for (int i = 0; i < results.getNumHits(); i++) {
             String oid = results.getHit(i).getID();
-            String id = String.valueOf(Integer.parseInt(oid.split("_")[2]));
-            String uri = "ubo:" + id;
-            MCRBasketEntry entry = new MCRBasketEntry(id, uri);
+            String uri = "mcrobject:" + oid;
+            MCRBasketEntry entry = new MCRBasketEntry(oid, uri);
             entry.resolveContent();
             MCRBasketManager.getOrCreateBasketInSession("bibentries").add(entry);
         }
@@ -318,14 +316,13 @@ public class DozBibServlet extends MCRServlet {
 
             for (Iterator<MCRHit> hits = results.iterator(); hits.hasNext();) {
                 String oid = hits.next().getID();
-                String id = String.valueOf(MCRObjectID.getInstance(oid).getNumberAsInteger());
-                String uri = "ubo:" + id;
-                basket.add(new MCRBasketEntry(id, uri));
+                String uri = "mcrobject:" + oid;
+                basket.add(new MCRBasketEntry(oid, uri));
             }
         }
 
         String format = job.getRequest().getParameter("format");
-        String url = MCRServlet.getServletBaseURL() + "MCRExportServlet/export." + format + "?basket=" + basketID + "&root=bibentries&transformer=" + format;
+        String url = MCRServlet.getServletBaseURL() + "MCRExportServlet/export." + format + "?basket=" + basketID + "&root=export&transformer=" + format;
         String css = job.getRequest().getParameter("css");
         if( css != null ) url += "&XSL.css=" + css;
         
