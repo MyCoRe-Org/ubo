@@ -61,7 +61,9 @@ public class DozBibStatistics {
     private static final String INTEGER_PATTERN = "[0-9]+";
 
     private static int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
+
     private static int MAX_PUB_AGE_IN_YEARS = 5;
+
     private static int MIN_PUB_YEAR = THIS_YEAR - MAX_PUB_AGE_IN_YEARS;
 
     private static MCRCategoryDAO DAO;
@@ -83,8 +85,9 @@ public class DozBibStatistics {
             Row.COMPARE_BY_NUM_LABEL_DESC);
         Table publicationsByField = new Table("Publikationen nach Fachgebiet", ChartTemplateName.Piechart,
             Row.COMPARE_BY_NUM_DESC);
-        Table publicationsByPID = new Table("Am h\u00E4ufigsten verzeichnete AutorInnen (Publikationsjahr >= " + MIN_PUB_YEAR + ")", ChartTemplateName.TopList,
-            Row.COMPARE_BY_NUM_DESC);
+        Table publicationsByPID = new Table(
+            "Am h\u00E4ufigsten verzeichnete AutorInnen (Publikationsjahr >= " + MIN_PUB_YEAR + ")",
+            ChartTemplateName.TopList, Row.COMPARE_BY_NUM_DESC);
         Table identifiers = new Table("In Publikationen verwendete Autoren-Identifikatoren", ChartTemplateName.Matrix,
             Row.COMPARE_BY_LABEL);
         int numPublications = 0;
@@ -111,7 +114,7 @@ public class DozBibStatistics {
 
         Element statistics = new Element("ubostatistics");
         statistics.setAttribute("total", String.valueOf(numPublications));
-        statistics.setAttribute("minYear",String.valueOf(MIN_PUB_YEAR));
+        statistics.setAttribute("minYear", String.valueOf(MIN_PUB_YEAR));
         statistics.addContent(publicationsByYear.toXML());
         statistics.addContent(publicationsByField.toXML());
         statistics.addContent(publicationsByType.toXML());
@@ -149,7 +152,7 @@ public class DozBibStatistics {
     }
 
     private static void countNameIdentifiers(Table identifiers, Element root) {
-        for (Element name : getNodes(root, "//mods:name")) {
+        for (Element name : getNodes(root, "descendant::mods:name")) {
             for (Element nameIdentifier1 : getNodes(name, "mods:nameIdentifier")) {
                 String type1 = nameIdentifier1.getAttributeValue("type");
                 for (Element nameIdentifier2 : getNodes(name, "mods:nameIdentifier")) {
@@ -163,12 +166,12 @@ public class DozBibStatistics {
         }
     }
 
-    
     private static void countPublicationsByLSFPID(Table publicationsByPID, Element root) {
-        if( getPublicationYear(root) < MIN_PUB_YEAR ) return;
-        
+        if (getPublicationYear(root) < MIN_PUB_YEAR)
+            return;
+
         Set<String> occurringPIDs = new HashSet<String>(); // Count each PID only once per publication
-        for (Element name : getNodes(root, "//mods:name")) {
+        for (Element name : getNodes(root, "descendant::mods:name")) {
             for (Element nameIdentifier : getNodes(name, "mods:nameIdentifier[@type='lsf']")) {
                 String pid = nameIdentifier.getTextTrim();
                 String completeName = getCompleteName(name);
@@ -190,15 +193,14 @@ public class DozBibStatistics {
     }
 
     private static void countPublicationField(Table publicationsByField, Element root) {
-        for (Element classification : getNodes(root,
-            "//mods:mods/mods:classification[contains(@authorityURI,'fachreferate')]")) {
+        for (Element classification : getNodes(root, "mods:classification[contains(@authorityURI,'fachreferate')]")) {
             String subjectID = classification.getAttributeValue("valueURI").split("#")[1];
             publicationsByField.increaseRowValueforKey(subjectID, null);
         }
     }
 
     private static void countPublicationType(Table publicationsByType, Element root) {
-        String type = getNodes(root, "//mods:mods/mods:genre[@type='intern']").get(0).getTextTrim();
+        String type = getNodes(root, "mods:genre[@type='intern']").get(0).getTextTrim();
         String label = getGenreLabel(type);
         publicationsByType.increaseRowValueforKey(type, label);
     }
@@ -219,7 +221,7 @@ public class DozBibStatistics {
     }
 
     private static int getPublicationYear(Element root) {
-        List<Element> datesIssued = getNodes(root, "//mods:originInfo/mods:dateIssued");
+        List<Element> datesIssued = getNodes(root, "descendant::mods:originInfo/mods:dateIssued");
         if (datesIssued.isEmpty())
             return 0;
 
