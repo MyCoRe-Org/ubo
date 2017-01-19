@@ -72,8 +72,8 @@ public class BasketNameLister implements URIResolver {
         List<Element> contributors = new ArrayList<Element>();
         MCRBasket basket = MCRBasketManager.getOrCreateBasketInSession("bibentries");
         for (MCRBasketEntry entry : basket) {
-            Element bibentry = entry.getContent();
-            Iterator<Element> iter = bibentry.getDescendants(new ElementFilter("name", MCRConstants.MODS_NAMESPACE));
+            Element obj = entry.getContent();
+            Iterator<Element> iter = obj.getDescendants(new ElementFilter("name", MCRConstants.MODS_NAMESPACE));
             while (iter.hasNext()) {
                 Element modsName = iter.next();
                 if ("personal".equals(modsName.getAttributeValue("type"))) // ignore corporate or conference

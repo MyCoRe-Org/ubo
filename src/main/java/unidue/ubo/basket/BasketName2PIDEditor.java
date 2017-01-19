@@ -21,6 +21,8 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.mycore.common.MCRConstants;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.frontend.basket.MCRBasket;
 import org.mycore.frontend.basket.MCRBasketEntry;
 import org.mycore.frontend.basket.MCRBasketManager;
@@ -29,7 +31,6 @@ import org.mycore.frontend.servlets.MCRServletJob;
 
 import unidue.ubo.AccessControl;
 import unidue.ubo.DozBibEntryServlet;
-import unidue.ubo.DozBibManager;
 
 /**
  * Servlet invoked by edit-contributors.xml to
@@ -39,6 +40,7 @@ import unidue.ubo.DozBibManager;
  * @author Frank L\u00FCtzenkirchen
  */
 public class BasketName2PIDEditor extends MCRServlet {
+    
     private final static Logger LOGGER = LogManager.getLogger(BasketName2PIDEditor.class);
 
     public void doGetPost(MCRServletJob job) throws Exception {
@@ -110,14 +112,14 @@ public class BasketName2PIDEditor extends MCRServlet {
     }
 
     /**
-     * Marks the "bibentry" element in the basket that is parent of the given contributor 
+     * Marks the "mycoreobject" element in the basket that is parent of the given contributor 
      * element to be changed by the editor form, so the servlet can identify the entries
      * that are changed and have to be saved later.
      * 
      * @param element the contributor element that was edited.
      */
     private void markAsChanged(Element element) {
-        while (!element.getName().equals("bibentry"))
+        while (!element.getName().equals("mycoreobject"))
             element = element.getParentElement();
         element.setAttribute("changed", "true");
     }
@@ -154,13 +156,14 @@ public class BasketName2PIDEditor extends MCRServlet {
      * Saves an entry from the basket and updates its data in the basket afterwards.
      */
     private void saveChangedEntry(MCRBasketEntry entry) throws Exception {
-        Element bibentry = entry.getContent();
-        bibentry.removeAttribute("changed");
-        bibentry = (Element) (bibentry.clone());
-        int id = Integer.parseInt(bibentry.getAttributeValue("id"));
-        DozBibManager.instance().updateEntry(new Document(bibentry));
+        Element objxml = entry.getContent();
+        objxml.removeAttribute("changed");
+        objxml = (Element) (objxml.clone());
         
-        bibentry = DozBibManager.instance().getEntry(id).detachRootElement();
-        entry.setContent(bibentry); // some data may have changed when saving!
+        MCRObject obj = new MCRObject(new Document(objxml));
+        MCRMetadataManager.update(obj);
+        
+        objxml = obj.createXML().getRootElement().clone();
+        entry.setContent(objxml); // some data may have changed when saving!
     }
 }
