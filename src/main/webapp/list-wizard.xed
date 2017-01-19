@@ -24,7 +24,8 @@
       Alternativ können Sie über das folgende Formular persönliche Publikationslisten direkt aus der Universitätsbibliographie erstellen und 
       in verschiedenen Formaten verlinken oder ausgeben. Voraussetzung ist, dass die Publikationen mit Ihrer HIS LSF Personen-ID verknüpft sind.
       Falls Publikationen fehlen, <a href="newPublication.xed">melden Sie diese hier.</a>
-      Falls Einträge korrigiert werden müssen, <a href="contact.xml">sprechen Sie uns an.</a> 
+      Falls Einträge korrigiert werden müssen, <a href="contact.xml">sprechen Sie uns an.</a>
+      Sie können auch Publikationen über vergebene "Tags" auswählen.   
     </p>
   </section>
   <section xml:lang="en" class="highlight2" title="Create personal publication list">
@@ -32,7 +33,8 @@
       Alternatively, you can use the following form to create your personal publication list directly from university bibliography data to  
       link it or output it in various formats. This requires that the publications are linked with your own HIS LSF person ID.
       In case publications are missing, <a href="newPublication.xed">you can enter them here.</a>
-      in case entries have to be corrected, <a href="contact.xml">contact us.</a> 
+      in case entries have to be corrected, <a href="contact.xml">contact us.</a>
+      You can also choose publications by "tags". 
     </p>
   </section>
   
@@ -62,24 +64,19 @@
               </label>
               <xed:choose>
                 <xed:when test="string-length(mods:nameIdentifier[@type='lsf']) &gt; 0">
-                  <span id="{xed:generate-id()}" style="display:inline-block; width:195px;">
+                  <span id="{xed:generate-id()}" style="display:inline-block; width:auto;">
                     <xed:output value="mods:namePart[@type='family']" /><xed:if test="mods:namePart[@type='given']"><xed:output value="concat(', ',mods:namePart[@type='given'])" /></xed:if>
                   </span>
-                  <span style="display:inline-block; width:80px;">
+                  <span style="display:inline-block; width:auto;">
                     <xed:bind xpath="mods:nameIdentifier[@type='lsf']">
-                      <xed:output value="concat('LSF: ',.)" />
+                      <xed:output value="concat('(LSF ID: ',.,')')" />
                     </xed:bind>
                   </span>
                 </xed:when>
                 <xed:otherwise>
-                  <xed:bind xpath="mods:nameIdentifier[@type='lsf']">
-                    <span style="display:inline-block; width:195px;">
-                      <xed:output i18n="listWizard.subselect" />
-                    </span>
-                  </xed:bind>
-                  <span style="display:inline-block; width:115px;">
+                  <span style="display:inline-block; width:auto;">
                     <button class="roundedButton" type="submit" xed:target="subselect" xed:href="../lsfpidsearch.html">
-                      <xed:output i18n="search.select" />
+                      <xed:output i18n="listWizard.subselect" />
                     </button>
                   </span>
                 </xed:otherwise>
