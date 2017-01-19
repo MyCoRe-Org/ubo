@@ -14,15 +14,13 @@ import java.util.Set;
 
 import org.jdom2.Element;
 
-import unidue.ubo.DozBibManager;
-
 class DeDupGroup implements Comparable<DeDupGroup> {
 
     private Set<DeDupCriterion> criteria = new HashSet<DeDupCriterion>();
 
-    private Set<Integer> IDs = new HashSet<Integer>();
+    private Set<String> IDs = new HashSet<String>();
 
-    public DeDupGroup(Set<DeDupCriterion> criteria, int id) {
+    public DeDupGroup(Set<DeDupCriterion> criteria, String id) {
         this.criteria.addAll(criteria);
         this.IDs.add(id);
     }
@@ -31,7 +29,7 @@ class DeDupGroup implements Comparable<DeDupGroup> {
         return criteria;
     }
 
-    public Set<Integer> getIDs() {
+    public Set<String> getIDs() {
         return IDs;
     }
 
@@ -52,15 +50,15 @@ class DeDupGroup implements Comparable<DeDupGroup> {
             if (criterion.isUsedInMatch())
                 group.addContent(criterion.toXML());
 
-        for (Integer id : IDs)
-            group.addContent(new Element("id").setText(DozBibManager.buildMCRObjectID(id).toString()));
+        for (String id : IDs)
+            group.addContent(new Element("id").setText(id));
 
         return group;
     }
 
     public String listIDs() {
         StringBuffer sb = new StringBuffer();
-        for (Integer id : IDs)
+        for (String id : IDs)
             sb.append(id).append(" ");
         return sb.toString().trim();
     }

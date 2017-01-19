@@ -21,15 +21,16 @@ import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jdom2.Document;
 import org.jdom2.Element;
-import org.mycore.common.MCRConstants;
 import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
-
-import unidue.ubo.DozBibManager;
+import org.mycore.mods.MCRMODSWrapper;
 
 @MCRCommandGroup(name = "UBO DeDup Commands")
 public class DeDupCommands extends MCRAbstractCommands {
@@ -44,11 +45,10 @@ public class DeDupCommands extends MCRAbstractCommands {
         DeDupCriteriaBuilder builder = new DeDupCriteriaBuilder();
         int numEntries = 0;
 
-        for (Iterator<Integer> IDs = DozBibManager.instance().iterateStoredIDs(); IDs.hasNext();) {
-            int id = IDs.next();
+        for (String id : MCRXMLMetadataManager.instance().listIDsOfType("mods")) {
             try {
-                Document entry = DozBibManager.instance().getEntry(id);
-                Element mods = entry.getRootElement().getChild("mods", MCRConstants.MODS_NAMESPACE);
+                MCRObject obj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(id));
+                Element mods = new MCRMODSWrapper(obj).getMODS();
                 numEntries++;
 
                 DeDupGroup group = new DeDupGroup(builder.buildFromMODS(mods), id);
