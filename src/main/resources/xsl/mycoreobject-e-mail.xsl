@@ -17,7 +17,7 @@
 
 <xsl:include href="bibmaster.xsl" />
 <xsl:include href="mods-display.xsl" />
-<xsl:include href="bibentry-html.xsl" />
+<xsl:include href="mycoreobject-html.xsl" />
 <xsl:include href="coreFunctions.xsl" />
 
 <xsl:param name="loaded_navigation_xml" />
