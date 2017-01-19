@@ -22,11 +22,24 @@
     <xsl:value-of select="$ServletsBaseURL" />
     <xsl:text>DozBibServlet</xsl:text>
     <xsl:apply-templates select="format" />
-    <xsl:text>query=((</xsl:text>
-    <xsl:apply-templates select="mods:name" mode="query" />
-    <xsl:text>)</xsl:text>
+
+    <xsl:text>query=(</xsl:text>
+    <xsl:if test="mods:name">
+      <xsl:text>(</xsl:text>
+      <xsl:apply-templates select="mods:name" mode="query" />
+      <xsl:text>)</xsl:text>
+    </xsl:if>
+    <xsl:if test="tag and mods:name">
+      <xsl:text>+and+</xsl:text>
+    </xsl:if>
+    <xsl:if test="tag">
+      <xsl:if test="count(tag) &gt; 1">(</xsl:if>
+      <xsl:apply-templates select="tag" mode="query" />
+      <xsl:if test="count(tag) &gt; 1">)</xsl:if>
+    </xsl:if>
     <xsl:apply-templates select="min-year" />
     <xsl:text>)</xsl:text>
+    
     <xsl:apply-templates select="max-results" />
     <xsl:apply-templates select="sort-by/field" />
   </xsl:variable>
@@ -39,6 +52,7 @@
     </hgroup>
     <p>
       <xsl:apply-templates select="mods:name" mode="display" />
+      <xsl:apply-templates select="tag" mode="display" />
     </p>
     <p>
       <xsl:value-of select="i18n:translate('listWizard.link')" />
@@ -72,14 +86,15 @@
 </xsl:template>
 
 <xsl:template match="mods:name" mode="query">
-  <xsl:text>(ubo_role_pid+=+aut_</xsl:text>
-  <xsl:value-of select="mods:nameIdentifier[@type='lsf']" />
-  <xsl:text>)+or+(ubo_role_pid+=+edt_</xsl:text>
-  <xsl:value-of select="mods:nameIdentifier[@type='lsf']" />
-  <xsl:text>)</xsl:text>
-  <xsl:if test="position() != last()">
-    <xsl:text>+or+</xsl:text>
-  </xsl:if>
+  <xsl:value-of select="concat('(ubo_role_pid+=+aut_',mods:nameIdentifier[@type='lsf'],')')" />
+  <xsl:text>+or+</xsl:text>
+  <xsl:value-of select="concat('(ubo_role_pid+=+edt_',mods:nameIdentifier[@type='lsf'],')')" />
+  <xsl:if test="following::mods:name">+or+</xsl:if>
+</xsl:template>
+
+<xsl:template match="tag" mode="query">
+  <xsl:value-of select="concat('(ubo_tag+=+',.,')')" />
+  <xsl:if test="following::tag">+or+</xsl:if>
 </xsl:template>
 
 <xsl:template match="min-year">
@@ -95,22 +110,32 @@
 </xsl:template>
 
 <xsl:template match="mods:name" mode="display">
-  <xsl:choose>
-    <xsl:when test="position()=1">
-      <xsl:value-of select="i18n:translate('listWizard.for')" />
-      <xsl:text> </xsl:text>
-    </xsl:when>
-    <xsl:otherwise>
-      <br />
-      <xsl:value-of select="i18n:translate('listWizard.and')" />
-      <xsl:text> </xsl:text>
-    </xsl:otherwise>
-  </xsl:choose>
+  <xsl:if test="position() = 1">
+    <xsl:value-of select="i18n:translate('listWizard.for')" />
+    <xsl:text> </xsl:text>
+  </xsl:if>
+  <xsl:if test="preceding::mods:name">
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="i18n:translate('listWizard.and')" />
+    <xsl:text> </xsl:text>
+  </xsl:if>
   <a href="{$UBO.LSF.Link}{mods:nameIdentifier[@type='lsf']}">
     <xsl:value-of select="mods:namePart[@type='family']" />
     <xsl:text>, </xsl:text>
     <xsl:value-of select="mods:namePart[@type='given']" />
   </a>
+</xsl:template>
+
+<xsl:template match="tag" mode="display">
+  <xsl:if test="preceding::mods:name or preceding::tag">
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="i18n:translate('listWizard.and')" />
+    <xsl:text> </xsl:text>
+  </xsl:if>
+  <xsl:value-of select="i18n:translate('listWizard.tag')" />
+  <xsl:text> "</xsl:text>
+  <xsl:value-of select="text()" />
+  <xsl:text>"</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>
