@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,6 +42,11 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.mods.MCRMODSWrapper;
 
 /**
  * Collections statistics on bibliography entries and writes them to a file statistics.xml within the web application.
@@ -89,17 +93,17 @@ public class DozBibStatistics {
 
         LOGGER.info("Collecting statistics...");
 
-        for (Iterator<Integer> IDs = DozBibManager.instance().iterateStoredIDs(); IDs.hasNext();) {
-            int id = IDs.next();
+        for (String id : MCRXMLMetadataManager.instance().listIDsOfType("mods")) {
             numPublications++;
 
             try {
-                Element root = DozBibManager.instance().getEntry(id).getRootElement();
-                countPublicationType(publicationsByType, root);
-                countPublicationYear(publicationsByYear, root);
-                countPublicationField(publicationsByField, root);
-                countNameIdentifiers(identifiers, root);
-                countPublicationsByLSFPID(publicationsByPID, root);
+                MCRObject obj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(id));
+                Element mods = new MCRMODSWrapper(obj).getMODS();
+                countPublicationType(publicationsByType, mods);
+                countPublicationYear(publicationsByYear, mods);
+                countPublicationField(publicationsByField, mods);
+                countNameIdentifiers(identifiers, mods);
+                countPublicationsByLSFPID(publicationsByPID, mods);
             } catch (Exception e) {
                 LOGGER.warn("Exception while processing entry #" + id, e);
             }
@@ -187,14 +191,14 @@ public class DozBibStatistics {
 
     private static void countPublicationField(Table publicationsByField, Element root) {
         for (Element classification : getNodes(root,
-            "mods:mods/mods:classification[contains(@authorityURI,'fachreferate')]")) {
+            "//mods:mods/mods:classification[contains(@authorityURI,'fachreferate')]")) {
             String subjectID = classification.getAttributeValue("valueURI").split("#")[1];
             publicationsByField.increaseRowValueforKey(subjectID, null);
         }
     }
 
     private static void countPublicationType(Table publicationsByType, Element root) {
-        String type = getNodes(root, "mods:mods/mods:genre[@type='intern']").get(0).getTextTrim();
+        String type = getNodes(root, "//mods:mods/mods:genre[@type='intern']").get(0).getTextTrim();
         String label = getGenreLabel(type);
         publicationsByType.increaseRowValueforKey(type, label);
     }
