@@ -32,7 +32,17 @@
     <field source="objectMetadata" name="ubo_pubmed"       type="identifier" xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods//mods:identifier[@type='pubmed']" value="text()" />
     <field source="objectMetadata" name="ubo_scopus"       type="identifier" xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods//mods:identifier[@type='scopus']" value="text()" />
     <field source="objectMetadata" name="ubo_documentID"   type="identifier" xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods//mods:identifier[@type='duepublico']" value="text()" />
-    <field source="objectMetadata" name="ubo_all"          type="text"       xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods//mods:*" value="concat(text(),lastName,', ',firstName)" />
+    
+    <field source="objectMetadata" name="ubo_all" type="text">
+      <mcr:ubo_all>
+        <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
+          <xsl:for-each select="descendant::mods:*">
+            <xsl:value-of select="text()" />
+            <xsl:text> </xsl:text>
+          </xsl:for-each>
+        </xsl:for-each>
+      </mcr:ubo_all>
+    </field>
 
     <field source="objectMetadata" name="ubo_role_pid" type="identifier">
       <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:name[mods:nameIdentifier[@type='lsf']]/mods:role/mods:roleTerm">

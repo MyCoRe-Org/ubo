@@ -36,7 +36,7 @@
 
       <xed:bind xpath="/query">
         <xed:bind xpath="conditions[@format='xml']/boolean[@operator='and']">
-          <xed:bind xpath="condition[@field='ubo_all'][@operator='=']/@value">
+          <xed:bind xpath="condition[@field='ubo_all'][@operator='contains']/@value">
             <label for="input">
               <xed:output i18n="ubo.search.simple" />
             </label>
