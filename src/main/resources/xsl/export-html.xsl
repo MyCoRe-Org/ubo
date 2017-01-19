@@ -23,7 +23,7 @@
 
   <xsl:include href="bibmaster.xsl" />
   <xsl:include href="mods-display.xsl" />
-  <xsl:include href="bibentry-html.xsl" />
+  <xsl:include href="mycoreobject-html.xsl" />
   <xsl:include href="coreFunctions.xsl" />
 
   <!-- ============ Link zum default CSS adaptiv via http/https ============ -->
@@ -37,7 +37,7 @@
 
   <xsl:param name="css" select="$defaultCssHref" />
 
-  <xsl:template match="/bibentries">
+  <xsl:template match="/export">
     <html> 
       <head>
         <META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -45,7 +45,7 @@
       </head>
       <body>
         <ul class="bibentries">
-          <xsl:apply-templates select="bibentry" />
+          <xsl:apply-templates select="mycoreobject" />
         </ul>
       </body>
     </html>
@@ -53,7 +53,7 @@
 
 <!-- ============ Einzeltreffer Detail-Anzeige ============ -->
 
-  <xsl:template match="bibentry">
+  <xsl:template match="mycoreobject">
     <li>
       <div class="bibentry">
         <xsl:apply-templates select="." mode="html-export" />

@@ -270,8 +270,8 @@
     <input type="hidden" name="action" value="add"/>
     <input type="hidden" name="type" value="bibentries"/>
     <input type="hidden" name="resolve" value="true"/>
-    <input type="hidden" name="id" value="{number(substring-after(ancestor::mycoreobject/@ID,'mods_'))}"/>
-    <input type="hidden" name="uri" value="ubo:{number(substring-after(ancestor::mycoreobject/@ID,'mods_'))}"/>
+    <input type="hidden" name="id" value="{ancestor::mycoreobject/@ID}"/>
+    <input type="hidden" name="uri" value="mcrobject:{ancestor::mycoreobject/@ID}"/>
     <input type="submit" class="roundedButton" value="{i18n:translate('button.basketAdd')}" />
   </form>
 </xsl:template>

@@ -24,7 +24,7 @@
       <xsl:when test="$UBO.System.ReadOnly = 'true'" />
       <xsl:when xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()">
         <action label="Personen zuordnen" target="{$WebApplicationBaseURL}edit-contributors.xed" />
-        <xsl:if test="entry/bibentry[@changed='true']">
+        <xsl:if test="entry/mycoreobject[@changed='true']">
           <action label="Änderungen speichern" target="{$ServletsBaseURL}BasketName2PIDEditor">
             <param name="action" value="save" />
           </action>
@@ -33,32 +33,32 @@
     </xsl:choose>
     <action label="MODS" target="MCRExportServlet/mods.xml">
       <param name="basket" value="bibentries" />
-      <param name="root" value="bibentries" />
+      <param name="root" value="export" />
       <param name="transformer" value="mods" />
     </action>
     <action label="BibTeX" target="MCRExportServlet/export.bibtex">
       <param name="basket" value="bibentries" />
-      <param name="root" value="bibentries" />
+      <param name="root" value="export" />
       <param name="transformer" value="bibtex" />
     </action>
     <action label="EndNote" target="MCRExportServlet/export.endnote">
       <param name="basket" value="bibentries" />
-      <param name="root" value="bibentries" />
+      <param name="root" value="export" />
       <param name="transformer" value="endnote" />
     </action>
     <action label="RIS" target="MCRExportServlet/export.ris">
       <param name="basket" value="bibentries" />
-      <param name="root" value="bibentries" />
+      <param name="root" value="export" />
       <param name="transformer" value="ris" />
     </action>
     <action label="PDF" target="MCRExportServlet/export.pdf">
       <param name="basket" value="bibentries" />
-      <param name="root" value="bibentries" />
+      <param name="root" value="export" />
       <param name="transformer" value="pdf" />
     </action>
     <action label="HTML" target="MCRExportServlet/export.html">
       <param name="basket" value="bibentries" />
-      <param name="root" value="bibentries" />
+      <param name="root" value="export" />
       <param name="transformer" value="html" />
     </action>
   </xsl:for-each>
@@ -76,7 +76,7 @@
 
   <xsl:call-template name="basketNumEntries" />
 
-  <xsl:if test="entry/bibentry[@changed='true']">
+  <xsl:if test="entry/mycoreobject[@changed='true']">
     <div class="section">
       <p>
         In Ihrem Korb befinden sich geänderte Einträge. Die Änderungen wirken momentan nur auf den
@@ -89,8 +89,8 @@
 
 </xsl:template>
 
-<xsl:template match="bibentry" mode="basketContent">
-  <xsl:for-each select="mods:mods">
+<xsl:template match="mycoreobject" mode="basketContent">
+  <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
     <div class="labels">
       <xsl:call-template name="pubtype" />
       <xsl:call-template name="label-year" />
@@ -102,7 +102,7 @@
       <div class="footer">
         <form action="{$ServletsBaseURL}DozBibEntryServlet" method="get">
           <input type="hidden" name="mode" value="show"/>
-          <input type="hidden" name="id" value="{java:unidue.ubo.DozBibManager.buildMCRObjectID(../@id)}"/>
+          <input type="hidden" name="id" value="{ancestor::mycoreobject/@ID}"/>
           <input type="submit" class="roundedButton" value="{i18n:translate('result.dozbib.info')}" />
         </form>
       </div>

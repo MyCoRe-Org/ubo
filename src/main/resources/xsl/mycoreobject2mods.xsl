@@ -8,12 +8,10 @@
 >
   
 <xsl:include href="mycoreobject2record.xsl" />
-<xsl:include href="bibentry-mods.xsl" />
+<xsl:include href="mycoreobject-mods.xsl" />
 
 <xsl:template match="mycoreobject" mode="metadata">
-  <mods:mods ID="{@ID}" version="3.6" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd">
-    <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" mode="copy-mods" />
-  </mods:mods>
+  <xsl:apply-templates select="." />
 </xsl:template>
 
 </xsl:stylesheet>

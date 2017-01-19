@@ -22,8 +22,6 @@
 <xsl:include href="mods-highwire.xsl" />
 <xsl:include href="mods-display.xsl" />
 
-<xsl:variable name="entryID" select="number(substring-after(/mycoreobject/@ID,'ubo_mods_'))" />
-  
 <xsl:param name="Referer" select="concat($ServletsBaseURL,'DozBibEntryServlet?mode=show&amp;id=',/mycoreobject/@ID)" />
 <xsl:param name="PageNr"  />
 <xsl:param name="ListKey" />
@@ -74,7 +72,7 @@
       </xsl:attribute>
     </xsl:if>
   </item>  
-  <item label="{i18n:translate('result.dozbib.entry')} {$entryID}" />
+  <item label="{i18n:translate('result.dozbib.entry')} {number(substring-after(/mycoreobject/@ID,'ubo_mods_'))}" />
 </xsl:variable>
 
 <!-- ============ Aktionen ============ -->
@@ -97,28 +95,28 @@
     <param name="type"    value="bibentries" />
     <param name="action"  value="add" />
     <param name="resolve" value="true" />
-    <param name="id"      value="{$entryID}" />
-    <param name="uri"     value="ubo:{$entryID}" />
+    <param name="id"      value="{/mycoreobject/@ID}" />
+    <param name="uri"     value="mcrobject:{/mycoreobject/@ID}" />
   </action>
   <xsl:if test="string-length($step) = 0">
-    <action label="MODS" target="{$ServletsBaseURL}MCRExportServlet/mods-{$entryID}.xml">
-      <param name="uri"          value="ubo:{$entryID}" />
-      <param name="root"         value="bibentries" />
+    <action label="MODS" target="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.xml">
+      <param name="uri"          value="mcrobject:{/mycoreobject/@ID}" />
+      <param name="root"         value="export" />
       <param name="transformer"  value="mods" />
     </action>
-    <action label="BibTeX" target="{$ServletsBaseURL}MCRExportServlet/bibentry-{$entryID}.bib">
-      <param name="uri"          value="ubo:{$entryID}" />
-      <param name="root"         value="bibentries" />
+    <action label="BibTeX" target="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.bib">
+      <param name="uri"          value="mcrobject:{/mycoreobject/@ID}" />
+      <param name="root"         value="export" />
       <param name="transformer"  value="bibtex" />
     </action>
-    <action label="EndNote" target="{$ServletsBaseURL}MCRExportServlet/bibentry-{$entryID}.enl">
-      <param name="uri"          value="ubo:{$entryID}" />
-      <param name="root"         value="bibentries" />
+    <action label="EndNote" target="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.enl">
+      <param name="uri"          value="mcrobject:{/mycoreobject/@ID}" />
+      <param name="root"         value="export" />
       <param name="transformer"  value="endnote" />
     </action>
-    <action label="RIS" target="{$ServletsBaseURL}MCRExportServlet/bibentry-{$entryID}.ris">
-      <param name="uri"          value="ubo:{$entryID}" />
-      <param name="root"         value="bibentries" />
+    <action label="RIS" target="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.ris">
+      <param name="uri"          value="mcrobject:{/mycoreobject/@ID}" />
+      <param name="root"         value="export" />
       <param name="transformer"  value="ris" />
     </action>
   </xsl:if>

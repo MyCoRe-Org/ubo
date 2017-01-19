@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<!--
-  Converts bibentry schema to MODS schema for export.
-  See http://www.loc.gov/standards/mods/ 
--->
-
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xalan="http://xml.apache.org/xalan"
@@ -13,16 +8,16 @@
   exclude-result-prefixes="xsl xalan"  
 >
 
-<xsl:include href="bibentry-mods.xsl" />
+<xsl:include href="mycoreobject-mods.xsl" />
 
-<xsl:template match="/bibentries">
+<xsl:template match="/export">
   <mods:modsCollection xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd">
-    <xsl:apply-templates select="bibentry" />
+    <xsl:apply-templates select="mycoreobject" />
   </mods:modsCollection>
 </xsl:template>
 
-<xsl:template match="bibentry" priority="1">
-  <mods:mods ID="ubo:{@id}">
+<xsl:template match="mycoreobject" priority="1">
+  <mods:mods ID="{@ID}">
     <xsl:apply-templates select="." mode="mods" />
   </mods:mods>
 </xsl:template>

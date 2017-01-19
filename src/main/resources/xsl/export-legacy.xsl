@@ -11,17 +11,23 @@
   xmlns:mods="http://www.loc.gov/mods/v3" 
   exclude-result-prefixes="xsl xalan i18n mods">
 
-  <xsl:template match="/bibentries">
-    <xsl:copy>
-      <xsl:apply-templates />
-    </xsl:copy>
+  <xsl:template match="/export">
+    <bibentries>
+      <xsl:apply-templates select="mycoreobject" />
+    </bibentries>
   </xsl:template>
 
-  <xsl:template match="bibentry">
-    <xsl:copy>
-      <xsl:copy-of select="@*" />
-      <xsl:apply-templates select="mods:mods" />
-    </xsl:copy>
+  <xsl:template match="mycoreobject">
+    <bibentry id="{number(substring-after(@ID,'_mods_'))}">
+      <xsl:apply-templates select="service/servdates/servdate[@type='modifydate']" />
+      <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" />
+    </bibentry>
+  </xsl:template>
+  
+  <xsl:template match="servdate[@type='modifydate']">
+    <xsl:attribute name="lastModified"> <!-- lastModified="2016-02-01 20:07:01" <servdate type="modifydate" inherited="0">2017-01-13T08:46:57.595Z</servdate> -->
+      <xsl:value-of select="translate(substring-before(text(),'.'),'T',' ')" />
+    </xsl:attribute>
   </xsl:template>
   
   <xsl:template match="mods:mods">

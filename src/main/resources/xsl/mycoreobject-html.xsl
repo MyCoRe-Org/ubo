@@ -16,8 +16,8 @@
 
 <!-- ============ Einzeltreffer HTML Export ============ -->
 
-  <xsl:template match="bibentry" mode="html-export">
-    <xsl:apply-templates select="mods:mods" mode="html-export" />
+  <xsl:template match="mycoreobject" mode="html-export">
+    <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" mode="html-export" />
   </xsl:template>
 
   <xsl:template match="mods:mods" mode="html-export">

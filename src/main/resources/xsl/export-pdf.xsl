@@ -25,10 +25,10 @@
 
 <xsl:include href="bibmaster.xsl" />
 <xsl:include href="mods-display.xsl" />
-<xsl:include href="bibentry-html.xsl" />
+<xsl:include href="mycoreobject-html.xsl" />
 <xsl:include href="coreFunctions.xsl" />
 
-<xsl:template match="/bibentries">
+<xsl:template match="/export">
   <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
   
     <fo:layout-master-set>
@@ -61,7 +61,7 @@
       </fo:static-content>
       
       <fo:flow flow-name="xsl-region-body">
-        <xsl:apply-templates select="bibentry" />
+        <xsl:apply-templates select="mycoreobject" />
       </fo:flow>
 
     </fo:page-sequence>
@@ -69,7 +69,7 @@
   </fo:root>
 </xsl:template>
 
-<xsl:template match="bibentry">
+<xsl:template match="mycoreobject">
   <fo:table width="180mm" table-layout="fixed">
     <fo:table-column column-width="177mm"/>
     <fo:table-body>
@@ -86,10 +86,10 @@
                 </fo:list-item-label>
                 <fo:list-item-body start-indent="body-start()">
                 
-                  <xsl:variable name="bibentry.html">
+                  <xsl:variable name="export.html">
                     <xsl:apply-templates select="." mode="html-export" /> 
                   </xsl:variable>
-                  <xsl:apply-templates select="xalan:nodeset($bibentry.html)" />
+                  <xsl:apply-templates select="xalan:nodeset($export.html)" />
                   
                 </fo:list-item-body>
               </fo:list-item>
