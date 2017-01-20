@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -28,16 +29,23 @@ import org.jdom2.Attribute;
 import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.Namespace;
+import org.jdom2.Text;
 import org.jdom2.filter.ElementFilter;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRXSLTransformer;
+import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs2.MCRMetadataStore;
 import org.mycore.datamodel.ifs2.MCRStore;
 import org.mycore.datamodel.ifs2.MCRStoreManager;
@@ -47,8 +55,6 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.MCRCommand;
 import org.mycore.mods.MCRMODSWrapper;
-
-import unidue.ubo.dedup.DeDupCriteriaBuilder;
 
 public class DozBibCommands extends MCRAbstractCommands {
 
@@ -92,33 +98,29 @@ public class DozBibCommands extends MCRAbstractCommands {
         ze.setTime(now.getTime());
         zip.putNextEntry(ze);
 
+        LOGGER.info("Collecting object IDs...");
+        List<String> oids = MCRXMLMetadataManager.instance().listIDsOfType("mods");
+
         LOGGER.info("Collecting all entries...");
+        Element collection = new Element("modsCollection", MCRConstants.MODS_NAMESPACE);
 
-        Element bibentries = new Element("bibentries");
-        Document doc = new Document(bibentries);
-
-        Iterator<Integer> IDs = DozBibManager.instance().iterateStoredIDs();
-        while (IDs.hasNext()) {
-            int id = IDs.next();
-            try {
-                Document entry = DozBibManager.instance().getEntry(id);
-                String status = entry.getRootElement().getAttributeValue("status", "");
-                if (!status.equals("confirmed"))
-                    continue;
-                bibentries.addContent(entry.detachRootElement());
-            } catch (Exception ex) {
-                String msg = "Skipping corrupted entry " + id;
-                LOGGER.warn(msg, ex);
+        for (String oid : oids) {
+            MCRObject obj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(oid));
+            MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
+            if ("confirmed".equals(wrapper.getServiceFlag("status"))) {
+                MCRContent src = new MCRJDOMContent(obj.createXML());
+                MCRXSLTransformer transformer = new MCRXSLTransformer("xsl/mycoreobject-mods.xsl");
+                MCRContent mods = transformer.transform(src);
+                collection.addContent(mods.asXML().detachRootElement());
             }
         }
+        System.out.println();
 
-        LOGGER.info("Transforming entries to MODS...");
-
-        MCRXSLTransformer transformer = new MCRXSLTransformer("xsl/bibentries-mods.xsl");
-        MCRJDOMContent source = new MCRJDOMContent(doc);
-        transformer.transform(source, zip);
-
+        LOGGER.info("Writing output to zip...");
+        Document doc = new Document(collection);
+        new MCRJDOMContent(doc).sendTo(zip);
         zip.close();
+
         LOGGER.info("Exported all entries to file " + file.getAbsolutePath());
     }
 
@@ -210,7 +212,7 @@ public class DozBibCommands extends MCRAbstractCommands {
             // migrate extension source elements
             Element root = xml.getRootElement();
             Element mods = root.getChild("mods", MCRConstants.MODS_NAMESPACE);
-                
+
             for (Element extension : mods.getChildren("extension", MCRConstants.MODS_NAMESPACE)) {
                 String type = extension.getAttributeValue("type");
                 extension.removeAttribute("type");
@@ -229,7 +231,7 @@ public class DozBibCommands extends MCRAbstractCommands {
                 extension = new Element("extension", MCRConstants.MODS_NAMESPACE);
                 mods.addContent(extension);
             }
-            
+
             // migrate tag elements
             for (Element tag : root.getChildren("tag"))
                 extension.addContent(tag.clone());
