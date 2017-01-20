@@ -2,12 +2,6 @@
 
 <!-- ==================================================
  Übernahme einer E-Dissertation von DuEPublico zur Universitätsbibliographie
- 
- Input: 
-   <mycoreobject ID="miless_mods_NNNNN" ... /> 
-   
- Output:
-   <bibentry ... />  
  ================================================== -->
 
 <xsl:stylesheet version="1.0" 
