@@ -43,10 +43,6 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.mods.MCRMODSWrapper;
 
 /**
  * Collections statistics on bibliography entries and writes them to a file statistics.xml within the web application.
@@ -55,6 +51,22 @@ import org.mycore.mods.MCRMODSWrapper;
  * @author Frank L\u00FCtzenkirchen
  */
 public class DozBibStatistics {
+
+    private static final XPathExpression<Element> XPATH_MODS_DATE_ISSUED = buildXPath("descendant::mods:originInfo/mods:dateIssued");
+
+    private static final XPathExpression<Element> XPATH_MODS_GENRE_INTERN = buildXPath("mods:genre[@type='intern']");
+
+    private static final XPathExpression<Element> XPATH_FACHREFERAT = buildXPath("mods:classification[contains(@authorityURI,'fachreferate')]");
+
+    private static final XPathExpression<Element> XPATH_MODS_NAMEPART_GIVEN = buildXPath("mods:namePart[@type='given']");
+
+    private static final XPathExpression<Element> XPATH_MODS_NAMEPART_FAMILY = buildXPath("mods:namePart[@type='family']");
+
+    private static final XPathExpression<Element> XPATH_MODS_NAMEIDENTIFIER_LSF = buildXPath("mods:nameIdentifier[@type='lsf']");
+
+    private static final XPathExpression<Element> XPATH_MODS_NAMEIDENTIFIER = buildXPath("mods:nameIdentifier");
+
+    private static final XPathExpression<Element> XPATH_MODS_NAME = buildXPath("descendant::mods:name");
 
     private static final Logger LOGGER = LogManager.getLogger(DozBibStatistics.class);
 
@@ -98,10 +110,12 @@ public class DozBibStatistics {
 
         for (String id : MCRXMLMetadataManager.instance().listIDsOfType("mods")) {
             numPublications++;
+            if( numPublications % 100 == 0 ) System.out.print(".");
+            if( numPublications % 1000 == 0 ) System.out.print(" " + numPublications + " ");
 
             try {
-                MCRObject obj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(id));
-                Element mods = new MCRMODSWrapper(obj).getMODS();
+                Element obj = MCRURIResolver.instance().resolve("mcrobject:" + id);
+                Element mods = obj.getChild("metadata").getChild("def.modsContainer").getChild("modsContainer").getChildren().get(0);
                 countPublicationType(publicationsByType, mods);
                 countPublicationYear(publicationsByYear, mods);
                 countPublicationField(publicationsByField, mods);
@@ -152,10 +166,10 @@ public class DozBibStatistics {
     }
 
     private static void countNameIdentifiers(Table identifiers, Element root) {
-        for (Element name : getNodes(root, "descendant::mods:name")) {
-            for (Element nameIdentifier1 : getNodes(name, "mods:nameIdentifier")) {
+        for (Element name : getNodes(root, XPATH_MODS_NAME)) {
+            for (Element nameIdentifier1 : getNodes(name, XPATH_MODS_NAMEIDENTIFIER)) {
                 String type1 = nameIdentifier1.getAttributeValue("type");
-                for (Element nameIdentifier2 : getNodes(name, "mods:nameIdentifier")) {
+                for (Element nameIdentifier2 : getNodes(name, XPATH_MODS_NAMEIDENTIFIER)) {
                     String type2 = nameIdentifier2.getAttributeValue("type");
                     {
                         String key = (type1 + "2" + type2).toUpperCase();
@@ -171,8 +185,8 @@ public class DozBibStatistics {
             return;
 
         Set<String> occurringPIDs = new HashSet<String>(); // Count each PID only once per publication
-        for (Element name : getNodes(root, "descendant::mods:name")) {
-            for (Element nameIdentifier : getNodes(name, "mods:nameIdentifier[@type='lsf']")) {
+        for (Element name : getNodes(root, XPATH_MODS_NAME)) {
+            for (Element nameIdentifier : getNodes(name, XPATH_MODS_NAMEIDENTIFIER_LSF)) {
                 String pid = nameIdentifier.getTextTrim();
                 String completeName = getCompleteName(name);
 
@@ -185,22 +199,22 @@ public class DozBibStatistics {
     }
 
     private static String getCompleteName(Element name) {
-        List<Element> familyNames = getNodes(name, "mods:namePart[@type='family']");
+        List<Element> familyNames = getNodes(name, XPATH_MODS_NAMEPART_FAMILY);
         String familyName = familyNames.isEmpty() ? "" : familyNames.get(0).getTextTrim();
-        List<Element> givenNames = getNodes(name, "mods:namePart[@type='given']");
+        List<Element> givenNames = getNodes(name, XPATH_MODS_NAMEPART_GIVEN);
         String givenName = givenNames.isEmpty() ? "" : givenNames.get(0).getTextTrim();
         return familyName + ", " + givenName;
     }
 
     private static void countPublicationField(Table publicationsByField, Element root) {
-        for (Element classification : getNodes(root, "mods:classification[contains(@authorityURI,'fachreferate')]")) {
+        for (Element classification : getNodes(root, XPATH_FACHREFERAT)) {
             String subjectID = classification.getAttributeValue("valueURI").split("#")[1];
             publicationsByField.increaseRowValueforKey(subjectID, null);
         }
     }
 
     private static void countPublicationType(Table publicationsByType, Element root) {
-        String type = getNodes(root, "mods:genre[@type='intern']").get(0).getTextTrim();
+        String type = getNodes(root, XPATH_MODS_GENRE_INTERN).get(0).getTextTrim();
         String label = getGenreLabel(type);
         publicationsByType.increaseRowValueforKey(type, label);
     }
@@ -221,7 +235,7 @@ public class DozBibStatistics {
     }
 
     private static int getPublicationYear(Element root) {
-        List<Element> datesIssued = getNodes(root, "descendant::mods:originInfo/mods:dateIssued");
+        List<Element> datesIssued = getNodes(root, XPATH_MODS_DATE_ISSUED);
         if (datesIssued.isEmpty())
             return 0;
 
@@ -235,12 +249,16 @@ public class DozBibStatistics {
             return 0;
     }
 
-    private static List<Element> getNodes(Element context, String xPath) {
+    private static List<Element> getNodes(Element context, XPathExpression<Element> xPath) {
+        return xPath.evaluate(context);
+    }
+
+    private static XPathExpression<Element> buildXPath(String xPath) {
         List<Namespace> namespaces = new ArrayList<Namespace>();
         namespaces.add(MCRConstants.MODS_NAMESPACE);
         XPathExpression<Element> xPathExpr = XPathFactory.instance().compile(xPath, Filters.element(), null,
             namespaces);
-        return xPathExpr.evaluate(context);
+        return xPathExpr;
     }
 
     public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
