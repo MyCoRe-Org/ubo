@@ -257,6 +257,7 @@
           <xsl:call-template name="bibentry.show.details" />
           <xsl:call-template name="bibentry.add.to.basket" />
           <xsl:apply-templates select="mods:identifier[@type='duepublico']" mode="bibentry.button" />
+          <xsl:apply-templates select="mods:identifier[@type='doi']" mode="bibentry.button" />
           <xsl:apply-templates select="mods:location/mods:url" mode="bibentry.button" />
           <span class="floatRight">[ ID <xsl:value-of select="number(substring-after(ancestor::mycoreobject/@ID,'mods_'))"/> ]</span>
         </div>
@@ -290,6 +291,12 @@
   <form action="http://duepublico.uni-duisburg-essen.de/servlets/DocumentServlet" method="get">
     <input type="hidden" name="id" value="{text()}"/>
     <input type="submit" class="roundedButton" value="{i18n:translate('result.dozbib.fulltext')}" />
+  </form>
+</xsl:template>
+
+<xsl:template match="mods:mods/mods:identifier[@type='doi']" mode="bibentry.button">
+  <form action="https://doi.org/{text()}" method="get">
+    <input type="submit" class="roundedButton" value="DOI" />
   </form>
 </xsl:template>
 
