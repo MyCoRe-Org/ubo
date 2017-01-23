@@ -91,6 +91,8 @@
               </div>
             </xed:bind>
   
+            <xed:validate test="limit[string-length(.) &gt; 0]" display="global">Mindestens eine Einschränkung (Institut, Jahr, Ännderungsdatum, ID) muss gegeben sein!</xed:validate>
+  
             <div class="cancel-submit">
               <button class="roundedButton" type="submit" xed:target="servlet" xed:href="DozBibImportServlet">
                 <xed:output i18n="button.submit" />
