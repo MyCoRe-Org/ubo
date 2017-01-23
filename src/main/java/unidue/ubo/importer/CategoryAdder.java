@@ -39,9 +39,12 @@ class CategoryAdder {
         }
     }
 
-    public void addCategories(List<Document> bibentries) throws JDOMException, IOException, SAXException {
-        for (Document bibentry : bibentries)
+    public void addCategories(List<Document> publications) throws JDOMException, IOException, SAXException {
+        for (Document publication : publications) {
+            Element metadata = publication.getRootElement().getChild("metadata");
+            Element mods = metadata.getChild("def.modsContainer").getChild("modsContainer").getChildren().get(0);
             for (Element category : categories)
-                bibentry.getRootElement().getChild("mods", MCRConstants.MODS_NAMESPACE).addContent(category.clone());
+                mods.addContent(category.clone());
+        }
     }
 }

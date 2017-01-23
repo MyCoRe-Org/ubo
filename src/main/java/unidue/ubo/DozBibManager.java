@@ -63,26 +63,6 @@ public class DozBibManager {
         return new Document(bibentry);
     }
 
-    public int createEntry(Document xml) throws Exception {
-        Element root = xml.getRootElement();
-
-        MCRMODSWrapper wrapper = new MCRMODSWrapper();
-        wrapper.setServiceFlag("status", root.getAttributeValue("status"));
-        Element mods = root.getChild("mods", MCRConstants.MODS_NAMESPACE).clone();
-        wrapper.setMODS(mods);
-        MCRObject obj = wrapper.getMCRObject();
-
-        MCRObjectID oid = buildMCRObjectID(0);
-        oid = MCRObjectID.getNextFreeId(oid.getBase());
-        obj.setId(oid);
-
-        MCRMetadataManager.create(obj);
-
-        int id = oid.getNumberAsInteger();
-        root.setAttribute("id", String.valueOf(id));
-        return id;
-    }
-
     public void updateEntry(Document xml) throws Exception {
         Element root = xml.getRootElement();
         int id = Integer.parseInt(root.getAttributeValue("id"));

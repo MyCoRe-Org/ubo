@@ -192,22 +192,28 @@ class BibTeXEntryTransformer {
 
     Element transform(BibtexEntry entry) {
         Element mods = new Element("mods", MCRConstants.MODS_NAMESPACE);
-        Element source = buildSourceExtension(entry);
         GenreTransformer.setGenre(entry, mods);
         transformFields(entry, mods);
         GenreTransformer.fixHostGenre(entry, mods);
-        mods.addContent(source);
+        Element extension = getExtension(mods);
+        extension.addContent(buildSourceExtension(entry));
         return mods;
+    }
+
+    private Element getExtension(Element mods) {
+        Element extension = mods.getChild("extension", MCRConstants.MODS_NAMESPACE);
+        if (extension == null) {
+            extension = new Element("extension", MCRConstants.MODS_NAMESPACE);
+            mods.addContent(extension);
+        }
+        return extension;
     }
 
     private Element buildSourceExtension(BibtexEntry entry) {
         Element source = new Element("source");
         source.setAttribute("format", "bibtex");
         source.setText(entry.toString());
-
-        Element extension = new Element("extension", MCRConstants.MODS_NAMESPACE);
-        extension.addContent(source);
-        return extension;
+        return source;
     }
 
     private void transformFields(BibtexEntry entry, Element mods) {

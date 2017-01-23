@@ -19,12 +19,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.basket.MCRBasket;
 import org.mycore.frontend.basket.MCRBasketEntry;
 import org.mycore.frontend.basket.MCRBasketManager;
 import org.mycore.frontend.editor.MCREditorSubmission;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
+import org.mycore.mods.MCRMODSWrapper;
 
 import unidue.ubo.AccessControl;
 import unidue.ubo.DozBibEntryServlet;
@@ -64,25 +68,25 @@ public class DozBibImportServlet extends MCRServlet {
             parameters = xml.getRootElement();
         }
 
-        List<Document> entries = job.transform();
-        new CategoryAdder(parameters).addCategories(entries);
-        addDeDupCriteria(entries);
-        addToBasket(entries);
+        List<Document> publications = job.transform();
+        new CategoryAdder(parameters).addCategories(publications);
+        addDeDupCriteria(publications);
+        addToBasket(publications);
         res.sendRedirect(getServletBaseURL() + "MCRBasketServlet?type=import&action=show");
     }
 
-    private void addDeDupCriteria(List<Document> entries) {
+    private void addDeDupCriteria(List<Document> publications) {
         DeDupCriteriaBuilder ddcb = new DeDupCriteriaBuilder();
-        for (Document entry : entries)
-            ddcb.updateDeDupCriteria(entry);
+        for (Document publication : publications)
+            ddcb.updateDeDupCriteria(publication);
     }
 
-    private void addToBasket(List<Document> entries) {
+    private void addToBasket(List<Document> publications) {
         MCRBasket basket = MCRBasketManager.getOrCreateBasketInSession("import");
-        for (Document bibentry : entries) {
+        for (Document publication : publications) {
             String id = String.valueOf(basket.size() + 1);
             MCRBasketEntry entry = new MCRBasketEntry(id, "imported:" + id);
-            entry.setContent(bibentry.detachRootElement());
+            entry.setContent(publication.detachRootElement());
             basket.add(entry);
         }
     }
@@ -92,8 +96,11 @@ public class DozBibImportServlet extends MCRServlet {
         for (Iterator<MCRBasketEntry> iterator = basket.iterator(); iterator.hasNext();) {
             MCRBasketEntry entry = iterator.next();
             Element root = entry.getContent();
-            Document bibentry = new Document(root);
-            DozBibManager.instance().createEntry(bibentry);
+            MCRObject obj = new MCRObject(new Document(root));
+            MCRObjectID oid = DozBibManager.buildMCRObjectID(0);
+            oid = MCRObjectID.getNextFreeId(oid.getBase());
+            obj.setId(oid);
+            MCRMetadataManager.create(obj);
         }
         basket.clear();
         res.sendRedirect(getServletBaseURL() + "MCRBasketServlet?type=import&action=show");

@@ -174,8 +174,10 @@ public class TestBibTeX2MODSTransformer extends MCRJPATestCase {
 
         MCRContentTransformer transformer = MCRContentTransformerFactory.getTransformer("import.BibTeX");
 
-        Document bibentries = transformer.transform(new MCRStringContent(bibtex)).asXML();
-        Element mods = bibentries.getRootElement().getChild("bibentry").getChild("mods", MCRConstants.MODS_NAMESPACE);
+        Document imported = transformer.transform(new MCRStringContent(bibtex)).asXML();
+        Element publication = imported.getRootElement().getChild("mycoreobject");
+        Element mc = publication.getChild("metadata").getChild("def.modsContainer").getChild("modsContainer");
+        Element mods = mc.getChild("mods", MCRConstants.MODS_NAMESPACE);
 
         assertEquals(genre, mods.getChildText("genre", MCRConstants.MODS_NAMESPACE));
         assertEquals(host, mods.getChild("relatedItem", MCRConstants.MODS_NAMESPACE).getChildText("genre",

@@ -38,7 +38,7 @@
   </xsl:template>
 
   <xsl:template name="buttons">
-    <xsl:for-each select="bibentry/mods:mods/mods:extension[dedup]">
+    <xsl:for-each select="descendant::mods:extension[dedup][1]">
       <xsl:variable name="duplicatesURI">
         <xsl:call-template name="buildFindDuplicatesURI" />
       </xsl:variable>
@@ -68,8 +68,8 @@
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template match="bibentry" mode="basketContent">
-    <xsl:for-each select="mods:mods">
+  <xsl:template match="mycoreobject" mode="basketContent">
+    <xsl:for-each select="descendant::mods:mods">
       <div class="labels">
         <xsl:call-template name="pubtype" />
         <xsl:call-template name="label-year" />
@@ -81,7 +81,7 @@
           </xsl:apply-templates>
         </div>
         <xsl:apply-templates select="mods:extension/source" />
-        <xsl:apply-templates select="mods:extension[@type='fields'][field]" />
+        <xsl:apply-templates select="mods:extension[field]" />
       </div>
     </xsl:for-each>
   </xsl:template>
@@ -109,10 +109,10 @@
     <xsl:value-of select="concat(' ',name(),'=&#34;',.,'&#34;')" />
   </xsl:template>
 
-  <xsl:template match="mods:extension[@type='fields']">
+  <xsl:template match="mods:extension[field]">
     <ul>
       <xsl:apply-templates select="field" />
-      <xsl:for-each select="ancestor::bibentry//comment()">
+      <xsl:for-each select="ancestor::mycoreobject//comment()">
         <li>
           <xsl:value-of select="." />
         </li>
@@ -120,7 +120,7 @@
     </ul>
   </xsl:template>
   
-  <xsl:template match="mods:extension[@type='fields']/field">
+  <xsl:template match="mods:extension/field">
     <li>
       <xsl:text>Feld </xsl:text>
       <strong>

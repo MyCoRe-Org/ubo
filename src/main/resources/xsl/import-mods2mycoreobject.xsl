@@ -13,18 +13,30 @@
   </xsl:template>
   
   <xsl:template match="mods:modsCollection">
-    <bibentries>
+    <import>
       <xsl:apply-templates select="mods:mods|comment()" />
-    </bibentries>
+    </import>
   </xsl:template>
 
   <xsl:template match="mods:mods">
-    <bibentry status="imported">
-      <mods:mods>
-        <xsl:apply-templates select="*" />
-        <xsl:apply-templates select="comment()" />
-      </mods:mods>
-    </bibentry>
+    <mycoreobject ID="ubo_mods_00000000" label="ubo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-mods.xsd">
+      <structure />
+      <metadata>
+        <def.modsContainer class="MCRMetaXML">
+          <modsContainer>
+            <mods:mods>
+              <xsl:apply-templates select="*" />
+              <xsl:apply-templates select="comment()" />
+            </mods:mods>
+           </modsContainer>
+         </def.modsContainer>
+       </metadata>
+       <service>
+         <servflags class="MCRMetaLangText">
+           <servflag type="status" inherited="0" form="plain">imported</servflag>
+         </servflags>
+       </service>
+     </mycoreobject>
   </xsl:template>
 
   <!-- the following templates actually maps BibTeX publication types to currently used internal publication types -->

@@ -43,11 +43,11 @@ public class DeDupCriteriaBuilder {
      * Updates the deduplication criteria stored together with the MODS publication metadata 
      * within the given XML document.
      * 
-     * @param entry a &lt;bibentry /&gt; document containing a &lt;mods:mods&gt; child element 
+     * @param entry a &lt;mycoreobject /&gt; document containing a &lt;mods:mods&gt; child element 
      */
     public void updateDeDupCriteria(Document entry) {
-        Element root = entry.getRootElement();
-        Element mods = root.getChild("mods", MCRConstants.MODS_NAMESPACE);
+        Element metadata = entry.getRootElement().getChild("metadata");
+        Element mods = metadata.getChild("def.modsContainer").getChild("modsContainer").getChildren().get(0);
         updateDeDupCriteria(mods);
     }
 

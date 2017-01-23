@@ -44,17 +44,17 @@ public abstract class ImportJob {
         MCRContentTransformer transformer = MCRContentTransformerFactory.getTransformer(transformerID);
         MCRContent transformed = transformer.transform(source);
         Element collection = transformed.asXML().getRootElement();
-        List<Document> entries = extractBibEntries(collection);
+        List<Document> publications = extractPublications(collection);
 
-        int num = entries.size();
+        int num = publications.size();
         LOGGER.info("Transformed " + num + " " + type + " entries to MODS bibliography entries");
-        return entries;
+        return publications;
     }
 
-    private List<Document> extractBibEntries(Element collection) {
+    private List<Document> extractPublications(Element collection) {
         List<Document> entries = new ArrayList<Document>();
-        for (Element bibentry : collection.getChildren())
-            entries.add(new Document(bibentry.clone()));
+        for (Element publication : collection.getChildren())
+            entries.add(new Document(publication.clone()));
         return entries;
     }
 }
