@@ -14,7 +14,6 @@ import java.util.Iterator;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.mycore.common.MCRConstants;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs2.MCRMetadataStore;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -61,21 +60,6 @@ public class DozBibManager {
         bibentry.setAttribute("lastModified", lastModified);
 
         return new Document(bibentry);
-    }
-
-    public void updateEntry(Document xml) throws Exception {
-        Element root = xml.getRootElement();
-        int id = Integer.parseInt(root.getAttributeValue("id"));
-
-        MCRObjectID oid = buildMCRObjectID(id);
-        MCRObject obj = MCRMetadataManager.retrieveMCRObject(oid);
-
-        MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
-        wrapper.setServiceFlag("status", root.getAttributeValue("status"));
-        Element mods = root.getChild("mods", MCRConstants.MODS_NAMESPACE).clone();
-        wrapper.setMODS(mods);
-
-        MCRMetadataManager.update(obj);
     }
 
     public static MCRObjectID buildMCRObjectID(int id) {

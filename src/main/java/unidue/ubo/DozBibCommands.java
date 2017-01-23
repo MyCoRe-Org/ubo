@@ -14,10 +14,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -28,16 +28,10 @@ import org.jdom2.Attribute;
 import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.filter.ElementFilter;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRXSLTransformer;
-import org.mycore.datamodel.classifications2.MCRCategory;
-import org.mycore.datamodel.classifications2.MCRCategoryDAO;
-import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
-import org.mycore.datamodel.classifications2.MCRCategoryID;
-import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs2.MCRMetadataStore;
 import org.mycore.datamodel.ifs2.MCRStore;
@@ -58,14 +52,9 @@ public class DozBibCommands extends MCRAbstractCommands {
         addCommand(new MCRCommand("ubo mods export all entries to directory {0}",
             "unidue.ubo.DozBibCommands.exportMODS String",
             "exports all entries as MODS dump to a zipped xml file in local directory {0}"));
-        addCommand(new MCRCommand("ubo transform entry {0} using xsl {1}",
-            "unidue.ubo.DozBibCommands.transformEntry int String",
-            "Transforms persistent xml of bibentry using XSL stylesheet"));
         addCommand(
             new MCRCommand("ubo transform entries using xsl {0}", "unidue.ubo.DozBibCommands.transformEntries String",
                 "Transforms persistent xml of all bibentries using XSL stylesheet"));
-        addCommand(new MCRCommand("ubo fix origin", "unidue.ubo.DozBibCommands.fixOrigin",
-            "Fixes all origin fields in entries, by removing non-existing category references and changing moved categories"));
         addCommand(new MCRCommand("ubo collect statistics {0}", "unidue.ubo.DozBibStatistics.collectStatistics String",
             "Counts number of publications by status, type etc. from all entries, web application directory is parameter {0}"));
         addCommand(new MCRCommand("ubo find gnds", "unidue.ubo.DozBibGNDCommands.findGNDs", "Find GNDs"));
@@ -124,74 +113,12 @@ public class DozBibCommands extends MCRAbstractCommands {
     }
 
     /** Transforms existing entries using XSL stylesheet **/
-    public static void transformEntries(String xslFile) throws Exception {
-        Iterator<Integer> IDs = DozBibManager.instance().iterateStoredIDs();
-        while (IDs.hasNext()) {
-            transformEntry(IDs.next(), xslFile);
+    public static List<String> transformEntries(String xslFile) throws Exception {
+        List<String> commands = new ArrayList<String>();
+        for (String oid : MCRXMLMetadataManager.instance().listIDsOfType("mods")) {
+            commands.add("xslt " + oid + " with file " + xslFile);
         }
-    }
-
-    /** Transforms existing entry using XSL stylesheet **/
-    public static void transformEntry(int entryID, String xslFile) throws Exception {
-        MCRXSLTransformer transformer = MCRXSLTransformer.getInstance("xsl/" + xslFile);
-        Document entry = DozBibManager.instance().getEntry(entryID);
-        transformEntry(entryID, transformer, entry);
-    }
-
-    private static void transformEntry(int entryID, MCRXSLTransformer transformer, Document entry) {
-        try {
-            MCRJDOMContent source = new MCRJDOMContent(entry);
-            MCRContent result = transformer.transform(source);
-            DozBibManager.instance().updateEntry(result.asXML());
-            LOGGER.info("bibentry " + entryID + " transformed");
-        } catch (Exception ex) {
-            LOGGER
-                .error("bibentry " + entryID + " NOT transformed: " + ex.getClass().getName() + ": " + ex.getMessage());
-        }
-    }
-
-    public static void fixOrigin() throws Exception {
-        MCRCategoryDAO DAO = MCRCategoryDAOFactory.getInstance();
-
-        Iterator<Integer> IDs = DozBibManager.instance().iterateStoredIDs();
-        LOGGER.info("Fixing origin of UBO entries...");
-
-        while (IDs.hasNext()) {
-            int ID = IDs.next();
-            try {
-                Document xml = DozBibManager.instance().getEntry(ID);
-
-                for (Element classification : xml.getRootElement()
-                    .getDescendants(new ElementFilter("classification", MCRConstants.MODS_NAMESPACE))) {
-                    String authorityURI = classification.getAttributeValue("authorityURI");
-                    if (!authorityURI.contains("ORIGIN"))
-                        continue;
-
-                    String origin = classification.getAttributeValue("valueURI").split("#")[1];
-
-                    MCRCategoryID originID = new MCRCategoryID("ORIGIN", origin);
-                    if (DAO.exist(originID)) {
-                        MCRCategory category = DAO.getCategory(originID, 0);
-                        Optional<MCRLabel> label = category.getLabel("x-move");
-                        if (!label.isPresent())
-                            continue;
-
-                        String newCategory = label.get().getText();
-                        LOGGER.info("Moving UBO entry " + ID + " from " + origin + " to " + newCategory);
-                        classification.setAttribute("valueURI", authorityURI + "#" + newCategory);
-                        DozBibManager.instance().updateEntry(xml);
-                    } else {
-                        LOGGER.warn("UBO entry " + ID + " contains illegal origin entry, removing: " + origin);
-                        classification.detach();
-                        DozBibManager.instance().updateEntry(xml);
-                    }
-                }
-
-            } catch (Exception tolerated) {
-                LOGGER.warn("Unable to fix UBO entry " + ID + ": " + tolerated.getMessage());
-            }
-        }
-        LOGGER.info("Finished fixing origin of UBO entries");
+        return commands;
     }
 
     public static void migrate2mcrobject() throws Exception {
