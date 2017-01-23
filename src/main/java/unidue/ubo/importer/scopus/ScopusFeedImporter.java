@@ -39,8 +39,6 @@ import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 
-import unidue.ubo.DozBibManager;
-
 /**
  * Reads an RSS feed from Scopus referencing new publications and imports those publications that are not stored yet. 
  * 
@@ -113,8 +111,7 @@ public class ScopusFeedImporter {
 
         }
 
-        MCRObjectID oid = DozBibManager.buildMCRObjectID(0);
-        oid = MCRObjectID.getNextFreeId(oid.getBase());
+        MCRObjectID oid = MCRObjectID.getNextFreeId("ubo_mods");
         obj.setId(oid);
 
         MCRMetadataManager.create(obj);

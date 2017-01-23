@@ -28,11 +28,9 @@ import org.mycore.frontend.basket.MCRBasketManager;
 import org.mycore.frontend.editor.MCREditorSubmission;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
-import org.mycore.mods.MCRMODSWrapper;
 
 import unidue.ubo.AccessControl;
 import unidue.ubo.DozBibEntryServlet;
-import unidue.ubo.DozBibManager;
 import unidue.ubo.dedup.DeDupCriteriaBuilder;
 import unidue.ubo.importer.bibtex.BibTeXImportJob;
 import unidue.ubo.importer.evaluna.EvalunaImportJob;
@@ -97,8 +95,7 @@ public class DozBibImportServlet extends MCRServlet {
             MCRBasketEntry entry = iterator.next();
             Element root = entry.getContent();
             MCRObject obj = new MCRObject(new Document(root));
-            MCRObjectID oid = DozBibManager.buildMCRObjectID(0);
-            oid = MCRObjectID.getNextFreeId(oid.getBase());
+            MCRObjectID oid = MCRObjectID.getNextFreeId("ubo_mods");
             obj.setId(oid);
             MCRMetadataManager.create(obj);
         }

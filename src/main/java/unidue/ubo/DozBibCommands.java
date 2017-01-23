@@ -127,7 +127,7 @@ public class DozBibCommands extends MCRAbstractCommands {
             int id = IDs.next();
             LOGGER.info("Migrating <bibentry> " + id + " to <mycoreobject>...");
 
-            MCRObjectID oid = DozBibManager.buildMCRObjectID(id);
+            MCRObjectID oid = MCRObjectID.getInstance(MCRObjectID.formatID("ubo_mods", id));
             if (MCRMetadataManager.exists(oid)) {
                 LOGGER.info("object " + oid.toString() + " already exists, skipping...");
                 continue;

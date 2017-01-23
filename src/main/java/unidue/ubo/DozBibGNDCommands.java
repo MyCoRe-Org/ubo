@@ -15,7 +15,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,6 +31,7 @@ import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.xml.MCRURIResolver;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.xml.sax.SAXException;
 
 public class DozBibGNDCommands {
@@ -46,7 +46,7 @@ public class DozBibGNDCommands {
 
     private static final int MILLIS_TO_WAIT_BETWEEN_REQUESTS = 400;
 
-    private List<Element> bibEntries = new ArrayList<Element>();
+    private List<Element> publications = new ArrayList<Element>();
 
     private Map<String, String> id2id = new HashMap<String, String>();
 
@@ -67,7 +67,7 @@ public class DozBibGNDCommands {
     }
 
     private DozBibGNDCommands() throws Exception {
-        readBibEntries();
+        readPublications();
         addGNDsFromAleph();
         buildIDMapping();
         addMissingIDs("pid", "gnd");
@@ -76,8 +76,9 @@ public class DozBibGNDCommands {
     }
 
     private void buildIDMapping() {
-        for (Element bibEntry : bibEntries) {
-            for (Element contributor : getNodes(bibEntry, "mods:mods/mods:name[@type='personal']")) {
+        for (Element publication : publications) {
+            for (Element contributor : getNodes(publication,
+                "metadata/def.modsContainer/modsContainer/mods:mods/mods:name[@type='personal']")) {
                 String gnd = getID(contributor, "gnd");
                 if (gnd != null)
                     gnds.add(gnd);
@@ -95,8 +96,9 @@ public class DozBibGNDCommands {
     }
 
     private void addMissingIDs(String fromIDType, String toIDType) {
-        for (Element bibEntry : bibEntries) {
-            for (Element contributor : bibEntry.getChildren("contributor")) {
+        for (Element publication : publications) {
+            for (Element contributor : getNodes(publication,
+                "metadata/def.modsContainer/modsContainer/mods:mods/mods:name[@type='personal']")) {
                 String toID = getID(contributor, toIDType);
                 if (toID != null)
                     continue;
@@ -106,7 +108,11 @@ public class DozBibGNDCommands {
                     continue;
 
                 toID = id2id.get(fromID);
-                contributor.addContent(new Element(toIDType).setText(toID));
+
+                Element nameIdentifier = new Element("nameIdentifier", MCRConstants.MODS_NAMESPACE);
+                nameIdentifier.setAttribute("type", toIDType);
+                nameIdentifier.setText(toID);
+                contributor.addContent(nameIdentifier);
             }
         }
     }
@@ -128,27 +134,28 @@ public class DozBibGNDCommands {
     }
 
     private void addGNDsFromAleph() {
-        for (Element bibEntry : bibEntries) {
-            String type = getNodes(bibEntry, "mods:mods/mods:genre[@type='intern']").get(0).getTextTrim();
+        for (Element publication : publications) {
+            String type = getNodes(publication,
+                "metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@type='intern']").get(0).getTextTrim();
             if (!"dissertation collection proceedings book festschrift lexicon".contains(type))
                 continue;
 
             numBooks++;
 
-            Element alephRecord = getAlephRecord(bibEntry);
+            Element alephRecord = getAlephRecord(publication);
             if (alephRecord != null) {
-                if (hasMoreOrLessTheSameTitle(bibEntry, alephRecord)) {
+                if (hasMoreOrLessTheSameTitle(publication, alephRecord)) {
                     numFound++;
                     Map<String, String> name2gnd = getGNDs(alephRecord);
-                    addGNDs(bibEntry, name2gnd);
+                    addGNDs(publication, name2gnd);
                 }
             }
         }
     }
 
-    private boolean hasMoreOrLessTheSameTitle(Element bibEntry, Element alephRecord) {
+    private boolean hasMoreOrLessTheSameTitle(Element publication, Element alephRecord) {
         String titleFromAleph = getTitleFromAleph(alephRecord);
-        String titleFromBibEntry = getTitleFromBibEntry(bibEntry);
+        String titleFromBibEntry = getTitleFromPublication(publication);
 
         int minLength = Math.min(titleFromAleph.length(), titleFromBibEntry.length());
         int maxDistance = minLength * MAX_DIFFERENCE_PERCENT / 100;
@@ -156,7 +163,7 @@ public class DozBibGNDCommands {
         int distance = StringUtils.getLevenshteinDistance(normalizeTitle(titleFromAleph),
             normalizeTitle(titleFromBibEntry));
         if (distance > maxDistance) {
-            String id = bibEntry.getAttributeValue("id");
+            String id = publication.getAttributeValue("ID");
             LOGGER.warn("Skipping entry " + id + ", Levenshtein Distance = " + distance);
             LOGGER.warn(titleFromBibEntry);
             LOGGER.warn(titleFromAleph);
@@ -164,18 +171,17 @@ public class DozBibGNDCommands {
         return true; // (distance <= maxDistance);
     }
 
-    private void readBibEntries() throws IOException, JDOMException, SAXException, Exception {
-        LOGGER.info("Reading in all bibentries...");
+    private void readPublications() throws IOException, JDOMException, SAXException, Exception {
+        LOGGER.info("Reading in all publications...");
 
-        for (Iterator<Integer> ids = DozBibManager.instance().iterateStoredIDs(); ids.hasNext();) {
-            int id = ids.next();
-            Element bibEntry = DozBibManager.instance().getEntry(id).getRootElement();
-            bibEntries.add(bibEntry);
+        for (String oid : MCRXMLMetadataManager.instance().listIDsOfType("mods")) {
+            Element publication = MCRURIResolver.instance().resolve("mcrobject:" + oid);
+            publications.add(publication);
         }
     }
 
     private void showStatistics() {
-        int numEntries = bibEntries.size();
+        int numEntries = publications.size();
         LOGGER.info("      Anzahl Einträge : " + numEntries);
         LOGGER.info("         davon Bücher : " + numBooks + " = "
             + Math.round(((double) numBooks / (double) numEntries) * 100) + "  %");
@@ -190,11 +196,11 @@ public class DozBibGNDCommands {
         LOGGER.info("  Mapping PID <-> GND : " + id2id.size() / 2);
     }
 
-    private Element getAlephRecord(Element bibEntry) {
+    private Element getAlephRecord(Element publication) {
         Element alephRecord = null;
 
-        String isbn = getISBN(bibEntry);
-        String shelfmark = getShelfmark(bibEntry);
+        String isbn = getISBN(publication);
+        String shelfmark = getShelfmark(publication);
 
         if (isbn != null)
             alephRecord = getAlephRecord("ibn=" + isbn);
@@ -208,8 +214,9 @@ public class DozBibGNDCommands {
         return alephRecord;
     }
 
-    private String getISBN(Element bibEntry) {
-        List<Element> identifiers = getNodes(bibEntry, "mods:mods/mods:identifier[@type='isbn']");
+    private String getISBN(Element publication) {
+        List<Element> identifiers = getNodes(publication,
+            "metadata/def.modsContainer/modsContainer/mods:mods/mods:identifier[@type='isbn']");
         if (identifiers.isEmpty())
             return null;
 
@@ -225,8 +232,9 @@ public class DozBibGNDCommands {
         return isbn;
     }
 
-    private String getShelfmark(Element bibEntry) {
-        List<Element> shelfmarks = getNodes(bibEntry, "mods:mods/mods:location/mods:shelfLocator");
+    private String getShelfmark(Element publication) {
+        List<Element> shelfmarks = getNodes(publication,
+            "metadata/def.modsContainer/modsContainer/mods:mods/mods:location/mods:shelfLocator");
         if (shelfmarks.isEmpty())
             return null;
 
@@ -303,10 +311,11 @@ public class DozBibGNDCommands {
         return title.trim();
     }
 
-    private String getTitleFromBibEntry(Element bibEntry) {
+    private String getTitleFromPublication(Element publication) {
         String title = "";
 
-        Element titleInfo = getNodes(bibEntry, "mods:mods/mods:titleInfo").get(0);
+        Element titleInfo = getNodes(publication, "metadata/def.modsContainer/modsContainer/mods:mods/mods:titleInfo")
+            .get(0);
         for (Element part : titleInfo.getChildren()) {
             title += " " + part.getTextTrim();
         }
@@ -358,14 +367,15 @@ public class DozBibGNDCommands {
         return null;
     }
 
-    private void addGNDs(Element bibEntry, Map<String, String> name2gnd) {
-        for (Element contributor : getNodes(bibEntry, "mods:mods/mods:name[@type='personal']")) {
+    private void addGNDs(Element publication, Map<String, String> name2gnd) {
+        for (Element contributor : getNodes(publication,
+            "metadata/def.modsContainer/modsContainer/mods:mods/mods:name[@type='personal']")) {
             if (getID(contributor, "gnd") == null) {
                 String name = getContributorName(contributor);
                 String gnd = name2gnd.get(name);
                 if (gnd != null) {
                     contributor.addContent(new Element("nameIdentifier", MCRConstants.MODS_NAMESPACE).setText(gnd));
-                    LOGGER.info("New GND added in bibentry " + bibEntry.getAttributeValue("id") + ": " + name
+                    LOGGER.info("New GND added in entry " + publication.getAttributeValue("ID") + ": " + name
                         + " has GND " + gnd);
                 }
             }
