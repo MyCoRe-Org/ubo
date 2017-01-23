@@ -16,7 +16,7 @@
   <packaging>war</packaging>
   <name>Universitätsbibliographie</name>
   <description>Universitätsbibliographie der Universität Duisburg-Essen</description>
-  <url>http://duepublico.uni-duisburg-essen.de/dozbib/</url>
+  <url>https://bibliographie.ub.uni-due.de/</url>
   <inceptionYear>1998</inceptionYear>
 
   <organization>
