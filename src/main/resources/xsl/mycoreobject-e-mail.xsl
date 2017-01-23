@@ -33,7 +33,7 @@
   <email>
     <from><xsl:value-of select="$MCR.Mail.Address" /></from>
     <to><xsl:value-of select="$MCR.Mail.Address" /></to>
-    <xsl:for-each select="metadata/def.modsCollection/modsCollection/mods:mods">
+    <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
       <xsl:call-template name="build.to" />
       <xsl:call-template name="build.subject" />
       <xsl:call-template name="build.body" />

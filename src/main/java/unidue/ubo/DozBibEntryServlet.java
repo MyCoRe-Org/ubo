@@ -137,7 +137,7 @@ public class DozBibEntryServlet extends MCRServlet {
 
             } else {
                 // Notify library staff via e-mail
-                sendNotificationMail(doc);
+                sendNotificationMail(obj.createXML());
                 res.sendRedirect(MCRServlet.getServletBaseURL()
                     + "DozBibEntryServlet?mode=show&XSL.step=confirm.submitted&id=" + oid.toString());
             }
