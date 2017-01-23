@@ -27,9 +27,6 @@ import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.frontend.cli.MCRAbstractCommands;
-import org.mycore.frontend.cli.annotation.MCRCommand;
-import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.services.fieldquery.MCRQuery;
 import org.mycore.services.fieldquery.MCRQueryCondition;
@@ -49,8 +46,7 @@ import unidue.ubo.DozBibManager;
  * 
  * @author Frank L\u00FCtzenkirchen
  */
-@MCRCommandGroup(name = "Universitätsbibliographie")
-public class ScopusFeedImporter extends MCRAbstractCommands {
+public class ScopusFeedImporter {
 
     private final static Logger LOGGER = LogManager.getLogger(ScopusFeedImporter.class);
 
@@ -70,7 +66,6 @@ public class ScopusFeedImporter extends MCRAbstractCommands {
         FEED_URL = MCRConfiguration.instance().getString("UBO.Scopus.RSSFeedURL");
     }
 
-    @MCRCommand(syntax = "ubo import scopus publications from RSS feed", help = "Reads an RSS feed from Scopus referencing new publications and imports those publications that are not stored yet.")
     public static void importPublications() throws Exception {
         LOGGER.info("Getting new publications from Scopus RSS feed...");
         Element bibentries = new Element("bibentries");

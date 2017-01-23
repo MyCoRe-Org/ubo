@@ -27,17 +27,12 @@ import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.frontend.cli.MCRAbstractCommands;
-import org.mycore.frontend.cli.annotation.MCRCommand;
-import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.mods.MCRMODSWrapper;
 
-@MCRCommandGroup(name = "UBO DeDup Commands")
-public class DeDupCommands extends MCRAbstractCommands {
+public class DeDupCommands {
 
     private final static Logger LOGGER = LogManager.getLogger(DeDupCommands.class);
 
-    @MCRCommand(syntax = "ubo build duplicates report to directory {0}", help = "builds report on possibly duplicate entries and writes it as xml to file duplicates.xml in directory {0}")
     public static void buildDuplicatesReport(String targetDirectory) throws Exception {
         LOGGER.info("Building duplicates report...");
 

@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -29,17 +28,11 @@ import org.jdom2.Attribute;
 import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.Namespace;
-import org.jdom2.Text;
 import org.jdom2.filter.ElementFilter;
-import org.jdom2.filter.Filters;
-import org.jdom2.xpath.XPathExpression;
-import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRXSLTransformer;
-import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
@@ -78,6 +71,12 @@ public class DozBibCommands extends MCRAbstractCommands {
         addCommand(new MCRCommand("ubo find gnds", "unidue.ubo.DozBibGNDCommands.findGNDs", "Find GNDs"));
         addCommand(new MCRCommand("ubo migrate to mcrobject", "unidue.ubo.DozBibCommands.migrate2mcrobject",
             "migrates all bibentries to mycoreobject persistence"));
+        addCommand(new MCRCommand("ubo build duplicates report to directory {0}",
+            "unidue.ubo.dedup.DeDupCommands String",
+            "builds report on possibly duplicate entries and writes it as xml to file duplicates.xml in directory {0}"));
+        addCommand(new MCRCommand("ubo import scopus publications from RSS feed",
+            "unidue.ubo.importer.scopus.ScopusFeedImporter.importPublications",
+            "Reads an RSS feed from Scopus referencing new publications and imports those publications that are not stored yet."));
     }
 
     /** Exports all entries as MODS dump to a zipped xml file in the given directory */
