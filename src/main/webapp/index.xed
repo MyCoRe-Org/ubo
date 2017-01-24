@@ -35,6 +35,7 @@
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form" style="margin:0; padding:0;">
 
       <xed:bind xpath="/query">
+        <xed:bind xpath="@numPerPage" default="10" />
         <xed:bind xpath="conditions[@format='xml']/boolean[@operator='and']">
           <xed:bind xpath="condition[@field='ubo_all'][@operator='contains']/@value">
             <label for="input">

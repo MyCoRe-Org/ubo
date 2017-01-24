@@ -8,7 +8,8 @@
   xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:mods="http://www.loc.gov/mods/v3"
-  exclude-result-prefixes="xsl xalan i18n mods" 
+  xmlns:mcr="http://www.mycore.org/"
+  exclude-result-prefixes="xsl xalan i18n mods mcr" 
 >
 
 <xsl:include href="layout.xsl" />
@@ -25,18 +26,22 @@
     <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/grid12.css" />
 </xsl:variable>
 
+<xsl:variable name="resultsID" select="/mcr:results/@id" />
+<xsl:variable name="resultsPage" select="/mcr:results/@page" />
+<xsl:variable name="resultsNumPerPage" select="/mcr:results/@numPerPage" />
+
 <!-- ==================== Anzeige Seitentitel ==================== -->
 
 <xsl:variable name="page.title">
   <xsl:value-of select="i18n:translate('result.dozbib.results')" /> 
   <xsl:text>: </xsl:text> 
   <xsl:choose>
-    <xsl:when test="/bibentries/@numHits > 1">
-      <xsl:value-of select="/bibentries/@numHits" />
+    <xsl:when test="/mcr:results/@numHits > 1">
+      <xsl:value-of select="/mcr:results/@numHits" />
       <xsl:text> </xsl:text>
       <xsl:value-of select="i18n:translate('result.dozbib.publicationMany')"/>
     </xsl:when>
-    <xsl:when test="/bibentries/@numHits = 1">
+    <xsl:when test="/mcr:results/@numHits = 1">
       <xsl:value-of select="i18n:translate('result.dozbib.publicationOne')"/>
     </xsl:when>
     <xsl:otherwise>
@@ -48,49 +53,55 @@
 <!-- ==================== Export-Buttons ==================== -->
 
 <xsl:variable name="actions">
-  <xsl:if test="/bibentries/@numHits &gt; 0">
-    <action label="{i18n:translate('button.basketAdd')}" target="{$ServletsBaseURL}DozBibServlet">
-      <param name="mode"    value="allToBasket" />
-      <param name="listKey" value="{/bibentries/@listKey}" />
+  <xsl:if test="/mcr:results/@numHits &gt; 0">
+    <action label="{i18n:translate('button.basketAdd')}" target="{$ServletsBaseURL}Results2Basket">
+      <param name="basket" value="bibentries" />
+      <param name="id"     value="{$resultsID}" />
     </action>
-    <action label="MODS" target="{$ServletsBaseURL}DozBibServlet/mods.xml">
-      <param name="mode"    value="export" />
-      <param name="format"  value="mods" />
-      <param name="listKey" value="{/bibentries/@listKey}" />
+    <action label="MODS" target="{$ServletsBaseURL}MCRSearchServlet">
+      <param name="mode"             value="results" />
+      <param name="id"               value="{$resultsID}" />
+      <param name="numPerPage"       value="{/mcr:results/@numHits}" />
+      <param name="XSL.Transformer"  value="mods" />
     </action>
-    <action label="BibTeX" target="{$ServletsBaseURL}DozBibServlet/results.bib">
-      <param name="mode"    value="export" />
-      <param name="format"  value="bibtex" />
-      <param name="listKey" value="{/bibentries/@listKey}" />
+    <action label="BibTeX" target="{$ServletsBaseURL}MCRSearchServlet">
+      <param name="mode"             value="results" />
+      <param name="id"               value="{$resultsID}" />
+      <param name="numPerPage"       value="{/mcr:results/@numHits}" />
+      <param name="XSL.Transformer"  value="bibtex" />
     </action>
-    <action label="EndNote" target="{$ServletsBaseURL}DozBibServlet/results.enl">
-      <param name="mode"    value="export" />
-      <param name="format"  value="endnote" />
-      <param name="listKey" value="{/bibentries/@listKey}" />
+    <action label="EndNote" target="{$ServletsBaseURL}MCRSearchServlet">
+      <param name="mode"             value="results" />
+      <param name="id"               value="{$resultsID}" />
+      <param name="numPerPage"       value="{/mcr:results/@numHits}" />
+      <param name="XSL.Transformer"  value="endnote" />
     </action>
-    <action label="RIS" target="{$ServletsBaseURL}DozBibServlet/results.ris">
-      <param name="mode"    value="export" />
-      <param name="format"  value="ris" />
-      <param name="listKey" value="{/bibentries/@listKey}" />
+    <action label="RIS" target="{$ServletsBaseURL}MCRSearchServlet">
+      <param name="mode"             value="results" />
+      <param name="id"               value="{$resultsID}" />
+      <param name="numPerPage"       value="{/mcr:results/@numHits}" />
+      <param name="XSL.Transformer"  value="ris" />
     </action>
-    <action label="PDF" target="{$ServletsBaseURL}DozBibServlet/results.pdf">
-      <param name="mode"    value="export" />
-      <param name="format"  value="pdf" />
-      <param name="listKey" value="{/bibentries/@listKey}" />
+    <action label="PDF" target="{$ServletsBaseURL}MCRSearchServlet">
+      <param name="mode"             value="results" />
+      <param name="id"               value="{$resultsID}" />
+      <param name="numPerPage"       value="{/mcr:results/@numHits}" />
+      <param name="XSL.Transformer"  value="pdf" />
     </action>
-    <action label="HTML" target="{$ServletsBaseURL}DozBibServlet/results.html">
-      <param name="mode"    value="export" />
-      <param name="format"  value="html" />
-      <param name="listKey" value="{/bibentries/@listKey}" />
+    <action label="HTML" target="{$ServletsBaseURL}MCRSearchServlet">
+      <param name="mode"             value="results" />
+      <param name="id"               value="{$resultsID}" />
+      <param name="numPerPage"       value="{/mcr:results/@numHits}" />
+      <param name="XSL.Transformer"  value="html" />
     </action>
   </xsl:if>
 </xsl:variable>
 
 <!-- ==================== Anzeige Trefferliste ==================== -->
 
-<xsl:template match="bibentries">
+<xsl:template match="mcr:results">
 
-  <xsl:variable name="hitStartIndex" select="(number(@page) - 1) * number(@numPerPage) + 1"/>
+  <xsl:variable name="offset" select="(number(@page) - 1) * number(@numPerPage)"/>
 
   <!-- Seitennavigation oben -->
   <xsl:if test="@numPages &gt; 1">
@@ -108,8 +119,8 @@
     </xsl:if>
     <xsl:if test="@numHits &gt; 0">
       <ol class="results">
-        <xsl:apply-templates select="mycoreobject">
-          <xsl:with-param name="hitStartIndex" select="$hitStartIndex"/>
+        <xsl:apply-templates select="mcr:hit">
+          <xsl:with-param name="offset" select="$offset"/>
         </xsl:apply-templates>
       </ol>
     </xsl:if>
@@ -129,9 +140,9 @@
 
 <xsl:template name="navigation">
 
-  <xsl:variable name="resultpage" select="concat('DozBibServlet?mode=list&amp;listKey=',@listKey,'&amp;numPerPage=',@numPerPage,'&amp;page=')" />
+  <xsl:variable name="resultpage" select="concat('MCRSearchServlet?mode=results&amp;id=',@id,'&amp;numPerPage=',@numPerPage,'&amp;page=')" />
   <xsl:variable name="first" select="(number(@page) - 1) * number(@numPerPage) + 1" />
-  <xsl:variable name="last" select="$first - 1 + count(mycoreobject)" />
+  <xsl:variable name="last" select="$first - 1 + count(mcr:hit)" />
   <xsl:variable name="pageaddition" select="'2'"/>
   
   <xsl:variable name="firstPageIndex">
@@ -233,17 +244,16 @@
 
 <!-- ==================== Anzeige Treffer ==================== -->
 
-<xsl:template match="mycoreobject">
-  <xsl:param name="hitStartIndex"/>
+<xsl:template match="mcr:hit">
+  <xsl:param name="offset" />
   
-  <xsl:variable name="index" select="position() + number($hitStartIndex) - 1"/>
-    
   <div class="grid_1">
-    <div class="number">#<xsl:value-of select="$index"/></div>
+    <div class="number">#<xsl:value-of select="$offset + position()"/></div>
   </div>
   <div class="grid_11">
     <div class="hit">
-      <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
+      <xsl:variable name="mycoreobject" select="document(concat('mcrobject:',@id))/mycoreobject" />
+      <xsl:for-each select="$mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
         <div class="labels">
           <xsl:call-template name="pubtype" />
           <xsl:call-template name="label-year" />
@@ -281,8 +291,9 @@
   <form action="{$ServletsBaseURL}DozBibEntryServlet" method="get">
     <input type="hidden" name="mode" value="show"/>
     <input type="hidden" name="id" value="{ancestor::mycoreobject/@ID}"/>
-    <input type="hidden" name="XSL.ListKey" value="{/bibentries/@listKey}"/>
-    <input type="hidden" name="XSL.PageNr" value="{/bibentries/@pageNr}"/>
+    <input type="hidden" name="XSL.resultsID" value="{$resultsID}"/>
+    <input type="hidden" name="XSL.resultsPage" value="{$resultsPage}"/>
+    <input type="hidden" name="XSL.resultsNumPerPage" value="{$resultsNumPerPage}"/>
     <input type="submit" class="roundedButton" value="{i18n:translate('result.dozbib.info')}" />
   </form>
 </xsl:template>

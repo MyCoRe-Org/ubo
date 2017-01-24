@@ -23,8 +23,9 @@
 <xsl:include href="mods-display.xsl" />
 
 <xsl:param name="Referer" select="concat($ServletsBaseURL,'DozBibEntryServlet?mode=show&amp;id=',/mycoreobject/@ID)" />
-<xsl:param name="PageNr"  />
-<xsl:param name="ListKey" />
+<xsl:param name="resultsPage"  />
+<xsl:param name="resultsNumPerPage"  />
+<xsl:param name="resultsID" />
 <xsl:param name="CurrentUserPID" />
 <xsl:param name="step" />
 
@@ -63,12 +64,12 @@
 
 <xsl:variable name="breadcrumb.extensions">
   <item label="{i18n:translate('result.dozbib.results')}">
-    <xsl:if test="string-length($ListKey) > 0">
+    <xsl:if test="string-length($resultsID) > 0">
       <xsl:attribute name="ref">
-        <xsl:text>servlets/DozBibServlet?mode=list&amp;pageNr=</xsl:text>
-        <xsl:value-of select="$PageNr" />
-        <xsl:text>&amp;numPerPage=10&amp;listKey=</xsl:text>
-        <xsl:value-of select="$ListKey" />
+        <xsl:text>servlets/MCRSearchServlet?mode=results</xsl:text>
+        <xsl:value-of select="concat('&amp;page=',$resultsPage)" />
+        <xsl:value-of select="concat('&amp;numPerPage=',$resultsNumPerPage)" />
+        <xsl:value-of select="concat('&amp;id=',$resultsID)" />
       </xsl:attribute>
     </xsl:if>
   </item>  

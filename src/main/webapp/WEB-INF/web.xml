@@ -33,6 +33,15 @@
     <url-pattern> /servlets/DozBibImportServlet </url-pattern>
   </servlet-mapping>
 
+  <servlet id="Results2Basket">
+    <servlet-name>Results2Basket</servlet-name>
+    <servlet-class>unidue.ubo.basket.Results2Basket</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Results2Basket</servlet-name>
+    <url-pattern> /servlets/Results2Basket </url-pattern>
+  </servlet-mapping>
+
   <servlet id="BasketName2PIDEditor">
     <servlet-name>BasketName2PIDEditor</servlet-name>
     <servlet-class>unidue.ubo.basket.BasketName2PIDEditor</servlet-class>

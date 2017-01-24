@@ -9,144 +9,47 @@
 
 package unidue.ubo;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.ElementFilter;
-import org.mycore.common.content.MCRJDOMContent;
-import org.mycore.common.xml.MCRURIResolver;
-import org.mycore.frontend.basket.MCRBasket;
-import org.mycore.frontend.basket.MCRBasketEntry;
-import org.mycore.frontend.basket.MCRBasketManager;
 import org.mycore.frontend.editor.MCREditorSubmission;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.parsers.bool.MCRAndCondition;
 import org.mycore.parsers.bool.MCRCondition;
 import org.mycore.parsers.bool.MCROrCondition;
+import org.mycore.services.fieldquery.MCRCachedQueryData;
 import org.mycore.services.fieldquery.MCRFieldDef;
 import org.mycore.services.fieldquery.MCRFieldType;
-import org.mycore.services.fieldquery.MCRHit;
 import org.mycore.services.fieldquery.MCRQuery;
 import org.mycore.services.fieldquery.MCRQueryCondition;
-import org.mycore.services.fieldquery.MCRQueryManager;
 import org.mycore.services.fieldquery.MCRQueryParser;
 import org.mycore.services.fieldquery.MCRResults;
 
 public class DozBibServlet extends MCRServlet {
-    
+
     public final static Logger LOGGER = LogManager.getLogger(DozBibServlet.class);
 
     public void doGetPost(MCRServletJob job) throws Exception {
         HttpServletRequest req = job.getRequest();
         HttpServletResponse res = job.getResponse();
 
-        String mode = req.getParameter("mode");
-
-        if ("list".equals(mode))
-            showResultList(job);
-        else if ("export".equals(mode))
-            exportResultList(job);
-        else if ("allToBasket".equals(mode))
-            allToBasket(req, res);
-        else
-            searchForEntries(job);
-    }
-
-    private void allToBasket(HttpServletRequest req, HttpServletResponse res) throws Exception {
-        String key = req.getParameter("listKey");
-        if ((key == null) || (key.trim().length() == 0)) {
-            res.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter 'key' is missing.");
-            return;
-        }
-
-        LOGGER.info("UBO add results to basket " + key);
-        MCRResults results = (MCRResults) (req.getSession(true).getAttribute(key));
-        if (results == null) {
-            res.sendError(HttpServletResponse.SC_BAD_REQUEST, "Result list does not exist in session.");
-            return;
-        }
-
-        for (int i = 0; i < results.getNumHits(); i++) {
-            String oid = results.getHit(i).getID();
-            String uri = "mcrobject:" + oid;
-            MCRBasketEntry entry = new MCRBasketEntry(oid, uri);
-            entry.resolveContent();
-            MCRBasketManager.getOrCreateBasketInSession("bibentries").add(entry);
-        }
-
-        res.sendRedirect(getServletBaseURL() + "MCRBasketServlet?type=bibentries&action=show");
-    }
-
-    private MCRResults getResults(MCRServletJob job) throws Exception {
-        String key = job.getRequest().getParameter("listKey");
-        if ((key == null) || (key.trim().length() == 0)) {
-            job.getResponse().sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter 'key' is missing.");
-            return null;
-        }
-
-        MCRResults results = (MCRResults) (job.getRequest().getSession(true).getAttribute(key));
-        if (results == null) {
-            job.getResponse().sendError(HttpServletResponse.SC_BAD_REQUEST, "Result list does not exist in session.");
-            return null;
-        }
-
-        return results;
-    }
-
-    private void exportResultList(MCRServletJob job) throws Exception {
-        MCRResults results = getResults(job);
-        if (results != null)
-            exportResults(job, results);
-    }
-
-    private void showResultList(MCRServletJob job) throws Exception {
-        MCRResults results = getResults(job);
-        if (results == null)
-            return;
-
-        HttpServletRequest req = job.getRequest();
-        HttpServletResponse res = job.getResponse();
-
-        String key = job.getRequest().getParameter("listKey");
-
-        String snpp = req.getParameter("numPerPage");
-        if ((snpp == null) || (snpp.trim().length() == 0))
-            snpp = "10";
-        int npp = Integer.parseInt(snpp);
-
-        String spage = req.getParameter("page");
-        if ((spage == null) || (spage.trim().length() == 0))
-            spage = "1";
-        int page = Integer.parseInt(spage);
-
-        Document xml = buildResultsPage(npp, page, results, key);
-        getLayoutService().doLayout(req, res, new MCRJDOMContent(xml));
-    }
-
-    private void searchForEntries(MCRServletJob job) throws Exception {
-        HttpServletRequest req = job.getRequest();
-        HttpServletResponse res = job.getResponse();
-
         Document doc = (Document) req.getAttribute("MCRXEditorSubmission"); // Query as XML document
         if (req.getAttribute("MCREditorSubmission") != null) // Query from legacy search mask
             doc = ((MCREditorSubmission) (req.getAttribute("MCREditorSubmission"))).getXML();
-        
+
         MCRCondition cond = null; // Parsed query condition
 
         if (doc != null) // Query from search mask
@@ -196,13 +99,13 @@ public class DozBibServlet extends MCRServlet {
                 for (String name : sortFields) {
                     String sOrder = getReqParameter(req, name, "ascending");
                     name = name.substring(0, name.indexOf(".sortField"));
-                    
+
                     // Fix legacy sort fields, field names have changed:
                     if ("ubo_title".equals(name))
                         name = "ubo_sortby_title";
                     if ("ubo_author".equals(name))
                         name = "ubo_sortby_name";
-                    
+
                     Element sField = new Element("field");
                     sField.setAttribute("name", name);
                     sField.setAttribute("order", sOrder);
@@ -265,7 +168,7 @@ public class DozBibServlet extends MCRServlet {
         }
 
         // If current user is not admin, always only search for "status=confirmed" 
-        
+
         if (!AccessControl.currentUserIsAdmin()) {
             MCRCondition extraCond = new MCRQueryCondition("ubo_status", "=", "confirmed");
 
@@ -273,7 +176,7 @@ public class DozBibServlet extends MCRServlet {
                 ((MCRAndCondition) cond).addChild(extraCond);
             } else {
                 MCRAndCondition ac = new MCRAndCondition();
-                if (cond != null) 
+                if (cond != null)
                     ac.addChild(cond);
                 ac.addChild(extraCond);
                 cond = ac;
@@ -286,47 +189,37 @@ public class DozBibServlet extends MCRServlet {
         // Empty search mask, no condition at all? Then search for all entries with dummy condition:
         if (cond == null)
             cond = new MCRQueryCondition("ubo_status", "like", "*");
-        
+
         conditions.setContent(cond.toXML());
 
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("UBO search: " + cond.toString());
 
-        MCRResults results = MCRQueryManager.search(MCRQuery.parseXML(doc), true);
-        String key = storeResultList(req.getSession(true), results);
+        doc.getRootElement().setAttribute("mask", "ubo");
+        MCRQuery query = MCRQuery.parseXML(doc);
+        MCRCachedQueryData qd = MCRCachedQueryData.cache(query, doc);
 
-        String npp = doc.getRootElement().getAttributeValue("numPerPage");
-        if ((npp == null) || npp.equals("") || (Integer.parseInt(npp) > results.getNumHits()))
-            npp = String.valueOf(results.getNumHits());
+        MCRResults results = qd.getResults();
+
+        StringBuilder url = new StringBuilder(MCRServlet.getServletBaseURL());
+        url.append("MCRSearchServlet?mode=results");
+        url.append("&id=").append(results.getID());
 
         String format = req.getParameter("format");
         if ((format == null) || (format.equals("pdf") && (results.getNumHits() == 0))) {
-            String url = MCRServlet.getServletBaseURL() + "DozBibServlet?mode=list&page=1&numPerPage=" + npp + "&listKey=" + key;
-            res.sendRedirect(url);
-        } else
-            exportResults(job, results);
-    }
+            String npp = doc.getRootElement().getAttributeValue("numPerPage");
+            if ((npp == null) || npp.isEmpty() || (Integer.parseInt(npp) > results.getNumHits()))
+                npp = String.valueOf(results.getNumHits());
 
-    private void exportResults(MCRServletJob job, MCRResults results) throws Exception, IOException, ServletException {
-        String basketID = "bibresults-" + results.getID();
-        MCRBasket basket = MCRBasketManager.getOrCreateBasketInSession(basketID);
-        
-        if (basket.size() != results.getNumHits()) {
-            basket.clear();
-
-            for (Iterator<MCRHit> hits = results.iterator(); hits.hasNext();) {
-                String oid = hits.next().getID();
-                String uri = "mcrobject:" + oid;
-                basket.add(new MCRBasketEntry(oid, uri));
-            }
+            url.append("&numPerPage=").append(npp);
+        } else {
+            url.append("&numPerPage=").append(results.getNumHits());
+            url.append("&XSL.Transformer=").append(format);
+            String css = job.getRequest().getParameter("css");
+            if (css != null)
+                url.append("&XSL.css=").append(css);
         }
-
-        String format = job.getRequest().getParameter("format");
-        String url = MCRServlet.getServletBaseURL() + "MCRExportServlet/export." + format + "?basket=" + basketID + "&root=export&transformer=" + format;
-        String css = job.getRequest().getParameter("css");
-        if( css != null ) url += "&XSL.css=" + css;
-        
-        job.getResponse().sendRedirect(url);
+        res.sendRedirect(url.toString());
     }
 
     private String getReqParameter(HttpServletRequest req, String name, String defaultValue) {
@@ -337,49 +230,20 @@ public class DozBibServlet extends MCRServlet {
             return value.trim();
     }
 
-    private Document buildResultsPage(int npp, int page, MCRResults results, String key) throws Exception {
-        int numHits = results.getNumHits();
-        int first = npp * (page - 1);
-        int last = Math.min(first + npp, numHits);
-        int numPages = (int) (Math.ceil((double) numHits / (double) npp));
-
-        Element root = new Element("bibentries");
-        root.setAttribute("numHits", String.valueOf(numHits));
-        root.setAttribute("page", String.valueOf(page));
-        root.setAttribute("numPerPage", String.valueOf(npp));
-        root.setAttribute("numPages", String.valueOf(numPages));
-        root.setAttribute("listKey", key);
-
-        for (int i = first; i < last; i++) {
-            String oid = results.getHit(i).getID();
-            String uri = "mcrobject:" + oid;
-            Element entry = MCRURIResolver.instance().resolve(uri);
-            root.addContent(entry);
-        }
-
-        return new Document(root);
-    }
-
-    private String storeResultList(HttpSession session, MCRResults results) {
-        String key = Long.toString(System.currentTimeMillis(), 36);
-        session.setAttribute(key, results);
-        return key;
-    }
-
     private void prepareQuery(Document query) throws Exception {
         // Rename condition elements from search mask: condition1 -> condition
         // Transform condition with multiple values into OR condition
         Element root = query.getRootElement();
         List<Element> contentToRemove = new ArrayList<Element>();
         for (Element elem : root.getDescendants(new ElementFilter())) {
-            
+
             if ((!elem.getName().equals("conditions")) && elem.getName().startsWith("condition"))
                 elem.setName("condition");
             else if (elem.getName().equals("value")) {
                 Element parent = elem.getParentElement();
                 parent.removeAttribute("value");
                 parent.setAttribute("children", "true");
-                
+
                 elem.setName("condition");
                 elem.setAttribute("field", parent.getAttributeValue("field"));
                 elem.setAttribute("operator", parent.getAttributeValue("operator"));
