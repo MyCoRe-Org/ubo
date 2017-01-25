@@ -113,7 +113,7 @@
             
             <xed:choose>
               <xed:when test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
-                <xed:bind xpath="condition6[@field='status'][@operator='=']/@value">
+                <xed:bind xpath="condition6[@field='status'][@operator='=']/value">
                   <div>
                     <label>
                       <strong>
@@ -152,7 +152,9 @@
         </xed:bind>
       </fieldset>
       
-      <xed:cleanup-rule xpath="//*[@field]" relevant-if="string-length(@value) &gt; 0" />
+      
+      <xed:cleanup-rule xpath="//*[@field][@value]" relevant-if="string-length(@value) &gt; 0" />
+      <xed:cleanup-rule xpath="//*[@field][value]" relevant-if="value[string-length(text()) &gt; 0]" />
       
     </xed:form>
   </section>
