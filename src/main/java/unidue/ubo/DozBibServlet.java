@@ -9,12 +9,12 @@
 
 package unidue.ubo;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,8 +23,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.filter.ElementFilter;
-import org.mycore.frontend.editor.MCREditorSubmission;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.parsers.bool.MCRAndCondition;
@@ -47,23 +45,13 @@ public class DozBibServlet extends MCRServlet {
         HttpServletResponse res = job.getResponse();
 
         Document doc = (Document) req.getAttribute("MCRXEditorSubmission"); // Query as XML document
-        if (req.getAttribute("MCREditorSubmission") != null) // Query from legacy search mask
-            doc = ((MCREditorSubmission) (req.getAttribute("MCREditorSubmission"))).getXML();
 
         MCRCondition cond = null; // Parsed query condition
 
-        if (doc != null) // Query from search mask
+        if (doc != null) // Expertensuche, Suchausdruck in MCRQL
         {
             Element conditions = doc.getRootElement().getChild("conditions");
-
-            if (conditions.getAttributeValue("format").equals("text")) {
-                // Expertensuche, Suchausdruck in MCRQL
-                cond = new MCRQueryParser().parse(conditions.getTextTrim());
-            } else {
-                // Suchmaske mit einzelnen Feldern
-                prepareQuery(doc);
-                cond = new MCRQueryParser().parse((Element) (conditions.getChildren().get(0)));
-            }
+            cond = new MCRQueryParser().parse(conditions.getTextTrim());
         } else
         // Query as a link
         {
@@ -201,17 +189,17 @@ public class DozBibServlet extends MCRServlet {
 
         MCRResults results = qd.getResults();
 
+        redirectToResults(job, doc, results);
+    }
+
+    private void redirectToResults(MCRServletJob job, Document doc, MCRResults results) throws IOException {
         StringBuilder url = new StringBuilder(MCRServlet.getServletBaseURL());
         url.append("MCRSearchServlet?mode=results");
         url.append("&id=").append(results.getID());
 
-        String format = req.getParameter("format");
+        String format = job.getRequest().getParameter("format");
         if ((format == null) || (format.equals("pdf") && (results.getNumHits() == 0))) {
-            String npp = doc.getRootElement().getAttributeValue("numPerPage");
-            if ((npp == null) || npp.isEmpty() || (Integer.parseInt(npp) > results.getNumHits()))
-                npp = String.valueOf(results.getNumHits());
-
-            url.append("&numPerPage=").append(npp);
+            url.append("&numPerPage=").append(getNumPerPage(doc, results));
         } else {
             url.append("&numPerPage=").append(results.getNumHits());
             url.append("&XSL.Transformer=").append(format);
@@ -219,7 +207,14 @@ public class DozBibServlet extends MCRServlet {
             if (css != null)
                 url.append("&XSL.css=").append(css);
         }
-        res.sendRedirect(url.toString());
+        job.getResponse().sendRedirect(url.toString());
+    }
+
+    private String getNumPerPage(Document doc, MCRResults results) {
+        String npp = doc.getRootElement().getAttributeValue("numPerPage");
+        if ((npp == null) || npp.isEmpty() || (Integer.parseInt(npp) > results.getNumHits()))
+            npp = String.valueOf(results.getNumHits());
+        return npp;
     }
 
     private String getReqParameter(HttpServletRequest req, String name, String defaultValue) {
@@ -228,48 +223,5 @@ public class DozBibServlet extends MCRServlet {
             return defaultValue;
         else
             return value.trim();
-    }
-
-    private void prepareQuery(Document query) throws Exception {
-        // Rename condition elements from search mask: condition1 -> condition
-        // Transform condition with multiple values into OR condition
-        Element root = query.getRootElement();
-        List<Element> contentToRemove = new ArrayList<Element>();
-        for (Element elem : root.getDescendants(new ElementFilter())) {
-
-            if ((!elem.getName().equals("conditions")) && elem.getName().startsWith("condition"))
-                elem.setName("condition");
-            else if (elem.getName().equals("value")) {
-                Element parent = elem.getParentElement();
-                parent.removeAttribute("value");
-                parent.setAttribute("children", "true");
-
-                elem.setName("condition");
-                elem.setAttribute("field", parent.getAttributeValue("field"));
-                elem.setAttribute("operator", parent.getAttributeValue("operator"));
-                elem.setAttribute("value", elem.getText());
-                contentToRemove.add(elem);
-            }
-        }
-        for (Element element : contentToRemove) {
-            element.removeContent();
-        }
-
-        // Find condition fields without values
-        Vector<Element> help = new Vector<Element>();
-        for (Element condition : root.getDescendants(new ElementFilter("condition"))) {
-            if (condition.getAttribute("children") != null) {
-                // Transform into OR condition
-                condition.setName("boolean");
-                condition.setAttribute("operator", "or");
-                condition.removeAttribute("children");
-            } else if (condition.getAttribute("value") == null) {
-                help.add(condition);
-            }
-        }
-
-        // Remove found conditions without values
-        for (int i = help.size() - 1; i >= 0; i--)
-            help.get(i).detach();
     }
 }

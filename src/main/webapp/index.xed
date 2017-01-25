@@ -35,6 +35,7 @@
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form" style="margin:0; padding:0;">
 
       <xed:bind xpath="/query">
+        <xed:bind xpath="@mask" default="index.xed" />
         <xed:bind xpath="@numPerPage" default="10" />
         <xed:bind xpath="conditions[@format='xml']/boolean[@operator='and']">
           <xed:bind xpath="condition[@field='ubo_all'][@operator='contains']/@value">
@@ -43,10 +44,16 @@
             </label>
             <input id="input" type="text" style="width:300px" />
           </xed:bind>
+          
+          <!-- Standard users must only find confirmed publications, admins find all publications -->
+          <xed:if test="not(xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin'))">
+            <xed:bind xpath="condition[@field='ubo_status'][@operator='='][@value='confirmed']" />
+          </xed:if>
+          
         </xed:bind>
       </xed:bind>
 
-      <button class="roundedButton" type="submit" xed:target="servlet" xed:href="DozBibServlet">
+      <button class="roundedButton" type="submit" xed:target="servlet" xed:href="MCRSearchServlet">
         <xed:output i18n="button.search" />
       </button>
 

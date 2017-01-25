@@ -115,7 +115,7 @@
 
   <xed:template id="submit"> 
     <div class="cancel-submit" style="margin-top:2ex;">
-      <button class="roundedButton" type="submit" xed:target="servlet" xed:href="DozBibServlet">
+      <button class="roundedButton" type="submit" xed:target="servlet" xed:href="MCRSearchServlet">
         <xed:output i18n="button.search" />
       </button>
       <button class="roundedButton" type="reset">

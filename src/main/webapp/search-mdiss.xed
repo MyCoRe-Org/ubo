@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <webpage lastModified="$Date: 2011-08-03 12:16:35 +0200 (Mi, 03 Aug 2011) $" id="dozbib.search-mdiss">
-  <title xml:lang="de">Suche nach Dissertationen der medizinischen Fakult�t</title>
+  <title xml:lang="de">Suche nach Dissertationen der medizinischen Fakultätt</title>
   <title xml:lang="en">Search for doctoral thesis in medical faculty</title>
 
   <section xml:lang="de">
     <p>
-      Hier k�nnen Sie nach Dissertationen suchen, die in der medizinischen Fakult�t
-      geschrieben wurden. Die Suche basiert auf den Eintr�gen
-      der Universit�tsbibliographie, daher werden sowohl elektronische Dissertationen 
-      mit Volltext, als auch herk�mmliche Publikationen als reine Nachweise gefunden.  
+      Hierkönnen Sie nach Dissertationen suchen, die in der medizinischen Fakultät
+      geschrieben wurden. Die Suche basiert auf den Einträgen
+      der Universitätsbibliographie, daher werden sowohl elektronische Dissertationen 
+      mit Volltext, als auch herkömmliche Publikationen als reine Nachweise gefunden.  
     </p>
   </section>
 
@@ -32,6 +32,7 @@
         <xed:include uri="webapp:import-search.xed" ref="validation" />
 
         <xed:bind xpath="/query">
+          <xed:bind xpath="@mask" default="index.xed" />
           <xed:bind xpath="conditions[@format='xml']/boolean[@operator='and']">
 
             <xed:bind xpath="condition6[@field='ubo_origin'][@operator='=']/@value" default="14">
@@ -64,6 +65,7 @@
             <xed:include uri="webapp:import-search.xed" ref="year" /> 
 
             <xed:bind xpath="condition7[@field='ubo_type'][@operator='='][@value='dissertation']" />
+            <xed:bind xpath="condition[@field='ubo_status'][@operator='='][@value='confirmed']" />
           </xed:bind>        
           
           <xed:include uri="webapp:import-search.xed" ref="sortby" /> 
