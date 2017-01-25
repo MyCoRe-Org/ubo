@@ -109,20 +109,20 @@ public class DozBibServlet extends MCRServlet {
 
     private Element buildSortBy(HttpServletRequest req) {
         List<String> sortFieldParameters = Collections.list(req.getParameterNames());
-        sortFieldParameters.removeIf(p -> ! p.contains(".sortField"));
+        sortFieldParameters.removeIf(p -> !p.contains(".sortField"));
 
         Element sortBy = new Element("sortBy");
-        if (!sortFieldParameters.isEmpty()) {
+        if (sortFieldParameters.isEmpty())
+            sortBy.addContent(buildSortFieldElement("ubo_year", "descending"));
+        else {
             sortSortFieldParameters(sortFieldParameters);
 
             for (String parameterName : sortFieldParameters) {
                 String order = getReqParameter(req, parameterName, "ascending");
                 String name = getSortFieldName(parameterName);
-
                 sortBy.addContent(buildSortFieldElement(name, order));
             }
-        } else
-            sortBy.addContent(buildSortFieldElement("ubo_year", "descending"));
+        }
 
         return sortBy;
     }
@@ -165,7 +165,7 @@ public class DozBibServlet extends MCRServlet {
         if ((format == null) || (format.equals("pdf") && (results.getNumHits() == 0))) {
             url.append("&numPerPage=").append(getNumPerPage(doc, results));
         } else {
-            url.append("&numPerPage=").append(results.getNumHits());
+            url.append("&numPerPage=").append(results.getNumHits()); // For export, include all publications
             url.append("&XSL.Transformer=").append(format);
             String css = job.getRequest().getParameter("css");
             if (css != null)
