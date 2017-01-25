@@ -17,6 +17,7 @@
     <field source="objectMetadata" name="pid"          type="identifier" xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:name/mods:nameIdentifier[@type='lsf']" value="text()" />
     <field source="objectMetadata" name="orcid"        type="identifier" xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:name/mods:nameIdentifier[@type='orcid']" value="text()" />
     <field source="objectMetadata" name="researcherid" type="identifier" xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:name/mods:nameIdentifier[@type='researcherid']" value="text()" />
+    <field source="objectMetadata" name="scopus_pers"  type="identifier" xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:name/mods:nameIdentifier[@type='scopus']" value="text()" />
     <field source="objectMetadata" name="gnd"          type="identifier" xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:name/mods:nameIdentifier[@type='gnd']" value="text()" />
     <field source="objectMetadata" name="year"         type="integer"    xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods//mods:dateIssued[1]" value="text()" sortable="true" />
     <field source="objectMetadata" name="journal"      type="text"       xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host'][mods:genre='journal']/mods:titleInfo" value="concat(mods:title,' ',mods:subTitle)" />
@@ -30,7 +31,7 @@
     <field source="objectMetadata" name="doi"          type="identifier" xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods//mods:identifier[@type='doi']" value="text()" />
     <field source="objectMetadata" name="urn"          type="identifier" xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods//mods:identifier[@type='urn']" value="text()" />
     <field source="objectMetadata" name="pubmed"       type="identifier" xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods//mods:identifier[@type='pubmed']" value="text()" />
-    <field source="objectMetadata" name="scopus"       type="identifier" xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods//mods:identifier[@type='scopus']" value="text()" />
+    <field source="objectMetadata" name="scopus_pub"   type="identifier" xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods//mods:identifier[@type='scopus']" value="text()" />
     <field source="objectMetadata" name="documentID"   type="identifier" xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods//mods:identifier[@type='duepublico']" value="text()" />
     
     <field source="objectMetadata" name="all" type="text">

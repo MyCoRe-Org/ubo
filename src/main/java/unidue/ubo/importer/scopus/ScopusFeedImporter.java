@@ -131,7 +131,7 @@ public class ScopusFeedImporter {
     }
 
     private static boolean isAlreadyStored(String scopusID) {
-        MCRQueryCondition condition = new MCRQueryCondition("scopus", "=", scopusID);
+        MCRQueryCondition condition = new MCRQueryCondition("scopus_pub", "=", scopusID);
         MCRQuery query = new MCRQuery(condition);
         MCRResults results = MCRQueryManager.search(query);
         results.fetchAllHits();

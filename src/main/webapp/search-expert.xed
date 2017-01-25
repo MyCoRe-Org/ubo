@@ -113,6 +113,7 @@
   <tr class="background2"><td>role_pid</td><td>ID</td><td>Kombination Rolle + Personen-ID aus HIS LSF, z. B. advisor_2809 findet Doktorvater</td><td> = </td></tr>
   <tr class="background1"><td>orcid</td><td>ID</td><td>ORCID</td><td> = </td></tr>
   <tr class="background1"><td>researcherid</td><td>ID</td><td>ResearcherID</td><td> = </td></tr>
+  <tr class="background2"><td>scopus_pers</td><td>ID</td><td>ID der Person in SCOPUS</td><td> = </td></tr>
   <tr class="background1"><td>gnd</td><td>ID</td><td>GND</td><td> = </td></tr>
   <tr class="background1"><td>publisher</td><td>Name</td><td>Herausgeber, Verlag</td><td>=, contains, like</td></tr>
   <tr class="background2"><td>contributor</td><td>Name</td><td>Personenname (Autoren, Herausgeber oder andere)</td><td>=, contains, like</td></tr>
@@ -133,6 +134,7 @@
   <tr class="background1"><td>signature</td><td>ID</td><td>Signatur der Universitätsbibliothek</td><td> = </td></tr>
   <tr class="background2"><td>doi</td><td>ID</td><td>DOI</td><td> = </td></tr>
   <tr class="background2"><td>urn</td><td>ID</td><td>URN</td><td> = </td></tr>
+  <tr class="background2"><td>scopus_pub</td><td>ID</td><td>ID der Publikation in SCOPUS</td><td> = </td></tr>
   <tr class="background2"><td>documentID</td><td>ID</td><td>ID eines verknüpften DuEPublico-Dokumentes</td><td> = </td></tr>
 
 </table>
@@ -154,6 +156,7 @@
   <tr class="background2"><td>role_pid</td><td>ID</td><td>Combined role plus person ID from HIS LSF, e.g. advisor_2809 finds thesis advisor</td><td> = </td></tr>
   <tr class="background1"><td>orcid</td><td>ID</td><td>ORCID</td><td> = </td></tr>
   <tr class="background1"><td>researcherid</td><td>ID</td><td>ResearcherID</td><td> = </td></tr>
+  <tr class="background2"><td>scopus_pers</td><td>ID</td><td>ID of person in SCOPUS</td><td> = </td></tr>
   <tr class="background1"><td>gnd</td><td>ID</td><td>GND</td><td> = </td></tr>
   <tr class="background2"><td>publisher</td><td>name</td><td>publisher</td><td>=, contains, like</td></tr>
   <tr class="background1"><td>contributor</td><td>name</td><td>name (authors, editors or others)</td><td>=, contains, like</td></tr>
@@ -175,6 +178,7 @@
   <tr class="background2"><td>urn</td><td>ID</td><td>URN</td><td> = </td></tr>
   <tr class="background1"><td>lastModified</td><td>date</td><td>date of the last modification of the entry</td><td>=, &lt;, &gt;, &lt;=, &gt;=</td></tr>
   <tr class="background2"><td>signature</td><td>ID</td><td>signature from the  university library</td><td> = </td></tr>
+  <tr class="background2"><td>scopus_pub</td><td>ID</td><td>ID of publication in SCOPUS</td><td> = </td></tr>
   <tr class="background1"><td>documentID</td><td>ID</td><td>ID of a linked DuEPublico document</td><td> = </td></tr>
 
 </table>
