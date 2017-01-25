@@ -156,29 +156,13 @@
 
   <section xml:lang="de" class="highlight1">
     <p>
-      Sie können außerdem
-      <ul>
-        <li>
-          <a href="list-wizard.xed">eine persönliche Publikationsliste erstellen und verlinken</a>
-        </li>
-        <li>
-          <a href="search-expert.xed">komplexe Suchanfragen über die Expertensuche durchführen</a>
-        </li>
-      </ul>
+      Sie können außerdem <a href="list-wizard.xed">eine persönliche Publikationsliste erstellen und verlinken.</a>
     </p>
   </section>
 
   <section xml:lang="en" class="highlight1">
     <p>
-      Furthermore you can
-      <ul>
-        <li>
-          <a href="list-wizard.xed">create and link your personal publication list</a>
-        </li>
-        <li>
-          <a href="search-expert.xed">perform a complex query using the expert-search-mask</a>
-        </li>
-      </ul>
+      Furthermore you can <a href="list-wizard.xed">create and link your personal publication list.</a>
     </p>
   </section>    
   
