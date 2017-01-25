@@ -10,10 +10,9 @@
 package unidue.ubo;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,154 +41,119 @@ public class DozBibServlet extends MCRServlet {
 
     public void doGetPost(MCRServletJob job) throws Exception {
         HttpServletRequest req = job.getRequest();
-        HttpServletResponse res = job.getResponse();
 
-        Document doc = (Document) req.getAttribute("MCRXEditorSubmission"); // Query as XML document
+        MCRAndCondition cond = new MCRAndCondition();
+        cond.addChild(new MCRQueryCondition("ubo_status", "=", "confirmed")); // Only find "status=confirmed" publications
 
-        MCRCondition cond = null; // Parsed query condition
-
-        if (doc != null) // Expertensuche, Suchausdruck in MCRQL
         {
-            Element conditions = doc.getRootElement().getChild("conditions");
-            cond = new MCRQueryParser().parse(conditions.getTextTrim());
-        } else
-        // Query as a link
-        {
-            boolean requestContainsQueryCondition = false;
+            if (req.getParameter("query") != null)
+                cond.addChild(new MCRQueryParser().parse(req.getParameter("query")));
+            else
+                for (String name : Collections.list(req.getParameterNames()))
+                    if (isConditionParameter(name))
+                        cond.addChild(buildFieldCondition(req, name));
 
-            Element query = new Element("query");
-            query.setAttribute("maxResults", getReqParameter(req, "maxResults", "0"));
-            query.setAttribute("numPerPage", getReqParameter(req, "numPerPage", ""));
-            doc = new Document(query);
-
-            Element conditions = new Element("conditions");
-            query.addContent(conditions);
-
-            Element sortBy = new Element("sortBy");
-            query.addContent(sortBy);
-
-            List<String> sortFields = new ArrayList<String>();
-            for (Enumeration<String> names = req.getParameterNames(); names.hasMoreElements();) {
-                String name = names.nextElement();
-                if (name.contains(".sortField"))
-                    sortFields.add(name);
-            }
-
-            if (sortFields.size() > 0) {
-                Collections.sort(sortFields, new Comparator<String>() {
-                    public int compare(String s0, String s1) {
-                        s0 = s0.substring(s0.indexOf(".sortField"));
-                        s1 = s1.substring(s1.indexOf(".sortField"));
-                        return s0.compareTo(s1);
-                    }
-                });
-
-                for (String name : sortFields) {
-                    String sOrder = getReqParameter(req, name, "ascending");
-                    name = name.substring(0, name.indexOf(".sortField"));
-
-                    // Fix legacy sort fields, field names have changed:
-                    if ("ubo_title".equals(name))
-                        name = "ubo_sortby_title";
-                    if ("ubo_author".equals(name))
-                        name = "ubo_sortby_name";
-
-                    Element sField = new Element("field");
-                    sField.setAttribute("name", name);
-                    sField.setAttribute("order", sOrder);
-                    sortBy.addContent(sField);
-                }
-            } else {
-                Element sField = new Element("field");
-                sField.setAttribute("name", "ubo_year");
-                sField.setAttribute("order", "descending");
-                sortBy.addContent(sField);
-            }
-
-            if (req.getParameter("query") != null) {
-                requestContainsQueryCondition = true;
-                // Search for a complex query expression
-                String expr = req.getParameter("query");
-                cond = new MCRQueryParser().parse(expr);
-            } else {
-                // Search for name-operator-value conditions given as request parameters
-
-                conditions.setAttribute("format", "xml");
-                MCRAndCondition ac = new MCRAndCondition();
-                cond = ac;
-
-                Enumeration<String> names = req.getParameterNames();
-                while (names.hasMoreElements()) {
-                    String name = names.nextElement();
-                    if (name.endsWith(".operator") || name.contains(".sortField") || name.startsWith("XSL."))
-                        continue;
-                    if (" maxResults numPerPage mode format lang css ".contains(" " + name + " "))
-                        continue;
-
-                    requestContainsQueryCondition = true;
-
-                    String fieldName = (name.startsWith("ubo_") ? name : "ubo_" + name);
-                    MCRFieldDef field = MCRFieldDef.getDef(fieldName);
-
-                    String operator = req.getParameter(name + ".operator");
-                    if (operator == null)
-                        operator = MCRFieldType.getDefaultOperator(field.getDataType());
-
-                    String[] values = req.getParameterValues(name);
-                    if (values.length == 1) {
-                        ac.addChild(new MCRQueryCondition(fieldName, operator, values[0].trim()));
-                    } else
-                    // Multiple fields with same name, combine with OR
-                    {
-                        MCROrCondition oc = new MCROrCondition();
-                        ac.addChild(oc);
-                        for (int i = 0; i < values.length; i++)
-                            oc.addChild(new MCRQueryCondition(fieldName, operator, values[i].trim()));
-                    }
-                }
-            }
-
-            if (!requestContainsQueryCondition) {
+            if (cond.getChildren().size() < 2) {
                 job.getResponse().sendError(HttpServletResponse.SC_BAD_REQUEST, "Request contains no query.");
                 return;
             }
         }
 
-        // If current user is not admin, always only search for "status=confirmed" 
-
-        if (!AccessControl.currentUserIsAdmin()) {
-            MCRCondition extraCond = new MCRQueryCondition("ubo_status", "=", "confirmed");
-
-            if (cond instanceof MCRAndCondition) {
-                ((MCRAndCondition) cond).addChild(extraCond);
-            } else {
-                MCRAndCondition ac = new MCRAndCondition();
-                if (cond != null)
-                    ac.addChild(cond);
-                ac.addChild(extraCond);
-                cond = ac;
-            }
-        }
-
-        Element conditions = doc.getRootElement().getChild("conditions");
-        conditions.setAttribute("format", "xml");
-
-        // Empty search mask, no condition at all? Then search for all entries with dummy condition:
-        if (cond == null)
-            cond = new MCRQueryCondition("ubo_status", "like", "*");
-
-        conditions.setContent(cond.toXML());
-
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("UBO search: " + cond.toString());
 
-        doc.getRootElement().setAttribute("mask", "ubo");
-        MCRQuery query = MCRQuery.parseXML(doc);
-        MCRCachedQueryData qd = MCRCachedQueryData.cache(query, doc);
+        Element query = new Element("query");
+        query.setAttribute("mask", "ubo");
+        query.setAttribute("maxResults", getReqParameter(req, "maxResults", "0"));
+        query.setAttribute("numPerPage", getReqParameter(req, "numPerPage", ""));
 
+        Element conditions = new Element("conditions");
+        conditions.setAttribute("format", "xml");
+        conditions.setContent(cond.toXML());
+        query.addContent(conditions);
+        query.addContent(buildSortBy(req));
+
+        Document doc = new Document(query);
+        MCRQuery q = MCRQuery.parseXML(doc);
+        MCRCachedQueryData qd = MCRCachedQueryData.cache(q, doc);
         MCRResults results = qd.getResults();
 
         redirectToResults(job, doc, results);
+    }
+
+    private MCRCondition buildFieldCondition(HttpServletRequest req, String name) {
+        String fieldName = (name.startsWith("ubo_") ? name : "ubo_" + name);
+        MCRFieldDef field = MCRFieldDef.getDef(fieldName);
+
+        String operator = getReqParameter(req, name + ".operator",
+            MCRFieldType.getDefaultOperator(field.getDataType()));
+
+        String[] values = req.getParameterValues(name);
+        if (values.length == 1)
+            return new MCRQueryCondition(fieldName, operator, values[0].trim());
+        else { // Multiple fields with same name, combine with OR
+            MCROrCondition oc = new MCROrCondition();
+            for (String value : values)
+                oc.addChild(new MCRQueryCondition(fieldName, operator, value.trim()));
+            return oc;
+        }
+    }
+
+    private boolean isConditionParameter(String name) {
+        if (name.endsWith(".operator") || name.contains(".sortField") || name.startsWith("XSL."))
+            return false;
+        if (Arrays.asList(new String[] { "maxResults", "numPerPage", "mode", "format", "lang", "css" }).contains(name))
+            return false;
+        return true;
+    }
+
+    private Element buildSortBy(HttpServletRequest req) {
+        List<String> sortFieldParameters = Collections.list(req.getParameterNames());
+        sortFieldParameters.removeIf(p -> ! p.contains(".sortField"));
+
+        Element sortBy = new Element("sortBy");
+        if (!sortFieldParameters.isEmpty()) {
+            sortSortFieldParameters(sortFieldParameters);
+
+            for (String parameterName : sortFieldParameters) {
+                String order = getReqParameter(req, parameterName, "ascending");
+                String name = getSortFieldName(parameterName);
+
+                sortBy.addContent(buildSortFieldElement(name, order));
+            }
+        } else
+            sortBy.addContent(buildSortFieldElement("ubo_year", "descending"));
+
+        return sortBy;
+    }
+
+    private Element buildSortFieldElement(String name, String order) {
+        Element sortField = new Element("field");
+        sortField.setAttribute("name", name);
+        sortField.setAttribute("order", order);
+        return sortField;
+    }
+
+    private String getSortFieldName(String parameterName) {
+        String name = parameterName.substring(0, parameterName.indexOf(".sortField"));
+
+        // Fix legacy sort fields, field names have changed:
+        if ("ubo_title".equals(name))
+            name = "ubo_sortby_title";
+        if ("ubo_author".equals(name))
+            name = "ubo_sortby_name";
+
+        return name;
+    }
+
+    private void sortSortFieldParameters(List<String> sortFieldParameters) {
+        Collections.sort(sortFieldParameters, new Comparator<String>() {
+            public int compare(String s0, String s1) {
+                s0 = s0.substring(s0.indexOf(".sortField"));
+                s1 = s1.substring(s1.indexOf(".sortField"));
+                return s0.compareTo(s1);
+            }
+        });
     }
 
     private void redirectToResults(MCRServletJob job, Document doc, MCRResults results) throws IOException {
