@@ -20,10 +20,10 @@
       <div>
         <xed:bind xpath="@field">
           <select class="label" style="margin-left:6px; width:182px;">
-            <option value="ubo_contributor">Person:</option>
-            <option value="ubo_author"     ><xed:output i18n="search.dozbib.author" /></option>
-            <option value="ubo_publisher"  ><xed:output i18n="search.dozbib.publisher" /></option>
-            <option value="ubo_advisor"    ><xed:output i18n="search.dozbib.advisor" /></option>         
+            <option value="contributor">Person:</option>
+            <option value="author"     ><xed:output i18n="search.dozbib.author" /></option>
+            <option value="publisher"  ><xed:output i18n="search.dozbib.publisher" /></option>
+            <option value="advisor"    ><xed:output i18n="search.dozbib.advisor" /></option>         
           </select>
         </xed:bind>
         <xed:bind xpath="@value">
@@ -35,7 +35,7 @@
   </xed:template>
 
   <xed:template id="year">
-    <xed:repeat xpath="condition5[@field='ubo_year']">
+    <xed:repeat xpath="condition5[@field='year']">
       <div>
         <label for="{xed:generate-id()}">
           <xed:output i18n="search.dozbib.year" />
@@ -69,9 +69,9 @@
             <xed:output i18n="search.sort.by" />
             <xed:bind xpath="@name">
               <select>
-                <option value="ubo_year"        ><xed:output i18n="search.sort.year" /></option>
-                <option value="ubo_sortby_name" ><xed:output i18n="document.creators.one" /></option>
-                <option value="ubo_sortby_title"><xed:output i18n="document.title" /></option>
+                <option value="year"        ><xed:output i18n="search.sort.year" /></option>
+                <option value="sortby_name" ><xed:output i18n="document.creators.one" /></option>
+                <option value="sortby_title"><xed:output i18n="document.title" /></option>
               </select>
             </xed:bind>
             <xed:bind xpath="@order">

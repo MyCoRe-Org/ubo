@@ -38,7 +38,7 @@
         <xed:bind xpath="@mask" default="index.xed" />
         <xed:bind xpath="@numPerPage" default="10" />
         <xed:bind xpath="conditions[@format='xml']/boolean[@operator='and']">
-          <xed:bind xpath="condition[@field='ubo_all'][@operator='contains']/@value">
+          <xed:bind xpath="condition[@field='all'][@operator='contains']/@value">
             <label for="input">
               <xed:output i18n="ubo.search.simple" />
             </label>
@@ -47,7 +47,7 @@
           
           <!-- Standard users must only find confirmed publications, admins find all publications -->
           <xed:if test="not(xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin'))">
-            <xed:bind xpath="condition[@field='ubo_status'][@operator='='][@value='confirmed']" />
+            <xed:bind xpath="condition[@field='status'][@operator='='][@value='confirmed']" />
           </xed:if>
           
         </xed:bind>

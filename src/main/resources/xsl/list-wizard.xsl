@@ -86,19 +86,19 @@
 </xsl:template>
 
 <xsl:template match="mods:name" mode="query">
-  <xsl:value-of select="concat('(ubo_role_pid+=+aut_',mods:nameIdentifier[@type='lsf'],')')" />
+  <xsl:value-of select="concat('(role_pid+=+aut_',mods:nameIdentifier[@type='lsf'],')')" />
   <xsl:text>+or+</xsl:text>
-  <xsl:value-of select="concat('(ubo_role_pid+=+edt_',mods:nameIdentifier[@type='lsf'],')')" />
+  <xsl:value-of select="concat('(role_pid+=+edt_',mods:nameIdentifier[@type='lsf'],')')" />
   <xsl:if test="following::mods:name">+or+</xsl:if>
 </xsl:template>
 
 <xsl:template match="tag" mode="query">
-  <xsl:value-of select="concat('(ubo_tag+=+',.,')')" />
+  <xsl:value-of select="concat('(tag+=+',.,')')" />
   <xsl:if test="following::tag">+or+</xsl:if>
 </xsl:template>
 
 <xsl:template match="min-year">
-  <xsl:value-of select="concat('+and+(ubo_year+&gt;=+',.,')')" />
+  <xsl:value-of select="concat('+and+(year+&gt;=+',.,')')" />
 </xsl:template>
 
 <xsl:template match="max-results">

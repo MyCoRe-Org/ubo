@@ -39,13 +39,13 @@
               <div>
                 <xed:bind xpath="@field">
                   <select class="label" style="margin-left:6px; width:182px;">
-                    <option value="ubo_title"     ><xed:output i18n="search.title" /></option>
-                    <option value="ubo_journal"   ><xed:output i18n="search.dozbib.journal" /></option>
-                    <option value="ubo_series"    ><xed:output i18n="search.dozbib.series" /></option>         
-                    <option value="ubo_conference"><xed:output i18n="ubo.conference" /></option>
-                    <option value="ubo_comment"   ><xed:output i18n="edit.comment" /></option>
-                    <option value="ubo_abstract"  >Abstract:</option>
-                    <option value="ubo_all"       ><xed:output i18n="search.dozbib.fields" /></option>
+                    <option value="title"     ><xed:output i18n="search.title" /></option>
+                    <option value="journal"   ><xed:output i18n="search.dozbib.journal" /></option>
+                    <option value="series"    ><xed:output i18n="search.dozbib.series" /></option>         
+                    <option value="conference"><xed:output i18n="ubo.conference" /></option>
+                    <option value="comment"   ><xed:output i18n="edit.comment" /></option>
+                    <option value="abstract"  >Abstract:</option>
+                    <option value="all"       ><xed:output i18n="search.dozbib.fields" /></option>
                   </select>
                 </xed:bind>
                 <xed:bind xpath="@value">
@@ -61,10 +61,10 @@
               <div>
                 <xed:bind xpath="@field">
                   <select class="label" style="margin-left:6px; width:182px;">
-                    <option value="ubo_pid"  ><xed:output i18n="search.dozbib.pid" /></option>
-                    <option value="ubo_orcid">ORCID:</option>
-                    <option value="ubo_researcherid">ResearcherID:</option>
-                    <option value="ubo_gnd">GND:</option>
+                    <option value="pid"  ><xed:output i18n="search.dozbib.pid" /></option>
+                    <option value="orcid">ORCID:</option>
+                    <option value="researcherid">ResearcherID:</option>
+                    <option value="gnd">GND:</option>
                   </select>
                 </xed:bind>
                 <xed:bind xpath="@value">
@@ -78,13 +78,13 @@
               <div>
                 <xed:bind xpath="@field">
                   <select class="label" style="margin-left:6px; width:182px;">
-                    <option value="ubo_doi"       >DOI:</option>
-                    <option value="ubo_urn"       >URN:</option>
-                    <option value="ubo_issn"      >ISSN:</option>
-                    <option value="ubo_isbn"      >ISBN:</option>
-                    <option value="ubo_signature" >Signatur:</option>
-                    <option value="ubo_documentID">DuEPublico ID:</option>
-                    <option value="ubo_tag"       >Tag:</option>         
+                    <option value="doi"       >DOI:</option>
+                    <option value="urn"       >URN:</option>
+                    <option value="issn"      >ISSN:</option>
+                    <option value="isbn"      >ISBN:</option>
+                    <option value="signature" >Signatur:</option>
+                    <option value="documentID">DuEPublico ID:</option>
+                    <option value="tag"       >Tag:</option>         
                   </select>
                 </xed:bind>
                 <xed:bind xpath="@value">
@@ -94,7 +94,7 @@
               </div>
             </xed:repeat>
             
-            <xed:bind xpath="condition4[@field='ubo_subject'][@operator='=']/@value">
+            <xed:bind xpath="condition4[@field='subject'][@operator='=']/@value">
               <div>
                 <label for="{xed:generate-id()}">
                   <xed:output i18n="search.dozbib.subject" />
@@ -110,7 +110,7 @@
             
             <xed:choose>
               <xed:when test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
-                <xed:bind xpath="condition6[@field='ubo_status'][@operator='=']/@value">
+                <xed:bind xpath="condition6[@field='status'][@operator='=']/@value">
                   <div>
                     <label>
                       <strong>
@@ -124,11 +124,11 @@
                 </xed:bind>
               </xed:when>
               <xed:otherwise>
-                <xed:bind xpath="condition[@field='ubo_status'][@operator='='][@value='confirmed']" />
+                <xed:bind xpath="condition[@field='status'][@operator='='][@value='confirmed']" />
               </xed:otherwise>
             </xed:choose>
             
-            <xed:bind xpath="condition7[@field='ubo_type'][@operator='=']/@value">
+            <xed:bind xpath="condition7[@field='type'][@operator='=']/@value">
               <div style="margin-bottom:4ex;">
                 <label for="{xed:generate-id()}">
                   <xed:output i18n="search.dozbib.type" />

@@ -82,7 +82,7 @@
 </xsl:template>
 
 <xsl:template match="dedup" mode="search">
-  <xsl:text>ubo_dedup=</xsl:text>
+  <xsl:text>dedup=</xsl:text>
   <xsl:value-of select="@key" />
   <xsl:if test="position() != last()">
     <xsl:text>&amp;</xsl:text>

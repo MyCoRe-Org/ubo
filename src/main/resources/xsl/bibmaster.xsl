@@ -73,7 +73,7 @@
 <xsl:template name="buildFindDuplicatesURI">
   <xsl:variable name="queryTerm">
     <xsl:for-each select="dedup">
-      <xsl:text>( ubo_dedup = </xsl:text>
+      <xsl:text>( dedup = </xsl:text>
       <xsl:value-of select="@key" />
       <xsl:text> )</xsl:text>
       <xsl:if test="position() != last()">

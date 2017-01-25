@@ -35,7 +35,7 @@
           <xed:bind xpath="@mask" default="index.xed" />
           <xed:bind xpath="conditions[@format='xml']/boolean[@operator='and']">
 
-            <xed:bind xpath="condition6[@field='ubo_origin'][@operator='=']/@value" default="14">
+            <xed:bind xpath="condition6[@field='origin'][@operator='=']/@value" default="14">
               <div>
                 <label>
                   <xed:output i18n="search.dozbib.origin" />
@@ -50,10 +50,10 @@
               </div>
             </xed:bind>
 
-            <xed:bind xpath="condition2[@operator='contains']/@field" initially="ubo_advisor" />
+            <xed:bind xpath="condition2[@operator='contains']/@field" initially="advisor" />
             <xed:include uri="webapp:import-search.xed" ref="name" />
 
-            <xed:bind xpath="condition4[@field='ubo_title'][@operator='contains']/@value">
+            <xed:bind xpath="condition4[@field='title'][@operator='contains']/@value">
               <div>
                 <label>
                   <xed:output i18n="search.title" />
@@ -64,8 +64,8 @@
               
             <xed:include uri="webapp:import-search.xed" ref="year" /> 
 
-            <xed:bind xpath="condition7[@field='ubo_type'][@operator='='][@value='dissertation']" />
-            <xed:bind xpath="condition[@field='ubo_status'][@operator='='][@value='confirmed']" />
+            <xed:bind xpath="condition7[@field='type'][@operator='='][@value='dissertation']" />
+            <xed:bind xpath="condition[@field='status'][@operator='='][@value='confirmed']" />
           </xed:bind>        
           
           <xed:include uri="webapp:import-search.xed" ref="sortby" /> 

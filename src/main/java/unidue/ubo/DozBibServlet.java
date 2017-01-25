@@ -43,12 +43,14 @@ public class DozBibServlet extends MCRServlet {
         HttpServletRequest req = job.getRequest();
 
         MCRAndCondition cond = new MCRAndCondition();
-        cond.addChild(new MCRQueryCondition("ubo_status", "=", "confirmed")); // Only find "status=confirmed" publications
+        cond.addChild(new MCRQueryCondition("status", "=", "confirmed")); // Only find "status=confirmed" publications
 
         {
-            if (req.getParameter("query") != null)
-                cond.addChild(new MCRQueryParser().parse(req.getParameter("query")));
-            else
+            if (req.getParameter("query") != null) {
+                String query = req.getParameter("query");
+                query = query.replace("ubo_", ""); // Remove legacy prefix for any search field
+                cond.addChild(new MCRQueryParser().parse(query));
+            } else
                 for (String name : Collections.list(req.getParameterNames()))
                     if (isConditionParameter(name))
                         cond.addChild(buildFieldCondition(req, name));
@@ -82,7 +84,7 @@ public class DozBibServlet extends MCRServlet {
     }
 
     private MCRCondition buildFieldCondition(HttpServletRequest req, String name) {
-        String fieldName = (name.startsWith("ubo_") ? name : "ubo_" + name);
+        String fieldName = (name.startsWith("ubo_") ? name.substring(4) : name);
         MCRFieldDef field = MCRFieldDef.getDef(fieldName);
 
         String operator = getReqParameter(req, name + ".operator",
@@ -113,7 +115,7 @@ public class DozBibServlet extends MCRServlet {
 
         Element sortBy = new Element("sortBy");
         if (sortFieldParameters.isEmpty())
-            sortBy.addContent(buildSortFieldElement("ubo_year", "descending"));
+            sortBy.addContent(buildSortFieldElement("year", "descending"));
         else {
             sortSortFieldParameters(sortFieldParameters);
 
@@ -139,9 +141,11 @@ public class DozBibServlet extends MCRServlet {
 
         // Fix legacy sort fields, field names have changed:
         if ("ubo_title".equals(name))
-            name = "ubo_sortby_title";
-        if ("ubo_author".equals(name))
-            name = "ubo_sortby_name";
+            name = "sortby_title";
+        else if ("ubo_author".equals(name))
+            name = "sortby_name";
+        else if (name.startsWith("ubo_"))
+            name = name.substring(4); // Remove legacy prefix for any search field
 
         return name;
     }

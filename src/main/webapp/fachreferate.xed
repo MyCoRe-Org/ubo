@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <webpage lastModified="$Date: 2016-02-02 08:30:30 +0100 (Di, 02 Feb 2016) $" id="dozbib.searchfields" xmlns:xed="http://www.mycore.de/xeditor">
-  <title xml:lang="de">Suchfeld ubo_subject</title>
-  <title xml:lang="en">Search field ubo_subject</title>
+  <title xml:lang="de">Suchfeld ""subject"</title>
+  <title xml:lang="en">Search field ""subject</title>
     
 <section xml:lang="de" id="sectionlast">
   <xed:form>
