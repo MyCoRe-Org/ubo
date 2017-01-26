@@ -52,6 +52,10 @@ import org.mycore.datamodel.common.MCRXMLMetadataManager;
  */
 public class DozBibStatistics {
 
+    private static final XPathExpression<Element> XPATH_STATUS = buildXPath("service/servflags/servflag[@type='status']");
+    
+    private static final XPathExpression<Element> XPATH_MODS = buildXPath("metadata/def.modsContainer/modsContainer/mods:mods");
+    
     private static final XPathExpression<Element> XPATH_MODS_DATE_ISSUED = buildXPath("descendant::mods:originInfo/mods:dateIssued");
 
     private static final XPathExpression<Element> XPATH_MODS_GENRE_INTERN = buildXPath("mods:genre[@type='intern']");
@@ -115,12 +119,15 @@ public class DozBibStatistics {
 
             try {
                 Element obj = MCRURIResolver.instance().resolve("mcrobject:" + id);
-                Element mods = obj.getChild("metadata").getChild("def.modsContainer").getChild("modsContainer").getChildren().get(0);
-                countPublicationType(publicationsByType, mods);
-                countPublicationYear(publicationsByYear, mods);
-                countPublicationField(publicationsByField, mods);
-                countNameIdentifiers(identifiers, mods);
-                countPublicationsByLSFPID(publicationsByPID, mods);
+                String status = getNodes(obj, XPATH_STATUS).get(0).getText();
+                if ("confirmed".equals(status)) {
+                    Element mods = getNodes(obj, XPATH_MODS).get(0);
+                    countPublicationType(publicationsByType, mods);
+                    countPublicationYear(publicationsByYear, mods);
+                    countPublicationField(publicationsByField, mods);
+                    countNameIdentifiers(identifiers, mods);
+                    countPublicationsByLSFPID(publicationsByPID, mods);
+                }
             } catch (Exception e) {
                 LOGGER.warn("Exception while processing entry #" + id, e);
             }
