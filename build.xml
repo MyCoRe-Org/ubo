@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Universitätsbibliographie SOLR Builder" default="usage" basedir=".">
+
+  <!-- ============================================== -->
+
+  <target name="usage" description="Show usage information">
+    <echo>
+
+  Initial setup, typically only once:
+    ant download.solr.war     Download pre-configured SOLR web applcation
+    ant build.solr.home       Build SOLR home directory containing index and core configuration
+
+  Whenever schema.xml changes:
+    ant copy.solr.schema      Copy SOLR schema to core configuration directory
+
+  To start/stop a local SOLR server:
+    ant start.solr            Start SOLR server
+    ant stop.solr             Stop SOLR server
+
+    </echo>
+  </target>
+
+  <!-- ============================================== -->
+
+  <property name="SOLR.WAR.URL"  value="http://artifactory.mycore.de/libs-snapshots-local/org/mycore/solr/solr/4.10.4.1-SNAPSHOT/solr-4.10.4.1-20151110.123030-1.war" />
+  <property name="SOLR.Home.URL" value="http://artifactory.mycore.de/libs-snapshots-local/org/mycore/solr/solr-home/4.10.4.1-SNAPSHOT/solr-home-4.10.4.1-20151110.123043-1.zip" />
+
+  <loadproperties srcfile="src/main/resources/local.properties" />
+
+  <!-- ============================================== -->
+
+  <target name="download.solr.war" description="Download pre-configured SOLR war file">
+    <echo>Downloading pre-configured SOLR war file...</echo>
+    <get src="${SOLR.WAR.URL}" dest="target/solr.war" verbose="on" />
+  </target>
+
+  <!-- ============================================== -->
+
+  <target name="build.solr.home" description="Build SOLR Home directory holding core configuration and index data">
+    <echo>Building SOLR home directory in ${UBO.BaseDir}...</echo>
+    <get src="${SOLR.Home.URL}" dest="target/solr-home.zip" verbose="on" />
+    <unzip src="target/solr-home.zip" dest="${UBO.BaseDir}" />
+    <move file="${UBO.BaseDir}/solr" tofile="${UBO.BaseDir}/solr-home" />
+    <move file="${UBO.BaseDir}/solr-home/collection1" tofile="${UBO.BaseDir}/solr-home/ubo" />
+    <echo file="${UBO.BaseDir}/solr-home/ubo/core.properties">name=ubo</echo>
+    <antcall target="copy.solr.schema" />
+  </target>
+
+  <!-- ============================================== -->
+
+  <target name="copy.solr.schema" description="Copy SOLR schema to core configuration directory">
+    <echo>Copy SOLR schema to core configuration directory...</echo>
+    <copy file="src/main/resources/schema.xml" todir="${UBO.BaseDir}/solr-home/ubo/conf" overwrite="true" />
+  </target>
+
+  <!-- ============================================== -->
+
+  <target name="start.solr" description="Start SOLR server">
+    <copy file="src/jetty-solr/context.xml" tofile="target/solr-context.xml" overwrite="true">
+      <filterset>
+        <filter token="SOLR.HOME" value="${UBO.BaseDir}/solr-home"/>
+      </filterset>
+    </copy> 
+    <antcall target="maven">
+      <param name="command" value="jetty:run-war" />
+      <param name="dir" value="${basedir}/src/jetty-solr" />
+    </antcall>
+  </target>
+
+  <!-- ============================================== -->
+
+  <target name="stop.solr" description="Stop SOLR server">
+    <antcall target="maven">
+      <param name="command" value="jetty:stop" />
+      <param name="dir" value="${basedir}/src/jetty-solr" />
+    </antcall>
+  </target>
+
+  <!-- ============================================== -->
+
+  <target name="maven">
+    <exec executable="cmd" osfamily="windows" dir="${dir}">
+      <env key="${target.env.key}" value="${target.env.value}"/>
+      <arg line="/c mvn ${command}" />
+    </exec>
+    <exec executable="mvn" osfamily="unix" dir="${dir}">
+      <env key="${target.env.key}" value="${target.env.value}"/>
+      <arg line="${command}" />
+    </exec>
+  </target>
+
+  <!-- ============================================== -->
+
+</project>
