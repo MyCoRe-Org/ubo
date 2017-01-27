@@ -641,7 +641,7 @@
     <a href="https://www.uni-due.de/ub/ghbsys/jop?{$parameters}" title="{i18n:translate('ubo.jop')}">
       <xsl:value-of select="text()" />
       <xsl:text> </xsl:text>
-      <img style="float:none" src="https://services.d-nb.de/fize-service/gvr/icon?{$parameters}" alt="{i18n:translate('ubo.jop')}" />
+      <img style="float:none" src="https://services.dnb.de/fize-service/gvr/icon?{$parameters}" alt="{i18n:translate('ubo.jop')}" />
     </a>
   </xsl:template>
 
