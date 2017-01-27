@@ -30,11 +30,15 @@
 
   <!-- Extra facet fields to display -->
   <field name="facet_person" type="string" indexed="true" stored="false" multiValued="true"  />
-  <copyField source="person" dest="facet_person"/>
+  <copyField source="role_*" dest="facet_person"/>
 
   <field name="facet_host" type="string" indexed="true" stored="false" multiValued="true"  />
   <copyField source="host_title" dest="facet_host"/>
 
+  <!-- Fields for each person role, e.g. <mods:roleTerm>aut -> role_aut -->
+  <dynamicField name="role_*"  type="name" indexed="true" stored="false" multiValued="true" />
+  <copyField source="role_*" dest="person"/>
+  
   <!-- Fields for mods:identifier, e.g. <mods:identifier type="doi" /> -> id_doi -->
   <dynamicField name="id_*"  type="id" indexed="true" stored="false" multiValued="true" />
   

@@ -17,7 +17,7 @@
   
   <xsl:template match="mods:mods" mode="solrField">
     <xsl:apply-templates select="mods:titleInfo" mode="solrField" />
-    <xsl:apply-templates select="mods:name[@type='personal']" mode="solrField" />
+    <xsl:apply-templates select="mods:name[@type='personal']/mods:role/mods:roleTerm[@type='code']" mode="solrField" />
     <xsl:apply-templates select="mods:name/mods:nameIdentifier" mode="solrField" />
     <xsl:apply-templates select="mods:genre[@type='intern']" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="solrField" />
@@ -91,13 +91,17 @@
     <xsl:value-of select="text()" />
   </xsl:template>
   
-  <xsl:template match="mods:name[@type='personal']" mode="solrField">
-    <field name="person">
-      <xsl:value-of select="mods:namePart[@type='family']" />
-      <xsl:for-each select="mods:namePart[@type='given'][1]">
-        <xsl:value-of select="concat(', ',text())" />
-      </xsl:for-each>
+  <xsl:template match="mods:name[@type='personal']/mods:role/mods:roleTerm[@type='code']" mode="solrField">
+    <field name="role_{text()}">
+      <xsl:apply-templates select="../.." mode="solrField" />
     </field>
+  </xsl:template>
+  
+  <xsl:template match="mods:name[@type='personal']" mode="solrField">
+    <xsl:value-of select="mods:namePart[@type='family']" />
+    <xsl:for-each select="mods:namePart[@type='given'][1]">
+      <xsl:value-of select="concat(', ',text())" />
+    </xsl:for-each>
   </xsl:template>
   
   <xsl:template match="mods:name[@type='conference']" mode="solrField">
