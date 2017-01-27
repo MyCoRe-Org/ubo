@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
+<Configure class="org.eclipse.jetty.webapp.WebAppContext">
+  <Set name="contextPath">/</Set>
+  <Get name="securityHandler">
+    <Set name="loginService">
+      <New class="org.eclipse.jetty.security.HashLoginService">
+        <Set name="name">Restricted</Set>
+        <Set name="config">realm.properties</Set>
+        <Call name="start" />
+      </New>
+    </Set>
+    <Set name="checkWelcomeFiles">true</Set>
+  </Get>
+  <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg></Arg>
+    <Arg>solr/home</Arg>
+    <Arg type="java.lang.String">@SOLR.HOME@</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+</Configure>
