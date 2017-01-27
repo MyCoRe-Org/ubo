@@ -130,14 +130,14 @@
       <tokenizer class="solr.StandardTokenizerFactory" />
       <filter class="solr.GermanNormalizationFilterFactory"/>
       <filter class="solr.ICUNormalizer2FilterFactory" name="nfkc_cf" mode="compose"/>
-      <filter class="solr.EdgeNGramFilterFactory" minGramSize="2" maxGramSize="15" />
+      <filter class="solr.EdgeNGramFilterFactory" minGramSize="1" maxGramSize="15" />
     </analyzer>
     <analyzer type="query">
       <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-ISOLatin1Accent.txt"/>
       <tokenizer class="solr.StandardTokenizerFactory" />
       <filter class="solr.GermanNormalizationFilterFactory"/>
       <filter class="solr.ICUNormalizer2FilterFactory" name="nfkc_cf" mode="compose"/>
-      <filter class="solr.EdgeNGramFilterFactory" minGramSize="2" maxGramSize="15" />
+      <filter class="solr.EdgeNGramFilterFactory" minGramSize="1" maxGramSize="15" />
     </analyzer>
   </fieldType>
 
