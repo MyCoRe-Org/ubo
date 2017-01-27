@@ -10,7 +10,7 @@
   <xsl:import href="xslImport:solr-document:ubo-solr.xsl" />
 
   <xsl:template match="mycoreobject">
-    <xsl:apply-imports />
+    <xsl:apply-templates select="." mode="baseFields" />
     <xsl:apply-templates select="service/servflags/servflag[@type='status']" mode="solrField" />
     <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" mode="solrField" />
   </xsl:template>
@@ -23,11 +23,13 @@
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:titleInfo" mode="solrField.host" />
-    <xsl:apply-templates select="descendant::mods:relatedItem[@type='host'][mods:genre='journal']/mods:titleInfo" mode="solrField" />
+    <xsl:apply-templates select="mods:relatedItem[@type='host'][mods:genre='journal']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:relatedItem[@type='series']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:name[@type='conference']" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:dateIssued[1][translate(text(),'1234567890','YYYYYYYYYY')='YYYY']" mode="solrField" />
     <xsl:apply-templates select="mods:identifier[@type]" mode="solrField" />
+    <xsl:apply-templates select="mods:note" mode="solrField" />
+    <xsl:apply-templates select="mods:abstract" mode="solrField" />
     <xsl:apply-templates select="mods:language/mods:languageTerm[@type='code']" mode="solrField" />
     <xsl:apply-templates select="mods:extension/tag" mode="solrField" />
     <xsl:apply-templates select="mods:extension/dedup" mode="solrField" />
@@ -151,6 +153,18 @@
   
   <xsl:template match="mods:language/mods:languageTerm[@type='code']" mode="solrField">
     <field name="lang">
+      <xsl:value-of select="text()" />
+    </field>
+  </xsl:template>
+
+  <xsl:template match="mods:note" mode="solrField">
+    <field name="note">
+      <xsl:value-of select="text()" />
+    </field>
+  </xsl:template>
+
+  <xsl:template match="mods:abstract" mode="solrField">
+    <field name="abstract">
       <xsl:value-of select="text()" />
     </field>
   </xsl:template>

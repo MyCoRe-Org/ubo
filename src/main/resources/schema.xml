@@ -11,6 +11,8 @@
   <field name="returnId"      type="string" indexed="true" stored="true"  required="false" multiValued="false" />
   <field name="objectType"    type="string" indexed="true" stored="false" required="false" multiValued="false" />
   <field name="objectProject" type="string" indexed="true" stored="false" required="false" multiValued="false" />
+  <field name="created"       type="date"   indexed="true" stored="false" required="false" multiValued="false" />
+  <field name="modified"      type="date"   indexed="true" stored="false" required="false" multiValued="false" />
 
   <!-- Universitätsbibliographie fields -->
   <field name="title"      type="text"   indexed="true" stored="true"  multiValued="true"  />
@@ -23,6 +25,8 @@
   <field name="journal"    type="text"   indexed="true" stored="false" multiValued="true"  />
   <field name="series"     type="text"   indexed="true" stored="false" multiValued="true"  />
   <field name="conference" type="text"   indexed="true" stored="false" multiValued="false" />
+  <field name="note"       type="text"   indexed="true" stored="false" multiValued="false" />
+  <field name="abstract"   type="text"   indexed="true" stored="false" multiValued="false" />
   <field name="year"       type="int"    indexed="true" stored="true"  multiValued="false" />
   <field name="lang"       type="string" indexed="true" stored="false" multiValued="true"  />
   <field name="tag"        type="string" indexed="true" stored="false" multiValued="true"  />
@@ -45,6 +49,18 @@
   <!-- Fields for mods:nameIdentifier, e.g. <mods:nameIdentifier type="scopus" /> -> nid_scopus -->
   <dynamicField name="nid_*" type="id" indexed="true" stored="false" multiValued="true" />
 
+  <!-- Field to search in "all fields" (not really all, but most) -->
+  <field name="all" type="text" indexed="true" stored="false" multiValued="true" />
+  <copyField source="role_*"     dest="all" />
+  <copyField source="title"      dest="all" />
+  <copyField source="host_title" dest="all" />
+  <copyField source="series"     dest="all" />
+  <copyField source="conference" dest="all" />
+  <copyField source="note"       dest="all" />
+  <copyField source="abstract"   dest="all" />
+  <copyField source="year"       dest="all" />
+  <copyField source="tag"        dest="all" />
+
   <!-- Ignore all other fields -->
   <dynamicField name="*" type="ignored" />
 
@@ -53,6 +69,7 @@
   <fieldType name="string"  class="solr.StrField"      sortMissingLast="true" />
   <fieldType name="int"     class="solr.TrieIntField"  precisionStep="0" positionIncrementGap="0"/>
   <fieldType name="long"    class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0" />
+  <fieldType name="date"    class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0"/>
   <fieldtype name="ignored" class="solr.StrField"      stored="false" indexed="false" multiValued="true"  />
 
   <!-- Field type for identifiers such as ISBN, ISSN: remove hyphens -->
