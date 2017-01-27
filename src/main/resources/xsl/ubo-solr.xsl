@@ -17,10 +17,12 @@
   
   <xsl:template match="mods:mods" mode="solrField">
     <xsl:apply-templates select="mods:titleInfo" mode="solrField" />
+    <xsl:apply-templates select="mods:name[@type='personal']" mode="solrField" />
     <xsl:apply-templates select="mods:name/mods:nameIdentifier" mode="solrField" />
     <xsl:apply-templates select="mods:genre[@type='intern']" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="solrField" />
+    <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:titleInfo" mode="solrField.host" />
     <xsl:apply-templates select="descendant::mods:relatedItem[@type='host'][mods:genre='journal']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:relatedItem[@type='series']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:name[@type='conference']" mode="solrField" />
@@ -43,6 +45,12 @@
     </xsl:call-template>
   </xsl:template>
   
+  <xsl:template match="mods:relatedItem[@type='host']/mods:titleInfo" mode="solrField.host">
+    <xsl:call-template name="buildTitleField">
+      <xsl:with-param name="name">host_title</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template match="mods:relatedItem[@type='host'][mods:genre='journal']/mods:titleInfo" mode="solrField">
     <xsl:call-template name="buildTitleField">
       <xsl:with-param name="name">journal</xsl:with-param>
@@ -81,6 +89,15 @@
     </xsl:if>
     <xsl:text> </xsl:text>
     <xsl:value-of select="text()" />
+  </xsl:template>
+  
+  <xsl:template match="mods:name[@type='personal']" mode="solrField">
+    <field name="person">
+      <xsl:value-of select="mods:namePart[@type='family']" />
+      <xsl:for-each select="mods:namePart[@type='given'][1]">
+        <xsl:value-of select="concat(', ',text())" />
+      </xsl:for-each>
+    </field>
   </xsl:template>
   
   <xsl:template match="mods:name[@type='conference']" mode="solrField">
