@@ -19,7 +19,9 @@
     <xsl:apply-templates select="mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="mods:name[@type='personal']/mods:role/mods:roleTerm[@type='code']" mode="solrField" />
     <xsl:apply-templates select="mods:name/mods:nameIdentifier" mode="solrField" />
+    <xsl:apply-templates select="mods:name[mods:nameIdentifier[@type='pid']]" mode="solrField.pid" />
     <xsl:apply-templates select="mods:genre[@type='intern']" mode="solrField" />
+    <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:genre[@type='intern']" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:titleInfo" mode="solrField.host" />
@@ -28,11 +30,23 @@
     <xsl:apply-templates select="descendant::mods:name[@type='conference']" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:dateIssued[1][translate(text(),'1234567890','YYYYYYYYYY')='YYYY']" mode="solrField" />
     <xsl:apply-templates select="mods:identifier[@type]" mode="solrField" />
+    <xsl:apply-templates select="descendant::mods:shelfLocator" mode="solrField" />
     <xsl:apply-templates select="mods:note" mode="solrField" />
     <xsl:apply-templates select="mods:abstract" mode="solrField" />
     <xsl:apply-templates select="mods:language/mods:languageTerm[@type='code']" mode="solrField" />
     <xsl:apply-templates select="mods:extension/tag" mode="solrField" />
     <xsl:apply-templates select="mods:extension/dedup" mode="solrField" />
+    <xsl:call-template name="sortby_person" />
+  </xsl:template>
+  
+  <xsl:template name="sortby_person">
+    <xsl:if test="mods:name[@type='personal']">
+      <field name="sortby_person">
+        <xsl:for-each select="mods:name[@type='personal']">
+          <xsl:value-of select="concat(mods:namePart[@type='family'],' ',mods:namePart[@type='given'],' ')" />
+        </xsl:for-each>
+      </field>
+    </xsl:if>
   </xsl:template>
   
   <xsl:template match="servflag[@type='status']" mode="solrField">
@@ -45,6 +59,12 @@
     <xsl:call-template name="buildTitleField">
       <xsl:with-param name="name">title</xsl:with-param>
     </xsl:call-template>
+    <xsl:if test="position() = 1"> <!-- sort by first title only, not multi-valued -->
+      <field name="sortby_title">
+        <xsl:apply-templates select="mods:title"    mode="solrField" />
+        <xsl:apply-templates select="mods:subTitle" mode="solrField" />
+      </field>
+    </xsl:if>
   </xsl:template>
   
   <xsl:template match="mods:relatedItem[@type='host']/mods:titleInfo" mode="solrField.host">
@@ -118,12 +138,26 @@
     </field>
   </xsl:template>
   
-  <xsl:template match="mods:genre" mode="solrField">
+  <xsl:template match="mods:name[mods:nameIdentifier[@type='pid']]" mode="solrField.pid">
+    <xsl:for-each select="mods:role/mods:roleTerm[@type='code']">
+      <field name="pid_{.}">
+        <xsl:value-of select="../../mods:nameIdentifier[@type='pid']" />
+      </field>
+    </xsl:for-each>
+  </xsl:template>
+  
+  <xsl:template match="mods:mods/mods:genre[@type='intern']" mode="solrField">
     <field name="genre">
       <xsl:value-of select="text()" />
     </field>
   </xsl:template>
   
+  <xsl:template match="mods:relatedItem[@type='host']/mods:genre[@type='intern']" mode="solrField">
+    <field name="host_genre">
+      <xsl:value-of select="text()" />
+    </field>
+  </xsl:template>
+
   <xsl:template match="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="solrField">
     <xsl:variable name="category" select="substring-after(@valueURI,'#')" /> 
     <xsl:for-each select="document(concat('classification:editor:0:parents:ORIGIN:',$category))/descendant::item">
@@ -151,6 +185,12 @@
     </field>
   </xsl:template>
   
+  <xsl:template match="mods:shelfLocator" mode="solrField">
+    <field name="shelfmark">
+      <xsl:value-of select="text()" />
+    </field>
+  </xsl:template>
+
   <xsl:template match="mods:language/mods:languageTerm[@type='code']" mode="solrField">
     <field name="lang">
       <xsl:value-of select="text()" />
@@ -161,6 +201,13 @@
     <field name="note">
       <xsl:value-of select="text()" />
     </field>
+    <xsl:if test="contains(.,'Univ') and contains(.,'Diss') and ( contains(.,'Essen') or contains(.,'Duisburg') ) and contains( translate(.,'0123456789','JJJJJJJJJJ'),'JJJJ')">
+      <xsl:variable name="jjjj" select="translate(.,'0123456789','JJJJJJJJJJ')" />
+      <xsl:variable name="before" select="substring-before($jjjj,'JJJJ')" />
+      <field name="year_diss">
+        <xsl:value-of select="substring(substring-after(.,$before),1,4)" />
+      </field>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="mods:abstract" mode="solrField">

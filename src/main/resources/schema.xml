@@ -15,22 +15,29 @@
   <field name="modified"      type="date"   indexed="true" stored="false" required="false" multiValued="false" />
 
   <!-- Universitätsbibliographie fields -->
-  <field name="title"      type="text"    indexed="true" stored="true"  multiValued="true"  />
-  <field name="person"     type="name"    indexed="true" stored="true"  multiValued="true"  />
-  <field name="genre"      type="string"  indexed="true" stored="true"  multiValued="false" />
-  <field name="subject"    type="string"  indexed="true" stored="true"  multiValued="true"  />
-  <field name="origin"     type="string"  indexed="true" stored="false" multiValued="true"  />
-  <field name="status"     type="string"  indexed="true" stored="false" multiValued="false" />
-  <field name="host_title" type="text"    indexed="true" stored="false" multiValued="true"  />
-  <field name="journal"    type="journal" indexed="true" stored="false" multiValued="true"  />
-  <field name="series"     type="text"    indexed="true" stored="false" multiValued="true"  />
-  <field name="conference" type="text"    indexed="true" stored="false" multiValued="false" />
-  <field name="note"       type="text"    indexed="true" stored="false" multiValued="false" />
-  <field name="abstract"   type="text"    indexed="true" stored="false" multiValued="false" />
-  <field name="year"       type="int"     indexed="true" stored="true"  multiValued="false" />
-  <field name="lang"       type="string"  indexed="true" stored="false" multiValued="true"  />
-  <field name="tag"        type="string"  indexed="true" stored="false" multiValued="true"  />
-  <field name="dedup"      type="string"  indexed="true" stored="false" multiValued="true"  />
+  <field name="title"      type="text"      indexed="true" stored="true"  multiValued="true"  />
+  <field name="person"     type="name"      indexed="true" stored="true"  multiValued="true"  />
+  <field name="genre"      type="string"    indexed="true" stored="true"  multiValued="false" />
+  <field name="subject"    type="string"    indexed="true" stored="true"  multiValued="true"  />
+  <field name="origin"     type="string"    indexed="true" stored="false" multiValued="true"  />
+  <field name="status"     type="string"    indexed="true" stored="false" multiValued="false" />
+  <field name="host_title" type="text"      indexed="true" stored="false" multiValued="true"  />
+  <field name="host_genre" type="string"    indexed="true" stored="true"  multiValued="false" />
+  <field name="journal"    type="journal"   indexed="true" stored="false" multiValued="true"  />
+  <field name="series"     type="text"      indexed="true" stored="false" multiValued="true"  />
+  <field name="conference" type="text"      indexed="true" stored="false" multiValued="false" />
+  <field name="note"       type="text"      indexed="true" stored="false" multiValued="true"  />
+  <field name="abstract"   type="text"      indexed="true" stored="false" multiValued="true"  />
+  <field name="year"       type="int"       indexed="true" stored="true"  multiValued="false" />
+  <field name="year_diss"  type="int"       indexed="true" stored="false" multiValued="false" />
+  <field name="lang"       type="string"    indexed="true" stored="false" multiValued="true"  />
+  <field name="shelfmark"  type="shelfmark" indexed="true" stored="false" multiValued="true"  />
+  <field name="tag"        type="string"    indexed="true" stored="false" multiValued="true"  />
+  <field name="dedup"      type="string"    indexed="true" stored="false" multiValued="true"  />
+
+  <!-- Extra fields for sorting -->
+  <field name="sortby_title"  type="sort" indexed="true" stored="false" multiValued="false" />
+  <field name="sortby_person" type="sort" indexed="true" stored="false" multiValued="false" />
 
   <!-- Extra facet fields to display -->
   <field name="facet_person" type="string" indexed="true" stored="false" multiValued="true"  />
@@ -43,6 +50,9 @@
   <dynamicField name="role_*"  type="name" indexed="true" stored="false" multiValued="true" />
   <copyField source="role_*" dest="person"/>
   
+  <!-- Fields for each person ID by role, e.g. role_aut_pid -->
+  <dynamicField name="pid_*"  type="string" indexed="true" stored="false" multiValued="true" />
+
   <!-- Fields for mods:identifier, e.g. <mods:identifier type="doi" /> ==> id_doi -->
   <dynamicField name="id_*"  type="id" indexed="true" stored="false" multiValued="true" />
   
@@ -60,6 +70,7 @@
   <copyField source="abstract"   dest="all" />
   <copyField source="year"       dest="all" />
   <copyField source="tag"        dest="all" />
+  <copyField source="id_*"       dest="all" />
 
   <!-- Ignore all other fields -->
   <dynamicField name="*" type="ignored" />
@@ -71,20 +82,6 @@
   <fieldType name="long"    class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0" />
   <fieldType name="date"    class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0"/>
   <fieldtype name="ignored" class="solr.StrField"      stored="false" indexed="false" multiValued="true"  />
-
-  <!-- Field type for identifiers such as ISBN, ISSN: remove hyphens -->
-  <fieldType name="id" class="solr.TextField">
-    <analyzer type="index">
-      <tokenizer class="solr.WhitespaceTokenizerFactory" />
-      <filter class="solr.PatternReplaceFilterFactory" pattern="-" replacement="" replace="all" />
-      <filter class="solr.LowerCaseFilterFactory" />
-    </analyzer>
-    <analyzer type="query">
-      <tokenizer class="solr.WhitespaceTokenizerFactory" />
-      <filter class="solr.PatternReplaceFilterFactory" pattern="-" replacement="" replace="all" />
-      <filter class="solr.LowerCaseFilterFactory" />
-    </analyzer>
-  </fieldType>
 
   <!-- Field type for text such as title, abstract, comment -->
   <fieldType name="text" class="solr.TextField" positionIncrementGap="100">
@@ -138,6 +135,54 @@
       <filter class="solr.GermanNormalizationFilterFactory"/>
       <filter class="solr.ICUNormalizer2FilterFactory" name="nfkc_cf" mode="compose"/>
       <filter class="solr.EdgeNGramFilterFactory" minGramSize="1" maxGramSize="15" />
+    </analyzer>
+  </fieldType>
+
+  <!-- Field type for sorting by title, person names -->
+  <fieldType name="sort" class="solr.TextField" sortMissingLast="true">
+    <analyzer type="index">
+      <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-ISOLatin1Accent.txt"/>
+      <tokenizer class="solr.KeywordTokenizerFactory"/>
+      <filter class="solr.GermanNormalizationFilterFactory"/>
+      <filter class="solr.ICUNormalizer2FilterFactory" name="nfkc_cf" mode="compose"/>
+      <filter class="solr.PatternReplaceFilterFactory" pattern="([^A-Za-z0-9])" replacement="" replace="all"/>
+    </analyzer>
+    <analyzer type="query">
+      <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-ISOLatin1Accent.txt"/>
+      <tokenizer class="solr.KeywordTokenizerFactory"/>
+      <filter class="solr.GermanNormalizationFilterFactory"/>
+      <filter class="solr.ICUNormalizer2FilterFactory" name="nfkc_cf" mode="compose"/>
+      <filter class="solr.PatternReplaceFilterFactory" pattern="([^A-Za-z0-9])" replacement="" replace="all"/>
+    </analyzer>
+  </fieldType>
+
+  <!-- Field type for identifiers such as ISBN, ISSN: remove hyphens -->
+  <fieldType name="id" class="solr.TextField">
+    <analyzer type="index">
+      <tokenizer class="solr.WhitespaceTokenizerFactory" />
+      <filter class="solr.PatternReplaceFilterFactory" pattern="-" replacement="" replace="all" />
+      <filter class="solr.LowerCaseFilterFactory" />
+    </analyzer>
+    <analyzer type="query">
+      <tokenizer class="solr.WhitespaceTokenizerFactory" />
+      <filter class="solr.PatternReplaceFilterFactory" pattern="-" replacement="" replace="all" />
+      <filter class="solr.LowerCaseFilterFactory" />
+    </analyzer>
+  </fieldType>
+
+  <!-- Field type for shelfmarks: lowercase, remove whitespace, remove +NNN -->
+  <fieldType name="shelfmark" class="solr.TextField">
+    <analyzer type="index">
+      <tokenizer class="solr.KeywordTokenizerFactory"/>
+      <filter class="solr.LowerCaseFilterFactory" />
+      <filter class="solr.PatternReplaceFilterFactory" pattern="\s" replacement="" replace="all" />
+      <filter class="solr.PatternReplaceFilterFactory" pattern="\+[0-9]+" replacement="" replace="all" />
+    </analyzer>
+    <analyzer type="query">
+      <tokenizer class="solr.KeywordTokenizerFactory"/>
+      <filter class="solr.LowerCaseFilterFactory" />
+      <filter class="solr.PatternReplaceFilterFactory" pattern="\s" replacement="" replace="all" />
+      <filter class="solr.PatternReplaceFilterFactory" pattern="\+[0-9]+" replacement="" replace="all" />
     </analyzer>
   </fieldType>
 
