@@ -23,9 +23,6 @@
 <xsl:include href="mods-display.xsl" />
 
 <xsl:param name="Referer" select="concat($ServletsBaseURL,'DozBibEntryServlet?mode=show&amp;id=',/mycoreobject/@ID)" />
-<xsl:param name="resultsPage"  />
-<xsl:param name="resultsNumPerPage"  />
-<xsl:param name="resultsID" />
 <xsl:param name="CurrentUserPID" />
 <xsl:param name="step" />
 
@@ -63,16 +60,7 @@
 <xsl:variable name="ContextID" select="'dozbib'" />
 
 <xsl:variable name="breadcrumb.extensions">
-  <item label="{i18n:translate('result.dozbib.results')}">
-    <xsl:if test="string-length($resultsID) > 0">
-      <xsl:attribute name="ref">
-        <xsl:text>servlets/MCRSearchServlet?mode=results</xsl:text>
-        <xsl:value-of select="concat('&amp;page=',$resultsPage)" />
-        <xsl:value-of select="concat('&amp;numPerPage=',$resultsNumPerPage)" />
-        <xsl:value-of select="concat('&amp;id=',$resultsID)" />
-      </xsl:attribute>
-    </xsl:if>
-  </item>  
+  <item label="{i18n:translate('result.dozbib.results')}" />
   <item label="{i18n:translate('result.dozbib.entry')} {number(substring-after(/mycoreobject/@ID,'ubo_mods_'))}" />
 </xsl:variable>
 

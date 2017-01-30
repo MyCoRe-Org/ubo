@@ -43,7 +43,7 @@
                     <option value="journal"   ><xed:output i18n="search.dozbib.journal" /></option>
                     <option value="series"    ><xed:output i18n="search.dozbib.series" /></option>         
                     <option value="conference"><xed:output i18n="ubo.conference" /></option>
-                    <option value="comment"   ><xed:output i18n="edit.comment" /></option>
+                    <option value="note"      ><xed:output i18n="edit.comment" /></option>
                     <option value="abstract"  >Abstract:</option>
                     <option value="all"       ><xed:output i18n="search.dozbib.fields" /></option>
                   </select>
@@ -61,11 +61,11 @@
               <div>
                 <xed:bind xpath="@field">
                   <select class="label" style="margin-left:6px; width:182px;">
-                    <option value="pid"  ><xed:output i18n="search.dozbib.pid" /></option>
-                    <option value="orcid">ORCID:</option>
-                    <option value="researcherid">ResearcherID:</option>
-                    <option value="scopus_pers">Scopus ID:</option>
-                    <option value="gnd">GND:</option>
+                    <option value="nid_lsf"          ><xed:output i18n="search.dozbib.pid" /></option>
+                    <option value="nid_orcid"        >ORCID:</option>
+                    <option value="nid_researcherid" >ResearcherID:</option>
+                    <option value="nid_scopus"       >Scopus ID:</option>
+                    <option value="nid_gnd"          >GND:</option>
                   </select>
                 </xed:bind>
                 <xed:bind xpath="@value">
@@ -79,15 +79,15 @@
               <div>
                 <xed:bind xpath="@field">
                   <select class="label" style="margin-left:6px; width:182px;">
-                    <option value="doi"       >DOI:</option>
-                    <option value="urn"       >URN:</option>
-                    <option value="issn"      >ISSN:</option>
-                    <option value="isbn"      >ISBN:</option>
-                    <option value="signature" >Signatur:</option>
-                    <option value="documentID">DuEPublico ID:</option>
-                    <option value="pubmed"    >PubMed ID:</option>
-                    <option value="scopus_pub">Scopus ID:</option>
-                    <option value="tag"       >Tag:</option>         
+                    <option value="id_doi"        >DOI:</option>
+                    <option value="id_urn"        >URN:</option>
+                    <option value="id_issn"       >ISSN:</option>
+                    <option value="id_isbn"       >ISBN:</option>
+                    <option value="id_duepublico" >DuEPublico ID:</option>
+                    <option value="id_pubmed"     >PubMed ID:</option>
+                    <option value="id_scopus"     >Scopus ID:</option>
+                    <option value="shelfmark"     >Signatur:</option>
+                    <option value="tag"           >Tag:</option>         
                   </select>
                 </xed:bind>
                 <xed:bind xpath="@value">
@@ -145,8 +145,8 @@
             
           </xed:bind>
 
-          <xed:include uri="webapp:import-search.xed" ref="sortby" /> 
-          <xed:include uri="webapp:import-search.xed" ref="numhits" /> 
+          <xed:include uri="webapp:import-search.xed" ref="sortby" />
+          <xed:include uri="webapp:import-search.xed" ref="numhits" />
           <xed:include uri="webapp:import-search.xed" ref="submit" />
           
         </xed:bind>

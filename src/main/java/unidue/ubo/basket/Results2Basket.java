@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jdom2.Element;
+import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.frontend.basket.MCRBasket;
 import org.mycore.frontend.basket.MCRBasketEntry;
 import org.mycore.frontend.basket.MCRBasketManager;
@@ -23,7 +25,7 @@ import org.mycore.services.fieldquery.MCRCachedQueryData;
 import org.mycore.services.fieldquery.MCRResults;
 
 /**
- * Put all hits from current result list into basket
+ * Put all hits from result list into basket
  * 
  * @author Frank L\u00FCtzenkirchen
  */
@@ -37,22 +39,52 @@ public class Results2Basket extends MCRServlet {
         HttpServletResponse res = job.getResponse();
 
         String resultsID = req.getParameter("id");
-        String basketID = req.getParameter("basket");
-        LOGGER.info("add results " + resultsID + " to basket " + basketID);
+        if (resultsID != null)
+            addResultsToBasket(resultsID);
+        else
+            addSOLRResultsToBasket(req);
+
+        res.sendRedirect(getServletBaseURL() + "MCRBasketServlet?action=show&type=bibentries");
+    }
+
+    private void addSOLRResultsToBasket(HttpServletRequest req) {
+        LOGGER.info("add SOLR results to basket...");
+
+        String url = req.getParameter("solr") + "%XSL.Style=xml";
+        Element response = MCRURIResolver.instance().resolve(url);
+
+        for (Element result : response.getChildren("result")) {
+            if ("response".equals(result.getAttributeValue("name"))) {
+                for (Element doc : result.getChildren("doc")) {
+                    for (Element str : doc.getChildren("str")) {
+                        if ("id".equals(str.getAttributeValue("name"))) {
+                            String oid = str.getText();
+                            addtoBasket(oid);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void addResultsToBasket(String resultsID) {
+        LOGGER.info("add lucene results to basket...");
 
         MCRCachedQueryData qd = MCRCachedQueryData.getData(resultsID);
-        MCRBasket basket = MCRBasketManager.getOrCreateBasketInSession(basketID);
         MCRResults results = qd.getResults();
         results.fetchAllHits();
 
         for (int i = 0; i < results.getNumHits(); i++) {
             String oid = results.getHit(i).getID();
-            String uri = "mcrobject:" + oid;
-            MCRBasketEntry entry = new MCRBasketEntry(oid, uri);
-            entry.resolveContent();
-            basket.add(entry);
+            addtoBasket(oid);
         }
+    }
 
-        res.sendRedirect(getServletBaseURL() + "MCRBasketServlet?action=show&type=" + basketID);
+    private void addtoBasket(String oid) {
+        MCRBasket basket = MCRBasketManager.getOrCreateBasketInSession("bibentries");
+        String uri = "mcrobject:" + oid;
+        MCRBasketEntry entry = new MCRBasketEntry(oid, uri);
+        entry.resolveContent();
+        basket.add(entry);
     }
 }

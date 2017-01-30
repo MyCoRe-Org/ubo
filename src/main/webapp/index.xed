@@ -53,7 +53,7 @@
         </xed:bind>
       </xed:bind>
 
-      <button class="roundedButton" type="submit" xed:target="servlet" xed:href="MCRSearchServlet">
+      <button class="roundedButton" type="submit" xed:target="servlet" xed:href="MCRQLSearchServlet">
         <xed:output i18n="button.search" />
       </button>
 
