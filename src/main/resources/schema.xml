@@ -12,7 +12,7 @@
   <field name="objectType"    type="string" indexed="true" stored="false" required="false" multiValued="false" />
   <field name="objectProject" type="string" indexed="true" stored="false" required="false" multiValued="false" />
   <field name="created"       type="date"   indexed="true" stored="false" required="false" multiValued="false" />
-  <field name="modified"      type="date"   indexed="true" stored="false" required="false" multiValued="false" />
+  <field name="modified"      type="date"   indexed="true" stored="true"  required="true"  multiValued="false" />
 
   <!-- Universitätsbibliographie fields -->
   <field name="title"      type="text"      indexed="true" stored="true"  multiValued="true"  />
