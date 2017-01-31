@@ -50,8 +50,8 @@
   <dynamicField name="role_*"  type="name" indexed="true" stored="false" multiValued="true" />
   <copyField source="role_*" dest="person"/>
   
-  <!-- Fields for each person ID by role, e.g. role_aut_pid -->
-  <dynamicField name="pid_*"  type="string" indexed="true" stored="false" multiValued="true" />
+  <!-- Fields for each LSF person ID and role, e.g. role_lsf=aut_1234 -->
+  <field name="role_lsf" type="string" indexed="true" stored="false" multiValued="true" />
 
   <!-- Fields for mods:identifier, e.g. <mods:identifier type="doi" /> ==> id_doi -->
   <dynamicField name="id_*"  type="id" indexed="true" stored="false" multiValued="true" />

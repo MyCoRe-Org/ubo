@@ -83,13 +83,13 @@
                 <li>(title contains Faktoren) or (nid_lsf = 2809)</li>
                 <li>((title contains Faktoren) or (nid_lsf = 2809)) <br/> and (year = 2006)</li>
                 <li>(nid_lsf = 2809) and ((year = 2010) or (year = 2011))</li>
-                <li>(pid_aut = 2809) or ((type = book) <br/> and (pid_edt = 2809))</li>
+                <li>(role_lsf = aut_2809) or ((genre = book) <br/> and (role_lsf = edt_2809))</li>
               </ul>
             </div>
           </div>
 
           <xed:include uri="webapp:import-search.xed" ref="sortby" /> 
-          <xed:include uri="webapp:import-search.xed" ref="numhits" />
+          <xed:include uri="webapp:import-search.xed" ref="numPerPage" />
           <xed:include uri="webapp:import-search.xed" ref="submit" />  
 
         </xed:bind>
@@ -106,36 +106,37 @@
 <table class="editor">
 
   <tr class="background1"><th>Suchfeld:</th><th>Datentyp:</th><th>Beschreibung:</th><th>Operator</th></tr>
+  
   <tr class="background2"><td>all</td><td>Text</td><td>Suche in allen Datenfeldern</td><td>=, contains, like, phrase</td></tr>
   <tr class="background1"><td>title</td><td>Text</td><td>Titel</td><td>=, contains, like, phrase</td></tr>
-  <tr class="background2"><td>author</td><td>Name</td><td>Autor</td><td>=, contains, like</td></tr>
-  <tr class="background1"><td>pid</td><td>ID</td><td>Personen-ID aus HIS LSF</td><td> = </td></tr>
-  <tr class="background2"><td>role_pid</td><td>ID</td><td>Kombination Rolle + Personen-ID aus HIS LSF, z. B. advisor_2809 findet Doktorvater</td><td> = </td></tr>
-  <tr class="background1"><td>orcid</td><td>ID</td><td>ORCID</td><td> = </td></tr>
-  <tr class="background1"><td>researcherid</td><td>ID</td><td>ResearcherID</td><td> = </td></tr>
-  <tr class="background2"><td>scopus_pers</td><td>ID</td><td>ID der Person in SCOPUS</td><td> = </td></tr>
-  <tr class="background1"><td>gnd</td><td>ID</td><td>GND</td><td> = </td></tr>
-  <tr class="background1"><td>publisher</td><td>Name</td><td>Herausgeber, Verlag</td><td>=, contains, like</td></tr>
-  <tr class="background2"><td>contributor</td><td>Name</td><td>Personenname (Autoren, Herausgeber oder andere)</td><td>=, contains, like</td></tr>
-  <tr class="background1"><td>advisor</td><td>Name</td><td>Doktorvater, BetreuerIn bei Dissertationen</td><td>=, contains, like</td></tr>  
+  <tr class="background2"><td>person</td><td>Name</td><td>Personenname (Autoren, Herausgeber oder andere)</td><td>=, contains, like</td></tr>
+  <tr class="background2"><td>role_aut</td><td>Name</td><td>Autor</td><td>=, contains, like</td></tr>
+  <tr class="background1"><td>role_edt</td><td>Name</td><td>Herausgeber, Verlag</td><td>=, contains, like</td></tr>
+  <tr class="background1"><td>role_adv</td><td>Name</td><td>Doktorvater, BetreuerIn bei Dissertationen</td><td>=, contains, like</td></tr>  
+  <tr class="background1"><td>nid_lsf</td><td>ID</td><td>Personen-ID aus HIS LSF</td><td> = </td></tr>
+  <tr class="background1"><td>nid_orcid</td><td>ID</td><td>ORCID</td><td> = </td></tr>
+  <tr class="background1"><td>nid_researcherid</td><td>ID</td><td>ResearcherID</td><td> = </td></tr>
+  <tr class="background2"><td>nid_scopus</td><td>ID</td><td>ID der Person in SCOPUS</td><td> = </td></tr>
+  <tr class="background1"><td>nid_gnd</td><td>ID</td><td>GND</td><td> = </td></tr>
+  <tr class="background2"><td>role_lsf</td><td>ID</td><td>Kombination Rolle + Personen-ID aus HIS LSF, z. B. adv_2809 findet Doktorvater</td><td> = </td></tr>
   <tr class="background1"><td>year</td><td>Zahl</td><td>Jahr</td><td>=, &lt;, &gt;, &lt;=, &gt;=</td></tr>
+  <tr class="background1"><td>id_issn</td><td>ID</td><td>ISSN</td><td> = </td></tr>
+  <tr class="background2"><td>id_isbn</td><td>ID</td><td>ISBN</td><td> = </td></tr>
+  <tr class="background2"><td>id_doi</td><td>ID</td><td>DOI</td><td> = </td></tr>
+  <tr class="background2"><td>id_urn</td><td>ID</td><td>URN</td><td> = </td></tr>
+  <tr class="background2"><td>id_scopus</td><td>ID</td><td>ID der Publikation in SCOPUS</td><td> = </td></tr>
+  <tr class="background2"><td>id_duepublico</td><td>ID</td><td>ID eines verknüpften DuEPublico-Dokumentes</td><td> = </td></tr>
+  <tr class="background1"><td>shelfmark</td><td>ID</td><td>Signatur der Universitätsbibliothek</td><td> = </td></tr>
   <tr class="background2"><td>journal</td><td>Text</td><td>Titel der Zeitschrift</td><td>=, contains, like, phrase</td></tr>
-  <tr class="background1"><td>issn</td><td>ID</td><td>ISSN</td><td> = </td></tr>
-  <tr class="background2"><td>isbn</td><td>ID</td><td>ISBN</td><td> = </td></tr>
   <tr class="background1"><td>series</td><td>Text</td><td>Bezeichnung der Serie</td><td>=, contains, like, phrase</td></tr>
   <tr class="background1"><td>conference</td><td>Text</td><td>Konferenz</td><td>=, contains, like, phrase</td></tr>
   <tr class="background2"><td>abstract</td><td>Text</td><td>Abstract, Zusammenfassung</td><td>=, contains, like, phrase</td></tr>
-  <tr class="background1"><td>comment</td><td>Text</td><td>Kommentarfeld</td><td>=, contains, like, phrase</td></tr>
-  <tr class="background2"><td>type</td><td>ID</td><td>Typ des Eintrages, mögliche Werte: <b>article chapter book dissertation</b></td><td> = </td></tr>
+  <tr class="background1"><td>note</td><td>Text</td><td>Kommentarfeld</td><td>=, contains, like, phrase</td></tr>
+  <tr class="background2"><td>genre</td><td>ID</td><td>Typ des Eintrages, z. B. <b>article chapter book dissertation</b></td><td> = </td></tr>
   <tr class="background1"><td>subject</td><td>ID</td><td>Fach, vgl. <a href="fachreferate.xed">diese Liste</a></td><td> = </td></tr>
   <tr class="background2"><td>origin</td><td>ID</td><td>Fakultät / Einrichtung</td><td> = </td></tr>
   <tr class="background1"><td>id</td><td>ID</td><td>ID des Eintrages</td><td> = </td></tr>
-  <tr class="background2"><td>lastModified</td><td>Datum</td><td>Datum der letzten Änderung des Eintrages</td><td>=, &lt;, &gt;, &lt;=, &gt;=</td></tr>
-  <tr class="background1"><td>signature</td><td>ID</td><td>Signatur der Universitätsbibliothek</td><td> = </td></tr>
-  <tr class="background2"><td>doi</td><td>ID</td><td>DOI</td><td> = </td></tr>
-  <tr class="background2"><td>urn</td><td>ID</td><td>URN</td><td> = </td></tr>
-  <tr class="background2"><td>scopus_pub</td><td>ID</td><td>ID der Publikation in SCOPUS</td><td> = </td></tr>
-  <tr class="background2"><td>documentID</td><td>ID</td><td>ID eines verknüpften DuEPublico-Dokumentes</td><td> = </td></tr>
+  <tr class="background2"><td>modified</td><td>Timestamp</td><td>Zeitpunkt der letzten Änderung des Eintrages</td><td>=, &lt;, &gt;, &lt;=, &gt;=</td></tr>
 
 </table>
 </p>
@@ -151,35 +152,34 @@
   <tr class="background1"><th>search field:</th><th>data type:</th><th>description:</th><th>operator</th></tr>
   <tr class="background2"><td>all</td><td>text</td><td>search in all data fields</td><td>=, contains, like, phrase</td></tr>
   <tr class="background1"><td>title</td><td>text</td><td>title</td><td>=, contains, like, phrase</td></tr>
-  <tr class="background2"><td>author</td><td>name</td><td>author</td><td>=, contains, like</td></tr>
-  <tr class="background1"><td>pid</td><td>ID</td><td>person ID from HIS LSF</td><td> = </td></tr>
-  <tr class="background2"><td>role_pid</td><td>ID</td><td>Combined role plus person ID from HIS LSF, e.g. advisor_2809 finds thesis advisor</td><td> = </td></tr>
-  <tr class="background1"><td>orcid</td><td>ID</td><td>ORCID</td><td> = </td></tr>
-  <tr class="background1"><td>researcherid</td><td>ID</td><td>ResearcherID</td><td> = </td></tr>
-  <tr class="background2"><td>scopus_pers</td><td>ID</td><td>ID of person in SCOPUS</td><td> = </td></tr>
-  <tr class="background1"><td>gnd</td><td>ID</td><td>GND</td><td> = </td></tr>
-  <tr class="background2"><td>publisher</td><td>name</td><td>publisher</td><td>=, contains, like</td></tr>
-  <tr class="background1"><td>contributor</td><td>name</td><td>name (authors, editors or others)</td><td>=, contains, like</td></tr>
-  <tr class="background2"><td>advisor</td><td>name</td><td>advisor of thesis paper</td><td>=, contains, like</td></tr>
-  <tr class="background1"><td>referee</td><td>name</td><td>referee of thesis pater</td><td>=, contains, like</td></tr>
+  <tr class="background1"><td>person</td><td>name</td><td>name (authors, editors or others)</td><td>=, contains, like</td></tr>
+  <tr class="background2"><td>role_aut</td><td>name</td><td>author</td><td>=, contains, like</td></tr>
+  <tr class="background2"><td>role_edt</td><td>name</td><td>publisher</td><td>=, contains, like</td></tr>
+  <tr class="background2"><td>role_adv</td><td>name</td><td>advisor of thesis paper</td><td>=, contains, like</td></tr>
+  <tr class="background1"><td>nid_lsf</td><td>ID</td><td>person ID from HIS LSF</td><td> = </td></tr>
+  <tr class="background1"><td>nid_orcid</td><td>ID</td><td>ORCID</td><td> = </td></tr>
+  <tr class="background1"><td>nid_researcherid</td><td>ID</td><td>ResearcherID</td><td> = </td></tr>
+  <tr class="background2"><td>nid_scopus</td><td>ID</td><td>ID of person in SCOPUS</td><td> = </td></tr>
+  <tr class="background1"><td>nid_gnd</td><td>ID</td><td>GND</td><td> = </td></tr>
+  <tr class="background2"><td>role_lsf</td><td>ID</td><td>Combined role plus person ID from HIS LSF, e.g. adv_2809 finds thesis advisor</td><td> = </td></tr>
   <tr class="background2"><td>year</td><td>number</td><td>year</td><td>=, &lt;, &gt;, &lt;=, &gt;=</td></tr>
+  <tr class="background2"><td>id_issn</td><td>ID</td><td>ISSN</td><td> = </td></tr>
+  <tr class="background1"><td>id_isbn</td><td>ID</td><td>ISBN</td><td> = </td></tr>
+  <tr class="background2"><td>id_doi</td><td>ID</td><td>DOI</td><td> = </td></tr>
+  <tr class="background2"><td>id_urn</td><td>ID</td><td>URN</td><td> = </td></tr>
+  <tr class="background2"><td>id_scopus</td><td>ID</td><td>ID of publication in SCOPUS</td><td> = </td></tr>
+  <tr class="background1"><td>id_duepublico</td><td>ID</td><td>ID of a linked DuEPublico document</td><td> = </td></tr>
+  <tr class="background2"><td>shelfmark</td><td>ID</td><td>signature from the  university library</td><td> = </td></tr>
   <tr class="background1"><td>journal</td><td>text</td><td>title of the journal</td><td>=, contains, like, phrase</td></tr>
-  <tr class="background2"><td>issn</td><td>ID</td><td>ISSN</td><td> = </td></tr>
-  <tr class="background1"><td>isbn</td><td>ID</td><td>ISBN</td><td> = </td></tr>
   <tr class="background2"><td>series</td><td>text</td><td>name of the series</td><td>=, contains, like, phrase</td></tr>
   <tr class="background2"><td>conference</td><td>text</td><td>conference</td><td>=, contains, like, phrase</td></tr>
   <tr class="background1"><td>abstract</td><td>text</td><td>abstract, summary</td><td>=, contains, like, phrase</td></tr>
-  <tr class="background2"><td>comment</td><td>text</td><td>comment field</td><td>=, contains, like, phrase</td></tr>
-  <tr class="background1"><td>type</td><td>ID</td><td>type of the entry, possible values: <b>article chapter book dissertation</b></td><td> = </td></tr>
+  <tr class="background2"><td>note</td><td>text</td><td>comment field</td><td>=, contains, like, phrase</td></tr>
+  <tr class="background1"><td>genre</td><td>ID</td><td>type of the entry, e.g. <b>article chapter book dissertation</b></td><td> = </td></tr>
   <tr class="background2"><td>subject</td><td>ID</td><td>subject, cf. <a href="fachreferate.xed">attribute value in this list</a></td><td> = </td></tr>
   <tr class="background1"><td>origin</td><td>ID</td><td>faculty / institution</td><td> = </td></tr>
   <tr class="background2"><td>id</td><td>text</td><td>ID of the entry</td><td> = </td></tr>
-  <tr class="background2"><td>doi</td><td>ID</td><td>DOI</td><td> = </td></tr>
-  <tr class="background2"><td>urn</td><td>ID</td><td>URN</td><td> = </td></tr>
-  <tr class="background1"><td>lastModified</td><td>date</td><td>date of the last modification of the entry</td><td>=, &lt;, &gt;, &lt;=, &gt;=</td></tr>
-  <tr class="background2"><td>signature</td><td>ID</td><td>signature from the  university library</td><td> = </td></tr>
-  <tr class="background2"><td>scopus_pub</td><td>ID</td><td>ID of publication in SCOPUS</td><td> = </td></tr>
-  <tr class="background1"><td>documentID</td><td>ID</td><td>ID of a linked DuEPublico document</td><td> = </td></tr>
+  <tr class="background1"><td>modified</td><td>Timestamp</td><td>Timestamp of the last modification of the entry</td><td>=, &lt;, &gt;, &lt;=, &gt;=</td></tr>
 
 </table>
 </p>

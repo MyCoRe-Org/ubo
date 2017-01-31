@@ -19,7 +19,7 @@
     <xsl:apply-templates select="mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="mods:name[@type='personal']/mods:role/mods:roleTerm[@type='code']" mode="solrField" />
     <xsl:apply-templates select="mods:name/mods:nameIdentifier" mode="solrField" />
-    <xsl:apply-templates select="mods:name[mods:nameIdentifier[@type='pid']]" mode="solrField.pid" />
+    <xsl:apply-templates select="mods:name[mods:nameIdentifier[@type='lsf']]" mode="solrField.lsf" />
     <xsl:apply-templates select="mods:genre[@type='intern']" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:genre[@type='intern']" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="solrField" />
@@ -138,10 +138,12 @@
     </field>
   </xsl:template>
   
-  <xsl:template match="mods:name[mods:nameIdentifier[@type='pid']]" mode="solrField.pid">
+  <xsl:template match="mods:name[mods:nameIdentifier[@type='lsf']]" mode="solrField.lsf">
     <xsl:for-each select="mods:role/mods:roleTerm[@type='code']">
-      <field name="pid_{.}">
-        <xsl:value-of select="../../mods:nameIdentifier[@type='pid']" />
+      <field name="role_lsf">
+        <xsl:value-of select="." />
+        <xsl:text>_</xsl:text>
+        <xsl:value-of select="../../mods:nameIdentifier[@type='lsf']" />
       </field>
     </xsl:for-each>
   </xsl:template>

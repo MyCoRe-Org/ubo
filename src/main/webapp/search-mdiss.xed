@@ -64,12 +64,12 @@
               
             <xed:include uri="webapp:import-search.xed" ref="year" /> 
 
-            <xed:bind xpath="condition7[@field='type'][@operator='='][@value='dissertation']" />
+            <xed:bind xpath="condition7[@field='genre'][@operator='='][@value='dissertation']" />
             <xed:bind xpath="condition[@field='status'][@operator='='][@value='confirmed']" />
           </xed:bind>        
           
           <xed:include uri="webapp:import-search.xed" ref="sortby" /> 
-          <xed:include uri="webapp:import-search.xed" ref="numhits" /> 
+          <xed:include uri="webapp:import-search.xed" ref="numPerPage" /> 
           <xed:include uri="webapp:import-search.xed" ref="submit" />
 
         </xed:bind>

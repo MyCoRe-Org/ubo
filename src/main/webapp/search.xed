@@ -131,7 +131,7 @@
               </xed:otherwise>
             </xed:choose>
             
-            <xed:bind xpath="condition7[@field='type'][@operator='=']/@value">
+            <xed:bind xpath="condition7[@field='genre'][@operator='=']/@value">
               <div style="margin-bottom:4ex;">
                 <label for="{xed:generate-id()}">
                   <xed:output i18n="search.dozbib.type" />
@@ -146,7 +146,7 @@
           </xed:bind>
 
           <xed:include uri="webapp:import-search.xed" ref="sortby" />
-          <xed:include uri="webapp:import-search.xed" ref="numhits" />
+          <xed:include uri="webapp:import-search.xed" ref="numPerPage" />
           <xed:include uri="webapp:import-search.xed" ref="submit" />
           
         </xed:bind>

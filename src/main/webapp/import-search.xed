@@ -87,21 +87,11 @@
     </div>
   </xed:template>
 
-  <xed:template id="numhits"> 
+  <xed:template id="numPerPage"> 
     <div>
       <label>
-        <xed:output i18n="search.numHits" />
+        <xed:output i18n="search.hits.numPerPage" />
       </label>
-      <span>max.</span>
-      <xed:bind xpath="@maxResults">
-        <select>
-          <option>100</option>
-          <option>250</option>
-          <option>500</option>
-          <option value="999999"><xed:output i18n="search.hits.all" /></option>
-        </select>
-      </xed:bind>
-      <xed:output i18n="search.hits.with" />
       <xed:bind xpath="@numPerPage">
         <select>
           <option>10</option>
@@ -109,7 +99,6 @@
           <option>50</option>
         </select>
       </xed:bind>
-      <xed:output i18n="search.hits.page" />
     </div>
   </xed:template>
 
