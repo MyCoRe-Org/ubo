@@ -10,6 +10,7 @@
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:mcr="http://www.mycore.org/"
   xmlns:encoder="xalan://java.net.URLEncoder"
+  xmlns:str="xalan://java.lang.String"
   exclude-result-prefixes="xsl xalan i18n mods mcr encoder" 
 >
 
@@ -95,6 +96,7 @@
     <action label="RIS"     target="{$exportURL}XSL.Transformer=ris" />
     <action label="PDF"     target="{$exportURL}XSL.Transformer=pdf" />
     <action label="HTML"    target="{$exportURL}XSL.Transformer=html" />
+    <action label="CSV"     target="{str:replaceAll(str:new($exportURL),'fl=id','fl=id,year,genre,title')}wt=csv" />
   </xsl:if>
 </xsl:variable>
 
