@@ -19,6 +19,10 @@ import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.mycore.common.MCRMailer;
@@ -28,10 +32,8 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mods.MCRMODSWrapper;
-import org.mycore.services.fieldquery.MCRQuery;
-import org.mycore.services.fieldquery.MCRQueryCondition;
-import org.mycore.services.fieldquery.MCRQueryManager;
-import org.mycore.services.fieldquery.MCRResults;
+import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrUtils;
 
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
@@ -130,12 +132,13 @@ public class ScopusFeedImporter {
         return feed;
     }
 
-    private static boolean isAlreadyStored(String scopusID) {
-        MCRQueryCondition condition = new MCRQueryCondition("scopus_pub", "=", scopusID);
-        MCRQuery query = new MCRQuery(condition);
-        MCRResults results = MCRQueryManager.search(query);
-        results.fetchAllHits();
-        return (results.getNumHits() > 0);
+    private static boolean isAlreadyStored(String scopusID) throws SolrServerException, IOException {
+        SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
+        SolrQuery query = new SolrQuery();
+        query.setQuery("id_scopus:" + MCRSolrUtils.escapeSearchValue(scopusID));
+        query.setRows(0);
+        SolrDocumentList results = solrClient.query(query).getResults();
+        return (results.getNumFound() > 0);
     }
 
     private static Element buildEntryFromScopus(String scopusID) {
