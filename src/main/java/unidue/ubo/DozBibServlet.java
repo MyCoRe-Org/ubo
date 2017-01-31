@@ -24,11 +24,14 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.parsers.bool.MCRAndCondition;
 import org.mycore.parsers.bool.MCRCondition;
+import org.mycore.parsers.bool.MCRNotCondition;
 import org.mycore.parsers.bool.MCROrCondition;
+import org.mycore.parsers.bool.MCRSetCondition;
 import org.mycore.services.fieldquery.MCRQuery;
 import org.mycore.services.fieldquery.MCRQueryCondition;
 import org.mycore.services.fieldquery.MCRQueryParser;
@@ -48,7 +51,6 @@ public class DozBibServlet extends MCRServlet {
 
         if (req.getParameter("query") != null) {
             String query = req.getParameter("query");
-            query = query.replace("ubo_", ""); // Remove legacy prefix for any search field
             cond.addChild(new MCRQueryParser().parse(query));
         } else
             for (String name : Collections.list(req.getParameterNames()))
@@ -59,6 +61,8 @@ public class DozBibServlet extends MCRServlet {
             job.getResponse().sendError(HttpServletResponse.SC_BAD_REQUEST, "Request contains no query.");
             return;
         }
+
+        convertLegacyFieldNames(cond);
 
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("UBO search: " + cond.toString());
@@ -106,19 +110,17 @@ public class DozBibServlet extends MCRServlet {
     }
 
     private MCRCondition buildFieldCondition(HttpServletRequest req, String name) {
-        String fieldName = (name.startsWith("ubo_") ? name.substring(4) : name);
-        //MCRFieldDef field = MCRFieldDef.getDef(fieldName);
-
         String operator = getReqParameter(req, name + ".operator", "contains");
+        //MCRFieldDef field = MCRFieldDef.getDef(fieldName);
         //MCRFieldType.getDefaultOperator(field.getDataType()));
 
         String[] values = req.getParameterValues(name);
         if (values.length == 1)
-            return new MCRQueryCondition(fieldName, operator, values[0].trim());
+            return new MCRQueryCondition(name, operator, values[0].trim());
         else { // Multiple fields with same name, combine with OR
             MCROrCondition oc = new MCROrCondition();
             for (String value : values)
-                oc.addChild(new MCRQueryCondition(fieldName, operator, value.trim()));
+                oc.addChild(new MCRQueryCondition(name, operator, value.trim()));
             return oc;
         }
     }
@@ -160,16 +162,7 @@ public class DozBibServlet extends MCRServlet {
 
     private String getSortFieldName(String parameterName) {
         String name = parameterName.substring(0, parameterName.indexOf(".sortField"));
-
-        // Fix legacy sort fields, field names have changed:
-        if ("ubo_title".equals(name))
-            name = "sortby_title";
-        else if ("ubo_author".equals(name))
-            name = "sortby_name";
-        else if (name.startsWith("ubo_"))
-            name = name.substring(4); // Remove legacy prefix for any search field
-
-        return name;
+        return convertLegacyFieldName("Sort", name);
     }
 
     private void sortSortFieldParameters(List<String> sortFieldParameters) {
@@ -188,5 +181,26 @@ public class DozBibServlet extends MCRServlet {
             return defaultValue;
         else
             return value.trim();
+    }
+
+    private void convertLegacyFieldNames(MCRCondition cond) {
+        if (cond instanceof MCRQueryCondition) {
+            MCRQueryCondition qc = ((MCRQueryCondition) cond);
+            String nameOld = qc.getFieldName();
+            String nameNew = convertLegacyFieldName("Field", nameOld);
+            qc.setFieldName(nameNew);
+        } else if (cond instanceof MCRSetCondition) {
+            MCRSetCondition sc = (MCRSetCondition) cond;
+            for (MCRCondition childCond : (List<MCRCondition>) (sc.getChildren()))
+                convertLegacyFieldNames(childCond);
+        } else if (cond instanceof MCRNotCondition) {
+            MCRNotCondition nc = (MCRNotCondition) cond;
+            convertLegacyFieldNames(nc.getChild());
+        }
+    }
+
+    private String convertLegacyFieldName(String type, String nameOld) {
+        String nameKey = "UBO.LegacySearch." + type + "." + nameOld;
+        return MCRConfiguration.instance().getString(nameKey, nameOld);
     }
 }
