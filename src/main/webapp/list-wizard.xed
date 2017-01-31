@@ -111,20 +111,6 @@
             </div>
           </xed:bind>
           
-          <xed:bind xpath="max-results">
-            <div style="margin-top:5ex;">
-              <label for="max-results">
-                <xed:output i18n="search.numHits" />
-              </label>
-              <select>
-                <option value=""><xed:output i18n="search.hits.all" /></option>
-                <option>100</option>
-                <option>50</option>
-                <option>20</option>
-              </select>
-            </div>
-          </xed:bind>
-          
           <div>
             <label>
               <xed:output i18n="search.sort" />

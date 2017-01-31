@@ -9,7 +9,6 @@
 
 package unidue.ubo;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -20,6 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.mycore.frontend.servlets.MCRServlet;
@@ -27,13 +29,11 @@ import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.parsers.bool.MCRAndCondition;
 import org.mycore.parsers.bool.MCRCondition;
 import org.mycore.parsers.bool.MCROrCondition;
-import org.mycore.services.fieldquery.MCRCachedQueryData;
-import org.mycore.services.fieldquery.MCRFieldDef;
-import org.mycore.services.fieldquery.MCRFieldType;
 import org.mycore.services.fieldquery.MCRQuery;
 import org.mycore.services.fieldquery.MCRQueryCondition;
 import org.mycore.services.fieldquery.MCRQueryParser;
-import org.mycore.services.fieldquery.MCRResults;
+import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.search.MCRQLSearchUtils;
 
 public class DozBibServlet extends MCRServlet {
 
@@ -41,24 +41,23 @@ public class DozBibServlet extends MCRServlet {
 
     public void doGetPost(MCRServletJob job) throws Exception {
         HttpServletRequest req = job.getRequest();
+        HttpServletResponse res = job.getResponse();
 
         MCRAndCondition cond = new MCRAndCondition();
         cond.addChild(new MCRQueryCondition("status", "=", "confirmed")); // Only find "status=confirmed" publications
 
-        {
-            if (req.getParameter("query") != null) {
-                String query = req.getParameter("query");
-                query = query.replace("ubo_", ""); // Remove legacy prefix for any search field
-                cond.addChild(new MCRQueryParser().parse(query));
-            } else
-                for (String name : Collections.list(req.getParameterNames()))
-                    if (isConditionParameter(name))
-                        cond.addChild(buildFieldCondition(req, name));
+        if (req.getParameter("query") != null) {
+            String query = req.getParameter("query");
+            query = query.replace("ubo_", ""); // Remove legacy prefix for any search field
+            cond.addChild(new MCRQueryParser().parse(query));
+        } else
+            for (String name : Collections.list(req.getParameterNames()))
+                if (isConditionParameter(name))
+                    cond.addChild(buildFieldCondition(req, name));
 
-            if (cond.getChildren().size() < 2) {
-                job.getResponse().sendError(HttpServletResponse.SC_BAD_REQUEST, "Request contains no query.");
-                return;
-            }
+        if (cond.getChildren().size() < 2) {
+            job.getResponse().sendError(HttpServletResponse.SC_BAD_REQUEST, "Request contains no query.");
+            return;
         }
 
         if (LOGGER.isDebugEnabled())
@@ -66,8 +65,7 @@ public class DozBibServlet extends MCRServlet {
 
         Element query = new Element("query");
         query.setAttribute("mask", "ubo");
-        query.setAttribute("maxResults", getReqParameter(req, "maxResults", "0"));
-        query.setAttribute("numPerPage", getReqParameter(req, "numPerPage", ""));
+        query.setAttribute("numPerPage", "0");
 
         Element conditions = new Element("conditions");
         conditions.setAttribute("format", "xml");
@@ -77,18 +75,42 @@ public class DozBibServlet extends MCRServlet {
 
         Document doc = new Document(query);
         MCRQuery q = MCRQuery.parseXML(doc);
-        MCRCachedQueryData qd = MCRCachedQueryData.cache(q, doc);
-        MCRResults results = qd.getResults();
 
-        redirectToResults(job, doc, results);
+        SolrQuery solrQuery = MCRQLSearchUtils.getSolrQuery(q, doc, req);
+        solrQuery.setRows(0);
+        SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
+        SolrDocumentList results = solrClient.query(solrQuery).getResults();
+        long numFound = results.getNumFound();
+
+        String format = job.getRequest().getParameter("format");
+        boolean export = (format != null) && ((numFound > 0) || !"pdf".equals(format));
+
+        String numPerPage = getReqParameter(req, "numPerPage", "10");
+        if (export)
+            numPerPage = String.valueOf(numFound);
+        query.setAttribute("numPerPage", numPerPage);
+
+        solrQuery = MCRQLSearchUtils.getSolrQuery(q, doc, req);
+        StringBuffer url = new StringBuffer(MCRServlet.getServletBaseURL());
+        url.append("SolrSelectProxy");
+        url.append(solrQuery.toQueryString());
+
+        if (export) {
+            url.append("&XSL.Transformer=").append(format);
+            String css = job.getRequest().getParameter("css");
+            if (css != null)
+                url.append("&XSL.css=").append(css);
+        }
+
+        res.sendRedirect(res.encodeRedirectURL(url.toString()));
     }
 
     private MCRCondition buildFieldCondition(HttpServletRequest req, String name) {
         String fieldName = (name.startsWith("ubo_") ? name.substring(4) : name);
-        MCRFieldDef field = MCRFieldDef.getDef(fieldName);
+        //MCRFieldDef field = MCRFieldDef.getDef(fieldName);
 
-        String operator = getReqParameter(req, name + ".operator",
-            MCRFieldType.getDefaultOperator(field.getDataType()));
+        String operator = getReqParameter(req, name + ".operator", "contains");
+        //MCRFieldType.getDefaultOperator(field.getDataType()));
 
         String[] values = req.getParameterValues(name);
         if (values.length == 1)
@@ -158,31 +180,6 @@ public class DozBibServlet extends MCRServlet {
                 return s0.compareTo(s1);
             }
         });
-    }
-
-    private void redirectToResults(MCRServletJob job, Document doc, MCRResults results) throws IOException {
-        StringBuilder url = new StringBuilder(MCRServlet.getServletBaseURL());
-        url.append("MCRSearchServlet?mode=results");
-        url.append("&id=").append(results.getID());
-
-        String format = job.getRequest().getParameter("format");
-        if ((format == null) || (format.equals("pdf") && (results.getNumHits() == 0))) {
-            url.append("&numPerPage=").append(getNumPerPage(doc, results));
-        } else {
-            url.append("&numPerPage=").append(results.getNumHits()); // For export, include all publications
-            url.append("&XSL.Transformer=").append(format);
-            String css = job.getRequest().getParameter("css");
-            if (css != null)
-                url.append("&XSL.css=").append(css);
-        }
-        job.getResponse().sendRedirect(url.toString());
-    }
-
-    private String getNumPerPage(Document doc, MCRResults results) {
-        String npp = doc.getRootElement().getAttributeValue("numPerPage");
-        if ((npp == null) || npp.isEmpty() || (Integer.parseInt(npp) > results.getNumHits()))
-            npp = String.valueOf(results.getNumHits());
-        return npp;
     }
 
     private String getReqParameter(HttpServletRequest req, String name, String defaultValue) {
