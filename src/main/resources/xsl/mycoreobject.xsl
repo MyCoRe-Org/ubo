@@ -155,7 +155,7 @@
       <xsl:call-template name="buildFindDuplicatesURI" />
     </xsl:for-each>
   </xsl:variable>
-  <xsl:variable name="duplicates" select="document($duplicatesURI)/mcr:results/mcr:hit" />
+  <xsl:variable name="duplicates" select="document($duplicatesURI)/response/result[@name='response']/doc" />
   <xsl:variable name="numDuplicates" select="count($duplicates) - 1" />
   <xsl:if test="$numDuplicates &gt; 0">
     <div class="highlight1 duplicates">
@@ -173,14 +173,15 @@
       <xsl:variable name="myOwnHitID" select="/mycoreobject/@ID" />
       <ul>
         <xsl:for-each select="$duplicates">
-          <xsl:sort select="@id" data-type="number" order="descending" />
-          <xsl:if test="not(@id = $myOwnHitID)">
+          <xsl:sort select="str[@name='id']" data-type="number" order="descending" />
+          <xsl:variable name="duplicateID" select="str[@name='id']" />
+          <xsl:if test="not($duplicateID = $myOwnHitID)">
             <li>
-              <a href="DozBibEntryServlet?mode=show&amp;id={@id}">
+              <a href="DozBibEntryServlet?mode=show&amp;id={$duplicateID}">
                 <xsl:text>Eintrag </xsl:text>
-                <xsl:value-of select="@id" />
+                <xsl:value-of select="number(substring-after($duplicateID,'_mods_'))" />
               </a>
-              <xsl:for-each select="document(concat('mcrobject:',@id))/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
+              <xsl:for-each select="document(concat('mcrobject:',$duplicateID))/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
                 <div class="bibentry">
                   <xsl:apply-templates select="." mode="cite">
                     <xsl:with-param name="mode">divs</xsl:with-param>

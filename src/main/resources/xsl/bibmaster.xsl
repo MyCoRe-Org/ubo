@@ -71,17 +71,15 @@
 <!-- ========== URI bauen, um Dubletten zu finden ========== -->
 
 <xsl:template name="buildFindDuplicatesURI">
-  <xsl:variable name="queryTerm">
-    <xsl:for-each select="dedup">
-      <xsl:text>( dedup = </xsl:text>
-      <xsl:value-of select="@key" />
-      <xsl:text> )</xsl:text>
-      <xsl:if test="position() != last()">
-        <xsl:text> OR </xsl:text>
-      </xsl:if>
-    </xsl:for-each>
-  </xsl:variable>
-  <xsl:value-of xmlns:encoder="xalan://java.net.URLEncoder" select="concat('notnull:mcrql:term=',encoder:encode($queryTerm,'UTF-8'))" />
+  <xsl:text>solr:fl=id&amp;rows=999&amp;q=(</xsl:text>
+  <xsl:for-each select="dedup">
+    <xsl:text>dedup:</xsl:text>
+    <xsl:value-of select="encoder:encode(@key,'UTF-8')" xmlns:encoder="xalan://java.net.URLEncoder" />
+    <xsl:if test="position() != last()">
+      <xsl:text>+OR+</xsl:text>
+    </xsl:if>
+  </xsl:for-each>
+  <xsl:text>)</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>

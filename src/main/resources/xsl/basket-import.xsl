@@ -42,18 +42,9 @@
       <xsl:variable name="duplicatesURI">
         <xsl:call-template name="buildFindDuplicatesURI" />
       </xsl:variable>
-      <xsl:variable name="duplicates" select="document($duplicatesURI)/mcr:results/mcr:hit" />
+      <xsl:variable name="duplicates" select="document($duplicatesURI)/response/result[@name='response']/doc" />
       <xsl:if test="count($duplicates) &gt; 0">
-        <a class="roundedButton basketButton">
-          <xsl:attribute name="href">
-            <xsl:value-of select="$ServletsBaseURL" />
-            <xsl:text>DozBibServlet?</xsl:text>
-            <xsl:for-each select="dedup">
-              <xsl:text>dedup=</xsl:text>
-              <xsl:value-of select="@key" />
-              <xsl:if test="position() != last()">&amp;</xsl:if>
-            </xsl:for-each>
-          </xsl:attribute>
+        <a class="roundedButton basketButton" href="{$ServletsBaseURL}solr/select?{substring-after($duplicatesURI,'solr:')}">
           <xsl:value-of select="count($duplicates)" />
           <xsl:text> Dublette</xsl:text>
           <xsl:if test="count($duplicates) &gt; 1">n</xsl:if>
