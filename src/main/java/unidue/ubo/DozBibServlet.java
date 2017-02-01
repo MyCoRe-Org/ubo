@@ -62,10 +62,13 @@ public class DozBibServlet extends MCRServlet {
             return;
         }
 
+        if (LOGGER.isDebugEnabled())
+            LOGGER.debug("UBO search incoming: " + cond.toString());
+
         convertLegacyFieldNames(cond);
 
         if (LOGGER.isDebugEnabled())
-            LOGGER.debug("UBO search: " + cond.toString());
+            LOGGER.debug("UBO search MCRQL: " + cond.toString());
 
         Element query = new Element("query");
         query.setAttribute("mask", "ubo");
@@ -110,9 +113,8 @@ public class DozBibServlet extends MCRServlet {
     }
 
     private MCRCondition buildFieldCondition(HttpServletRequest req, String name) {
-        String operator = getReqParameter(req, name + ".operator", "contains");
-        //MCRFieldDef field = MCRFieldDef.getDef(fieldName);
-        //MCRFieldType.getDefaultOperator(field.getDataType()));
+        String defaultOperator = getDefaultOperator(name);
+        String operator = getReqParameter(req, name + ".operator", defaultOperator);
 
         String[] values = req.getParameterValues(name);
         if (values.length == 1)
@@ -123,6 +125,11 @@ public class DozBibServlet extends MCRServlet {
                 oc.addChild(new MCRQueryCondition(name, operator, value.trim()));
             return oc;
         }
+    }
+
+    private String getDefaultOperator(String fieldName) {
+        String key = "UBO.LegacySearch.DefaultOperator." + fieldName;
+        return MCRConfiguration.instance().getString(key, "=");
     }
 
     private boolean isConditionParameter(String name) {
