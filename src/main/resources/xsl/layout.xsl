@@ -349,6 +349,7 @@
     <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/legacy.css" />
     <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/duepublico.css?v={$UBO.Build.TimeStamp}" />
     <link rel="stylesheet" href="{$WebApplicationBaseURL}external/chosen/chosen.css" />
+    <link rel="stylesheet" href="{$WebApplicationBaseURL}webjars/bootstrap-glyphicons/bdd2cbfba0/css/bootstrap-glyphicons.css" />
     <xsl:text disable-output-escaping="yes">
       &lt;!--[if gte IE 9]&gt;
     </xsl:text>

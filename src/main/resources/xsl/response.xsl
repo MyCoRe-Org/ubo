@@ -147,26 +147,25 @@
   <xsl:call-template name="link2resultsPage">
     <xsl:with-param name="condition" select="$start &gt; 0" />
     <xsl:with-param name="pageNr"    select="0" />
-    <xsl:with-param name="symbol"    select="'|&#171;&#171;'" />
+    <xsl:with-param name="icon"      select="'fast-backward'" />
   </xsl:call-template>
   <xsl:call-template name="link2resultsPage">
     <xsl:with-param name="condition" select="$start &gt; 0" />
     <xsl:with-param name="pageNr"    select="number($start)-number($rows)" />
-    <xsl:with-param name="symbol"    select="'&#171;&#8212;'" />
+    <xsl:with-param name="icon"      select="'backward'" />
   </xsl:call-template>
   <xsl:call-template name="link2resultsPage">
-    <xsl:with-param name="condition" select="false()" />
-    <xsl:with-param name="symbol"    select="floor(number($start) div number($rows))+1" />
+    <xsl:with-param name="text"      select="floor(number($start) div number($rows))+1" />
   </xsl:call-template>
   <xsl:call-template name="link2resultsPage">
     <xsl:with-param name="condition" select="number($start)+number($rows) &lt; $numFound" />
     <xsl:with-param name="pageNr"    select="number($start)+number($rows)" />
-    <xsl:with-param name="symbol"    select="'&#8212;&#187;'" />
+    <xsl:with-param name="icon"      select="'forward'" />
   </xsl:call-template>
   <xsl:call-template name="link2resultsPage">
     <xsl:with-param name="condition" select="number($start)+number($rows) &lt; $numFound" />
     <xsl:with-param name="pageNr"    select="floor(number($numFound) div number($rows))*number($rows)" />
-    <xsl:with-param name="symbol"    select="'&#187;&#187;|'" />
+    <xsl:with-param name="icon"      select="'fast-forward'" />
   </xsl:call-template>
 </xsl:template>
 
@@ -184,17 +183,21 @@
 <xsl:template name="link2resultsPage">
   <xsl:param name="condition" />
   <xsl:param name="pageNr" />
-  <xsl:param name="symbol" />
+  <xsl:param name="icon" />
+  <xsl:param name="text" />
   
   <span class="pageLink">
     <xsl:choose>
+      <xsl:when test="string-length($text) &gt; 0">
+        <xsl:value-of select="concat('&#160;',$text,'&#160;')" />
+      </xsl:when>
       <xsl:when test="$condition">
         <a href="{$resultsPageURL}{$pageNr}">
-          <xsl:value-of select="concat('&#160;',$symbol,'&#160;')" />
+          <span class="glyphicon glyphicon-{$icon}" aria-hidden="true"></span>
         </a>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="$symbol" />
+        <span class="glyphicon glyphicon-{$icon}" aria-hidden="true"></span>
       </xsl:otherwise>
     </xsl:choose>
   </span>
@@ -204,11 +207,9 @@
 
 <xsl:template match="doc">
   <xsl:param name="start" />
+  <xsl:variable name="hitNo" select="$start + position()" />
   
-  <div class="grid_1">
-    <div class="number">#<xsl:value-of select="$start + position()"/></div>
-  </div>
-  <div class="grid_11">
+  <div class="grid_12">
     <div class="hit">
       <xsl:variable name="id" select="str[@name='id']" />
       <xsl:variable name="mycoreobject" select="document(concat('mcrobject:',$id))/mycoreobject" />
@@ -228,7 +229,7 @@
           <xsl:apply-templates select="mods:identifier[@type='duepublico']" mode="bibentry.button" />
           <xsl:apply-templates select="mods:identifier[@type='doi']" mode="bibentry.button" />
           <xsl:apply-templates select="mods:location/mods:url" mode="bibentry.button" />
-          <span class="floatRight">[ ID <xsl:value-of select="number(substring-after(ancestor::mycoreobject/@ID,'mods_'))"/> ]</span>
+          <span class="floatRight"># <xsl:value-of select="$hitNo"/></span>
         </div>
       </xsl:for-each>
     </div>
