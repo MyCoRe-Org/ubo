@@ -36,10 +36,10 @@ public class Results2Basket extends MCRServlet {
         HttpServletRequest req = job.getRequest();
         HttpServletResponse res = job.getResponse();
 
-        LOGGER.info("add SOLR results to basket...");
+        String uri = "solr:" + req.getParameter("solr");
+        LOGGER.info("add SOLR results to basket:" + uri);
 
-        String url = req.getParameter("solr") + "%XSL.Style=xml";
-        Element response = MCRURIResolver.instance().resolve(url);
+        Element response = MCRURIResolver.instance().resolve(uri);
 
         for (Element result : response.getChildren("result")) {
             if ("response".equals(result.getAttributeValue("name"))) {

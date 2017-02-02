@@ -67,36 +67,32 @@
   <xsl:value-of select="$ServletsBaseURL" />
   <xsl:text>solr/select?</xsl:text>
   <xsl:for-each select="/response/lst[@name='responseHeader']/lst[@name='params']/str">
-    <xsl:value-of select="@name" />
-    <xsl:text>=</xsl:text>
     <xsl:choose>
-      <xsl:when test="@name='rows'">
-        <xsl:value-of select="$numFound" />
-      </xsl:when>
-      <xsl:when test="@name='start'">
-        <xsl:text>0</xsl:text>
-      </xsl:when>
-      <xsl:when test="@name='fl'">
-        <xsl:text>id</xsl:text>
-      </xsl:when>
+      <xsl:when test="@name='rows'" />
+      <xsl:when test="@name='start'" /> 
+      <xsl:when test="@name='fl'" />
       <xsl:otherwise>
-        <xsl:value-of select="encoder:encode(text())" />
+        <xsl:value-of select="@name" />
+        <xsl:text>=</xsl:text>
+        <xsl:value-of select="encoder:encode(text(),'UTF-8')" />
+        <xsl:text>&amp;</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>&amp;</xsl:text>
   </xsl:for-each>
+  <xsl:text>start=0&amp;fl=id&amp;rows=</xsl:text>
+  <xsl:value-of select="$numFound" />
 </xsl:variable>
 
 <xsl:variable name="actions">
   <xsl:if test="$numFound &gt; 0">
-    <action label="{i18n:translate('button.basketAdd')}" target="{$ServletsBaseURL}Results2Basket?solr={encoder:encode($exportURL)}" />
-    <action label="MODS"    target="{$exportURL}XSL.Transformer=mods" />
-    <action label="BibTeX"  target="{$exportURL}XSL.Transformer=bibtex" />
-    <action label="EndNote" target="{$exportURL}XSL.Transformer=endnote" />
-    <action label="RIS"     target="{$exportURL}XSL.Transformer=ris" />
-    <action label="PDF"     target="{$exportURL}XSL.Transformer=pdf" />
-    <action label="HTML"    target="{$exportURL}XSL.Transformer=html" />
-    <action label="CSV"     target="{str:replaceAll(str:new($exportURL),'fl=id','fl=id,year,genre,title')}wt=csv" />
+    <action label="{i18n:translate('button.basketAdd')}" target="{$ServletsBaseURL}Results2Basket?solr={encoder:encode(substring-after($exportURL,'?'))}" />
+    <action label="MODS"    target="{$exportURL}&amp;XSL.Transformer=mods" />
+    <action label="BibTeX"  target="{$exportURL}&amp;XSL.Transformer=bibtex" />
+    <action label="EndNote" target="{$exportURL}&amp;XSL.Transformer=endnote" />
+    <action label="RIS"     target="{$exportURL}&amp;XSL.Transformer=ris" />
+    <action label="PDF"     target="{$exportURL}&amp;XSL.Transformer=pdf" />
+    <action label="HTML"    target="{$exportURL}&amp;XSL.Transformer=html" />
+    <action label="CSV"     target="{str:replaceAll(str:new($exportURL),'fl=id','fl=id,year,genre,title')}&amp;wt=csv" />
   </xsl:if>
 </xsl:variable>
 
