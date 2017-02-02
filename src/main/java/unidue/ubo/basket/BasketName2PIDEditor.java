@@ -106,7 +106,8 @@ public class BasketName2PIDEditor extends MCRServlet {
 
         for (Element child : nameEntryEdited.getModsName().getChildren())
             if ("namePart".equals(child.getName()) || "nameIdentifier".equals(child.getName()))
-                contributor.addContent(child.clone());
+                if (!child.getTextTrim().isEmpty())
+                    contributor.addContent(child.clone());
 
         markAsChanged(contributor);
     }
