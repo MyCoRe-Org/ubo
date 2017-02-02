@@ -96,7 +96,7 @@
               </a>
             </td>
             <td>
-              <a href="servlets/DozBibServlet?pid={@key}&amp;year={/ubostatistics/@minYear}&amp;year.operator=%3E%3D">
+              <a href="servlets/DozBibServlet?nid_lsf={@key}&amp;year={/ubostatistics/@minYear}&amp;year.operator=%3E%3D">
                 <xsl:value-of select="@num" />
               </a>
             </td>
