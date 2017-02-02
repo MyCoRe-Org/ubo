@@ -41,14 +41,14 @@
 
   <!-- Extra facet fields to display -->
   <field name="facet_person" type="string" indexed="true" stored="false" multiValued="true"  />
-  <copyField source="role_*" dest="facet_person"/>
+  <copyField source="person_*" dest="facet_person"/>
 
   <field name="facet_host" type="string" indexed="true" stored="false" multiValued="true"  />
   <copyField source="host_title" dest="facet_host"/>
 
-  <!-- Fields for each person role, e.g. <mods:roleTerm>aut ==> role_aut -->
-  <dynamicField name="role_*"  type="name" indexed="true" stored="false" multiValued="true" />
-  <copyField source="role_*" dest="person"/>
+  <!-- Fields for each person role, e.g. <mods:roleTerm>aut ==> person_aut -->
+  <dynamicField name="person_*"  type="name" indexed="true" stored="false" multiValued="true" />
+  <copyField source="person_*" dest="person"/>
   
   <!-- Fields for each LSF person ID and role, e.g. role_lsf=aut_1234 -->
   <field name="role_lsf" type="string" indexed="true" stored="false" multiValued="true" />
@@ -61,7 +61,7 @@
 
   <!-- Field to search in "all fields" (not really all, but most) -->
   <field name="all" type="text" indexed="true" stored="false" multiValued="true" />
-  <copyField source="role_*"     dest="all" />
+  <copyField source="person_*"   dest="all" />
   <copyField source="title"      dest="all" />
   <copyField source="host_title" dest="all" />
   <copyField source="series"     dest="all" />

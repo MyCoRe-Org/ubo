@@ -114,7 +114,7 @@
   </xsl:template>
   
   <xsl:template match="mods:name[@type='personal']/mods:role/mods:roleTerm[@type='code']" mode="solrField">
-    <field name="role_{text()}">
+    <field name="person_{text()}">
       <xsl:apply-templates select="../.." mode="solrField" />
     </field>
   </xsl:template>

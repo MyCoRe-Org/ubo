@@ -110,9 +110,9 @@
   <tr class="background2"><td>all</td><td>Text</td><td>Suche in allen Datenfeldern</td><td>=, contains, like, phrase</td></tr>
   <tr class="background1"><td>title</td><td>Text</td><td>Titel</td><td>=, contains, like, phrase</td></tr>
   <tr class="background2"><td>person</td><td>Name</td><td>Personenname (Autoren, Herausgeber oder andere)</td><td>=, contains, like</td></tr>
-  <tr class="background2"><td>role_aut</td><td>Name</td><td>Autor</td><td>=, contains, like</td></tr>
-  <tr class="background1"><td>role_edt</td><td>Name</td><td>Herausgeber, Verlag</td><td>=, contains, like</td></tr>
-  <tr class="background1"><td>role_adv</td><td>Name</td><td>Doktorvater, BetreuerIn bei Dissertationen</td><td>=, contains, like</td></tr>  
+  <tr class="background2"><td>person_aut</td><td>Name</td><td>Autor</td><td>=, contains, like</td></tr>
+  <tr class="background1"><td>person_edt</td><td>Name</td><td>Herausgeber, Verlag</td><td>=, contains, like</td></tr>
+  <tr class="background1"><td>person_adv</td><td>Name</td><td>Doktorvater, BetreuerIn bei Dissertationen</td><td>=, contains, like</td></tr>  
   <tr class="background1"><td>nid_lsf</td><td>ID</td><td>Personen-ID aus HIS LSF</td><td> = </td></tr>
   <tr class="background1"><td>nid_orcid</td><td>ID</td><td>ORCID</td><td> = </td></tr>
   <tr class="background1"><td>nid_researcherid</td><td>ID</td><td>ResearcherID</td><td> = </td></tr>
@@ -153,9 +153,9 @@
   <tr class="background2"><td>all</td><td>text</td><td>search in all data fields</td><td>=, contains, like, phrase</td></tr>
   <tr class="background1"><td>title</td><td>text</td><td>title</td><td>=, contains, like, phrase</td></tr>
   <tr class="background1"><td>person</td><td>name</td><td>name (authors, editors or others)</td><td>=, contains, like</td></tr>
-  <tr class="background2"><td>role_aut</td><td>name</td><td>author</td><td>=, contains, like</td></tr>
-  <tr class="background2"><td>role_edt</td><td>name</td><td>publisher</td><td>=, contains, like</td></tr>
-  <tr class="background2"><td>role_adv</td><td>name</td><td>advisor of thesis paper</td><td>=, contains, like</td></tr>
+  <tr class="background2"><td>person_aut</td><td>name</td><td>author</td><td>=, contains, like</td></tr>
+  <tr class="background2"><td>person_edt</td><td>name</td><td>publisher</td><td>=, contains, like</td></tr>
+  <tr class="background2"><td>person_adv</td><td>name</td><td>advisor of thesis paper</td><td>=, contains, like</td></tr>
   <tr class="background1"><td>nid_lsf</td><td>ID</td><td>person ID from HIS LSF</td><td> = </td></tr>
   <tr class="background1"><td>nid_orcid</td><td>ID</td><td>ORCID</td><td> = </td></tr>
   <tr class="background1"><td>nid_researcherid</td><td>ID</td><td>ResearcherID</td><td> = </td></tr>
