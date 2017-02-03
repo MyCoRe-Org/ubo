@@ -36,8 +36,7 @@
 <xsl:template match="/bibentries">
   <email>
     <from><xsl:value-of select="$MCR.Mail.Address" /></from>
-   <!-- <to><xsl:value-of select="$MCR.Mail.Address" /></to> -->
-   <to>frank.luetzenkirchen@uni-due.de</to>
+    <to><xsl:value-of select="$MCR.Mail.Address" /></to>
     <subject>Universitätsbibliographie: <xsl:value-of select="$RSS.SourceSystem" /> RSS Feed Import</subject>
     <body>
     <xsl:text>
