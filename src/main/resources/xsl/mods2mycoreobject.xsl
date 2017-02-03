@@ -71,6 +71,7 @@
         <xsl:when test="$genre='technical report'">article</xsl:when>
         
         <!-- ignore these publication types from Scopus and PubMed  -->
+        <xsl:when test="$genre='ignore'">ignore</xsl:when>
         <xsl:when test="$genre='conference review'">ignore</xsl:when>        
         <xsl:when test="$genre='addresses'">ignore</xsl:when>
         <xsl:when test="$genre='autobiography'">ignore</xsl:when>

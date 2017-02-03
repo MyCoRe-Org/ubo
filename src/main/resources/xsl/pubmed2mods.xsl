@@ -11,17 +11,26 @@
 
   <xsl:output method="xml" encoding="UTF-8" indent="yes" xalan:indent-amount="2" />
   
-  <xsl:template match="/responseWrapper|resultList">
+  <xsl:template match="/">
+    <mods:mods>
+      <xsl:apply-templates />
+    </mods:mods>
+  </xsl:template>
+  
+  <xsl:template match="responseWrapper[hitCount=0]" priority="1">
+    <xsl:message>Warning: no data returned for <xsl:value-of select="request/query" /></xsl:message>
+    <mods:genre>ignore</mods:genre>
+  </xsl:template>
+
+  <xsl:template match="responseWrapper|resultList">
     <xsl:apply-templates />
   </xsl:template>
   
   <xsl:template match="version|hitCount|request|result/id|result/source|result/authorString" />
   
   <xsl:template match="resultList/result">
-    <mods:mods>
-      <xsl:apply-templates />
-      <xsl:apply-templates select="journalInfo/yearOfPublication" mode="dateIssued" />
-    </mods:mods>
+    <xsl:apply-templates />
+    <xsl:apply-templates select="journalInfo/yearOfPublication" mode="dateIssued" />
   </xsl:template>
   
   <xsl:template match="result/pmid">
