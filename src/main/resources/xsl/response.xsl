@@ -85,14 +85,15 @@
 
 <xsl:variable name="actions">
   <xsl:if test="$numFound &gt; 0">
-    <action label="{i18n:translate('button.basketAdd')}" target="{$ServletsBaseURL}Results2Basket?solr={encoder:encode(substring-after($exportURL,'?'))}" />
-    <action label="MODS"    target="{$exportURL}&amp;XSL.Transformer=mods" />
-    <action label="BibTeX"  target="{$exportURL}&amp;XSL.Transformer=bibtex" />
-    <action label="EndNote" target="{$exportURL}&amp;XSL.Transformer=endnote" />
-    <action label="RIS"     target="{$exportURL}&amp;XSL.Transformer=ris" />
-    <action label="PDF"     target="{$exportURL}&amp;XSL.Transformer=pdf" />
-    <action label="HTML"    target="{$exportURL}&amp;XSL.Transformer=html" />
-    <action label="CSV"     target="{str:replaceAll(str:new($exportURL),'fl=id','fl=id,year,genre,title')}&amp;wt=csv" />
+    <action label="{i18n:translate('button.basketAdd')}"  target="{$ServletsBaseURL}Results2Basket?solr={encoder:encode(substring-after($exportURL,'?'))}" />
+    <action label="{i18n:translate('button.statistics')}" target="{$exportURL}&amp;facet=true&amp;facet.field=year&amp;facet.field=subject&amp;facet.field=genre&amp;facet.field=facet_person&amp;facet.mincount=1&amp;XSL.Transformer=statistics" />
+    <action label="MODS"      target="{$exportURL}&amp;XSL.Transformer=mods" />
+    <action label="BibTeX"    target="{$exportURL}&amp;XSL.Transformer=bibtex" />
+    <action label="EndNote"   target="{$exportURL}&amp;XSL.Transformer=endnote" />
+    <action label="RIS"       target="{$exportURL}&amp;XSL.Transformer=ris" />
+    <action label="PDF"       target="{$exportURL}&amp;XSL.Transformer=pdf" />
+    <action label="HTML"      target="{$exportURL}&amp;XSL.Transformer=html" />
+    <action label="CSV"       target="{str:replaceAll(str:new($exportURL),'fl=id','fl=id,year,genre,title')}&amp;wt=csv" />
   </xsl:if>
 </xsl:variable>
 

@@ -15,7 +15,7 @@
 <xsl:variable name="page.title">
   <xsl:text>Statistik: </xsl:text>
   <xsl:value-of select="/ubostatistics/@total" />
-  <xsl:text> Publikationen insgesamt</xsl:text>
+  <xsl:text> Publikationen</xsl:text>
 </xsl:variable>
 
 <xsl:variable name="head.additional">
@@ -23,12 +23,7 @@
 </xsl:variable>
 
 <xsl:template match="ubostatistics">
-
-  <div class="section" id="sectionlast">
-    <h3><xsl:value-of select="i18n:translate('stats.hint.title')" />:</h3>
-    <p><xsl:value-of select="i18n:translate('stats.hint.show.dialog')" /></p>
-  </div>
-
+  <h2><xsl:value-of select="i18n:translate('stats.hint.title')" />: <xsl:value-of select="i18n:translate('stats.hint.show.dialog')" /></h2>
   <div id="chart-dialog" />
   <xsl:apply-templates select="table" />
 </xsl:template>
