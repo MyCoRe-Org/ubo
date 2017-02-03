@@ -63,9 +63,9 @@ public class DozBibCommands extends MCRAbstractCommands {
         addCommand(new MCRCommand("ubo build duplicates report to directory {0}",
             "unidue.ubo.dedup.DeDupCommands String",
             "builds report on possibly duplicate entries and writes it as xml to file duplicates.xml in directory {0}"));
-        addCommand(new MCRCommand("ubo import scopus publications from RSS feed",
-            "unidue.ubo.importer.scopus.ScopusFeedImporter.importPublications",
-            "Reads an RSS feed from Scopus referencing new publications and imports those publications that are not stored yet."));
+        addCommand(new MCRCommand("ubo import publications from {0} RSS feed",
+            "unidue.ubo.importer.rss.RSSFeedImporter.importFromFeed String",
+            "Reads an RSS feed referencing new publications and imports those publications that are not stored yet."));
     }
 
     /** Exports all entries as MODS dump to a zipped xml file in the given directory */

@@ -7,7 +7,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  **/
 
-package unidue.ubo.importer.scopus;
+package unidue.ubo.importer.rss;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -42,47 +42,57 @@ import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 
 /**
- * Reads an RSS feed from Scopus referencing new publications and imports those publications that are not stored yet. 
+ * Reads an RSS feed referencing new publications and imports those publications that are not stored yet. 
  * 
  * @author Frank L\u00FCtzenkirchen
  */
-public class ScopusFeedImporter {
+public class RSSFeedImporter {
 
-    private final static Logger LOGGER = LogManager.getLogger(ScopusFeedImporter.class);
+    private final static Logger LOGGER = LogManager.getLogger(RSSFeedImporter.class);
 
-    private final static String API_KEY;
-
-    private final static String API_URL;
-
-    private final static String FEED_URL;
-
-    private final static String importURI = "xslStyle:scopus2mods,mods2mycoreobject:{0}abstract/scopus_id/{1}?apikey={2}";
-
-    private final static Pattern scopusIDFinder = Pattern.compile(".+eid%3D2-s2\\.0-(\\d+)%26.+");
-
-    static {
-        API_KEY = MCRConfiguration.instance().getString("UBO.Scopus.API.Key");
-        API_URL = MCRConfiguration.instance().getString("UBO.Scopus.API.URL");
-        FEED_URL = MCRConfiguration.instance().getString("UBO.Scopus.RSSFeedURL");
+    public static void importFromFeed(String sourceSystemID) throws Exception {
+        RSSFeedImporter importer = new RSSFeedImporter(sourceSystemID);
+        importer.importPublications();
     }
 
-    public static void importPublications() throws Exception {
-        LOGGER.info("Getting new publications from Scopus RSS feed...");
+    private String sourceSystemID;
+
+    private String feedURL;
+
+    private String importURI;
+
+    private Pattern pattern2findID;
+
+    private String field2queryID;
+
+    public RSSFeedImporter(String sourceSystemID) {
+        this.sourceSystemID = sourceSystemID;
+
+        String prefix = "UBO.RSSFeedImporter." + sourceSystemID + ".";
+        MCRConfiguration config = MCRConfiguration.instance();
+        feedURL = config.getString(prefix + "FeedURL");
+        importURI = config.getString(prefix + "PublicationURI");
+        pattern2findID = Pattern.compile(config.getString(prefix + "Pattern2FindID"));
+        field2queryID = config.getString(prefix + "Field2QueryID");
+    }
+
+    public void importPublications() throws Exception {
+        LOGGER.info("Getting new publications from " + sourceSystemID + " RSS feed...");
         Element bibentries = new Element("bibentries");
         SyndFeed feed = retrieveFeed();
 
         for (SyndEntry entry : feed.getEntries()) {
             String link = entry.getLink();
-            Matcher m = scopusIDFinder.matcher(link);
+            Matcher m = pattern2findID.matcher(link);
             if (m.matches()) {
-                String scopusID = m.group(1);
+                String externalID = m.group(1);
                 try {
-                    handlePublication(bibentries, scopusID);
+                    handlePublication(bibentries, externalID);
                 } catch (Exception ex) {
-                    LOGGER.warn("Exception while importing publication from Scopus ID", ex);
+                    LOGGER.warn("Exception while importing publication from " + sourceSystemID, ex);
                 }
             } else
-                LOGGER.warn("no Scopus ID found in link " + link);
+                LOGGER.warn("no publication ID found in link " + link);
         }
         int numPublicationsImported = bibentries.getChildren().size();
 
@@ -90,20 +100,21 @@ public class ScopusFeedImporter {
         if (numPublicationsImported > 0) {
             HashMap<String, String> parameters = new HashMap<String, String>();
             parameters.put("MCR.Mail.Address", MCRConfiguration.instance().getString("MCR.Mail.Address"));
-            MCRMailer.sendMail(new Document(bibentries), "scopus-rss-import-e-mail", parameters);
+            parameters.put("RSS.SourceSystem", sourceSystemID);
+            MCRMailer.sendMail(new Document(bibentries), "rss-import-e-mail", parameters);
         }
     }
 
-    private static void handlePublication(Element bibentries, String scopusID) throws Exception {
-        if (isAlreadyStored(scopusID)) {
-            LOGGER.info("publication with ID " + scopusID + " already existing, will not import.");
+    private void handlePublication(Element bibentries, String externalID) throws Exception {
+        if (isAlreadyStored(externalID)) {
+            LOGGER.info("publication with ID " + externalID + " already existing, will not import.");
             return;
         }
 
-        LOGGER.info("publication with ID " + scopusID + " does not exist yet, retrieving data...");
-        Element entry = buildEntryFromScopus(scopusID);
+        LOGGER.info("publication with ID " + externalID + " does not exist yet, retrieving data...");
+        Element publication = retrieveAndConvertPublication(externalID);
 
-        MCRObject obj = new MCRObject(new Document(entry));
+        MCRObject obj = new MCRObject(new Document(publication));
         MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
         wrapper.setServiceFlag("status", "imported");
 
@@ -122,27 +133,30 @@ public class ScopusFeedImporter {
 
     /** If mods:genre was set to "ignore" by conversion/import function, ignore this publication and do not import */
     private static boolean shouldIgnore(MCRMODSWrapper wrapper) {
-        return "ignore".equals(wrapper.getElementValue("mods:genre"));
+        for (Element genre : wrapper.getElements("mods:genre"))
+            if (genre.getTextTrim().contains("ignore"))
+                return true;
+        return false;
     }
 
-    private static SyndFeed retrieveFeed() throws IOException, MalformedURLException, FeedException {
-        XmlReader feedReader = new XmlReader(new URL(FEED_URL));
+    private SyndFeed retrieveFeed() throws IOException, MalformedURLException, FeedException {
+        XmlReader feedReader = new XmlReader(new URL(feedURL));
         SyndFeedInput input = new SyndFeedInput();
         SyndFeed feed = input.build(feedReader);
         return feed;
     }
 
-    private static boolean isAlreadyStored(String scopusID) throws SolrServerException, IOException {
+    private boolean isAlreadyStored(String externalID) throws SolrServerException, IOException {
         SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
         SolrQuery query = new SolrQuery();
-        query.setQuery("id_scopus:" + MCRSolrUtils.escapeSearchValue(scopusID));
+        query.setQuery(field2queryID + ":" + MCRSolrUtils.escapeSearchValue(externalID));
         query.setRows(0);
         SolrDocumentList results = solrClient.query(query).getResults();
         return (results.getNumFound() > 0);
     }
 
-    private static Element buildEntryFromScopus(String scopusID) {
-        String uri = MessageFormat.format(importURI, API_URL, scopusID, API_KEY);
+    private Element retrieveAndConvertPublication(String externalID) {
+        String uri = MessageFormat.format(importURI, externalID);
         return MCRURIResolver.instance().resolve(uri);
     }
 }
