@@ -96,4 +96,10 @@
     </article>
   </xsl:template>
   
+  <!-- Dynamic includes -->
+  
+  <xsl:template match="xinclude">
+    <xsl:copy-of select="document(@uri)/*/node()" />
+  </xsl:template>
+  
 </xsl:stylesheet>
