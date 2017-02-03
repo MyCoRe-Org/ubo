@@ -18,14 +18,8 @@
   <xsl:param name="CurrentUser" />
   <xsl:param name="CurrentLang" />
   <xsl:param name="DefaultLang" />
-  <xsl:param name="DocumentBaseURL" />
-  <xsl:param name="DocumentID" />
-  <xsl:param name="DerivateID" />
-  <xsl:param name="FilePath" />
-  <xsl:param name="FileName" />
   <xsl:param name="WritePermission" />
   <xsl:param name="ReadPermission" />
-  <xsl:param name="TicketID" />
   <xsl:param name="UBO.System.ReadOnly" />
   <xsl:param name="UBO.Build.TimeStamp" select="''" />
 
@@ -40,9 +34,6 @@
 
   <!-- optional: last mofidied date of this page in format YYYY-MM-TT -->
   <xsl:variable name="pageLastModified" />
-
-  <!-- optional: impression image -->
-  <xsl:variable name="impression" />
 
   <!-- id of the current page -->
   <xsl:variable name="PageID" />
@@ -75,7 +66,6 @@
   <xsl:variable name="navigation.tree" select="document('webapp:navigation.xml')/navigation" />
 
   <xsl:variable name="CurrentItem" select="$navigation.tree/descendant-or-self::item[@id = $NavigationID]" />
-  <xsl:variable name="navigation" select="($CurrentItem/ancestor-or-self::*[@root='true'])[last()]" />
   
   <!-- true if current user is the guest user -->
   <xsl:variable name="isGuest" select="$CurrentUser = $MCR.Users.Guestuser.UserName"/>
@@ -83,21 +73,10 @@
   <!-- html page -->
 
   <xsl:template match="/">
-
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>
   
     </xsl:text>
-
-    <!-- print html root element for specific browsers -->
-    <xsl:comment>[if IEMobile 7 ]&gt;&lt;html class="no-js iem7" manifest="default.appcache?v=1"&gt;&lt;![endif]</xsl:comment>
-    <xsl:comment>[if lt IE 7 ]&gt;&lt;html class="no-js ie6" lang="de"&gt;&lt;![endif]</xsl:comment>
-    <xsl:comment>[if IE 7 ]&gt;&lt;html class="no-js ie7" lang="de"&gt;&lt;![endif]</xsl:comment>
-    <xsl:comment>[if IE 8 ]&gt;&lt;html class="no-js ie8" lang="de"&gt;&lt;![endif]</xsl:comment>
-    <xsl:comment>[if (gte IE 9)|(gt IEMobile 7)|!(IEMobile)|!(IE)]&gt;&lt;!</xsl:comment>
     <html lang="{$CurrentLang}">
-      <xsl:comment>
-        &lt;![endif]
-      </xsl:comment>
       <xsl:call-template name="layout.head" />
       <xsl:call-template name="layout.body" />
     </html>
@@ -108,14 +87,10 @@
   <xsl:template name="layout.body">
     <xsl:element name="body">
       <xsl:attribute name="class">
-        <xsl:value-of select="'clearfix '"/>
+        <xsl:text>clearfix layout</xsl:text>
         <xsl:choose>
-          <xsl:when test="/*/sidebar">
-            <xsl:value-of select="'layout2'"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="'layout1'"/>
-          </xsl:otherwise>
+          <xsl:when test="/*/sidebar">2</xsl:when>
+          <xsl:otherwise>1</xsl:otherwise>
         </xsl:choose>
       </xsl:attribute>
       
@@ -129,7 +104,7 @@
         <xsl:call-template name="layout.breadcrumbPath" />
         <div id="leftbar">
           <xsl:call-template name="layout.mainnavigation" />
-          <xsl:call-template name="layout.login" />
+          <xsl:call-template name="layout.logout" />
         </div>
         <xsl:call-template name="layout.inhalt" />
         <xsl:apply-templates select="/*/sidebar"/>
@@ -271,157 +246,51 @@
 
   <xsl:template name="layout.head">
     <head>
-      <xsl:call-template name="layout.headMicrosoft" />
-      <xsl:call-template name="layout.noCaching" />
-      <xsl:call-template name="layout.htmlContentType" />
-      <xsl:call-template name="layout.handheldFriendly" />
-      <xsl:call-template name="layout.scripts" />
-      <xsl:call-template name="layout.shiv" />
-      <xsl:call-template name="layout.headAdditional" />
-      <xsl:call-template name="layout.pageTitle" />
-      <xsl:call-template name="layout.cssLinks" />
-      <xsl:call-template name="layout.shortcutIcons" />
+      <title><xsl:value-of select="$page.title" /></title>
+      <meta charset="utf-8" />
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+      <meta http-equiv="cleartype" content="on" />
+      <meta http-equiv="expires" content="0" />
+      <meta http-equiv="cache-control" content="no-cache" />
+      <meta http-equiv="pragma" content="no-cache" />
+      <meta name="HandheldFriendly" content="True" />
+      <meta name="MobileOptimized" content="320" />
+      <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1" />
+      <link href='https://fonts.googleapis.com/css?family=Droid+Sans|Droid+Sans+Mono' rel='stylesheet' type='text/css'/>
+      <link rel="stylesheet" href="{$WebApplicationBaseURL}external/jquery-ui-theme/jquery-ui-1.8.21.custom.css" />
+      <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/style.css" />
+      <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/legacy.css" />
+      <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/duepublico.css?v={$UBO.Build.TimeStamp}" />
+      <link rel="stylesheet" href="{$WebApplicationBaseURL}external/chosen/chosen.css" />
+      <link rel="stylesheet" href="{$WebApplicationBaseURL}webjars/bootstrap-glyphicons/bdd2cbfba0/css/bootstrap-glyphicons.css" />
+      <xsl:text disable-output-escaping="yes">&lt;!--[if gte IE 9]&gt;</xsl:text>
+      <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/ie9fixes.css" />
+      <xsl:text disable-output-escaping="yes">&lt;![endif]--&gt;</xsl:text>
+      <link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://www.uni-due.de/imperia/md/images/cms/h/apple-touch-icon.png" />
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://www.uni-due.de/imperia/md/images/cms/m/apple-touch-icon.png" />
+      <link rel="apple-touch-icon-precomposed" href="https://www.uni-due.de/imperia/md/images/cms/l/apple-touch-icon-precomposed.png" />
+      <link rel="shortcut icon" href="https://www.uni-due.de/imperia/md/images/cms/l/apple-touch-icon.png" />
+      <link rel="shortcut icon" href="{$WebApplicationBaseURL}images/favicon.ico" />
+      <script type="text/javascript" src="{$WebApplicationBaseURL}external/jquery-1.7.min.js"></script>
+      <script type="text/javascript"> jQuery.noConflict(); </script>
+      <script type="text/javascript" src="{$WebApplicationBaseURL}external/html5shiv-3.5/html5shiv.js"></script>
+      <script type="text/javascript" src="{$WebApplicationBaseURL}external/modernizr-2.5.3/modernizr.js"></script>
+      <xsl:text disable-output-escaping="yes">&lt;!--[if lt IE 9]&gt;</xsl:text>
+      <script src="{$WebApplicationBaseURL}external/html5shiv-3.5/html5shiv.js"></script>
+      <xsl:text disable-output-escaping="yes">&lt;![endif]--&gt;</xsl:text>
+      <xsl:copy-of select="$head.additional" />
     </head>
-  </xsl:template>
-
-  <!-- Microsoft -->
-
-  <xsl:template name="layout.headMicrosoft">
-    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
-    <meta http-equiv="cleartype" content="on" />
-  </xsl:template>
-
-  <!-- Optional: Weitere Elemente für den HTML <head> Bereich -->
-
-  <xsl:template name="layout.headAdditional">
-    <xsl:copy-of select="$head.additional" />
-  </xsl:template>
-
-  <!-- Load JavaScripts -->
-
-  <xsl:template name="layout.scripts">
-    <script type="text/javascript" src="{$WebApplicationBaseURL}external/jquery-1.7.min.js"></script>
-    <script type="text/javascript"> jQuery.noConflict(); </script>
-    <script type="text/javascript" src="{$WebApplicationBaseURL}external/html5shiv-3.5/html5shiv.js"></script>
-    <script type="text/javascript" src="{$WebApplicationBaseURL}external/modernizr-2.5.3/modernizr.js"></script>
-  </xsl:template>
-
-  <!-- support html5 elements inside ie version less than ie9 (http://code.google.com/p/html5shiv/) -->
-  <xsl:template name="layout.shiv">
-    <xsl:text disable-output-escaping="yes">
-      &lt;!--[if lt IE 9]&gt;
-    </xsl:text>
-    <script src="{$WebApplicationBaseURL}external/html5shiv-3.5/html5shiv.js"></script>
-    <xsl:text disable-output-escaping="yes">
-      &lt;![endif]--&gt;
-    </xsl:text>
-  </xsl:template>
-
-  <!-- http://t.co/dKP3o1e -->
-
-  <xsl:template name="layout.handheldFriendly">
-    <meta name="HandheldFriendly" content="True" />
-    <meta name="MobileOptimized" content="320" />
-    <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1" />
-  </xsl:template>
-
-  <!-- HTML Content Type -->
-
-  <xsl:template name="layout.htmlContentType">
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <meta charset="utf-8" />
-  </xsl:template>
-
-  <!-- No Caching -->
-
-  <xsl:template name="layout.noCaching">
-    <meta http-equiv="expires" content="0" />
-    <meta http-equiv="cache-control" content="no-cache" />
-    <meta http-equiv="pragma" content="no-cache" />
-  </xsl:template>
-
-  <!-- CSS Links -->
-
-  <xsl:template name="layout.cssLinks">
-    <link href='https://fonts.googleapis.com/css?family=Droid+Sans|Droid+Sans+Mono' rel='stylesheet' type='text/css'/>
-    <link rel="stylesheet" href="{$WebApplicationBaseURL}external/jquery-ui-theme/jquery-ui-1.8.21.custom.css" />
-    <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/style.css" />
-    <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/legacy.css" />
-    <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/duepublico.css?v={$UBO.Build.TimeStamp}" />
-    <link rel="stylesheet" href="{$WebApplicationBaseURL}external/chosen/chosen.css" />
-    <link rel="stylesheet" href="{$WebApplicationBaseURL}webjars/bootstrap-glyphicons/bdd2cbfba0/css/bootstrap-glyphicons.css" />
-    <xsl:text disable-output-escaping="yes">
-      &lt;!--[if gte IE 9]&gt;
-    </xsl:text>
-    <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/ie9fixes.css" />
-    <xsl:text disable-output-escaping="yes">
-      &lt;![endif]--&gt;
-    </xsl:text>
-    
-  </xsl:template>
-
-  <!-- Shortcut Icon -->
-
-  <xsl:template name="layout.shortcutIcons">
-    <!-- For iPhone 4 -->
-    <link rel="apple-touch-icon-precomposed" sizes="114x114"
-      href="https://www.uni-due.de/imperia/md/images/cms/h/apple-touch-icon.png" />
-    <!-- For iPad 1 -->
-    <link rel="apple-touch-icon-precomposed" sizes="72x72"
-      href="https://www.uni-due.de/imperia/md/images/cms/m/apple-touch-icon.png" />
-    <!-- For iPhone 3G, iPod Touch and Android -->
-    <link rel="apple-touch-icon-precomposed" href="https://www.uni-due.de/imperia/md/images/cms/l/apple-touch-icon-precomposed.png" />
-    <!-- For Nokia -->
-    <link rel="shortcut icon" href="https://www.uni-due.de/imperia/md/images/cms/l/apple-touch-icon.png" />
-    <!-- For everything else -->
-    <link rel="shortcut icon" href="{$WebApplicationBaseURL}images/favicon.ico" />
-  </xsl:template>
-
-  <!-- Seiten-Titel -->
-
-  <xsl:template name="layout.pageTitle">
-    <title>
-      <xsl:value-of select="$page.title" />
-    </title>
   </xsl:template>
 
   <!-- Skip-Navigation -->
 
   <xsl:template name="layout.skip">
     <ul id="skip">
-      <li>
-        <a href="#inhalt">Inhalt</a>
-      </li>
-      <li>
-        <a href="#zielgruppen">Zielgruppeneinstieg</a>
-      </li>
-      <li>
-        <a href="#hauptnavigation">Hauptnavigation</a>
-      </li>
+      <li><a href="#inhalt">Inhalt</a></li>
+      <li><a href="#zielgruppen">Zielgruppeneinstieg</a></li>
+      <li><a href="#hauptnavigation">Hauptnavigation</a></li>
     </ul>
-  </xsl:template>
-
-  <!-- Meta-Navigation -->
-
-  <xsl:template name="layout.metanav">
-    <xsl:variable name="metanavigation" select="$navigation.tree/item[@role='meta']/item"/>
-    <nav id="metanav">
-      <ul>
-        <!-- Find the item that is the root of the navigation tree to display -->
-        <xsl:for-each select="$metanavigation" >
-          <xsl:choose>
-            <!-- There is an item that should be displayed as root of the tree -->
-            <xsl:when test="name()='item'">
-              <xsl:apply-templates select="." mode="navigation" />
-            </xsl:when>
-            <!-- Display the complete navigation tree down from top -->
-            <xsl:otherwise>
-              <xsl:apply-templates select="item[@label|label]" mode="navigation" />
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:for-each>
-      </ul>
-    </nav>
   </xsl:template>
 
   <!-- Brotkrumen-Navigation -->
@@ -443,7 +312,7 @@
       </span>
 
       <xsl:apply-templates mode="breadcrumb"
-        select="$CurrentItem/ancestor-or-self::item[@label|label][ancestor-or-self::*=$navigation[@role='main']]" />
+        select="$CurrentItem/ancestor-or-self::item[@label|label][ancestor-or-self::*=$navigation.tree[@role='main']]" />
 
       <xsl:apply-templates mode="breadcrumb" select="xalan:nodeset($breadcrumb.extensions)/item" />
 
@@ -516,7 +385,7 @@
   </xsl:template>
 
   <!-- current user and login formular-->
-  <xsl:template name="layout.login">
+  <xsl:template name="layout.logout">
     <xsl:if test="not($CurrentUser = $MCR.Users.Guestuser.UserName)">
       <div id="login">
         <span class="user">
@@ -540,17 +409,8 @@
     <nav role="navigation" id="hauptnavigation">
       <ul id="mainnav">
         <!-- Find the item that is the root of the navigation tree to display -->
-        <xsl:for-each select="$navigation">
-          <xsl:choose>
-            <!-- There is an item that should be displayed as root of the tree -->
-            <xsl:when test="name()='item'">
-              <xsl:apply-templates select="." mode="navigation" />
-            </xsl:when>
-            <!-- Display the complete navigation tree down from top -->
-            <xsl:otherwise>
-              <xsl:apply-templates select="item[@label|label]" mode="navigation" />
-            </xsl:otherwise>
-          </xsl:choose>
+        <xsl:for-each select="$navigation.tree">
+          <xsl:apply-templates select="item[@label|label]" mode="navigation" />
         </xsl:for-each>
         <xsl:if test="$CurrentUser = $MCR.Users.Guestuser.UserName">
           <li>
@@ -630,15 +490,6 @@
       <h1 id="seitentitel">
         <xsl:value-of select="$page.title" disable-output-escaping="yes" />
       </h1>
-      
-      <!-- banner -->      
-      <xsl:for-each select="$CurrentItem">
-        <xsl:for-each select="(ancestor-or-self::*[@banner])[last()]">
-        <a href="{$WebApplicationBaseURL}{@ref}">
-          <img id="banner" src="{$WebApplicationBaseURL}{@banner}" alt="{i18n:translate('navigation.Banner.alt')}" />
-        </a>
-        </xsl:for-each>
-      </xsl:for-each>
     </div>
   </xsl:template>
   
@@ -653,10 +504,9 @@
 
   <xsl:template name="layout.footer">
     <footer role="contentinfo" class="clearfix">
-      <xsl:call-template name="layout.metanav" />
       <p>
         <xsl:call-template name="layout.lastModified" />
-        <xsl:text>© Universität Duisburg-Essen | - </xsl:text>
+        <xsl:text>© Universität Duisburg-Essen | </xsl:text>
         <a href="mailto:{$MCR.Mail.Address}">
           <xsl:value-of select="$MCR.Mail.Address" />
         </a>
@@ -687,7 +537,6 @@
       <xsl:text> | </xsl:text>
     </xsl:if>
   </xsl:template>
-
 
   <!-- print out message that the system is in read only mode -->
 
