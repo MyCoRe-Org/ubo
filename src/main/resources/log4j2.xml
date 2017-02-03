@@ -13,6 +13,6 @@
     <logger name="org.hibernate" level="error" />
     <logger name="org.mycore.frontend.editor.validation" level="info" />
     <logger name="org.mycore.services.fieldquery.MCRSearcher" level="info" />
-    <logger name="org.mycore.backend.lucene.MCRLuceneSearcher" level="info" />
+    <logger name="org.mycore.common.content.transformer.MCRXSLTransformer" level="warn" />
   </loggers>
 </configuration>
