@@ -16,7 +16,7 @@
   </xed:template>
 
   <xed:template id="name">
-    <xed:repeat xpath="condition2[@operator='contains']">
+    <xed:repeat xpath="condition2[@operator='phrase']">
       <div>
         <xed:bind xpath="@field">
           <select class="label" style="margin-left:6px; width:182px;">
