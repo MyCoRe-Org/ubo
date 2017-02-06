@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsl:stylesheet 
+  version="1.0" 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+  xmlns:encoder="xalan://java.net.URLEncoder"
+  xmlns:str="xalan://java.lang.String"
+  exclude-result-prefixes="xsl xalan i18n encoder" 
+>
+
+<xsl:param name="RequestURL" />
+<xsl:param name="ServletsBaseURL" />
+
+<xsl:variable name="maxFacetValuesDisplayed">5</xsl:variable>
+<xsl:variable name="quotes">"</xsl:variable>
+<xsl:variable name="proximitySearch">~5</xsl:variable>
+
+<xsl:template match="lst[@name='facet_counts']">
+  <xsl:apply-templates select="../lst[@name='responseHeader']/lst[@name='params']" mode="fq" />
+  <xsl:apply-templates select="lst[@name='facet_fields']/lst" />
+</xsl:template>
+
+<!-- List currently active filter queries -->
+<xsl:template match="lst[@name='responseHeader']/lst[@name='params']" mode="fq">
+  <xsl:variable name="hasActiveFilters" select="boolean(*[@name='fq'])" />
+  <article class="highlight2">
+    <hgroup class="ubo-facets">
+      <h3>
+        <xsl:value-of select="i18n:translate(concat('facets.filters.',$hasActiveFilters))" />
+      </h3>
+    </hgroup>
+    <xsl:if test="$hasActiveFilters">
+      <ul class="ubo-facets">
+        <xsl:for-each select="*[@name='fq']/descendant-or-self::str">
+
+          <xsl:variable name="fq_name" select="substring-before(.,':')" />
+          <xsl:variable name="fq_value" select="substring-after(.,':')" />
+          <xsl:variable name="removeURL">
+            <xsl:value-of select="$ServletsBaseURL" />
+            <xsl:text>solr/select?</xsl:text>
+            <xsl:for-each select="/response/lst[@name='responseHeader']/lst[@name='params']/*">
+              <xsl:variable name="param_name" select="@name" />
+              <xsl:for-each select="descendant-or-self::str"> <!-- may be an array: arr/str or ./str -->
+                <xsl:choose>
+                  <xsl:when test="$param_name='start'" />
+                  <xsl:when test="($param_name='fq') and (text()=concat($fq_name,':',$fq_value))" /> <!--  remove this --> 
+                  <xsl:otherwise>
+                    <xsl:value-of select="$param_name" />
+                    <xsl:text>=</xsl:text>
+                    <xsl:value-of select="encoder:encode(text(),'UTF-8')" />
+                    <xsl:text>&amp;</xsl:text>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+            </xsl:for-each>
+            <xsl:text>start=0</xsl:text>
+          </xsl:variable>
+
+          <li>
+            <a class="ubo-facet-remove" href="{$removeURL}"> 
+              <span class="glyphicon glyphicon-remove-circle" aria-hidden="true" />
+            </a>
+            <span class="ubo-facet-filter">
+              <xsl:call-template name="output.facet.value">
+                <xsl:with-param name="type"  select="$fq_name" />
+                <xsl:with-param name="value" select="str:replaceAll(str:replaceAll($fq_value,$quotes,''),$proximitySearch,'')" />
+              </xsl:call-template>
+            </span>
+          </li>
+        </xsl:for-each>
+      </ul>
+    </xsl:if>
+  </article>
+</xsl:template>
+
+<!-- List a facet -->
+<xsl:template match="lst[@name='facet_fields']/lst">
+  <article class="highlight2">
+    <hgroup class="ubo-facets"><h3><xsl:value-of select="i18n:translate(concat('facets.facet.',str:replaceAll(str:new(@name),'facet_','')))" />:</h3></hgroup>
+    <ul id="{generate-id(.)}" class="ubo-facets">
+      <xsl:choose>
+        <xsl:when test="@name='year'"> <!-- sort year facets by year, descending -->
+          <xsl:apply-templates select="int" mode="facets">
+            <xsl:sort select="@name" data-type="number" order="descending" />
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise> <!-- sort other facets by facet count, descending -->
+          <xsl:apply-templates select="int" mode="facets"> 
+            <xsl:sort select="text()" data-type="number" order="descending" />
+          </xsl:apply-templates>
+        </xsl:otherwise>
+      </xsl:choose>
+    </ul>
+    <xsl:if test="count(int) &gt; number($maxFacetValuesDisplayed)">
+      <a class="ubo-facets-toggle" onclick="jQuery('ul#{generate-id(.)} li:gt({$maxFacetValuesDisplayed})').slideToggle();">
+        <xsl:value-of select="i18n:translate('facets.toggle.more')" />
+        <xsl:text>...</xsl:text>
+      </a>
+    </xsl:if>
+  </article>
+</xsl:template>
+
+<!-- URL to build links to add a facet filter query -->
+<xsl:variable name="baseURL">
+  <xsl:value-of select="$ServletsBaseURL" />
+  <xsl:text>solr/select?</xsl:text>
+  <xsl:for-each select="/response/lst[@name='responseHeader']/lst[@name='params']/*">
+    <xsl:variable name="name" select="@name" />
+    <xsl:for-each select="descendant-or-self::str"> <!-- may be an array: arr/str or ./str -->
+      <xsl:choose>
+        <xsl:when test="$name='start'" /> 
+        <xsl:otherwise>
+          <xsl:value-of select="$name" />
+          <xsl:text>=</xsl:text>
+          <xsl:value-of select="encoder:encode(text(),'UTF-8')" />
+          <xsl:text>&amp;</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+  </xsl:for-each>
+  <xsl:text>start=0&amp;fq=</xsl:text>
+</xsl:variable>
+
+<!-- Output single facet value -->
+<xsl:template match="lst[@name='facet_fields']/lst/int" mode="facets">
+  <li>
+    <xsl:if test="position() &gt; number($maxFacetValuesDisplayed)">
+      <xsl:attribute name="style">display:none;</xsl:attribute>
+    </xsl:if>
+    <span class="ubo-facet-count">
+      <xsl:value-of select="text()" />
+    </span>
+    <span class="ubo-facet-value">
+      <xsl:choose>
+        <xsl:when test="number(text()) &lt; number($numFound)">
+          <a>
+            <xsl:attribute name="href">
+              <xsl:value-of select="$baseURL" />
+              <xsl:value-of select="encoder:encode(concat(str:replaceAll(str:new(../@name),'facet_',''),':',$quotes,@name,$quotes),'UTF-8')" />
+              <xsl:if test="ancestor::lst[@name='facet_person']">
+                <xsl:value-of select="$proximitySearch" />
+              </xsl:if>
+            </xsl:attribute>
+            <xsl:call-template name="output.facet.value">
+              <xsl:with-param name="type"  select="../@name" />
+              <xsl:with-param name="value" select="@name"/>
+            </xsl:call-template>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="output.facet.value">
+            <xsl:with-param name="type"  select="../@name" />
+            <xsl:with-param name="value" select="@name"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
+    </span>
+  </li>
+</xsl:template>
+
+<xsl:variable name="subjects" select="document('resource:fachreferate.xml')/fachreferate" />
+
+<!-- Output facet value: some must be translated to a label, e.g. subject, genre -->
+<xsl:template name="output.facet.value">
+  <xsl:param name="type"  />
+  <xsl:param name="value" />
+  
+  <xsl:choose>
+    <xsl:when test="$type='subject'">
+      <xsl:value-of select="$subjects/item[@value=$value]/@label" />
+    </xsl:when>
+    <xsl:when test="$type='genre'">
+      <xsl:value-of select="$genres//category[@ID=$value]/label[lang($CurrentLang)]/@text" />
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$value" />
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+</xsl:stylesheet>

@@ -1842,3 +1842,61 @@ div.duplicates .label-info {
 	width: 50px;
 	text-align: right;
 }
+
+hgroup.ubo-facets {
+	margin: 0;
+}
+
+hgroup.ubo-facets h3 {
+	font-weight: bold;
+}
+
+ul.ubo-facets {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.ubo-facet-filter {
+	display: inline-block;
+	width: 180px;
+	height: 1.3em;
+	vertical-align: top;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+}
+
+.ubo-facet-count {
+	display: inline-block;
+	width: 42px;
+	height: 1.2em;
+	vertical-align: top;
+	margin: 0;
+	padding: 0;
+	text-align: right;
+}
+
+.ubo-facet-count:after { 
+  content:"|"
+}
+
+.ubo-facet-value {
+	display: inline-block;
+	width: 160px;
+	height: 1.3em;
+	vertical-align: top;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+}
+
+a.ubo-facets-toggle {
+	float:right;
+}
+
+a.ubo-facet-remove {
+  text-decoration: none;
+  color: red;
+  margin-right: 1ex;
+}
