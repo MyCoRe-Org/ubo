@@ -29,12 +29,14 @@
       <xsl:with-param name="mode" select="$mode" />
       <xsl:with-param name="class" select="'conference'" />
     </xsl:call-template>
-    <xsl:call-template name="output.line">
-      <xsl:with-param name="selected" select="mods:originInfo" />
-      <xsl:with-param name="before"> - </xsl:with-param>
-      <xsl:with-param name="mode" select="$mode" />
-      <xsl:with-param name="class" select="'origin'" />
-    </xsl:call-template>
+    <xsl:if test="not(mods:relatedItem[@type='host'])">
+      <xsl:call-template name="output.line">
+        <xsl:with-param name="selected" select="mods:originInfo" />
+        <xsl:with-param name="before"> - </xsl:with-param>
+        <xsl:with-param name="mode" select="$mode" />
+        <xsl:with-param name="class" select="'origin'" />
+      </xsl:call-template>
+    </xsl:if>
     <xsl:call-template name="output.line"> 
       <xsl:with-param name="selected" select="mods:relatedItem[@type='series']" />
       <xsl:with-param name="before"> - </xsl:with-param>
