@@ -92,8 +92,8 @@
 <xsl:template match="mycoreobject" mode="basketContent">
   <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
     <div class="labels">
-      <xsl:call-template name="pubtype" />
       <xsl:call-template name="label-year" />
+      <xsl:call-template name="pubtype" />
     </div>
     <div class="content bibentry">  
       <xsl:apply-templates select="." mode="cite"> 

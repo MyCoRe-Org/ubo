@@ -122,8 +122,8 @@
   </div>
   <div class="section">
     <div class="labels">
-      <xsl:call-template name="pubtype" />
       <xsl:call-template name="label-year" />
+      <xsl:call-template name="pubtype" />
       <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info" />
       <xsl:apply-templates select="mods:extension/tag" />
     </div>
