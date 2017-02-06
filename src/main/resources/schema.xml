@@ -43,8 +43,8 @@
   <field name="facet_person" type="string" indexed="true" stored="false" multiValued="true"  />
   <copyField source="person_*" dest="facet_person"/>
 
-  <field name="facet_host" type="string" indexed="true" stored="false" multiValued="true"  />
-  <copyField source="host_title" dest="facet_host"/>
+  <field name="facet_host_title" type="string" indexed="true" stored="false" multiValued="true"  />
+  <copyField source="host_title" dest="facet_host_title"/>
 
   <!-- Fields for each person role, e.g. <mods:roleTerm>aut ==> person_aut -->
   <dynamicField name="person_*"  type="name" indexed="true" stored="false" multiValued="true" />
