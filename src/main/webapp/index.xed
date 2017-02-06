@@ -44,9 +44,14 @@
           </xed:bind>
           
           <!-- Standard users must only find confirmed publications, admins find all publications -->
-          <xed:if test="not(xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin'))">
-            <xed:bind xpath="condition[@field='status'][@operator='='][@value='confirmed']" />
-          </xed:if>
+          <xed:choose>
+            <xed:when test="not(xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin'))">
+              <xed:bind xpath="condition[@field='status'][@operator='='][@value='confirmed']" />
+            </xed:when>
+            <xed:otherwise>
+              <xed:bind xpath="condition[@field='objectProject'][@operator='='][@value='ubo']" />
+            </xed:otherwise>
+          </xed:choose>
           
         </xed:bind>
       </xed:bind>

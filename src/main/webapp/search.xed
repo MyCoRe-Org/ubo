@@ -125,6 +125,7 @@
                     <input type="checkbox" value="confirmed" /><strong><xed:output i18n="search.dozbib.status.confirmed" /></strong>
                   </div>
                 </xed:bind>
+                <xed:bind xpath="condition[@field='objectProject'][@operator='='][@value='ubo']" />
               </xed:when>
               <xed:otherwise>
                 <xed:bind xpath="condition[@field='status'][@operator='='][@value='confirmed']" />
