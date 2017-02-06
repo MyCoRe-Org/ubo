@@ -29,6 +29,7 @@
     <hgroup class="ubo-facets">
       <h3>
         <xsl:value-of select="i18n:translate(concat('facets.filters.',$hasActiveFilters))" />
+        <xsl:text>:</xsl:text>
       </h3>
     </hgroup>
     <xsl:if test="$hasActiveFilters">
@@ -94,8 +95,9 @@
       </xsl:choose>
     </ul>
     <xsl:if test="count(int) &gt; number($maxFacetValuesDisplayed)">
-      <a class="ubo-facets-toggle" onclick="jQuery('ul#{generate-id(.)} li:gt({$maxFacetValuesDisplayed})').slideToggle();">
-        <xsl:value-of select="i18n:translate('facets.toggle.more')" />
+      <a class="ubo-facets-toggle" id="tg{generate-id(.)}" onclick="jQuery('ul#{generate-id(.)} li:gt({$maxFacetValuesDisplayed})').slideToggle(); jQuery('a#tg{generate-id(.)} span').toggle();">
+        <span><xsl:value-of select="i18n:translate('facets.toggle.more')" /></span>
+        <span style="display:none;"><xsl:value-of select="i18n:translate('facets.toggle.less')" /></span>
         <xsl:text>...</xsl:text>
       </a>
     </xsl:if>
