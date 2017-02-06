@@ -39,6 +39,9 @@
   <xsl:variable name="PageID" />
   <xsl:variable name="ContextID" />
 
+  <!-- right column as sidebar -->
+  <xsl:variable name="sidebar" />
+  
   <!-- last navigation id calculated from navigation.xml -->
   <xsl:variable name="NavigationID" xmlns:lastPageID="xalan://unidue.ubo.LastPageID">
     <xsl:choose>
@@ -90,6 +93,7 @@
         <xsl:text>clearfix layout</xsl:text>
         <xsl:choose>
           <xsl:when test="/*/sidebar">2</xsl:when>
+          <xsl:when test="string-length($sidebar) &gt; 0">2</xsl:when>
           <xsl:otherwise>1</xsl:otherwise>
         </xsl:choose>
       </xsl:attribute>
@@ -107,7 +111,12 @@
           <xsl:call-template name="layout.logout" />
         </div>
         <xsl:call-template name="layout.inhalt" />
-        <xsl:apply-templates select="/*/sidebar"/>
+        <xsl:apply-templates select="/*/sidebar" />
+        <xsl:if test="string-length($sidebar) &gt; 0">
+          <aside role="complementary" id="sidebar">
+            <xsl:copy-of select="xalan:nodeset($sidebar)/*" />
+          </aside>
+        </xsl:if>
         <xsl:call-template name="layout.footer" />
       </div>
     </xsl:element>
