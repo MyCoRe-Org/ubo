@@ -1892,7 +1892,8 @@ ul.ubo-facets {
 }
 
 a.ubo-facets-toggle {
-	float:right;
+	float: right;
+	cursor: pointer;
 }
 
 a.ubo-facet-remove {
