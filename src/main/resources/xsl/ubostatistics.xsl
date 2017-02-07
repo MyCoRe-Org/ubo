@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xsl xalan i18n">
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0" 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  xmlns:xalan="http://xml.apache.org/xalan" 
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" 
+  exclude-result-prefixes="xsl xalan i18n">
 
 <xsl:include href="layout.xsl"/>
 <xsl:include href="highcharts-header.xsl"/>
@@ -13,9 +17,11 @@
 <xsl:variable name="PageID" select="'dozbib.stats'"/>
 
 <xsl:variable name="page.title">
-  <xsl:text>Statistik: </xsl:text>
+  <xsl:value-of select="i18n:translate('stats.page.title')" />
+  <xsl:text>: </xsl:text>
   <xsl:value-of select="/ubostatistics/@total" />
-  <xsl:text> Publikationen</xsl:text>
+  <xsl:text> </xsl:text>
+  <xsl:value-of select="i18n:translate('ubo.publications')" />
 </xsl:variable>
 
 <xsl:variable name="head.additional">
@@ -79,8 +85,8 @@
     </h3>
     <table class="editor" style="width:auto;">
       <tr>
-        <th>Autor:</th>
-        <th>Anzahl:</th>
+        <th><xsl:value-of select="i18n:translate('ubo.search.name')" /></th>
+        <th><xsl:value-of select="i18n:translate('stats.count')" />:</th>
       </tr>
       <xsl:for-each select="row">
         <xsl:if test="position() &lt; 200">
