@@ -1872,7 +1872,7 @@ ul.ubo-facets {
 	position: absolute;
 	white-space: nowrap;
 	transform: translateX(0);
-	transition: 2s;
+	transition: 4s;
 }
 
 .ubo-facet-filter:hover .scroll-on-hover {
@@ -1908,7 +1908,7 @@ ul.ubo-facets {
 	position: absolute;
 	white-space: nowrap;
 	transform: translateX(0);
-	transition: 2s;
+	transition: 4s;
 }
 
 .ubo-facet-value:hover .scroll-on-hover {
@@ -1925,6 +1925,16 @@ a.ubo-facet-remove {
   color: red;
   margin-right: 1ex;
 }
+
+a.ubo-facet-add, a.ubo-facet-add:hover {
+  text-decoration: none;
+  color: rgb(10, 83, 151);
+  background-color: transparent;
+}
+
+
+
+
 
 .ubo-facet-exclude {
   text-decoration: none;

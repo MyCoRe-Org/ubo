@@ -161,7 +161,7 @@
         <a class="ubo-facet-exclude" href="{$baseURL}{encoder:encode($fq_not)}{$fq}"> <!-- Link to exclude this facet value -->
           <span class="glyphicon glyphicon-remove-circle" aria-hidden="true" />
         </a>
-        <a href="{$baseURL}{$fq}">
+        <a class="ubo-facet-add" href="{$baseURL}{$fq}">
           <span class="ubo-facet-value">
             <xsl:call-template name="output.facet.value">
               <xsl:with-param name="type"  select="../@name" />
