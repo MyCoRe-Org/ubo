@@ -197,7 +197,7 @@
     </span>
     <xsl:if test="not(/response[lst[@name='facet_counts']])">
       <span class="pageLink" style="float:right;">
-        <a href="{$resultsPageURL}0&amp;facet=true&amp;facet.field=year&amp;facet.field=facet_person&amp;facet.field=subject&amp;facet.field=genre&amp;facet.mincount=1">Filtern</a>
+        <a href="{$resultsPageURL}0&amp;facet=true&amp;facet.field=year&amp;facet.field=facet_person&amp;facet.field=subject&amp;facet.field=genre&amp;facet.field=facet_host_title&amp;facet.mincount=1">Filtern</a>
       </span>
     </xsl:if>
 

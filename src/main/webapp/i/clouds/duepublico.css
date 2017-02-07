@@ -1865,6 +1865,18 @@ ul.ubo-facets {
 	overflow: hidden;
 	margin: 0;
 	padding: 0;
+    position: relative;
+}
+
+.ubo-facet-filter .scroll-on-hover {
+	position: absolute;
+	white-space: nowrap;
+	transform: translateX(0);
+	transition: 2s;
+}
+
+.ubo-facet-filter:hover .scroll-on-hover {
+	transform: translateX(calc(180px - 100%));
 }
 
 .ubo-facet-count {
@@ -1889,6 +1901,18 @@ ul.ubo-facets {
 	overflow: hidden;
 	margin: 0;
 	padding: 0;
+    position: relative;
+}
+
+.ubo-facet-value .scroll-on-hover {
+	position: absolute;
+	white-space: nowrap;
+	transform: translateX(0);
+	transition: 2s;
+}
+
+.ubo-facet-value:hover .scroll-on-hover {
+	transform: translateX(calc(150px - 100%));
 }
 
 a.ubo-facets-toggle {

@@ -161,14 +161,14 @@
         <a class="ubo-facet-exclude" href="{$baseURL}{encoder:encode($fq_not)}{$fq}"> <!-- Link to exclude this facet value -->
           <span class="glyphicon glyphicon-remove-circle" aria-hidden="true" />
         </a>
-        <span class="ubo-facet-value">
-          <a href="{$baseURL}{$fq}">
+        <a href="{$baseURL}{$fq}">
+          <span class="ubo-facet-value">
             <xsl:call-template name="output.facet.value">
               <xsl:with-param name="type"  select="../@name" />
               <xsl:with-param name="value" select="@name"/>
             </xsl:call-template>
-          </a>
-        </span>
+          </span>
+        </a>
       </xsl:when>
       <xsl:otherwise>
         <span class="ubo-facet-exclude" />
@@ -190,19 +190,28 @@
   <xsl:param name="prefix" />
   <xsl:param name="type"  />
   <xsl:param name="value" />
-  
-  <xsl:value-of select="$prefix" />
-  <xsl:choose>
-    <xsl:when test="$type='subject'">
-      <xsl:value-of select="$subjects/item[@value=$value]/@label" />
-    </xsl:when>
-    <xsl:when test="$type='genre'">
-      <xsl:value-of select="$genres//category[@ID=$value]/label[lang($CurrentLang)]/@text" />
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:value-of select="$value" />
-    </xsl:otherwise>
-  </xsl:choose>
+
+  <xsl:variable name="label">
+    <xsl:value-of select="$prefix" />
+    <xsl:choose>
+      <xsl:when test="$type='subject'">
+        <xsl:value-of select="$subjects/item[@value=$value]/@label" />
+      </xsl:when>
+      <xsl:when test="$type='genre'">
+        <xsl:value-of select="$genres//category[@ID=$value]/label[lang($CurrentLang)]/@text" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$value" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>  
+
+  <span>
+    <xsl:if test="string-length($label) &gt; 20">
+       <xsl:attribute name="class">scroll-on-hover</xsl:attribute>
+    </xsl:if>
+    <xsl:value-of select="$label" />
+  </span>
 </xsl:template>
 
 </xsl:stylesheet>
