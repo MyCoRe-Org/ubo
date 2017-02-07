@@ -16,6 +16,7 @@
 <xsl:variable name="maxFacetValuesDisplayed">5</xsl:variable>
 <xsl:variable name="quotes">"</xsl:variable>
 <xsl:variable name="proximitySearch">~5</xsl:variable>
+<xsl:variable name="fq_not">*:* AND -</xsl:variable>
 
 <xsl:template match="lst[@name='facet_counts']">
   <xsl:apply-templates select="../lst[@name='responseHeader']/lst[@name='params']" mode="fq" />
@@ -36,8 +37,8 @@
       <ul class="ubo-facets">
         <xsl:for-each select="*[@name='fq']/descendant-or-self::str">
 
-          <xsl:variable name="fq_name" select="substring-before(.,':')" />
-          <xsl:variable name="fq_value" select="substring-after(.,':')" />
+          <xsl:variable name="fq" select="text()" />
+          
           <xsl:variable name="removeURL">
             <xsl:value-of select="$ServletsBaseURL" />
             <xsl:text>solr/select?</xsl:text>
@@ -46,7 +47,7 @@
               <xsl:for-each select="descendant-or-self::str"> <!-- may be an array: arr/str or ./str -->
                 <xsl:choose>
                   <xsl:when test="$param_name='start'" />
-                  <xsl:when test="($param_name='fq') and (text()=concat($fq_name,':',$fq_value))" /> <!--  remove this --> 
+                  <xsl:when test="($param_name='fq') and (text()=$fq)" /> <!--  remove this --> 
                   <xsl:otherwise>
                     <xsl:value-of select="$param_name" />
                     <xsl:text>=</xsl:text>
@@ -59,15 +60,29 @@
             <xsl:text>start=0</xsl:text>
           </xsl:variable>
 
+          <xsl:variable name="fq_without_proximity" select="str:replaceAll(str:replaceAll(str:new($fq),$quotes,''),$proximitySearch,'')" />
+          
           <li>
             <a class="ubo-facet-remove" href="{$removeURL}"> 
               <span class="glyphicon glyphicon-remove-circle" aria-hidden="true" />
             </a>
             <span class="ubo-facet-filter">
-              <xsl:call-template name="output.facet.value">
-                <xsl:with-param name="type"  select="$fq_name" />
-                <xsl:with-param name="value" select="str:replaceAll(str:replaceAll($fq_value,$quotes,''),$proximitySearch,'')" />
-              </xsl:call-template>
+              <xsl:choose>
+                <xsl:when test="starts-with($fq_without_proximity,$fq_not)">
+                  <xsl:variable name="fq_without_not" select="substring-after($fq_without_proximity,'-')" />
+                  <xsl:call-template name="output.facet.value">
+                    <xsl:with-param name="prefix" select="concat(i18n:translate('facets.filters.not'),' ')" />
+                    <xsl:with-param name="type"  select="substring-before($fq_without_not,':')" />
+                    <xsl:with-param name="value" select="substring-after($fq_without_not,':')" />
+                  </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:call-template name="output.facet.value">
+                    <xsl:with-param name="type"  select="substring-before($fq_without_proximity,':')" />
+                    <xsl:with-param name="value" select="substring-after($fq_without_proximity,':')" />
+                  </xsl:call-template>
+                </xsl:otherwise>
+              </xsl:choose>
             </span>
           </li>
         </xsl:for-each>
@@ -94,9 +109,10 @@
         </xsl:otherwise>
       </xsl:choose>
     </ul>
-    <xsl:if test="count(int) &gt; number($maxFacetValuesDisplayed)">
+    <xsl:variable name="numMore" select="count(int) - number($maxFacetValuesDisplayed)" />
+    <xsl:if test="$numMore &gt; 0">
       <a class="ubo-facets-toggle" id="tg{generate-id(.)}" onclick="jQuery('ul#{generate-id(.)} li:gt({$maxFacetValuesDisplayed})').slideToggle(); jQuery('a#tg{generate-id(.)} span').toggle();">
-        <span><xsl:value-of select="i18n:translate('facets.toggle.more')" /></span>
+        <span><xsl:value-of select="concat($numMore,' ',i18n:translate('facets.toggle.more'))" /></span>
         <span style="display:none;"><xsl:value-of select="i18n:translate('facets.toggle.less')" /></span>
         <xsl:text>...</xsl:text>
       </a>
@@ -134,31 +150,36 @@
     <span class="ubo-facet-count">
       <xsl:value-of select="text()" />
     </span>
-    <span class="ubo-facet-value">
-      <xsl:choose>
-        <xsl:when test="number(text()) &lt; number($numFound)">
-          <a>
-            <xsl:attribute name="href">
-              <xsl:value-of select="$baseURL" />
-              <xsl:value-of select="encoder:encode(concat(str:replaceAll(str:new(../@name),'facet_',''),':',$quotes,@name,$quotes),'UTF-8')" />
-              <xsl:if test="ancestor::lst[@name='facet_person']">
-                <xsl:value-of select="$proximitySearch" />
-              </xsl:if>
-            </xsl:attribute>
+    <xsl:variable name="fq">
+      <xsl:value-of select="encoder:encode(concat(str:replaceAll(str:new(../@name),'facet_',''),':',$quotes,@name,$quotes),'UTF-8')" />
+      <xsl:if test="ancestor::lst[@name='facet_person']">
+        <xsl:value-of select="$proximitySearch" />
+      </xsl:if>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="number(text()) &lt; number($numFound)"> <!-- When count = 100%, filtering makes no sense -->
+        <a class="ubo-facet-exclude" href="{$baseURL}{encoder:encode($fq_not)}{$fq}"> <!-- Link to exclude this facet value -->
+          <span class="glyphicon glyphicon-remove-circle" aria-hidden="true" />
+        </a>
+        <span class="ubo-facet-value">
+          <a href="{$baseURL}{$fq}">
             <xsl:call-template name="output.facet.value">
               <xsl:with-param name="type"  select="../@name" />
               <xsl:with-param name="value" select="@name"/>
             </xsl:call-template>
           </a>
-        </xsl:when>
-        <xsl:otherwise>
+        </span>
+      </xsl:when>
+      <xsl:otherwise>
+        <span class="ubo-facet-exclude" />
+        <span class="ubo-facet-value">
           <xsl:call-template name="output.facet.value">
             <xsl:with-param name="type"  select="../@name" />
             <xsl:with-param name="value" select="@name"/>
           </xsl:call-template>
-        </xsl:otherwise>
-      </xsl:choose>
-    </span>
+        </span>
+      </xsl:otherwise>
+    </xsl:choose>
   </li>
 </xsl:template>
 
@@ -166,9 +187,11 @@
 
 <!-- Output facet value: some must be translated to a label, e.g. subject, genre -->
 <xsl:template name="output.facet.value">
+  <xsl:param name="prefix" />
   <xsl:param name="type"  />
   <xsl:param name="value" />
   
+  <xsl:value-of select="$prefix" />
   <xsl:choose>
     <xsl:when test="$type='subject'">
       <xsl:value-of select="$subjects/item[@value=$value]/@label" />

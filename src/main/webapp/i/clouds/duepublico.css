@@ -1883,7 +1883,7 @@ ul.ubo-facets {
 
 .ubo-facet-value {
 	display: inline-block;
-	width: 160px;
+	width: 150px;
 	height: 1.3em;
 	vertical-align: top;
 	overflow: hidden;
@@ -1900,4 +1900,12 @@ a.ubo-facet-remove {
   text-decoration: none;
   color: red;
   margin-right: 1ex;
+}
+
+.ubo-facet-exclude {
+  text-decoration: none;
+  color: red;
+  margin-right: 4px;
+  display: inline-block;
+  width: 10px;
 }
