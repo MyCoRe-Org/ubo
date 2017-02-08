@@ -105,9 +105,11 @@
           <xsl:call-template name="layout.h1" />
           <xsl:call-template name="layout.mastHead" />
         </div>
-        <xsl:call-template name="layout.breadcrumbPath" />
-        <div id="leftbar">
+        <section id="breadcrumb" style="padding-right:0; width:74%;">
+          <xsl:call-template name="layout.breadcrumbPath" />
           <xsl:call-template name="layout.basket.info" />
+        </section>
+        <div id="leftbar">
           <xsl:call-template name="layout.mainnavigation" />
           <xsl:call-template name="layout.logout" />
         </div>
@@ -124,13 +126,14 @@
   </xsl:template>
 
   <xsl:template name="layout.basket.info">
-    <div id="basket-info">
+    <div id="basket-info" style="float:right; margin:0; padding:0; display:inline-block;">
       <a href="{$ServletsBaseURL}MCRBasketServlet?action=show&amp;type=bibentries">
-        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true" />
+        <span class="glyphicon glyphicon-bookmark" aria-hidden="true" />
+        <span><xsl:value-of select="i18n:translate('basket')" />:</span>
         <span id="basket-info-num">
           <xsl:value-of select="count(document('notnull:basket:bibentries')/basket/*)" />
         </span>
-        <span>im Korb</span>
+        <span><xsl:value-of select="i18n:translate('ubo.publications')" /></span>
       </a>
     </div>
   </xsl:template>
@@ -321,7 +324,6 @@
   <xsl:variable name="breadcrumb" />
 
   <xsl:template name="layout.breadcrumbPath">
-    <section id="breadcrumb">
       <span>
         <a href="https://www.uni-due.de/ub/">
           <xsl:value-of select="i18n:translate('navigation.UB')" />
@@ -343,8 +345,6 @@
           <xsl:value-of select="$breadcrumb" />
         </span>
       </xsl:if>
-
-    </section>
   </xsl:template>
 
   <xsl:template match="item" mode="breadcrumb">

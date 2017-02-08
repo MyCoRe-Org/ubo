@@ -14,8 +14,8 @@
 <xsl:include href="bibmaster.xsl" />
 <xsl:include href="mods-display.xsl" />
 
-<xsl:variable name="page.title" select="'Korb'" />
-<xsl:variable name="PageID" select="'bibbasket'" />
+<xsl:variable name="page.title" select="'Merkliste'" />
+<xsl:variable name="PageID" select="'basket'" />
 
 <xsl:variable name="actions">
   <xsl:call-template name="basketClearButton" />
@@ -66,24 +66,17 @@
 
 <xsl:template match="basket">
 
-  <div class="section">
+  <article class="highlight1">
     <p>
-      In diesem Korb können Sie ausgewählte Publikationen sammeln, um sie dann in verschiedenen Formaten
-      zu exportieren. Bitte beachten Sie, dass der Korb an Ihre Benutzersitzung gebunden ist, so dass
-      er nach maximal 30 Minuten Inaktivität geleert wird.
-    </p>  
-  </div>
-
-  <xsl:call-template name="basketNumEntries" />
-
-  <xsl:if test="entry/mycoreobject[@changed='true']">
-    <div class="section">
+      <xsl:value-of select="i18n:translate('basket.introduction')" />
+    </p>
+    <xsl:call-template name="basketNumEntries" />
+    <xsl:if test="entry/mycoreobject[@changed='true']">
       <p>
-        In Ihrem Korb befinden sich geänderte Einträge. Die Änderungen wirken momentan nur auf den
-        Korb selbst. Klicken Sie "Änderungen speichern", um die Einträge dauerhaft zu ändern. 
+        <xsl:value-of select="i18n:translate('basket.changedEntriesExist')" />
       </p>
-    </div>
-  </xsl:if>
+    </xsl:if>
+  </article>
 
   <xsl:call-template name="basketEntries" />
 

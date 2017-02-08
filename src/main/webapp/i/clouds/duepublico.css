@@ -1940,16 +1940,25 @@ a.ubo-facet-add, a.ubo-facet-add:hover {
 	width: 10px;
 }
 
-#basket-info {
-	margin-bottom: 1.5ex;
+#basket-info span {
+	margin-left: 4px;
+}
+
+#basket-info span::before {
+	content: "";
+}
+
+#basket-info span.glyphicon-bookmark::before {
+    content: "";
+}
+#basket-info span.glyphicon::before {
+    font-family: "Glyphicons Halflings";
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
 }
 
 #basket-info a {
 	text-decoration: none;
 	cursor: pointer;
-}
-
-#basket-info-num {
-	margin-left: 5px;
-	margin-right: 5px;
 }
