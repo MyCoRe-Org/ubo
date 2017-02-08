@@ -6,10 +6,6 @@
   <item id="login" />
   <item id="dozbib" />
 
-  <item ref="index.xed">
-    <label xml:lang="de">Start</label>
-    <label xml:lang="en">Start</label>
-  </item>
   <item ref="search.xed">
     <label xml:lang="de">Suchen</label>
     <label xml:lang="en">Search</label>
