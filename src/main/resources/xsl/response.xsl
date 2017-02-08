@@ -66,39 +66,28 @@
 
 <!-- ==================== Export-Buttons ==================== -->
 
-<xsl:variable name="exportURL">
-  <xsl:value-of select="$ServletsBaseURL" />
-  <xsl:text>solr/select?</xsl:text>
-  <xsl:for-each select="/response/lst[@name='responseHeader']/lst[@name='params']/*">
+<xsl:variable name="exportParams">
+  <xsl:for-each select="/response/lst[@name='responseHeader']/lst[@name='params']/*[(@name='q') or (@name='fq')]">
     <xsl:variable name="name" select="@name" />
     <xsl:for-each select="descendant-or-self::str"> <!-- may be an array: arr/str or ./str -->
-      <xsl:choose>
-        <xsl:when test="$name='rows'" />
-        <xsl:when test="$name='start'" /> 
-        <xsl:when test="$name='fl'" />
-        <xsl:when test="starts-with($name,'facet')" />
-        <xsl:otherwise>
-          <xsl:value-of select="$name" />
-          <xsl:text>=</xsl:text>
-          <xsl:value-of select="encoder:encode(text(),'UTF-8')" />
-          <xsl:text>&amp;</xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="$name" />
+      <xsl:text>=</xsl:text>
+      <xsl:value-of select="encoder:encode(text(),'UTF-8')" />
+      <xsl:text>&amp;</xsl:text>
     </xsl:for-each>
   </xsl:for-each>
-  <xsl:text>start=0&amp;fl=id&amp;rows=</xsl:text>
-  <xsl:value-of select="$numFound" />
+  <xsl:value-of select="concat('rows=',$numFound)" />
 </xsl:variable>
 
 <xsl:variable name="actions">
   <xsl:if test="$numFound &gt; 0">
-    <action label="MODS"      target="{$exportURL}&amp;XSL.Transformer=mods" />
-    <action label="BibTeX"    target="{$exportURL}&amp;XSL.Transformer=bibtex" />
-    <action label="EndNote"   target="{$exportURL}&amp;XSL.Transformer=endnote" />
-    <action label="RIS"       target="{$exportURL}&amp;XSL.Transformer=ris" />
-    <action label="PDF"       target="{$exportURL}&amp;XSL.Transformer=pdf" />
-    <action label="HTML"      target="{$exportURL}&amp;XSL.Transformer=html" />
-    <action label="CSV"       target="{str:replaceAll(str:new($exportURL),'fl=id','fl=id,year,genre,title')}&amp;wt=csv" />
+    <action label="MODS"      target="export?{$exportParams}&amp;XSL.Transformer=mods" />
+    <action label="BibTeX"    target="export?{$exportParams}&amp;XSL.Transformer=bibtex" />
+    <action label="EndNote"   target="export?{$exportParams}&amp;XSL.Transformer=endnote" />
+    <action label="RIS"       target="export?{$exportParams}&amp;XSL.Transformer=ris" />
+    <action label="PDF"       target="export?{$exportParams}&amp;XSL.Transformer=pdf" />
+    <action label="HTML"      target="export?{$exportParams}&amp;XSL.Transformer=html" />
+    <action label="CSV"       target="export?{$exportParams}&amp;fl=id,year,genre,title&amp;wt=csv" />
   </xsl:if>
 </xsl:variable>
 
@@ -165,7 +154,7 @@
   <div class="resultsNavigation section">
 
     <span class="pageLink" style="float:left;">
-      <a href="{$ServletsBaseURL}Results2Basket?solr={encoder:encode(substring-after($exportURL,'?'))}"><xsl:value-of select="i18n:translate('button.basketAdd')" /></a>
+      <a href="{$ServletsBaseURL}Results2Basket?solr={encoder:encode($exportParams)}"><xsl:value-of select="i18n:translate('button.basketAdd')" /></a>
     </span>
 
     <xsl:call-template name="link2resultsPage">
@@ -193,13 +182,8 @@
     </xsl:call-template>
 
     <span class="pageLink" style="float:right;">
-      <a href="{$exportURL}&amp;facet=true&amp;facet.field=year&amp;facet.field=subject&amp;facet.field=genre&amp;facet.field=facet_person&amp;facet.mincount=1&amp;XSL.Transformer=statistics"><xsl:value-of select="i18n:translate('button.statistics')" /></a>
+      <a href="statistics?{$exportParams}&amp;XSL.Transformer=statistics"><xsl:value-of select="i18n:translate('button.statistics')" /></a>
     </span>
-    <xsl:if test="not(/response[lst[@name='facet_counts']])">
-      <span class="pageLink" style="float:right;">
-        <a href="{$resultsPageURL}0&amp;facet=true&amp;facet.field=year&amp;facet.field=facet_person&amp;facet.field=subject&amp;facet.field=genre&amp;facet.field=facet_host_title&amp;facet.mincount=1">Filtern</a>
-      </span>
-    </xsl:if>
 
   </div>
 </xsl:template>

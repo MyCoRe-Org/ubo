@@ -40,8 +40,7 @@
           <xsl:variable name="fq" select="text()" />
           
           <xsl:variable name="removeURL">
-            <xsl:value-of select="$ServletsBaseURL" />
-            <xsl:text>solr/select?</xsl:text>
+            <xsl:text>select?</xsl:text>
             <xsl:for-each select="/response/lst[@name='responseHeader']/lst[@name='params']/*">
               <xsl:variable name="param_name" select="@name" />
               <xsl:for-each select="descendant-or-self::str"> <!-- may be an array: arr/str or ./str -->
@@ -122,8 +121,7 @@
 
 <!-- URL to build links to add a facet filter query -->
 <xsl:variable name="baseURL">
-  <xsl:value-of select="$ServletsBaseURL" />
-  <xsl:text>solr/select?</xsl:text>
+  <xsl:text>select?</xsl:text>
   <xsl:for-each select="/response/lst[@name='responseHeader']/lst[@name='params']/*">
     <xsl:variable name="name" select="@name" />
     <xsl:for-each select="descendant-or-self::str"> <!-- may be an array: arr/str or ./str -->

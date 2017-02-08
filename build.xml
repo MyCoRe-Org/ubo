@@ -12,7 +12,7 @@
     ant build.solr.home       Build SOLR home directory containing index and core configuration
 
   Whenever schema.xml changes:
-    ant copy.solr.schema      Copy SOLR schema to core configuration directory
+    ant copy.solr.config      Copy SOLR configuration and schema to core configuration directory
 
   To start/stop a local SOLR server:
     ant start.solr            Start SOLR server
@@ -49,9 +49,10 @@
 
   <!-- ============================================== -->
 
-  <target name="copy.solr.schema" description="Copy SOLR schema to core configuration directory">
-    <echo>Copy SOLR schema to core configuration directory...</echo>
+  <target name="copy.solr.config" description="Copy SOLR configuration and schema to core configuration directory">
+    <echo>Copy SOLR configuration to core directory...</echo>
     <copy file="src/main/resources/schema.xml" todir="${UBO.BaseDir}/solr-home/ubo/conf" overwrite="true" />
+    <copy file="src/main/resources/solrconfig.xml" todir="${UBO.BaseDir}/solr-home/ubo/conf" overwrite="true" />
   </target>
 
   <!-- ============================================== -->
