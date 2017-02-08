@@ -32,14 +32,6 @@
     <label xml:lang="en">Registering a publication</label>
     <item id="dozbib.edit.publication" />
   </item>
-  <item id="bibbasket" ref="servlets/MCRBasketServlet?action=show&amp;type=bibentries">
-    <label xml:lang="de">Korb</label>
-    <label xml:lang="en">Basket</label>
-    <item id="dozbib.edit.contributors" ref="edit-contributors.xed" admin="true">
-      <label xml:lang="de">Personen zuordnen</label>
-      <label xml:lang="en">Assign Persons</label>
-    </item>
-  </item>
   <item ref="contact.xml" id="contact">
      <label xml:lang="de">Kontakt</label>
      <label xml:lang="en">Contact</label>

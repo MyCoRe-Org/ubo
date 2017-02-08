@@ -1865,7 +1865,7 @@ ul.ubo-facets {
 	overflow: hidden;
 	margin: 0;
 	padding: 0;
-    position: relative;
+	position: relative;
 }
 
 .ubo-facet-filter .scroll-on-hover {
@@ -1889,8 +1889,8 @@ ul.ubo-facets {
 	text-align: right;
 }
 
-.ubo-facet-count:after { 
-  content:"|"
+.ubo-facet-count:after {
+	content: "|"
 }
 
 .ubo-facet-value {
@@ -1901,7 +1901,7 @@ ul.ubo-facets {
 	overflow: hidden;
 	margin: 0;
 	padding: 0;
-    position: relative;
+	position: relative;
 }
 
 .ubo-facet-value .scroll-on-hover {
@@ -1921,25 +1921,35 @@ a.ubo-facets-toggle {
 }
 
 a.ubo-facet-remove {
-  text-decoration: none;
-  color: red;
-  margin-right: 1ex;
+	text-decoration: none;
+	color: red;
+	margin-right: 1ex;
 }
 
 a.ubo-facet-add, a.ubo-facet-add:hover {
-  text-decoration: none;
-  color: rgb(10, 83, 151);
-  background-color: transparent;
+	text-decoration: none;
+	color: rgb(10, 83, 151);
+	background-color: transparent;
 }
 
-
-
-
-
 .ubo-facet-exclude {
-  text-decoration: none;
-  color: red;
-  margin-right: 4px;
-  display: inline-block;
-  width: 10px;
+	text-decoration: none;
+	color: red;
+	margin-right: 4px;
+	display: inline-block;
+	width: 10px;
+}
+
+#basket-info {
+	margin-bottom: 1.5ex;
+}
+
+#basket-info a {
+	text-decoration: none;
+	cursor: pointer;
+}
+
+#basket-info-num {
+	margin-left: 5px;
+	margin-right: 5px;
 }

@@ -107,6 +107,7 @@
         </div>
         <xsl:call-template name="layout.breadcrumbPath" />
         <div id="leftbar">
+          <xsl:call-template name="layout.basket.info" />
           <xsl:call-template name="layout.mainnavigation" />
           <xsl:call-template name="layout.logout" />
         </div>
@@ -120,6 +121,18 @@
         <xsl:call-template name="layout.footer" />
       </div>
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template name="layout.basket.info">
+    <div id="basket-info">
+      <a href="{$ServletsBaseURL}MCRBasketServlet?action=show&amp;type=bibentries">
+        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true" />
+        <span id="basket-info-num">
+          <xsl:value-of select="count(document('notnull:basket:bibentries')/basket/*)" />
+        </span>
+        <span>im Korb</span>
+      </a>
+    </div>
   </xsl:template>
 
   <!-- page content -->
