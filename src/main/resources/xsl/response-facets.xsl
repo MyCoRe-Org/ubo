@@ -16,7 +16,7 @@
 <xsl:variable name="maxFacetValuesDisplayed">5</xsl:variable>
 <xsl:variable name="quotes">"</xsl:variable>
 <xsl:variable name="proximitySearch">~5</xsl:variable>
-<xsl:variable name="fq_not">*:* AND -</xsl:variable>
+<xsl:variable name="fq_not">-</xsl:variable>
 
 <xsl:template match="lst[@name='facet_counts']">
   <xsl:apply-templates select="../lst[@name='responseHeader']/lst[@name='params']" mode="fq" />
