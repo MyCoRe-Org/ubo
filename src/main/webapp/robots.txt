@@ -3,4 +3,7 @@ Disallow: /servlets/DozBibServlet
 Disallow: /servlets/MCRBasketServlet
 Disallow: /servlets/MCRLoginServlet
 Disallow: /servlets/MCRExportServlet
+Disallow: /servlets/solr
+Disallow: /servlets/MCRQLSearchServlet
+Disallow: /servlets/MCRSOLRProxyServlet
 Disallow: /api
