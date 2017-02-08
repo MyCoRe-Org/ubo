@@ -33,7 +33,7 @@
           <xsl:sort select="@name" data-type="number" order="descending" />
           <xsl:value-of select="@name"/>
           <xsl:text> : </xsl:text>
-          <a href="{$ServletsBaseURL}solr/select?q=status:confirmed+AND+year:{@name}&amp;rows=10">
+          <a href="{$ServletsBaseURL}solr/select?q=status:confirmed+AND+year:{@name}">
             <xsl:value-of select="text()"/> Publikationen
           </a>
           <br/>
@@ -67,7 +67,7 @@
       </ul>
     </xsl:for-each>
     <p class="mehrzu_info">
-      <a href="{$ServletsBaseURL}solr/select?q=status:confirmed+AND+year:[{$lastYear}+TO+{$nextYear}]&amp;rows=10&amp;sort:created+desc">mehr...</a>
+      <a href="{$ServletsBaseURL}solr/select?q=status:confirmed+AND+year:[{$lastYear}+TO+{$nextYear}]&amp;sort:created+desc">mehr...</a>
     </p>
   </xsl:template>
   
