@@ -54,6 +54,9 @@
           </xed:choose>
           
         </xed:bind>
+        
+        <xed:bind xpath="sortBy[field[@name='year'][@order='descending']]" />
+        
       </xed:bind>
 
       <button class="roundedButton" type="submit" xed:target="servlet" xed:href="MCRQLSearchServlet">
