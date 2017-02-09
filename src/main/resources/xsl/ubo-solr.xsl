@@ -17,9 +17,9 @@
   
   <xsl:template match="mods:mods" mode="solrField">
     <xsl:apply-templates select="mods:titleInfo" mode="solrField" />
-    <xsl:apply-templates select="mods:name[@type='personal']/mods:role/mods:roleTerm[@type='code']" mode="solrField" />
-    <xsl:apply-templates select="mods:name/mods:nameIdentifier" mode="solrField" />
-    <xsl:apply-templates select="mods:name[mods:nameIdentifier[@type='lsf']]" mode="solrField.lsf" />
+    <xsl:apply-templates select="descendant::mods:name[@type='personal']/mods:role/mods:roleTerm[@type='code']" mode="solrField" />
+    <xsl:apply-templates select="descendant::mods:name/mods:nameIdentifier" mode="solrField" />
+    <xsl:apply-templates select="descendant::mods:name[mods:nameIdentifier[@type='lsf']]" mode="solrField.lsf" />
     <xsl:apply-templates select="mods:genre[@type='intern']" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:genre[@type='intern']" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="solrField" />
@@ -29,7 +29,7 @@
     <xsl:apply-templates select="descendant::mods:relatedItem[@type='series']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:name[@type='conference']" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:dateIssued[1][translate(text(),'1234567890','YYYYYYYYYY')='YYYY']" mode="solrField" />
-    <xsl:apply-templates select="mods:identifier[@type]" mode="solrField" />
+    <xsl:apply-templates select="descendant::mods:identifier[@type]" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:shelfLocator" mode="solrField" />
     <xsl:apply-templates select="mods:note" mode="solrField" />
     <xsl:apply-templates select="mods:abstract" mode="solrField" />
@@ -142,6 +142,19 @@
     <xsl:for-each select="mods:role/mods:roleTerm[@type='code']">
       <field name="role_lsf">
         <xsl:value-of select="." />
+        <xsl:text>_</xsl:text>
+        <xsl:value-of select="../../mods:nameIdentifier[@type='lsf']" />
+      </field>
+      <field name="role_lsf"> <!-- support for legacy role codes -->
+        <xsl:choose>
+          <xsl:when test=".='aut'">author</xsl:when>
+          <xsl:when test=".='edt'">publisher</xsl:when>
+          <xsl:when test=".='ths'">advisor</xsl:when>
+          <xsl:when test=".='rev'">referee</xsl:when>
+          <xsl:when test=".='trl'">translator</xsl:when>
+          <xsl:when test=".='ctb'">contributor</xsl:when>
+          <xsl:otherwise>contributor</xsl:otherwise>
+        </xsl:choose>
         <xsl:text>_</xsl:text>
         <xsl:value-of select="../../mods:nameIdentifier[@type='lsf']" />
       </field>
