@@ -78,7 +78,7 @@
 <!-- ==================== Export-Buttons ==================== -->
 
 <xsl:variable name="exportParams">
-  <xsl:for-each select="/response/lst[@name='responseHeader']/lst[@name='params']/*[(@name='q') or (@name='fq')]">
+  <xsl:for-each select="/response/lst[@name='responseHeader']/lst[@name='params']/*[(@name='q') or (@name='fq') or (@name='sort')]">
     <xsl:variable name="name" select="@name" />
     <xsl:for-each select="descendant-or-self::str"> <!-- may be an array: arr/str or ./str -->
       <xsl:value-of select="$name" />
