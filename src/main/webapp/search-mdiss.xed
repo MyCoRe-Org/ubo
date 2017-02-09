@@ -50,7 +50,7 @@
               </div>
             </xed:bind>
 
-            <xed:bind xpath="condition2[@operator='contains']/@field" initially="adv" />
+            <xed:bind xpath="condition2[@operator='contains']/@field" initially="person_ths" />
             <xed:include uri="webapp:import-search.xed" ref="name" />
 
             <xed:bind xpath="condition4[@field='title'][@operator='contains']/@value">

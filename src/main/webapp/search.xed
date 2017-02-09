@@ -35,7 +35,7 @@
           <xed:bind xpath="@mask" default="search.xed" />
           <xed:bind xpath="conditions[@format='xml']/boolean[@operator='and']">
           
-            <xed:repeat xpath="condition1[@operator='phrase']">
+            <xed:repeat xpath="condition1[@operator='contains']">
               <div>
                 <xed:bind xpath="@field">
                   <select class="label" style="margin-left:6px; width:182px;">
