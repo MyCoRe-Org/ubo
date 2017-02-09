@@ -113,14 +113,14 @@ public class DozBibStatistics {
         LOGGER.info("Collecting statistics...");
 
         for (String id : MCRXMLMetadataManager.instance().listIDsOfType("mods")) {
-            numPublications++;
-            if( numPublications % 100 == 0 ) System.out.print(".");
-            if( numPublications % 1000 == 0 ) System.out.print(" " + numPublications + " ");
-
             try {
                 Element obj = MCRURIResolver.instance().resolve("mcrobject:" + id);
                 String status = getNodes(obj, XPATH_STATUS).get(0).getText();
                 if ("confirmed".equals(status)) {
+                    numPublications++;
+                    if( numPublications % 100 == 0 ) System.out.print(".");
+                    if( numPublications % 1000 == 0 ) System.out.print(" " + numPublications + " ");
+                    
                     Element mods = getNodes(obj, XPATH_MODS).get(0);
                     countPublicationType(publicationsByType, mods);
                     countPublicationYear(publicationsByYear, mods);
