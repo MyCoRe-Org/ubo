@@ -67,7 +67,7 @@
       </ul>
     </xsl:for-each>
     <p class="mehrzu_info">
-      <a href="{$ServletsBaseURL}solr/select?q=status:confirmed+AND+year:[{$lastYear}+TO+{$nextYear}]&amp;sort:created+desc">mehr...</a>
+      <a href="{$ServletsBaseURL}solr/select?q=status:confirmed+AND+year:[{$lastYear}+TO+{$nextYear}]&amp;sort=year+desc,created+desc">mehr...</a>
     </p>
   </xsl:template>
   
