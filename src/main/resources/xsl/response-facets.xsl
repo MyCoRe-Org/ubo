@@ -20,7 +20,7 @@
 
 <xsl:template match="lst[@name='facet_counts']">
   <xsl:apply-templates select="../lst[@name='responseHeader']/lst[@name='params']" mode="fq" />
-  <xsl:apply-templates select="lst[@name='facet_fields']/lst" />
+  <xsl:apply-templates select="lst[@name='facet_fields']/lst[int]" />
 </xsl:template>
 
 <!-- List currently active filter queries -->
@@ -91,7 +91,7 @@
 </xsl:template>
 
 <!-- List a facet -->
-<xsl:template match="lst[@name='facet_fields']/lst">
+<xsl:template match="lst[@name='facet_fields']/lst[int]">
   <article class="highlight2">
     <hgroup class="ubo-facets"><h3><xsl:value-of select="i18n:translate(concat('facets.facet.',str:replaceAll(str:new(@name),'facet_','')))" />:</h3></hgroup>
     <ul id="{generate-id(.)}" class="ubo-facets">

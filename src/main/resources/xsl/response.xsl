@@ -34,13 +34,24 @@
 <!-- ==================== Trefferliste Metadaten ==================== -->
 
 <xsl:variable name="numFound" select="/response/result[@name='response']/@numFound" />
-<xsl:variable name="rows" select="/response/lst[@name='responseHeader']/lst[@name='params']/str[@name='rows']" />
+<xsl:variable name="numDocs" select="count(/response/result[@name='response']/doc)" />
 <xsl:variable name="start">
   <xsl:choose>
     <xsl:when test="/response/lst[@name='responseHeader']/lst[@name='params']/str[@name='start']">
       <xsl:value-of select="/response/lst[@name='responseHeader']/lst[@name='params']/str[@name='start']" />
     </xsl:when>
     <xsl:otherwise>0</xsl:otherwise>
+  </xsl:choose>
+</xsl:variable>
+<xsl:variable name="rows">
+  <xsl:choose>
+    <xsl:when test="/response/lst[@name='responseHeader']/lst[@name='params']/str[@name='rows']">
+      <xsl:value-of select="/response/lst[@name='responseHeader']/lst[@name='params']/str[@name='rows']" />
+    </xsl:when>
+    <xsl:when test="$start + $numDocs &lt; $numFound">
+      <xsl:value-of select="$numDocs" /> <!-- rows parameter missing, use count docs returned -->
+    </xsl:when>
+    <xsl:otherwise>10</xsl:otherwise> <!-- guess, no way to find out -->
   </xsl:choose>
 </xsl:variable>
 
@@ -94,7 +105,7 @@
 <!-- ==================== Facetten / Filtern ==================== -->
 
 <xsl:variable name="sidebar">
-  <xsl:apply-templates select="/response/lst[@name='facet_counts']" />
+  <xsl:apply-templates select="/response/lst[@name='facet_counts'][lst[@name='facet_fields']/lst[int]]" />
 </xsl:variable>
 
 <!-- ==================== Anzeige Trefferliste ==================== -->
@@ -106,12 +117,10 @@
 <xsl:template match="result[@name='response']">
 
   <!-- Seitennavigation oben -->
-  <xsl:if test="$numFound &gt; $rows">
-    <xsl:call-template name="navigation" />
-  </xsl:if>
+  <xsl:call-template name="navigation" />
 
   <!-- Trefferliste -->
-  <div class="container_12">
+  <div class="container_12" style="margin-top:1ex;">
     <xsl:if test="$numFound = 0">
       <p>
         <xsl:value-of select="i18n:translate('result.dozbib.publicationNo')" />
@@ -128,9 +137,7 @@
   <div class="clear"></div>
   
   <!-- Seitennavigation unten -->
-  <xsl:if test="$numFound &gt; $rows">
-    <xsl:call-template name="navigation" />
-  </xsl:if>
+  <xsl:call-template name="navigation" />
   
 </xsl:template>
 
@@ -157,29 +164,31 @@
       <a href="{$ServletsBaseURL}Results2Basket?solr={encoder:encode($exportParams)}"><xsl:value-of select="i18n:translate('button.basketAdd')" /></a>
     </span>
 
-    <xsl:call-template name="link2resultsPage">
-      <xsl:with-param name="condition" select="$start &gt; 0" />
-      <xsl:with-param name="pageNr"    select="0" />
-      <xsl:with-param name="icon"      select="'fast-backward'" />
-    </xsl:call-template>
-    <xsl:call-template name="link2resultsPage">
-      <xsl:with-param name="condition" select="$start &gt; 0" />
-      <xsl:with-param name="pageNr"    select="number($start)-number($rows)" />
-      <xsl:with-param name="icon"      select="'backward'" />
-    </xsl:call-template>
-    <xsl:call-template name="link2resultsPage">
-      <xsl:with-param name="text"      select="floor(number($start) div number($rows))+1" />
-    </xsl:call-template>
-    <xsl:call-template name="link2resultsPage">
-      <xsl:with-param name="condition" select="number($start)+number($rows) &lt; $numFound" />
-      <xsl:with-param name="pageNr"    select="number($start)+number($rows)" />
-      <xsl:with-param name="icon"      select="'forward'" />
-    </xsl:call-template>
-    <xsl:call-template name="link2resultsPage">
-      <xsl:with-param name="condition" select="number($start)+number($rows) &lt; $numFound" />
-      <xsl:with-param name="pageNr"    select="floor(number($numFound) div number($rows))*number($rows)" />
-      <xsl:with-param name="icon"      select="'fast-forward'" />
-    </xsl:call-template>
+    <xsl:if test="$numFound &gt; $rows">
+      <xsl:call-template name="link2resultsPage">
+        <xsl:with-param name="condition" select="$start &gt; 0" />
+        <xsl:with-param name="start"     select="0" />
+        <xsl:with-param name="icon"      select="'fast-backward'" />
+      </xsl:call-template>
+      <xsl:call-template name="link2resultsPage">
+        <xsl:with-param name="condition" select="$start &gt; 0" />
+        <xsl:with-param name="start"     select="number($start)-number($rows)" />
+        <xsl:with-param name="icon"      select="'backward'" />
+      </xsl:call-template>
+      <xsl:call-template name="link2resultsPage">
+        <xsl:with-param name="text"      select="floor(number($start) div number($rows))+1" />
+      </xsl:call-template>
+      <xsl:call-template name="link2resultsPage">
+        <xsl:with-param name="condition" select="number($start)+number($rows) &lt; $numFound" />
+        <xsl:with-param name="start"     select="number($start)+number($rows)" />
+        <xsl:with-param name="icon"      select="'forward'" />
+      </xsl:call-template>
+      <xsl:call-template name="link2resultsPage">
+        <xsl:with-param name="condition" select="number($start)+number($rows) &lt; $numFound" />
+        <xsl:with-param name="start"     select="floor(number($numFound) div number($rows))*number($rows)" />
+        <xsl:with-param name="icon"      select="'fast-forward'" />
+      </xsl:call-template>
+    </xsl:if>
 
     <span class="pageLink" style="float:right;">
       <a href="statistics?{$exportParams}&amp;XSL.Transformer=statistics"><xsl:value-of select="i18n:translate('button.statistics')" /></a>
@@ -190,7 +199,7 @@
 
 <xsl:template name="link2resultsPage">
   <xsl:param name="condition" />
-  <xsl:param name="pageNr" />
+  <xsl:param name="start" />
   <xsl:param name="icon" />
   <xsl:param name="text" />
   
@@ -200,7 +209,7 @@
         <xsl:value-of select="concat('&#160;',$text,'&#160;')" />
       </xsl:when>
       <xsl:when test="$condition">
-        <a href="{$resultsPageURL}{$pageNr}">
+        <a href="{$resultsPageURL}{$start}">
           <span class="glyphicon glyphicon-{$icon}" aria-hidden="true"></span>
         </a>
       </xsl:when>
