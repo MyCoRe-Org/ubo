@@ -6,19 +6,15 @@
   <item id="login" />
   <item id="dozbib" />
 
-  <item ref="search.xed">
-    <label xml:lang="de">Suchen</label>
-    <label xml:lang="en">Search</label>
-    <item id="dozbib.search-simple" ref="search.xed">
-      <label xml:lang="de">Erweiterte Suche</label>
-      <label xml:lang="en">Advanced search</label>
-    </item>
-    <item id="dozbib.search-expert" ref="search-expert.xed" admin="true">
-      <label xml:lang="de">Expertensuche</label>
-      <label xml:lang="en">Expert search</label>
-    </item>
+  <item id="dozbib.search-simple" ref="search.xed">
+    <label xml:lang="de">Erweiterte Suche</label>
+    <label xml:lang="en">Advanced search</label>
     <item id="dozbib.search" />      
-  </item>        
+  </item>
+  <item id="dozbib.search-expert" ref="search-expert.xed" admin="true">
+    <label xml:lang="de">Expertensuche</label>
+    <label xml:lang="en">Expert search</label>
+  </item>
   <item ref="list-wizard.xed" id="dozbib.list-wizard">
     <label xml:lang="de">Persönliche Publikationsliste</label>
     <label xml:lang="en">Personal publication list</label>
