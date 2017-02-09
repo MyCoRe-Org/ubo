@@ -90,8 +90,10 @@
   </article>
 </xsl:template>
 
+<xsl:variable name="permission.admin" xmlns:check="xalan://unidue.ubo.AccessControl" select="check:currentUserIsAdmin()" />
+
 <!-- List a facet -->
-<xsl:template match="lst[@name='facet_fields']/lst[int]">
+<xsl:template match="lst[@name='facet_fields']/lst[int][not(@name='status') or $permission.admin]">
   <article class="highlight2">
     <hgroup class="ubo-facets"><h3><xsl:value-of select="i18n:translate(concat('facets.facet.',str:replaceAll(str:new(@name),'facet_','')))" />:</h3></hgroup>
     <ul id="{generate-id(.)}" class="ubo-facets">
@@ -197,6 +199,9 @@
       </xsl:when>
       <xsl:when test="$type='genre'">
         <xsl:value-of select="$genres//category[@ID=$value]/label[lang($CurrentLang)]/@text" />
+      </xsl:when>
+      <xsl:when test="$type='status'">
+        <xsl:value-of select="i18n:translate(concat('search.dozbib.status.',$value))" />
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$value" />

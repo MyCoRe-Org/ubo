@@ -837,6 +837,9 @@
       <int name="rows">10</int>
       <str name="facet">true</str>
       <str name="facet.mincount">1</str>
+    </lst>
+    <lst name="appends">
+      <str name="facet.field">status</str>
       <str name="facet.field">year</str>
       <str name="facet.field">facet_person</str>
       <str name="facet.field">subject</str>
@@ -872,15 +875,17 @@
       <str name="q.op">AND</str> <!-- default operator AND instead OR -->
       <str name="df">all</str> <!-- default search this field -->
     </lst>
+    <lst name="appends">
+      <str name="facet.field">year</str>
+      <str name="facet.field">subject</str>
+      <str name="facet.field">genre</str>
+      <str name="facet.field">facet_person</str>
+    </lst>
     <lst name="invariants">
       <str name="fl" />
       <str name="start">0</str>
       <str name="rows">0</str>
       <str name="facet">true</str>
-      <str name="facet.field">year</str>
-      <str name="facet.field">subject</str>
-      <str name="facet.field">genre</str>
-      <str name="facet.field">facet_person</str>
       <str name="facet.mincount">1</str>
     </lst>
   </requestHandler>
