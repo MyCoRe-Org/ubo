@@ -61,7 +61,7 @@ public class DozBibCommands extends MCRAbstractCommands {
         addCommand(new MCRCommand("ubo migrate to mcrobject", "unidue.ubo.DozBibCommands.migrate2mcrobject",
             "migrates all bibentries to mycoreobject persistence"));
         addCommand(new MCRCommand("ubo build duplicates report to directory {0}",
-            "unidue.ubo.dedup.DeDupCommands String",
+            "unidue.ubo.dedup.DeDupCommands.buildDuplicatesReport String",
             "builds report on possibly duplicate entries and writes it as xml to file duplicates.xml in directory {0}"));
         addCommand(new MCRCommand("ubo import publications from {0} RSS feed",
             "unidue.ubo.importer.rss.RSSFeedImporter.importFromFeed String",
