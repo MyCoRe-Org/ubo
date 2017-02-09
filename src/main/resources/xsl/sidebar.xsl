@@ -46,7 +46,7 @@
     <hgroup>
       <h2>Neueste Publikationen:</h2>
     </hgroup>
-    <xsl:for-each select="document(concat('solr:q=status:confirmed+AND+year:[',$lastYear,'+TO+',$nextYear,']&amp;fl=id,title,year,person&amp;rows=4&amp;sort:created+desc'))/response">
+    <xsl:for-each select="document(concat('solr:q=status:confirmed+AND+year:[',$lastYear,'+TO+',$nextYear,']&amp;fl=id,title,year,person&amp;rows=4&amp;sort=year+desc,+created+desc'))/response">
       <ul>
         <xsl:for-each select="result[@name='response']/doc">
           <li style="margin-bottom:1ex;">
