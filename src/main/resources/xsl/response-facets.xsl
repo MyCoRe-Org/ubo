@@ -15,7 +15,6 @@
 
 <xsl:variable name="maxFacetValuesDisplayed">5</xsl:variable>
 <xsl:variable name="quotes">"</xsl:variable>
-<xsl:variable name="proximitySearch">~5</xsl:variable>
 <xsl:variable name="fq_not">-</xsl:variable>
 
 <xsl:template match="lst[@name='facet_counts']">
@@ -59,7 +58,7 @@
             <xsl:text>start=0</xsl:text>
           </xsl:variable>
 
-          <xsl:variable name="fq_without_proximity" select="str:replaceAll(str:replaceAll(str:new($fq),$quotes,''),$proximitySearch,'')" />
+          <xsl:variable name="fq_without_quotes" select="str:replaceAll(str:new($fq),$quotes,'')" />
           
           <li>
             <a class="ubo-facet-remove" href="{$removeURL}"> 
@@ -67,8 +66,8 @@
             </a>
             <span class="ubo-facet-filter">
               <xsl:choose>
-                <xsl:when test="starts-with($fq_without_proximity,$fq_not)">
-                  <xsl:variable name="fq_without_not" select="substring-after($fq_without_proximity,'-')" />
+                <xsl:when test="starts-with($fq_without_quotes,$fq_not)">
+                  <xsl:variable name="fq_without_not" select="substring-after($fq_without_quotes,'-')" />
                   <xsl:call-template name="output.facet.value">
                     <xsl:with-param name="prefix" select="concat(i18n:translate('facets.filters.not'),' ')" />
                     <xsl:with-param name="type"  select="substring-before($fq_without_not,':')" />
@@ -77,8 +76,8 @@
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:call-template name="output.facet.value">
-                    <xsl:with-param name="type"  select="substring-before($fq_without_proximity,':')" />
-                    <xsl:with-param name="value" select="substring-after($fq_without_proximity,':')" />
+                    <xsl:with-param name="type"  select="substring-before($fq_without_quotes,':')" />
+                    <xsl:with-param name="value" select="substring-after($fq_without_quotes,':')" />
                   </xsl:call-template>
                 </xsl:otherwise>
               </xsl:choose>
@@ -150,12 +149,7 @@
     <span class="ubo-facet-count">
       <xsl:value-of select="text()" />
     </span>
-    <xsl:variable name="fq">
-      <xsl:value-of select="encoder:encode(concat(str:replaceAll(str:new(../@name),'facet_',''),':',$quotes,@name,$quotes),'UTF-8')" />
-      <xsl:if test="ancestor::lst[@name='facet_person']">
-        <xsl:value-of select="$proximitySearch" />
-      </xsl:if>
-    </xsl:variable>
+    <xsl:variable name="fq" select="encoder:encode(concat(../@name,':',$quotes,@name,$quotes),'UTF-8')" />
     <xsl:choose>
       <xsl:when test="number(text()) &lt; number($numFound)"> <!-- When count = 100%, filtering makes no sense -->
         <a class="ubo-facet-exclude" href="{$baseURL}{encoder:encode($fq_not)}{$fq}"> <!-- Link to exclude this facet value -->
