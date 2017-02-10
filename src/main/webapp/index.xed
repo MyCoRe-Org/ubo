@@ -7,29 +7,32 @@
  <section class="highlight1" xml:lang="de">  
    <h3>Die Universitätsbibliographie</h3>
     <p>
-    ist der zentrale Publikationsnachweis der Universität Duisburg-Essen, der online tagesaktuell und zeitnah die Publikationstätgkeit der Hochschulangehörigen verzeichnet.
-    Die Einträge beruhen großenteils auf den Angaben der Autoren selbst. Seit September 2010 überarbeitet und vervollständigt ein Redaktionsteam die Neueinträge.
+      ist der zentrale Publikationsnachweis der Universität Duisburg-Essen, der online die Publikationstätgkeit der Hochschulangehörigen verzeichnet.
+      Die Einträge beruhen großenteils auf den Angaben der Autoren selbst.  
+      Die Universitätsbibliographie wird von der Universitätsbibliothek betrieben. Seit September 2010 überarbeitet und vervollständigt ein Redaktionsteam die Neueinträge. 
     </p>
     <h3>Sie sind Angehöriger der Universität Duisburg-Essen?</h3> 
     <p>
-    <a href="../newPublication.xed">Hier können Sie Ihre Publikation an die Universitätsbibliographie melden</a>
+      Helfen Sie uns bei der Vervollständigung!<br/>
+      <a href="../newPublication.xed">Hier können Sie Ihre Publikation an die Universitätsbibliographie melden</a>
     </p>
   </section>
   <section class="highlight1" xml:lang="en">   
     <h3>The University Bibliography</h3> 
     <p>
-    is the central resource of Duisburg-Essen University that lists all publication activities of the university members and provides 
-    online service that is updated daily and regularly.
-    The bibliography entries are based mainly on the information provided by the authors themselves. Since september, 2010 an editoral team revises and completes the new entries.
+      is the central resource of Duisburg-Essen University that lists all publication activities of the university members.
+      The entries are mainly based on information provided by the authors themselves. 
+      The bibliography is run by the university library. Since September, 2010 an editoral team revises and completes new entries.
     </p>    
     <h3>
-    As a member of Duisburg Essen University</h3> 
+      As a member of Duisburg Essen University</h3> 
     <p>
-    <a href="../newPublication.xed">you can register your publication at the university bibliography here</a>
+      Help us to complete the bibliography!<br/>
+      <a href="../newPublication.xed">Here you can register your own publication</a>
     </p>
   </section>
 
-  <section class="highlight2">
+  <article class="highlight2">
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form" style="margin:0; padding:0;">
 
       <xed:bind xpath="/query">
@@ -64,10 +67,42 @@
       </button>
 
     </xed:form>
-  </section>
+  </article>
+
+  <article class="highlight1">
+    <xinclude uri="xslStyle:response-newest:solr:q=status:confirmed&amp;rows=4&amp;sort=year+desc,+created+desc&amp;facet=false&amp;fl=id,year" />
+  </article>
   
   <sidebar>
-    <xinclude uri="xslStyle:sidebar:buildxml:_rootName_=sidebar" />
+    <xinclude uri="xslStyle:response-sidebar-mini:solr:q=status:confirmed&amp;rows=0" />
+    <section class="highlight1" xml:lang="de">
+      <hgroup>
+        <h2>Kontakt:</h2>
+      </hgroup>
+      <p>
+        <a href="mailto:universitaetsbibliographie@ub.uni-due.de">
+          <span style="display:inline-block; vertical-align:top;">universitaetsbibliographie<br/>@ub.uni-due.de</span>
+        </a>
+      </p>
+      <p>
+        Universitätsbibliothek<br/>
+        Tel.: 0201 / 183-3703
+      </p>
+    </section>
+    <section class="highlight1" xml:lang="en">
+      <hgroup>
+        <h2>Contact:</h2>
+      </hgroup>
+      <p>
+        <a href="mailto:universitaetsbibliographie@ub.uni-due.de">
+          <span style="display:inline-block; vertical-align:top;">universitaetsbibliographie<br/>@ub.uni-due.de</span>
+        </a>
+      </p>
+      <p>
+        University library<br/>
+        Phone: 0201 / 183-3703
+      </p>
+    </section>
   </sidebar>
     
 </webpage>
