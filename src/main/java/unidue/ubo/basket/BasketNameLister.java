@@ -25,7 +25,6 @@ import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRConstants;
 import org.mycore.frontend.basket.MCRBasket;
 import org.mycore.frontend.basket.MCRBasketEntry;
-import org.mycore.frontend.basket.MCRBasketManager;
 
 /**
  * URIResolver that outputs a list of name entries of all
@@ -70,7 +69,7 @@ public class BasketNameLister implements URIResolver {
      */
     static List<Element> getAllContributorsFromBasket() {
         List<Element> contributors = new ArrayList<Element>();
-        MCRBasket basket = MCRBasketManager.getOrCreateBasketInSession("bibentries");
+        MCRBasket basket = BasketUtils.getBasket();
         for (MCRBasketEntry entry : basket) {
             Element obj = entry.getContent();
             Iterator<Element> iter = obj.getDescendants(new ElementFilter("name", MCRConstants.MODS_NAMESPACE));

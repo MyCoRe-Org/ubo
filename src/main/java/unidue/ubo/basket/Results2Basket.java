@@ -18,7 +18,6 @@ import org.jdom2.Element;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.frontend.basket.MCRBasket;
 import org.mycore.frontend.basket.MCRBasketEntry;
-import org.mycore.frontend.basket.MCRBasketManager;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 
@@ -58,7 +57,7 @@ public class Results2Basket extends MCRServlet {
     }
 
     private void addtoBasket(String oid) {
-        MCRBasket basket = MCRBasketManager.getOrCreateBasketInSession("bibentries");
+        MCRBasket basket = BasketUtils.getBasket();
         String uri = "mcrobject:" + oid;
         MCRBasketEntry entry = new MCRBasketEntry(oid, uri);
         entry.resolveContent();

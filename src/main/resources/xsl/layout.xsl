@@ -131,7 +131,7 @@
         <span class="glyphicon glyphicon-bookmark" aria-hidden="true" />
         <span><xsl:value-of select="i18n:translate('basket')" />:</span>
         <span id="basket-info-num">
-          <xsl:value-of select="count(document('notnull:basket:bibentries')/basket/*)" />
+          <xsl:value-of xmlns:basket="xalan://unidue.ubo.basket.BasketUtils" select="basket:size()" />
         </span>
         <span><xsl:value-of select="i18n:translate('ubo.publications')" /></span>
       </a>

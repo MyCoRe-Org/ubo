@@ -25,7 +25,6 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.frontend.basket.MCRBasket;
 import org.mycore.frontend.basket.MCRBasketEntry;
-import org.mycore.frontend.basket.MCRBasketManager;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 
@@ -56,7 +55,7 @@ public class BasketName2PIDEditor extends MCRServlet {
             return;
         }
 
-        MCRBasket basket = MCRBasketManager.getOrCreateBasketInSession("bibentries");
+        MCRBasket basket = BasketUtils.getBasket();
         Document doc = (Document) req.getAttribute("MCRXEditorSubmission");
 
         String action = req.getParameter("action");
