@@ -106,8 +106,9 @@
   <fieldType name="name" class="solr.TextField" positionIncrementGap="100">
     <analyzer type="index">
       <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-ISOLatin1Accent.txt"/>
-      <!-- Turnbull, Douglas G. ==> Turnbull, Douglas D G. to force all initials found -->
-      <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="\s+(\S)(\S+)" replacement=" $1$2 $1" />
+      <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="[\-\.]" replacement=" " />
+      <!-- Turnbull, Douglas G ==> Turnbull, Douglas D G to force all initials found -->
+      <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="\s+(\S)(\S+)" replacement=" $1$2 $1" /> <!-- Douglas Harold ==> Douglas D Harold H -->
       <tokenizer class="solr.StandardTokenizerFactory" />
       <filter class="solr.GermanNormalizationFilterFactory"/>
       <filter class="solr.ICUNormalizer2FilterFactory" name="nfkc_cf" mode="compose"/>
