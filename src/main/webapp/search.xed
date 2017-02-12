@@ -40,7 +40,6 @@
                 <xed:bind xpath="@field">
                   <select class="label" style="margin-left:6px; width:182px;">
                     <option value="title"     ><xed:output i18n="search.title" /></option>
-                    <option value="journal"   ><xed:output i18n="search.dozbib.journal" /></option>
                     <option value="series"    ><xed:output i18n="search.dozbib.series" /></option>         
                     <option value="conference"><xed:output i18n="ubo.conference" /></option>
                     <option value="note"      ><xed:output i18n="edit.comment" /></option>
@@ -55,6 +54,15 @@
               </div>
             </xed:repeat>
   
+            <xed:bind xpath="condition[@field='journal'][@operator='phrase']/@value">
+              <div>
+                <label for="journal">
+                  <xed:output i18n="search.dozbib.journal" />
+                </label>
+                <input id="journal" type="text" style="width:450px" /> />
+              </div>
+            </xed:bind>
+
             <xed:include uri="webapp:import-search.xed" ref="name" />
             
             <xed:repeat xpath="condition3[@operator='=']">
