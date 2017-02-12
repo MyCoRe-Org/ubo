@@ -44,7 +44,7 @@ public class Results2Basket extends MCRServlet {
             if ("response".equals(result.getAttributeValue("name"))) {
                 for (Element doc : result.getChildren("doc")) {
                     for (Element str : doc.getChildren("str")) {
-                        if ("id".equals(str.getAttributeValue("name"))) {
+                        if ("id".equals(str.getAttributeValue("name")) && BasketUtils.hasSpace()) {
                             String oid = str.getText();
                             addtoBasket(oid);
                         }

@@ -21,12 +21,18 @@ public class BasketUtils {
 
     private final static String basketID = "bibentries";
 
+    private final static int BASKET_LIMIT_NUMENTRIES = 500;
+    
     public static MCRBasket getBasket() {
         return MCRBasketManager.getOrCreateBasketInSession(basketID);
     }
 
     public static int size() {
         return getBasket().size();
+    }
+    
+    public static boolean hasSpace() {
+        return size() < BASKET_LIMIT_NUMENTRIES;
     }
 
     public static boolean contains(String entryID) {

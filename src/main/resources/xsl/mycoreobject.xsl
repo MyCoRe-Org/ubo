@@ -80,13 +80,15 @@
       <param name="id"         value="{/mycoreobject/@ID}" />
     </action>
   </xsl:if>
-  <action label="{i18n:translate('button.basketAdd')}" target="{$ServletsBaseURL}MCRBasketServlet">
-    <param name="type"    value="bibentries" />
-    <param name="action"  value="add" />
-    <param name="resolve" value="true" />
-    <param name="id"      value="{/mycoreobject/@ID}" />
-    <param name="uri"     value="mcrobject:{/mycoreobject/@ID}" />
-  </action>
+  <xsl:if xmlns:basket="xalan://unidue.ubo.basket.BasketUtils" test="basket:hasSpace()">
+    <action label="{i18n:translate('button.basketAdd')}" target="{$ServletsBaseURL}MCRBasketServlet">
+      <param name="type"    value="bibentries" />
+      <param name="action"  value="add" />
+      <param name="resolve" value="true" />
+      <param name="id"      value="{/mycoreobject/@ID}" />
+      <param name="uri"     value="mcrobject:{/mycoreobject/@ID}" />
+    </action>
+  </xsl:if>
   <xsl:if test="string-length($step) = 0">
     <action label="MODS" target="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.xml">
       <param name="uri"          value="mcrobject:{/mycoreobject/@ID}" />

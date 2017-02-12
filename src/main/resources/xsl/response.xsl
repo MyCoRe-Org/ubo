@@ -11,7 +11,8 @@
   xmlns:mcr="http://www.mycore.org/"
   xmlns:encoder="xalan://java.net.URLEncoder"
   xmlns:str="xalan://java.lang.String"
-  exclude-result-prefixes="xsl xalan i18n mods mcr encoder" 
+  xmlns:basket="xalan://unidue.ubo.basket.BasketUtils"
+  exclude-result-prefixes="xsl xalan i18n mods mcr encoder str basket" 
 >
 
 <xsl:include href="layout.xsl" />
@@ -160,9 +161,11 @@
 <xsl:template name="navigation">
   <div class="resultsNavigation section">
 
-    <span class="pageLink" style="float:left;">
-      <a href="{$ServletsBaseURL}Results2Basket?solr={encoder:encode($exportParams)}"><xsl:value-of select="i18n:translate('button.basketAdd')" /></a>
-    </span>
+    <xsl:if test="basket:hasSpace()">
+      <span class="pageLink" style="float:left;">
+        <a href="{$ServletsBaseURL}Results2Basket?solr={encoder:encode($exportParams)}"><xsl:value-of select="i18n:translate('button.basketAdd')" /></a>
+      </span>
+    </xsl:if>
 
     <xsl:if test="$numFound &gt; $rows">
       <xsl:call-template name="link2resultsPage">
@@ -242,7 +245,9 @@
         </div>
         <div class="footer">
           <xsl:call-template name="bibentry.show.details" />
-          <xsl:call-template name="bibentry.add.to.basket" />
+          <xsl:if test="basket:hasSpace()">
+            <xsl:call-template name="bibentry.add.to.basket" />
+          </xsl:if>
           <span class="floatRight"># <xsl:value-of select="$hitNo"/></span>
         </div>
       </xsl:for-each>
