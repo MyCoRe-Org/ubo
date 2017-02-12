@@ -8,11 +8,11 @@
 
   <!-- MyCoRe general fields -->
   <field name="id"            type="string" indexed="true" stored="true"  required="true"  multiValued="false" />
-  <field name="returnId"      type="string" indexed="true" stored="true"  required="false" multiValued="false" />
+  <field name="objectKind"    type="string" indexed="true" stored="false" required="true"  multiValued="false" />
   <field name="objectType"    type="string" indexed="true" stored="false" required="false" multiValued="false" />
   <field name="objectProject" type="string" indexed="true" stored="false" required="false" multiValued="false" />
   <field name="created"       type="date"   indexed="true" stored="false" required="false" multiValued="false" />
-  <field name="modified"      type="date"   indexed="true" stored="true"  required="true"  multiValued="false" />
+  <field name="modified"      type="date"   indexed="true" stored="true"  required="false" multiValued="false" />
 
   <!-- Universitätsbibliographie fields -->
   <field name="title"      type="text"      indexed="true" stored="true"  multiValued="true"  />

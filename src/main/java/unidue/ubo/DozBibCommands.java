@@ -55,8 +55,6 @@ public class DozBibCommands extends MCRAbstractCommands {
         addCommand(
             new MCRCommand("ubo transform entries using xsl {0}", "unidue.ubo.DozBibCommands.transformEntries String",
                 "Transforms persistent xml of all bibentries using XSL stylesheet"));
-        addCommand(new MCRCommand("ubo collect statistics {0}", "unidue.ubo.DozBibStatistics.collectStatistics String",
-            "Counts number of publications by status, type etc. from all entries, web application directory is parameter {0}"));
         addCommand(new MCRCommand("ubo find gnds", "unidue.ubo.DozBibGNDCommands.findGNDs", "Find GNDs"));
         addCommand(new MCRCommand("ubo migrate to mcrobject", "unidue.ubo.DozBibCommands.migrate2mcrobject",
             "migrates all bibentries to mycoreobject persistence"));

@@ -6,63 +6,38 @@
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   exclude-result-prefixes="xsl xalan i18n">
 
-  <xsl:param name="CurrentLang" />
+  <xsl:include href="layout.xsl"/>
+  <xsl:include href="statistics.xsl" />
   
-  <xsl:variable name="maxToShow" select="number('20')" /> 
+  <xsl:variable name="page.title">
+    <xsl:value-of select="i18n:translate('stats.page.title')" />
+    <xsl:text>: </xsl:text>
+    <xsl:value-of select="/response/result[@name='response']/@numFound" />
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="i18n:translate('ubo.publications')" />
+  </xsl:variable>
 
-  <xsl:template match="response">
-    <ubostatistics total="{result[@name='response']/@numFound}">
-      <xsl:for-each select="lst[@name='facet_counts']/lst[@name='facet_fields']">
+  <xsl:template match="/response" priority="1">
+    <script src="{$WebApplicationBaseURL}external/jquery-ui-1.8.12.custom.min.js" type="text/javascript"></script>
+    <script src="{$WebApplicationBaseURL}webjars/github-com-highcharts-highcharts/4.2.5/lib/highcharts.src.js" type="text/javascript"></script>
+    <script src="{$WebApplicationBaseURL}webjars/github-com-highcharts-highcharts/4.2.5/lib/themes/grid.js" type="text/javascript"></script>
+    
+    <div id="chartDialog" />
+    
+    <xsl:for-each select="lst[@name='facet_counts']/lst[@name='facet_fields']">
+      <article class="highlight1">
         <xsl:apply-templates select="lst[@name='year']" />
+      </article>
+      <article class="highlight1">
         <xsl:apply-templates select="lst[@name='subject']" />
+      </article>
+      <article class="highlight1">
         <xsl:apply-templates select="lst[@name='genre']" />
-        <xsl:apply-templates select="lst[@name='facet_person']" />  
-      </xsl:for-each>
-    </ubostatistics>
-  </xsl:template>
-  
-  <xsl:template match="lst[@name='facet_fields']/lst[@name='year']">
-    <table name="{i18n:translate('facets.facet.year')}" charttype="PublicationsByYear" id="{generate-id(.)}">
-      <xsl:for-each select="int">
-        <xsl:sort select="@name" data-type="number" order="ascending" />
-        <row num="{text()}" key="{@name}" label="{@name}" />
-      </xsl:for-each>
-    </table>
-  </xsl:template>
-
-  <xsl:variable name="subjects" select="document('resource:fachreferate.xml')/fachreferate" />
-
-  <xsl:template match="lst[@name='facet_fields']/lst[@name='subject']">
-    <table name="{i18n:translate('facets.facet.subject')} ({i18n:translate('facets.multiple')}, Top {$maxToShow})" charttype="ColumnRotatedLabels" id="{generate-id(.)}">
-      <xsl:for-each select="int">
-        <xsl:sort select="text()" data-type="number" order="descending" />
-        <xsl:if test="position() &lt;= $maxToShow">
-          <row num="{text()}" key="{@name}" label="{$subjects/item[@value=current()/@name]/@label}" />
-        </xsl:if>
-      </xsl:for-each>
-    </table>
-  </xsl:template>
-
-  <xsl:variable name="genres" select="document('classification:metadata:-1:children:ubogenre')/mycoreclass/categories" />
-
-  <xsl:template match="lst[@name='facet_fields']/lst[@name='genre']">
-    <table name="{i18n:translate('facets.facet.genre')}" charttype="Piechart" id="{generate-id(.)}">
-      <xsl:for-each select="int">
-        <xsl:sort select="text()" data-type="number" order="descending" />
-        <row num="{text()}" key="{@name}" label="{$genres//category[@ID=current()/@name]/label[lang($CurrentLang)]/@text}" />
-      </xsl:for-each>
-    </table>
-  </xsl:template>
-
-  <xsl:template match="lst[@name='facet_fields']/lst[@name='facet_person']">
-    <table name="{i18n:translate('facets.facet.person')} (Top {$maxToShow})" charttype="ColumnRotatedLabels" id="{generate-id(.)}">
-      <xsl:for-each select="int">
-        <xsl:sort select="text()" data-type="number" order="descending" />
-        <xsl:if test="position() &lt;= $maxToShow">
-          <row num="{text()}" key="{@name}" label="{@name}" />
-        </xsl:if>
-      </xsl:for-each>
-    </table>
+      </article>
+      <article class="highlight1">
+        <xsl:apply-templates select="lst[@name='facet_person']" />
+      </article>
+    </xsl:for-each>
   </xsl:template>
 
 </xsl:stylesheet>

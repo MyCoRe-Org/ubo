@@ -194,7 +194,7 @@
     </xsl:if>
 
     <span class="pageLink" style="float:right;">
-      <a href="statistics?{$exportParams}&amp;XSL.Transformer=statistics"><xsl:value-of select="i18n:translate('button.statistics')" /></a>
+      <a href="statistics?{$exportParams}&amp;XSL.Style=statistics"><xsl:value-of select="i18n:translate('button.statistics')" /></a>
     </span>
 
   </div>

@@ -20,6 +20,7 @@
     <xsl:apply-templates select="descendant::mods:name[@type='personal']/mods:role/mods:roleTerm[@type='code']" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:name/mods:nameIdentifier" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:name[mods:nameIdentifier[@type='lsf']]" mode="solrField.lsf" />
+    <xsl:apply-templates select="descendant::mods:name[@type='personal']" mode="child" />
     <xsl:apply-templates select="mods:genre[@type='intern']" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:genre[@type='intern']" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="solrField" />
@@ -240,6 +241,22 @@
   <xsl:template match="mods:extension/dedup" mode="solrField">
     <field name="dedup">
       <xsl:value-of select="@key" />
+    </field>
+  </xsl:template>
+
+  <xsl:template match="mods:name[@type='personal']" mode="child">
+    <doc>
+      <field name="objectKind">name</field>
+      <field name="id">
+        <xsl:value-of select="concat(ancestor::mycoreobject/@ID,'_',generate-id(.))" />
+      </field>
+      <xsl:apply-templates select="mods:nameIdentifier" mode="child" />
+    </doc>
+  </xsl:template>
+  
+  <xsl:template match="mods:nameIdentifier" mode="child">
+    <field name="nid_type">
+      <xsl:value-of select="@type" />
     </field>
   </xsl:template>
 
