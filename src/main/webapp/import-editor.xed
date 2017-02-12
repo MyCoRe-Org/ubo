@@ -16,7 +16,6 @@
     <xed:validate xpath="//mods:classification[@classID='fachreferate']" required="true" i18n="condition.subject" display="global" />
     <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:titleInfo/mods:title" required="true" i18n="ubo.title.validation" display="global" />
     <xed:validate xpath="//mods:mods/mods:name[@type='personal'][1]" test="string-length(mods:namePart[@type='family']) &gt; 0" i18n="ubo.role.author.validation" display="global" />
-    <xed:validate xpath="//mods:originInfo/mods:dateIssued[@encoding='w3cdtf']" matches="[\d]{4}" required="true" i18n="ubo.date.issued.4.validation" display="global" />
     <xed:validate xpath="//mods:identifier[@type='doi']" matches="10\.\d+.*" i18n="ubo.identifier.doi.validation" display="global" />
     <xed:validate xpath="//mods:identifier[@type='urn']" matches="urn:nbn:[a-z]{2}:\S*" i18n="ubo.identifier.urn.validation" display="global" />
     <xed:validate xpath="//mods:identifier[@type='issn']" matches="[0-9X]{4}\-[0-9X]{4}" i18n="ubo.identifier.issn.validation" display="global" />
@@ -25,6 +24,8 @@
     <xed:validate xpath="//mods:location/mods:url" matches="(f|ht)tp(s?)://[\w\d.]+\S*" i18n="ubo.link.validation" display="global" />
     <xed:validate xpath="//mods:location/mods:url" matches="^((?!doi.org/10).)*$" i18n="ubo.link.validation.not.doi" display="global" />
     <xed:validate xpath="//mods:location/mods:shelfLocator" matches="([ED]\d\d\/\d\d\s[A-Za-z]+\s\d+.*)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
+    <!-- year is required, except for journal and series: -->
+    <xed:validate xpath="//mods:mods" test="descendant::mods:dateIssued[string-length(.) &gt; 0] or mods:genre='journal' or mods:genre='series'" matches="[\d]{4}" i18n="ubo.date.issued.4.validation" display="global" />
   </xed:template>
   
   <xed:template id="common.metafields">
@@ -381,6 +382,7 @@
         </label>
         <input id="{xed:generate-id()}" class="{$xed-validation-marker}" type="text" style="width:7ex" placeholder="{i18n:ubo.date.issued.4.placeholder}" />
       </div>
+      <xed:validate matches="[\d]{4}" i18n="ubo.date.issued.4.validation" display="global" />
     </xed:bind>
   </xed:template>
 

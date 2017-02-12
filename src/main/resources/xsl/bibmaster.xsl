@@ -63,9 +63,11 @@
 <!-- ========== Ausgabe Jahr ========== -->
 
 <xsl:template name="label-year">
-  <span class="label-info">
-    <xsl:value-of select="descendant-or-self::mods:dateIssued[not(ancestor::mods:relatedItem[not(@type='host')])][1]" />
-  </span>
+  <xsl:for-each select="descendant-or-self::mods:dateIssued[not(ancestor::mods:relatedItem[not(@type='host')])][1]">
+    <span class="label-info">
+      <xsl:value-of select="text()" />
+    </span>
+  </xsl:for-each>
 </xsl:template>
 
 <!-- ========== URI bauen, um Dubletten zu finden ========== -->
