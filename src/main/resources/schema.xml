@@ -125,10 +125,15 @@
   <fieldType name="journal" class="solr.TextField" positionIncrementGap="100">
     <analyzer>
       <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-ISOLatin1Accent.txt"/>
+      <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="ournal" replacement="" />
+      <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="eitschrift" replacement="" />
+      <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="agazin" replacement="" />
+      <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="(\S)\s+" replacement="$1$1$1 " />
+      <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="\s+(\S)$" replacement=" $1$1$1" />
       <tokenizer class="solr.StandardTokenizerFactory" />
       <filter class="solr.GermanNormalizationFilterFactory"/>
       <filter class="solr.ICUNormalizer2FilterFactory" name="nfkc_cf" mode="compose"/>
-      <filter class="solr.EdgeNGramFilterFactory" minGramSize="1" maxGramSize="15" />
+      <filter class="solr.EdgeNGramFilterFactory" minGramSize="3" maxGramSize="15" />
     </analyzer>
   </fieldType>
 
