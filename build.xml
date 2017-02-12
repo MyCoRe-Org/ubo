@@ -17,6 +17,7 @@
   To start/stop a local SOLR server:
     ant start.solr            Start SOLR server
     ant stop.solr             Stop SOLR server
+    ant restart.solr          Same as stop.solr, copy.solr.config, start.solr
 
     </echo>
   </target>
@@ -78,6 +79,10 @@
     </antcall>
   </target>
 
+  <!-- ============================================== -->
+	
+  <target name="restart.solr" description="Same as stop.solr, copy.solr.config, start.solr" depends="stop.solr, copy.solr.config, start.solr" />
+	
   <!-- ============================================== -->
 
   <target name="maven">
