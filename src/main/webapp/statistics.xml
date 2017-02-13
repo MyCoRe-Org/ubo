@@ -39,21 +39,12 @@
   </section>
 
   <section class="highlight2" xml:lang="de">
-    <h3>Am häufigsten verzeichnete Personennamen (Top 50, seit 2012):</h3>
-    <xinclude uri="xslStyle:statistics:solr:q=status:confirmed+year:[2012+TO+*]&amp;rows=0&amp;facet.field=facet_person&amp;facet.limit=50" />
+    <h3>Am häufigsten verzeichnete Personen (nur mit UDE LSF Zuordnung, Top 50, in Publikationen ab 2012):</h3>
+    <xinclude uri="xslStyle:statistics:solr:q=status:confirmed+year:[2012+TO+*]&amp;rows=0&amp;facet.field=nid_lsf&amp;facet.limit=50" />
   </section>
   <section class="highlight2" xml:lang="en">
-    <h3>Most frequently listed person names (Top 50, since 2012):</h3>
-    <xinclude uri="xslStyle:statistics:solr:q=status:confirmed+year:[2012+TO+*]&amp;rows=0&amp;facet.field=facet_person&amp;facet.limit=50" />
-  </section>
-
-  <section class="highlight2" xml:lang="de">
-    <h3>Am häufigsten verzeichnete Personen (nur UDE/mit LSF Zuordnung, Top 50, über alle Einträge):</h3>
-    <xinclude uri="xslStyle:statistics:solr:q=objectKind:name&amp;rows=0&amp;facet.pivot=name_id_lsf,name&amp;facet.limit=50" />
-  </section>
-  <section class="highlight2" xml:lang="en">
-    <h3>Most frequently listed staff (University members only that are linked to HIS LSF, top 50, collected from all entries):</h3>
-    <xinclude uri="xslStyle:statistics:solr:q=objectKind:name&amp;rows=0&amp;facet.pivot=name_id_lsf,name&amp;facet.limit=50" />
+    <h3>Most frequently listed staff (University members only that are linked to HIS LSF, top 50, in publications from 2012):</h3>
+    <xinclude uri="xslStyle:statistics:solr:q=status:confirmed+year:[2012+TO+*]&amp;rows=0&amp;facet.field=nid_lsf&amp;facet.limit=50" />
   </section>
 
   <section class="highlight2" xml:lang="de">

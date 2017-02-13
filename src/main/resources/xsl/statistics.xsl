@@ -4,7 +4,8 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:xalan="http://xml.apache.org/xalan" 
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" 
-  exclude-result-prefixes="xsl xalan i18n">
+  xmlns:encoder="xalan://java.net.URLEncoder"
+  exclude-result-prefixes="xsl xalan i18n encoder">
 
   <xsl:param name="CurrentLang" />
   <xsl:param name="ServletsBaseURL" />
@@ -19,8 +20,8 @@
         <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='subject'][int]" />
         <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='genre'][int]" />
         <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='facet_person'][int]" />
+        <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='nid_lsf'][int]" />
         <xsl:apply-templates select="lst[@name='facet_pivot']/arr[@name='name_id_type,name_id_type']" />
-        <xsl:apply-templates select="lst[@name='facet_pivot']/arr[@name='name_id_lsf,name']" />
       </xsl:for-each>
     </xinclude>
   </xsl:template>
@@ -303,6 +304,98 @@
       });
     </script>
   </xsl:template>
+  
+  <xsl:template match="lst[@name='facet_fields']/lst[@name='nid_lsf']">
+  
+    <!-- The facet is a list of top LSF IDs matching the restricted query, e.g. status=confirmed, year > 2012 -->
+    <!-- To find the corresponding names, build a pivot facet with LSF ID and name variants, use most frequent name  -->
+    <xsl:variable name="uri">
+       <xsl:text>solr:q=objectKind:name+AND+(</xsl:text>
+       <xsl:for-each select="int">
+         <xsl:text>name_id_lsf:</xsl:text>
+         <xsl:value-of select="@name" />
+         <xsl:if test="position() != last()">+OR+</xsl:if>
+       </xsl:for-each>
+       <xsl:text>)&amp;rows=0&amp;facet.pivot=name_id_lsf,name&amp;facet.limit=</xsl:text>
+       <xsl:value-of select="count(int)" />
+    </xsl:variable>
+    <xsl:variable name="response" select="document($uri)/response" />
+    <xsl:variable name="lsf2name" select="$response/lst[@name='facet_counts']/lst[@name='facet_pivot']/arr[@name='name_id_lsf,name']" />
+  
+    <xsl:variable name="q" select="encoder:encode(/response/lst[@name='responseHeader']/lst[@name='params']/str[@name='q'],'UTF-8')" />
+
+    <xsl:variable name="title" select="concat(i18n:translate('ubo.publications'),' / ',i18n:translate('facets.facet.nid_lsf'))" />
+
+    <div id="chartLSF" style="width:100%; height:{50 + count(int) * 30}px" />
+    
+    <script type="text/javascript">
+      jQuery(document).ready(function() {
+        new Highcharts.Chart({
+          chart: {
+            renderTo: 'chartLSF',
+            type: 'bar',
+            events: {
+              click: function(e) {
+                jQuery('#chartDialog').dialog({
+                  position: 'center',
+                  width: jQuery(window).width() - 80,
+                  height: jQuery(window).height() - 80,
+                  draggable: false,
+                  resizable: false,
+                  modal: false
+                });
+                var dialogOptions = this.options;
+                dialogOptions.chart.renderTo = 'chartDialog';
+                dialogOptions.chart.events = null;
+                dialogOptions.chart.zoomType = 'x';
+                new Highcharts.Chart(dialogOptions);
+              }
+            }
+          },
+          title: { text: '<xsl:value-of select="$title" />' },
+          legend: { enabled: false },
+          xAxis: { categories: [
+            <xsl:for-each select="int">
+              <xsl:sort select="text()" data-type="number" order="descending" />
+              <xsl:variable name="lsf_id" select="@name" />
+              <xsl:variable name="name"   select="$lsf2name/lst[str[@name='value']=$lsf_id]/arr/lst[1]/str[@name='value']" />
+              "<xsl:value-of select="$name"/>"
+              <xsl:if test="position() != last()">, </xsl:if>
+            </xsl:for-each>
+            ],
+            labels: {
+              align: 'right',
+              style: { font: 'normal 13px Verdana, sans-serif' }
+            }
+          },
+          yAxis: {
+             title: { text: '<xsl:value-of select="$count" />' },
+             labels: { formatter: function() { return this.value; } },
+             endOnTick: false,          
+             max: <xsl:value-of select="floor(number(int[1]) * 1.05)" /> <!-- +5% -->          
+          },
+          tooltip: { formatter: function() { return '<b>' + this.x +'</b>: '+ this.y; } },
+          plotOptions: { series: { pointWidth: 15 } },
+          series: [{
+            name: '<xsl:value-of select="$title" />',
+            data: [
+              <xsl:for-each select="int">
+                <xsl:sort select="text()" data-type="number" order="descending" />
+                <xsl:value-of select="text()"/>
+                <xsl:if test="position() != last()">, </xsl:if>
+              </xsl:for-each>
+            ],
+            dataLabels: {
+              enabled: true,
+              align: 'right', 
+              formatter: function() { return this.y; },
+              style: { font: 'normal 15px Verdana, sans-serif' }
+            }
+          }]
+        });
+      });
+    </script>
+  </xsl:template>  
 
   <xsl:template match="lst/arr[@name='name_id_type,name_id_type']">
     <xsl:variable name="base" select="." />
@@ -328,29 +421,6 @@
               <xsl:value-of select="$base/lst[str[@name='value']=$a]/arr/lst[str[@name='value']=$b]/int[@name='count']" />
             </td>
           </xsl:for-each>
-        </tr>
-      </xsl:for-each>
-    </table>
-  </xsl:template>
-
-  <xsl:template match="lst/arr[@name='name_id_lsf,name']">
-    <table class="ubo-chart">
-      <xsl:for-each select="lst">
-        <xsl:variable name="lsf_id" select="str[@name='value']" />
-        <xsl:variable name="count"  select="int[@name='count']" />
-        <xsl:variable name="name"   select="arr/lst[1]/str[@name='value']" /> <!-- most frequent name -->
-      
-        <tr>
-          <td class="identifier">
-            <a href="{$ServletsBaseURL}solr/select?q=status:confirmed+nid_lsf:{$lsf_id}">
-              <xsl:value-of select="$count" />
-            </a>
-          </td>
-          <td>
-            <a href="{$UBO.LSF.Link}{$lsf_id}">
-              <xsl:value-of select="$name" />
-            </a>
-          </td>
         </tr>
       </xsl:for-each>
     </table>
