@@ -7,6 +7,8 @@
   exclude-result-prefixes="xsl xalan i18n">
 
   <xsl:param name="CurrentLang" />
+  <xsl:param name="ServletsBaseURL" />
+  <xsl:param name="UBO.LSF.Link" />
 
   <xsl:variable name="count" select="concat(i18n:translate('stats.count'),' ',i18n:translate('ubo.publications'))" />
 
@@ -17,7 +19,8 @@
         <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='subject'][int]" />
         <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='genre'][int]" />
         <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='facet_person'][int]" />
-        <xsl:apply-templates select="lst[@name='facet_pivot']/arr[@name='nid_type,nid_type']" />
+        <xsl:apply-templates select="lst[@name='facet_pivot']/arr[@name='name_id_type,name_id_type']" />
+        <xsl:apply-templates select="lst[@name='facet_pivot']/arr[@name='name_id_lsf,name']" />
       </xsl:for-each>
     </xinclude>
   </xsl:template>
@@ -301,7 +304,7 @@
     </script>
   </xsl:template>
 
-  <xsl:template match="lst/arr">
+  <xsl:template match="lst/arr[@name='name_id_type,name_id_type']">
     <xsl:variable name="base" select="." />
 
     <table class="ubo-chart"> 
@@ -325,6 +328,29 @@
               <xsl:value-of select="$base/lst[str[@name='value']=$a]/arr/lst[str[@name='value']=$b]/int[@name='count']" />
             </td>
           </xsl:for-each>
+        </tr>
+      </xsl:for-each>
+    </table>
+  </xsl:template>
+
+  <xsl:template match="lst/arr[@name='name_id_lsf,name']">
+    <table class="ubo-chart">
+      <xsl:for-each select="lst">
+        <xsl:variable name="lsf_id" select="str[@name='value']" />
+        <xsl:variable name="count"  select="int[@name='count']" />
+        <xsl:variable name="name"   select="arr/lst[1]/str[@name='value']" /> <!-- most frequent name -->
+      
+        <tr>
+          <td class="identifier">
+            <a href="{$ServletsBaseURL}solr/select?q=status:confirmed+nid_lsf:{$lsf_id}">
+              <xsl:value-of select="$count" />
+            </a>
+          </td>
+          <td>
+            <a href="{$UBO.LSF.Link}{$lsf_id}">
+              <xsl:value-of select="$name" />
+            </a>
+          </td>
         </tr>
       </xsl:for-each>
     </table>

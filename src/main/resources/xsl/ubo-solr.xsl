@@ -250,13 +250,19 @@
       <field name="id">
         <xsl:value-of select="concat(ancestor::mycoreobject/@ID,'_',generate-id(.))" />
       </field>
+      <field name="name">
+        <xsl:apply-templates select="." mode="solrField" />
+      </field>
       <xsl:apply-templates select="mods:nameIdentifier" mode="child" />
     </doc>
   </xsl:template>
   
   <xsl:template match="mods:nameIdentifier" mode="child">
-    <field name="nid_type">
+    <field name="name_id_type">
       <xsl:value-of select="@type" />
+    </field>
+    <field name="name_id_{@type}">
+      <xsl:value-of select="text()" />
     </field>
   </xsl:template>
 

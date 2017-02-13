@@ -76,6 +76,10 @@
   <copyField source="tag"        dest="all" />
   <copyField source="id_*"       dest="all" />
 
+  <!-- Special fields for indexing mods:name as nested child documents -->
+  <field name="name" type="string" indexed="true" stored="false" multiValued="false" /> 
+  <dynamicField name="name_id_*" type="id" indexed="true" stored="false" multiValued="true" />
+
   <!-- Ignore all other fields -->
   <dynamicField name="*" type="ignored" />
 
