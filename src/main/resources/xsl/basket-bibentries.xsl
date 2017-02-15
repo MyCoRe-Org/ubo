@@ -11,7 +11,6 @@
 >
 
 <xsl:include href="basket-common.xsl" />
-<xsl:include href="bibmaster.xsl" />
 <xsl:include href="mods-display.xsl" />
 
 <xsl:variable name="page.title" select="'Merkliste'" />

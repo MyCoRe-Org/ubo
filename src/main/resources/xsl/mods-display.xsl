@@ -11,10 +11,78 @@
   exclude-result-prefixes="xsl xalan xlink i18n encoder mcr">
   
   <xsl:include href="shelfmark-normalization.xsl" />
+  <xsl:include href="output-category.xsl" />
   
   <xsl:param name="step" />
   <xsl:param name="RequestURL" />
   <xsl:param name="WebApplicationBaseURL" />
+  <xsl:param name="ServletsBaseURL" />
+  <xsl:param name="UBO.LSF.Link" />
+  <xsl:param name="CurrentLang" />
+
+  <!-- ============ Katalogsuche Basis-URLs ============ -->
+  <xsl:variable name="primo.search">
+    <xsl:text>http://primo.ub.uni-due.de/primo_library/libweb/action/dlSearch.do</xsl:text>
+    <xsl:text>?vid=UDE&amp;institution=UDE&amp;bulkSize=10&amp;indx=1&amp;onCampus=false&amp;query=</xsl:text>
+  </xsl:variable>
+  
+  <!-- ============ Fächerliste (subject) laden ============ -->
+  <xsl:variable name="subjects" select="document('resource:fachreferate.xml')/fachreferate" />
+  
+  <!-- ============ Ausgabe Publikationsart ============ -->
+  
+  <xsl:template name="pubtype">
+    <span class="label-info">
+      <xsl:apply-templates select="mods:genre[@type='intern']" />
+      <xsl:for-each select="mods:relatedItem[@type='host']/mods:genre[@type='intern']">
+        <xsl:text> in </xsl:text>
+        <xsl:apply-templates select="." />
+      </xsl:for-each> 
+    </span>
+  </xsl:template>
+  
+  <!-- ============ Ausgabe Fach ============ -->
+  
+  <xsl:template match="mods:mods/mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info">
+    <span class="label-info">
+      <xsl:value-of select="$subjects/item[@value=substring-after(current()/@valueURI,'#')]/@label"/>
+    </span>
+  </xsl:template>
+  
+  <!-- ========== Ausgabe Fakultät ========== -->
+  
+  <xsl:template match="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info">
+    <span class="label-info">
+      <xsl:call-template name="output.category">
+        <xsl:with-param name="classID" select="'ORIGIN'" />
+        <xsl:with-param name="categID" select="substring-after(@valueURI,'#')" />
+      </xsl:call-template>
+    </span>
+  </xsl:template>
+  
+  <!-- ========== Ausgabe Jahr ========== -->
+  
+  <xsl:template name="label-year">
+    <xsl:for-each select="descendant-or-self::mods:dateIssued[not(ancestor::mods:relatedItem[not(@type='host')])][1]">
+      <span class="label-info">
+        <xsl:value-of select="text()" />
+      </span>
+    </xsl:for-each>
+  </xsl:template>
+  
+  <!-- ========== URI bauen, um Dubletten zu finden ========== -->
+  
+  <xsl:template name="buildFindDuplicatesURI">
+    <xsl:text>solr:fl=id&amp;rows=999&amp;q=(</xsl:text>
+    <xsl:for-each select="dedup">
+      <xsl:text>dedup:</xsl:text>
+      <xsl:value-of select="encoder:encode(@key,'UTF-8')" xmlns:encoder="xalan://java.net.URLEncoder" />
+      <xsl:if test="position() != last()">
+        <xsl:text>+OR+</xsl:text>
+      </xsl:if>
+    </xsl:for-each>
+    <xsl:text>)</xsl:text>
+  </xsl:template>
   
   <!-- ========== Zitierform ========== -->
   <xsl:template match="mods:mods|mods:relatedItem" mode="cite">
@@ -105,24 +173,17 @@
     <xsl:param name="after" />
     <xsl:param name="mode" />
     <xsl:param name="class" />
+
     <xsl:if test="count($selected) &gt; 0">
-      <xsl:variable name="text">
-        <xsl:apply-templates select="$selected" mode="brief" />
-      </xsl:variable>
       <xsl:choose>
         <xsl:when test="$mode='plain'">
           <xsl:value-of select="$before" />
-          <xsl:copy-of select="$text" />
+          <xsl:apply-templates select="$selected" mode="brief" />
           <xsl:value-of select="$after" />
         </xsl:when>
         <xsl:otherwise>
-          <div>
-            <xsl:if test="string-length($class) &gt; 0">
-              <xsl:attribute name="class">
-                <xsl:value-of select="$class" />
-              </xsl:attribute>
-            </xsl:if>
-            <xsl:copy-of select="$text" />
+          <div class="{$class}">
+            <xsl:apply-templates select="$selected" mode="brief" />
             <xsl:value-of select="$after" />
           </div>
         </xsl:otherwise>
@@ -133,7 +194,7 @@
   <!-- ========== Personennamen als Liste ========== -->
   <xsl:template match="mods:name" mode="brief">
     <xsl:apply-templates select="." />
-    <xsl:if test="position() != last()">
+    <xsl:if test="position() != last()"> <!-- et al ? -->
       <xsl:text>; </xsl:text>
     </xsl:if>
   </xsl:template>

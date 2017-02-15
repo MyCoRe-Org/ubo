@@ -17,7 +17,6 @@
 >
 
 <xsl:include href="layout.xsl" />
-<xsl:include href="bibmaster.xsl" />
 <xsl:include href="mods-dc-meta.xsl" />
 <xsl:include href="mods-highwire.xsl" />
 <xsl:include href="mods-display.xsl" />
@@ -80,7 +79,7 @@
       <param name="id"         value="{/mycoreobject/@ID}" />
     </action>
   </xsl:if>
-  <xsl:if xmlns:basket="xalan://unidue.ubo.basket.BasketUtils" test="basket:hasSpace()">
+  <xsl:if xmlns:basket="xalan://unidue.ubo.basket.BasketUtils" test="basket:hasSpace() and not(basket:contains(string(/mycoreobject/@ID)))">
     <action label="{i18n:translate('button.basketAdd')}" target="{$ServletsBaseURL}MCRBasketServlet">
       <param name="type"    value="bibentries" />
       <param name="action"  value="add" />
@@ -129,7 +128,9 @@
       <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info" />
       <xsl:apply-templates select="mods:extension/tag" />
     </div>
-    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" />
+    <div class="labels">
+      <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info" />
+    </div>
     <xsl:apply-templates select="/mycoreobject/service/servflags/servflag[@type='status']" />
     <xsl:call-template name="steps.and.actions" /> 
   </div>

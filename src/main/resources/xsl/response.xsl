@@ -16,7 +16,6 @@
 >
 
 <xsl:include href="layout.xsl" />
-<xsl:include href="bibmaster.xsl" />
 <xsl:include href="mods-display.xsl" />
 <xsl:include href="response-facets.xsl" />
 
@@ -245,7 +244,7 @@
         </div>
         <div class="footer">
           <xsl:call-template name="bibentry.show.details" />
-          <xsl:if test="basket:hasSpace()">
+          <xsl:if test="basket:hasSpace() and not(basket:contains(string(ancestor::mycoreobject/@ID)))">
             <xsl:call-template name="bibentry.add.to.basket" />
           </xsl:if>
           <span class="floatRight"># <xsl:value-of select="$hitNo"/></span>

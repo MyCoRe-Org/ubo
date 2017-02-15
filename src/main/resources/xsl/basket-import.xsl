@@ -9,7 +9,6 @@
   exclude-result-prefixes="xsl xalan i18n mods mcr">
 
   <xsl:include href="basket-common.xsl" />
-  <xsl:include href="bibmaster.xsl" />
   <xsl:include href="mods-display.xsl" />
 
   <xsl:variable name="page.title" select="'Literaturliste importieren'" />
