@@ -26,6 +26,14 @@ public class TestTitleInfoMerger extends MCRJPATestCase {
     }
 
     @Test
+    public void testLongerWins() throws Exception {
+        String a = "[mods:titleInfo[mods:title='Applied Physics A']]";
+        String b = "[mods:titleInfo[mods:title='Applied Physics A : Materials Science & Processing']]";
+        String e = b;
+        TestMerger.test(a, b, e);
+    }
+
+    @Test
     public void testMergingTitleSubtitle() throws JaxenException, IOException {
         String a = "[mods:titleInfo[mods:title='testing: all you have to know about']]";
         String b = "[mods:titleInfo[mods:title='Testing'][mods:subTitle='All You have to know about']]";

@@ -29,15 +29,23 @@ public class TitleInfoMerger extends Merger {
     public boolean isProbablySameAs(Merger other) {
         if (!(other instanceof TitleInfoMerger))
             return false;
-        else
-            return text.equals(((TitleInfoMerger) other).text);
+
+        TitleInfoMerger otherTitle = (TitleInfoMerger) other;
+        if (text.equals(otherTitle.text))
+            return true;
+
+        return text.startsWith(otherTitle.text) || otherTitle.text.startsWith(text);
     }
 
     public void mergeFrom(Merger other) {
         mergeAttributes(other);
 
-        // if the other one has a subTitle and we don't, the other one wins
-        if (textOf("subTitle").isEmpty() && !((TitleInfoMerger) other).textOf("subTitle").isEmpty()) {
+        TitleInfoMerger otherTitle = (TitleInfoMerger) other;
+
+        boolean otherHasSubTitleAndWeNot = textOf("subTitle").isEmpty() && !otherTitle.textOf("subTitle").isEmpty();
+        boolean otherTitleIsLonger = otherTitle.text.length() > this.text.length();
+
+        if (otherHasSubTitleAndWeNot || otherTitleIsLonger) {
             this.element.setContent(other.element.cloneContent());
         }
     }
