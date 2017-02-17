@@ -10,26 +10,14 @@
         <legend>Publikation aus Scopus, PubMed oder CrossRef importieren</legend>
         <div>
           <label>
-            <select class="label" style="width:150px;" name="scopusField">
-              <option value="scopus_id">Scopus ID</option>
-              <option value="eid">Scopus EID</option>
-              <option value="doi">Scopus DOI</option>
+            <select class="label" style="width:150px;" name="idType">
+              <option value="doi">DOI</option>
+              <option value="pubmed">PubMed ID</option>
+              <option value="scopus">Scopus ID</option>
+              <option value="issn">ISSN</option>
             </select>:
           </label>
-          <input type="text" style="width:300px;" name="ScopusID" />
-        </div>
-        <div>
-          <label>
-            <select class="label" style="width:150px;" name="pubMedField">
-              <option value="ext_id">PubMed ID</option>
-              <option value="doi">PubMed DOI</option>
-            </select>:
-          </label>
-          <input type="text" style="width:300px;" name="PubMedID" />
-        </div>
-        <div>
-          <label>CrossRef DOI :</label>
-          <input type="text" style="width:300px;" name="CrossRefDOI" />
+          <input type="text" style="width:300px;" name="id2resolve" />
         </div>
         <div>
           <label>
