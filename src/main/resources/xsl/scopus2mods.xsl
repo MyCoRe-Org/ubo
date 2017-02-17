@@ -47,7 +47,9 @@
 
   <xsl:template match="scopus:authors/scopus:author">
     <mods:name type="personal">
-      <xsl:apply-templates select="ce:surname|ce:given-name" />
+      <xsl:apply-templates select="ce:surname" />
+      <xsl:apply-templates select="ce:given-name" />
+      <xsl:apply-templates select="ce:initials[not(../ce:given-name)]" />
       <xsl:apply-templates select="@orcid" />
       <xsl:apply-templates select="@auid" />
       <mods:role>
@@ -97,7 +99,7 @@
     </mods:namePart>
   </xsl:template>
 
-  <xsl:template match="ce:given-name">
+  <xsl:template match="ce:given-name|ce:initials">
     <mods:namePart type="given">
       <xsl:value-of select="text()" />
     </mods:namePart>

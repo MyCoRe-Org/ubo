@@ -131,12 +131,9 @@ public class RSSFeedImporter {
         bibentries.addContent(obj.createXML().detachRootElement());
     }
 
-    /** If mods:genre was set to "ignore" by conversion/import function, ignore this publication and do not import */
+    /** If mods:genre was not mapped by conversion/import function, ignore this publication and do not import */
     private static boolean shouldIgnore(MCRMODSWrapper wrapper) {
-        for (Element genre : wrapper.getElements("mods:genre"))
-            if (genre.getTextTrim().contains("ignore"))
-                return true;
-        return false;
+        return wrapper.getElements("mods:genre").isEmpty();
     }
 
     private SyndFeed retrieveFeed() throws IOException, MalformedURLException, FeedException {
