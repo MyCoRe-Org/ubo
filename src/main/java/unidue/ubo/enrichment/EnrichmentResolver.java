@@ -60,11 +60,11 @@ public class EnrichmentResolver implements URIResolver {
         for (Element relatedItem : relatedItems)
             enrichPublicationLevel(relatedItem, configID);
 
-        output(mods, "complete publication");
+        debug(mods, "complete publication");
     }
 
     private void enrichPublicationLevel(Element mods, String configID) {
-        LOGGER.info("resolving via config " + configID + " : " + MCRXPathBuilder.buildXPath(mods));
+        LOGGER.debug("resolving via config " + configID + " : " + MCRXPathBuilder.buildXPath(mods));
 
         boolean withinGroup = false;
         boolean dataSourceCompleted = false;
@@ -81,7 +81,7 @@ public class EnrichmentResolver implements URIResolver {
                 withinGroup = false;
                 dataSourceCompleted = false;
             } else if (withinGroup && dataSourceCompleted) {
-                LOGGER.info("Skipping data source " + token);
+                LOGGER.debug("Skipping data source " + token);
                 continue;
             } else {
                 String dataSourceID = token;
@@ -93,11 +93,11 @@ public class EnrichmentResolver implements URIResolver {
                     for (Element identifierElement : identifiersFound) {
                         String identifier = identifierElement.getTextTrim();
 
-                        LOGGER.info("resolving " + idType + " " + identifier + " from " + dataSource + "...");
+                        LOGGER.debug("resolving " + idType + " " + identifier + " from " + dataSource + "...");
                         Element resolved = resolver.resolve(identifier);
 
                         if (resolved == null) {
-                            LOGGER.info("no data returned from " + dataSource);
+                            LOGGER.debug("no data returned from " + dataSource);
                         } else {
                             mergeResolvedIntoExistingData(mods, resolved);
                             dataSourceCompleted = true;
@@ -110,11 +110,11 @@ public class EnrichmentResolver implements URIResolver {
     }
 
     private void mergeResolvedIntoExistingData(Element mods, Element resolved) {
-        LOGGER.info("resolved publication data, merging into existing data...");
-        output(resolved, "resolved publication");
+        LOGGER.debug("resolved publication data, merging into existing data...");
+        debug(resolved, "resolved publication");
 
         if (mods.getName().equals("relatedItem")) {
-            // resolved is always mods:mods, tranform to mods:relatedItem to be mergeable
+            // resolved is always mods:mods, transform to mods:relatedItem to be mergeable
             resolved.setName("relatedItem");
             resolved.setAttribute(mods.getAttribute("type").clone());
         }
@@ -124,17 +124,19 @@ public class EnrichmentResolver implements URIResolver {
         a.mergeFrom(b);
 
         MODSSorter.sort(mods);
-        output(mods, "merged publication");
+        debug(mods, "merged publication");
     }
 
-    private void output(Element mods, String headline) {
-        mods.removeChildren("extension", MCRConstants.MODS_NAMESPACE);
-        try {
-            System.out.println("\n-------------------- " + headline + ": --------------------\n");
-            XMLOutputter xout = new XMLOutputter(Format.getPrettyFormat());
-            xout.output(mods, System.out);
-            System.out.println("\n");
-        } catch (Exception ignored) {
+    private void debug(Element mods, String headline) {
+        if (LOGGER.isDebugEnabled()) {
+            mods.removeChildren("extension", MCRConstants.MODS_NAMESPACE);
+            try {
+                LOGGER.debug("\n-------------------- " + headline + ": --------------------\n");
+                XMLOutputter xout = new XMLOutputter(Format.getPrettyFormat());
+                LOGGER.debug(xout.outputString(mods));
+                LOGGER.debug("\n");
+            } catch (Exception ignored) {
+            }
         }
     }
 }

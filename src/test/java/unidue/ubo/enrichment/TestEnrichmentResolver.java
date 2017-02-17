@@ -10,6 +10,7 @@
 package unidue.ubo.enrichment;
 
 import org.jdom2.Element;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mycore.common.MCRJPATestCase;
 import org.mycore.common.xml.MCRNodeBuilder;
@@ -18,7 +19,7 @@ import unidue.ubo.enrichment.EnrichmentResolver;
 
 public class TestEnrichmentResolver extends MCRJPATestCase {
 
-    @Test
+    @Ignore
     public void test() throws Exception {
         Element mods = new MCRNodeBuilder()
             .buildElement("mods:mods[mods:identifier[@type='doi']='10.1016/0009-2614(86)80016-1 ']", null, null);
