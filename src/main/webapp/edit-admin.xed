@@ -14,7 +14,7 @@
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form">
   
       <xed:source uri="xslStyle:mods-preprocessor:mcrobject:{$id}" />
-      <xed:source uri="xslStyle:mods2mycoreobject,mods-preprocessor:enrichment:import:buildxml:_rootName_=mods:mods&amp;mods:identifier={$id2resolve}&amp;mods:identifier/@type={$idType}" />
+      <xed:source uri="xslStyle:mods2mycoreobject,mods-preprocessor:enrich:import:buildxml:_rootName_=mods:mods&amp;mods:identifier={$id2resolve}&amp;mods:identifier/@type={$idType}" />
       <xed:source uri="xslStyle:primo2mods,mods2mycoreobject,mods-preprocessor:http://primo.ub.uni-due.de/PrimoWebServices/xservice/search/brief?institution=UDE&amp;loc=adaptor,primo_central_multiple_fe&amp;query={$primoField},{$PrimoID}" />
       <xed:cancel url="servlets/DozBibEntryServlet?mode=show&amp;id={$id}" />
       <xed:cancel url="newPublication.xed" />
