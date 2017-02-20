@@ -7,7 +7,7 @@
   <section>
     <form class="ubo-form" action="edit-admin.xed">
       <fieldset>
-        <legend>Publikation aus Scopus, PubMed oder CrossRef importieren</legend>
+        <legend>Publikation aus Scopus, PubMed, CrossRef, GBV oder SWB importieren</legend>
         <div>
           <label>
             <select class="label" style="width:150px;" name="idType">
@@ -15,6 +15,9 @@
               <option value="pubmed">PubMed ID</option>
               <option value="scopus">Scopus ID</option>
               <option value="issn">ISSN</option>
+              <option value="isbn">ISBN</option>
+              <option value="ppn">GBV/SWB PPN</option>
+              <option value="hbz">HBZ HT</option>
             </select>:
           </label>
           <input type="text" style="width:300px;" name="id2resolve" />
