@@ -7,20 +7,26 @@
   <section>
     <form class="ubo-form" action="edit-admin.xed">
       <fieldset>
-        <legend>Publikation aus Scopus, PubMed, CrossRef, GBV oder SWB importieren</legend>
+        <legend>Publikation aus Scopus, PubMed, CrossRef, GBV, SWB, HBZ Verbundkatalog oder EVALuna Biblo importieren</legend>
         <div>
           <label>
             <select class="label" style="width:150px;" name="idType">
               <option value="doi">DOI</option>
               <option value="pubmed">PubMed ID</option>
               <option value="scopus">Scopus ID</option>
-              <option value="issn">ISSN</option>
+              <option value="evaluna">EVALuna Biblio ID</option>
               <option value="isbn">ISBN</option>
+              <option value="issn">ISSN</option>
+              <option value="zdb">ZDB ID</option>
               <option value="ppn">GBV/SWB PPN</option>
-              <option value="hbz">HBZ HT</option>
+              <option value="hbz">HBZ HT-Nummer</option>
             </select>:
           </label>
           <input type="text" style="width:300px;" name="id2resolve" />
+        </div>
+        <div>
+          <label>Signatur:</label>
+          <input type="text" style="width:300px;" name="shelfmark" />
         </div>
         <div>
           <label>

@@ -5,7 +5,7 @@
  
  Input: 
    <request>
-     <signature>BFH3309</signature>
+     <shelfmark>BFH3309</shelfmark>
    </request> 
    
  Output:
@@ -21,17 +21,22 @@
   exclude-result-prefixes="xsl xalan java">
 
   <xsl:template match="/request">
-    <mods:mods>
-      <mods:genre type="intern">dissertation</mods:genre>
+    <xsl:variable name="mods">
       <xsl:call-template name="call-aleph">
         <xsl:with-param name="request" select="concat('find&amp;base=edu01&amp;request=psg=',encoder:encode(shelfmark,'UTF-8'))" />
       </xsl:call-template>
-      <mods:location>
-        <mods:shelfLocator>
-          <xsl:value-of select="translate(shelfmark,'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ')" />
-        </mods:shelfLocator>
-      </mods:location>
-    </mods:mods>
+    </xsl:variable>
+    <xsl:for-each select="xalan:nodeset($mods)/*">
+      <xsl:copy>
+        <mods:genre type="intern">dissertation</mods:genre>
+        <xsl:copy-of select="*" />
+        <mods:location>
+          <mods:shelfLocator>
+            <xsl:value-of select="translate(shelfmark,'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ')" />
+          </mods:shelfLocator>
+        </mods:location>
+      </xsl:copy>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="call-aleph">
@@ -45,7 +50,9 @@
   </xsl:template>
 
   <xsl:template match="/find">
-    <xsl:apply-templates select="set_number|error" />
+    <mods:mods>
+      <xsl:apply-templates select="set_number|error" />
+    </mods:mods>
   </xsl:template>
   
   <xsl:template match="set_number">
@@ -58,15 +65,7 @@
     </xsl:call-template>
   </xsl:template>
   
-  <xsl:template match="error">
-    <mods:titleInfo>
-      <mods:title>
-        <xsl:text>**** FEHLER: Signatur nicht gefunden: </xsl:text>
-        <xsl:value-of select="text()" />
-        <xsl:text> **** </xsl:text>
-      </mods:title>
-    </mods:titleInfo>
-  </xsl:template>
+  <xsl:template match="error" />
   
   <xsl:template match="/present">
     <xsl:for-each select="record/metadata/oai_marc">

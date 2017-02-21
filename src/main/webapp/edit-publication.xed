@@ -7,7 +7,7 @@
   <script type="text/javascript" src="external/jquery-tools-1.2.7/jquery.tools.min.js"></script>
   <script type="text/javascript" src="js/editor.validation.failed.tooltip.js"></script>
      
-  <section id="sectionedit" xml:lang="de">  
+  <section class="highlight1" xml:lang="de">  
   <p>
     Die mit <strong>*</strong> gekennzeichneten Felder sind <strong>Pflichtfelder</strong>.
     Durch klicken auf <strong>[+]</strong> können Sie ein <strong>Eingabefeld wiederholen</strong>!
@@ -19,7 +19,7 @@
     finden Sie auf unseren <a href="https://www.uni-due.de/ub/openaccess/">Open Access-Seiten</a>. 
     </p>
   </section>
-  <section id="sectionedit" xml:lang="en">
+  <section class="highlight1" xml:lang="en">
     <p>
     Fields marked with <strong>*</strong>  are <strong>required fields</strong>. 
     By clicking on <strong>[+]</strong> you can repeat an input field!

@@ -15,6 +15,7 @@
   <xsl:template match="mods:name[@nameTitleGroup]" />
   <xsl:template match="mods:name/@authorityURI" />
   <xsl:template match="mods:name/@authority" />
+  <xsl:template match="mods:name/@usage" />
   <xsl:template match="mods:role[mods:roleTerm/@type='text']" />
   <xsl:template match="mods:typeOfResource" />
   <xsl:template match="mods:genre" />
@@ -27,6 +28,8 @@
   <xsl:template match="mods:recordInfo" />
   <xsl:template match="mods:language[@objectPart]" />
   <xsl:template match="mods:classification" />
+  <xsl:template match="mods:note/@language" />
+  <xsl:template match="mods:subject/@authority" />
 
   <xsl:template match="mods:name/@valueURI">
     <xsl:if test="contains(.,'/gnd/')">
