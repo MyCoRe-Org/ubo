@@ -24,6 +24,7 @@
     <xed:validate xpath="//mods:location/mods:url" matches="(f|ht)tp(s?)://[\w\d.]+\S*" i18n="ubo.link.validation" display="global" />
     <xed:validate xpath="//mods:location/mods:url" matches="^((?!doi.org/10).)*$" i18n="ubo.link.validation.not.doi" display="global" />
     <xed:validate xpath="//mods:location/mods:shelfLocator" matches="([ED]\d\d\/\d\d\s[A-Za-z]+\s\d+.*)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
+    <xed:validate xpath="//mods:abstract/@xlink:href" matches="(f|ht)tp(s?)://[\w\d.]+\S*" i18n="ubo.link.validation" display="global" />
     <!-- year is required, except for journal and series: -->
     <xed:validate xpath="//mods:mods" test="descendant::mods:dateIssued[string-length(.) &gt; 0] or mods:genre='journal' or mods:genre='series'" matches="[\d]{4}" i18n="ubo.date.issued.4.validation" display="global" />
   </xed:template>
@@ -279,7 +280,7 @@
   </xed:template>
 
   <xed:template id="person">
-    <div style="display:inline-block; width:400px; border-bottom:1px solid black; padding-bottom:1ex;">
+    <div style="display:inline-block; width:400px; border-bottom:1px solid blue; padding-bottom:1ex;">
       <span id="{xed:generate-id()}" style="display:inline-block; width:195px;" class="{$xed-validation-marker}">
         <xed:if test="string-length(mods:namePart[@type='family']) &gt; 0">
           <xed:output value="mods:namePart[@type='family']" /><xed:if test="mods:namePart[@type='given']"><xed:output value="concat(', ',mods:namePart[@type='given'])" /></xed:if>
@@ -615,14 +616,37 @@
   </xed:template>
 
   <xed:template id="abstract">
-    <xed:bind xpath="mods:abstract">
+    <xed:repeat xpath="mods:abstract" max="4">
+      <div style="border-top:1px solid blue; padding-top:1ex;">
+        <xed:bind xpath="@xml:lang">
+          <label for="{xed:generate-id()}">
+            <xed:output i18n="ubo.abstract.in" />:
+          </label>
+          <select style="width:200px;">
+            <option value=""><xed:output i18n="search.select" /></option>
+            <xed:include uri="xslStyle:items2options:classification:editor:0:parents:rfc4646:de" />
+            <xed:include uri="xslStyle:items2options:classification:editor:0:parents:rfc4646:en" />
+            <xed:include uri="xslStyle:items2options:classification:editor:0:parents:rfc4646:fr" />
+            <xed:include uri="xslStyle:items2options:classification:editor:-1:children:rfc4646" />
+          </select>
+        </xed:bind>
+        <xed:controls />
+      </div>
+      <div>
+        <xed:bind xpath="@xlink:href">
+          <label for="{xed:generate-id()}">
+            <xed:output i18n="ubo.abstract.link" />
+          </label>
+          <input id="{xed:generate-id()}" class="{$xed-validation-marker}" type="text" style="width:520px;" placeholder="http://" />
+        </xed:bind>
+      </div>
       <div>
         <label for="{xed:generate-id()}">
-          <xed:output i18n="ubo.abstract" />:
+          <xed:output i18n="ubo.abstract.ortext" />
         </label>
-        <textarea id="{xed:generate-id()}" style="width:520px; height:200px;" linewrap="on" placeholder="Auch Abstracts sind urheberrechtlich geschützt! Tragen Sie hier bitte nur Abstracts ein, die Sie selbst verfasst haben oder zu deren Weiterveröffentlichung Sie berechtigt sind (z.B. aufgrund von Open Access oder entsprechender Lizenzen)."/>
+        <textarea id="{xed:generate-id()}" style="width:520px; height:200px;" linewrap="on" placeholder="{i18n:ubo.abstract.placeholder}"/>
       </div>
-    </xed:bind>
+    </xed:repeat>
   </xed:template>  
   
   <xed:template id="cleanup">
