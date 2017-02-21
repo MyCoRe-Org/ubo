@@ -42,6 +42,7 @@
                     <option value="title"     ><xed:output i18n="search.title" /></option>
                     <option value="series"    ><xed:output i18n="search.dozbib.series" /></option>         
                     <option value="conference"><xed:output i18n="ubo.conference" /></option>
+                    <option value="topic"     ><xed:output i18n="ubo.subject.topic" /></option>
                     <option value="note"      ><xed:output i18n="edit.comment" /></option>
                     <option value="abstract"  >Abstract:</option>
                     <option value="all"       ><xed:output i18n="search.dozbib.fields" /></option>

@@ -26,6 +26,7 @@
   <field name="journal"    type="journal"   indexed="true" stored="false" multiValued="true"  />
   <field name="series"     type="text"      indexed="true" stored="false" multiValued="true"  />
   <field name="conference" type="text"      indexed="true" stored="false" multiValued="false" />
+  <field name="topic"      type="text"      indexed="true" stored="false" multiValued="true"  />
   <field name="note"       type="text"      indexed="true" stored="false" multiValued="true"  />
   <field name="abstract"   type="text"      indexed="true" stored="false" multiValued="true"  />
   <field name="year"       type="int"       indexed="true" stored="true"  multiValued="false" />
@@ -70,6 +71,7 @@
   <copyField source="host_title" dest="all" />
   <copyField source="series"     dest="all" />
   <copyField source="conference" dest="all" />
+  <copyField source="topic"      dest="all" />
   <copyField source="note"       dest="all" />
   <copyField source="abstract"   dest="all" />
   <copyField source="year"       dest="all" />

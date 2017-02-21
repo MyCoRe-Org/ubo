@@ -32,6 +32,7 @@
     <xsl:apply-templates select="descendant::mods:dateIssued[1][translate(text(),'1234567890','YYYYYYYYYY')='YYYY']" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:identifier[@type]" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:shelfLocator" mode="solrField" />
+    <xsl:apply-templates select="mods:subject" mode="solrField" />
     <xsl:apply-templates select="mods:note" mode="solrField" />
     <xsl:apply-templates select="mods:abstract" mode="solrField" />
     <xsl:apply-templates select="mods:language/mods:languageTerm[@type='code']" mode="solrField" />
@@ -210,6 +211,12 @@
   <xsl:template match="mods:language/mods:languageTerm[@type='code']" mode="solrField">
     <field name="lang">
       <xsl:value-of select="text()" />
+    </field>
+  </xsl:template>
+  
+  <xsl:template match="mods:subject" mode="solrField">
+    <field name="topic">
+      <xsl:value-of select="mods:topic" />
     </field>
   </xsl:template>
 
