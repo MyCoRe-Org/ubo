@@ -14,6 +14,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
 import org.jdom2.Document;
+import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
 
 /**
@@ -21,6 +22,8 @@ import org.jdom2.transform.JDOMSource;
  * 
  * evaluna:insitutions
  *   returns the list of institutions
+ * evaluna:[ID]
+ *   returns a single publication with the given ID in evaluna
  *   
  *   To use this resolver add property:
  *    
@@ -32,9 +35,19 @@ import org.jdom2.transform.JDOMSource;
 public class EvalunaResolver implements URIResolver {
 
     public Source resolve(String href, String base) throws TransformerException {
+        href = href.substring(href.indexOf(':') + 1);
+        EvalunaConnection ec = new EvalunaConnection();
+        if (href.equals("institutions"))
+            ec.addInstitutionRequest();
+        else {
+            Element request = new Element("request");
+            request.addContent(new Element("limit").setAttribute("type", "ids").setText(href));
+            ec.addPublicationRequest(request);
+        }
+
         try {
-            Document institutions = new EvalunaConnection().addInstitutionRequest().getResponse().asXML();
-            return new JDOMSource(institutions);
+            Document response = ec.getResponse().asXML();
+            return new JDOMSource(response);
         } catch (Exception ex) {
             throw new TransformerException(ex);
         }
