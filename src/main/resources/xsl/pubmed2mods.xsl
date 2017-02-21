@@ -50,7 +50,7 @@
   </xsl:template>
   
   <xsl:template match="authorList">
-    <xsl:apply-templates select="author" />
+    <xsl:apply-templates select="author[lastName]" />
   </xsl:template>
   
   <xsl:template match="authorList/author">
