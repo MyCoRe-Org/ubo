@@ -27,13 +27,9 @@
     <xsl:call-template name="ibn-export">
       <xsl:with-param name="type">isbn</xsl:with-param>
     </xsl:call-template> 
-    <xsl:call-template name="ibn-export">
-      <xsl:with-param name="type">issn</xsl:with-param>
-    </xsl:call-template>
     <xsl:apply-templates select="mods:identifier[@type='doi']" mode="html-export" />
     <xsl:apply-templates select="mods:identifier[@type='urn']" mode="html-export" /> 
     <xsl:apply-templates select="mods:identifier[@type='duepublico']" mode="html-export" /> 
-    <xsl:apply-templates select="mods:location/mods:url" mode="html-export" /> 
   </xsl:template>
 
   <!-- ========== Liste von ISBNs oder ISSNs =========== -->
@@ -82,16 +78,6 @@
     <div class="link">
       <xsl:text>URN: </xsl:text>
       <a href="http://nbn-resolving.org/{text()}">
-        <xsl:value-of select="text()"/>
-      </a>
-    </div>
-  </xsl:template>
-
-  <!-- ========== Link ========== -->
-  
-  <xsl:template match="mods:location/mods:url" mode="html-export">
-    <div class="link">
-      <a href="{text()}">
         <xsl:value-of select="text()"/>
       </a>
     </div>
