@@ -29,4 +29,17 @@ public class TestAbstractMerger extends MCRJPATestCase {
         String e = b;
         TestMerger.test(a, b, e);
     }
+
+    @Test
+    public void testSimilar() throws Exception {
+        String a = "[mods:abstract[@xml:lang='de']='Dies ist der deutsche Abstract']";
+        String b = "[mods:abstract='Dies ist der deitsche Abstract']";
+        String e = a;
+        TestMerger.test(a, b, e);
+
+        String a2 = "[mods:abstract[@xml:lang='de']='Dies ist der deutsche Abstract']";
+        String b2 = "[mods:abstract='Dieses ist der doitsche Äbschträkt']";
+        String e2 = a2 + b2;
+        TestMerger.test(a2, b2, e2);
+    }
 }
