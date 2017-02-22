@@ -15,6 +15,7 @@
               <option value="pubmed">PubMed ID</option>
               <option value="scopus">Scopus ID</option>
               <option value="evaluna">EVALuna Biblio ID</option>
+              <option value="ieee">IEEE Article No.</option>
               <option value="isbn">ISBN</option>
               <option value="issn">ISSN</option>
               <option value="zdb">ZDB ID</option>
