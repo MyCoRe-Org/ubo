@@ -26,7 +26,7 @@
           <input type="text" style="width:300px;" name="id2resolve" />
         </div>
         <div>
-          <label>Signatur:</label>
+          <label>Signatur :</label>
           <input type="text" style="width:300px;" name="shelfmark" />
         </div>
         <div>
