@@ -4,31 +4,69 @@
   <title xml:lang="de">Publikation melden</title>
   <title xml:lang="en">Registering publication</title>
   
-  <section class="highlight2" title="Hier können Sie Ihre Publikation an die Universitätsbibliographie melden:" xml:lang="de">
-    <form class="ubo-form" style="margin-bottom:0;" action="edit-publication.xed" method="get" id="submit_publication">
-      <fieldset>
-        <legend>Bitte wählen Sie den Publikationstyp:</legend>
-        <div style="display:inline-block; margin-left:1ex;"><select id="genre" name="genre" size="1" /></div>
-        <div style="display:inline-block;"> erschienen in <select id="host" name="host" size="1" /></div>
-        <input type="submit" class="roundedButton" value="eintragen" />
-      </fieldset>
-    </form>
-  </section>
-    
-  <section class="highlight2" title="Here you can register your publication at the university bibliography:" xml:lang="en">
-    <form class="ubo-form" style="margin-bottom:0;" action="edit-publication.xed" method="post" id="submit_publication">
-      <fieldset>
-        <legend>Please choose the type of publication:</legend>
-        <div style="display:inline-block; margin-left:1ex; margin-bottom:1ex;"><select id="genre" name="genre" size="1" /></div>
-        <div style="display:inline-block;"> published in <select id="host" name="host" size="1" /></div>
-        <input type="submit" class="roundedButton" value="enter" />
-      </fieldset>
-    </form>
-  </section>
+  <section class="highlight2">
+    <xed:form class="ubo-form" role="form" xmlns:xed="http://www.mycore.de/xeditor">
+      <xed:bind xpath="/mods:mods">
+        <fieldset>
+          <legend><xed:output i18n="ubo.registerPublication" />:</legend>
 
-  <section style="display:none;">
-    <xed:form xmlns:xed="http://www.mycore.de/xeditor">
-      <xed:bind xpath="/dummy">
+          <xed:choose>
+            <xed:when test="$xed-validation-failed">
+              <div class="validation-failures">
+                <h3>
+                  <xed:output i18n="form.validation.failed" />
+                </h3>
+                <ul>
+                  <xed:display-validation-messages />
+                </ul>
+              </div>
+            </xed:when>
+            <xed:otherwise>
+              <div>
+                <p>
+                  <xed:output i18n="ubo.registerPublication.intro" />
+                </p>
+              </div>
+            </xed:otherwise>
+          </xed:choose>
+
+          <xed:bind xpath="mods:genre[@type='intern']">
+            <div>
+              <label for="genre" style="vertical-align:bottom;"><xed:output i18n="ubo.genre" />:</label>
+              <select id="genre" size="1" />
+            </div>
+          </xed:bind>
+
+          <xed:bind xpath="mods:titleInfo/mods:title">
+            <div>
+              <label for="title" style="vertical-align:bottom;"><xed:output i18n="ubo.title" />:</label>
+              <input id="title" class="{$xed-validation-marker}" style="width:400px;" placeholder="{i18n:translate('ubo.registerPublication.title.placeholder')}" />
+              <xed:validate required="true" i18n="ubo.title.validation" display="global" />
+            </div>
+          </xed:bind>
+
+          <xed:bind xpath="mods:name[@type='personal']/mods:namePart[@type='family']">
+            <div>
+              <label for="author" style="vertical-align:bottom;"><xed:output i18n="ubo.role.author" />:</label>
+              <input id="author" class="{$xed-validation-marker}" style="width:400px;" placeholder="{i18n:translate('ubo.registerPublication.title.placeholder')}" />
+              <xed:validate required="true" i18n="ubo.role.author.validation" display="global" />
+            </div>
+          </xed:bind>
+
+          <xed:bind xpath="mods:relatedItem[@type='host']/mods:genre[@type='intern']">
+            <div> 
+              <label for="host" style="vertical-align:bottom;"><xed:output i18n="ubo.registerPublication.publishedIn" />:</label>
+              <select id="host" size="1" />
+            </div>
+          </xed:bind>
+
+          <div class="cancel-submit">
+            <button class="roundedButton" type="submit" xed:target="servlet" xed:href="CheckNewPublicationServlet">
+              <xed:output i18n="button.submit" />
+            </button>
+          </div>
+
+        </fieldset>
         <script type="text/javascript">
           var GenreXML;
           
@@ -76,7 +114,7 @@
               var hosts = host.split(' ');
               jQuery.each( hosts, function(ind, val) {
                 if (val == 'standalone') {
-                  jQuery('#host').prepend('&lt;option value="standalone" selected="selected"&gt;(<xed:output value="i18n:form.select.optional" />)&lt;/option&gt;');
+                  jQuery('#host').append('&lt;option value="standalone"&gt; --- &lt;/option&gt;');
                 } else {
                   jQuery('#host').append( createOption(val,'host') );
                 }
@@ -104,7 +142,7 @@
             });
           });
         </script>
-    
+        <xed:cleanup-rule xpath="//mods:relatedItem" relevant-if="not(mods:genre[@type='intern']='standalone')" />
       </xed:bind>
     </xed:form>
   </section>

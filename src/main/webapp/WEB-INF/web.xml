@@ -15,6 +15,15 @@
     <url-pattern> /servlets/DozBibServlet/* </url-pattern>
   </servlet-mapping>
 
+  <servlet id="CheckNewPublicationServlet">
+    <servlet-name>CheckNewPublicationServlet</servlet-name>
+    <servlet-class>unidue.ubo.CheckNewPublicationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CheckNewPublicationServlet</servlet-name>
+    <url-pattern> /servlets/CheckNewPublicationServlet </url-pattern>
+  </servlet-mapping>
+
   <servlet id="DozBibEntryServlet">
     <servlet-name>DozBibEntryServlet</servlet-name>
     <servlet-class>unidue.ubo.DozBibEntryServlet</servlet-class>
