@@ -124,7 +124,6 @@
                       <option value="year"        ><xed:output i18n="ubo.date.issued.4" /></option>
                       <option value="sortby_name" ><xed:output i18n="document.creators.one" /></option>
                       <option value="sortby_title"><xed:output i18n="document.title" /></option>
-                      <option value="type"        ><xed:output i18n="ubo.genre" /></option>
                     </select>
                   </xed:bind>
                   <xed:bind xpath="@order">
