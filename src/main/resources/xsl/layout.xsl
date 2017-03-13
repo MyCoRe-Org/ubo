@@ -526,6 +526,7 @@
 
   <xsl:template name="layout.footer">
     <footer role="contentinfo" class="clearfix">
+      <xsl:call-template name="layout.metanav" />
       <p>
         <xsl:call-template name="layout.lastModified" />
         <xsl:text>© Universität Duisburg-Essen | </xsl:text>
@@ -558,6 +559,29 @@
       </xsl:choose>
       <xsl:text> | </xsl:text>
     </xsl:if>
+  </xsl:template>
+
+  <!-- Meta-Navigation -->
+
+  <xsl:template name="layout.metanav">
+    <xsl:variable name="metanavigation" select="$navigation.tree/item[@role='meta']/item"/>
+    <nav id="metanav">
+      <ul>
+        <!-- Find the item that is the root of the navigation tree to display -->
+        <xsl:for-each select="$metanavigation" >
+          <xsl:choose>
+            <!-- There is an item that should be displayed as root of the tree -->
+            <xsl:when test="name()='item'">
+              <xsl:apply-templates select="." mode="navigation" />
+            </xsl:when>
+            <!-- Display the complete navigation tree down from top -->
+            <xsl:otherwise>
+              <xsl:apply-templates select="item[@label|label]" mode="navigation" />
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:for-each>
+      </ul>
+    </nav>
   </xsl:template>
 
   <!-- print out message that the system is in read only mode -->

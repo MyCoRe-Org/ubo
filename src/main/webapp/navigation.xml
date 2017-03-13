@@ -59,6 +59,17 @@
   <item id="dozbib.duplicates" ref="duplicates.xml" admin="true">
     <label xml:lang="de">Dubletten-Bericht</label>
     <label xml:lang="en">Duplicates report</label>
-  </item>  
+  </item>
+  
+  <item role="meta">
+    <item ref="contact.xml">
+      <label xml:lang="de">KONTAKT</label>
+      <label xml:lang="en">CONTACT</label>
+    </item>
+    <item ref="impressum.xml">
+      <label xml:lang="de">IMPRESSUM</label>
+      <label xml:lang="en">IMPRINT</label>
+    </item>
+  </item>
 
 </navigation>
