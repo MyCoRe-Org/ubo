@@ -225,14 +225,16 @@
   </xsl:template>
 
   <!-- ========== Personennamen gruppiert je Rolle ========== -->
-  <xsl:template match="mods:roleTerm" mode="details">
-    <xsl:if test="not(preceding::mods:roleTerm[text()=current()/text()])">
+  <xsl:template match="mods:name[@type='personal']" mode="details">
+    <xsl:variable name="role" select="mods:role/mods:roleTerm[@type='code']" />
+    <xsl:variable name="list" select="../mods:name[mods:role/mods:roleTerm[@type='code']=$role]" />
+    <xsl:if test="count($list[1]|.)=1">
       <div class="grid_3 label">
-        <xsl:apply-templates select="." />
+        <xsl:apply-templates select="$role" />
         <xsl:text>:</xsl:text>
       </div>
       <div class="grid_9">
-        <xsl:for-each select="../../../mods:name[mods:role/mods:roleTerm=current()/text()]">
+        <xsl:for-each select="$list">
           <span>
             <xsl:attribute name="class">
               <xsl:text>personalName</xsl:text>
@@ -534,7 +536,7 @@
   <xsl:template match="mods:mods|mods:relatedItem" mode="details_lines">
     <xsl:apply-templates select="mods:titleInfo" mode="details" />
     <xsl:apply-templates select="mods:name[@type='conference']" mode="details" />
-    <xsl:apply-templates select="mods:name[@type='personal']/mods:role/mods:roleTerm" mode="details" />
+    <xsl:apply-templates select="mods:name[@type='personal']" mode="details" />
     <xsl:apply-templates select="mods:originInfo/mods:edition" mode="details" />
     <xsl:apply-templates select="mods:originInfo/mods:place" mode="details" />
     <xsl:apply-templates select="mods:originInfo/mods:publisher" mode="details" />
