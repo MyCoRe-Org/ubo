@@ -519,6 +519,7 @@
             <option value="doi">DOI</option>
             <option value="urn">URN</option>
             <option value="pubmed">PubMed ID</option>
+            <option value="ieee">IEEE ID</option>
             <option value="scopus">Scopus ID</option>
             <option value="duepublico">DuEPublico ID</option>
           </select>
@@ -531,18 +532,23 @@
   </xed:template>
 
   <xed:template id="identifier">
-    <xed:repeat xpath="mods:identifier[contains('doi urn pubmed scopus evaluna isi isbn issn duepublico',@type)]">
+    <xed:repeat xpath="mods:identifier[contains('doi urn hdl pubmed ieee zdb ppn hbz scopus evaluna isi isbn issn duepublico',@type)]">
       <div>
         <xed:bind xpath="@type" default="doi">
           <select class="label" style="margin-left:6px; width:167px;">
             <option value="doi">DOI</option>
             <option value="urn">URN</option>
+            <option value="hdl">Handle</option>
             <option value="isbn">ISBN</option>
             <option value="issn">ISSN</option>
             <option value="pubmed">PubMed ID</option>
+            <option value="ieee">IEEE ID</option>
+            <option value="zdb">ZDB ID</option>
             <option value="scopus">Scopus ID</option>
             <option value="isi">Web of Science ID</option>
             <option value="evaluna">EVALuna ID</option>
+            <option value="ppn">GBV PPN</option>
+            <option value="hbz">HBZ HT-Nummer</option>
             <option value="duepublico">DuEPublico ID</option>
           </select>
           <span style="display:inline-block; width:auto; margin-right:1ex;">:</span>

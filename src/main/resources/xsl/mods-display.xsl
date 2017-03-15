@@ -751,6 +751,15 @@
     </a>
   </xsl:template>
 
+  <!-- ========== IEEE ID ========== -->
+  <xsl:param name="UBO.IEEE.Link" />
+  
+  <xsl:template match="mods:identifier[@type='ieee']">
+    <a href="{$UBO.IEEE.Link}{text()}">
+      <xsl:value-of select="text()" />
+    </a>
+  </xsl:template>
+
   <!-- ========== Web of Science ID ========== -->
   <xsl:param name="UBO.WebOfScience.Link" />
   
