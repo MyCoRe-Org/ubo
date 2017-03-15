@@ -30,10 +30,14 @@
       </mods:originInfo>
       <xsl:apply-templates select="mab:datafield[@tag='433']" />
       <xsl:apply-templates select="mab:datafield[@tag='451']" />
-      <xsl:apply-templates select="mab:datafield[@tag='540']" />
+      <xsl:apply-templates select="mab:datafield[@tag='540'][1]/mab:subfield[@code='a']" />
+      <xsl:apply-templates select="mab:datafield[@tag='552'][1]/mab:subfield[@code='a']" />
       <xsl:apply-templates select="mab:datafield[@tag='519']|mab:datafield[@tag='520']" />
       <xsl:apply-templates select="mab:datafield[@tag='037']/mab:subfield[@code='a']" />
-      <xsl:apply-templates select="mab:datafield[@tag='088'][ (mab:subfield[@code='a']='464') or (mab:subfield[@code='a']='465') ][1]" /> 
+      <mods:location>
+        <xsl:apply-templates select="mab:datafield[@tag='088'][ (mab:subfield[@code='a']='464') or (mab:subfield[@code='a']='465') ][1]/mab:subfield[@code='c']" />
+        <xsl:apply-templates select="mab:datafield[@tag='655']/mab:subfield[@code='u']" /> 
+      </mods:location>
     </mods:mods>
   </xsl:template>
   
@@ -49,25 +53,39 @@
     </mods:subTitle>
   </xsl:template>
 
-  <xsl:template match="mab:datafield[@tag='100']">
+  <xsl:template match="mab:datafield[@tag='100']|mab:datafield[@tag='104']|mab:datafield[@tag='108']">
     <mods:name type="personal">
-      <mods:role>
-        <mods:roleTerm authority="marcrelator" type="code">aut</mods:roleTerm>
-      </mods:role>
-      <xsl:for-each select="mab:subfield[@code='p']">
-        <mods:namePart type="family">
-          <xsl:value-of select="substring-before(.,', ')" />
-        </mods:namePart>
-        <mods:namePart type="given">
-          <xsl:value-of select="substring-after(.,', ')" />
-        </mods:namePart>
-      </xsl:for-each>
-      <xsl:for-each select="mab:subfield[@code='9'][starts-with(text(),'(DE-588)')]">
-        <mods:nameIdentifier type="gnd">
-          <xsl:value-of select="substring-after(text(),'(DE-588)')" />
-        </mods:nameIdentifier>
-      </xsl:for-each>
+      <xsl:apply-templates select="mab:subfield[@code='p']|mab:subfield[@code='a']" mode="name" />
+      <xsl:call-template name="role" />
+      <xsl:apply-templates select="mab:subfield[@code='9'][starts-with(text(),'(DE-588)')]" />
     </mods:name>
+  </xsl:template>
+  
+  <xsl:template match="mab:subfield[@code='p']|mab:subfield[@code='a']" mode="name">
+    <mods:namePart type="family">
+      <xsl:value-of select="substring-before(.,', ')" />
+    </mods:namePart>
+    <mods:namePart type="given">
+      <xsl:value-of select="substring-after(.,', ')" />
+    </mods:namePart>
+  </xsl:template>
+  
+  <xsl:template name="role">
+    <mods:role>
+      <mods:roleTerm authority="marcrelator" type="code">
+        <xsl:choose>
+          <xsl:when test="mab:subfield[@code='4']='edt'">edt</xsl:when>
+          <xsl:when test="contains(mab:subfield[@code='b'],'Hrsg')">edt</xsl:when>
+          <xsl:otherwise>aut</xsl:otherwise>
+        </xsl:choose>
+      </mods:roleTerm>
+    </mods:role>
+  </xsl:template>
+  
+  <xsl:template match="mab:subfield[@code='9'][starts-with(text(),'(DE-588)')]">
+    <mods:nameIdentifier type="gnd">
+      <xsl:value-of select="substring-after(text(),'(DE-588)')" />
+    </mods:nameIdentifier>
   </xsl:template>
   
   <xsl:template match="mab:datafield[@tag='410']/mab:subfield[@code='a']|mab:datafield[@tag='419']/mab:subfield[@code='a']">
@@ -113,9 +131,15 @@
     </mods:note>
   </xsl:template>
   
-  <xsl:template match="mab:datafield[@tag='540'][1]">
+  <xsl:template match="mab:datafield[@tag='540'][1]/mab:subfield[@code='a']">
     <mods:identifier type="isbn">
-      <xsl:value-of select="mab:subfield[@code='a']" />
+      <xsl:value-of select="." />
+    </mods:identifier>
+  </xsl:template>
+
+  <xsl:template match="mab:datafield[@tag='552'][1]/mab:subfield[@code='a']">
+    <mods:identifier type="doi">
+      <xsl:value-of select="." />
     </mods:identifier>
   </xsl:template>
 
@@ -184,12 +208,16 @@
     </mods:language>
   </xsl:template>
 
-  <xsl:template match="mab:datafield[@tag='088']">
-    <mods:location>
-      <mods:shelfLocator>
-        <xsl:value-of select="mab:subfield[@code='c']" />
-      </mods:shelfLocator>
-    </mods:location>
+  <xsl:template match="mab:datafield[@tag='088']/mab:subfield[@code='c']">
+    <mods:shelfLocator>
+      <xsl:value-of select="." />
+    </mods:shelfLocator>
+  </xsl:template>
+  
+  <xsl:template match="mab:datafield[@tag='655']/mab:subfield[@code='u']">
+    <mods:url>
+      <xsl:value-of select="." />
+    </mods:url>
   </xsl:template>
 
   <xsl:template match="*" />
