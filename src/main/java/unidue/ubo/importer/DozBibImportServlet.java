@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.mycore.access.MCRAccessException;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -31,10 +32,12 @@ import org.mycore.frontend.servlets.MCRServletJob;
 
 import unidue.ubo.AccessControl;
 import unidue.ubo.DozBibEntryServlet;
+import unidue.ubo.basket.BasketUtils;
 import unidue.ubo.dedup.DeDupCriteriaBuilder;
 import unidue.ubo.importer.bibtex.BibTeXImportJob;
 import unidue.ubo.importer.evaluna.EvalunaImportJob;
 
+@SuppressWarnings("serial")
 public class DozBibImportServlet extends MCRServlet {
 
     public void doGetPost(MCRServletJob job) throws Exception {
@@ -94,12 +97,24 @@ public class DozBibImportServlet extends MCRServlet {
         for (Iterator<MCRBasketEntry> iterator = basket.iterator(); iterator.hasNext();) {
             MCRBasketEntry entry = iterator.next();
             Element root = entry.getContent();
-            MCRObject obj = new MCRObject(new Document(root));
-            MCRObjectID oid = MCRObjectID.getNextFreeId("ubo_mods");
-            obj.setId(oid);
-            MCRMetadataManager.create(obj);
+            MCRObjectID oid = saveEntry(root);
+            addImportedToRegularBasket(oid);
         }
         basket.clear();
-        res.sendRedirect(getServletBaseURL() + "MCRBasketServlet?type=import&action=show");
+        res.sendRedirect(getServletBaseURL() + "MCRBasketServlet?type=bibentries&action=show");
+    }
+
+    private MCRObjectID saveEntry(Element root) throws MCRAccessException {
+        MCRObject obj = new MCRObject(new Document(root));
+        MCRObjectID oid = MCRObjectID.getNextFreeId("ubo_mods");
+        obj.setId(oid);
+        MCRMetadataManager.create(obj);
+        return oid;
+    }
+
+    private void addImportedToRegularBasket(MCRObjectID oid) {
+        MCRBasketEntry e = new MCRBasketEntry(oid.toString(),"mcrobject:"+oid);
+        e.resolveContent();
+        BasketUtils.getBasket().add(e);
     }
 }
