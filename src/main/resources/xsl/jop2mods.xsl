@@ -9,7 +9,7 @@
       <xsl:apply-templates select="Full/ElectronicData[not(../PrintData)]/ResultList/Result[1]/Title" />
       <xsl:if test="Full/PrintData/ResultList/Result/Signature">
         <mods:location>
-          <xsl:apply-templates select="Full/PrintData/ResultList/Result/Signature" />
+          <xsl:apply-templates select="Full/PrintData/ResultList/Result[Signature][1]/Signature" />
         </mods:location>
       </xsl:if>
     </mods:mods>
@@ -30,7 +30,17 @@
 
   <xsl:template match="Signature">
     <mods:shelfLocator>
-      <xsl:value-of select="text()" />
+      <xsl:choose>
+        <xsl:when test="starts-with(.,'E ')">
+          <xsl:value-of select="concat('E',substring-after(.,' '))" />
+        </xsl:when>
+        <xsl:when test="starts-with(.,'D ')">
+          <xsl:value-of select="concat('D',substring-after(.,' '))" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="text()" />
+        </xsl:otherwise>
+      </xsl:choose>
     </mods:shelfLocator>
   </xsl:template>
 
