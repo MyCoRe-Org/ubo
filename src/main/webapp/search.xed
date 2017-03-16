@@ -49,7 +49,7 @@
                   </select>
                 </xed:bind>
                 <xed:bind xpath="@value">
-                  <input type="text" style="width:450px" /> />
+                  <input type="text" style="width:450px" /> 
                 </xed:bind>
                 <xed:controls>insert remove</xed:controls>
               </div>
@@ -60,7 +60,7 @@
                 <label for="journal">
                   <xed:output i18n="search.dozbib.journal" />
                 </label>
-                <input id="journal" type="text" style="width:450px" /> />
+                <input id="journal" type="text" style="width:450px" /> 
               </div>
             </xed:bind>
 
@@ -78,7 +78,7 @@
                   </select>
                 </xed:bind>
                 <xed:bind xpath="@value">
-                  <input type="text" style="width:450px" /> />
+                  <input type="text" style="width:450px" /> 
                 </xed:bind>
                 <xed:controls>insert remove</xed:controls>
               </div>
@@ -100,7 +100,7 @@
                   </select>
                 </xed:bind>
                 <xed:bind xpath="@value">
-                  <input type="text" style="width:450px" /> />
+                  <input type="text" style="width:450px" /> 
                 </xed:bind>
                 <xed:controls>insert remove</xed:controls>
               </div>
