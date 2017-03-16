@@ -48,21 +48,37 @@ public class CheckNewPublicationServlet extends MCRServlet {
         Element mods = doc.getRootElement();
 
         Set<DeDupCriterion> criteria = new DeDupCriteriaBuilder().buildFromMODS(mods);
-        String importKey = buildImportKey(criteria);
-        mods.removeChild("name", MCRConstants.MODS_NAMESPACE);
-        MCRSessionMgr.getCurrentSession().put(importKey, mods.detach());
 
-        String q = buildQueryForDuplicates(criteria);
+        StringBuilder q = new StringBuilder("status:confirmed AND (");
+        for (DeDupCriterion criterion : criteria)
+            q.append("dedup:").append(MCRSolrUtils.escapeSearchValue(criterion.getKey())).append(" OR ");
+
+        q.append("(title:\"").append(getTitle(mods)).append('"');
+        q.append(" AND person:\"").append(getName(mods)).append("\"))");
+
+        String importKey = buildImportKey(criteria);
+        MCRSessionMgr.getCurrentSession().put(importKey, mods.detach());
+        mods.removeChild("name", MCRConstants.MODS_NAMESPACE);
 
         StringBuffer url = new StringBuffer();
-        if (publicationMayAlreadyExist(q)) {
+        if (publicationMayAlreadyExist(q.toString())) {
             url.append(MCRServlet.getServletBaseURL()).append("SolrSelectProxy?q=");
             url.append(URLEncoder.encode(q.toString(), "UTF-8"));
-            url.append("&XSL.Style=duplicates&XSL.importKey=").append(importKey);
+            url.append("&rows=10&XSL.Style=duplicates&XSL.importKey=").append(importKey);
         } else {
             url.append(MCRFrontendUtil.getBaseURL()).append("edit-publication.xed?importKey=").append(importKey);
         }
         res.sendRedirect(res.encodeRedirectURL(url.toString()));
+    }
+
+    private String getName(Element mods) {
+        return mods.getChild("name", MCRConstants.MODS_NAMESPACE).getChildTextTrim("namePart",
+            MCRConstants.MODS_NAMESPACE);
+    }
+
+    private String getTitle(Element mods) {
+        return mods.getChild("titleInfo", MCRConstants.MODS_NAMESPACE).getChildTextTrim("title",
+            MCRConstants.MODS_NAMESPACE);
     }
 
     private String buildImportKey(Set<DeDupCriterion> criteria) {
@@ -78,17 +94,6 @@ public class CheckNewPublicationServlet extends MCRServlet {
         query.setQuery(q);
         query.setRows(0);
         SolrDocumentList results = solrClient.query(query).getResults();
-        boolean publicationMayAlreadyExist = results.getNumFound() > 0;
-        return publicationMayAlreadyExist;
-    }
-
-    private String buildQueryForDuplicates(Set<DeDupCriterion> criteria) {
-        StringBuilder q = new StringBuilder("status:confirmed AND (");
-        for (DeDupCriterion criterion : criteria) {
-            q.append("dedup:").append(MCRSolrUtils.escapeSearchValue(criterion.getKey())).append(" OR ");
-        }
-        q.setLength(q.length() - 4);
-        q.append(')');
-        return q.toString();
+        return results.getNumFound() > 0;
     }
 }
