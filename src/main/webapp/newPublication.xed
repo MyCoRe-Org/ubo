@@ -48,7 +48,7 @@
           <xed:bind xpath="mods:name[@type='personal']/mods:namePart[@type='family']">
             <div>
               <label for="author" style="vertical-align:bottom;"><xed:output i18n="ubo.role.author" />:</label>
-              <input id="author" class="{$xed-validation-marker}" style="width:400px;" placeholder="{i18n:ubo.registerPublication.title.placeholder}" />
+              <input id="author" class="{$xed-validation-marker}" style="width:400px;" placeholder="{i18n:ubo.registerPublication.author.placeholder}" />
               <xed:validate required="true" i18n="ubo.role.author.validation" display="global" />
             </div>
           </xed:bind>
