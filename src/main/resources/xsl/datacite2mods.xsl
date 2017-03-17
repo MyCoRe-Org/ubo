@@ -7,26 +7,25 @@
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:datacite="http://datacite.org/schema/kernel-2.2"
-  exclude-result-prefixes="xsl xsi xalan datacite">
+  exclude-result-prefixes="xsl xsi xalan">
 
   <xsl:output method="xml" encoding="UTF-8" indent="yes" xalan:indent-amount="2" />
 		
-  <xsl:template match="datacite:resource">
+  <xsl:template match="resource">
     <mods:mods>
-      <xsl:apply-templates select="datacite:titles/datacite:title" />
-      <xsl:apply-templates select="datacite:creators/datacite:creator" />
+      <xsl:apply-templates select="titles/title" />
+      <xsl:apply-templates select="creators/creator" />
       <mods:originInfo>
-        <xsl:apply-templates select="datacite:publisher" />
-        <xsl:apply-templates select="datacite:publicationYear" />
+        <xsl:apply-templates select="publisher" />
+        <xsl:apply-templates select="publicationYear" />
       </mods:originInfo>
-      <xsl:apply-templates select="datacite:language" />
-      <xsl:apply-templates select="datacite:subjects/datacite:subject" />
-      <xsl:apply-templates select="datacite:descriptions/datacite:description[@descriptionType='Abstract']" />
+      <xsl:apply-templates select="language" />
+      <xsl:apply-templates select="subjects/subject" />
+      <xsl:apply-templates select="descriptions/description[@descriptionType='Abstract']" />
     </mods:mods>
   </xsl:template>
   
-  <xsl:template match="datacite:title">
+  <xsl:template match="title">
     <mods:titleInfo>
       <mods:title>
         <xsl:value-of select="text()" />
@@ -34,18 +33,18 @@
     </mods:titleInfo>
   </xsl:template>
 
-  <xsl:template match="datacite:creator[contains(datacite:creatorName,',')]">
+  <xsl:template match="creator[contains(creatorName,',')]">
     <mods:name type="personal">
-      <xsl:apply-templates select="datacite:creatorName" />
+      <xsl:apply-templates select="creatorName" />
       <mods:role>
         <mods:roleTerm authority="marcrelator" type="code">aut</mods:roleTerm>
       </mods:role>
-      <xsl:apply-templates select="datacite:nameIdentifier[@nameIdentifierScheme='ORCID']" />
-      <xsl:apply-templates select="datacite:affiliation" />
+      <xsl:apply-templates select="nameIdentifier[@nameIdentifierScheme='ORCID']" />
+      <xsl:apply-templates select="affiliation" />
     </mods:name>
   </xsl:template>
   
-  <xsl:template match="datacite:creatorName">
+  <xsl:template match="creatorName">
     <mods:namePart type="family">
       <xsl:value-of select="normalize-space(substring-before(.,','))" />
     </mods:namePart>
@@ -54,31 +53,31 @@
     </mods:namePart>
   </xsl:template>
 
-  <xsl:template match="datacite:nameIdentifier[@nameIdentifierScheme='ORCID']">
+  <xsl:template match="nameIdentifier[@nameIdentifierScheme='ORCID']">
     <mods:nameIdentifier type="orcid">
       <xsl:value-of select="text()" />
     </mods:nameIdentifier>
   </xsl:template>
   
-  <xsl:template match="datacite:affiliation">
+  <xsl:template match="affiliation">
     <mods:affiliation>
       <xsl:value-of select="text()" />
     </mods:affiliation>
   </xsl:template>
   
-  <xsl:template match="datacite:publisher">
+  <xsl:template match="publisher">
     <mods:publisher>
       <xsl:value-of select="text()" />
     </mods:publisher>
   </xsl:template>
 
-  <xsl:template match="datacite:publicationYear">
+  <xsl:template match="publicationYear">
     <mods:dateIssued encoding="w3cdtf">
       <xsl:value-of select="text()" />
     </mods:dateIssued>
   </xsl:template>
   
-  <xsl:template match="datacite:language">
+  <xsl:template match="language">
     <mods:language>
       <mods:languageTerm authority="rfc4646" type="code">
         <xsl:value-of select="document(concat('language:',.))/language/@xmlCode" />
@@ -86,7 +85,7 @@
     </mods:language>
   </xsl:template>
 
-  <xsl:template match="datacite:subject">
+  <xsl:template match="subject">
     <mods:subject>
       <mods:topic>
         <xsl:value-of select="text()" />
@@ -94,7 +93,7 @@
     </mods:subject>
   </xsl:template>
 
-  <xsl:template match="datacite:description[@descriptionType='Abstract']">
+  <xsl:template match="description[@descriptionType='Abstract']">
     <mods:abstract>
       <xsl:value-of select="text()" />
     </mods:abstract>
