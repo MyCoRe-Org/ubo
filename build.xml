@@ -45,7 +45,7 @@
     <move file="${UBO.BaseDir}/solr" tofile="${UBO.BaseDir}/solr-home" />
     <move file="${UBO.BaseDir}/solr-home/collection1" tofile="${UBO.BaseDir}/solr-home/ubo" />
     <echo file="${UBO.BaseDir}/solr-home/ubo/core.properties">name=ubo</echo>
-    <antcall target="copy.solr.schema" />
+    <antcall target="copy.solr.config" />
   </target>
 
   <!-- ============================================== -->
