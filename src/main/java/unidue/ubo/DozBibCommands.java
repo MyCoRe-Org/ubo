@@ -13,6 +13,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,10 +29,14 @@ import org.jdom2.Attribute;
 import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.input.sax.XMLReaders;
 import org.mycore.common.MCRConstants;
+import org.mycore.common.MCRException;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRXSLTransformer;
+import org.mycore.common.xml.MCRXMLHelper;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs2.MCRMetadataStore;
 import org.mycore.datamodel.ifs2.MCRStore;
@@ -41,6 +46,7 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.MCRCommand;
+import org.mycore.mods.MCRMODSCommands;
 import org.mycore.mods.MCRMODSWrapper;
 
 public class DozBibCommands extends MCRAbstractCommands {
@@ -64,6 +70,8 @@ public class DozBibCommands extends MCRAbstractCommands {
         addCommand(new MCRCommand("ubo import publications from {0} RSS feed",
             "unidue.ubo.importer.rss.RSSFeedImporter.importFromFeed String",
             "Reads an RSS feed referencing new publications and imports those publications that are not stored yet."));
+        addCommand(new MCRCommand("ubo import mods collection from file {0}",
+            "unidue.ubo.DozBibCommands.importMODSCollection String", "import mods:modsCollection from xml file {0}"));
     }
 
     /** Exports all entries as MODS dump to a zipped xml file in the given directory */
@@ -166,6 +174,33 @@ public class DozBibCommands extends MCRAbstractCommands {
             MCRObject obj = wrapper.getMCRObject();
 
             obj.setId(oid);
+            MCRMetadataManager.create(obj);
+        }
+    }
+
+    public static void importMODSCollection(String fileName) throws Exception {
+        File file = new File(fileName);
+        if (!file.isFile()) {
+            throw new MCRException(MessageFormat.format("File {0} is not a file.", file.getAbsolutePath()));
+        }
+        SAXBuilder s = new SAXBuilder(XMLReaders.NONVALIDATING, null, null);
+        Document doc = s.build(file);
+        MCRXMLHelper.validate(doc, MCRMODSCommands.MODS_V3_XSD_URI);
+        Element root = doc.getRootElement();
+        if (!root.getNamespace().equals(MCRConstants.MODS_NAMESPACE)) {
+            throw new MCRException(MessageFormat.format("File {0} is not a MODS document.", file.getAbsolutePath()));
+        }
+        if (!root.getName().equals("modsCollection")) {
+            throw new MCRException(
+                MessageFormat.format("File {0} does not contain a mods:modsCollection.", file.getAbsolutePath()));
+        }
+        for (Element mods : root.getChildren("mods", MCRConstants.MODS_NAMESPACE)) {
+            MCRMODSWrapper wrapper = new MCRMODSWrapper();
+            wrapper.setServiceFlag("status", "imported");
+            wrapper.setMODS(mods.clone());
+            MCRObject obj = wrapper.getMCRObject();
+
+            obj.setId(MCRObjectID.getNextFreeId("ubo_mods"));
             MCRMetadataManager.create(obj);
         }
     }
