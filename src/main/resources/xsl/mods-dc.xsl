@@ -223,7 +223,7 @@
   <xsl:template match="mods:identifier[@type='duepublico']" mode="dc">
     <dc:publisher>Universitätsbibliothek Duisburg-Essen, Dokumenten- und Publikationsserver DuEPublico</dc:publisher>
     <dc:identifier>
-      <xsl:text>http://duepublico.uni-duisburg-essen.de/servlet/DocumentServlet?id=</xsl:text>
+      <xsl:text>http://duepublico.uni-duisburg-essen.de/servlets/DocumentServlet?id=</xsl:text>
       <xsl:value-of select="text()" />
     </dc:identifier>
   </xsl:template>
