@@ -87,11 +87,11 @@
               <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
             </xed:bind>
           </fieldset>
+          <fieldset>
+            <xed:include uri="webapp:import-editor.xed" ref="topics" />    
+            <xed:include uri="webapp:import-editor.xed" ref="abstract" />    
+          </fieldset>
         </xed:bind>
-        <fieldset>
-          <xed:include uri="webapp:import-editor.xed" ref="topics" />    
-          <xed:include uri="webapp:import-editor.xed" ref="abstract" />    
-        </fieldset>
   
         <xed:include uri="webapp:import-editor.xed" ref="cleanup" />
         <xed:include uri="webapp:import-editor.xed" ref="cancel.submit" />
