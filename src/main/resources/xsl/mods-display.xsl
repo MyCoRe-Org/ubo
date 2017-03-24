@@ -552,7 +552,7 @@
     <xsl:apply-templates select="mods:relatedItem" mode="details" />
     <xsl:call-template name="subject.topic" />
     <xsl:apply-templates select="mods:abstract/@xlink:href" mode="details" />
-    <xsl:apply-templates select="mods:abstract" mode="details" />
+    <xsl:apply-templates select="mods:abstract[string-length(.) &gt; 0]" mode="details" />
   </xsl:template>
   
   <!-- =========== Schlagworte =========== -->
@@ -589,14 +589,13 @@
     <div class="clear" />
   </xsl:template>
 
-  <xsl:template match="mods:abstract" mode="details">
+  <xsl:template match="mods:abstract[string-length(.) &gt; 0]" mode="details">
     <div style="padding:1ex;">
       <h3>
         <xsl:value-of select="i18n:translate('ubo.abstract')" />
         <xsl:apply-templates select="@xml:lang" />
         <xsl:text>:</xsl:text>
       </h3>
-      <xsl:apply-templates select="@xlink:href" />
       <p>
         <xsl:value-of select="text()" />
       </p>
