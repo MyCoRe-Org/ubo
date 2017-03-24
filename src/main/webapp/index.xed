@@ -75,6 +75,7 @@
   
   <sidebar>
     <xinclude uri="xslStyle:response-sidebar-mini:solr:q=status:confirmed&amp;rows=0" />
+    <xinclude uri="xslStyle:response-sidebar-admin:solr:q=*:*&amp;rows=0&amp;facet=true&amp;facet.mincount=0&amp;facet.field=status&amp;facet.range=created&amp;facet.range=modified&amp;facet.range.start=NOW/DAY-30DAY&amp;facet.range.end=NOW&amp;facet.range.gap=%2B1DAY" />
     <section class="highlight1" xml:lang="de">
       <hgroup>
         <h2>Kontakt:</h2>
