@@ -6,6 +6,8 @@
  
  <script type="text/javascript" src="/external/jquery-tools-1.2.7/jquery.tools.min.js"></script>
  <script type="text/javascript" src="/js/editor.validation.failed.tooltip.js"></script>
+ <script type="text/javascript" src="external/jquery-ui-1.8.21.custom.min.js"></script>
+ <script type="text/javascript" src="external/chosen/chosen.jquery.min.js"></script>
  
  <section class="highlight2">
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form" style="margin:0; padding:0;">
@@ -123,11 +125,14 @@
                 <label for="{xed:generate-id()}">
                   <xed:output i18n="ubo.department" />:
                 </label>
-                <select id="{xed:generate-id()}" style="width:450px;">
+                <select id="{xed:generate-id()}" style="width:450px;" class="autocomplete">
                   <option value=""><xed:output i18n="search.select" /></option>
                   <xed:include uri="xslStyle:items2options:classification:editor:-1:children:ORIGIN" />
                 </select>
               </div>
+              <script type="text/javascript">
+                jQuery(document).ready(function() { jQuery('select[class*="autocomplete"]').chosen({search_contains: true}); });
+              </script>
             </xed:bind>
 
             <xed:include uri="webapp:import-search.xed" ref="year" />
