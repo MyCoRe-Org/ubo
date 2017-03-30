@@ -26,7 +26,6 @@
    <mods:mods>
      <xsl:apply-templates select="citation" />
      <xsl:apply-templates select="." mode="recordInfo" />
-     <xsl:apply-templates select="." mode="source" />
    </mods:mods>
   </xsl:template>
 
@@ -241,14 +240,6 @@
     </mods:identifier>
   </xsl:template>
 
-  <xsl:template match="publication" mode="source">
-    <mods:extension>
-      <source format="evaluna">
-        <xsl:copy-of select="." />
-      </source>
-    </mods:extension>
-  </xsl:template>
-  
   <xsl:template match="*[string-length(text()) = 0]" priority="1" /> <!-- ignore empty elements -->
 
   <xsl:template match="*|@*|text()" />

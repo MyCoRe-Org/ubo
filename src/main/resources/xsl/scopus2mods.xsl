@@ -24,16 +24,7 @@
       <xsl:apply-templates select="item/bibrecord/head/citation-info/author-keywords/author-keyword" />
       <xsl:apply-templates select="scopus:language" />
       <xsl:apply-templates select="item/bibrecord/head/abstracts/abstract" />
-      <xsl:apply-templates select="." mode="source" />
     </mods:mods>
-  </xsl:template>
-
-  <xsl:template match="scopus:abstracts-retrieval-response" mode="source">
-    <mods:extension>
-      <source format="scopus">
-        <xsl:copy-of select="." />
-      </source>
-    </mods:extension>
   </xsl:template>
 
   <xsl:template match="citation-title/titletext">

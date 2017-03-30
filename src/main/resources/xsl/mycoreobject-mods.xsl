@@ -136,7 +136,6 @@
 </xsl:template>
 
 <xsl:template match="mods:extension[not(tag)]" mode="copy-mods" />
-<xsl:template match="mods:extension/source" mode="copy-mods" />
 <xsl:template match="mods:extension/dedup" mode="copy-mods" />
 
 </xsl:stylesheet>
