@@ -336,7 +336,7 @@
   <xed:template id="book.contributors">
     <xed:repeat xpath="mods:name[@type='personal']">
       <div>
-        <xed:bind xpath="mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']" initially="author">
+        <xed:bind xpath="mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']" initially="aut">
           <label>*
             <select class="label" style="width:152px;">
               <xed:include uri="xslStyle:items2options:webapp:rollen.xml" />
@@ -352,7 +352,7 @@
   <xed:template id="person.role">
     <xed:repeat xpath="mods:name[@type='personal']">
       <div>
-        <xed:bind xpath="mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']" initially="author">
+        <xed:bind xpath="mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']" initially="aut">
           <label>*
             <select class="label" style="width:152px;">
             <xed:include uri="xslStyle:items2options:classification:editor:-1:children:marcrelator" />
@@ -513,7 +513,7 @@
   </xed:template>
 
   <xed:template id="doi.urn.duepublico">
-    <xed:repeat xpath="mods:identifier[contains('doi urn pubmed scopus duepublico',@type)]">
+    <xed:repeat xpath="mods:identifier[contains('doi urn pubmed ieee scopus duepublico',@type)]">
       <div>
         <xed:bind xpath="@type" default="doi">
           <select class="label" style="margin-left:6px; width:167px;">
