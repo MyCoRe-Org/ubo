@@ -540,7 +540,7 @@
     <xsl:apply-templates select="mods:originInfo/mods:edition" mode="details" />
     <xsl:apply-templates select="mods:originInfo/mods:place" mode="details" />
     <xsl:apply-templates select="mods:originInfo/mods:publisher" mode="details" />
-    <xsl:apply-templates select="descendant-or-self::mods:dateIssued" mode="details" />
+    <xsl:apply-templates select="mods:originInfo/mods:dateIssued" mode="details" />
     <xsl:apply-templates select="mods:part" mode="details" />
     <xsl:apply-templates select="mods:originInfo/mods:dateOther" mode="details" />    
     <xsl:apply-templates select="mods:physicalDescription/mods:extent" mode="details" />
