@@ -8,141 +8,94 @@
     <xed:form class="ubo-form" role="form" xmlns:xed="http://www.mycore.de/xeditor">
       <xed:bind xpath="/mods:mods">
         <fieldset>
-          <legend><xed:output i18n="ubo.registerPublication" />:</legend>
 
-          <xed:choose>
-            <xed:when test="$xed-validation-failed">
-              <div class="validation-failures">
-                <h3>
-                  <xed:output i18n="form.validation.failed" />
-                </h3>
-                <ul>
-                  <xed:display-validation-messages />
-                </ul>
-              </div>
-            </xed:when>
-            <xed:otherwise>
-              <div>
-                <p>
-                  <xed:output i18n="ubo.registerPublication.intro" />
-                </p>
-              </div>
-            </xed:otherwise>
-          </xed:choose>
+          <legend><xed:output i18n="ubo.newPublicationWizard" /></legend>
 
-          <xed:bind xpath="mods:genre[@type='intern']">
+          <xed:if test="$xed-validation-failed">
+            <div class="validation-failures">
+              <h3>
+                <xed:output i18n="form.validation.failed" />
+              </h3>
+              <ul>
+                <xed:display-validation-messages />
+              </ul>
+            </div>
+          </xed:if>
+
+          <div>
+            <p>
+              <xed:output i18n="ubo.newPublicationWizard.doi" />
+            </p>
+          </div>
+
+          <xed:bind xpath="mods:identifier">
             <div>
-              <label for="genre" style="vertical-align:bottom;"><xed:output i18n="ubo.genre" />:</label>
-              <select id="genre" size="1" />
+              <xed:bind xpath="@type">
+                <label for="identifier">
+                  <select class="label" style="width:150px;">
+                    <option value="doi">DOI</option>
+                    <option value="pubmed">PubMed ID</option>
+                    <option value="scopus">Scopus ID</option>
+                    <option value="ieee">IEEE Article No.</option>
+                    <option value="isbn">ISBN</option>
+                    <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+                      <option value="duepublico">DuEPublico ID</option>
+                      <option value="evaluna">EVALuna Biblio ID</option>
+                      <option value="zdb">ZDB ID</option>
+                      <option value="ppn">GBV/SWB PPN</option>
+                      <option value="hbz">HBZ HT-Nummer</option>
+                      <option value="issn">ISSN</option>
+                    </xed:if>
+                  </select>:
+                </label>
+              </xed:bind>
+              <input id="identifier" class="{$xed-validation-marker}" style="width:400px;" />
             </div>
           </xed:bind>
+          <xed:validate xpath="//mods:identifier[@type='doi']" matches="10\.\d+.*" i18n="ubo.identifier.doi.validation" display="global" />
+          <xed:validate xpath="//mods:identifier[@type='issn']" matches="[0-9X]{4}\-[0-9X]{4}" i18n="ubo.identifier.issn.validation" display="global" />
+          <xed:validate xpath="//mods:identifier[@type='isbn']" matches="^((978|979)-?)?([\d -]{12}|\d{9})(\d|X)$" i18n="ubo.identifier.isbn.validation" display="global" />
+          <xed:validate xpath="//mods:identifier[@type='duepublico']" matches="\d+" display="global" />
+
+          <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+            <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
+            <xed:validate xpath="//mods:location/mods:shelfLocator" matches="([ED]\d\d\/\d\d\s[A-Za-z]+\s\d+.*)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
+          </xed:if>
+          
+          <div>
+            <p>
+              <xed:output i18n="ubo.newPublicationWizard.titleAuthor" />
+            </p>
+          </div>
 
           <xed:bind xpath="mods:titleInfo/mods:title">
             <div>
               <label for="title" style="vertical-align:bottom;"><xed:output i18n="ubo.title" />:</label>
-              <input id="title" class="{$xed-validation-marker}" style="width:400px;" placeholder="{i18n:ubo.registerPublication.title.placeholder}" />
-              <xed:validate required="true" i18n="ubo.title.validation" display="global" />
+              <input id="title" class="{$xed-validation-marker}" style="width:400px;" placeholder="{i18n:ubo.newPublicationWizard.title.placeholder}" />
             </div>
           </xed:bind>
 
-          <xed:bind xpath="mods:name[@type='personal']/mods:namePart[@type='family']">
-            <div>
-              <label for="author" style="vertical-align:bottom;"><xed:output i18n="ubo.role.author" />:</label>
-              <input id="author" class="{$xed-validation-marker}" style="width:400px;" placeholder="{i18n:ubo.registerPublication.author.placeholder}" />
-              <xed:validate required="true" i18n="ubo.role.author.validation" display="global" />
-            </div>
+          <xed:bind xpath="mods:name[@type='personal']">
+            <xed:bind xpath="mods:namePart[@type='family']">
+              <div>
+                <label for="author" style="vertical-align:bottom;"><xed:output i18n="ubo.role.author" />:</label>
+                <input id="author" class="{$xed-validation-marker}" style="width:400px;" placeholder="{i18n:ubo.newPublicationWizard.author.placeholder}" />
+              </div>
+            </xed:bind>
+            <xed:bind xpath="mods:role[mods:roleTerm[@authority='marcrelator'][@type='code']='aut']" />
           </xed:bind>
+          
+          <xed:validate test="(string-length(mods:identifier) &gt; 0) or (string-length(mods:location/mods:shelfLocator) &gt; 0) or ( (string-length(mods:titleInfo/mods:title) &gt; 0) and (string-length(mods:name/mods:namePart) &gt; 0) )" display="global" i18n="ubo.newPublicationWizard.required" />
 
-          <xed:bind xpath="mods:relatedItem[@type='host']/mods:genre[@type='intern']">
-            <div> 
-              <label for="host" style="vertical-align:bottom;"><xed:output i18n="ubo.registerPublication.publishedIn" />:</label>
-              <select id="host" size="1" />
-            </div>
-          </xed:bind>
+          <xed:cleanup-rule xpath="//mods:*" relevant-if="(string-length(normalize-space(text())) &gt; 0) or *" />
 
           <div class="cancel-submit">
-            <button class="roundedButton" type="submit" xed:target="servlet" xed:href="CheckNewPublicationServlet">
-              <xed:output i18n="button.submit" />
+            <button class="roundedButton" type="submit" xed:target="servlet" xed:href="NewPublicationWizard">
+              <xed:output i18n="button.next" />
             </button>
           </div>
 
         </fieldset>
-        <script type="text/javascript">
-          var GenreXML;
-          
-          function findCategory(id) {
-            return jQuery(GenreXML).find('[ID="' + id + '"]')[0];
-          }
-          
-          function getLabel(category, lang) {
-            return jQuery(category).children('label[xml\\:lang="' + lang + '"]').attr('text');
-          }
-          
-          function createOption(id,mode) {
-            var category = findCategory(id);
-            var hosts = getLabel(category,'x-hosts');
-            var title = getLabel(category,'<xed:output value="$CurrentLang" />');
-          
-            if ((typeof hosts === 'undefined') &amp;&amp; mode == 'genre') 
-              return ''; 
-            else 
-              return '&lt;option value="' + id + '"&gt;' + title + '&lt;/option&gt;';
-          }
-          
-          function createGenreOptions() {
-            var options = "";
-            jQuery(GenreXML).find('categories &gt; category').each(function() {
-              options += createOption(jQuery(this).attr('ID'),'genre');
-          
-              jQuery(this).find('category').each(function() {
-                options += createOption(jQuery(this).attr('ID'),'genre');
-              });
-          
-            });
-            jQuery('#genre').append(options);
-          }
-          
-          function changeHostOptions() {
-            jQuery('#host').empty();
-            jQuery('#host').parent().show();
-          
-            var id = jQuery('#genre option:selected')[0].value;
-            var category = findCategory(id);
-            var host = getLabel(category,'x-hosts');
-          
-            if (!(typeof host === 'undefined')) {
-              var hosts = host.split(' ');
-              jQuery.each( hosts, function(ind, val) {
-                if (val == 'standalone') {
-                  jQuery('#host').append('&lt;option value="standalone"&gt; --- &lt;/option&gt;');
-                } else {
-                  jQuery('#host').append( createOption(val,'host') );
-                }
-              });
-              if (hosts.length == '1' &amp;&amp; hosts[0] == 'standalone') {
-                jQuery('#host').parent().hide();
-              }
-            } else {
-              jQuery('#host').parent().hide();
-            }
-          }
-          
-          jQuery(document).ready(function() {
-            jQuery('#genre').change(function() {
-              changeHostOptions();
-            });
-            jQuery.ajax({
-              method : "GET",
-              url : "api/v1/classifications/ubogenre",
-              dataType : "xml"
-            }).done(function(xml) {
-              GenreXML = xml;
-              createGenreOptions();
-              changeHostOptions();
-            });
-          });
-        </script>
-        <xed:cleanup-rule xpath="//mods:relatedItem" relevant-if="not(mods:genre[@type='intern']='standalone')" />
       </xed:bind>
     </xed:form>
   </section>

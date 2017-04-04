@@ -47,14 +47,6 @@
       <label xml:lang="de">Import-Korb</label>
       <label xml:lang="en">Import basket</label>
     </item>
-    <item id="dozbib.import.diss" ref="import-dissertation.xml" admin="true">
-      <label xml:lang="de">Dissertation</label>
-      <label xml:lang="en">Dissertation</label>
-    </item>  
-    <item id="dozbib.import.db" ref="import-from-db.xed" admin="true">
-      <label xml:lang="de">aus Datenbank</label>
-      <label xml:lang="en">from database</label>
-    </item>  
   </item>
   <item id="dozbib.duplicates" ref="duplicates.xml" admin="true">
     <label xml:lang="de">Dubletten-Bericht</label>

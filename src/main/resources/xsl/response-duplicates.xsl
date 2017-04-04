@@ -17,13 +17,12 @@
 <xsl:include href="mods-display.xsl" />
 
 <xsl:param name="RequestURL" />
-<xsl:param name="importKey" />
 
 <xsl:variable name="ContextID" select="'dozbib.new.publication'" />
 
 <xsl:variable name="breadcrumb.extensions">
-  <item label="{i18n:translate('ubo.registerPublication')}" href="{$WebApplicationBaseURL}newPublication.xed" />
-  <item label="{i18n:translate('ubo.checkDuplicates')}" />
+  <item label="{i18n:translate('ubo.newPublicationWizard')}" href="{$WebApplicationBaseURL}newPublication.xed" />
+  <item label="{i18n:translate('ubo.newPublicationWizard.duplicates')}" />
 </xsl:variable>
 
 <xsl:variable name="head.additional">
@@ -57,7 +56,7 @@
 <!-- ==================== Anzeige Seitentitel ==================== -->
 
 <xsl:variable name="page.title">
-  <xsl:value-of select="i18n:translate('ubo.checkDuplicates')" /> 
+  <xsl:value-of select="i18n:translate('ubo.newPublicationWizard.duplicates')" /> 
   <xsl:text>: </xsl:text> 
   <xsl:choose>
     <xsl:when test="$numFound > 1">
@@ -79,13 +78,16 @@
 <xsl:template match="response">
   <article class="highlight2">
     <hgroup>
-      <h2><xsl:value-of select="i18n:translate('ubo.checkDuplicates.headline')"/>:</h2>
+      <h2><xsl:value-of select="i18n:translate('ubo.newPublicationWizard.duplicates.headline')"/>:</h2>
     </hgroup>
-    <p>
-      <xsl:value-of select="i18n:translate('ubo.checkDuplicates.pleaseCheck')"/>
-      <form method="get" action="{$WebApplicationBaseURL}edit-publication.xed" style="margin:0;">
-        <input type="hidden" name="importKey" value="{$importKey}" />
-        <input type="submit" class="roundedButton" value="{i18n:translate('ubo.checkDuplicates.noContinue')}" />
+    <xsl:copy-of select="document('xslStyle:mods-wizard-display:session:ubo.submission')/*" />
+    <p style="margin-top:1ex;">
+      <strong>
+        <xsl:value-of select="i18n:translate('ubo.newPublicationWizard.duplicates.pleaseCheck')"/>
+      </strong>
+      <form method="get" action="{$ServletsBaseURL}NewPublicationWizard" style="margin:0;">
+        <input type="hidden" name="step" value="genres" />
+        <input type="submit" class="roundedButton" value="{i18n:translate('ubo.newPublicationWizard.duplicates.noContinue')}" />
       </form>  
     </p>
   </article>

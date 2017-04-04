@@ -20,25 +20,6 @@
   xmlns:encoder="xalan://java.net.URLEncoder"
   exclude-result-prefixes="xsl xalan java">
 
-  <xsl:template match="/request">
-    <xsl:variable name="mods">
-      <xsl:call-template name="call-aleph">
-        <xsl:with-param name="request" select="concat('find&amp;base=edu01&amp;request=psg=',encoder:encode(shelfmark,'UTF-8'))" />
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:for-each select="xalan:nodeset($mods)/*">
-      <xsl:copy>
-        <mods:genre type="intern">dissertation</mods:genre>
-        <xsl:copy-of select="*" />
-        <mods:location>
-          <mods:shelfLocator>
-            <xsl:value-of select="translate(shelfmark,'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ')" />
-          </mods:shelfLocator>
-        </mods:location>
-      </xsl:copy>
-    </xsl:for-each>
-  </xsl:template>
-
   <xsl:template name="call-aleph">
     <xsl:param name="request" />
     <xsl:variable name="url" select="concat('https://alephprod.ub.uni-due.de/X?op=',$request)" />
@@ -69,6 +50,7 @@
   
   <xsl:template match="/present">
     <xsl:for-each select="record/metadata/oai_marc">
+      <mods:genre type="intern">dissertation</mods:genre>
       <mods:titleInfo>
         <xsl:apply-templates select="varfield[@id='331']" />
         <xsl:apply-templates select="varfield[@id='335']" />

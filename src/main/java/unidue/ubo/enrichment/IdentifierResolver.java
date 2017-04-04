@@ -9,6 +9,7 @@
 
 package unidue.ubo.enrichment;
 
+import java.net.URLEncoder;
 import java.text.MessageFormat;
 
 import org.apache.logging.log4j.LogManager;
@@ -34,12 +35,12 @@ class IdentifierResolver {
     }
 
     public Element resolve(String identifier) {
-        String uri = MessageFormat.format(uriPattern, identifier);
         Element resolved = null;
         try {
+            String uri = MessageFormat.format(uriPattern, identifier, URLEncoder.encode(identifier, "UTF-8"));
             resolved = MCRURIResolver.instance().resolve(uri);
         } catch (Exception ex) {
-            LOGGER.warn("Exception resolving " + uri + ": " + ex.getClass().getName() + " " + ex.getMessage());
+            LOGGER.warn("Exception resolving " + identifier + ": " + ex.getClass().getName() + " " + ex.getMessage());
         }
 
         // Normalize various error/not found cases:
