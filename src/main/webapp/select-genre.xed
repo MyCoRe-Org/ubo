@@ -59,7 +59,6 @@
           </xed:bind>
           
           <div class="cancel-submit">
-            <button class="roundedButton" type="submit" xed:target="debug">DEBUG</button>
             <button class="roundedButton" type="submit" xed:target="servlet" xed:href="NewPublicationWizard">
               <xed:output i18n="button.next" />
             </button>
