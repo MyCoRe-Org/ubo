@@ -99,41 +99,40 @@
   <!-- Field type for text such as title, abstract, comment -->
   <fieldType name="text" class="solr.TextField" positionIncrementGap="100">
     <analyzer>
-      <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-ISOLatin1Accent.txt"/>
       <tokenizer class="solr.StandardTokenizerFactory" />
+      <filter class="solr.GermanNormalizationFilterFactory"/>
+      <filter class="solr.ICUNormalizer2FilterFactory" name="nfkc_cf" mode="compose"/>
+      <filter class="solr.ICUFoldingFilterFactory"/>
       <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_de.txt" format="snowball" />
       <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_en.txt" format="snowball" />
       <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_fr.txt" format="snowball" />
       <filter class="solr.GermanMinimalStemFilterFactory"/> 
       <filter class="solr.EnglishMinimalStemFilterFactory"/>
-      <filter class="solr.GermanNormalizationFilterFactory"/>
-      <filter class="solr.ICUNormalizer2FilterFactory" name="nfkc_cf" mode="compose"/>
     </analyzer>
   </fieldType>
 
   <!-- Field type for names such as author, editor, place -->
   <fieldType name="name" class="solr.TextField" positionIncrementGap="100">
     <analyzer type="index">
-      <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-ISOLatin1Accent.txt"/>
       <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="[\-\.]" replacement=" " />
       <!-- Turnbull, Douglas G ==> Turnbull, Douglas D G to force all initials found -->
       <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="\s+(\S)(\S+)" replacement=" $1$2 $1" /> <!-- Douglas Harold ==> Douglas D Harold H -->
       <tokenizer class="solr.StandardTokenizerFactory" />
       <filter class="solr.GermanNormalizationFilterFactory"/>
       <filter class="solr.ICUNormalizer2FilterFactory" name="nfkc_cf" mode="compose"/>
+      <filter class="solr.ICUFoldingFilterFactory"/>
     </analyzer>
     <analyzer type="query">
-      <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-ISOLatin1Accent.txt"/>
       <tokenizer class="solr.StandardTokenizerFactory" />
       <filter class="solr.GermanNormalizationFilterFactory"/>
       <filter class="solr.ICUNormalizer2FilterFactory" name="nfkc_cf" mode="compose"/>
+      <filter class="solr.ICUFoldingFilterFactory"/>
     </analyzer>
   </fieldType>
   
   <!-- Field type for journal title to support for abbreviated titles, "Advances in Physics" vs. "Adv Phys" -->
   <fieldType name="journal" class="solr.TextField" positionIncrementGap="100">
     <analyzer>
-      <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-ISOLatin1Accent.txt"/>
       <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="ournal" replacement="" />
       <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="eitschrift" replacement="" />
       <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="agazin" replacement="" />
@@ -142,6 +141,7 @@
       <tokenizer class="solr.StandardTokenizerFactory" />
       <filter class="solr.GermanNormalizationFilterFactory"/>
       <filter class="solr.ICUNormalizer2FilterFactory" name="nfkc_cf" mode="compose"/>
+      <filter class="solr.ICUFoldingFilterFactory"/>
       <filter class="solr.EdgeNGramFilterFactory" minGramSize="3" maxGramSize="15" />
     </analyzer>
   </fieldType>
@@ -149,10 +149,10 @@
   <!-- Field type for sorting by title, person names -->
   <fieldType name="sort" class="solr.TextField" sortMissingLast="true">
     <analyzer>
-      <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-ISOLatin1Accent.txt"/>
       <tokenizer class="solr.KeywordTokenizerFactory"/>
       <filter class="solr.GermanNormalizationFilterFactory"/>
       <filter class="solr.ICUNormalizer2FilterFactory" name="nfkc_cf" mode="compose"/>
+      <filter class="solr.ICUFoldingFilterFactory"/>
       <filter class="solr.PatternReplaceFilterFactory" pattern="([^A-Za-z0-9])" replacement="" replace="all"/>
     </analyzer>
   </fieldType>
@@ -189,6 +189,7 @@
       <filter class="solr.GermanMinimalStemFilterFactory"/> 
       <filter class="solr.EnglishMinimalStemFilterFactory"/>
       <filter class="solr.ICUNormalizer2FilterFactory" name="nfkc_cf" mode="compose"/>
+      <filter class="solr.ICUFoldingFilterFactory"/>
     </analyzer>
   </fieldType>
 
