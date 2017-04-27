@@ -93,15 +93,19 @@ public class DozBibServlet extends MCRServlet {
         boolean export = (format != null) && ((numFound > 0) || !"pdf".equals(format));
 
         String numPerPage = getReqParameter(req, "numPerPage", "10");
-        if (export)
+        String maxResults = getReqParameter(req, "maxResults", "0");
+        if (!"0".equals(maxResults))
+            numPerPage = maxResults;
+        else if (export)
             numPerPage = String.valueOf(numFound);
+        
         query.setAttribute("numPerPage", numPerPage);
 
         solrQuery = MCRQLSearchUtils.getSolrQuery(q, doc, req);
         StringBuffer url = new StringBuffer(MCRServlet.getServletBaseURL());
         url.append("SolrSelectProxy");
         url.append(solrQuery.toQueryString());
-
+        
         if (export) {
             url.append("&XSL.Transformer=").append(format);
             String css = job.getRequest().getParameter("css");
