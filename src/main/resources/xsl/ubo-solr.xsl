@@ -84,7 +84,7 @@
 
   <xsl:template match="mods:relatedItem[@type='series']/mods:titleInfo" mode="solrField">
     <xsl:call-template name="buildTitleField">
-      <xsl:with-param name="name">journal</xsl:with-param>
+      <xsl:with-param name="name">series</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
