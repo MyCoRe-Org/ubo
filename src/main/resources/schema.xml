@@ -58,6 +58,9 @@
   <!-- Fields for each LSF person ID and role, e.g. role_lsf=aut_1234 -->
   <field name="role_lsf" type="string" indexed="true" stored="false" multiValued="true" />
 
+  <!-- Fields for each LSF person ID that is author or editor of this publication -->
+  <field name="ae_lsf" type="string" indexed="true" stored="false" multiValued="true" />
+
   <!-- Fields for mods:identifier, e.g. <mods:identifier type="doi" /> ==> id_doi -->
   <dynamicField name="id_*"  type="id" indexed="true" stored="false" multiValued="true" />
   

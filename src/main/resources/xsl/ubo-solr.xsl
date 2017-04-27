@@ -20,6 +20,7 @@
     <xsl:apply-templates select="descendant::mods:name[@type='personal']/mods:role/mods:roleTerm[@type='code']" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:name/mods:nameIdentifier" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:name[mods:nameIdentifier[@type='lsf']]" mode="solrField.lsf" />
+    <xsl:apply-templates select="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][contains('aut cre tch pht prg edt',text())]]/mods:nameIdentifier[@type='lsf']" mode="solrField.ae" />
     <xsl:apply-templates select="descendant::mods:name[@type='personal']" mode="child" />
     <xsl:apply-templates select="mods:genre[@type='intern']" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:genre[@type='intern']" mode="solrField" />
@@ -161,6 +162,12 @@
         <xsl:value-of select="../../mods:nameIdentifier[@type='lsf']" />
       </field>
     </xsl:for-each>
+  </xsl:template>
+  
+  <xsl:template match="mods:nameIdentifier[@type='lsf']" mode="solrField.ae">
+    <field name="ae_lsf">
+      <xsl:value-of select="text()" />
+    </field>
   </xsl:template>
   
   <xsl:template match="mods:mods/mods:genre[@type='intern']" mode="solrField">
