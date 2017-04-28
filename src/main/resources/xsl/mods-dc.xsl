@@ -188,9 +188,11 @@
     </dc:identifier>
   </xsl:template>
 
+  <xsl:param name="UBO.DOIResolver" />
+
   <xsl:template match="mods:identifier[@type='doi']" mode="dc">
     <dc:identifier>
-      <xsl:text>http://dx.doi.org/</xsl:text>
+      <xsl:value-of select="$UBO.DOIResolver" />
       <xsl:value-of select="text()" />
     </dc:identifier>
   </xsl:template>

@@ -258,9 +258,11 @@
     </issn>
   </xsl:template>
   
+  <xsl:param name="UBO.DOIResolver" />
+
   <xsl:template match="mods:identifier[@type='doi']">
     <url>
-      <xsl:value-of select="concat('http://dx.doi.org/',text())" />
+      <xsl:value-of select="concat($UBO.DOIResolver,text())" />
     </url>
   </xsl:template>
 

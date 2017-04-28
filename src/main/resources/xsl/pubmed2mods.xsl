@@ -209,7 +209,7 @@
   </xsl:template>
   
   <xsl:template match="fullTextUrlList">
-    <xsl:apply-templates select="fullTextUrl/url[not(contains(text(),'dx.doi.org'))]" />
+    <xsl:apply-templates select="fullTextUrl/url[not(contains(text(),'doi.org'))]" />
   </xsl:template>
   
   <xsl:template match="fullTextUrl/url">

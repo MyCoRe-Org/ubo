@@ -63,10 +63,12 @@
 
   <!-- ========== DOI ========== -->
   
+  <xsl:param name="UBO.DOIResolver" />
+  
   <xsl:template match="mods:identifier[@type='doi']" mode="html-export">
     <div class="link">
       <xsl:text>DOI: </xsl:text>
-      <a href="http://dx.doi.org/{text()}">
+      <a href="{$UBO.DOIResolver}{text()}">
         <xsl:value-of select="text()"/>
       </a>
     </div>
