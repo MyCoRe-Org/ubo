@@ -85,9 +85,7 @@
 </xsl:template>
 
 <xsl:template match="mods:name" mode="query">
-  <xsl:value-of select="concat('(role_lsf+=+aut_',mods:nameIdentifier[@type='lsf'],')')" />
-  <xsl:text>+or+</xsl:text>
-  <xsl:value-of select="concat('(role_lsf+=+edt_',mods:nameIdentifier[@type='lsf'],')')" />
+  <xsl:value-of select="concat('(ae_lsf+=+',mods:nameIdentifier[@type='lsf'],')')" />
   <xsl:if test="following::mods:name">+or+</xsl:if>
 </xsl:template>
 
