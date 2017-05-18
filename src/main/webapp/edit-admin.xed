@@ -84,6 +84,7 @@
               <xed:include uri="webapp:import-editor.xed" ref="pages" />
               <xed:include uri="webapp:import-editor.xed" ref="identifier" />
               <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
+              <xed:include uri="webapp:import-editor.xed" ref="url" />
             </xed:bind>
           </fieldset>
           <fieldset>
