@@ -8,21 +8,21 @@
 
   <!-- MyCoRe general fields -->
   <field name="id"            type="string" indexed="true" stored="true"  required="true"  multiValued="false" />
-  <field name="objectKind"    type="string" indexed="true" stored="false" required="true"  multiValued="false" />
-  <field name="objectType"    type="string" indexed="true" stored="false" required="false" multiValued="false" />
-  <field name="objectProject" type="string" indexed="true" stored="false" required="false" multiValued="false" />
+  <field name="objectKind"    type="id"     indexed="true" stored="false" required="true"  multiValued="false" />
+  <field name="objectType"    type="id"     indexed="true" stored="false" required="false" multiValued="false" />
+  <field name="objectProject" type="id"     indexed="true" stored="false" required="false" multiValued="false" />
   <field name="created"       type="date"   indexed="true" stored="false" required="false" multiValued="false" />
   <field name="modified"      type="date"   indexed="true" stored="true"  required="false" multiValued="false" />
 
   <!-- Universitätsbibliographie fields -->
   <field name="title"      type="text"      indexed="true" stored="true"  multiValued="true"  />
   <field name="person"     type="name"      indexed="true" stored="true"  multiValued="true"  />
-  <field name="genre"      type="string"    indexed="true" stored="true"  multiValued="false" />
-  <field name="subject"    type="string"    indexed="true" stored="true"  multiValued="true"  />
-  <field name="origin"     type="string"    indexed="true" stored="false" multiValued="true"  />
-  <field name="status"     type="string"    indexed="true" stored="false" multiValued="false" />
+  <field name="genre"      type="id"        indexed="true" stored="true"  multiValued="false" />
+  <field name="subject"    type="id"        indexed="true" stored="true"  multiValued="true"  />
+  <field name="origin"     type="id"        indexed="true" stored="false" multiValued="true"  />
+  <field name="status"     type="id"        indexed="true" stored="false" multiValued="false" />
   <field name="host_title" type="text"      indexed="true" stored="false" multiValued="true"  />
-  <field name="host_genre" type="string"    indexed="true" stored="true"  multiValued="false" />
+  <field name="host_genre" type="id"        indexed="true" stored="true"  multiValued="false" />
   <field name="journal"    type="journal"   indexed="true" stored="false" multiValued="true"  />
   <field name="series"     type="text"      indexed="true" stored="false" multiValued="true"  />
   <field name="conference" type="text"      indexed="true" stored="false" multiValued="false" />
@@ -31,10 +31,10 @@
   <field name="abstract"   type="text"      indexed="true" stored="false" multiValued="true"  />
   <field name="year"       type="int"       indexed="true" stored="true"  multiValued="false" />
   <field name="year_diss"  type="int"       indexed="true" stored="false" multiValued="false" />
-  <field name="lang"       type="string"    indexed="true" stored="false" multiValued="true"  />
+  <field name="lang"       type="id"        indexed="true" stored="false" multiValued="true"  />
   <field name="shelfmark"  type="shelfmark" indexed="true" stored="false" multiValued="true"  />
-  <field name="tag"        type="string"    indexed="true" stored="false" multiValued="true"  />
-  <field name="dedup"      type="string"    indexed="true" stored="false" multiValued="true"  />
+  <field name="tag"        type="id"        indexed="true" stored="false" multiValued="true"  />
+  <field name="dedup"      type="id"        indexed="true" stored="false" multiValued="true"  />
 
   <!-- Extra fields for sorting -->
   <field name="sortby_title"  type="sort" indexed="true" stored="false" multiValued="false" />
@@ -56,10 +56,10 @@
   <copyField source="person_*" dest="person"/>
   
   <!-- Fields for each LSF person ID and role, e.g. role_lsf=aut_1234 -->
-  <field name="role_lsf" type="string" indexed="true" stored="false" multiValued="true" />
+  <field name="role_lsf" type="id" indexed="true" stored="false" multiValued="true" />
 
   <!-- Fields for each LSF person ID that is author or editor of this publication -->
-  <field name="ae_lsf" type="string" indexed="true" stored="false" multiValued="true" />
+  <field name="ae_lsf" type="id" indexed="true" stored="false" multiValued="true" />
 
   <!-- Fields for mods:identifier, e.g. <mods:identifier type="doi" /> ==> id_doi -->
   <dynamicField name="id_*"  type="id" indexed="true" stored="false" multiValued="true" />
@@ -157,10 +157,10 @@
     </analyzer>
   </fieldType>
 
-  <!-- Field type for identifiers such as ISBN, ISSN: remove hyphens -->
+  <!-- Field type for identifiers such as ISBN, ISSN: remove hyphens, lowercase -->
   <fieldType name="id" class="solr.TextField">
     <analyzer>
-      <tokenizer class="solr.WhitespaceTokenizerFactory" />
+      <tokenizer class="solr.KeywordTokenizerFactory" />
       <filter class="solr.PatternReplaceFilterFactory" pattern="-" replacement="" replace="all" />
       <filter class="solr.LowerCaseFilterFactory" />
     </analyzer>
