@@ -5,6 +5,7 @@
   xmlns:mods="http://www.loc.gov/mods/v3" 
   xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+  xmlns:solr="xalan://org.mycore.solr.MCRSolrUtils"
   exclude-result-prefixes="xsl mods xalan i18n">
 
   <xsl:param name="ServletsBaseURL" />
@@ -16,6 +17,7 @@
           <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_fields']/lst[@name='status']" />
           <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_ranges']/lst[@name='modified']/lst[@name='counts']" />
           <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_ranges']/lst[@name='created']/lst[@name='counts']" />
+          <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_fields']/lst[@name='importID']" />
         </article>
       </xsl:if>
     </include>
@@ -36,6 +38,24 @@
     </ul>
   </xsl:template>
   
+  <xsl:variable name="quote">"</xsl:variable>
+
+  <xsl:template match="lst[@name='facet_fields']/lst[@name='importID']">
+    <hgroup>
+      <h2>Zuletzt importierte Listen:</h2>
+    </hgroup>
+    <ul style="list-style:none;">
+      <xsl:for-each select="int">
+        <xsl:sort select="@name"  order="descending" /> 
+        <xsl:call-template name="output.value">
+          <xsl:with-param name="label" select="@name"/>
+          <xsl:with-param name="value" select="text()" />
+          <xsl:with-param name="query" select="concat('importID:',$quote,solr:escapeSearchValue(@name),$quote)" />
+        </xsl:call-template>
+      </xsl:for-each>
+    </ul>
+  </xsl:template>
+
   <xsl:template match="lst[@name='facet_ranges']/lst/lst[@name='counts']">
     <xsl:variable name="numDays" select="count(int)" />
     <xsl:variable name="dateField" select="../@name" /> <!-- created|modified -->

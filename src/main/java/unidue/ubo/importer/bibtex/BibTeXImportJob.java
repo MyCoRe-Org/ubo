@@ -16,7 +16,6 @@ import java.net.URLConnection;
 import java.net.URL;
 
 import org.apache.commons.fileupload.FileItem;
-import org.jdom2.Element;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRStreamContent;
 import org.mycore.common.content.MCRStringContent;
@@ -33,10 +32,10 @@ public class BibTeXImportJob extends ImportJob {
     public static BibTeXImportJob buildFrom(MCREditorSubmission sub) throws MalformedURLException, IOException {
         BibTeXImportJob job = new BibTeXImportJob();
 
-        Element parameters = sub.getXML().getRootElement();
-        String url = parameters.getChildTextTrim("url");
-        String encoding = parameters.getChildText("encoding");
-        String text = parameters.getChildTextTrim("text");
+        job.parameters = sub.getXML().getRootElement();
+        String url = job.parameters.getChildTextTrim("url");
+        String encoding = job.parameters.getChildText("encoding");
+        String text = job.parameters.getChildTextTrim("text");
 
         if (url != null)
             job.from(url, encoding);

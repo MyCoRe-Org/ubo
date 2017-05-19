@@ -20,10 +20,14 @@ import unidue.ubo.importer.ImportJob;
 
 public class EvalunaImportJob extends ImportJob {
     
-   public EvalunaImportJob( Element request ) throws HttpException, IOException, JDOMException, SAXException
+   public EvalunaImportJob( Element root ) throws HttpException, IOException, JDOMException, SAXException
    {
        super("Evaluna");
+       
        this.label = this.type;
+       this.parameters = root;
+
+       Element request = root.getChild("request");
        this.source = new EvalunaConnection().addInstitutionRequest().addPublicationRequest(request).getResponse();
    }
 }

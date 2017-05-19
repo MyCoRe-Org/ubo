@@ -35,6 +35,7 @@
   <field name="shelfmark"  type="shelfmark" indexed="true" stored="false" multiValued="true"  />
   <field name="tag"        type="id"        indexed="true" stored="false" multiValued="true"  />
   <field name="dedup"      type="id"        indexed="true" stored="false" multiValued="true"  />
+  <field name="importID"   type="string"    indexed="true" stored="false" multiValued="false" />
 
   <!-- Extra fields for sorting -->
   <field name="sortby_title"  type="sort" indexed="true" stored="false" multiValued="false" />

@@ -43,10 +43,6 @@
       <label xml:lang="de">aus EVALuna Biblio</label>
       <label xml:lang="en">from EVALuna Biblio</label>
     </item>  
-    <item id="dozbib.import.basket" ref="servlets/MCRBasketServlet?action=show&amp;type=import">
-      <label xml:lang="de">Import-Korb</label>
-      <label xml:lang="en">Import basket</label>
-    </item>
   </item>
   <item id="dozbib.duplicates" ref="duplicates.xml" admin="true">
     <label xml:lang="de">Dubletten-Bericht</label>

@@ -10,30 +10,19 @@
 package unidue.ubo.importer;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.mycore.access.MCRAccessException;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.frontend.basket.MCRBasket;
-import org.mycore.frontend.basket.MCRBasketEntry;
-import org.mycore.frontend.basket.MCRBasketManager;
 import org.mycore.frontend.editor.MCREditorSubmission;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
+import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrUtils;
 
 import unidue.ubo.AccessControl;
 import unidue.ubo.DozBibEntryServlet;
-import unidue.ubo.basket.BasketUtils;
-import unidue.ubo.dedup.DeDupCriteriaBuilder;
 import unidue.ubo.importer.bibtex.BibTeXImportJob;
 import unidue.ubo.importer.evaluna.EvalunaImportJob;
 
@@ -48,8 +37,6 @@ public class DozBibImportServlet extends MCRServlet {
             res.sendError(HttpServletResponse.SC_FORBIDDEN);
         else if (AccessControl.systemInReadOnlyMode())
             DozBibEntryServlet.sendReadOnlyError(res);
-        else if ("save".equals(req.getParameter("action")))
-            doSaveEntries(res);
         else
             doImport(req, res);
     }
@@ -58,63 +45,19 @@ public class DozBibImportServlet extends MCRServlet {
         MCREditorSubmission sub = (MCREditorSubmission) (req.getAttribute("MCREditorSubmission"));
 
         ImportJob job = null;
-        Element parameters = null;
 
         if (sub != null) { // BibTeX Import
             job = BibTeXImportJob.buildFrom(sub);
-            parameters = sub.getXML().getRootElement();
         } else { // Evaluna Import
             Document xml = (Document) (req.getAttribute("MCRXEditorSubmission"));
-            job = new EvalunaImportJob(xml.getRootElement().getChild("request").detach());
-            parameters = xml.getRootElement();
+            job = new EvalunaImportJob(xml.getRootElement().detach());
         }
 
-        List<Document> publications = job.transform();
-        new CategoryAdder(parameters).addCategories(publications);
-        addDeDupCriteria(publications);
-        addToBasket(publications);
-        res.sendRedirect(getServletBaseURL() + "MCRBasketServlet?type=import&action=show");
-    }
+        job.transformAndImport();
 
-    private void addDeDupCriteria(List<Document> publications) {
-        DeDupCriteriaBuilder ddcb = new DeDupCriteriaBuilder();
-        for (Document publication : publications)
-            ddcb.updateDeDupCriteria(publication);
-    }
+        MCRSolrClientFactory.getSolrClient().optimize(true, true); // Workaround to wait for SOLR indexing finished
 
-    private void addToBasket(List<Document> publications) {
-        MCRBasket basket = MCRBasketManager.getOrCreateBasketInSession("import");
-        for (Document publication : publications) {
-            String id = String.valueOf(basket.size() + 1);
-            MCRBasketEntry entry = new MCRBasketEntry(id, "imported:" + id);
-            entry.setContent(publication.detachRootElement());
-            basket.add(entry);
-        }
-    }
-
-    private void doSaveEntries(HttpServletResponse res) throws IOException, JDOMException, Exception {
-        MCRBasket basket = MCRBasketManager.getOrCreateBasketInSession("import");
-        for (Iterator<MCRBasketEntry> iterator = basket.iterator(); iterator.hasNext();) {
-            MCRBasketEntry entry = iterator.next();
-            Element root = entry.getContent();
-            MCRObjectID oid = saveEntry(root);
-            addImportedToRegularBasket(oid);
-        }
-        basket.clear();
-        res.sendRedirect(getServletBaseURL() + "MCRBasketServlet?type=bibentries&action=show");
-    }
-
-    private MCRObjectID saveEntry(Element root) throws MCRAccessException {
-        MCRObject obj = new MCRObject(new Document(root));
-        MCRObjectID oid = MCRObjectID.getNextFreeId("ubo_mods");
-        obj.setId(oid);
-        MCRMetadataManager.create(obj);
-        return oid;
-    }
-
-    private void addImportedToRegularBasket(MCRObjectID oid) {
-        MCRBasketEntry e = new MCRBasketEntry(oid.toString(),"mcrobject:"+oid);
-        e.resolveContent();
-        BasketUtils.getBasket().add(e);
+        String url = "solr/select?q=importID:\"" + MCRSolrUtils.escapeSearchValue(job.getID()) + "\"";
+        res.sendRedirect(getServletBaseURL() + url);
     }
 }
