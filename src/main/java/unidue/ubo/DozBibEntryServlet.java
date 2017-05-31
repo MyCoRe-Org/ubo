@@ -59,16 +59,30 @@ public class DozBibEntryServlet extends MCRServlet {
     }
 
     private void showEntry(HttpServletRequest req, HttpServletResponse res) throws Exception {
-        String ID = req.getParameter("id");
-        if (!isValidID(ID)) {
+        MCRObjectID oid = getObjectID(req);
+        if (oid == null) {
             res.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-        
-        LOGGER.info("UBO show entry " + ID);
-        MCRObjectID oid = MCRObjectID.getInstance(ID);
+
+        LOGGER.info("UBO show entry " + oid.toString());
         Document xml = MCRMetadataManager.retrieveMCRObject(oid).createXML();
         getLayoutService().doLayout(req, res, new MCRJDOMContent(xml));
+    }
+
+    private MCRObjectID getObjectID(HttpServletRequest req) throws IOException {
+        String ID = req.getParameter("id");
+        MCRObjectID oid;
+        if (isValidID(ID))
+            return MCRObjectID.getInstance(ID);
+
+        try {
+            int id = Integer.parseInt(ID);
+            oid = MCRObjectID.getInstance(MCRObjectID.formatID("ubo_mods", id));
+            return (MCRXMLMetadataManager.instance().exists(oid) ? oid : null);
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
     private void deleteEntry(HttpServletRequest req, HttpServletResponse res) throws Exception {
@@ -97,7 +111,7 @@ public class DozBibEntryServlet extends MCRServlet {
 
     private boolean isValidID(String id) throws IOException {
         return id != null && MCRObjectID.isValid(id)
-            && MCRXMLMetadataManager.instance().exists(MCRObjectID.getInstance(id));
+                && MCRXMLMetadataManager.instance().exists(MCRObjectID.getInstance(id));
     }
 
     private void sendNotificationMail(Document doc) throws Exception {
@@ -139,7 +153,7 @@ public class DozBibEntryServlet extends MCRServlet {
                 // Notify library staff via e-mail
                 sendNotificationMail(obj.createXML());
                 res.sendRedirect(MCRServlet.getServletBaseURL()
-                    + "DozBibEntryServlet?mode=show&XSL.step=confirm.submitted&id=" + oid.toString());
+                        + "DozBibEntryServlet?mode=show&XSL.step=confirm.submitted&id=" + oid.toString());
             }
         }
     }
