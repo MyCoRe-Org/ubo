@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2016 Duisburg-Essen University Library
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v2.0
  * which accompanies this distribution, and is available at
@@ -19,15 +19,14 @@ import org.xml.sax.SAXException;
 import unidue.ubo.importer.ImportJob;
 
 public class EvalunaImportJob extends ImportJob {
-    
-   public EvalunaImportJob( Element root ) throws HttpException, IOException, JDOMException, SAXException
-   {
-       super("Evaluna");
-       
-       this.label = this.type;
-       this.parameters = root;
 
-       Element request = root.getChild("request");
-       this.source = new EvalunaConnection().addInstitutionRequest().addPublicationRequest(request).getResponse();
-   }
+    public EvalunaImportJob(Element root) throws HttpException, IOException, JDOMException, SAXException {
+        super("Evaluna");
+
+        this.label = this.type;
+        this.parameters = root;
+
+        Element request = root.getChild("request").clone();
+        this.source = new EvalunaConnection().addInstitutionRequest().addPublicationRequest(request).getResponse();
+    }
 }
