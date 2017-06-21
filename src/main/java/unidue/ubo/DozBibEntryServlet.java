@@ -59,30 +59,27 @@ public class DozBibEntryServlet extends MCRServlet {
     }
 
     private void showEntry(HttpServletRequest req, HttpServletResponse res) throws Exception {
-        MCRObjectID oid = getObjectID(req);
-        if (oid == null) {
+        String ID = req.getParameter("id");
+        if (isValidID(ID)) {
+            LOGGER.info("UBO show entry " + ID);
+            MCRObjectID oid = MCRObjectID.getInstance(ID);
+            Document xml = MCRMetadataManager.retrieveMCRObject(oid).createXML();
+            getLayoutService().doLayout(req, res, new MCRJDOMContent(xml));
+        } else if (isLegacyPublicationID(ID)) {
+            redirectToCurrentPublicationID(res, ID);
+        } else
             res.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
-
-        LOGGER.info("UBO show entry " + oid.toString());
-        Document xml = MCRMetadataManager.retrieveMCRObject(oid).createXML();
-        getLayoutService().doLayout(req, res, new MCRJDOMContent(xml));
     }
 
-    private MCRObjectID getObjectID(HttpServletRequest req) throws IOException {
-        String ID = req.getParameter("id");
-        MCRObjectID oid;
-        if (isValidID(ID))
-            return MCRObjectID.getInstance(ID);
+    private void redirectToCurrentPublicationID(HttpServletResponse res, String ID) throws IOException {
+        int id = Integer.parseInt(ID);
+        MCRObjectID oid = MCRObjectID.getInstance(MCRObjectID.formatID("ubo_mods", id));
+        String url = "DozBibEntryServlet?id=" + oid.toString();
+        res.sendRedirect(url);
+    }
 
-        try {
-            int id = Integer.parseInt(ID);
-            oid = MCRObjectID.getInstance(MCRObjectID.formatID("ubo_mods", id));
-            return (MCRXMLMetadataManager.instance().exists(oid) ? oid : null);
-        } catch (Exception ex) {
-            return null;
-        }
+    private boolean isLegacyPublicationID(String ID) {
+        return (ID != null) && ID.matches("\\d+");
     }
 
     private void deleteEntry(HttpServletRequest req, HttpServletResponse res) throws Exception {
