@@ -11,7 +11,7 @@
     <mods:mods>
       <xsl:apply-templates select="item/bibrecord/head/citation-info/citation-type/@code" />
       <xsl:apply-templates select="item/bibrecord/head/citation-title/titletext" />
-      <xsl:apply-templates select="scopus:authors/scopus:author">
+      <xsl:apply-templates select="scopus:authors/author">
         <xsl:sort select="@seq" data-type="number" order="ascending" />
       </xsl:apply-templates>
       <xsl:apply-templates select="item/bibrecord/head/source[not((@type='b') and (../citation-info/citation-type/@code='bk'))]" />
@@ -36,7 +36,7 @@
     </mods:titleInfo>
   </xsl:template>
 
-  <xsl:template match="scopus:authors/scopus:author">
+  <xsl:template match="scopus:authors/author">
     <mods:name type="personal">
       <xsl:apply-templates select="ce:surname" />
       <xsl:apply-templates select="ce:given-name" />
@@ -46,8 +46,8 @@
       <mods:role>
         <mods:roleTerm type="code" authority="marcrelator">aut</mods:roleTerm>
       </mods:role>
-      <xsl:apply-templates select="scopus:affiliation" />
-      <xsl:apply-templates select="//author[@auid=current()/@auid][1]/ce:e-address[@type='email']" />
+      <xsl:apply-templates select="affiliation" />
+      <xsl:apply-templates select="//*[@auid=current()/@auid][1]/ce:e-address[@type='email']" />
     </mods:name>
   </xsl:template>
   
@@ -57,7 +57,7 @@
     </mods:affiliation>
   </xsl:template>
 
-  <xsl:template match="scopus:affiliation">
+  <xsl:template match="author/affiliation">
     <xsl:apply-templates select="//affiliation[@afid=current()/@id][1]" />
   </xsl:template>
 
@@ -72,13 +72,13 @@
     <xsl:if test="position() != last()">, </xsl:if>
   </xsl:template>
 
-  <xsl:template match="@orcid">
+  <xsl:template match="author/@orcid">
     <mods:nameIdentifier type="orcid">
       <xsl:value-of select="." />
     </mods:nameIdentifier>
   </xsl:template>
 
-  <xsl:template match="scopus:author/@auid">
+  <xsl:template match="author/@auid">
     <mods:nameIdentifier type="scopus">
       <xsl:value-of select="." />
     </mods:nameIdentifier>
