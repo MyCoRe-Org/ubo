@@ -111,7 +111,7 @@
     </ul>
     <xsl:variable name="numMore" select="count(int) - number($maxFacetValuesDisplayed)" />
     <xsl:if test="$numMore &gt; 0">
-      <a class="ubo-facets-toggle" id="tg{generate-id(.)}" onclick="jQuery('ul#{generate-id(.)} li:gt({$maxFacetValuesDisplayed})').slideToggle(); jQuery('a#tg{generate-id(.)} span').toggle();">
+      <a class="ubo-facets-toggle" id="tg{generate-id(.)}" onclick="jQuery('ul#{generate-id(.)} li:gt({$maxFacetValuesDisplayed - 1})').slideToggle(); jQuery('a#tg{generate-id(.)} span').toggle();">
         <span><xsl:value-of select="concat($numMore,' ',i18n:translate('facets.toggle.more'))" /></span>
         <span style="display:none;"><xsl:value-of select="i18n:translate('facets.toggle.less')" /></span>
         <xsl:text>...</xsl:text>
