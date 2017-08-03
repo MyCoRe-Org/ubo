@@ -158,6 +158,7 @@
 </xsl:variable>
 
 <xsl:template name="navigation">
+ <xsl:if test="$numFound &gt; 1">
   <div class="resultsNavigation section">
 
     <xsl:if test="basket:hasSpace()">
@@ -192,11 +193,12 @@
       </xsl:call-template>
     </xsl:if>
 
-    <span class="pageLink" style="float:right;">
-      <a href="statistics?{$exportParams}&amp;XSL.Style=statistics"><xsl:value-of select="i18n:translate('button.statistics')" /></a>
-    </span>
+      <span class="pageLink" style="float:right;">
+        <a href="statistics?{$exportParams}&amp;XSL.Style=statistics"><xsl:value-of select="i18n:translate('button.statistics')" /></a>
+      </span>
 
   </div>
+ </xsl:if>
 </xsl:template>
 
 <xsl:template name="link2resultsPage">
