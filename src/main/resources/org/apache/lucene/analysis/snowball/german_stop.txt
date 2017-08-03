@@ -1,5 +1,0 @@
- | german stop words, blank list 
-
-
-
-     
