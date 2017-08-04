@@ -6,7 +6,7 @@
   <parent>
     <artifactId>mycore-parent</artifactId>
     <groupId>org.mycore</groupId>
-    <version>29</version>
+    <version>32</version>
     <relativePath />
   </parent>
 
@@ -95,18 +95,13 @@
   <properties>
     <java.target.version>1.8</java.target.version>
     <hibernate.version>5.2.2.Final</hibernate.version>
-    <mycore.version>2016.06.0.2-SNAPSHOT</mycore.version>
+    <mycore.version>2017.06.0.1-SNAPSHOT</mycore.version>
     <log4j.version>2.6.1</log4j.version>
     <axis1.version>1.4</axis1.version>
     <timestamp>${maven.build.timestamp}</timestamp>
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>com.rometools</groupId>
-      <artifactId>rome</artifactId>
-      <version>1.5.1</version>
-    </dependency>
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
@@ -123,11 +118,6 @@
           <artifactId>commons-logging</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>commons-fileupload</groupId>
-      <artifactId>commons-fileupload</artifactId>
-      <version>1.3.1</version>
     </dependency>
     <dependency>
       <groupId>commons-httpclient</groupId>

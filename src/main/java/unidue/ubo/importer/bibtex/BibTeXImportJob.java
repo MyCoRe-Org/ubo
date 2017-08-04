@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2016 Duisburg-Essen University Library
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v2.0
  * which accompanies this distribution, and is available at
@@ -15,11 +15,10 @@ import java.net.MalformedURLException;
 import java.net.URLConnection;
 import java.net.URL;
 
-import org.apache.commons.fileupload.FileItem;
+import org.jdom2.Document;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRStreamContent;
 import org.mycore.common.content.MCRStringContent;
-import org.mycore.frontend.editor.MCREditorSubmission;
 
 import unidue.ubo.importer.ImportJob;
 
@@ -29,20 +28,21 @@ public class BibTeXImportJob extends ImportJob {
         super("BibTeX");
     }
 
-    public static BibTeXImportJob buildFrom(MCREditorSubmission sub) throws MalformedURLException, IOException {
+    public static BibTeXImportJob buildFrom(Document xml) throws MalformedURLException, IOException {
         BibTeXImportJob job = new BibTeXImportJob();
 
-        job.parameters = sub.getXML().getRootElement();
+        //job.parameters = sub.getXML().getRootElement();
         String url = job.parameters.getChildTextTrim("url");
         String encoding = job.parameters.getChildText("encoding");
         String text = job.parameters.getChildTextTrim("text");
 
-        if (url != null)
+        if (url != null) {
             job.from(url, encoding);
-        else if (text != null)
+        } else if (text != null) {
             job.from(text);
-        else
-            job.from((FileItem) (sub.getFiles().get(0)), encoding);
+            //else
+            //    job.from((FileItem) (sub.getFiles().get(0)), encoding);
+        }
 
         return job;
     }
@@ -56,21 +56,22 @@ public class BibTeXImportJob extends ImportJob {
         this.label = "text";
         this.source = new MCRStringContent(text);
     }
-
-    private void from(FileItem file, String encoding) throws IOException {
-        this.label = "file " + file.getName();
-        this.source = new MCRStringContent(stream2String(file.getInputStream(), encoding));
-    }
+    //
+    //    private void from(FileItem file, String encoding) throws IOException {
+    //        this.label = "file " + file.getName();
+    //        this.source = new MCRStringContent(stream2String(file.getInputStream(), encoding));
+    //    }
 
     private void from(String url, String defaultEncoding) throws MalformedURLException, IOException {
         URLConnection uc = new URL(url).openConnection();
         String encoding = uc.getContentEncoding() == null ? defaultEncoding : uc.getContentEncoding();
         InputStream in = uc.getInputStream();
 
-        if (uc.getContentType().contains("html"))
+        if (uc.getContentType().contains("html")) {
             from(url, new HTML2TextTransformer().transform(in, encoding));
-        else
+        } else {
             from(url, new MCRStringContent(stream2String(in, encoding)));
+        }
     }
 
     private static String stream2String(InputStream in, String encoding) throws IOException {

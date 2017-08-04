@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2016 Duisburg-Essen University Library
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v2.0
  * which accompanies this distribution, and is available at
@@ -56,22 +56,20 @@ public class DozBibCommands extends MCRAbstractCommands {
     /** Commands for the MyCoRe Command Line Interface */
     public DozBibCommands() {
         addCommand(new MCRCommand("ubo mods export all entries to directory {0}",
-            "unidue.ubo.DozBibCommands.exportMODS String",
-            "exports all entries as MODS dump to a zipped xml file in local directory {0}"));
-        addCommand(
-            new MCRCommand("ubo transform entries using xsl {0}", "unidue.ubo.DozBibCommands.transformEntries String",
+                "unidue.ubo.DozBibCommands.exportMODS String",
+                "exports all entries as MODS dump to a zipped xml file in local directory {0}"));
+        addCommand(new MCRCommand("ubo transform entries using xsl {0}",
+                "unidue.ubo.DozBibCommands.transformEntries String",
                 "Transforms persistent xml of all bibentries using XSL stylesheet"));
         addCommand(new MCRCommand("ubo find gnds", "unidue.ubo.DozBibGNDCommands.findGNDs", "Find GNDs"));
         addCommand(new MCRCommand("ubo migrate to mcrobject", "unidue.ubo.DozBibCommands.migrate2mcrobject",
-            "migrates all bibentries to mycoreobject persistence"));
+                "migrates all bibentries to mycoreobject persistence"));
         addCommand(new MCRCommand("ubo build duplicates report to directory {0}",
-            "unidue.ubo.dedup.DeDupCommands.buildDuplicatesReport String",
-            "builds report on possibly duplicate entries and writes it as xml to file duplicates.xml in directory {0}"));
-        addCommand(new MCRCommand("ubo import publications from {0} RSS feed",
-            "unidue.ubo.importer.rss.RSSFeedImporter.importFromFeed String",
-            "Reads an RSS feed referencing new publications and imports those publications that are not stored yet."));
+                "unidue.ubo.dedup.DeDupCommands.buildDuplicatesReport String",
+                "builds report on possibly duplicate entries and writes it as xml to file duplicates.xml in directory {0}"));
         addCommand(new MCRCommand("ubo import mods collection from file {0}",
-            "unidue.ubo.DozBibCommands.importMODSCollection String", "import mods:modsCollection from xml file {0}"));
+                "unidue.ubo.DozBibCommands.importMODSCollection String",
+                "import mods:modsCollection from xml file {0}"));
     }
 
     /** Exports all entries as MODS dump to a zipped xml file in the given directory */
@@ -165,8 +163,9 @@ public class DozBibCommands extends MCRAbstractCommands {
             }
 
             // migrate tag elements
-            for (Element tag : root.getChildren("tag"))
+            for (Element tag : root.getChildren("tag")) {
                 extension.addContent(tag.clone());
+            }
 
             MCRMODSWrapper wrapper = new MCRMODSWrapper();
             wrapper.setServiceFlag("status", root.getAttributeValue("status"));
@@ -192,7 +191,7 @@ public class DozBibCommands extends MCRAbstractCommands {
         }
         if (!root.getName().equals("modsCollection")) {
             throw new MCRException(
-                MessageFormat.format("File {0} does not contain a mods:modsCollection.", file.getAbsolutePath()));
+                    MessageFormat.format("File {0} does not contain a mods:modsCollection.", file.getAbsolutePath()));
         }
         for (Element mods : root.getChildren("mods", MCRConstants.MODS_NAMESPACE)) {
             MCRMODSWrapper wrapper = new MCRMODSWrapper();

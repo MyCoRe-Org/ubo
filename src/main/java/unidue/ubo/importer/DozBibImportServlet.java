@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2016 Duisburg-Essen University Library
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v2.0
  * which accompanies this distribution, and is available at
@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jdom2.Document;
-import org.mycore.frontend.editor.MCREditorSubmission;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.solr.MCRSolrClientFactory;
@@ -33,25 +32,26 @@ public class DozBibImportServlet extends MCRServlet {
         HttpServletRequest req = job.getRequest();
         HttpServletResponse res = job.getResponse();
 
-        if (!AccessControl.currentUserIsAdmin())
+        if (!AccessControl.currentUserIsAdmin()) {
             res.sendError(HttpServletResponse.SC_FORBIDDEN);
-        else if (AccessControl.systemInReadOnlyMode())
+        } else if (AccessControl.systemInReadOnlyMode()) {
             DozBibEntryServlet.sendReadOnlyError(res);
-        else
+        } else {
             doImport(req, res);
+        }
     }
 
     private void doImport(HttpServletRequest req, HttpServletResponse res) throws Exception, IOException {
-        MCREditorSubmission sub = (MCREditorSubmission) (req.getAttribute("MCREditorSubmission"));
+        // MCREditorSubmission sub = (MCREditorSubmission) (req.getAttribute("MCREditorSubmission"));
 
         ImportJob job = null;
 
-        if (sub != null) { // BibTeX Import
-            job = BibTeXImportJob.buildFrom(sub);
-        } else { // Evaluna Import
-            Document xml = (Document) (req.getAttribute("MCRXEditorSubmission"));
-            job = new EvalunaImportJob(xml.getRootElement().detach());
-        }
+        //if (sub != null) { // BibTeX Import
+        //  job = BibTeXImportJob.buildFrom(sub);
+        //} else { // Evaluna Import
+        Document xml = (Document) (req.getAttribute("MCRXEditorSubmission"));
+        job = new EvalunaImportJob(xml.getRootElement().detach());
+        //}
 
         job.transformAndImport();
 

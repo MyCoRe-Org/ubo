@@ -10,7 +10,6 @@
   exclude-result-prefixes="xsl i18n">
 
   <xsl:include href="layout.xsl" />
-  <xsl:include href="editor.xsl" />
 
   <xsl:variable name="PageID" select="/webpage/@id" />
   <xsl:variable name="page.title">
