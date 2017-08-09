@@ -7,11 +7,11 @@
 
   <xsl:output method="xml" encoding="UTF-8" indent="yes" xalan:indent-amount="2" />
 
-  <xsl:template match="scopus:abstracts-retrieval-response">
+  <xsl:template match="abstracts-retrieval-response">
     <mods:mods>
       <xsl:apply-templates select="item/bibrecord/head/citation-info/citation-type/@code" />
       <xsl:apply-templates select="item/bibrecord/head/citation-title/titletext" />
-      <xsl:apply-templates select="scopus:authors/author">
+      <xsl:apply-templates select="authors/author">
         <xsl:sort select="@seq" data-type="number" order="ascending" />
       </xsl:apply-templates>
       <xsl:apply-templates select="item/bibrecord/head/source[not((@type='b') and (../citation-info/citation-type/@code='bk'))]" />
@@ -22,7 +22,7 @@
         <xsl:apply-templates select="item/bibrecord/head/source/publicationdate/year" />
       </mods:originInfo>
       <xsl:apply-templates select="item/bibrecord/head/citation-info/author-keywords/author-keyword" />
-      <xsl:apply-templates select="scopus:language" />
+      <xsl:apply-templates select="language" />
       <xsl:apply-templates select="item/bibrecord/head/abstracts/abstract" />
     </mods:mods>
   </xsl:template>
@@ -36,7 +36,7 @@
     </mods:titleInfo>
   </xsl:template>
 
-  <xsl:template match="scopus:authors/author">
+  <xsl:template match="authors/author">
     <mods:name type="personal">
       <xsl:apply-templates select="ce:surname" />
       <xsl:apply-templates select="ce:given-name" />
@@ -109,7 +109,7 @@
     </xsl:attribute>
   </xsl:template>
 
-  <xsl:template match="scopus:language">
+  <xsl:template match="language">
     <mods:language>
       <mods:languageTerm authority="rfc4646" type="code">
         <xsl:value-of select="document(concat('language:',@xml:lang))/language/@xmlCode" />
