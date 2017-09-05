@@ -1754,6 +1754,10 @@ div.labels {
     vertical-align: baseline;
 }
 
+.ubo-tag a, .ubo-tag a:visited {
+    color: white;
+    text-decoration: none;
+}
 div.duplicates {
   margin-top:1ex;
   padding:1ex;

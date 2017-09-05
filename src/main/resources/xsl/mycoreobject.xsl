@@ -13,7 +13,8 @@
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   xmlns:mcr="http://www.mycore.org/"
-  exclude-result-prefixes="xsl xalan ubo mods xlink i18n dc mcr"  
+  xmlns:encoder="xalan://java.net.URLEncoder"
+  exclude-result-prefixes="xsl xalan ubo mods xlink i18n dc mcr encoder"  
 >
 
 <xsl:include href="layout.xsl" />
@@ -145,9 +146,13 @@
  </xsl:for-each>
 </xsl:template>
 
+<xsl:variable name="quotes">"</xsl:variable>
+
 <xsl:template match="mods:extension/tag">
   <span class="ubo-tag">
-    <xsl:value-of select="text()" />
+    <a href="{$ServletsBaseURL}solr/select?q=status:confirmed+AND+tag:{encoder:encode(concat($quotes,text(),$quotes),'UTF-8')}">
+      <xsl:value-of select="text()" />
+    </a>
   </span>
 </xsl:template>
 
