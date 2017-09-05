@@ -126,12 +126,16 @@
     <div class="labels">
       <xsl:call-template name="label-year" />
       <xsl:call-template name="pubtype" />
-      <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info" />
-      <xsl:apply-templates select="mods:extension/tag" />
     </div>
     <div class="labels">
+      <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info" />
       <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info" />
     </div>
+    <xsl:if test="mods:extension/tag">
+      <div class="labels">
+        <xsl:apply-templates select="mods:extension/tag" />
+      </div>
+    </xsl:if>
     <xsl:apply-templates select="/mycoreobject/service/servflags/servflag[@type='status']" />
     <xsl:call-template name="steps.and.actions" /> 
   </div>
