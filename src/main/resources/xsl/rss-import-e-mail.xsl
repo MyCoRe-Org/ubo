@@ -27,21 +27,20 @@
 <xsl:param name="WebApplicationBaseURL" />
 <xsl:param name="ServletsBaseURL" />
 <xsl:param name="MCR.Mail.Address" />
-<xsl:param name="RSS.SourceSystem" />
 
 <xsl:variable name="br"><xsl:text>
 </xsl:text></xsl:variable>
 
-<xsl:template match="/bibentries">
+<xsl:template match="/imported">
   <email>
     <from><xsl:value-of select="$MCR.Mail.Address" /></from>
-    <to><xsl:value-of select="$MCR.Mail.Address" /></to>
-    <subject>Universitätsbibliographie: <xsl:value-of select="$RSS.SourceSystem" /> RSS Feed Import</subject>
+    <to>frank.luetzenkirchen@uni-due.de</to>
+    <subject>Universitätsbibliographie: <xsl:value-of select="@source" /> RSS Feed Import</subject>
     <body>
     <xsl:text>
 Liebe Kollegin, lieber Kollege,
 
-die folgenden Publikationen wurden aus </xsl:text><xsl:value-of select="$RSS.SourceSystem" /><xsl:text> importiert:
+die folgenden Publikationen wurden aus </xsl:text><xsl:value-of select="@source" /><xsl:text> importiert:
 
 </xsl:text>
       <xsl:for-each select="mycoreobject">
