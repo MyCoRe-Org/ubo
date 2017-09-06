@@ -34,7 +34,7 @@
 <xsl:template match="/imported">
   <email>
     <from><xsl:value-of select="$MCR.Mail.Address" /></from>
-    <to>frank.luetzenkirchen@uni-due.de</to>
+    <to><xsl:value-of select="$MCR.Mail.Address" /></to>
     <subject>Universitätsbibliographie: <xsl:value-of select="@source" /> RSS Feed Import</subject>
     <body>
     <xsl:text>
