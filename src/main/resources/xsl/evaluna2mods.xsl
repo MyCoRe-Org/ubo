@@ -85,28 +85,31 @@
   </xsl:template>
   
   <xsl:template match="authors">
-    <xsl:apply-templates select="author[@collective='no']">
+    <xsl:apply-templates select="author">
       <xsl:sort select="@pos" data-type="number" />
     </xsl:apply-templates>
   </xsl:template>
   
-  <xsl:template match="author[@collective='no']">
+  <xsl:template match="author[(@collective='yes') or (@investigator='no') or not(@institution='0')]">
     <mods:name type="personal">
       <xsl:apply-templates select="lastname" />
-      <xsl:choose>
-        <xsl:when test="string-length(firstname) &gt; 0">
-          <xsl:apply-templates select="firstname" />
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select="initials" />
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates select="firstname[string-length() &gt; 0]" />
+      <xsl:apply-templates select="initials[(string-length() &gt; 0) and (string-length(../firstname) = 0)]" />
       <xsl:apply-templates select="@institution" />
-      <mods:role>
-        <mods:roleTerm type="code" authority="marcrelator">aut</mods:roleTerm>
-      </mods:role>
+      <xsl:apply-templates select="@investigator" />
     </mods:name>
   </xsl:template>
+  
+  <xsl:template match="author/@investigator">
+    <mods:role>
+      <mods:roleTerm type="code" authority="marcrelator">
+        <xsl:choose>
+          <xsl:when test=".='no'">aut</xsl:when>
+          <xsl:when test=".='yes'">ctb</xsl:when>
+        </xsl:choose>
+      </mods:roleTerm>
+    </mods:role>
+</xsl:template>
   
   <xsl:template match="lastname">
     <mods:namePart type="family">
