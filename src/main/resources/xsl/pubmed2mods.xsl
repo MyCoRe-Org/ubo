@@ -50,10 +50,10 @@
   </xsl:template>
   
   <xsl:template match="authorList">
-    <xsl:apply-templates select="author[lastName]" />
+    <xsl:apply-templates select="author[lastName|collectiveName]" />
   </xsl:template>
   
-  <xsl:template match="authorList/author">
+  <xsl:template match="author[lastName|collectiveName]">
     <mods:name type="personal">
       <xsl:apply-templates />
       <mods:role>
@@ -70,7 +70,7 @@
     </mods:namePart>
   </xsl:template>
 
-  <xsl:template match="author/lastName">
+  <xsl:template match="author/lastName|author/collectiveName">
     <mods:namePart type="family">
       <xsl:value-of select="." />
     </mods:namePart>
