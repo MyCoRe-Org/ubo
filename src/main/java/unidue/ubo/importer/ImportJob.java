@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2016 Duisburg-Essen University Library
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v2.0
  * which accompanies this distribution, and is available at
@@ -15,12 +15,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.mycore.access.MCRAccessException;
+import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.transformer.MCRContentTransformer;
 import org.mycore.common.content.transformer.MCRContentTransformerFactory;
@@ -31,57 +30,39 @@ import org.xml.sax.SAXException;
 
 public abstract class ImportJob {
 
-    private final static Logger LOGGER = LogManager.getLogger(ImportJob.class);
+    private final static SimpleDateFormat ID_BUILDER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    private final static SimpleDateFormat idBuilder = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private String id = ID_BUILDER.format(new Date());;
 
-    protected MCRContent source;
-
-    protected String id;
-
-    protected String type;
-
-    protected String label;
-
-    protected Element parameters;
-
-    protected ImportJob(String type) {
-        this.type = type;
-        this.id = idBuilder.format(new Date());
-    }
+    private List<Document> publications = new ArrayList<Document>();
 
     public String getID() {
         return id;
     }
 
-    public void transformAndImport() throws IOException, JDOMException, SAXException, MCRAccessException {
-        List<Document> publications = this.transform();
-        new CategoryAdder(parameters).addCategories(publications);
-        savePublications(publications);
+    public int getNumPublications() {
+        return publications.size();
     }
 
-    protected List<Document> transform() throws IOException, JDOMException, SAXException {
-        LOGGER.info("Importing " + type + " from " + label);
-
-        String transformerID = "import." + type;
+    public void transform(MCRContent source) throws IOException, JDOMException, SAXException {
+        String transformerID = getTransformerID();
         MCRContentTransformer transformer = MCRContentTransformerFactory.getTransformer(transformerID);
-        MCRContent transformed = transformer.transform(source);
-        Element collection = transformed.asXML().getRootElement();
-        List<Document> publications = extractPublications(collection);
+        MCRContent converted = transformer.transform(source);
 
-        int num = publications.size();
-        LOGGER.info("Transformed " + num + " " + type + " entries to MODS bibliography entries");
-        return publications;
+        Element collection = converted.asXML().getRootElement();
+        for (Element publication : collection.getChildren()) {
+            publications.add(new Document(publication.clone()));
+        }
     }
 
-    private List<Document> extractPublications(Element collection) {
-        List<Document> entries = new ArrayList<Document>();
-        for (Element publication : collection.getChildren())
-            entries.add(new Document(publication.clone()));
-        return entries;
+    public void addFixedCategories(Element formInput) {
+        CategoryAdder adder = new CategoryAdder(formInput);
+        for (Document publication : publications) {
+            adder.addCategories(publication);
+        }
     }
 
-    private void savePublications(List<Document> publications) throws MCRAccessException {
+    public void savePublications() throws MCRPersistenceException, MCRAccessException {
         for (Document publication : publications) {
             MCRObject obj = new MCRObject(publication);
             MCRObjectID oid = MCRObjectID.getNextFreeId("ubo_mods");
@@ -90,4 +71,15 @@ public abstract class ImportJob {
             MCRMetadataManager.create(obj);
         }
     }
+
+    public void handleImport(Element formInput) throws Exception {
+        MCRContent source = getSource(formInput);
+        transform(source);
+        addFixedCategories(formInput);
+        savePublications();
+    }
+
+    protected abstract String getTransformerID();
+
+    protected abstract MCRContent getSource(Element formInput) throws Exception;
 }

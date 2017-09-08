@@ -9,24 +9,20 @@
 
 package unidue.ubo.importer.evaluna;
 
-import java.io.IOException;
-
-import org.apache.commons.httpclient.HttpException;
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.xml.sax.SAXException;
+import org.mycore.common.content.MCRContent;
 
 import unidue.ubo.importer.ImportJob;
 
 public class EvalunaImportJob extends ImportJob {
 
-    public EvalunaImportJob(Element root) throws HttpException, IOException, JDOMException, SAXException {
-        super("Evaluna");
+    protected String getTransformerID() {
+        return "import.Evaluna";
+    }
 
-        this.label = this.type;
-        this.parameters = root;
-
-        Element request = root.getChild("request").clone();
-        this.source = new EvalunaConnection().addInstitutionRequest().addPublicationRequest(request).getResponse();
+    protected MCRContent getSource(Element formInput) throws Exception {
+        Element request = formInput.getChild("request").clone();
+        EvalunaConnection evaluna = new EvalunaConnection().addInstitutionRequest().addPublicationRequest(request);
+        return evaluna.getResponse();
     }
 }

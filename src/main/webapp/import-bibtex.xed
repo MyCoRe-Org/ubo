@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<webpage lastModified="$Date: 2009-07-09 12:25:56 +0200 (Do, 09 Jul 2009) $" id="dozbib.import.bibtex">
+  <title xml:lang="de">Literaturliste im BibTeX-Format importieren</title>
+
+  <script type="text/javascript" src="external/jquery-tools-1.2.7/jquery.tools.min.js"></script>
+  <script type="text/javascript" src="js/editor.validation.failed.tooltip.js"></script>
+  <script type="text/javascript" src="external/jquery-ui-1.8.21.custom.min.js"></script>
+  <script type="text/javascript" src="external/chosen/chosen.jquery.min.js"></script>
+     
+  <section>
+  
+    <p>
+      Über dieses Formular können Sie eine Literaturliste im
+      <a href="http://artis.imag.fr/~Xavier.Decoret/resources/xdkbibtex/bibtex_summary.html">BibTeX Format</a> 
+      importieren.
+    </p>
+
+    <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form">
+      <xed:bind xpath="/import">
+        <xed:bind xpath="@type" default="BibTeX" />
+
+        <xed:if test="$xed-validation-failed">
+          <div class="validation-failures">
+            <h3>
+              <xed:output i18n="form.validation.failed" />
+            </h3>
+            <ul>
+              <xed:display-validation-messages />
+            </ul>
+          </div>
+        </xed:if>
+
+        <fieldset>
+          <legend>Literaturliste im BibTeX-Format importieren</legend>
+
+          <xed:repeat xpath="subject" max="5">
+            <div>
+              <label for="{xed:generate-id()}"><xed:output i18n="ubo.subject" />:</label>
+              <select id="{xed:generate-id()}" style="width:400px;" class="{$xed-validation-marker}">
+                <option value=""><xed:output i18n="search.select" /></option>
+                <xed:include uri="xslStyle:fachref2options:resource:fachreferate.xml" />
+              </select>
+              <xed:controls />
+            </div>
+          </xed:repeat>
+
+          <xed:bind xpath="origin">
+            <div>
+              <label for="{xed:generate-id()}"><xed:output i18n="ubo.department" />:</label>
+              <select id="{xed:generate-id()}" style="width:400px;" class="autocomplete {$xed-validation-marker}">
+                <option value=""><xed:output i18n="search.select" /></option>
+                <xed:include uri="xslStyle:items2options:classification:editor:-1:children:ORIGIN" />
+              </select>
+            </div>
+          </xed:bind>
+
+          <xed:bind xpath="bibtex">
+            <div>
+              <label for="{xed:generate-id()}">BibTeX Quellcode:</label>
+              <textarea id="{xed:generate-id()}" class="{$xed-validation-marker}" type="text" style="width:520px; height:300px;" />
+            </div>
+            <xed:validate required="true" display="global">Bitte geben Sie BibTeX Quellcode ein!</xed:validate>
+          </xed:bind>
+
+          <div class="cancel-submit">
+            <button class="roundedButton" type="submit" xed:target="servlet" xed:href="DozBibImportServlet">
+              <xed:output i18n="button.submit" />
+            </button>
+          </div>
+
+        </fieldset>
+
+      </xed:bind>
+    </xed:form>
+
+    <script type="text/javascript">
+      jQuery(document).ready(function() { jQuery('select[class*="autocomplete"]').chosen({search_contains: true}); });
+    </script>
+
+  </section>
+</webpage>

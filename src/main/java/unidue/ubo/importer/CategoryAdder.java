@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2016 Duisburg-Essen University Library
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v2.0
  * which accompanies this distribution, and is available at
@@ -9,16 +9,13 @@
 
 package unidue.ubo.importer;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
 import org.mycore.common.MCRConstants;
 import org.mycore.frontend.MCRFrontendUtil;
-import org.xml.sax.SAXException;
 
 class CategoryAdder {
 
@@ -39,12 +36,11 @@ class CategoryAdder {
         }
     }
 
-    public void addCategories(List<Document> publications) throws JDOMException, IOException, SAXException {
-        for (Document publication : publications) {
-            Element metadata = publication.getRootElement().getChild("metadata");
-            Element mods = metadata.getChild("def.modsContainer").getChild("modsContainer").getChildren().get(0);
-            for (Element category : categories)
-                mods.addContent(category.clone());
+    public void addCategories(Document publication) {
+        Element metadata = publication.getRootElement().getChild("metadata");
+        Element mods = metadata.getChild("def.modsContainer").getChild("modsContainer").getChildren().get(0);
+        for (Element category : categories) {
+            mods.addContent(category.clone());
         }
     }
 }
