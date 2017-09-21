@@ -60,7 +60,7 @@
                 <label for="{xed:generate-id()}">Institut / Klinik:</label>
                 <select id="{xed:generate-id()}">
                   <option value=""><xed:output i18n="search.select" /></option>
-                  <xed:include uri="cache:xslStyle:evaluna-institutions2select-options:evaluna:institutions" />
+                  <xed:include uri="cache:xslStyle:import/evaluna-institutions2select-options:evaluna:institutions" />
                 </select>
               </div>
             </xed:bind>
