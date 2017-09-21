@@ -93,8 +93,7 @@
   <xsl:template match="author[(@collective='yes') or (@investigator='no') or not(@institution='0')]">
     <mods:name type="personal">
       <xsl:apply-templates select="lastname" />
-      <xsl:apply-templates select="firstname[string-length() &gt; 0]" />
-      <xsl:apply-templates select="initials[(string-length() &gt; 0) and (string-length(../firstname) = 0)]" />
+      <xsl:call-template name="firstname" />
       <xsl:apply-templates select="@institution" />
       <xsl:apply-templates select="@investigator" />
     </mods:name>
@@ -117,24 +116,28 @@
     </mods:namePart>
   </xsl:template>
 
-  <xsl:template match="firstname">
+  <xsl:template name="firstname">
     <mods:namePart type="given">
-      <xsl:value-of select="text()" />
+      <xsl:choose>
+        <xsl:when test="firstname[string-length() &gt; 0]">
+          <xsl:value-of select="firstname" />
+        </xsl:when>
+        <xsl:when test="initials[string-length() &gt; 2]">
+          <xsl:value-of select="initials" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:for-each select="str:tokenize(initials,'')" xmlns:str="http://exslt.org/strings">
+            <xsl:value-of select="." />
+            <xsl:text>.</xsl:text>
+            <xsl:if test="position() != last()">
+              <xsl:text> </xsl:text>
+            </xsl:if>
+          </xsl:for-each>
+        </xsl:otherwise>
+      </xsl:choose>
     </mods:namePart>
   </xsl:template>
 
-  <xsl:template match="initials">
-    <mods:namePart type="given">
-      <xsl:for-each select="str:tokenize(text(),'')" xmlns:str="http://exslt.org/strings">
-        <xsl:value-of select="." />
-        <xsl:text>.</xsl:text>
-        <xsl:if test="position() != last()">
-          <xsl:text> </xsl:text>
-        </xsl:if>
-      </xsl:for-each>
-    </mods:namePart>
-  </xsl:template>
-  
   <xsl:template match="@institution[number(.) != 0]">
     <mods:affiliation>
       <xsl:value-of select="$institutions/institution[@id=current()]/fullname" />
