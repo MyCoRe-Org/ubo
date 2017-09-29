@@ -7,21 +7,6 @@
   exclude-result-prefixes="xsl"  
 >
 
-<xsl:template match="mycoreobject">
-  <xsl:copy>
-    <xsl:copy-of select="@*" />
-    <xsl:copy-of select="structure" />
-    <metadata>
-      <def.modsContainer class="MCRMetaXML" heritable="false" notinherit="true">
-        <modsContainer inherited="0">
-          <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods[1]" />  
-        </modsContainer>
-      </def.modsContainer>
-    </metadata>
-    <xsl:copy-of select="service" />
-  </xsl:copy>
-</xsl:template>
-
 <xsl:template name="copy-and-apply"> <!-- copy supported elements and attributes calling this template -->
   <xsl:copy> 
     <xsl:apply-templates select="@*|node()"/>
@@ -50,7 +35,7 @@
 
 <xsl:template match="mods:classification/text()" /> 
 
-<xsl:template match="mods:name[@type='personal']|mods:name[@type='conference']|mods:name/@type">
+<xsl:template match="mods:name[@type='personal']|mods:name[@type='conference'][1]|mods:name/@type">
   <xsl:call-template name="copy-and-apply" />
 </xsl:template>
 
