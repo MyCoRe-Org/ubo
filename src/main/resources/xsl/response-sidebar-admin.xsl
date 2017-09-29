@@ -47,11 +47,13 @@
     <ul style="list-style:none;">
       <xsl:for-each select="int">
         <xsl:sort select="@name"  order="descending" /> 
-        <xsl:call-template name="output.value">
-          <xsl:with-param name="label" select="@name"/>
-          <xsl:with-param name="value" select="text()" />
-          <xsl:with-param name="query" select="concat('importID:',$quote,solr:escapeSearchValue(@name),$quote)" />
-        </xsl:call-template>
+        <xsl:if test="position() &lt;= 20"> <!-- show only latest 20 imports -->
+          <xsl:call-template name="output.value">
+            <xsl:with-param name="label" select="@name"/>
+            <xsl:with-param name="value" select="text()" />
+            <xsl:with-param name="query" select="concat('importID:',$quote,solr:escapeSearchValue(@name),$quote)" />
+          </xsl:call-template>
+        </xsl:if>
       </xsl:for-each>
     </ul>
   </xsl:template>
