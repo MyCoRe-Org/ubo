@@ -14,7 +14,7 @@
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form">
   
       <xed:source uri="xslStyle:mods-preprocessor:mcrobject:{$id}" />
-      <xed:source uri="xslStyle:mods-filter-supported,mods2mycoreobject,mods-preprocessor:session:{$key}" />
+      <xed:source uri="xslStyle:mods2mycoreobject,mods-preprocessor:session:{$key}" />
       
       <xed:cancel url="servlets/DozBibEntryServlet?mode=show&amp;id={$id}" />
       <xed:cancel url="newPublication.xed" />

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2016 Duisburg-Essen University Library
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v2.0
  * which accompanies this distribution, and is available at
@@ -66,10 +66,11 @@ public class NewPublicationWizard extends MCRServlet {
                 }
             }
             checkForExistingDuplicates(job);
-        } else if (step.equals("genres"))
+        } else if (step.equals("genres")) {
             redirectToGenreSelection(job.getResponse());
-        else if (step.equals("form"))
+        } else if (step.equals("form")) {
             redirectToForm(job.getResponse());
+        }
     }
 
     private void storeAnySubmittedMODS(MCRServletJob job) throws IOException {
@@ -88,7 +89,7 @@ public class NewPublicationWizard extends MCRServlet {
         Element mods = getMODSfromSession();
         mods.removeChildren("titleInfo", MCRConstants.MODS_NAMESPACE);
         mods.removeChildren("name", MCRConstants.MODS_NAMESPACE);
-        mods = MCRURIResolver.instance().resolve("enrich:import:session:" + sessionKey);
+        mods = MCRURIResolver.instance().resolve("xslStyle:mods-filter-supported:enrich:import:session:" + sessionKey);
         MCRSessionMgr.getCurrentSession().put(sessionKey, mods);
     }
 
@@ -106,22 +107,24 @@ public class NewPublicationWizard extends MCRServlet {
     }
 
     private void checkForExistingDuplicates(MCRServletJob job)
-        throws UnsupportedEncodingException, SolrServerException, IOException {
+            throws UnsupportedEncodingException, SolrServerException, IOException {
         Element mods = getMODSfromSession();
         String query = buildQuery(mods);
 
-        if (publicationMayAlreadyExist(query))
+        if (publicationMayAlreadyExist(query)) {
             redirectToResults(job.getResponse(), query);
-        else
+        } else {
             redirectToGenreSelection(job.getResponse());
+        }
     }
 
     private String buildQuery(Element mods) {
         StringBuilder query = new StringBuilder("status:confirmed AND (");
 
         Set<DeDupCriterion> criteria = new DeDupCriteriaBuilder().buildFromMODS(mods);
-        for (DeDupCriterion criterion : criteria)
+        for (DeDupCriterion criterion : criteria) {
             query.append("dedup:").append(MCRSolrUtils.escapeSearchValue(criterion.getKey())).append(" OR ");
+        }
 
         query.append("(title:\"").append(getByXPath(mods, "mods:titleInfo/mods:title")).append('"');
         query.append(" AND person:\"").append(getByXPath(mods, "mods:name/mods:namePart")).append("\"))");
@@ -153,9 +156,10 @@ public class NewPublicationWizard extends MCRServlet {
 
     private void redirectToForm(HttpServletResponse res) throws IOException {
         Element mods = getMODSfromSession();
-        if (!hasIdentifier())
+        if (!hasIdentifier()) {
             mods.removeChild("name", MCRConstants.MODS_NAMESPACE);
-        
+        }
+
         String form = mods.getAttribute("form").detach().getValue();
         String url = MCRFrontendUtil.getBaseURL() + form + "?key=" + sessionKey;
         res.sendRedirect(res.encodeRedirectURL(url));
