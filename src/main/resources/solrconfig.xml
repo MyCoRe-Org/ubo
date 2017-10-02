@@ -838,6 +838,7 @@
       <str name="facet">true</str>
       <str name="facet.mincount">1</str>
       <str name="facet.field">status</str>
+      <str name="facet.field">importID</str>
       <str name="facet.field">year</str>
       <str name="facet.field">facet_person</str>
       <str name="facet.field">subject</str>

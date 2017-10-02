@@ -92,7 +92,17 @@
 <xsl:variable name="permission.admin" xmlns:check="xalan://unidue.ubo.AccessControl" select="check:currentUserIsAdmin()" />
 
 <!-- List a facet -->
-<xsl:template match="lst[@name='facet_fields']/lst[int][not(@name='status') or $permission.admin]">
+<xsl:template match="lst[@name='facet_fields']/lst[int]">
+  <xsl:choose>
+    <xsl:when test="(@name='status') and not($permission.admin)" /> <!-- do not show status facet if not admin -->
+    <xsl:when test="(@name='importID') and not($permission.admin)" /> <!-- do not show importID facet if not admin -->
+    <xsl:otherwise>
+      <xsl:call-template name="display.facet" />
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="display.facet">
   <article class="highlight2">
     <hgroup class="ubo-facets"><h3><xsl:value-of select="i18n:translate(concat('facets.facet.',str:replaceAll(str:new(@name),'facet_','')))" />:</h3></hgroup>
     <ul id="{generate-id(.)}" class="ubo-facets">
