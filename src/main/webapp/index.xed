@@ -70,7 +70,7 @@
   </article>
 
   <article class="highlight1">
-    <xinclude uri="xslStyle:response-newest:solr:q=status:confirmed&amp;rows=4&amp;sort=year+desc,+created+desc&amp;facet=false&amp;fl=id,year" />
+    <xinclude uri="xslStyle:response-newest:solr:q=status:confirmed+AND+year:[2017+TO+2018]&amp;rows=4&amp;sort=created+desc,year+desc&amp;facet=false&amp;fl=id,year" />
   </article>
   
   <sidebar>
