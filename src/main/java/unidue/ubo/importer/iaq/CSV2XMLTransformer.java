@@ -20,23 +20,33 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.jdom2.Element;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRContent;
+import org.mycore.common.content.MCRFileContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRContentTransformer;
+import org.mycore.common.events.MCRStartupHandler;
 
 public class CSV2XMLTransformer extends MCRContentTransformer {
 
-    private final static char DELIMITER = ',';
-    private final static char QUOTE = '"';
-    private final static char ESCAPE = '\\';
-    private final static boolean WITH_HEADER = true;
+    private CSVFormat format = buildCSVFormat(',', '"', '\\');
 
-    private CSVFormat format = buildCSVFormat();
+    @Override
+    public void init(String id) {
+        super.init(id);
 
-    private CSVFormat buildCSVFormat() {
-        format = CSVFormat.DEFAULT.withDelimiter(DELIMITER).withQuote(QUOTE).withEscape(ESCAPE);
+        String configPrefix = "MCR.ContentTransformer." + id + ".";
+        char delimiter = MCRConfiguration.instance().getString(configPrefix + "DelimiterCharacter", ",").charAt(0);
+        char quote = MCRConfiguration.instance().getString(configPrefix + "QuoteCharacter", "\"").charAt(0);
+        char escape = MCRConfiguration.instance().getString(configPrefix + "EscapeCharacter", "\\").charAt(0);
+        format = buildCSVFormat(delimiter, quote, escape);
+    }
+
+    private CSVFormat buildCSVFormat(char delimiter, char quote, char escape) {
+        CSVFormat format = CSVFormat.DEFAULT.withDelimiter(delimiter).withQuote(quote).withEscape(escape);
         format = format.withIgnoreEmptyLines(true).withIgnoreSurroundingSpaces();
-        return WITH_HEADER ? format.withFirstRecordAsHeader() : format;
+        format = format.withFirstRecordAsHeader();
+        return format;
     }
 
     public MCRJDOMContent transform(MCRContent source) throws IOException {
