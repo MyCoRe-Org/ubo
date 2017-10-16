@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016 Duisburg-Essen University Library
+ * Copyright (c) 2017 Duisburg-Essen University Library
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v2.0
@@ -9,9 +9,6 @@
 
 package unidue.ubo.importer;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +20,7 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.solr.MCRSolrClientFactory;
@@ -45,8 +43,6 @@ public class DozBibImportServlet extends MCRServlet {
             res.sendError(HttpServletResponse.SC_FORBIDDEN);
         } else if (AccessControl.systemInReadOnlyMode()) {
             DozBibEntryServlet.sendReadOnlyError(res);
-        } else if (req.getParameter("importID") != null) {
-            tryToWaitUntilSolrIndexingFinished(req, res);
         } else {
             doImport(req, res);
         }
@@ -58,7 +54,14 @@ public class DozBibImportServlet extends MCRServlet {
 
         ImportJob importJob = buildImportJob(formInput);
         importJob.handleImport(formInput);
-        redirectToWaitForIndexingFinished(res, importJob);
+
+        //redirectToWaitForIndexingFinished(res, importJob);
+
+        MCRSessionMgr.getCurrentSession().commitTransaction();
+
+        String queryString = tryToWaitUntilSolrIndexingFinished(importJob);
+        String url = "solr/select?q=" + queryString;
+        res.sendRedirect(getServletBaseURL() + url);
     }
 
     private ImportJob buildImportJob(Element formInput) {
@@ -67,29 +70,15 @@ public class DozBibImportServlet extends MCRServlet {
         return ("Evaluna".equals(type) ? new EvalunaImportJob() : new ListImportJob(type));
     }
 
-    private void redirectToWaitForIndexingFinished(HttpServletResponse res, ImportJob importer)
-            throws UnsupportedEncodingException, IOException {
-        String importID = importer.getID();
-        int numImported = importer.getNumPublications();
-
-        String qs = "importID=" + URLEncoder.encode(importID, "UTF-8") + "&numExpected=" + numImported;
-        res.sendRedirect("DozBibImportServlet?" + qs);
-    }
-
-    private void tryToWaitUntilSolrIndexingFinished(HttpServletRequest req, HttpServletResponse res)
-            throws IOException {
-        String importID = req.getParameter("importID");
-        int numExpected = Integer.parseInt(req.getParameter("numExpected"));
-        String queryString = "importID:\"" + MCRSolrUtils.escapeSearchValue(importID) + "\"";
-        tryToWaitUntilSolrIndexingFinished(numExpected, queryString);
-        String url = "solr/select?q=" + queryString;
-        res.sendRedirect(getServletBaseURL() + url);
-    }
-
     private static final int MAX_SOLR_CHECKS = 10; // times
     private static final int SECONDS_TO_WAIT_BETWEEN_SOLR_CHECKS = 2;
 
-    private void tryToWaitUntilSolrIndexingFinished(int numResultsExpected, String queryString) {
+    private String tryToWaitUntilSolrIndexingFinished(ImportJob importJob) {
+        String importID = importJob.getID();
+        int numResultsExpected = importJob.getNumPublications();
+
+        String queryString = "importID:\"" + MCRSolrUtils.escapeSearchValue(importID) + "\"";
+
         SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
         SolrQuery query = new SolrQuery();
         query.setQuery(queryString);
@@ -107,5 +96,7 @@ public class DozBibImportServlet extends MCRServlet {
         } catch (Exception ex) {
             LOGGER.warn(ex);
         }
+
+        return queryString;
     }
 }
