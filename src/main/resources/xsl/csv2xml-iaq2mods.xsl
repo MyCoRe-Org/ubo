@@ -275,7 +275,7 @@
   <mods:classification valueURI="{$uri}#sowi" authorityURI="{$uri}"/>
 </xsl:template>
 
-<xsl:template match="projekt">
+<xsl:template name="projekt">
  <xsl:if test="projekt">
    <mods:extension>
       <xsl:for-each select="xalan:tokenize(projekt,';')">
