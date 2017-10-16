@@ -7,7 +7,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  **/
 
-package unidue.ubo.importer.bibtex;
+package unidue.ubo.importer;
 
 import org.jdom2.Element;
 import org.mycore.common.content.MCRContent;
@@ -15,14 +15,20 @@ import org.mycore.common.content.MCRStringContent;
 
 import unidue.ubo.importer.ImportJob;
 
-public class BibTeXImportJob extends ImportJob {
+public class ListImportJob extends ImportJob {
+
+    private String type;
+
+    public ListImportJob(String type) {
+        this.type = type;
+    }
 
     protected String getTransformerID() {
-        return "import.BibTeX";
+        return "import." + type;
     }
 
     protected MCRContent getSource(Element formInput) throws Exception {
-        String code = formInput.getChildTextTrim("bibtex");
+        String code = formInput.getChildTextTrim("source");
         return new MCRStringContent(code);
     }
 }

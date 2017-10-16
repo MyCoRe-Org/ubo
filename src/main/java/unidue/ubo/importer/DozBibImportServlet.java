@@ -30,7 +30,6 @@ import org.mycore.solr.MCRSolrUtils;
 
 import unidue.ubo.AccessControl;
 import unidue.ubo.DozBibEntryServlet;
-import unidue.ubo.importer.bibtex.BibTeXImportJob;
 import unidue.ubo.importer.evaluna.EvalunaImportJob;
 
 @SuppressWarnings("serial")
@@ -65,7 +64,7 @@ public class DozBibImportServlet extends MCRServlet {
     private ImportJob buildImportJob(Element formInput) {
         String type = formInput.getAttributeValue("type");
         LOGGER.info("Importing from " + type + "...");
-        return "BibTeX".equals(type) ? new BibTeXImportJob() : new EvalunaImportJob();
+        return ("Evaluna".equals(type) ? new EvalunaImportJob() : new ListImportJob(type));
     }
 
     private void redirectToWaitForIndexingFinished(HttpServletResponse res, ImportJob importer)
