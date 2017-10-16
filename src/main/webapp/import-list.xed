@@ -35,19 +35,17 @@
 
           <xed:bind xpath="@type">
             <div>
-              <label for="type">Format:</label>
-              <select id="type" style="width:400px;">
+              <select id="type" style="width:600px; margin-left:5px;">
                 <option value="BibTeX">BibTeX Quellcode</option>
-                <option value="IAQ">IAQ Literatorliste im CSV-Format</option> 
+                <option value="IAQ">IAQ Literaturliste im CSV-Format (Erste Zeile: Spaltenüberschriften)</option> 
               </select>
             </div>
           </xed:bind>
 
           <xed:repeat xpath="subject" max="5">
             <div>
-              <label for="{xed:generate-id()}"><xed:output i18n="ubo.subject" />:</label>
-              <select id="{xed:generate-id()}" style="width:400px;" class="{$xed-validation-marker}">
-                <option value=""><xed:output i18n="search.select" /></option>
+              <select style="width:600px; margin-left:5px;" class="{$xed-validation-marker}">
+                <option value=""><xed:output i18n="ubo.subject" />: <xed:output i18n="search.select" /></option>
                 <xed:include uri="xslStyle:fachref2options:resource:fachreferate.xml" />
               </select>
               <xed:controls />
@@ -56,9 +54,8 @@
 
           <xed:bind xpath="origin">
             <div>
-              <label for="{xed:generate-id()}"><xed:output i18n="ubo.department" />:</label>
-              <select id="{xed:generate-id()}" style="width:400px;" class="autocomplete {$xed-validation-marker}">
-                <option value=""><xed:output i18n="search.select" /></option>
+              <select style="width:605px; margin-left:5px;" class="autocomplete {$xed-validation-marker}">
+                <option value=""><xed:output i18n="ubo.department" />:<xed:output i18n="search.select" /></option>
                 <xed:include uri="xslStyle:items2options:classification:editor:-1:children:ORIGIN" />
               </select>
             </div>
@@ -66,10 +63,9 @@
 
           <xed:bind xpath="source">
             <div>
-              <label for="{xed:generate-id()}">Literaturliste:</label>
-              <textarea id="{xed:generate-id()}" class="{$xed-validation-marker}" type="text" style="width:520px; height:300px;" />
+              <textarea id="{xed:generate-id()}" class="{$xed-validation-marker}" type="text" style="width:700px; height:300px; margin-left:5px;" placeholder="BibTeX Quellcode bzw. CSV-Literaturliste hierhin kopieren" />
             </div>
-            <xed:validate required="true" display="global">BibTeX Quellcode bzw. CSV-Literaturlliste</xed:validate>
+            <xed:validate required="true" display="global" />
           </xed:bind>
 
           <div class="cancel-submit">
