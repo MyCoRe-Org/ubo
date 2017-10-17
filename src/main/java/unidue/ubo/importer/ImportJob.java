@@ -14,21 +14,31 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.transformer.MCRContentTransformer;
 import org.mycore.common.content.transformer.MCRContentTransformerFactory;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrUtils;
 import org.xml.sax.SAXException;
 
 public abstract class ImportJob {
+
+    private final static Logger LOGGER = LogManager.getLogger(ImportJob.class);
 
     private final static SimpleDateFormat ID_BUILDER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -72,11 +82,44 @@ public abstract class ImportJob {
         }
     }
 
-    public void handleImport(Element formInput) throws Exception {
+    public void transform(Element formInput) throws Exception {
+        LOGGER.info("Importing from " + formInput.getAttributeValue("type") + "...");
         MCRContent source = getSource(formInput);
         transform(source);
         addFixedCategories(formInput);
+    }
+
+    public void saveAndIndex() throws MCRAccessException {
         savePublications();
+        MCRSessionMgr.getCurrentSession().commitTransaction();
+        tryToWaitUntilSolrIndexingFinished();
+    }
+
+    public String getQueryString() {
+        return "importID:\"" + MCRSolrUtils.escapeSearchValue(this.id) + "\"";
+    }
+
+    private static final int MAX_SOLR_CHECKS = 10; // times
+    private static final int SECONDS_TO_WAIT_BETWEEN_SOLR_CHECKS = 2;
+
+    private void tryToWaitUntilSolrIndexingFinished() {
+        SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
+        SolrQuery query = new SolrQuery();
+        query.setQuery(getQueryString());
+        query.setRows(0);
+
+        try {
+            int numTries = 0;
+            long numFound;
+            do {
+                TimeUnit.SECONDS.sleep(SECONDS_TO_WAIT_BETWEEN_SOLR_CHECKS);
+                numFound = solrClient.query(query).getResults().getNumFound();
+                LOGGER.info("Check if SOLR indexed all publications: #" + numTries + " " + numFound + " / "
+                        + getNumPublications());
+            } while ((numFound < getNumPublications()) && (++numTries < MAX_SOLR_CHECKS));
+        } catch (Exception ex) {
+            LOGGER.warn(ex);
+        }
     }
 
     protected abstract String getTransformerID();

@@ -9,22 +9,15 @@
 
 package unidue.ubo.importer;
 
-import java.util.concurrent.TimeUnit;
+import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.mycore.common.MCRSessionMgr;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
-import org.mycore.solr.MCRSolrClientFactory;
-import org.mycore.solr.MCRSolrUtils;
 
 import unidue.ubo.AccessControl;
 import unidue.ubo.DozBibEntryServlet;
@@ -32,8 +25,6 @@ import unidue.ubo.importer.evaluna.EvalunaImportJob;
 
 @SuppressWarnings("serial")
 public class DozBibImportServlet extends MCRServlet {
-
-    private final static Logger LOGGER = LogManager.getLogger(DozBibImportServlet.class);
 
     public void doGetPost(MCRServletJob job) throws Exception {
         HttpServletRequest req = job.getRequest();
@@ -53,50 +44,20 @@ public class DozBibImportServlet extends MCRServlet {
         Element formInput = doc.detachRootElement();
 
         ImportJob importJob = buildImportJob(formInput);
-        importJob.handleImport(formInput);
+        importJob.transform(formInput);
+        importJob.saveAndIndex();
 
-        //redirectToWaitForIndexingFinished(res, importJob);
-
-        MCRSessionMgr.getCurrentSession().commitTransaction();
-
-        String queryString = tryToWaitUntilSolrIndexingFinished(importJob);
-        String url = "solr/select?q=" + queryString;
-        res.sendRedirect(getServletBaseURL() + url);
+        redirectToResultsPage(res, importJob);
     }
 
     private ImportJob buildImportJob(Element formInput) {
         String type = formInput.getAttributeValue("type");
-        LOGGER.info("Importing from " + type + "...");
         return ("Evaluna".equals(type) ? new EvalunaImportJob() : new ListImportJob(type));
     }
 
-    private static final int MAX_SOLR_CHECKS = 10; // times
-    private static final int SECONDS_TO_WAIT_BETWEEN_SOLR_CHECKS = 2;
-
-    private String tryToWaitUntilSolrIndexingFinished(ImportJob importJob) {
-        String importID = importJob.getID();
-        int numResultsExpected = importJob.getNumPublications();
-
-        String queryString = "importID:\"" + MCRSolrUtils.escapeSearchValue(importID) + "\"";
-
-        SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
-        SolrQuery query = new SolrQuery();
-        query.setQuery(queryString);
-        query.setRows(0);
-
-        try {
-            int numTries = 0;
-            long numFound;
-            do {
-                TimeUnit.SECONDS.sleep(SECONDS_TO_WAIT_BETWEEN_SOLR_CHECKS);
-                numFound = solrClient.query(query).getResults().getNumFound();
-                LOGGER.info("Check if SOLR indexed all publications: #" + numTries + " " + numFound + " / "
-                        + numResultsExpected);
-            } while ((numFound < numResultsExpected) && (++numTries < MAX_SOLR_CHECKS));
-        } catch (Exception ex) {
-            LOGGER.warn(ex);
-        }
-
-        return queryString;
+    private void redirectToResultsPage(HttpServletResponse res, ImportJob importJob) throws IOException {
+        String queryString = importJob.getQueryString();
+        String url = "solr/select?q=" + queryString;
+        res.sendRedirect(getServletBaseURL() + url);
     }
 }
