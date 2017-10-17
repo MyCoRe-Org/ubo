@@ -35,7 +35,7 @@
   <item ref="import-list.xed" admin="true">
     <label xml:lang="de">Importieren</label>
     <label xml:lang="en">Import</label>
-    <item id="dozbib.import.bibtex" ref="import-list.xed" admin="true">
+    <item id="dozbib.import.list" ref="import-list.xed" admin="true">
       <label xml:lang="de">Literaturliste importieren</label>
       <label xml:lang="en">Import publication list</label>
     </item>  
