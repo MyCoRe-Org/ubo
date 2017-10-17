@@ -7,7 +7,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  **/
 
-package unidue.ubo.importer.iaq;
+package unidue.ubo.importer;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,10 +22,8 @@ import org.apache.commons.csv.CSVRecord;
 import org.jdom2.Element;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRContent;
-import org.mycore.common.content.MCRFileContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRContentTransformer;
-import org.mycore.common.events.MCRStartupHandler;
 
 public class CSV2XMLTransformer extends MCRContentTransformer {
 
@@ -80,12 +78,12 @@ public class CSV2XMLTransformer extends MCRContentTransformer {
 
     private void cell2xml(CSVRecord record, Element row, String name) {
         String value = record.get(name);
-        if ((value == null) || value.isEmpty()) {
+        if ((value == null) || value.trim().isEmpty()) {
             return;
         }
 
         Element cell = new Element(name.replace(' ', '_'));
-        cell.setText(value);
+        cell.setText(value.trim());
         row.addContent(cell);
     }
 
