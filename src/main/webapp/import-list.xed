@@ -33,16 +33,24 @@
         <fieldset>
           <legend>Literaturliste importieren</legend>
 
-          <xed:bind xpath="@type">
-            <div>
-              <select id="type" style="width:600px; margin-left:5px;">
+          <div>
+            <xed:bind xpath="@sourceType">
+              <select style="width:300px; margin-left:5px;">
                 <option value="BibTeX">BibTeX Quellcode</option>
                 <option value="IAQ">Literaturliste im CSV-Format: IAQ</option> 
                 <option value="NST">Literaturliste im CSV-Format: Nanostrukturtechnik</option> 
                 <option value="Opto">Literaturliste im CSV-Format: Optoelektronik</option> 
               </select>
-            </div>
-          </xed:bind>
+            </xed:bind>
+  
+            <xed:bind xpath="@targetType">
+              <select style="width:300px; margin-left:5px;">
+                <option value="preview-html">Vorschau (HTML)</option> 
+                <option value="preview-mods-raw">Vorschau (MODS)</option> 
+                <option value="import">direkt importieren</option>
+              </select>
+            </xed:bind>
+          </div>
 
           <xed:repeat xpath="subject" max="5">
             <div>

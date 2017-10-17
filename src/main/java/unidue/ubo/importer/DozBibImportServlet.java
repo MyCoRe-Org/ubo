@@ -13,11 +13,15 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.TransformerException;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.mycore.access.MCRAccessException;
+import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
+import org.xml.sax.SAXException;
 
 import unidue.ubo.AccessControl;
 import unidue.ubo.DozBibEntryServlet;
@@ -35,27 +39,44 @@ public class DozBibImportServlet extends MCRServlet {
         } else if (AccessControl.systemInReadOnlyMode()) {
             DozBibEntryServlet.sendReadOnlyError(res);
         } else {
-            doImport(req, res);
+            handleImportJob(req, res);
         }
     }
 
-    private void doImport(HttpServletRequest req, HttpServletResponse res) throws Exception {
+    private void handleImportJob(HttpServletRequest req, HttpServletResponse res) throws Exception {
         Document doc = (Document) (req.getAttribute("MCRXEditorSubmission"));
         Element formInput = doc.detachRootElement();
 
         ImportJob importJob = buildImportJob(formInput);
         importJob.transform(formInput);
-        importJob.saveAndIndex();
 
-        redirectToResultsPage(res, importJob);
+        String targetType = formInput.getAttributeValue("targetType");
+        if (targetType.startsWith("preview")) {
+            doPreview(req, res, importJob, targetType);
+        } else {
+            doImport(req, res, importJob);
+        }
     }
 
     private ImportJob buildImportJob(Element formInput) {
-        String type = formInput.getAttributeValue("type");
-        return ("Evaluna".equals(type) ? new EvalunaImportJob() : new ListImportJob(type));
+        String sourceType = formInput.getAttributeValue("sourceType");
+        return ("Evaluna".equals(sourceType) ? new EvalunaImportJob() : new ListImportJob(sourceType));
     }
 
-    private void redirectToResultsPage(HttpServletResponse res, ImportJob importJob) throws IOException {
+    private void doPreview(HttpServletRequest req, HttpServletResponse res, ImportJob importJob, String targetType)
+            throws IOException, TransformerException, SAXException {
+        Element export = new Element("export");
+        for (Document mcrObj : importJob.getPublications()) {
+            export.addContent(mcrObj.getRootElement().detach());
+        }
+
+        req.setAttribute("XSL.Style", targetType.substring(targetType.indexOf('-') + 1));
+        getLayoutService().doLayout(req, res, new MCRJDOMContent(export));
+    }
+
+    private void doImport(HttpServletRequest req, HttpServletResponse res, ImportJob importJob)
+            throws MCRAccessException, IOException {
+        importJob.saveAndIndex();
         String queryString = importJob.getQueryString();
         String url = "solr/select?q=" + queryString;
         res.sendRedirect(getServletBaseURL() + url);

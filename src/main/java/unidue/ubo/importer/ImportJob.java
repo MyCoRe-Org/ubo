@@ -50,6 +50,10 @@ public abstract class ImportJob {
         return id;
     }
 
+    public List<Document> getPublications() {
+        return publications;
+    }
+
     public int getNumPublications() {
         return publications.size();
     }
@@ -87,6 +91,7 @@ public abstract class ImportJob {
         MCRContent source = getSource(formInput);
         transform(source);
         addFixedCategories(formInput);
+        LOGGER.info("Transformed " + getNumPublications() + " publications");
     }
 
     public void saveAndIndex() throws MCRAccessException {
