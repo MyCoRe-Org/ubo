@@ -16,7 +16,8 @@
       <xed:cleanup-rule xpath="//limit" relevant-if="string-length(text()) &gt; 0" />
     
       <xed:bind xpath="/import">
-        <xed:bind xpath="@targetType" default="Evaluna" />
+        <xed:bind xpath="@sourceType" default="Evaluna" />
+        <xed:bind xpath="@targetType" default="import" />
         
         <xed:if test="$xed-validation-failed">
           <div class="validation-failures">

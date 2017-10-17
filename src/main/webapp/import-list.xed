@@ -33,25 +33,6 @@
         <fieldset>
           <legend>Literaturliste importieren</legend>
 
-          <div>
-            <xed:bind xpath="@sourceType">
-              <select style="width:300px; margin-left:5px;">
-                <option value="BibTeX">BibTeX Quellcode</option>
-                <option value="IAQ">Literaturliste im CSV-Format: IAQ</option> 
-                <option value="NST">Literaturliste im CSV-Format: Nanostrukturtechnik</option> 
-                <option value="Opto">Literaturliste im CSV-Format: Optoelektronik</option> 
-              </select>
-            </xed:bind>
-  
-            <xed:bind xpath="@targetType">
-              <select style="width:300px; margin-left:5px;">
-                <option value="preview-html">Vorschau (HTML)</option> 
-                <option value="preview-mods-raw">Vorschau (MODS)</option> 
-                <option value="import">direkt importieren</option>
-              </select>
-            </xed:bind>
-          </div>
-
           <xed:repeat xpath="subject" max="5">
             <div>
               <select style="width:600px; margin-left:5px;" class="{$xed-validation-marker}">
@@ -71,6 +52,25 @@
             </div>
           </xed:bind>
 
+          <div>
+            <xed:bind xpath="@sourceType">
+              <select style="width:300px; margin-left:5px;">
+                <option value="BibTeX">BibTeX Quellcode</option>
+                <option value="IAQ">Literaturliste im CSV-Format: IAQ</option> 
+                <option value="NST">Literaturliste im CSV-Format: Nanostrukturtechnik</option> 
+                <option value="Opto">Literaturliste im CSV-Format: Optoelektronik</option> 
+              </select>
+            </xed:bind>
+  
+            <xed:bind xpath="@targetType">
+              <select style="width:295px;">
+                <option value="preview-html">Vorschau (HTML)</option> 
+                <option value="preview-mods-raw">Vorschau (MODS)</option> 
+                <option value="import">direkt importieren</option>
+              </select>
+            </xed:bind>
+          </div>
+
           <xed:bind xpath="source">
             <div>
               <textarea id="{xed:generate-id()}" class="{$xed-validation-marker}" type="text" style="width:700px; height:300px; margin-left:5px;" placeholder="BibTeX Quellcode bzw. CSV-Literaturliste hierhin kopieren" />
@@ -78,7 +78,7 @@
             <xed:validate required="true" display="global" />
           </xed:bind>
 
-          <div class="cancel-submit">
+          <div style="margin-left:5px;">
             <button class="roundedButton" type="submit" xed:target="servlet" xed:href="DozBibImportServlet">
               <xed:output i18n="button.submit" />
             </button>
