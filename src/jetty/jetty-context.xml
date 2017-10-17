@@ -12,4 +12,5 @@
     </Set>
     <Set name="checkWelcomeFiles">true</Set>
   </Get>
+  <Set name="maxFormContentSize" type="int">999999</Set>
  </Configure>
