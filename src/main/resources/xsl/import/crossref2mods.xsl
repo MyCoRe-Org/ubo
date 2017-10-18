@@ -25,8 +25,9 @@
       <xsl:apply-templates select="dc:title" />
       <xsl:apply-templates select="dc:creator" />
       <xsl:apply-templates select="dc:isPartOf/bibo:Journal" />
-      <xsl:apply-templates select="dc:date[starts-with(@rdf:datatype,'http://www.w3.org/2001/XMLSchema')]" />
+      <xsl:call-template name="originInfo" />
       <xsl:apply-templates select="bibo:doi" />
+      <xsl:apply-templates select="dc:identifier[starts-with(.,'10.1007/978')]" />
     </mods:mods>
   </xsl:template>
   
@@ -96,6 +97,12 @@
     </mods:identifier>
   </xsl:template>
   
+  <xsl:template match="dc:identifier[starts-with(.,'10.1007/978')]">
+    <mods:identifier type="isbn">
+      <xsl:value-of select="substring-after(text(),'/')" />
+    </mods:identifier>
+  </xsl:template>
+  
   <xsl:template match="bibo:issn">
     <mods:identifier type="issn">
       <xsl:value-of select="text()" />
@@ -122,12 +129,23 @@
     </mods:end>
   </xsl:template>
 
-  <xsl:template match="dc:date[starts-with(@rdf:datatype,'http://www.w3.org/2001/XMLSchema')]">
+  <xsl:template name="originInfo">
     <mods:originInfo>
-      <mods:dateIssued encoding="w3cdtf">
-        <xsl:value-of select="substring(text(),1,4)" />
-      </mods:dateIssued>
+      <xsl:apply-templates select="dc:date[starts-with(@rdf:datatype,'http://www.w3.org/2001/XMLSchema')]" />
+      <xsl:apply-templates select="dc:publisher" />
     </mods:originInfo>
+  </xsl:template>
+
+  <xsl:template match="dc:date[starts-with(@rdf:datatype,'http://www.w3.org/2001/XMLSchema')]">
+    <mods:dateIssued encoding="w3cdtf">
+      <xsl:value-of select="substring(text(),1,4)" />
+    </mods:dateIssued>
+  </xsl:template>
+  
+  <xsl:template match="dc:publisher">
+    <mods:publisher>
+      <xsl:value-of select="text()" />
+    </mods:publisher>
   </xsl:template>
   
 </xsl:stylesheet>
