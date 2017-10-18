@@ -88,7 +88,7 @@
       <mods:role>
         <mods:roleTerm authority="marcrelator" type="code">aut</mods:roleTerm>
       </mods:role>
-      <xsl:for-each select="subfield[@label='p']">
+      <xsl:for-each select="subfield[@label='p'][1]|subfield[@label='a'][1]">
         <mods:namePart type="family">
           <xsl:value-of select="substring-before(.,', ')" />
         </mods:namePart>
