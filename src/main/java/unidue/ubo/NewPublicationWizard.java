@@ -119,7 +119,7 @@ public class NewPublicationWizard extends MCRServlet {
     }
 
     private String buildQuery(Element mods) {
-        StringBuilder query = new StringBuilder("status:confirmed AND (");
+        StringBuilder query = new StringBuilder("objectProject:ubo AND (");
 
         Set<DeDupCriterion> criteria = new DeDupCriteriaBuilder().buildFromMODS(mods);
         for (DeDupCriterion criterion : criteria) {
