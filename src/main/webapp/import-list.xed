@@ -12,8 +12,8 @@
   
     <p>
       Über dieses Formular können Sie eine Literaturliste im
-      <a href="http://artis.imag.fr/~Xavier.Decoret/resources/xdkbibtex/bibtex_summary.html">BibTeX Format</a> 
-      oder eine CSV-Datei importieren.
+      <a href="http://artis.imag.fr/~Xavier.Decoret/resources/xdkbibtex/bibtex_summary.html">BibTeX Format</a>,
+      alle Publikationen einer gegebenen ORCID oder eine CSV-Datei importieren.
     </p>
 
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form">
@@ -56,6 +56,7 @@
             <xed:bind xpath="@sourceType">
               <select style="width:300px; margin-left:5px;">
                 <option value="BibTeX">BibTeX Quellcode</option>
+                <option value="ORCID">Publikationen aus dem ORCID Profil</option>
                 <option value="IAQ">Literaturliste im CSV-Format: IAQ</option> 
                 <option value="NST">Literaturliste im CSV-Format: Nanostrukturtechnik</option> 
                 <option value="Opto">Literaturliste im CSV-Format: Optoelektronik</option> 
@@ -73,7 +74,7 @@
 
           <xed:bind xpath="source">
             <div>
-              <textarea id="{xed:generate-id()}" class="{$xed-validation-marker}" type="text" style="width:700px; height:300px; margin-left:5px;" placeholder="BibTeX Quellcode bzw. CSV-Literaturliste hierhin kopieren" />
+              <textarea id="{xed:generate-id()}" class="{$xed-validation-marker}" type="text" style="width:700px; height:300px; margin-left:5px;" placeholder="BibTeX Quellcode bzw. ORCID bzw. CSV-Literaturliste hierhin kopieren" />
             </div>
             <xed:validate required="true" display="global" />
           </xed:bind>
