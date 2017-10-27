@@ -45,7 +45,6 @@
                       <option value="ppn">GBV/SWB PPN</option>
                       <option value="hbz">HBZ HT-Nummer</option>
                       <option value="issn">ISSN</option>
-                      <option value="orcid">ORCID Work Path</option>
                     </xed:if>
                   </select>:
                 </label>
