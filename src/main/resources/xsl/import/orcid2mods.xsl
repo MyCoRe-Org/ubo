@@ -19,7 +19,7 @@
       <xsl:apply-templates select="common:publication-date/common:year" />
       <xsl:apply-templates select="work:short-description" />
       <xsl:apply-templates select="work:url" />
-      <xsl:apply-templates select="common:external-ids/common:external-id" />
+      <xsl:apply-templates select="common:external-ids/common:external-id[common:external-id-relationship='self']" />
       <xsl:apply-templates select="common:language-code" />
     </mods:mods>
   </xsl:template>
@@ -69,6 +69,7 @@
           <xsl:value-of select="text()" />
         </mods:title>
       </mods:titleInfo>
+      <xsl:apply-templates select="../common:external-ids/common:external-id[common:external-id-relationship='part-of']" />
     </mods:relatedItem>  
   </xsl:template>
 
@@ -121,7 +122,7 @@
           <xsl:when test="work:contributor-attributes/work:contributor-role='co-inventor'">ctb</xsl:when>
           <xsl:when test="work:contributor-attributes/work:contributor-role='graduate-student'">ctb</xsl:when>
           <xsl:when test="work:contributor-attributes/work:contributor-role='other-inventor'">ctb</xsl:when>
-          <xsl:when test="work:contributor-attributes/work:contributor-role='principal-investigator'">res</xsl:when>
+          <xsl:when test="work:contributor-attributes/work:contributor-role='principal-investigator'">rth</xsl:when>
           <xsl:when test="work:contributor-attributes/work:contributor-role='postdoctoral-researcher'">res</xsl:when>
           <xsl:when test="work:contributor-attributes/work:contributor-role='support-staff'">ctb</xsl:when>
           <xsl:otherwise>aut</xsl:otherwise>
