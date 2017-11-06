@@ -67,8 +67,10 @@ public class OrcidWorksFetcher {
             String bibTeX = getBibTeX(work);
             if (bibTeX != null) {
                 Element modsFromBibTeX = bibTeX2MODS(bibTeX);
-                LOGGER.info("merging MODS from BibTeX into work");
-                merge(modsFromWork, modsFromBibTeX);
+                if (modsFromBibTeX != null) {
+                    LOGGER.info("merging MODS from BibTeX into work");
+                    merge(modsFromWork, modsFromBibTeX);
+                }
             }
 
             if (modsResult == null) {
@@ -116,7 +118,10 @@ public class OrcidWorksFetcher {
             MCRContent result = T_BIBTEX2MODS.transform(new MCRStringContent(bibTeX));
             return result.asXML().detachRootElement().getChild("mods", MCRConstants.MODS_NAMESPACE);
         } catch (Exception ex) {
-            throw new MCRException(ex);
+            String msg = "Exception parsing BibTeX: " + ex.getMessage();
+            msg += "\n" + bibTeX;
+            LOGGER.warn(msg);
+            return null;
         }
     }
 
