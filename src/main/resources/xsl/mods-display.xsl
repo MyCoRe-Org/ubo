@@ -274,7 +274,7 @@
   
   <xsl:template match="mods:nameIdentifier[@type='orcid']">
     <span class="nameIdentifier" title="ORCID: {.}">
-      <a href="http://orcid.org/{.}">ORCID</a>
+      <a href="https://orcid.org/{.}">ORCID</a>
     </span>
   </xsl:template>
 
