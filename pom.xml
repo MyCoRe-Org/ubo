@@ -95,7 +95,7 @@
   <properties>
     <java.target.version>1.8</java.target.version>
     <hibernate.version>5.2.2.Final</hibernate.version>
-    <mycore.version>2017.06.0.1-SNAPSHOT</mycore.version>
+    <mycore.version>2017.07-SNAPSHOT</mycore.version>
     <log4j.version>2.6.1</log4j.version>
     <axis1.version>1.4</axis1.version>
     <timestamp>${maven.build.timestamp}</timestamp>
@@ -254,21 +254,6 @@
       <artifactId>wsdl4j</artifactId>
       <version>1.6.3</version>
       <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.bibsonomy</groupId>
-      <artifactId>bibsonomy-bibtex-parser</artifactId>
-      <version>3.2.1</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>jtidy</artifactId>
-          <groupId>jtidy</groupId>
-        </exclusion>
-        <exclusion>
-          <groupId>commons-logging</groupId>
-          <artifactId>commons-logging</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>net.sf.jtidy</groupId>

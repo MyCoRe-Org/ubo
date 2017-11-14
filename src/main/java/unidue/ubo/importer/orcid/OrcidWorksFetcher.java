@@ -14,19 +14,20 @@ import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.MCRStringContent;
 import org.mycore.common.content.transformer.MCRXSLTransformer;
 import org.mycore.common.xml.MCRURIResolver;
+import org.mycore.mods.bibtex.MCRBibTeX2MODSTransformer;
 import org.mycore.mods.merger.MCRMerger;
 import org.mycore.mods.merger.MCRMergerFactory;
-
-import unidue.ubo.importer.bibtex.BibTeX2MODSTransformer;
 
 public class OrcidWorksFetcher {
 
     private final static Logger LOGGER = LogManager.getLogger(OrcidWorksFetcher.class);
 
     private final static String NS_URI_WORK = "http://www.orcid.org/ns/work";
+
     private final static String NS_URI_ACTIVITIES = "http://www.orcid.org/ns/activities";
 
     private final static Namespace NS_ACTIVITIES = Namespace.getNamespace("activities", NS_URI_ACTIVITIES);
+
     private final static Namespace NS_WORK = Namespace.getNamespace("work", NS_URI_WORK);
 
     private final static String URI_2_FETCH_WORKS = "https://pub.orcid.org/v2.1/%s/works";
@@ -35,7 +36,7 @@ public class OrcidWorksFetcher {
 
     private final static MCRXSLTransformer T_WORK2MODS = new MCRXSLTransformer("xsl/import/orcid2mods.xsl");
 
-    private final static BibTeX2MODSTransformer T_BIBTEX2MODS = new BibTeX2MODSTransformer();
+    private final static MCRBibTeX2MODSTransformer T_BIBTEX2MODS = new MCRBibTeX2MODSTransformer();
 
     private String orcid;
 
