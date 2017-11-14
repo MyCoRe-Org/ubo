@@ -87,7 +87,7 @@ public abstract class ImportJob {
     }
 
     public void transform(Element formInput) throws Exception {
-        LOGGER.info("Importing from " + formInput.getAttributeValue("type") + "...");
+        LOGGER.info("Importing from " + getTransformerID() + "...");
         MCRContent source = getSource(formInput);
         transform(source);
         addFixedCategories(formInput);
