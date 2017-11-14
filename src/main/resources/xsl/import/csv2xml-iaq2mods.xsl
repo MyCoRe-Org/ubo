@@ -230,7 +230,7 @@
 
 <xsl:template match="sprache">
   <mods:language>
-    <mods:languageTerm type="code" encoding="rfc4646">
+    <mods:languageTerm type="code" authority="rfc4646">
       <xsl:value-of select="text()" />
     </mods:languageTerm>
   </mods:language>
