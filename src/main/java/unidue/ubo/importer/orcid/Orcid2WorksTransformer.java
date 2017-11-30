@@ -8,7 +8,7 @@ import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRContentTransformer;
 import org.mycore.orcid.MCRORCIDProfile;
-import org.mycore.orcid.works.MCRWorks;
+import org.mycore.orcid.works.MCRWorksSection;
 import org.xml.sax.SAXException;
 
 public class Orcid2WorksTransformer extends MCRContentTransformer {
@@ -17,14 +17,14 @@ public class Orcid2WorksTransformer extends MCRContentTransformer {
         String orcid = source.asString();
 
         MCRORCIDProfile profile = new MCRORCIDProfile(orcid);
-        MCRWorks works = profile.getWorks();
         try {
-            works.fetchSummaries();
-            works.fetchDetails();
+            MCRWorksSection worksSection = profile.getWorksSection();
+            worksSection.fetchDetails();
+
+            Element modsCollection = worksSection.buildMODSCollection();
+            return new MCRJDOMContent(modsCollection);
         } catch (JDOMException | SAXException ex) {
             throw new IOException(ex);
         }
-        Element modsCollection = works.buildMODSCollection();
-        return new MCRJDOMContent(modsCollection);
     }
 }
