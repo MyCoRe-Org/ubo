@@ -86,7 +86,9 @@
   </xsl:copy>
 </xsl:template>
 
-<xsl:template match="mods:note[1]" />
+<xsl:template match="mods:note[1]">
+  <xsl:call-template name="copy-and-apply" />
+</xsl:template>
 
 <xsl:template match="mods:extension[tag|dedup][1]|mods:extension/tag|mods:extension/dedup">
   <xsl:call-template name="copy-and-apply" />
