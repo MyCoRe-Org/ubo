@@ -144,7 +144,7 @@
 
   <xsl:template match="mods:identifier[@type='hdl']" mode="qdc">
     <dc:identifier scheme="dcterms:URI">
-      <xsl:text>http://hdl.handle.net/</xsl:text>
+      <xsl:text>https://hdl.handle.net/</xsl:text>
       <xsl:value-of select="text()" />
     </dc:identifier>
   </xsl:template>

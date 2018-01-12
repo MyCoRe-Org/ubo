@@ -729,7 +729,7 @@
 
   <!-- ========== Handle ========== -->
   <xsl:template match="mods:identifier[@type='hdl']">
-    <a href="http://hdl.handle.net?hdl={encoder:encode(text())}">
+    <a href="https://hdl.handle.net{text()}">
       <xsl:value-of select="text()" />
     </a>
   </xsl:template>

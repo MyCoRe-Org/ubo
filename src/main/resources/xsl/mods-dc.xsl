@@ -199,7 +199,7 @@
 
   <xsl:template match="mods:identifier[@type='hdl']" mode="dc">
     <dc:identifier>
-      <xsl:text>http://hdl.handle.net/</xsl:text>
+      <xsl:text>https://hdl.handle.net/</xsl:text>
       <xsl:value-of select="text()" />
     </dc:identifier>
   </xsl:template>
