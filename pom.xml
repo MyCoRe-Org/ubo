@@ -93,13 +93,65 @@
   </issueManagement>
 
   <properties>
+    <MCR.AppName>ubo</MCR.AppName>
     <java.target.version>1.8</java.target.version>
-    <hibernate.version>5.2.2.Final</hibernate.version>
+    <hibernate.version>5.2.10.Final</hibernate.version>
     <mycore.version>2017.07-SNAPSHOT</mycore.version>
-    <log4j.version>2.6.1</log4j.version>
+    <log4j.version>2.8.2</log4j.version>
     <axis1.version>1.4</axis1.version>
     <timestamp>${maven.build.timestamp}</timestamp>
+    <cargo.container>jetty9x</cargo.container>
+    <cargo.container.zipUrlInstaller.downloadDir>${settings.localRepository}/../cargo/containers</cargo.container.zipUrlInstaller.downloadDir>
+    <cargo.debug.address>8295</cargo.debug.address>
+    <cargo.debug.suspend>n</cargo.debug.suspend>
+    <cargo.deployable.default.artifactId>${project.artifactId}</cargo.deployable.default.artifactId>
+    <cargo.deployable.default.context>/</cargo.deployable.default.context>
+    <cargo.deployable.default.groupId>${project.groupId}</cargo.deployable.default.groupId>
+    <cargo.jvmargs>-DMCR.AppName=${MCR.AppName} -Dsolr.solr.home=${solr.home} -Dsolr.data.dir=${solr.data.dir} -Xms512m -Xmx2048m</cargo.jvmargs>
+    <cargo.rmi.port>8290</cargo.rmi.port>
+    <cargo.servlet.port>8291</cargo.servlet.port>
+    <cargo.servlet.uriencoding>UTF-8</cargo.servlet.uriencoding>
+    <cargo.tomcat.ajp.port>8292</cargo.tomcat.ajp.port>
+    <cargo.version>1.6.7</cargo.version>
+    <jetty.version>9.4.8.v20171121</jetty.version>
+    <solr.data.dir>${solr.home}/ubo/data</solr.data.dir>
+    <solr.home>${user.home}/AppData/Local/MyCoRe/${MCR.AppName}/data/solr</solr.home>
   </properties>
+
+  <profiles>
+    <profile>
+      <id>windows</id>
+      <activation>
+        <os>
+          <family>Windows</family>
+        </os>
+      </activation>
+      <properties>
+        <user.config.dir>${user.home}/AppData/Local/MyCoRe</user.config.dir>
+      </properties>
+    </profile>
+    <profile>
+      <id>linux</id>
+      <activation>
+        <os>
+          <family>Unix</family>
+        </os>
+      </activation>
+      <properties>
+        <user.config.dir>${user.home}/.mycore</user.config.dir>
+      </properties>
+    </profile>
+    <profile>
+      <id>dev</id>
+      <properties>
+        <MCR.DataPrefix>dev</MCR.DataPrefix>
+        <cargo.jvmargs>-DMCR.AppName=${MCR.AppName} 
+        -Dsolr.solr.home=${solr.home}
+        -Dsolr.data.dir=${solr.data.dir}
+        -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=${cargo.debug.suspend},address=${cargo.debug.address}</cargo.jvmargs>
+      </properties>
+    </profile>
+  </profiles>
 
   <dependencies>
     <dependency>
@@ -156,7 +208,7 @@
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-hikaricp</artifactId>
       <version>${hibernate.version}</version>
-      <scope>test</scope>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>mysql</groupId>
@@ -180,18 +232,6 @@
           <groupId>commons-codec</groupId>
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-c3p0</artifactId>
-      <version>${hibernate.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-ehcache</artifactId>
-      <version>${hibernate.version}</version>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -240,6 +280,12 @@
       <version>${log4j.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j-impl</artifactId>
+      <version>${log4j.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>org.apache.axis</groupId>
       <artifactId>axis</artifactId>
       <version>${axis1.version}</version>
@@ -269,6 +315,12 @@
       <groupId>org.mycore</groupId>
       <artifactId>mycore-base</artifactId>
       <version>${mycore.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-slf4j-impl</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
@@ -291,6 +343,13 @@
       <version>${mycore.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.mycore.solr</groupId>
+      <artifactId>solr</artifactId>
+      <version>4.10.4.1-SNAPSHOT</version>
+      <type>war</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-xeditor</artifactId>
       <version>${mycore.version}</version>
@@ -309,7 +368,7 @@
     <dependency>
       <groupId>org.apache.solr</groupId>
       <artifactId>solr-solrj</artifactId>
-      <version>6.1.0</version>
+      <version>7.2.1</version>
     </dependency>
     <dependency>
       <groupId>xalan</groupId>
@@ -330,7 +389,7 @@
       <groupId>org.webjars</groupId>
       <artifactId>bootstrap-glyphicons</artifactId>
       <version>bdd2cbfba0</version>
-    </dependency>
+    </dependency>    
   </dependencies>
 
   <repositories>
@@ -340,6 +399,16 @@
       <url>https://repo.maven.apache.org/maven2</url>
       <snapshots>
         <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
       </snapshots>
     </repository>
     <repository>
@@ -374,6 +443,16 @@
       </snapshots>
     </pluginRepository>
     <pluginRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
       <id>MyCoRe HQ</id>
       <url>http://artifactory.mycore.de/mycore-releases</url>
       <snapshots>
@@ -393,7 +472,6 @@
   </pluginRepositories>
 
   <build>
-    <finalName>webapp</finalName>
     <plugins>
 
       <plugin>
@@ -477,55 +555,51 @@
       </plugin>
 
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <target>
-                <echo>Setting additional properties MCR.datadir and UBO.Build.TimeStamp...</echo>
-                <condition property="dir.sep" value="\\">
-                  <os family="windows"></os>
-                </condition>
-                <condition property="dir.sep" value="/">
-                  <os family="unix"></os>
-                </condition>
-                <pathconvert dirsep="${dir.sep}" property="datadir" targetos="unix">
-                  <path location="${project.build.directory}/${project.build.finalName}"></path>
-                </pathconvert>
-                <echo append="true"
-                  file="${project.build.directory}/${project.build.finalName}/WEB-INF/classes/local.properties">
-                  ${line.separator}MCR.datadir=${datadir}
-                  ${line.separator}UBO.Build.TimeStamp=${timestamp}</echo>
-              </target>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-maven-plugin</artifactId>
-        <version>9.4.0.v20161208</version>
+        <groupId>org.codehaus.cargo</groupId>
+        <artifactId>cargo-maven2-plugin</artifactId>
+        <version>${cargo.version}</version>
         <configuration>
-          <classesDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</classesDirectory>
-          <webAppSourceDirectory>${project.build.directory}/${project.build.finalName}</webAppSourceDirectory>
-          <webApp>
-            <tempDirectory>${project.build.directory}/tmp</tempDirectory>
-          </webApp>
-          <contextXml>${basedir}/src/jetty/jetty-context.xml</contextXml>
-          <systemProperties>
-            <systemProperty>
-              <name>com.sun.management.jmxremote</name>
-            </systemProperty>
-          </systemProperties>
+          <container>
+            <containerId>${cargo.container}</containerId>
+            <artifactInstaller>
+              <groupId>org.eclipse.jetty</groupId>
+              <artifactId>jetty-distribution</artifactId>
+              <version>${jetty.version}</version>
+            </artifactInstaller>
+          </container>
+          <configuration>
+            <properties>
+              <cargo.servlet.port>${cargo.servlet.port}</cargo.servlet.port>
+              <cargo.jvmargs>${cargo.jvmargs}</cargo.jvmargs>
+              <cargo.servlet.users>submitter:submitter123:submitter|editor:editor123:editor</cargo.servlet.users>
+              <xmlReplacements>
+                <xmlReplacement>
+                  <file>etc/jetty-logging.xml</file>
+                  <xpathExpression>/Configure</xpathExpression>
+                  <value>&lt;!-- disabled --&gt;</value>
+                </xmlReplacement>
+              </xmlReplacements>
+            </properties>
+          </configuration>
+          <deployables>
+            <deployable>
+              <groupId>org.mycore.solr</groupId>
+              <artifactId>solr</artifactId>
+              <type>war</type>
+              <properties>
+                <context>/solr</context>
+              </properties>
+            </deployable>
+            <deployable>
+              <groupId>${project.groupId}</groupId>
+              <artifactId>${project.artifactId}</artifactId>
+              <properties>
+                <context>/</context>
+              </properties>
+            </deployable>
+          </deployables>
         </configuration>
       </plugin>
-
     </plugins>
 
     <pluginManagement>
@@ -559,28 +633,6 @@
         </plugin>
       </plugins>
     </pluginManagement>
-
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>true</filtering>
-        <includes>
-          <include>META-INF/persistence.xml</include>
-        </includes>
-      </resource>
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>false</filtering>
-        <excludes>
-          <exclude>META-INF/persistence.xml</exclude>
-        </excludes>
-      </resource>
-    </resources>
-
-    <filters>
-      <filter>src/main/resources/mycore.properties</filter>
-      <filter>src/main/resources/local.properties</filter>
-    </filters>
 
   </build>
 

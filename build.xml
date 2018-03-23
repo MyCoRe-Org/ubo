@@ -8,33 +8,19 @@
     <echo>
 
   Initial setup, typically only once:
-    ant download.solr.war     Download pre-configured SOLR web applcation
     ant build.solr.home       Build SOLR home directory containing index and core configuration
 
   Whenever schema.xml changes:
     ant copy.solr.config      Copy SOLR configuration and schema to core configuration directory
-
-  To start/stop a local SOLR server:
-    ant start.solr            Start SOLR server
-    ant stop.solr             Stop SOLR server
-    ant restart.solr          Same as stop.solr, copy.solr.config, start.solr
 
     </echo>
   </target>
 
   <!-- ============================================== -->
 
-  <property name="SOLR.WAR.URL"  value="http://artifactory.mycore.de/libs-snapshots-local/org/mycore/solr/solr/4.10.4.1-SNAPSHOT/solr-4.10.4.1-20151110.123030-1.war" />
   <property name="SOLR.Home.URL" value="http://artifactory.mycore.de/libs-snapshots-local/org/mycore/solr/solr-home/4.10.4.1-SNAPSHOT/solr-home-4.10.4.1-20151110.123043-1.zip" />
 
   <loadproperties srcfile="src/main/resources/local.properties" />
-
-  <!-- ============================================== -->
-
-  <target name="download.solr.war" description="Download pre-configured SOLR war file">
-    <echo>Downloading pre-configured SOLR war file...</echo>
-    <get src="${SOLR.WAR.URL}" dest="target/solr.war" verbose="on" />
-  </target>
 
   <!-- ============================================== -->
 
@@ -55,47 +41,5 @@
     <copy file="src/main/resources/schema.xml" todir="${UBO.BaseDir}/solr-home/ubo/conf" overwrite="true" />
     <copy file="src/main/resources/solrconfig.xml" todir="${UBO.BaseDir}/solr-home/ubo/conf" overwrite="true" />
   </target>
-
-  <!-- ============================================== -->
-
-  <target name="start.solr" description="Start SOLR server">
-    <copy file="src/jetty-solr/context.xml" tofile="target/solr-context.xml" overwrite="true">
-      <filterset>
-        <filter token="SOLR.HOME" value="${UBO.BaseDir}/solr-home"/>
-      </filterset>
-    </copy> 
-    <antcall target="maven">
-      <param name="command" value="jetty:run-war" />
-      <param name="dir" value="${basedir}/src/jetty-solr" />
-    </antcall>
-  </target>
-
-  <!-- ============================================== -->
-
-  <target name="stop.solr" description="Stop SOLR server">
-    <antcall target="maven">
-      <param name="command" value="jetty:stop" />
-      <param name="dir" value="${basedir}/src/jetty-solr" />
-    </antcall>
-  </target>
-
-  <!-- ============================================== -->
-	
-  <target name="restart.solr" description="Same as stop.solr, copy.solr.config, start.solr" depends="stop.solr, copy.solr.config, start.solr" />
-	
-  <!-- ============================================== -->
-
-  <target name="maven">
-    <exec executable="cmd" osfamily="windows" dir="${dir}">
-      <env key="${target.env.key}" value="${target.env.value}"/>
-      <arg line="/c mvn ${command}" />
-    </exec>
-    <exec executable="mvn" osfamily="unix" dir="${dir}">
-      <env key="${target.env.key}" value="${target.env.value}"/>
-      <arg line="${command}" />
-    </exec>
-  </target>
-
-  <!-- ============================================== -->
 
 </project>
