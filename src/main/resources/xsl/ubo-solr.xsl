@@ -47,7 +47,9 @@
     <xsl:if test="mods:name[@type='personal']">
       <field name="sortby_person">
         <xsl:for-each select="mods:name[@type='personal']">
-          <xsl:value-of select="concat(mods:namePart[@type='family'],' ',mods:namePart[@type='given'],' ')" />
+          <xsl:if test="position() &lt; 11">
+            <xsl:value-of select="concat(mods:namePart[@type='family'],' ',mods:namePart[@type='given'],' ')" />
+          </xsl:if>
         </xsl:for-each>
       </field>
     </xsl:if>
