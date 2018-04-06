@@ -43,7 +43,7 @@
     <xed:source uri="xslStyle:mods-preprocessor:mcrobject:{$id}" />
     <xed:source uri="xslStyle:mods2mycoreobject,mods-preprocessor:session:{$key}" />
     
-    <xed:cancel url="servlets/DozBibEntryServlet?mode=show&amp;id={$id}" />
+    <xed:cancel url="servlets/DozBibEntryServlet?id={$id}" />
     <xed:cancel url="newPublication.xed" />
     
     <xed:post-processor xsl="mods-postprocessor.xsl" />    
@@ -117,7 +117,15 @@
               <xed:output value="concat('erschienen in ',$genres//category[@ID=$host_intern]/label[lang($CurrentLang)]/@text,':')" />
             </legend>
             <xed:bind xpath="mods:relatedItem[@type='host']">
-              <xed:include uri="webapp:import-genres.xed" ref="host.{$host_intern}" />
+              <xed:choose>
+                <xed:when test="@xlink:href">
+                  <xed:include uri="webapp:import-editor.xed" ref="linked.relatedItem" />
+                  <xed:include uri="webapp:import-genres.xed" ref="host.{$host_intern}.linked" />
+                </xed:when>
+                <xed:otherwise>
+                  <xed:include uri="webapp:import-genres.xed" ref="host.{$host_intern}" />
+                </xed:otherwise>
+              </xed:choose>
             </xed:bind>
             <xed:validate xpath="//mods:relatedItem[@type='host']/mods:titleInfo/mods:title" required="true" i18n="ubo.title.validation.host" display="global" />
           </fieldset>

@@ -16,7 +16,7 @@
       <xed:source uri="xslStyle:mods-preprocessor:mcrobject:{$id}" />
       <xed:source uri="xslStyle:mods2mycoreobject,mods-preprocessor:session:{$key}" />
       
-      <xed:cancel url="servlets/DozBibEntryServlet?mode=show&amp;id={$id}" />
+      <xed:cancel url="servlets/DozBibEntryServlet?id={$id}" />
       <xed:cancel url="newPublication.xed" />
         
       <xed:post-processor xsl="mods-postprocessor.xsl" />    
@@ -70,21 +70,31 @@
           <fieldset>
             <legend>erschienen in:</legend>
             <xed:bind xpath="mods:relatedItem[@type='host']">
-              <xed:include uri="webapp:import-editor.xed" ref="host" />
-              <xed:include uri="webapp:import-editor.xed" ref="title.complex" />
-              <xed:include uri="webapp:import-editor.xed" ref="conference" />
-              <xed:include uri="webapp:import-editor.xed" ref="person.role" />
-              <xed:include uri="webapp:import-editor.xed" ref="volume" />
-              <xed:include uri="webapp:import-editor.xed" ref="issue" />
-              <xed:include uri="webapp:import-editor.xed" ref="place" />
-              <xed:include uri="webapp:import-editor.xed" ref="year" />
-              <xed:include uri="webapp:import-editor.xed" ref="publisher" />
-              <xed:include uri="webapp:import-editor.xed" ref="edition" />
-              <xed:include uri="webapp:import-editor.xed" ref="series" />
-              <xed:include uri="webapp:import-editor.xed" ref="pages" />
-              <xed:include uri="webapp:import-editor.xed" ref="identifier" />
-              <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
-              <xed:include uri="webapp:import-editor.xed" ref="url" />
+              <xed:choose>
+                <xed:when test="@xlink:href">
+                  <xed:include uri="webapp:import-editor.xed" ref="linked.relatedItem" />
+                  <xed:include uri="webapp:import-editor.xed" ref="volume" />
+                  <xed:include uri="webapp:import-editor.xed" ref="issue" />
+                  <xed:include uri="webapp:import-editor.xed" ref="pages" />
+                </xed:when>
+                <xed:otherwise>
+                  <xed:include uri="webapp:import-editor.xed" ref="host" />
+                  <xed:include uri="webapp:import-editor.xed" ref="title.complex" />
+                  <xed:include uri="webapp:import-editor.xed" ref="conference" />
+                  <xed:include uri="webapp:import-editor.xed" ref="person.role" />
+                  <xed:include uri="webapp:import-editor.xed" ref="volume" />
+                  <xed:include uri="webapp:import-editor.xed" ref="issue" />
+                  <xed:include uri="webapp:import-editor.xed" ref="place" />
+                  <xed:include uri="webapp:import-editor.xed" ref="year" />
+                  <xed:include uri="webapp:import-editor.xed" ref="publisher" />
+                  <xed:include uri="webapp:import-editor.xed" ref="edition" />
+                  <xed:include uri="webapp:import-editor.xed" ref="series" />
+                  <xed:include uri="webapp:import-editor.xed" ref="pages" />
+                  <xed:include uri="webapp:import-editor.xed" ref="identifier" />
+                  <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
+                  <xed:include uri="webapp:import-editor.xed" ref="url" />
+                </xed:otherwise>
+              </xed:choose>
             </xed:bind>
           </fieldset>
           <fieldset>

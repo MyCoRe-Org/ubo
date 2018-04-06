@@ -22,7 +22,7 @@
 <xsl:include href="mods-highwire.xsl" />
 <xsl:include href="mods-display.xsl" />
 
-<xsl:param name="Referer" select="concat($ServletsBaseURL,'DozBibEntryServlet?mode=show&amp;id=',/mycoreobject/@ID)" />
+<xsl:param name="Referer" select="concat($ServletsBaseURL,'DozBibEntryServlet?id=',/mycoreobject/@ID)" />
 <xsl:param name="CurrentUserPID" />
 <xsl:param name="step" />
 
@@ -74,11 +74,19 @@
     <action label="Admin" target="{$WebApplicationBaseURL}edit-admin.xed">
       <param name="id"     value="{/mycoreobject/@ID}" />
     </action>
-    <action label="{i18n:translate('button.delete')}" target="{$ServletsBaseURL}DozBibEntryServlet">
-      <param name="mode"       value="show" />
-      <param name="XSL.step"   value="ask.delete" />
-      <param name="id"         value="{/mycoreobject/@ID}" />
-    </action>
+    <xsl:if test="not(/mycoreobject/structure/children/child)">
+      <action label="{i18n:translate('button.delete')}" target="{$ServletsBaseURL}DozBibEntryServlet">
+        <param name="XSL.step"   value="ask.delete" />
+        <param name="id"         value="{/mycoreobject/@ID}" />
+      </action>
+    </xsl:if>
+    <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host'][string-length(@xlink:href)=0]">
+      <!-- Button to extract mods:relatedItem[@type='host'] to a new separate entry -->
+      <action label="{i18n:translate('ubo.relatedItem.host.separate')}" target="{$ServletsBaseURL}DozBibEntryServlet">
+        <param name="mode" value="xhost" />
+        <param name="id"   value="{/mycoreobject/@ID}" />
+      </action>
+    </xsl:if>
   </xsl:if>
   <xsl:if xmlns:basket="xalan://unidue.ubo.basket.BasketUtils" test="basket:hasSpace() and not(basket:contains(string(/mycoreobject/@ID)))">
     <action label="{i18n:translate('button.basketAdd')}" target="{$ServletsBaseURL}MCRBasketServlet">
@@ -95,21 +103,23 @@
       <param name="root"         value="export" />
       <param name="transformer"  value="mods" />
     </action>
-    <action label="BibTeX" target="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.bib">
-      <param name="uri"          value="mcrobject:{/mycoreobject/@ID}" />
-      <param name="root"         value="export" />
-      <param name="transformer"  value="bibtex" />
-    </action>
-    <action label="EndNote" target="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.enl">
-      <param name="uri"          value="mcrobject:{/mycoreobject/@ID}" />
-      <param name="root"         value="export" />
-      <param name="transformer"  value="endnote" />
-    </action>
-    <action label="RIS" target="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.ris">
-      <param name="uri"          value="mcrobject:{/mycoreobject/@ID}" />
-      <param name="root"         value="export" />
-      <param name="transformer"  value="ris" />
-    </action>
+    <xsl:if test="not($permission.admin)">
+      <action label="BibTeX" target="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.bib">
+        <param name="uri"          value="mcrobject:{/mycoreobject/@ID}" />
+        <param name="root"         value="export" />
+        <param name="transformer"  value="bibtex" />
+      </action>
+      <action label="EndNote" target="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.enl">
+        <param name="uri"          value="mcrobject:{/mycoreobject/@ID}" />
+        <param name="root"         value="export" />
+        <param name="transformer"  value="endnote" />
+      </action>
+      <action label="RIS" target="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.ris">
+        <param name="uri"          value="mcrobject:{/mycoreobject/@ID}" />
+        <param name="root"         value="export" />
+        <param name="transformer"  value="ris" />
+      </action>
+    </xsl:if>    
   </xsl:if>
 </xsl:variable>
 
@@ -137,6 +147,7 @@
       </div>
     </xsl:if>
     <xsl:apply-templates select="/mycoreobject/service/servflags/servflag[@type='status']" />
+    <xsl:apply-templates select="/mycoreobject/structure/children[child]" />
     <xsl:call-template name="steps.and.actions" /> 
   </div>
   <div class="section highlight2" style="padding-top:2ex; padding-bottom:2ex;">
@@ -148,6 +159,20 @@
     <xsl:call-template name="listDuplicates" />
   </xsl:if>
  </xsl:for-each>
+</xsl:template>
+
+<xsl:template match="/mycoreobject/structure/children[child]">
+  <div class="labels">
+    <span class="label-info">
+      <xsl:value-of select="i18n:translate('ubo.relatedItem.host.contains')"/>
+      <xsl:text>: </xsl:text>
+      <a href="solr/select?q=link:{/mycoreobject/@ID}&amp;sort=year+desc">
+        <xsl:value-of select="count(child)" />
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="i18n:translate('ubo.relatedItem.host.contains.publications')"/>
+      </a>
+    </span>
+  </div>
 </xsl:template>
 
 <xsl:variable name="quotes">"</xsl:variable>
@@ -202,7 +227,7 @@
       <ul>
         <xsl:for-each select="$duplicates3">
           <li>
-            <a href="DozBibEntryServlet?mode=show&amp;id={.}">
+            <a href="DozBibEntryServlet?id={.}">
               <xsl:text>Eintrag </xsl:text>
               <xsl:value-of select="number(substring-after(.,'_mods_'))" />
             </a>

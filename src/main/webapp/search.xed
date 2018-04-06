@@ -11,6 +11,10 @@
  
  <section class="highlight2">
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form" style="margin:0; padding:0;">
+
+      <xed:cancel url="servlets/XEditor?_xed_submit_return_cancel=&amp;_xed_session={$_xed_subselect_session}" />
+      <xed:cancel url="index.xed" />
+        
       <fieldset style="margin:0; padding:0;">
         <legend>
           <xed:output i18n="search.dozbib" />
@@ -34,7 +38,15 @@
         </div>
       
         <xed:bind xpath="/query">
-          <xed:bind xpath="@mask" default="search.xed" />
+          <xed:choose>
+            <!-- Return from subselect to choose related item (host) in editor form -->
+            <xed:when test="string-length($_xed_subselect_session) &gt; 0">
+              <xed:bind xpath="@mask" set="_xed_subselect_session={$_xed_subselect_session}" />
+            </xed:when>
+            <xed:otherwise>
+              <xed:bind xpath="@mask" default="search.xed" />
+            </xed:otherwise>
+          </xed:choose>
           <xed:bind xpath="conditions[@format='xml']/boolean[@operator='and']">
           
             <xed:repeat xpath="condition1[@operator='contains']">
@@ -158,7 +170,7 @@
               </xed:otherwise>
             </xed:choose>
 
-            <xed:bind xpath="condition7[@field='genre'][@operator='=']/@value">
+            <xed:bind xpath="condition7[@field='genre'][@operator='=']/@value" default="{$genre}"> <!-- $genre comes from editor form subselect -->
               <div style="margin-bottom:4ex;">
                 <label for="{xed:generate-id()}">
                   <xed:output i18n="search.dozbib.type" />
@@ -174,7 +186,18 @@
 
           <xed:include uri="webapp:import-search.xed" ref="sortby" />
           <xed:include uri="webapp:import-search.xed" ref="numPerPage" />
-          <xed:include uri="webapp:import-search.xed" ref="submit" />
+
+          <div class="cancel-submit" style="margin-top:2ex;">
+            <button class="roundedButton" type="submit" xed:target="servlet" xed:href="MCRQLSearchServlet">
+              <xed:output i18n="button.search" />
+            </button>
+            <button class="roundedButton" type="submit" xed:target="cancel">
+              <xed:output i18n="button.cancel" />
+            </button>
+            <button class="roundedButton" type="reset">
+              <xed:output i18n="button.reset" />
+            </button>
+          </div>
           
         </xed:bind>
       </fieldset>

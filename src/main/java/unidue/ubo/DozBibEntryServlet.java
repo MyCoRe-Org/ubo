@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2016 Duisburg-Essen University Library
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v2.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@ package unidue.ubo;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,12 +19,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
+import org.jdom2.Element;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRMailer;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
@@ -39,17 +43,17 @@ public class DozBibEntryServlet extends MCRServlet {
         HttpServletResponse res = job.getResponse();
 
         String mode = req.getParameter("mode");
-        if ((mode == null) || mode.isEmpty())
-            mode = "show";
-
-        if ("show".equals(mode))
+        if ((mode == null) || mode.isEmpty() || "show".equals(mode)) {
             showEntry(req, res);
-        else if (AccessControl.systemInReadOnlyMode())
+        } else if (AccessControl.systemInReadOnlyMode()) {
             sendReadOnlyError(res);
-        else if ("delete".equals(mode))
+        } else if ("delete".equals(mode)) {
             deleteEntry(req, res);
-        else if ("save".equals(mode))
+        } else if ("save".equals(mode)) {
             saveEntry(req, res);
+        } else if ("xhost".equals(mode)) {
+            extractHostEntry(req, res);
+        }
     }
 
     public static void sendReadOnlyError(HttpServletResponse res) throws IOException {
@@ -67,8 +71,9 @@ public class DozBibEntryServlet extends MCRServlet {
             getLayoutService().doLayout(req, res, new MCRJDOMContent(xml));
         } else if (isLegacyPublicationID(ID)) {
             redirectToCurrentPublicationID(res, ID);
-        } else
+        } else {
             res.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
 
     private void redirectToCurrentPublicationID(HttpServletResponse res, String ID) throws IOException {
@@ -98,6 +103,14 @@ public class DozBibEntryServlet extends MCRServlet {
 
         MCRObjectID oid = MCRObjectID.getInstance(ID);
         MCRObject obj = MCRMetadataManager.retrieveMCRObject(oid);
+
+        // do not delete entries that have linked children, otherwise the children would be deleted too
+        List<MCRMetaLinkID> children = obj.getStructure().getChildren();
+        if (!children.isEmpty()) {
+            res.sendError(HttpServletResponse.SC_CONFLICT, "entry has " + children.size() + " child(ren)");
+            return;
+        }
+
         new MCRMODSWrapper(obj).setServiceFlag("status", "deleted");
         Document xml = obj.createXML();
 
@@ -108,7 +121,7 @@ public class DozBibEntryServlet extends MCRServlet {
 
     private boolean isValidID(String id) throws IOException {
         return id != null && MCRObjectID.isValid(id)
-                && MCRXMLMetadataManager.instance().exists(MCRObjectID.getInstance(id));
+            && MCRXMLMetadataManager.instance().exists(MCRObjectID.getInstance(id));
     }
 
     private void sendNotificationMail(Document doc) throws Exception {
@@ -131,7 +144,7 @@ public class DozBibEntryServlet extends MCRServlet {
             if (AccessControl.currentUserIsAdmin()) {
                 MCRMetadataManager.update(obj);
                 LOGGER.info("UBO saved entry with ID " + oid);
-                res.sendRedirect(MCRServlet.getServletBaseURL() + "DozBibEntryServlet?mode=show&id=" + id);
+                res.sendRedirect(MCRServlet.getServletBaseURL() + "DozBibEntryServlet?id=" + id);
             } else {
                 res.sendError(HttpServletResponse.SC_FORBIDDEN);
             }
@@ -144,14 +157,55 @@ public class DozBibEntryServlet extends MCRServlet {
             LOGGER.info("UBO saved entry with ID " + oid);
 
             if (AccessControl.currentUserIsAdmin()) {
-                res.sendRedirect(MCRServlet.getServletBaseURL() + "DozBibEntryServlet?mode=show&id=" + oid.toString());
+                res.sendRedirect(MCRServlet.getServletBaseURL() + "DozBibEntryServlet?id=" + oid.toString());
 
             } else {
                 // Notify library staff via e-mail
                 sendNotificationMail(obj.createXML());
                 res.sendRedirect(MCRServlet.getServletBaseURL()
-                        + "DozBibEntryServlet?mode=show&XSL.step=confirm.submitted&id=" + oid.toString());
+                    + "DozBibEntryServlet?XSL.step=confirm.submitted&id=" + oid.toString());
             }
         }
+    }
+
+    /** Extract mods:relatedItem[@type='host'] to a new separate entry and link it via xlink:href */
+    private void extractHostEntry(HttpServletRequest req, HttpServletResponse res) throws Exception {
+        if (!AccessControl.currentUserIsAdmin()) {
+            res.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return;
+        }
+
+        String ID = req.getParameter("id");
+        if (!isValidID(ID)) {
+            res.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        MCRObjectID childID = MCRObjectID.getInstance(ID);
+        MCRObject obj = MCRMetadataManager.retrieveMCRObject(childID);
+
+        Element mods = new MCRMODSWrapper(obj).getMODS();
+        for (Element relatedItem : mods.getChildren("relatedItem", MCRConstants.MODS_NAMESPACE)) {
+            String type = relatedItem.getAttributeValue("type");
+            if (!"host".equals(type)) {
+                continue;
+            }
+
+            String href = relatedItem.getAttributeValue("href", MCRConstants.XLINK_NAMESPACE);
+            if ((href != null) && !href.isEmpty()) {
+                continue;
+            }
+
+            LOGGER.info("UBO extract host in entry " + ID);
+
+            // Just add an empty dummy ID as xlink:href attribute, this triggers
+            // MCRExctractRelatedItemsEventHandler which will do the actual work afterwards
+            String nullID = MCRObjectID.formatID(childID.getBase(), 0);
+            relatedItem.setAttribute("href", nullID, MCRConstants.XLINK_NAMESPACE);
+            MCRMetadataManager.update(obj);
+            break;
+        }
+
+        res.sendRedirect(MCRServlet.getServletBaseURL() + "DozBibEntryServlet?id=" + childID);
     }
 }

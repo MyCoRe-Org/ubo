@@ -35,6 +35,7 @@
 
 <xsl:variable name="numFound" select="/response/result[@name='response']/@numFound" />
 <xsl:variable name="numDocs" select="count(/response/result[@name='response']/doc)" />
+<xsl:variable name="mask" select="/response/lst[@name='responseHeader']/lst[@name='params']/str[@name='mask']" />
 <xsl:variable name="start">
   <xsl:choose>
     <xsl:when test="/response/lst[@name='responseHeader']/lst[@name='params']/str[@name='start']">
@@ -249,6 +250,7 @@
           <xsl:if test="basket:hasSpace() and not(basket:contains(string(ancestor::mycoreobject/@ID)))">
             <xsl:call-template name="bibentry.add.to.basket" />
           </xsl:if>
+          <xsl:call-template name="bibentry.subselect.return" />
           <span class="floatRight"># <xsl:value-of select="$hitNo"/></span>
         </div>
       </xsl:for-each>
@@ -273,6 +275,23 @@
     <input type="hidden" name="id" value="{ancestor::mycoreobject/@ID}"/>
     <input type="submit" class="roundedButton" value="{i18n:translate('result.dozbib.info')}" />
   </form>
+</xsl:template>
+
+<!-- Return from subselect to choose related item (host) in editor form -->
+<xsl:template name="bibentry.subselect.return">
+  <xsl:if test="starts-with($mask,'_xed_subselect_session')">
+    <form action="{$ServletsBaseURL}XEditor" method="get">
+      <input type="hidden" name="_xed_submit_return" value=""/>
+      <input type="hidden" name="_xed_session" value="{substring-after($mask,'=')}"/>
+      <input type="hidden" name="." value="{ancestor::mycoreobject/@ID}"/>
+      <input type="submit" class="roundedButton" value="{i18n:translate('ubo.relatedItem.host.selectAs')}" />
+    </form>
+    <form action="{$ServletsBaseURL}XEditor" method="get">
+      <input type="hidden" name="_xed_submit_return_cancel" value=""/>
+      <input type="hidden" name="_xed_session" value="{substring-after($mask,'=')}"/>
+      <input type="submit" class="roundedButton" value="{i18n:translate('button.cancel')}" />
+    </form>
+  </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>

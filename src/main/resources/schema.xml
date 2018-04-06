@@ -8,6 +8,7 @@
 
   <!-- MyCoRe general fields -->
   <field name="id"            type="string" indexed="true" stored="true"  required="true"  multiValued="false" />
+  <field name="link"          type="string" indexed="true" stored="false" required="false" multiValued="true" />
   <field name="objectKind"    type="id"     indexed="true" stored="false" required="true"  multiValued="false" />
   <field name="objectType"    type="id"     indexed="true" stored="false" required="false" multiValued="false" />
   <field name="objectProject" type="id"     indexed="true" stored="false" required="false" multiValued="false" />

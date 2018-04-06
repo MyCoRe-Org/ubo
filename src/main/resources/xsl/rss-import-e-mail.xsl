@@ -46,7 +46,7 @@ die folgenden Publikationen wurden aus </xsl:text><xsl:value-of select="@source"
       <xsl:for-each select="mycoreobject">
         <xsl:text>&#xa;</xsl:text>
         <xsl:value-of select="$WebApplicationBaseURL" />
-        <xsl:text>servlets/DozBibEntryServlet?mode=show&amp;id=</xsl:text>
+        <xsl:text>servlets/DozBibEntryServlet?id=</xsl:text>
         <xsl:value-of select="@ID" />
         <xsl:text>&#xa;</xsl:text>
         <xsl:variable name="bibentry.html">

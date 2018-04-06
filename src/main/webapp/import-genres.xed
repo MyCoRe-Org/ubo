@@ -190,6 +190,12 @@
     <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
   </xed:template>
 
+  <xed:template id="host.journal.linked">
+    <xed:include uri="webapp:import-editor.xed" ref="volume" />
+    <xed:include uri="webapp:import-editor.xed" ref="issue" />
+    <xed:include uri="webapp:import-editor.xed" ref="pages" />
+  </xed:template>
+
   <xed:template id="host.collection">
     <xed:include uri="webapp:import-editor.xed" ref="title" />
     <xed:include uri="webapp:import-editor.xed" ref="editor" />
@@ -201,6 +207,10 @@
     <xed:include uri="webapp:import-editor.xed" ref="pages" />
     <xed:include uri="webapp:import-editor.xed" ref="isbn" />
     <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
+  </xed:template>
+
+  <xed:template id="host.collection.linked">
+    <xed:include uri="webapp:import-editor.xed" ref="pages" />
   </xed:template>
 
   <xed:template id="host.proceedings">
@@ -217,6 +227,10 @@
     <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
   </xed:template>
 
+  <xed:template id="host.proceedings.linked">
+    <xed:include uri="webapp:import-editor.xed" ref="pages" />
+  </xed:template>
+
   <xed:template id="host.festschrift">
     <xed:include uri="webapp:import-editor.xed" ref="title" />
     <xed:include uri="webapp:import-editor.xed" ref="editor" />
@@ -230,6 +244,10 @@
     <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
   </xed:template>
 
+  <xed:template id="host.festschrift.linked">
+    <xed:include uri="webapp:import-editor.xed" ref="pages" />
+  </xed:template>
+
   <xed:template id="host.lexicon">
     <xed:include uri="webapp:import-editor.xed" ref="title" />
     <xed:include uri="webapp:import-editor.xed" ref="editor" />
@@ -241,6 +259,10 @@
     <xed:include uri="webapp:import-editor.xed" ref="pages" />
     <xed:include uri="webapp:import-editor.xed" ref="isbn" />
     <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
+  </xed:template>
+
+  <xed:template id="host.lexicon.linked">
+    <xed:include uri="webapp:import-editor.xed" ref="pages" />
   </xed:template>
 
 </xed:template>

@@ -329,13 +329,22 @@
     <div class="clear" />
   </xsl:template>
   
-  <!-- ========== Erster Titel der Überordnung/Serie in Detailansicht, Tabelle ========== -->
+   <!-- ========== Erster Titel der Überordnung/Serie in Detailansicht, Tabelle ========== -->
   <xsl:template match="mods:relatedItem/mods:titleInfo[1]" mode="details" priority="1">
     <div class="grid_3 label">
       <xsl:value-of select="i18n:translate(concat('ubo.relatedItem.',../@type))" />
     </div>
     <div class="grid_9">
-      <xsl:apply-templates select="." />
+      <xsl:choose>
+        <xsl:when test="../@xlink:href">
+          <a href="{$ServletsBaseURL}DozBibEntryServlet?id={../@xlink:href}">
+            <xsl:apply-templates select="." />
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="." />
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
     <div class="clear" />
   </xsl:template>

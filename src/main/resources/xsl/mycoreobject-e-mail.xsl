@@ -97,7 +97,7 @@ Bitte folgen Sie diesem Link:
 
 </xsl:text>
 <xsl:value-of select="$WebApplicationBaseURL" />
-<xsl:text>servlets/DozBibEntryServlet?mode=show&amp;id=</xsl:text>
+<xsl:text>servlets/DozBibEntryServlet?id=</xsl:text>
 <xsl:value-of select="/mycoreobject/@ID" />
 <xsl:text>
 
