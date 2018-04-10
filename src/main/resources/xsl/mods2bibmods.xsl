@@ -26,6 +26,8 @@
     <mods:genre>thesis</mods:genre>
   </xsl:template>
 
+  <xsl:template match="mods:name[@type='conference']" />
+
   <xsl:template match="mods:genre[@type='intern'][contains('poster speech',.)][not(../mods:relatedItem[@type='host'])]">
     <mods:genre>conference</mods:genre>
     <mods:relatedItem type="host">
