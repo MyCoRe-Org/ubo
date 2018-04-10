@@ -658,7 +658,7 @@
   </xed:template>
   
   <xed:template id="linked.relatedItem">
-    <xed:bind xpath="@xlink:href">
+    <xed:bind xpath="@xlink:href"> 
       <div>
         <label>in:</label>
         <div style="width:520px; margin:0; padding:0; display:inline-block;">
@@ -676,7 +676,21 @@
         </div>
       </div>
     </xed:bind>
-  </xed:template>  
+  </xed:template> 
+  
+  <xed:template id="fix.structure.parent">
+    <xed:bind xpath="structure/parents/parent">
+      <xed:choose>
+        <xed:when test="../../../metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host'][@xlink:href]">
+          <xed:bind xpath="@xlink:href" set="{../../../../metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host']/@xlink:href}" />
+        </xed:when>
+        <xed:otherwise>
+          <xed:bind xpath="@xlink:href" set="" />
+        </xed:otherwise>
+      </xed:choose>
+    </xed:bind>
+    <xed:cleanup-rule xpath="/mycoreobject/structure/parents" relevant-if="string-length(parent/@xlink:href) &gt; 0" />
+  </xed:template> 
   
   <xed:template id="cleanup">
     <xed:cleanup-rule xpath="//mods:*"
@@ -687,7 +701,6 @@
     <xed:cleanup-rule xpath="//mods:*/@xlink:type" relevant-if="text()!='simple'" />
     <xed:cleanup-rule xpath="//mods:detail" relevant-if="mods:number|mods:caption|mods:title" />
     <xed:cleanup-rule xpath="//mods:relatedItem" relevant-if="mods:titleInfo" />
-    <xed:cleanup-rule xpath="/mycoreobject/structure/parents" relevant-if="/mycoreobject/descendant::mods:relatedItem[@type='host'][@xlink:href=/mycoreobject/structure/parents/parent/@xlink:href]" /> <!-- Remove parent from structure part -->
     <xed:cleanup-rule xpath="/mycoreobject/@label" relevant-if="true()" /> <!-- MyCoRe expects label attribute, even empty one -->
   </xed:template>
 
