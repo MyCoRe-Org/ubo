@@ -213,6 +213,14 @@
   <xsl:template match="mods:relatedItem[@type='host']" mode="brief">
     <xsl:text>In: </xsl:text>
     <xsl:apply-templates select="." mode="cite" />
+
+    <!-- journal article without volume: display year directly behind title, otherwise later behind volume number -->
+    <xsl:if test="(mods:genre[@type='intern']='journal') and not(mods:part/mods:detail[@type='volume']/mods:number)">
+      <xsl:for-each select="ancestor::mods:mods/descendant::mods:dateIssued[1]">
+        <xsl:value-of select="concat(' (',.,')')" /> 
+      </xsl:for-each>
+    </xsl:if>
+    
     <xsl:if test="mods:part">
       <xsl:text>, </xsl:text>
     </xsl:if>
@@ -877,24 +885,20 @@
       </xsl:otherwise>
     </xsl:choose>
     <xsl:text> </xsl:text>
-    <xsl:apply-templates select="mods:number" />
-  </xsl:template>
-  
-  <xsl:template match="mods:detail[@type='volume']/mods:number">
-    <xsl:variable name="volume.number" select="text()" />
-    <xsl:value-of select="$volume.number" />
-     
+    <xsl:value-of select="mods:number" />
+
+    <xsl:variable name="volume.number" select="mods:number" />
+    <xsl:variable name="year.issued" select="ancestor::mods:mods/descendant::mods:dateIssued[1]" />
+    
     <xsl:if test="ancestor::mods:relatedItem/mods:genre[@type='intern']='journal'"> <!-- if it is a journal -->
-      <xsl:for-each select="ancestor::mods:mods/descendant::mods:dateIssued[1]"> <!-- and there is a date issued -->
-        <xsl:if test="not($volume.number = text())"> <!-- and that date is not same as the volume number -->
-          <xsl:if test="translate(text(),'0123456789','jjjjjjjjjj') = 'jjjj'"> <!--  and it seems to be a year -->
-            <xsl:text> (</xsl:text> <!-- then output "volume (year)" -->
-            <xsl:value-of select="text()" /> 
-            <xsl:text>)</xsl:text>
-          </xsl:if>
-        </xsl:if>
-      </xsl:for-each>
-    </xsl:if>
+      <xsl:if test="(string-length($year.issued) &gt; 0) and translate($year.issued,'0123456789','jjjjjjjjjj') = 'jjjj'"> <!-- and there is a year -->
+        <xsl:if test="not($volume.number = $year.issued)"> <!-- and the year is not same as the volume number -->
+          <xsl:text> (</xsl:text> <!-- then output "volume (year)" -->
+          <xsl:value-of select="$year.issued" /> 
+          <xsl:text>)</xsl:text>
+        </xsl:if>  
+      </xsl:if>
+    </xsl:if>  
   </xsl:template>
 
   <!-- ========== Heftnummer ========== -->
