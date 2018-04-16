@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2016 Duisburg-Essen University Library
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v2.0
  * which accompanies this distribution, and is available at
@@ -35,18 +35,18 @@ import unidue.ubo.DozBibEntryServlet;
  * Servlet invoked by edit-contributors.xml to
  * change contributor name and pid entries in the basket of bibliography entries
  * and to save all changed entries when work is done.
- * 
+ *
  * @author Frank L\u00FCtzenkirchen
  */
 public class BasketName2PIDEditor extends MCRServlet {
-    
+
     private final static Logger LOGGER = LogManager.getLogger(BasketName2PIDEditor.class);
 
     public void doGetPost(MCRServletJob job) throws Exception {
         HttpServletRequest req = job.getRequest();
         HttpServletResponse res = job.getResponse();
 
-        if (! AccessControl.currentUserIsAdmin()) {
+        if (!AccessControl.currentUserIsAdmin()) {
             res.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
@@ -58,13 +58,8 @@ public class BasketName2PIDEditor extends MCRServlet {
         MCRBasket basket = BasketUtils.getBasket();
         Document doc = (Document) req.getAttribute("MCRXEditorSubmission");
 
-        String action = req.getParameter("action");
-        if ("save".equals(action))
-            saveChangedEntries(basket);
-        else if (doc != null)
-        {
-            changeNamesInBasket(doc, basket);
-        }
+        changeNamesInBasket(doc, basket);
+        saveChangedEntries(basket);
 
         res.sendRedirect(getServletBaseURL() + "MCRBasketServlet?type=bibentries&action=show");
     }
@@ -82,10 +77,12 @@ public class BasketName2PIDEditor extends MCRServlet {
             NameEntry nameEntryFromBasket = new NameEntry(contributor);
             NameEntry nameEntryEdited = key2nameEntries.get(nameEntryFromBasket.getKey());
 
-            if (nameEntryEdited == null)
+            if (nameEntryEdited == null) {
                 continue;
-            if (nameEntryFromBasket.getKey().equals(nameEntryEdited.getKey()))
+            }
+            if (nameEntryFromBasket.getKey().equals(nameEntryEdited.getKey())) {
                 continue;
+            }
 
             changeContributorInBasket(nameEntryFromBasket, nameEntryEdited);
         }
@@ -93,9 +90,9 @@ public class BasketName2PIDEditor extends MCRServlet {
 
     /**
      * Changes a single name entry in the basket.
-     * 
+     *
      * @param nameEntryFromBasket the name entry of a contributor element in the basket.
-     * @param nameEntryEdited the edited name entry returned by the editor form. 
+     * @param nameEntryEdited the edited name entry returned by the editor form.
      */
     private void changeContributorInBasket(NameEntry nameEntryFromBasket, NameEntry nameEntryEdited) {
 
@@ -103,24 +100,28 @@ public class BasketName2PIDEditor extends MCRServlet {
         contributor.removeChildren("namePart", MCRConstants.MODS_NAMESPACE);
         contributor.removeChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE);
 
-        for (Element child : nameEntryEdited.getModsName().getChildren())
-            if ("namePart".equals(child.getName()) || "nameIdentifier".equals(child.getName()))
-                if (!child.getTextTrim().isEmpty())
+        for (Element child : nameEntryEdited.getModsName().getChildren()) {
+            if ("namePart".equals(child.getName()) || "nameIdentifier".equals(child.getName())) {
+                if (!child.getTextTrim().isEmpty()) {
                     contributor.addContent(child.clone());
+                }
+            }
+        }
 
         markAsChanged(contributor);
     }
 
     /**
-     * Marks the "mycoreobject" element in the basket that is parent of the given contributor 
+     * Marks the "mycoreobject" element in the basket that is parent of the given contributor
      * element to be changed by the editor form, so the servlet can identify the entries
      * that are changed and have to be saved later.
-     * 
+     *
      * @param element the contributor element that was edited.
      */
     private void markAsChanged(Element element) {
-        while (!element.getName().equals("mycoreobject"))
+        while (!element.getName().equals("mycoreobject")) {
             element = element.getParentElement();
+        }
         element.setAttribute("changed", "true");
     }
 
@@ -141,14 +142,15 @@ public class BasketName2PIDEditor extends MCRServlet {
     }
 
     /**
-     * Saves all bibliography entries in the basket that are marked as changed. 
+     * Saves all bibliography entries in the basket that are marked as changed.
      */
     private void saveChangedEntries(MCRBasket basket) throws Exception {
         LOGGER.info("BasketName2PIDEditor save changes");
 
         for (MCRBasketEntry entry : basket) {
-            if ("true".equals(entry.getContent().getAttributeValue("changed")))
+            if ("true".equals(entry.getContent().getAttributeValue("changed"))) {
                 saveChangedEntry(entry);
+            }
         }
     }
 
@@ -158,11 +160,11 @@ public class BasketName2PIDEditor extends MCRServlet {
     private void saveChangedEntry(MCRBasketEntry entry) throws Exception {
         Element objxml = entry.getContent();
         objxml.removeAttribute("changed");
-        objxml = (Element) (objxml.clone());
-        
+        objxml = (objxml.clone());
+
         MCRObject obj = new MCRObject(new Document(objxml));
         MCRMetadataManager.update(obj);
-        
+
         objxml = obj.createXML().getRootElement().clone();
         entry.setContent(objxml); // some data may have changed when saving!
     }

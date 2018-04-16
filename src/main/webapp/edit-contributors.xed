@@ -18,8 +18,6 @@
       Die Liste ist absteigend sortiert, so dass <strong>die häufigsten Namen zuerst aufgelistet</strong> 
       sind. Es werden nur die 50 häufigsten Namen aufgelistet. In der rechten Spalte sehen Sie den bisherigen Eintrag in der 
       Publikationsliste ("Nachname, Vorname [LSF PID]"), den Sie hier ggf. korrigieren können. 
-      Die Änderungen werden erst auf die Einträge auf Ihrer Merkliste angewendet,
-      wenn Sie das Formular über den Button "In Merkliste ändern" abschicken. 
     </p>  
   
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
@@ -28,7 +26,7 @@
 
       <div style="margin-top:2ex; margin-bottom:2ex;">
         <button class="roundedButton" type="submit" xed:target="servlet" xed:href="BasketName2PIDEditor">
-          In Merkliste ändern
+          Änderungen speichern
         </button>
         <button class="roundedButton" type="submit" xed:target="cancel">
           <xed:output i18n="button.cancel" />

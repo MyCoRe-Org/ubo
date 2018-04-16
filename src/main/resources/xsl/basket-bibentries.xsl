@@ -23,11 +23,6 @@
       <xsl:when test="$UBO.System.ReadOnly = 'true'" />
       <xsl:when xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()">
         <action label="Personen zuordnen" target="{$WebApplicationBaseURL}edit-contributors.xed" />
-        <xsl:if test="entry/mycoreobject[@changed='true']">
-          <action label="Änderungen speichern" target="{$ServletsBaseURL}BasketName2PIDEditor">
-            <param name="action" value="save" />
-          </action>
-        </xsl:if>
       </xsl:when>
     </xsl:choose>
     <action label="MODS" target="MCRExportServlet/mods.xml">
@@ -149,11 +144,6 @@
       <xsl:value-of select="i18n:translate('basket.introduction')" />
     </p>
     <xsl:call-template name="basketNumEntries" />
-    <xsl:if test="entry/mycoreobject[@changed='true']">
-      <p>
-        <xsl:value-of select="i18n:translate('basket.changedEntriesExist')" />
-      </p>
-    </xsl:if>
   </article>
 
   <xsl:call-template name="basketEntries" />
