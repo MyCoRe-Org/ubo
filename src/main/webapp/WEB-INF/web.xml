@@ -60,6 +60,15 @@
     <url-pattern> /servlets/BasketName2PIDEditor </url-pattern>
   </servlet-mapping>
 
+  <servlet id="BasketPubMerger">
+    <servlet-name>BasketPubMerger</servlet-name>
+    <servlet-class>unidue.ubo.basket.BasketPubMerger</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>BasketPubMerger</servlet-name>
+    <url-pattern> /servlets/BasketPubMerger </url-pattern>
+  </servlet-mapping>
+
   <servlet id="LSFPIDSearch">
     <servlet-name>LSFPIDSearch</servlet-name>
     <servlet-class>unidue.ubo.lsf.LSFPIDSearch</servlet-class>

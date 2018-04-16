@@ -23,6 +23,9 @@
       <xsl:when test="$UBO.System.ReadOnly = 'true'" />
       <xsl:when xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()">
         <action label="Personen zuordnen" target="{$WebApplicationBaseURL}edit-contributors.xed" />
+        <xsl:if test="count(/basket/entry) &gt; 1">
+          <action label="Zusammenführen" target="BasketPubMerger" />
+        </xsl:if>
       </xsl:when>
     </xsl:choose>
     <action label="MODS" target="MCRExportServlet/mods.xml">
@@ -35,26 +38,28 @@
       <param name="root" value="export" />
       <param name="transformer" value="bibtex" />
     </action>
-    <action label="EndNote" target="MCRExportServlet/export.endnote">
-      <param name="basket" value="bibentries" />
-      <param name="root" value="export" />
-      <param name="transformer" value="endnote" />
-    </action>
-    <action label="RIS" target="MCRExportServlet/export.ris">
-      <param name="basket" value="bibentries" />
-      <param name="root" value="export" />
-      <param name="transformer" value="ris" />
-    </action>
-    <action label="PDF" target="MCRExportServlet/export.pdf">
-      <param name="basket" value="bibentries" />
-      <param name="root" value="export" />
-      <param name="transformer" value="pdf" />
-    </action>
-    <action label="HTML" target="MCRExportServlet/export.html">
-      <param name="basket" value="bibentries" />
-      <param name="root" value="export" />
-      <param name="transformer" value="html" />
-    </action>
+    <xsl:if xmlns:check="xalan://unidue.ubo.AccessControl" test="not(check:currentUserIsAdmin())">
+      <action label="EndNote" target="MCRExportServlet/export.endnote">
+        <param name="basket" value="bibentries" />
+        <param name="root" value="export" />
+        <param name="transformer" value="endnote" />
+      </action>
+      <action label="RIS" target="MCRExportServlet/export.ris">
+        <param name="basket" value="bibentries" />
+        <param name="root" value="export" />
+        <param name="transformer" value="ris" />
+      </action>
+      <action label="PDF" target="MCRExportServlet/export.pdf">
+        <param name="basket" value="bibentries" />
+        <param name="root" value="export" />
+        <param name="transformer" value="pdf" />
+      </action>
+      <action label="HTML" target="MCRExportServlet/export.html">
+        <param name="basket" value="bibentries" />
+        <param name="root" value="export" />
+        <param name="transformer" value="html" />
+      </action>
+    </xsl:if>
   </xsl:for-each>
 </xsl:variable>
 
@@ -161,11 +166,9 @@
         <xsl:with-param name="mode">divs</xsl:with-param> 
       </xsl:apply-templates>
       <div class="footer">
-        <form action="{$ServletsBaseURL}DozBibEntryServlet" method="get">
-          <input type="hidden" name="mode" value="show"/>
-          <input type="hidden" name="id" value="{ancestor::mycoreobject/@ID}"/>
-          <input type="submit" class="roundedButton" value="{i18n:translate('result.dozbib.info')}" />
-        </form>
+        <a class="roundedButton" href="{$ServletsBaseURL}DozBibEntryServlet?id={ancestor::mycoreobject/@ID}">
+          <xsl:value-of select="i18n:translate('result.dozbib.info')" />
+        </a>
       </div>
     </div>
   </xsl:for-each>
