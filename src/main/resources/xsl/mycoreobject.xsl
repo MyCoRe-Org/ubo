@@ -224,6 +224,20 @@
         </xsl:choose>
         <xsl:text>:</xsl:text> 
       </h3>
+      
+      <a style="float:right" class="roundedButton">
+        <xsl:attribute name="href">
+          <xsl:text>MCRBasketServlet?type=bibentries&amp;action=add&amp;resolve=true</xsl:text>
+          <xsl:text>&amp;id=</xsl:text><xsl:value-of select="$myID" />
+          <xsl:text>&amp;uri=mcrobject:</xsl:text><xsl:value-of select="$myID" />
+          <xsl:for-each select="$duplicates3">
+            <xsl:text>&amp;id=</xsl:text><xsl:value-of select="." />
+            <xsl:text>&amp;uri=mcrobject:</xsl:text><xsl:value-of select="." />
+          </xsl:for-each>
+        </xsl:attribute>
+        <xsl:value-of select="i18n:translate('button.basketAdd')" />
+      </a>
+      
       <ul>
         <xsl:for-each select="$duplicates3">
           <li>
