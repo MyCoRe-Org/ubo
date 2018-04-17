@@ -1,6 +1,6 @@
 package unidue.ubo.basket;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -67,7 +67,7 @@ public class BasketPubMerger extends MCRServlet {
 
     private void mergeHosts(MCRBasket basket) throws MCRAccessException, MCRActiveLinkException {
         List<MCRObject> children = basket2objects(basket);
-        Set<MCRObjectID> parentIDs = new HashSet<MCRObjectID>();
+        Set<MCRObjectID> parentIDs = new LinkedHashSet<MCRObjectID>();
 
         for (MCRObject child : children) {
             Element hostItem = getHostItem(child);
