@@ -25,6 +25,9 @@
         <action label="Personen zuordnen" target="{$WebApplicationBaseURL}edit-contributors.xed" />
         <xsl:if test="count(/basket/entry) &gt; 1">
           <action label="Zusammenführen" target="BasketPubMerger" />
+          <action label="Zusammenhosten" target="BasketPubMerger">
+            <param name="target" value="hosts" />
+          </action>
         </xsl:if>
       </xsl:when>
     </xsl:choose>
