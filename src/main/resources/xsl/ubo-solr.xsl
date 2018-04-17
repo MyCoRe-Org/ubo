@@ -77,6 +77,11 @@
         <xsl:apply-templates select="mods:subTitle" mode="solrField" />
       </field>
     </xsl:if>
+    <xsl:if test="../mods:genre='journal'">
+      <xsl:call-template name="buildTitleField">
+        <xsl:with-param name="name">journal</xsl:with-param>
+      </xsl:call-template>
+    </xsl:if>
   </xsl:template>
   
   <xsl:template match="mods:relatedItem[@type='host']/mods:titleInfo" mode="solrField.host">
