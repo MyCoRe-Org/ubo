@@ -31,9 +31,21 @@
     <mods:titleInfo>
       <xsl:apply-templates select="@xml:lang" />
       <mods:title>
-        <xsl:value-of select="text()" />
+        <xsl:apply-templates select="*|text()" />
       </mods:title>
     </mods:titleInfo>
+  </xsl:template>
+  
+  <xsl:template match="inf"> <!-- subscript / inferior -->
+    <xsl:value-of select="translate(text(),'-+=()aeox0123456789','₋₊₌₍₎ₐₑₒₓ₀₁₂₃₄₅₆₇₈₉')" />
+  </xsl:template>
+  
+  <xsl:template match="sup"> <!-- superscript / superior -->
+    <xsl:value-of select="translate(text(),'-+=()ni0123456789','⁻⁺⁼⁽⁾ⁿⁱ⁰¹²³⁴⁵⁶⁷⁸⁹')" />
+  </xsl:template>
+
+  <xsl:template match="titletext/text()|ce:para/text()" priority="1">
+    <xsl:copy-of select="." />
   </xsl:template>
 
   <xsl:template match="scopus:authors/scopus:author">
@@ -99,7 +111,7 @@
   <xsl:template match="abstracts/abstract">
     <mods:abstract>
       <xsl:apply-templates select="@xml:lang" />
-      <xsl:value-of select="ce:para" />
+      <xsl:apply-templates select="*|text()" />
     </mods:abstract>
   </xsl:template>
 
