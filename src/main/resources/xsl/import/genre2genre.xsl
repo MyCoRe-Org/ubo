@@ -33,6 +33,7 @@
     <xsl:choose>
       <xsl:when test="$genre='trade journal'">journal</xsl:when>
       <xsl:when test="$genre='journal'">journal</xsl:when>
+      <xsl:when test="$genre='journals'">article</xsl:when>
       <xsl:when test="$genre='journal article'">article</xsl:when>
       <xsl:when test="$genre='article'">article</xsl:when>
       <xsl:when test="$genre='article in press'">article</xsl:when>
@@ -40,6 +41,7 @@
       <xsl:when test="$genre='book' and ancestor::mods:relatedItem/@type='host'">collection</xsl:when>
       <xsl:when test="$genre='book'">book</xsl:when>
       <xsl:when test="$genre='book series'">series</xsl:when>
+      <xsl:when test="$genre='conferences'">chapter</xsl:when>
       <xsl:when test="$genre='conference paper'">chapter</xsl:when>
       <xsl:when test="$genre='conference abstract'">speech</xsl:when>        
       <xsl:when test="$genre='conference proceedings'">proceedings</xsl:when>
@@ -93,6 +95,7 @@
     <xsl:variable name="genre" select="normalize-space(translate(../../mods:genre[1],'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'))" />
     <xsl:choose>
       <xsl:when test="$genre='conference'">proceedings</xsl:when>
+      <xsl:when test="$genre='conferences'">proceedings</xsl:when>
       <xsl:when test="$genre='incollection'">collection</xsl:when>
       <xsl:when test="$genre='inproceedings'">proceedings</xsl:when>
       <xsl:when test="$genre='inbook'">collection</xsl:when>
