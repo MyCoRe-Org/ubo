@@ -67,60 +67,38 @@
 <!-- ============ Aktionen ============ -->
 
 <xsl:variable name="actions">
-  <xsl:if test="$permission.admin and (string-length($step) = 0) and not ($UBO.System.ReadOnly = 'true')">
-    <action label="{i18n:translate('button.edit')}" target="{$WebApplicationBaseURL}edit-publication.xed">
-      <param name="id"     value="{/mycoreobject/@ID}" />
-    </action>
-    <action label="Admin" target="{$WebApplicationBaseURL}edit-admin.xed">
-      <param name="id"     value="{/mycoreobject/@ID}" />
-    </action>
-    <xsl:if test="not(/mycoreobject/structure/children/child)">
-      <action label="{i18n:translate('button.delete')}" target="{$ServletsBaseURL}DozBibEntryServlet">
-        <param name="XSL.step"   value="ask.delete" />
-        <param name="id"         value="{/mycoreobject/@ID}" />
-      </action>
+  <div id="buttons">
+    <xsl:if test="$permission.admin and (string-length($step) = 0) and not ($UBO.System.ReadOnly = 'true')">
+      <a class="action" href="{$WebApplicationBaseURL}edit-publication.xed?id={/mycoreobject/@ID}">
+        <xsl:value-of select="i18n:translate('button.edit')" />
+      </a>
+      <a class="action" href="{$WebApplicationBaseURL}edit-admin.xed?id={/mycoreobject/@ID}">Admin</a>
+      <xsl:if test="not(/mycoreobject/structure/children/child)">
+        <a class="action" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.step=ask.delete">
+          <xsl:value-of select="i18n:translate('button.delete')" />
+        </a>
+      </xsl:if>
+      <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host'][string-length(@xlink:href)=0]">
+        <!-- Button to extract mods:relatedItem[@type='host'] to a new separate entry -->
+        <a class="action" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;mode=xhost">
+          <xsl:value-of select="i18n:translate('ubo.relatedItem.host.separate')" />
+        </a>
+      </xsl:if>
     </xsl:if>
-    <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host'][string-length(@xlink:href)=0]">
-      <!-- Button to extract mods:relatedItem[@type='host'] to a new separate entry -->
-      <action label="{i18n:translate('ubo.relatedItem.host.separate')}" target="{$ServletsBaseURL}DozBibEntryServlet">
-        <param name="mode" value="xhost" />
-        <param name="id"   value="{/mycoreobject/@ID}" />
-      </action>
+    <xsl:if xmlns:basket="xalan://unidue.ubo.basket.BasketUtils" test="basket:hasSpace() and not(basket:contains(string(/mycoreobject/@ID)))">
+      <a class="action" href="{$ServletsBaseURL}MCRBasketServlet?type=bibentries&amp;action=add&amp;resolve=true&amp;id={/mycoreobject/@ID}&amp;uri=mcrobject:{/mycoreobject/@ID}">
+        <xsl:value-of select="i18n:translate('button.basketAdd')" />
+      </a>
     </xsl:if>
-  </xsl:if>
-  <xsl:if xmlns:basket="xalan://unidue.ubo.basket.BasketUtils" test="basket:hasSpace() and not(basket:contains(string(/mycoreobject/@ID)))">
-    <action label="{i18n:translate('button.basketAdd')}" target="{$ServletsBaseURL}MCRBasketServlet">
-      <param name="type"    value="bibentries" />
-      <param name="action"  value="add" />
-      <param name="resolve" value="true" />
-      <param name="id"      value="{/mycoreobject/@ID}" />
-      <param name="uri"     value="mcrobject:{/mycoreobject/@ID}" />
-    </action>
-  </xsl:if>
-  <xsl:if test="string-length($step) = 0">
-    <action label="MODS" target="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.xml">
-      <param name="uri"          value="mcrobject:{/mycoreobject/@ID}" />
-      <param name="root"         value="export" />
-      <param name="transformer"  value="mods" />
-    </action>
-    <xsl:if test="not($permission.admin)">
-      <action label="BibTeX" target="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.bib">
-        <param name="uri"          value="mcrobject:{/mycoreobject/@ID}" />
-        <param name="root"         value="export" />
-        <param name="transformer"  value="bibtex" />
-      </action>
-      <action label="EndNote" target="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.enl">
-        <param name="uri"          value="mcrobject:{/mycoreobject/@ID}" />
-        <param name="root"         value="export" />
-        <param name="transformer"  value="endnote" />
-      </action>
-      <action label="RIS" target="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.ris">
-        <param name="uri"          value="mcrobject:{/mycoreobject/@ID}" />
-        <param name="root"         value="export" />
-        <param name="transformer"  value="ris" />
-      </action>
-    </xsl:if>    
-  </xsl:if>
+    <xsl:if test="string-length($step) = 0">
+      <a class="action" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.xml?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=mods">MODS</a>
+      <xsl:if test="not($permission.admin)">
+        <a class="action" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.bib?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=bibtex">BibTeX</a>
+        <a class="action" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.enl?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=endnote">EndNote</a>
+        <a class="action" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.ris?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=ris">RIS</a>
+      </xsl:if>    
+    </xsl:if>
+  </div>
 </xsl:variable>
 
 <!-- ============ Rechte Seite: Inhalte ============ -->

@@ -140,10 +140,13 @@
 
   <!-- page content -->
 
+  <xsl:variable name="actions" />
+
   <xsl:template name="layout.inhalt">
     <section role="main" id="inhalt">
+    
       <!-- ==== Buttons für Bearbeitungsaktionen ==== -->
-      <xsl:call-template name="action.buttons" />
+      <xsl:copy-of select="$actions" />
 
       <xsl:choose>
         <xsl:when test="$allowed.to.see.this.page = 'true'">
@@ -156,48 +159,6 @@
         </xsl:otherwise>
       </xsl:choose>
     </section>
-  </xsl:template>
-  
-  <!-- actions -->
-
-  <xsl:variable name="actions" />
-  
-  <xsl:template name="action.buttons">
-    <xsl:variable name="actions.combined" select="xalan:nodeset($actions)/action" />
-  
-    <xsl:if test="count($actions.combined) > 0">
-      <div id="buttons">
-        <xsl:apply-templates select="$actions.combined" mode="action.buttons" />
-      </div>
-    </xsl:if>
-  </xsl:template>
-
-  <xsl:template match="action" mode="action.buttons">
-    <xsl:element name="a">
-      <xsl:if test="@openwin='true'">
-        <xsl:attribute name="target">_blank</xsl:attribute>
-      </xsl:if>
-      <xsl:attribute name="class">
-        <xsl:value-of select="'action'"/>
-      </xsl:attribute>
-      <xsl:attribute name="href">
-        <xsl:value-of select="@target"/>
-        <xsl:for-each select="param">
-          <xsl:choose>
-            <xsl:when test="position() = 1">
-              <xsl:value-of select="'?'"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="'&amp;'"/>
-            </xsl:otherwise>
-          </xsl:choose>
-          <xsl:value-of select="@name"/>
-          <xsl:value-of select="'='"/>
-          <xsl:value-of select="encoder:encode(string(@value),'UTF-8')"/>
-        </xsl:for-each>
-      </xsl:attribute>
-      <xsl:value-of select="@label"/>
-    </xsl:element>
   </xsl:template>
 
   <!-- ========== Prüfe auf Berechtigung des Benutzers ======== -->

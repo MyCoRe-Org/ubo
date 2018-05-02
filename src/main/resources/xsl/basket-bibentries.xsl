@@ -17,63 +17,32 @@
 <xsl:variable name="PageID" select="'basket'" />
 
 <xsl:variable name="actions">
-  <xsl:call-template name="basketClearButton" />
   <xsl:for-each select="/basket[entry]">
-    <xsl:choose>
-      <xsl:when test="$UBO.System.ReadOnly = 'true'" />
-      <xsl:when xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()">
-        <action label="Personen zuordnen" target="{$WebApplicationBaseURL}edit-contributors.xed" />
-        <xsl:if test="count(/basket/entry) &gt; 1">
-          <action label="Zusammenführen" target="BasketPubMerger" />
-          <action label="Zusammenhosten" target="BasketPubMerger">
-            <param name="target" value="hosts" />
-          </action>
-        </xsl:if>
-      </xsl:when>
-    </xsl:choose>
-    <action label="MODS" target="MCRExportServlet/mods.xml">
-      <param name="basket" value="bibentries" />
-      <param name="root" value="export" />
-      <param name="transformer" value="mods" />
-    </action>
-    <action label="BibTeX" target="MCRExportServlet/export.bibtex">
-      <param name="basket" value="bibentries" />
-      <param name="root" value="export" />
-      <param name="transformer" value="bibtex" />
-    </action>
-    <xsl:if xmlns:check="xalan://unidue.ubo.AccessControl" test="not(check:currentUserIsAdmin())">
-      <action label="EndNote" target="MCRExportServlet/export.endnote">
-        <param name="basket" value="bibentries" />
-        <param name="root" value="export" />
-        <param name="transformer" value="endnote" />
-      </action>
-      <action label="RIS" target="MCRExportServlet/export.ris">
-        <param name="basket" value="bibentries" />
-        <param name="root" value="export" />
-        <param name="transformer" value="ris" />
-      </action>
-      <action label="PDF" target="MCRExportServlet/export.pdf">
-        <param name="basket" value="bibentries" />
-        <param name="root" value="export" />
-        <param name="transformer" value="pdf" />
-      </action>
-      <action label="HTML" target="MCRExportServlet/export.html">
-        <param name="basket" value="bibentries" />
-        <param name="root" value="export" />
-        <param name="transformer" value="html" />
-      </action>
-    </xsl:if>
+    <div id="buttons">
+      <a class="action" href="{$ServletsBaseURL}MCRBasketServlet?type=bibentries&amp;action=clear">
+        <xsl:value-of select="i18n:translate('button.clear')" />
+      </a>
+      <xsl:choose>
+        <xsl:when test="$UBO.System.ReadOnly = 'true'" />
+        <xsl:when xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()">
+          <a class="action" href="{$WebApplicationBaseURL}edit-contributors.xed">Personen zuordnen</a> 
+          <xsl:if test="count(/basket/entry) &gt; 1">
+            <a class="action" href="BasketPubMerger">Zusammenführen</a> 
+            <a class="action" href="BasketPubMerger?target=hosts">Zusammenhosten</a> 
+          </xsl:if>
+        </xsl:when>
+      </xsl:choose>
+      <a class="action" href="MCRExportServlet/mods.xml?basket=bibentries&amp;root=export&amp;transformer=mods">MODS</a>
+      <a class="action" href="MCRExportServlet/export.bibtex?basket=bibentries&amp;root=export&amp;transformer=bibtex">BibTeX</a>
+      <xsl:if xmlns:check="xalan://unidue.ubo.AccessControl" test="not(check:currentUserIsAdmin())">
+        <a class="action" href="MCRExportServlet/export.endnote?basket=bibentries&amp;root=export&amp;transformer=endnote">EndNote</a>
+        <a class="action" href="MCRExportServlet/export.ris?basket=bibentries&amp;root=export&amp;transformer=ris">RIS</a>
+        <a class="action" href="MCRExportServlet/export.pdf?basket=bibentries&amp;root=export&amp;transformer=pdf">PDF</a>
+        <a class="action" href="MCRExportServlet/export.html?basket=bibentries&amp;root=export&amp;transformer=html">HTML</a>
+      </xsl:if>
+    </div>
   </xsl:for-each>
 </xsl:variable>
-
-<xsl:template name="basketClearButton">
-  <xsl:for-each select="/basket[entry]">
-    <action target="{$ServletsBaseURL}MCRBasketServlet" label="{i18n:translate('button.clear')}">
-      <param name="type"   value="{@type}" />
-      <param name="action" value="clear" />
-    </action>
-  </xsl:for-each>
-</xsl:template>
 
 <xsl:template name="basketNumEntries">
   <div class="section">

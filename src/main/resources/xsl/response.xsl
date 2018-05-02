@@ -93,13 +93,15 @@
 
 <xsl:variable name="actions">
   <xsl:if test="$numFound &gt; 0">
-    <action label="MODS"      target="export?{$exportParams}&amp;XSL.Transformer=mods" />
-    <action label="BibTeX"    target="export?{$exportParams}&amp;XSL.Transformer=bibtex" />
-    <action label="EndNote"   target="export?{$exportParams}&amp;XSL.Transformer=endnote" />
-    <action label="RIS"       target="export?{$exportParams}&amp;XSL.Transformer=ris" />
-    <action label="PDF"       target="export?{$exportParams}&amp;XSL.Transformer=pdf" />
-    <action label="HTML"      target="export?{$exportParams}&amp;XSL.Transformer=html" />
-    <action label="CSV"       target="export?{$exportParams}&amp;fl=id,year,genre,title&amp;wt=csv" />
+    <div id="buttons">
+      <a class="action" href="export?{$exportParams}&amp;XSL.Transformer=mods">MODS</a>
+      <a class="action" href="export?{$exportParams}&amp;XSL.Transformer=bibtex">BibTeX</a>
+      <a class="action" href="export?{$exportParams}&amp;XSL.Transformer=endnote">EndNote</a>
+      <a class="action" href="export?{$exportParams}&amp;XSL.Transformer=ris">RIS</a>
+      <a class="action" href="export?{$exportParams}&amp;XSL.Transformer=pdf">PDF</a>
+      <a class="action" href="export?{$exportParams}&amp;XSL.Transformer=html">HTML</a>
+      <a class="action" href="export?{$exportParams}&amp;fl=id,year,genre,title&amp;wt=csv">CSV</a>
+    </div>
   </xsl:if>
 </xsl:variable>
 
