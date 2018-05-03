@@ -56,20 +56,24 @@ public class DozBibCommands extends MCRAbstractCommands {
     /** Commands for the MyCoRe Command Line Interface */
     public DozBibCommands() {
         addCommand(new MCRCommand("ubo mods export all entries to directory {0}",
-                "unidue.ubo.DozBibCommands.exportMODS String",
-                "exports all entries as MODS dump to a zipped xml file in local directory {0}"));
+            "unidue.ubo.DozBibCommands.exportMODS String",
+            "exports all entries as MODS dump to a zipped xml file in local directory {0}"));
         addCommand(new MCRCommand("ubo transform entries using xsl {0}",
-                "unidue.ubo.DozBibCommands.transformEntries String",
-                "Transforms persistent xml of all bibentries using XSL stylesheet"));
+            "unidue.ubo.DozBibCommands.transformEntries String",
+            "Transforms persistent xml of all bibentries using XSL stylesheet"));
         addCommand(new MCRCommand("ubo find gnds", "unidue.ubo.DozBibGNDCommands.findGNDs", "Find GNDs"));
         addCommand(new MCRCommand("ubo migrate to mcrobject", "unidue.ubo.DozBibCommands.migrate2mcrobject",
-                "migrates all bibentries to mycoreobject persistence"));
+            "migrates all bibentries to mycoreobject persistence"));
         addCommand(new MCRCommand("ubo build duplicates report to directory {0}",
-                "unidue.ubo.dedup.DeDupCommands.buildDuplicatesReport String",
-                "builds report on possibly duplicate entries and writes it as xml to file duplicates.xml in directory {0}"));
+            "unidue.ubo.dedup.DeDupCommands.buildDuplicatesReport String",
+            "builds report on possibly duplicate entries and writes it as xml to file duplicates.xml in directory {0}"));
         addCommand(new MCRCommand("ubo import mods collection from file {0}",
-                "unidue.ubo.DozBibCommands.importMODSCollection String",
-                "import mods:modsCollection from xml file {0}"));
+            "unidue.ubo.DozBibCommands.importMODSCollection String",
+            "import mods:modsCollection from xml file {0}"));
+        addCommand(new MCRCommand("ubo update from scopus for affiliation ID {0} last {1} days max {2}",
+            "unidue.ubo.importer.scopus.ScopusUpdater.update String int int",
+            "Queries Scopus for new publications of affiliation ID {0} added within last {1} days," +
+                "retrieves max {2} publications and imports them if not already present"));
     }
 
     /** Exports all entries as MODS dump to a zipped xml file in the given directory */
@@ -191,7 +195,7 @@ public class DozBibCommands extends MCRAbstractCommands {
         }
         if (!root.getName().equals("modsCollection")) {
             throw new MCRException(
-                    MessageFormat.format("File {0} does not contain a mods:modsCollection.", file.getAbsolutePath()));
+                MessageFormat.format("File {0} does not contain a mods:modsCollection.", file.getAbsolutePath()));
         }
         for (Element mods : root.getChildren("mods", MCRConstants.MODS_NAMESPACE)) {
             MCRMODSWrapper wrapper = new MCRMODSWrapper();
