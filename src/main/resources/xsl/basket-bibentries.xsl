@@ -26,12 +26,10 @@
         <xsl:when test="$UBO.System.ReadOnly = 'true'" />
         <xsl:when xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()">
           <a class="action" href="{$WebApplicationBaseURL}edit-contributors.xed">Personen zuordnen</a>
-          <!--  
           <xsl:if test="count(/basket/entry) &gt; 1">
-            <a class="action" href="BasketPubMerger">Zusammenführen</a> 
-            <a class="action" href="BasketPubMerger?target=hosts">Zusammenhosten</a> 
+            <a class="action" href="BasketPubMerger?commit=false&amp;target=publications">Zusammenführen</a> 
+            <a class="action" href="BasketPubMerger?commit=false&amp;target=hosts">Zusammenhosten</a>
           </xsl:if>
-          -->
         </xsl:when>
       </xsl:choose>
       <a class="action" href="MCRExportServlet/mods.xml?basket=bibentries&amp;root=export&amp;transformer=mods">MODS</a>

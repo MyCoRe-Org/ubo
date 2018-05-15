@@ -1,11 +1,13 @@
 package unidue.ubo.basket;
 
-import java.util.LinkedHashSet;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.TransformerException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +17,7 @@ import org.jdom2.Element;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRPersistenceException;
+import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -26,15 +29,21 @@ import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.mods.merger.MCRMergeTool;
+import org.xml.sax.SAXException;
 
 import unidue.ubo.AccessControl;
 import unidue.ubo.DozBibEntryServlet;
 
 /**
  * Merges publications in basket.
- * By default, merges the publications in basket into a single one, assuming all are dupulicates.
- * With parameter "target=hosts", extracts the host items of all publications in basket and merges into a single host,
- * assuming all publications in basket have the same host but maybe with duplicate/unseparated host entries.
+ *
+ * With parameter "commit=true",
+ *   will actually change publications in store, otherwise preview only
+ * With parameter "target=publications",
+ *   merges the publications in basket into a single one, assuming all are dupulicates.
+ * With parameter "target=hosts",
+ *   extracts the host items of all publications in basket and merges into a single host,
+ *   assuming all publications in basket have the same host but maybe with duplicate/unseparated host entries.
  *
  * @author Frank L\u00FCtzenkirchen
  */
@@ -55,19 +64,66 @@ public class BasketPubMerger extends MCRServlet {
         }
 
         MCRBasket basket = BasketUtils.getBasket();
+        String target = job.getRequest().getParameter("target");
+        boolean commit = "true".equals(job.getRequest().getParameter("commit"));
 
-        if ("hosts".equals(job.getRequest().getParameter("target"))) {
-            mergeHosts(basket);
-        } else {
-            List<MCRObject> duplicates = basket2objects(basket);
-            mergeDuplicates(basket, duplicates);
+        MCRObject master = null;
+
+        if ("publications".equals(target)) {
+            master = mergePublications(basket, commit);
+        } else if ("hosts".equals(target)) {
+            master = mergeHosts(basket, commit);
         }
-        res.sendRedirect(getServletBaseURL() + "MCRBasketServlet?type=bibentries&action=show");
+
+        if (commit) {
+            res.sendRedirect("DozBibEntryServlet?XSL.step=merged." + target + "&id=" + master.getId());
+        } else {
+            show(job, master, target);
+        }
     }
 
-    private void mergeHosts(MCRBasket basket) throws MCRAccessException, MCRActiveLinkException {
+    private MCRObject mergeHosts(MCRBasket basket, boolean commit) throws MCRAccessException, MCRActiveLinkException {
         List<MCRObject> children = basket2objects(basket);
-        Set<MCRObjectID> parentIDs = new LinkedHashSet<MCRObjectID>();
+        List<MCRObject> parents = collectParents(children);
+        MCRObject master = merge(parents);
+        if (commit) {
+            assignValidID(master);
+            MCRMetadataManager.update(master);
+            adoptChildrenThenKillFathers(parents, master);
+            linkUnlinkedHostItems(master, children);
+            updateBasket(basket);
+        }
+        return master;
+    }
+
+    private void assignValidID(MCRObject master) {
+        if (master.getId().getNumberAsInteger() == 0) {
+            String base = master.getId().getBase();
+            MCRObjectID oid = MCRObjectID.getNextFreeId(base);
+            master.setId(oid);
+        }
+    }
+
+    private MCRObject mergePublications(MCRBasket basket, boolean commit)
+        throws MCRAccessException, MCRActiveLinkException {
+        List<MCRObject> duplicates = basket2objects(basket);
+        MCRObject master = merge(duplicates);
+        if (commit) {
+            MCRMetadataManager.update(master);
+            adoptChildrenThenKillFathers(duplicates, master);
+            basket.clear();
+        }
+        return master;
+    }
+
+    private void updateBasket(MCRBasket basket) {
+        for (MCRBasketEntry entry : basket) {
+            entry.resolveContent();
+        }
+    }
+
+    private void linkUnlinkedHostItems(MCRObject master, List<MCRObject> children) throws MCRAccessException {
+        String masterID = master.getId().toString();
 
         for (MCRObject child : children) {
             Element hostItem = getHostItem(child);
@@ -77,63 +133,57 @@ public class BasketPubMerger extends MCRServlet {
 
             Attribute href = hostItem.getAttribute("href", MCRConstants.XLINK_NAMESPACE);
             if ((href == null) || (href.getValue().isEmpty())) {
-                LOGGER.info("extract host inside " + child.getId() + "...");
-                String nullID = MCRObjectID.formatID(child.getId().getBase(), 0);
-                hostItem.setAttribute("href", nullID, MCRConstants.XLINK_NAMESPACE);
+                hostItem.setAttribute("href", masterID, MCRConstants.XLINK_NAMESPACE);
+                child.getStructure().setParent(masterID);
                 MCRMetadataManager.update(child);
-                updateInBasket(basket, child);
             }
-
-            MCRObjectID parentID = child.getParent();
-            LOGGER.info("found host to merge: " + parentID);
-            parentIDs.add(parentID);
-        }
-
-        List<MCRObject> duplicates = parentIDs.stream().map(id -> MCRMetadataManager.retrieveMCRObject(id))
-            .collect(Collectors.toList());
-
-        mergeDuplicates(basket, duplicates);
-    }
-
-    private void mergeDuplicates(MCRBasket basket, List<MCRObject> duplicates)
-        throws MCRAccessException, MCRActiveLinkException {
-        if (duplicates.size() < 2) {
-            return;
-        }
-
-        MCRObject master = mergeMODS(duplicates);
-
-        LOGGER.info("saving merged master " + master.getId() + "...");
-        MCRMetadataManager.update(master);
-        updateInBasket(basket, master);
-
-        for (MCRObject duplicate : duplicates) {
-            adoptChildrenThenKillFather(master, duplicate);
-            removeFromBasket(basket, duplicate.getId());
         }
     }
 
-    private void updateInBasket(MCRBasket basket, MCRObject obj) {
-        MCRBasketEntry entry = basket.get(obj.getId().toString());
-        if (entry != null) {
-            entry.setContent(obj.createXML().clone().detachRootElement());
+    private List<MCRObject> collectParents(List<MCRObject> children) {
+        List<MCRObject> parents = new ArrayList<MCRObject>();
+        Set<String> parentIDs = new HashSet<String>();
+
+        for (MCRObject child : children) {
+            Element hostItem = getHostItem(child);
+            if (hostItem != null) {
+                String parentID = hostItem.getAttributeValue("href", MCRConstants.XLINK_NAMESPACE);
+                if (parentID != null) {
+                    if (!parentIDs.contains(parentID)) {
+                        parents.add(MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(parentID)));
+                    }
+                } else {
+                    parents.add(buildFromRelatedItem(hostItem, child.getId().getBase()));
+                }
+            }
         }
+        return parents;
     }
 
-    private void removeFromBasket(MCRBasket basket, MCRObjectID oid) {
-        MCRBasketEntry entry = basket.get(oid.toString());
-        if (entry != null) {
-            basket.remove(entry);
-        }
+    private MCRObject buildFromRelatedItem(Element relatedItem, String base) {
+        Element mods = relatedItem.clone().setName("mods");
+        mods.removeAttribute("type");
+        mods.removeChildren("part", MCRConstants.MODS_NAMESPACE);
+
+        MCRMODSWrapper wrapper = new MCRMODSWrapper();
+        wrapper.setMODS(mods);
+        MCRObject object = wrapper.getMCRObject();
+        String nullID = MCRObjectID.formatID(base, 0);
+        object.setId(MCRObjectID.getInstance(nullID));
+        return object;
     }
 
     private List<MCRObject> basket2objects(MCRBasket basket) {
-        List<MCRObject> duplicates = basket.stream()
-            .map(e -> new MCRObject(new Document(e.getContent().clone()))).collect(Collectors.toList());
-        return duplicates;
+        List<MCRObject> objects = new ArrayList<MCRObject>();
+        for (MCRBasketEntry entry : basket) {
+            MCRObjectID id = MCRObjectID.getInstance(entry.getID());
+            MCRObject obj = MCRMetadataManager.retrieveMCRObject(id);
+            objects.add(obj);
+        }
+        return objects;
     }
 
-    private MCRObject mergeMODS(List<MCRObject> duplicates) {
+    private MCRObject merge(List<MCRObject> duplicates) {
         MCRObject master = duplicates.remove(0);
         Element modsMaster = new MCRMODSWrapper(master).getMODS();
 
@@ -144,6 +194,22 @@ public class BasketPubMerger extends MCRServlet {
         }
 
         return master;
+    }
+
+    private void show(MCRServletJob job, MCRObject object, String target)
+        throws IOException, TransformerException, SAXException {
+        Document xml = object.createXML();
+        job.getRequest().setAttribute("XSL.step", "ask." + target);
+        getLayoutService().doLayout(job.getRequest(), job.getResponse(), new MCRJDOMContent(xml));
+    }
+
+    private void adoptChildrenThenKillFathers(List<MCRObject> duplicates, MCRObject master)
+        throws MCRAccessException, MCRActiveLinkException {
+        for (MCRObject duplicate : duplicates) {
+            if (duplicate.getId().getNumberAsInteger() > 0) {
+                adoptChildrenThenKillFather(master, duplicate);
+            }
+        }
     }
 
     private void adoptChildrenThenKillFather(MCRObject newParent, MCRObject oldParent)

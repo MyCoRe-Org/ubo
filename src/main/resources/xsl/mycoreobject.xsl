@@ -105,6 +105,7 @@
 
 <xsl:template match="mycoreobject">
  <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
+  <xsl:call-template name="steps.and.actions" /> 
   <div class="section bibentry highlight2" style="padding:1ex;">
     <xsl:apply-templates select="." mode="cite">
       <xsl:with-param name="mode">divs</xsl:with-param>
@@ -126,7 +127,6 @@
     </xsl:if>
     <xsl:apply-templates select="/mycoreobject/service/servflags/servflag[@type='status']" />
     <xsl:apply-templates select="/mycoreobject/structure/children[child]" />
-    <xsl:call-template name="steps.and.actions" /> 
   </div>
   <div class="section highlight2" style="padding-top:2ex; padding-bottom:2ex;">
     <div class="container_12 ubo_details">
@@ -247,6 +247,18 @@
     <xsl:when test="$step='confirm.submitted'">
       <xsl:call-template name="confirm.submitted" />
     </xsl:when>
+    <xsl:when test="$step='ask.publications'">
+      <xsl:call-template name="ask.publications" />
+    </xsl:when>
+    <xsl:when test="$step='merged.publications'">
+      <xsl:call-template name="merged.publications" />
+    </xsl:when>
+    <xsl:when test="$step='ask.hosts'">
+      <xsl:call-template name="ask.hosts" />
+    </xsl:when>
+    <xsl:when test="$step='merged.hosts'">
+      <xsl:call-template name="merged.hosts" />
+    </xsl:when>
   </xsl:choose>
 </xsl:template>
 
@@ -286,6 +298,65 @@
     onclick="self.location.href='{$ServletsBaseURL}DozBibEntryServlet?mode=delete&amp;id={/mycoreobject/@ID}'" />
   <input type="button" class="editorButton" name="cancel" value="{i18n:translate('button.cancelNo')}" 
     onclick="self.location.href='{$Referer}'" />
+</xsl:template>
+
+<xsl:template name="ask.publications">
+  <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
+    <p>
+      Wenn Sie die Publikationen im Korb zusammenführen, 
+      werden die bibliographischen Daten zu einem neuen Eintrag zusammengefasst 
+      und die ursprünglichen, alten Einträge gelöscht. 
+      Ergebnis wäre dieser Eintrag hier.
+    </p>
+    <p>
+      <strong>      
+        Wollen Sie die Publikationen im Korb wirklich zusammenführen?
+      </strong>
+    </p>
+    <input type="button" class="editorButton" name="merge" value="Zusammenführen" 
+      onclick="self.location.href='BasketPubMerger?commit=true&amp;target=publications'" />
+    <input type="button" class="editorButton" name="cancel" value="{i18n:translate('button.cancelNo')}" 
+      onclick="self.location.href='MCRBasketServlet?type=bibentries&amp;action=show'" />
+  </div>
+</xsl:template>
+
+<xsl:template name="ask.hosts">
+  <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
+    <p>
+      Wenn Sie die Publikationen im Korb zusammenhosten, 
+      werden die Überordnungen jeder dieser Publikationen extrahiert,
+      deren bibliographische Daten zu einem neuen Eintrag zusammengefasst 
+      und die Publikationen im Korb mit diesem neuen Eintrag verlinkt.  
+      Ergebnis wäre dieser Eintrag hier als gemeinsame Überordnung aller Publikationen im Korb.
+    </p>
+    <p>
+      <strong>      
+        Wollen Sie die Publikationen im Korb wirklich zusammenhosten?
+      </strong>
+    </p>
+    <input type="button" class="editorButton" name="merge" value="Zusammenhosten" 
+      onclick="self.location.href='BasketPubMerger?commit=true&amp;target=hosts'" />
+    <input type="button" class="editorButton" name="cancel" value="{i18n:translate('button.cancelNo')}" 
+      onclick="self.location.href='MCRBasketServlet?type=bibentries&amp;action=show'" />
+  </div>
+</xsl:template>
+
+<xsl:template name="merged.publications">
+  <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
+    <p>
+      Alle Publikationen im Korb wurden zu diesem Eintrag zusammengeführt. 
+      Die anderen Einträge wurden gelöscht. Der Korb wurde geleert.
+    </p>
+  </div>
+</xsl:template>
+
+<xsl:template name="merged.hosts">
+  <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
+    <p>
+      Alle Publikationen im Korb wurden mit dieser Überordnung verknüpft. 
+      Andere evtl. bereits vorhandene Überordnungen wurden gelöscht.
+    </p>
+  </div>
 </xsl:template>
 
 <xsl:template match="servflag[@type='status']">
