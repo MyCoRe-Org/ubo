@@ -26,6 +26,7 @@
     <xsl:apply-templates select="mods:genre[@type='intern']" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:genre[@type='intern']" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="solrField" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'oa')]" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:titleInfo" mode="solrField.host" />
     <xsl:apply-templates select="mods:relatedItem[@type='host'][mods:genre='journal']/mods:titleInfo" mode="solrField" />
@@ -200,6 +201,15 @@
     <xsl:variable name="category" select="substring-after(@valueURI,'#')" /> 
     <xsl:for-each select="document(concat('classification:editor:0:parents:ORIGIN:',$category))/descendant::item">
       <field name="origin">
+        <xsl:value-of select="@value" />
+      </field>
+    </xsl:for-each>
+  </xsl:template>
+  
+  <xsl:template match="mods:classification[contains(@authorityURI,'oa')]" mode="solrField">
+    <xsl:variable name="category" select="substring-after(@valueURI,'#')" /> 
+    <xsl:for-each select="document(concat('classification:editor:0:parents:oa:',$category))/descendant::item">
+      <field name="oa">
         <xsl:value-of select="@value" />
       </field>
     </xsl:for-each>

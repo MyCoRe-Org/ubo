@@ -493,6 +493,7 @@
   </xsl:template>
 
   <xsl:variable name="genres" select="document('classification:metadata:-1:children:ubogenre')/mycoreclass/categories" />
+  <xsl:variable name="oa"     select="document('classification:metadata:-1:children:oa')/mycoreclass/categories" />
 
   <xsl:template match="mods:genre[@type='intern']">
     <xsl:value-of select="$genres//category[@ID=current()]/label[lang($CurrentLang)]/@text" />

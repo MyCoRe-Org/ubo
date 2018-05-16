@@ -201,6 +201,9 @@
       <xsl:when test="$type='subject'">
         <xsl:value-of select="$subjects/item[@value=$value]/@label" />
       </xsl:when>
+      <xsl:when test="$type='oa'">
+        <xsl:value-of select="$oa//category[@ID=$value]/label[lang($CurrentLang)]/@text" />
+      </xsl:when>
       <xsl:when test="$type='genre'">
         <xsl:value-of select="$genres//category[@ID=$value]/label[lang($CurrentLang)]/@text" />
       </xsl:when>

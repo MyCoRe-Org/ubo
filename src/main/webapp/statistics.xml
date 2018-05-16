@@ -38,6 +38,10 @@
     <xinclude uri="xslStyle:statistics:solr:q=status:confirmed&amp;rows=0&amp;facet.field=genre" />
   </section>
 
+  <section class="highlight2">
+    <xinclude uri="xslStyle:statistics:solr:q=status:confirmed&amp;rows=0&amp;facet.field=oa" />
+  </section>
+
   <section class="highlight2" xml:lang="de">
     <h3>Am häufigsten verzeichnete Personen (nur mit UDE LSF Zuordnung, Top 50, in Publikationen ab 2012):</h3>
     <xinclude uri="xslStyle:statistics:solr:q=status:confirmed+year:[2012+TO+*]&amp;rows=0&amp;facet.field=nid_lsf&amp;facet.limit=50" />

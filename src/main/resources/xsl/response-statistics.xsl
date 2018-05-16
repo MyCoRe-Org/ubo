@@ -35,6 +35,9 @@
         <xsl:apply-templates select="lst[@name='genre']" />
       </article>
       <article class="highlight1">
+        <xsl:apply-templates select="lst[@name='oa']" />
+      </article>
+      <article class="highlight1">
         <xsl:apply-templates select="lst[@name='facet_person']" />
       </article>
     </xsl:for-each>

@@ -845,6 +845,7 @@
       <str name="facet.field">subject</str>
       <str name="facet.field">genre</str>
       <str name="facet.field">facet_host_title</str>
+      <str name="facet.field">oa</str>
     </lst>
   </requestHandler>
 
@@ -880,6 +881,7 @@
       <str name="facet.field">subject</str>
       <str name="facet.field">genre</str>
       <str name="facet.field">facet_person</str>
+      <str name="facet.field">oa</str>
     </lst>
     <lst name="invariants">
       <str name="fl" />

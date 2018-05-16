@@ -19,6 +19,7 @@
         <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='year'][int]" />
         <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='subject'][int]" />
         <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='genre'][int]" />
+        <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='oa'][int]" />
         <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='facet_person'][int]" />
         <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='nid_lsf'][int]" />
         <xsl:apply-templates select="lst[@name='facet_pivot']/arr[@name='name_id_type,name_id_type']" />
@@ -223,6 +224,78 @@
                 <xsl:for-each select="int">
                   <xsl:sort select="text()" data-type="number" order="descending" />
                   ['<xsl:value-of select="$genres//category[@ID=current()/@name]/label[lang($CurrentLang)]/@text"/>' , <xsl:value-of select="text()"/>]
+                  <xsl:if test="position()!=last()">,</xsl:if>
+                </xsl:for-each>
+              ]
+          }
+        ]
+    });
+ });
+    </script>
+  </xsl:template>
+
+  <xsl:variable name="oa" select="document('classification:metadata:-1:children:oa')/mycoreclass/categories" />
+
+  <xsl:template match="lst[@name='facet_fields']/lst[@name='oa']">
+    <xsl:variable name="title">Open Access?</xsl:variable>
+
+    <div id="chartOA" style="width:100%; height:350px" />
+    
+    <script type="text/javascript">
+     jQuery(document).ready(function() {
+       Highcharts.getOptions().plotOptions.pie.colors = ['#4572A7','#AA4643','#89A54E','#80699B','#3D96AE','#DB843D','#92A8CD','#A47D7C','#B5CA92'];
+       new Highcharts.Chart({
+         chart: {
+            renderTo: 'chartOA',         
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            defaultSeriesType: 'pie',
+            events: {
+              click: function(e) {
+                jQuery('#chartDialog').dialog({
+                  position: 'center',
+                  width: jQuery(window).width() - 80,
+                  height: jQuery(window).height() - 80,
+                  draggable: false,
+                  resizable: false,
+                  modal: false
+                });
+                var dialogOptions = this.options;
+                dialogOptions.chart.renderTo = 'chartDialog';
+                dialogOptions.chart.events = null;
+                dialogOptions.chart.zoomType = 'x';
+                new Highcharts.Chart(dialogOptions);
+              }
+            }
+         },
+         title: { text: '<xsl:value-of select="$title" />' },
+         legend: { enabled: false },
+         tooltip: {
+            formatter: function() {
+              return '<b>'+ this.point.name +'</b>: '+ this.y;
+            }
+         },
+         plotOptions: {
+            pie: {
+              allowPointSelect: true,
+              cursor: 'pointer',
+              dataLabels: {
+                 enabled: true,
+                 format: '<b>{point.name}</b>: {point.percentage:.1f} % ({y})'
+<!--                  formatter: function() {
+                    return '<b>'+ this.point.name +'</b>: ' + this.y;
+                 } -->
+              }
+            }
+         },
+         series: [{
+              name: '<xsl:value-of select="$title" />',
+              data: [
+                ['unbekannt / nicht OA', <xsl:value-of select="/response/result/@numFound - int[@name='oa']" />],
+                <xsl:for-each select="int[not(@name='oa')]">
+                  <xsl:sort select="text()" data-type="number" order="descending" />
+                  ['<xsl:value-of select="$oa//category[@ID=current()/@name]/label[lang($CurrentLang)]/@text"/>' , <xsl:value-of select="text()"/>]
                   <xsl:if test="position()!=last()">,</xsl:if>
                 </xsl:for-each>
               ]

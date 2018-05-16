@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="oa">
+
+  <label xml:lang="en" text="genre" description="Open Access Publikationsweg" />
+  <label xml:lang="de" text="Genre" description="Open Access Road" />
+
+  <categories>
+    <category ID="oa">
+      <label xml:lang="de" text="Open Access" />
+      <label xml:lang="en" text="Open Access" />
+      <category ID="green">
+        <label xml:lang="de" text="OA Grün" />
+        <label xml:lang="en" text="OA Green" />
+      </category>
+      <category ID="gold">
+        <label xml:lang="de" text="OA Gold" />
+        <label xml:lang="en" text="OA Gold" />
+      </category>
+      <category ID="hybrid">
+        <label xml:lang="de" text="OA Hybrid" />
+        <label xml:lang="en" text="OA Hybrid" />
+      </category>
+      <category ID="embargo">
+        <label xml:lang="de" text="OA Embargo" />
+        <label xml:lang="en" text="OA Embargo" />
+      </category>
+    </category>
+  </categories>
+</mycoreclass>

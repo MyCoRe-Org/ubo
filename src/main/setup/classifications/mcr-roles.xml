@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="mcr-roles">
+  <label xml:lang="en" text="system roles" />
+  <label xml:lang="de" text="Systemrollen" />
+  <categories>
+    <category ID="admin">
+      <label xml:lang="en" text="The superuser role" />
+    </category>
+  </categories>
+</mycoreclass>
