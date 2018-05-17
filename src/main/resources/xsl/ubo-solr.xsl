@@ -30,6 +30,8 @@
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:titleInfo" mode="solrField.host" />
     <xsl:apply-templates select="mods:relatedItem[@type='host'][mods:genre='journal']/mods:titleInfo" mode="solrField" />
+    <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:part" mode="solrField" />
+    <xsl:apply-templates select="descendant::mods:originInfo" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:relatedItem[@type='series']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:name[@type='conference']" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:dateIssued[1][translate(text(),'1234567890','YYYYYYYYYY')='YYYY']" mode="solrField" />
@@ -302,6 +304,55 @@
     <field name="name_id_{@type}">
       <xsl:value-of select="text()" />
     </field>
+  </xsl:template>
+  
+  <xsl:template match="mods:part" mode="solrField">
+    <xsl:for-each select="mods:detail[@type='volume']">
+      <field name="volume">
+        <xsl:value-of select="mods:number" />
+      </field>
+    </xsl:for-each>
+    <xsl:for-each select="mods:detail[@type='issue']">
+      <field name="issue">
+        <xsl:value-of select="mods:number" />
+      </field>
+    </xsl:for-each>
+    <xsl:for-each select="mods:detail[@type='page']">
+      <field name="pages">
+        <xsl:value-of select="mods:number" />
+      </field>
+    </xsl:for-each>
+    <xsl:for-each select="mods:extent[@unit='pages']">
+      <field name="pages">
+        <xsl:value-of select="mods:list" />
+        <xsl:value-of select="mods:start" />
+        <xsl:for-each select="mods:end">
+          <xsl:text> - </xsl:text>
+          <xsl:value-of select="." />
+        </xsl:for-each>
+        <xsl:for-each select="mods:total[../mods:start]">
+          <xsl:text> (</xsl:text>
+          <xsl:value-of select="." />
+          <xsl:text>)</xsl:text>
+        </xsl:for-each>
+        <xsl:for-each select="mods:total[not(../mods:start)]">
+          <xsl:value-of select="." />
+        </xsl:for-each>
+      </field>
+    </xsl:for-each>
+  </xsl:template>
+  
+  <xsl:template match="mods:originInfo" mode="solrField">
+    <xsl:for-each select="mods:place">
+      <field name="place">
+        <xsl:value-of select="mods:placeTerm" />
+      </field>
+    </xsl:for-each>
+    <xsl:for-each select="mods:publisher">
+      <field name="publisher">
+        <xsl:value-of select="." />
+      </field>
+    </xsl:for-each>
   </xsl:template>
 
 </xsl:stylesheet>

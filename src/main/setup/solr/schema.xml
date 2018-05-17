@@ -23,10 +23,15 @@
   <field name="origin"     type="id"        indexed="true" stored="false" multiValued="true"  />
   <field name="oa"         type="id"        indexed="true" stored="false" multiValued="true"  />
   <field name="status"     type="id"        indexed="true" stored="false" multiValued="false" />
-  <field name="host_title" type="text"      indexed="true" stored="false" multiValued="true"  />
+  <field name="host_title" type="text"      indexed="true" stored="true"  multiValued="true"  />
   <field name="host_genre" type="id"        indexed="true" stored="true"  multiValued="false" />
   <field name="journal"    type="journal"   indexed="true" stored="false" multiValued="true"  />
-  <field name="series"     type="text"      indexed="true" stored="false" multiValued="true"  />
+  <field name="series"     type="text"      indexed="true" stored="true"  multiValued="true"  />
+  <field name="volume"     type="text"      indexed="false" stored="true" multiValued="true"  />
+  <field name="issue"      type="text"      indexed="false" stored="true" multiValued="false" />
+  <field name="pages"      type="text"      indexed="false" stored="true" multiValued="false" />
+  <field name="place"      type="text"      indexed="false" stored="true" multiValued="true" />
+  <field name="publisher"  type="text"      indexed="false" stored="true" multiValued="true" />
   <field name="conference" type="text"      indexed="true" stored="false" multiValued="false" />
   <field name="topic"      type="text"      indexed="true" stored="false" multiValued="true"  />
   <field name="note"       type="text"      indexed="true" stored="false" multiValued="true"  />
@@ -34,7 +39,7 @@
   <field name="year"       type="int"       indexed="true" stored="true"  multiValued="false" />
   <field name="year_diss"  type="int"       indexed="true" stored="false" multiValued="false" />
   <field name="lang"       type="id"        indexed="true" stored="false" multiValued="true"  />
-  <field name="shelfmark"  type="shelfmark" indexed="true" stored="false" multiValued="true"  />
+  <field name="shelfmark"  type="shelfmark" indexed="true" stored="true"  multiValued="true"  />
   <field name="tag"        type="id"        indexed="true" stored="false" multiValued="true"  />
   <field name="dedup"      type="id"        indexed="true" stored="false" multiValued="true"  />
   <field name="importID"   type="string"    indexed="true" stored="false" multiValued="false" />
@@ -55,7 +60,7 @@
   <copyField source="title" dest="wordcloud"/>
 
   <!-- Fields for each person role, e.g. <mods:roleTerm>aut ==> person_aut -->
-  <dynamicField name="person_*"  type="name" indexed="true" stored="false" multiValued="true" />
+  <dynamicField name="person_*"  type="name" indexed="true" stored="true" multiValued="true" />
   <copyField source="person_*" dest="person"/>
   
   <!-- Fields for each LSF person ID and role, e.g. role_lsf=aut_1234 -->
@@ -65,10 +70,10 @@
   <field name="ae_lsf" type="id" indexed="true" stored="false" multiValued="true" />
 
   <!-- Fields for mods:identifier, e.g. <mods:identifier type="doi" /> ==> id_doi -->
-  <dynamicField name="id_*"  type="id" indexed="true" stored="false" multiValued="true" />
+  <dynamicField name="id_*"  type="id" indexed="true" stored="true" multiValued="true" />
   
   <!-- Fields for mods:nameIdentifier, e.g. <mods:nameIdentifier type="scopus" /> ==> nid_scopus -->
-  <dynamicField name="nid_*" type="id" indexed="true" stored="false" multiValued="true" />
+  <dynamicField name="nid_*" type="id" indexed="true" stored="true" multiValued="true" />
 
   <!-- Field to search in "all fields" (not really all, but most) -->
   <field name="all" type="text" indexed="true" stored="false" multiValued="true" />

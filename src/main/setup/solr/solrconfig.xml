@@ -860,6 +860,7 @@
       <str name="q.op">AND</str> <!-- default operator AND instead OR -->
       <str name="df">all</str> <!-- default search this field -->
       <str name="fl">id</str>
+      <str name="csv.separator">;</str>
     </lst>
     <lst name="invariants">
       <str name="start">0</str>
