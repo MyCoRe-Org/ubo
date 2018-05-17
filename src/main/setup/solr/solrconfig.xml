@@ -836,6 +836,7 @@
       <str name="q.op">AND</str> <!-- default operator AND instead OR -->
       <str name="df">all</str> <!-- default search this field -->
       <int name="rows">10</int>
+      <str name="fl">id</str>
       <str name="facet">true</str>
       <str name="facet.mincount">1</str>
       <str name="facet.field">status</str>
