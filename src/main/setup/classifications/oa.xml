@@ -9,21 +9,30 @@
       <label xml:lang="de" text="Open Access" />
       <label xml:lang="en" text="Open Access" />
       <category ID="green">
-        <label xml:lang="de" text="OA Grün" />
+        <!-- Publikation ist in einer lizenzpflichtigen Zeitschrift erschienen, eine (evtl. andere) Version des Artikels wurde auf DuEPublico publiziert (Zweitveröffentlichung). -->
+        <label xml:lang="de" text="OA Grün" />  
         <label xml:lang="en" text="OA Green" />
       </category>
       <category ID="gold">
+        <!-- OA Erstveröffentlichung -->
         <label xml:lang="de" text="OA Gold" />
         <label xml:lang="en" text="OA Gold" />
       </category>
       <category ID="hybrid">
-        <label xml:lang="de" text="OA Hybrid" />
+        <!-- Publikation ist in einer lizenzpflichtigen Zeitschrift erschienen, in der einzelne Artikel gegen Zahlung einer Publikationsgebühr Open Access erscheinen. -->
+        <label xml:lang="de" text="OA Hybrid" /> 
         <label xml:lang="en" text="OA Hybrid" />
       </category>
       <category ID="embargo">
-        <label xml:lang="de" text="OA Embargo" />
+        <!-- Publikation ist in einer lizenzpflichtigen Zeitschrift erschienen und nach nun bereits abgelaufener Embargofrist für alle frei zugänglich. -->
+        <label xml:lang="de" text="OA Embargo" /> 
         <label xml:lang="en" text="OA Embargo" />
       </category>
     </category>
+	<category ID="closed">
+      <!-- Publikation ist auf OA geprüft, aber closed access -->
+	  <label xml:lang="de" text="Closed Access" /> 
+      <label xml:lang="en" text="Closed Access" />
+	</category>
   </categories>
 </mycoreclass>

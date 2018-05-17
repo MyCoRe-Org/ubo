@@ -283,16 +283,13 @@
               dataLabels: {
                  enabled: true,
                  format: '<b>{point.name}</b>: {point.percentage:.1f} % ({y})'
-<!--                  formatter: function() {
-                    return '<b>'+ this.point.name +'</b>: ' + this.y;
-                 } -->
               }
             }
          },
          series: [{
               name: '<xsl:value-of select="$title" />',
               data: [
-                ['unbekannt / nicht OA', <xsl:value-of select="/response/result/@numFound - int[@name='oa']" />],
+                ['unbekannt / nicht OA', <xsl:value-of select="/response/result/@numFound - sum(int[contains('oa closed',@name)])" />],
                 <xsl:for-each select="int[not(@name='oa')]">
                   <xsl:sort select="text()" data-type="number" order="descending" />
                   ['<xsl:value-of select="$oa//category[@ID=current()/@name]/label[lang($CurrentLang)]/@text"/>' , <xsl:value-of select="text()"/>]
