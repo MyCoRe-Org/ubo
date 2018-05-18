@@ -26,6 +26,7 @@
       <xsl:copy-of select="mods:language" />
       <xsl:copy-of select="mods:subject[mods:topic]" />
       <xsl:copy-of select="mods:abstract" />
+      <xsl:call-template name="oa" />
     </xsl:copy>
   </xsl:template>
 
@@ -105,6 +106,12 @@
     <mods:identifier type="doi">
       <xsl:value-of select="substring-after(.,'doi:')" />
     </mods:identifier>
+  </xsl:template>
+
+  <xsl:variable name="authorityOA">https://bibliographie.ub.uni-due.de/classifications/oa</xsl:variable>
+
+  <xsl:template name="oa">
+    <mods:classification authorityURI="{$authorityOA}" valueURI="{$authorityOA}#oa" />
   </xsl:template>
 
 </xsl:stylesheet>

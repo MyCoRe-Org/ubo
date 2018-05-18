@@ -24,6 +24,7 @@
       <xsl:apply-templates select="item/bibrecord/head/citation-info/author-keywords/author-keyword" />
       <xsl:apply-templates select="scopus:language" />
       <xsl:apply-templates select="item/bibrecord/head/abstracts/abstract" />
+      <xsl:apply-templates select="scopus:coredata/scopus:openaccess" />
     </mods:mods>
   </xsl:template>
 
@@ -281,6 +282,21 @@
         <xsl:value-of select="." />
       </mods:topic>
     </mods:subject>
+  </xsl:template>
+
+  <xsl:variable name="authorityOA">https://bibliographie.ub.uni-due.de/classifications/oa</xsl:variable>
+
+  <xsl:template match="scopus:coredata/scopus:openaccess">
+    <mods:classification authorityURI="{$authorityOA}">
+      <xsl:attribute name="valueURI">
+        <xsl:value-of select="$authorityOA" />
+        <xsl:text>#</xsl:text>
+        <xsl:choose>
+          <xsl:when test=".='1'">oa</xsl:when>
+          <xsl:otherwise>closed</xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+    </mods:classification>
   </xsl:template>
 
   <xsl:template match="text()" />
