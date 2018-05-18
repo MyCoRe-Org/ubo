@@ -289,11 +289,25 @@
          series: [{
               name: '<xsl:value-of select="$title" />',
               data: [
-                ['unbekannt / nicht OA', <xsl:value-of select="/response/result/@numFound - sum(int[contains('oa closed',@name)])" />],
-                <xsl:for-each select="int[not(@name='oa')]">
+                
+                <xsl:for-each select="int">
                   <xsl:sort select="text()" data-type="number" order="descending" />
-                  ['<xsl:value-of select="$oa//category[@ID=current()/@name]/label[lang($CurrentLang)]/@text"/>' , <xsl:value-of select="text()"/>]
-                  <xsl:if test="position()!=last()">,</xsl:if>
+                  <xsl:choose>
+                    <xsl:when test="@name='oa'">
+                      <xsl:variable name="numOAdirect" select="number(.) - sum(../int[contains('green gold hybrid embargo',@name)])" /> 
+                      <xsl:variable name="numOther" select="/response/result/@numFound - $numOAdirect" />
+                      <xsl:if test="$numOther &gt; 0">
+                        ['nicht OA / unbekannt' , <xsl:value-of select="$numOther"/>],
+                      </xsl:if>
+                      <xsl:if test="$numOAdirect &gt; 0">
+                        ['Open Access, unspezifiziert' , <xsl:value-of select="$numOAdirect"/>],
+                      </xsl:if>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      ['<xsl:value-of select="$oa//category[@ID=current()/@name]/label[lang($CurrentLang)]/@text"/>' , <xsl:value-of select="text()"/>]
+                      <xsl:if test="position()!=last()">,</xsl:if>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </xsl:for-each>
               ]
           }
