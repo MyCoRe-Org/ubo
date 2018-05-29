@@ -241,9 +241,21 @@
 
     <div id="chartOA" style="width:100%; height:350px" />
     
+    <xsl:variable name="numOAdirect" select="int[@name='oa'] - sum(int[contains('green gold hybrid embargo',@name)])" /> 
+    <xsl:variable name="numOther" select="/response/result/@numFound - $numOAdirect - sum(int[contains('green gold hybrid embargo closed',@name)])" />
+
     <script type="text/javascript">
      jQuery(document).ready(function() {
-       Highcharts.getOptions().plotOptions.pie.colors = ['#4572A7','#AA4643','#89A54E','#80699B','#3D96AE','#DB843D','#92A8CD','#A47D7C','#B5CA92'];
+       Highcharts.getOptions().plotOptions.pie.colors = [
+         <xsl:if test="$numOther &gt; 0">'#5858FA',</xsl:if> 
+         <xsl:for-each select="int[not(@name='oa') or ($numOAdirect &gt; 0)]">
+           <xsl:sort data-type="number" order="descending" />
+           <xsl:text>'</xsl:text>
+           <xsl:value-of select="$oa//category[@ID=current()/@name]/label[lang('x-color')]/@text" />
+           <xsl:text>'</xsl:text>
+           <xsl:if test="position() != last()">, </xsl:if>
+         </xsl:for-each>
+       ];
        new Highcharts.Chart({
          chart: {
             renderTo: 'chartOA',         
@@ -289,26 +301,27 @@
          series: [{
               name: '<xsl:value-of select="$title" />',
               data: [
-                
-                <xsl:for-each select="int">
-                  <xsl:sort select="text()" data-type="number" order="descending" />
-                  <xsl:choose>
-                    <xsl:when test="@name='oa'">
-                      <xsl:variable name="numOAdirect" select="number(.) - sum(../int[contains('green gold hybrid embargo',@name)])" /> 
-                      <xsl:variable name="numOther" select="/response/result/@numFound - $numOAdirect" />
-                      <xsl:if test="$numOther &gt; 0">
-                        ['nicht OA / unbekannt' , <xsl:value-of select="$numOther"/>],
-                      </xsl:if>
-                      <xsl:if test="$numOAdirect &gt; 0">
-                        ['Open Access, unspezifiziert' , <xsl:value-of select="$numOAdirect"/>],
-                      </xsl:if>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      ['<xsl:value-of select="$oa//category[@ID=current()/@name]/label[lang($CurrentLang)]/@text"/>' , <xsl:value-of select="text()"/>]
-                      <xsl:if test="position()!=last()">,</xsl:if>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
+                <xsl:if test="$numOther &gt; 0">
+                  ['nicht OA / unbekannt' , <xsl:value-of select="$numOther"/>],
+                </xsl:if>
+
+               <xsl:for-each select="int[not(@name='oa') or ($numOAdirect &gt; 0)]">
+                 <xsl:sort data-type="number" order="descending" />
+                 <xsl:text>['</xsl:text>
+                 <xsl:value-of select="$oa//category[@ID=current()/@name]/label[lang($CurrentLang)]/@text" />
+                 <xsl:text>', </xsl:text>
+                 <xsl:choose>
+                   <xsl:when test="@name='oa'">
+                     <xsl:value-of select="$numOAdirect" />
+                   </xsl:when>
+                   <xsl:otherwise>
+                     <xsl:value-of select="text()" />
+                   </xsl:otherwise>
+                 </xsl:choose>
+                 <xsl:text>]</xsl:text>
+                 <xsl:if test="position() != last()">, </xsl:if>
+              </xsl:for-each>
+
               ]
           }
         ]
