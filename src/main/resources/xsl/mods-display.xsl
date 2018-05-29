@@ -60,6 +60,14 @@
     </span>
   </xsl:template>
   
+  <!-- ============ Ausgabe Open Access ============ -->
+  
+  <xsl:template match="mods:mods/mods:classification[contains(@authorityURI,'oa')]" mode="label-info">
+    <span class="label-info">
+      <xsl:value-of select="$oa//category[@ID=substring-after(current()/@valueURI,'#')]/label[lang($CurrentLang)]/@text"/>
+    </span>
+  </xsl:template>
+  
   <!-- ========== Ausgabe Jahr ========== -->
   
   <xsl:template name="label-year">
