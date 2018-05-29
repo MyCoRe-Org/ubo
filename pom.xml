@@ -324,6 +324,13 @@
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
+      <artifactId>mycore-base</artifactId>
+      <version>${mycore.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
       <artifactId>mycore-mods</artifactId>
       <version>${mycore.version}</version>
     </dependency>

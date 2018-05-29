@@ -82,7 +82,7 @@
 <xsl:template match="mods:relatedItem[@type='host'][1]|mods:relatedItem[@type='series']">
   <xsl:copy>
     <xsl:copy-of select="@type" />
-    <xsl:apply-templates select="mods:genre|mods:titleInfo|mods:name|mods:originInfo|mods:dateIssued|mods:identifier|mods:relatedItem|mods:location|mods:part" />
+    <xsl:apply-templates select="mods:genre|mods:titleInfo|mods:name|mods:classification|mods:originInfo|mods:dateIssued|mods:identifier|mods:relatedItem|mods:location|mods:part" />
   </xsl:copy>
 </xsl:template>
 
