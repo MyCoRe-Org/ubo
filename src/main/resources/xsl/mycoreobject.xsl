@@ -115,7 +115,7 @@
     <div class="labels">
       <xsl:call-template name="label-year" />
       <xsl:call-template name="pubtype" />
-      <xsl:apply-templates select="mods:classification[contains(@authorityURI,'oa')]" mode="label-info" />
+      <xsl:call-template name="label-oa" />
     </div>
     <div class="labels">
       <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info" />

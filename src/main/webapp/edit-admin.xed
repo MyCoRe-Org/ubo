@@ -45,7 +45,6 @@
             <xed:include uri="webapp:import-editor.xed" ref="status" />    
             <xed:include uri="webapp:import-editor.xed" ref="subject" />    
             <xed:include uri="webapp:import-editor.xed" ref="origin" />    
-            <xed:include uri="webapp:import-editor.xed" ref="oa" />    
             <xed:include uri="webapp:import-editor.xed" ref="tags" />
           </xed:bind>    
         </fieldset>
@@ -53,6 +52,7 @@
           <fieldset>
             <legend>Publikation:</legend>
               <xed:include uri="webapp:import-editor.xed" ref="genre" />
+              <xed:include uri="webapp:import-editor.xed" ref="oa" />    
               <xed:include uri="webapp:import-editor.xed" ref="title.complex" />
               <xed:include uri="webapp:import-editor.xed" ref="person.role" />
               <xed:include uri="webapp:import-editor.xed" ref="conference" />
@@ -80,6 +80,7 @@
                 </xed:when>
                 <xed:otherwise>
                   <xed:include uri="webapp:import-editor.xed" ref="host" />
+                  <xed:include uri="webapp:import-editor.xed" ref="oa" />    
                   <xed:include uri="webapp:import-editor.xed" ref="title.complex" />
                   <xed:include uri="webapp:import-editor.xed" ref="conference" />
                   <xed:include uri="webapp:import-editor.xed" ref="person.role" />

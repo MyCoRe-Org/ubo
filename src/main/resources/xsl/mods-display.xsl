@@ -62,11 +62,31 @@
   
   <!-- ============ Ausgabe Open Access ============ -->
   
-  <xsl:template match="mods:mods/mods:classification[contains(@authorityURI,'oa')]" mode="label-info">
+  <xsl:template name="label-oa">
+    <xsl:choose>
+      <xsl:when test="mods:classification[contains(@authorityURI,'oa')]">
+        <xsl:apply-templates select="mods:classification[contains(@authorityURI,'oa')]" mode="label-info" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:classification[contains(@authorityURI,'oa')]" mode="label-info" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template match="mods:classification[contains(@authorityURI,'oa')]" mode="label-info">
     <xsl:variable name="category" select="$oa//category[@ID=substring-after(current()/@valueURI,'#')]" />
     <span class="label-info" style="background-color:{$category/label[lang('x-color')]/@text}">
       <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
     </span>
+  </xsl:template>
+  
+  <xsl:template match="mods:classification[contains(@authorityURI,'oa')]" mode="details">
+    <div class="grid_3 label">Open Access?</div>
+    <div class="grid_9">
+      <xsl:variable name="category" select="$oa//category[@ID=substring-after(current()/@valueURI,'#')]" />
+      <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
+    </div>
+    <div class="clear" />
   </xsl:template>
   
   <!-- ========== Ausgabe Jahr ========== -->
@@ -381,6 +401,7 @@
   <xsl:template match="mods:place" mode="details">
     <div class="grid_3 label">
       <xsl:value-of select="i18n:translate('ubo.place')" />
+      <xsl:text>:</xsl:text>
     </div>
     <div class="grid_9">
       <xsl:apply-templates select="." />
@@ -403,6 +424,7 @@
   <xsl:template match="mods:publisher" mode="details">
     <div class="grid_3 label">
       <xsl:value-of select="i18n:translate('ubo.publisher')" />
+      <xsl:text>:</xsl:text>
     </div>
     <div class="grid_9">
       <xsl:apply-templates select="." />
@@ -425,6 +447,7 @@
   <xsl:template match="mods:dateIssued" mode="details">
     <div class="grid_3 label">
       <xsl:value-of select="i18n:translate(concat('ubo.date.issued.',string-length(.)))" />
+      <xsl:text>:</xsl:text>
     </div>
     <div class="grid_9">
       <xsl:value-of select="text()" />
@@ -568,6 +591,7 @@
     <xsl:apply-templates select="mods:originInfo/mods:place" mode="details" />
     <xsl:apply-templates select="mods:originInfo/mods:publisher" mode="details" />
     <xsl:apply-templates select="mods:originInfo/mods:dateIssued" mode="details" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'oa')]" mode="details" />
     <xsl:apply-templates select="mods:part" mode="details" />
     <xsl:apply-templates select="mods:originInfo/mods:dateOther" mode="details" />    
     <xsl:apply-templates select="mods:physicalDescription/mods:extent" mode="details" />
