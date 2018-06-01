@@ -192,10 +192,12 @@
                   </select>
                 </xed:bind>
                 <xed:bind xpath="@field" initially="oa">
-                  <select>
-                    <option value="oa">mit Unterkategorien</option>
-                    <option value="oa_exact">exakt zugeordnet</option>
-                  </select>
+                  <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+                    <select>
+                      <option value="oa">mit Unterkategorien</option>
+                      <option value="oa_exact">exakt zugeordnet</option>
+                    </select>
+                  </xed:if>
                 </xed:bind>
               </div>
             </xed:bind>
