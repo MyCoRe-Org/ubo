@@ -4,7 +4,12 @@
   <label xml:lang="de" text="Systemrollen" />
   <categories>
     <category ID="admin">
-      <label xml:lang="en" text="The superuser role" />
+      <label xml:lang="de" text="Administrator" />
+      <label xml:lang="en" text="Administrator" />
+    </category>
+    <category ID="submitter">
+      <label xml:lang="de" text="Submitter" />
+      <label xml:lang="en" text="Submitter" />
     </category>
   </categories>
 </mycoreclass>

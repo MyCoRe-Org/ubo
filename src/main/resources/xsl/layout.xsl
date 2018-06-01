@@ -110,8 +110,8 @@
           <xsl:call-template name="layout.basket.info" />
         </section>
         <div id="leftbar">
+          <xsl:call-template name="layout.login" />
           <xsl:call-template name="layout.mainnavigation" />
-          <xsl:call-template name="layout.logout" />
         </div>
         <xsl:call-template name="layout.inhalt" />
         <xsl:apply-templates select="/*/sidebar" />
@@ -368,21 +368,40 @@
   </xsl:template>
 
   <!-- current user and login formular-->
-  <xsl:template name="layout.logout">
-    <xsl:if test="not($CurrentUser = $MCR.Users.Guestuser.UserName)">
-      <div id="login">
-        <span class="user">
-          <xsl:text>[</xsl:text>
-          <xsl:value-of select="$CurrentUser" />
-          <xsl:text>]</xsl:text>
-        </span>
-        <form action="{$ServletsBaseURL}logout" method="get">
-          <input type="hidden" name="url" value="{$RequestURL}" />
-          <input class="roundedButton" type="submit" name="{i18n:translate('login.logOut')}" value="{i18n:translate('login.logOut')}" />
-        </form>
-        <div class="clearfix"/>
-      </div>
-    </xsl:if>
+  <xsl:template name="layout.login">
+    <div id="login">
+      <span class="user">
+        <xsl:text>[</xsl:text>
+        <xsl:choose>
+          <xsl:when test="$CurrentUser = $MCR.Users.Guestuser.UserName">
+            <xsl:value-of select="i18n:translate('component.user2.login.guest')" />
+          </xsl:when>
+          <xsl:when test="contains($CurrentUser,'@')">
+            <xsl:value-of select="substring-before($CurrentUser,'@')" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$CurrentUser" />
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>]</xsl:text>
+      </span>
+      <xsl:choose>
+        <xsl:when test="/webpage/@id='login'" />
+        <xsl:when test="$CurrentUser = $MCR.Users.Guestuser.UserName">
+          <form action="login.xed" method="get">
+            <input type="hidden" name="url" value="{$RequestURL}" />
+            <input class="roundedButton" style="border:0;" type="submit" name="{i18n:translate('component.user2.button.login')}" value="{i18n:translate('component.user2.button.login')}" />
+          </form>
+        </xsl:when>
+        <xsl:otherwise>
+          <form action="{$ServletsBaseURL}logout" method="get">
+            <input type="hidden" name="url" value="{$RequestURL}" />
+            <input class="roundedButton" style="border:0;" type="submit" name="{i18n:translate('login.logOut')}" value="{i18n:translate('login.logOut')}" />
+          </form>
+        </xsl:otherwise>
+      </xsl:choose>
+      <div class="clearfix"/>
+    </div>
   </xsl:template>
 
   <!-- main navigation -->
@@ -395,11 +414,6 @@
         <xsl:for-each select="$navigation.tree">
           <xsl:apply-templates select="item[@label|label]" mode="navigation" />
         </xsl:for-each>
-        <xsl:if test="$CurrentUser = $MCR.Users.Guestuser.UserName">
-          <li>
-            <a href="{$ServletsBaseURL}MCRLoginServlet?url={encoder:encode($RequestURL,'UTF-8')}">Administration</a>
-          </li>
-        </xsl:if>        
       </ul>
       <ul id="languagenav">
         <li>

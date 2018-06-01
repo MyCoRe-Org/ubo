@@ -370,7 +370,6 @@
       <groupId>org.mycore</groupId>
       <artifactId>mycore-user2</artifactId>
       <version>${mycore.version}</version>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.solr</groupId>

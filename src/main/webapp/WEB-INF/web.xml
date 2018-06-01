@@ -87,6 +87,15 @@
     <url-pattern> /oai </url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>CascadingLoginServlet</servlet-name>
+    <servlet-class>unidue.ub.login.CascadingLoginServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CascadingLoginServlet</servlet-name>
+    <url-pattern>/servlets/CascadingLoginServlet</url-pattern>
+  </servlet-mapping>
+
   <session-config>
     <session-timeout>30</session-timeout>
   </session-config>

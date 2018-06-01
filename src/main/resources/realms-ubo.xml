@@ -1,0 +1,30 @@
+<realms local="local">
+
+  <realm id="cascading" setable="false">
+    <label xml:lang="de">Für Studierende, Mitarbeiter und alle anderen Nutzer:</label>
+    <label xml:lang="de">For students, staff and all other users:</label>
+    <login url="../login.xed" redirectParameter="url">
+      <label xml:lang="de">Login mit der Unikennung der Universität Duisburg-Essen, oder mit einer lokalen Kennung</label>
+      <label xml:lang="en">Login with credentials from University of Duisburg-Essen, or a local account</label>
+    </login>
+  </realm>
+
+  <realm id="ude">
+    <label xml:lang="de">Für Studierende und Mitarbeiter der UDE:</label>
+    <label xml:lang="en">For students and staff of UDE:</label>
+    <login url="../login.xed" redirectParameter="url">
+      <label xml:lang="de">Login mit der Unikennung der Universität Duisburg Essen</label>
+      <label xml:lang="en">Login with credentials from University of Duisburg-Essen</label>
+    </login>
+  </realm>
+
+  <realm id="local">
+    <label xml:lang="de">Für sonstige registrierte Anwender:</label>
+    <label xml:lang="en">For other registered users:</label>
+    <login url="../login.xed" redirectParameter="url">
+      <label xml:lang="de">Anmeldung mit lokaler Nutzerkennung</label>
+      <label xml:lang="en">Login with local user account</label>
+    </login>
+  </realm>
+
+</realms>

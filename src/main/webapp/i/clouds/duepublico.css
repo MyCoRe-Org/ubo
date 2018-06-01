@@ -93,7 +93,8 @@ input, select, textarea {
 }
 
 #login {
-  margin-bottom: 3.5ex; 
+  margin-top:-22px; 
+  margin-bottom:12px;
 }
 
 #login .user {
