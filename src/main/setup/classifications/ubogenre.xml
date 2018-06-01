@@ -16,7 +16,7 @@
         <label xml:lang="x-marcgt" text="article" />
       </category>
       <category ID="preface">
-        <label xml:lang="x-hosts" text="collection proceedings festschrift lexicon" />
+        <label xml:lang="x-hosts" text="collection proceedings festschrift lexicon journal" />
         <label xml:lang="de" text="Vorwort / Nachwort" />
         <label xml:lang="en" text="Preface (foreword) / Postface" />
       </category>
