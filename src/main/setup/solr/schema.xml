@@ -22,6 +22,7 @@
   <field name="subject"    type="id"        indexed="true" stored="true"  multiValued="true"  />
   <field name="origin"     type="id"        indexed="true" stored="false" multiValued="true"  />
   <field name="oa"         type="id"        indexed="true" stored="true"  multiValued="true"  />
+  <field name="oa_exact"   type="id"        indexed="true" stored="true"  multiValued="false" />
   <field name="status"     type="id"        indexed="true" stored="false" multiValued="false" />
   <field name="host_title" type="text"      indexed="true" stored="true"  multiValued="true"  />
   <field name="host_genre" type="id"        indexed="true" stored="true"  multiValued="false" />

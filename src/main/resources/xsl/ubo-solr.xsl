@@ -211,16 +211,19 @@
   <xsl:template name="oa">
     <xsl:choose>
       <xsl:when test="mods:classification[contains(@authorityURI,'oa')]">
-        <xsl:apply-templates select="mods:classification[contains(@authorityURI,'oa')]" mode="solrField" />
+        <xsl:apply-templates select="mods:classification[contains(@authorityURI,'oa')][1]" mode="solrField" />
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:classification[contains(@authorityURI,'oa')]" mode="solrField" />
+        <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:classification[contains(@authorityURI,'oa')][1]" mode="solrField" />
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
   <xsl:template match="mods:classification[contains(@authorityURI,'oa')]" mode="solrField">
     <xsl:variable name="category" select="substring-after(@valueURI,'#')" /> 
+    <field name="oa_exact">
+      <xsl:value-of select="$category" />
+    </field>
     <xsl:for-each select="document(concat('classification:editor:0:parents:oa:',$category))/descendant::item">
       <field name="oa">
         <xsl:value-of select="@value" />

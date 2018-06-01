@@ -182,13 +182,21 @@
               </div>
             </xed:bind>
             
-            <xed:bind xpath="condition[@field='oa'][@operator='=']/value">
+            <xed:bind xpath="condition8[@operator='=']">
               <div style="margin-bottom:4ex;">
-                <label for="{xed:generate-id()}">Open Access?</label>
-                <select id="{xed:generate-id()}" style="width:450px;">
-                  <option value=""><xed:output i18n="search.select" /></option>
-                  <xed:include uri="xslStyle:items2options:classification:editor:-1:children:oa" />
-                </select>
+                <xed:bind xpath="@value">
+                  <label for="{xed:generate-id()}">Open Access?</label>
+                  <select id="{xed:generate-id()}">
+                    <option value=""><xed:output i18n="search.select" /></option>
+                    <xed:include uri="xslStyle:items2options:classification:editor:-1:children:oa" />
+                  </select>
+                </xed:bind>
+                <xed:bind xpath="@field" initially="oa">
+                  <select>
+                    <option value="oa">mit Unterkategorien</option>
+                    <option value="oa_exact">exakt zugeordnet</option>
+                  </select>
+                </xed:bind>
               </div>
             </xed:bind>
 
