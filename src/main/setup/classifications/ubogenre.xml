@@ -21,7 +21,7 @@
         <label xml:lang="en" text="Preface (foreword) / Postface" />
       </category>
       <category ID="speech">
-        <label xml:lang="x-hosts" text="collection proceedings standalone" />
+        <label xml:lang="x-hosts" text="standalone" />
         <label xml:lang="en" text="Lecture / Speech" />
         <label xml:lang="de" text="Vortrag" />
       </category>
