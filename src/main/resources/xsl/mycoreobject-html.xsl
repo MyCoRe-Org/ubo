@@ -54,7 +54,7 @@
   <xsl:template match="mods:identifier[@type='duepublico']" mode="html-export">
     <div class="link">
       <xsl:value-of select="i18n:translate('result.dozbib.fulltext')"/>:
-      <a href="http://duepublico.uni-duisburg-essen.de/servlets/DocumentServlet?id={text()}">
+      <a href="http://duepublico.uni-duisburg-essen.de/servlets/DocumentServlet?id={text()}" target="_blank">
         <xsl:value-of select="i18n:translate('document')"/>
         <xsl:value-of select="text()"/>
       </a>
@@ -68,7 +68,7 @@
   <xsl:template match="mods:identifier[@type='doi']" mode="html-export">
     <div class="link">
       <xsl:text>DOI: </xsl:text>
-      <a href="{$UBO.DOIResolver}{text()}">
+      <a href="{$UBO.DOIResolver}{text()}" target="_blank">
         <xsl:value-of select="text()"/>
       </a>
     </div>
@@ -79,7 +79,7 @@
   <xsl:template match="mods:identifier[@type='urn']" mode="html-export">
     <div class="link">
       <xsl:text>URN: </xsl:text>
-      <a href="http://nbn-resolving.org/{text()}">
+      <a href="http://nbn-resolving.org/{text()}" target="_blank">
         <xsl:value-of select="text()"/>
       </a>
     </div>
