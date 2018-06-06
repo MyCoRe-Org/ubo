@@ -5,13 +5,18 @@
   <item id="home" />
   <item id="login" />
   <item id="dozbib" />
+  
+  <item id="profile" ref="servlets/MCRUserServlet?action=show" role="submitter">
+    <label xml:lang="de">Mein Profil</label>
+    <label xml:lang="en">My profile</label>
+  </item>
 
   <item id="dozbib.search-simple" ref="search.xed">
     <label xml:lang="de">Erweiterte Suche</label>
     <label xml:lang="en">Advanced search</label>
     <item id="dozbib.search" />      
   </item>
-  <item id="dozbib.search-expert" ref="search-expert.xed" admin="true">
+  <item id="dozbib.search-expert" ref="search-expert.xed" role="admin">
     <label xml:lang="de">Expertensuche</label>
     <label xml:lang="en">Expert search</label>
   </item>
@@ -32,19 +37,19 @@
     <label xml:lang="de">Statistiken</label>
     <label xml:lang="en">Statistics</label>
   </item>
-  <item ref="import-list.xed" admin="true">
+  <item ref="import-list.xed" role="admin">
     <label xml:lang="de">Importieren</label>
     <label xml:lang="en">Import</label>
-    <item id="dozbib.import.list" ref="import-list.xed" admin="true">
+    <item id="dozbib.import.list" ref="import-list.xed" role="admin">
       <label xml:lang="de">Literaturliste importieren</label>
       <label xml:lang="en">Import publication list</label>
     </item>  
-    <item id="dozbib.import.evaluna" ref="import-from-evaluna.xed" admin="true">
+    <item id="dozbib.import.evaluna" ref="import-from-evaluna.xed" role="admin">
       <label xml:lang="de">aus EVALuna Biblio</label>
       <label xml:lang="en">from EVALuna Biblio</label>
     </item>  
   </item>
-  <item id="dozbib.duplicates" ref="duplicates.xml" admin="true">
+  <item id="dozbib.duplicates" ref="duplicates.xml" role="admin">
     <label xml:lang="de">Dubletten-Bericht</label>
     <label xml:lang="en">Duplicates report</label>
   </item>

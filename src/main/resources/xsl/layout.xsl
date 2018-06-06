@@ -166,8 +166,8 @@
   <xsl:variable name="allowed.to.see.this.page">
     <xsl:for-each select="$CurrentItem">
       <xsl:choose>
-        <xsl:when test="ancestor-or-self::item[@admin='true']">
-          <xsl:for-each select="(ancestor-or-self::item[@admin='true'])[last()]">
+        <xsl:when test="ancestor-or-self::item[@role]">
+          <xsl:for-each select="(ancestor-or-self::item[@role])[last()]">
             <xsl:call-template name="check.allowed" />
           </xsl:for-each>
         </xsl:when>
@@ -178,8 +178,8 @@
   
   <xsl:template name="check.allowed">
     <xsl:choose> 
-      <xsl:when test="not(@admin='true')">true</xsl:when>
-      <xsl:when xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()">true</xsl:when>
+      <xsl:when test="not(@role)">true</xsl:when>
+      <xsl:when xmlns:check="xalan://org.mycore.common.xml.MCRXMLFunctions" test="check:isCurrentUserInRole(@role)">true</xsl:when>
       <xsl:otherwise>false</xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -371,24 +371,26 @@
   <xsl:template name="layout.login">
     <div id="login">
       <span class="user">
-        <xsl:text>[</xsl:text>
+        <xsl:text>[ </xsl:text>
         <xsl:choose>
           <xsl:when test="$CurrentUser = $MCR.Users.Guestuser.UserName">
             <xsl:value-of select="i18n:translate('component.user2.login.guest')" />
           </xsl:when>
           <xsl:when test="contains($CurrentUser,'@')">
-            <xsl:value-of select="substring-before($CurrentUser,'@')" />
+            <a href="{$ServletsBaseURL}MCRUserServlet?action=show" style="text-decoration: none;">
+              <xsl:value-of select="substring-before($CurrentUser,'@')" />
+            </a>
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="$CurrentUser" />
           </xsl:otherwise>
         </xsl:choose>
-        <xsl:text>]</xsl:text>
+        <xsl:text> ]</xsl:text>
       </span>
       <xsl:choose>
         <xsl:when test="/webpage/@id='login'" />
         <xsl:when test="$CurrentUser = $MCR.Users.Guestuser.UserName">
-          <form action="login.xed" method="get">
+          <form action="{$WebApplicationBaseURL}login.xed" method="get">
             <input type="hidden" name="url" value="{$RequestURL}" />
             <input class="roundedButton" style="border:0;" type="submit" name="{i18n:translate('component.user2.button.login')}" value="{i18n:translate('component.user2.button.login')}" />
           </form>

@@ -96,6 +96,15 @@
     <url-pattern>/servlets/CascadingLoginServlet</url-pattern>
   </servlet-mapping>
 
+  <servlet id="OAuthServlet">
+    <servlet-name>OAuthServlet</servlet-name>
+    <servlet-class>org.mycore.orcid.oauth.MCROAuthServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OAuthServlet</servlet-name>
+    <url-pattern>/orcid</url-pattern>
+  </servlet-mapping>
+
   <session-config>
     <session-timeout>30</session-timeout>
   </session-config>

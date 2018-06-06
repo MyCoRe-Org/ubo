@@ -57,14 +57,12 @@ public class CascadingLoginServlet extends MCRServlet {
             return;
         }
 
-        MCRUser user = AUTH_HANDLER.authenticate(uid, pwd);
+        MCRUser user = MCRUserManager.getCurrentUser();
+        if (uid.equals(user.getUserName())) {
+            LOGGER.info("Login of user " + user.getUserName() + " from " + user.getRealmID() + " successful");
 
-        if (user != null) {
-            LOGGER.info("Login of user " + uid + " from " + user.getRealmID() + " successful");
-
-            user.setLastLogin();
+            user.getAttributes().clear();
             MCRUserManager.updateUser(user);
-            MCRSessionMgr.getCurrentSession().setUserInformation(user);
 
             redirect(req, res);
         } else {
@@ -85,7 +83,15 @@ public class CascadingLoginServlet extends MCRServlet {
         if ((uid == null) || (pwd == null) || uid.isEmpty() || pwd.isEmpty()) {
             return true;
         } else {
-            return AUTH_HANDLER.authenticate(uid, pwd) != null;
+            MCRUser user = AUTH_HANDLER.authenticate(uid, pwd);
+            if (user == null) {
+                return false;
+            } else {
+                user.setLastLogin();
+                MCRUserManager.updateUser(user);
+                MCRSessionMgr.getCurrentSession().setUserInformation(user);
+                return true;
+            }
         }
     }
 
@@ -97,6 +103,13 @@ public class CascadingLoginServlet extends MCRServlet {
         if (url == null) {
             url = MCRFrontendUtil.getBaseURL();
         }
-        res.sendRedirect(res.encodeRedirectURL(url));
+
+        if (MCRUserManager.getCurrentUser().isUserInRole("admin")) {
+            res.sendRedirect(res.encodeRedirectURL(url));
+        } else {
+            String redirect = MCRFrontendUtil.getBaseURL() + "servlets/MCRUserServlet?action=show&XSL.url=";
+            redirect += res.encodeURL(url);
+            res.sendRedirect(redirect);
+        }
     }
 }
