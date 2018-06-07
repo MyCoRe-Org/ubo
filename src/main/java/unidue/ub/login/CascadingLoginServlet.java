@@ -60,10 +60,6 @@ public class CascadingLoginServlet extends MCRServlet {
         MCRUser user = MCRUserManager.getCurrentUser();
         if (uid.equals(user.getUserName())) {
             LOGGER.info("Login of user " + user.getUserName() + " from " + user.getRealmID() + " successful");
-
-            user.getAttributes().clear();
-            MCRUserManager.updateUser(user);
-
             redirect(req, res);
         } else {
             LOGGER.info("Login of user " + uid + " failed");
