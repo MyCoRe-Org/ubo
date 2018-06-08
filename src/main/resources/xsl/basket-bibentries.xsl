@@ -132,6 +132,7 @@
     <div class="labels">
       <xsl:call-template name="label-year" />
       <xsl:call-template name="pubtype" />
+      <xsl:call-template name="orcid-status" />
     </div>
     <div class="content bibentry">  
       <xsl:apply-templates select="." mode="cite"> 

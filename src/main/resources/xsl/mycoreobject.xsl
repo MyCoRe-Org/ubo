@@ -116,6 +116,7 @@
       <xsl:call-template name="label-year" />
       <xsl:call-template name="pubtype" />
       <xsl:call-template name="label-oa" />
+      <xsl:call-template name="orcid-status" />
     </div>
     <div class="labels">
       <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info" />

@@ -6,13 +6,14 @@
   xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:mods="http://www.loc.gov/mods/v3"
-  exclude-result-prefixes="xsl xalan i18n mods"
->
+  exclude-result-prefixes="xsl xalan i18n mods encoder">
 
 <xsl:include href="layout.xsl" />
 
 <xsl:param name="error" />
 <xsl:param name="url" />
+
+<xsl:param name="UBO.LSF.Link" />
 
 <xsl:variable name="PageID">profile</xsl:variable>
 <xsl:variable name="page.title" select="concat('Mein Profil: ',/user/@name)" />
@@ -60,6 +61,7 @@
       <xsl:apply-templates select="realName" />
       <xsl:apply-templates select="eMail" />
       <xsl:apply-templates select="@name" />
+      <xsl:apply-templates select="attributes/attribute[@name='LSF']" />
       <xsl:call-template name="orcid" />
     </table>
   </article>
@@ -133,11 +135,19 @@
   <tr>
     <th style="width:30%; text-align:right" scope="row">Ihre ORCID iD:</th>
     <td>
-      <xsl:variable name="url" select="concat('https://orcid.org/',@value)" />
-      <a href="{$url}">
-        <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" style="width:2.5ex; height:2.5ex; margin-right:1ex" />
-        <xsl:value-of select="$url" />
-      </a>
+      <p>
+        <xsl:variable name="url" select="concat('https://orcid.org/',@value)" />
+        <a href="{$url}">
+          <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" style="width:2.5ex; height:2.5ex; margin-right:1ex" />
+          <xsl:value-of select="$url" />
+        </a>
+      </p>
+      <p>
+        Ihr ORCID Profil enthält 
+        <strong>
+          <xsl:value-of xmlns:orcid="xalan://org.mycore.orcid.MCRORCIDUser" select="orcid:getNumWorks()" /> Publikationen.
+        </strong>
+      </p>
       <p style="margin-top:2ex;">
         <xsl:choose>
           <xsl:when test="../attribute[@name='ORCID-AccessToken']">
@@ -151,6 +161,25 @@
           </xsl:otherwise>
         </xsl:choose>
       </p> 
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="attribute[@name='LSF']">
+  <tr>
+    <th style="width:30%; text-align:right" scope="row">Ihre LSF ID:</th>
+    <td>
+      <p>
+        <a href="{$UBO.LSF.Link}{@value}" target="_blank">
+          <xsl:value-of select="@value" />
+        </a>
+      </p>
+      <p>
+        In der Universitätsbibliographie sind Ihnen
+        <a href="{$ServletsBaseURL}solr/select?q=status:confirmed+nid_lsf:{@value}&amp;sort=year+desc">
+          <xsl:value-of select="document(concat('solr:rows=0&amp;q=status:confirmed+nid_lsf:',@value))/response/result/@numFound" /> Publikationen zugeordnet.
+        </a>
+      </p>
     </td>
   </tr>
 </xsl:template>

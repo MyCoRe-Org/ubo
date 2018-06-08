@@ -242,6 +242,7 @@
           <xsl:call-template name="label-year" />
           <xsl:call-template name="pubtype" />
           <xsl:call-template name="label-oa" />
+          <xsl:call-template name="orcid-status" />
         </div>
         <div class="content bibentry">  
           <xsl:apply-templates select="." mode="cite"> 
@@ -254,6 +255,7 @@
             <xsl:call-template name="bibentry.add.to.basket" />
           </xsl:if>
           <xsl:call-template name="bibentry.subselect.return" />
+          <xsl:call-template name="orcid-sync-button" />
           <span class="floatRight"># <xsl:value-of select="$hitNo"/></span>
         </div>
       </xsl:for-each>

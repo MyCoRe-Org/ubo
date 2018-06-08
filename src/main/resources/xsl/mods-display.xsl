@@ -99,6 +99,47 @@
     </xsl:for-each>
   </xsl:template>
   
+  <!-- ========== ORCID Status ========== -->
+  
+  <xsl:template name="orcid-status">
+    <xsl:for-each select="ancestor::mycoreobject">
+      <xsl:variable name="status" xmlns:synchronizer="xalan://org.mycore.orcid.MCRORCIDSynchronizer" select="synchronizer:getStatus(@ID)" />
+      <xsl:choose>
+        <xsl:when test="$status='in_my_orcid_profile'">
+          <span class="label-info" title="Diese Publikation ist auch in Ihrem ORCID Profil vorhanden">
+            <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" style="width:2.5ex; height:2.5ex; margin-right:1ex" />
+            <span class="glyphicon glyphicon-thumbs-up" style="color:rgb(166, 206, 57); position:relative; top:3px;" aria-hidden="true" />
+          </span>
+        </xsl:when>
+        <xsl:when test="$status='not_in_my_orcid_profile'">
+          <span class="label-info" title="Diese Publikation ist nicht in Ihrem ORCID Profil vorhanden">
+            <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" style="width:2.5ex; height:2.5ex; margin-right:1ex" />
+            <span class="glyphicon glyphicon-thumbs-down" style="color:red; position:relative; top:3px;" aria-hidden="true" />
+          </span>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:for-each>
+  </xsl:template>
+  
+  <!-- ORCID Sync Button -->
+  
+  <xsl:template name="orcid-sync-button">
+    <xsl:variable name="id" select="ancestor::mycoreobject/@ID" />
+    <xsl:if xmlns:orcid="xalan://org.mycore.orcid.MCRORCIDUser" test="orcid:weAreTrustedParty()">
+      <xsl:variable name="status" xmlns:synchronizer="xalan://org.mycore.orcid.MCRORCIDSynchronizer" select="synchronizer:getStatus($id)" />
+      <xsl:if test="$status = 'not_in_my_orcid_profile'">
+        <a class="roundedButton" href="{$ServletsBaseURL}ORCIDSyncServlet?id={$id}">
+          Ins ORCID Profil übertragen 
+        </a>
+      </xsl:if>
+      <xsl:if test="$status = 'in_my_orcid_profile'">
+        <a class="roundedButton" href="{$ServletsBaseURL}ORCIDSyncServlet?id={$id}">
+          Im ORCID Profil aktualisieren
+        </a>
+      </xsl:if>
+    </xsl:if>
+  </xsl:template>
+  
   <!-- ========== URI bauen, um Dubletten zu finden ========== -->
   
   <xsl:template name="buildFindDuplicatesURI">

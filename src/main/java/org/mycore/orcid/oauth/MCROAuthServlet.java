@@ -6,12 +6,15 @@ import java.net.URISyntaxException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jdom2.JDOMException;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
+import org.mycore.orcid.MCRORCIDUser;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserManager;
+import org.xml.sax.SAXException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -35,7 +38,9 @@ public class MCROAuthServlet extends MCRServlet {
         } else if ((code == null) || code.trim().isEmpty()) {
             redirectToGetAuthorization(job);
         } else {
-            exchangeCodeForAccessToken(code);
+            MCRTokenResponse token = exchangeCodeForAccessToken(code);
+            MCRORCIDUser.storeToken(token);
+            MCRORCIDUser.loadWorks();
             job.getResponse().sendRedirect("servlets/MCRUserServlet?action=show");
         }
     }
@@ -46,7 +51,8 @@ public class MCROAuthServlet extends MCRServlet {
         job.getResponse().sendRedirect(url);
     }
 
-    private void exchangeCodeForAccessToken(String code) throws JsonProcessingException, IOException {
+    private MCRTokenResponse exchangeCodeForAccessToken(String code)
+        throws JsonProcessingException, IOException, JDOMException, SAXException {
         MCRTokenRequest request = MCROAuthClient.instance().getTokenRequest();
         request.set("grant_type", "authorization_code");
         request.set("code", code);
@@ -54,10 +60,6 @@ public class MCROAuthServlet extends MCRServlet {
 
         MCRTokenResponse token = request.post();
         LOGGER.info("access granted for " + token.getORCID() + " " + token.getAccessToken());
-
-        MCRUser user = MCRUserManager.getCurrentUser();
-        user.getAttributes().put("ORCID", token.getORCID());
-        user.getAttributes().put("ORCID-AccessToken", token.getAccessToken());
-        MCRUserManager.updateUser(user);
+        return token;
     }
 }
