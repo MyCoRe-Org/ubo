@@ -14,6 +14,7 @@
 <xsl:param name="url" />
 
 <xsl:param name="UBO.LSF.Link" />
+<xsl:param name="UBO.Scopus.Author.Link" />
 
 <xsl:variable name="PageID">profile</xsl:variable>
 <xsl:variable name="page.title" select="concat('Mein Profil: ',/user/@name)" />
@@ -63,6 +64,7 @@
       <xsl:apply-templates select="@name" />
       <xsl:apply-templates select="attributes/attribute[@name='LSF']" />
       <xsl:call-template name="orcid" />
+      <xsl:apply-templates select="attributes/attribute[@name='SCOPUS']" />
     </table>
   </article>
 </xsl:template>
@@ -136,7 +138,7 @@
     <th style="width:30%; text-align:right" scope="row">Ihre ORCID iD:</th>
     <td>
       <p>
-        <xsl:variable name="url" select="concat('https://orcid.org/',@value)" />
+        <xsl:variable name="url" select="concat('https://sandbox.orcid.org/',@value)" />
         <a href="{$url}">
           <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" style="width:2.5ex; height:2.5ex; margin-right:1ex" />
           <xsl:value-of select="$url" />
@@ -180,6 +182,17 @@
           <xsl:value-of select="document(concat('solr:rows=0&amp;q=status:confirmed+nid_lsf:',@value))/response/result/@numFound" /> Publikationen zugeordnet.
         </a>
       </p>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="attribute[@name='SCOPUS']">
+  <tr>
+    <th style="width:30%; text-align:right" scope="row">Ihre Scopus Author ID:</th>
+    <td>
+      <a href="{$UBO.Scopus.Author.Link}{@value}" target="_blank">
+        <xsl:value-of select="@value" />
+      </a>
     </td>
   </tr>
 </xsl:template>
