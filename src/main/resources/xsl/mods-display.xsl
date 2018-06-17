@@ -125,7 +125,7 @@
   
   <xsl:template name="orcid-sync-button">
     <xsl:variable name="id" select="ancestor::mycoreobject/@ID" />
-    <xsl:if xmlns:orcid="xalan://org.mycore.orcid.MCRORCIDUser" test="orcid:weAreTrustedParty()">
+    <xsl:if xmlns:orcid="xalan://org.mycore.orcid.user.MCRORCIDSession" test="orcid:weAreTrustedParty()">
       <xsl:variable name="status" xmlns:synchronizer="xalan://org.mycore.orcid.MCRORCIDSynchronizer" select="synchronizer:getStatus($id)" />
       <xsl:if test="$status = 'not_in_my_orcid_profile'">
         <a class="roundedButton" href="{$ServletsBaseURL}ORCIDSyncServlet?id={$id}">

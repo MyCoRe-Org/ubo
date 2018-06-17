@@ -12,7 +12,6 @@ import org.mycore.common.config.MCRConfiguration;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
-import org.mycore.orcid.MCRORCIDUser;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUser2Constants;
 import org.mycore.user2.MCRUserManager;
@@ -61,7 +60,6 @@ public class CascadingLoginServlet extends MCRServlet {
         MCRUser user = MCRUserManager.getCurrentUser();
         if (uid.equals(user.getUserName())) {
             LOGGER.info("Login of user " + user.getUserName() + " from " + user.getRealmID() + " successful");
-            MCRORCIDUser.loadWorks();
             redirect(req, res);
         } else {
             LOGGER.info("Login of user " + uid + " failed");

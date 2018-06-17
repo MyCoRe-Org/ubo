@@ -11,9 +11,8 @@ import org.mycore.common.config.MCRConfiguration;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
-import org.mycore.orcid.MCRORCIDUser;
-import org.mycore.user2.MCRUser;
-import org.mycore.user2.MCRUserManager;
+import org.mycore.orcid.user.MCRORCIDSession;
+import org.mycore.orcid.user.MCRORCIDUser;
 import org.xml.sax.SAXException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -23,6 +22,8 @@ public class MCROAuthServlet extends MCRServlet {
     private final static Logger LOGGER = LogManager.getLogger(MCROAuthServlet.class);
 
     private String scopes = MCRConfiguration.instance().getString("MCR.ORCID.OAuth.Scopes");
+
+    private final static String USER_PROFILE_URL = MCRFrontendUtil.getBaseURL() + "servlets/MCRUserServlet?action=show";
 
     private String redirectURL;
 
@@ -34,14 +35,17 @@ public class MCROAuthServlet extends MCRServlet {
         String error = job.getRequest().getParameter("error");
 
         if ((error != null) && !error.trim().isEmpty()) {
-            job.getResponse().sendRedirect("servlets/MCRUserServlet?action=show&XSL.error=" + error);
+            job.getResponse().sendRedirect(USER_PROFILE_URL + "&XSL.error=" + error);
         } else if ((code == null) || code.trim().isEmpty()) {
             redirectToGetAuthorization(job);
         } else {
             MCRTokenResponse token = exchangeCodeForAccessToken(code);
-            MCRORCIDUser.storeToken(token);
-            MCRORCIDUser.loadWorks();
-            job.getResponse().sendRedirect("servlets/MCRUserServlet?action=show");
+
+            MCRORCIDUser orcidUser = MCRORCIDSession.getORCIDUser();
+            orcidUser.store(token);
+            orcidUser.getORCIDProfile().getWorksSection();
+
+            job.getResponse().sendRedirect(USER_PROFILE_URL);
         }
     }
 

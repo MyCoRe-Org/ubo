@@ -147,7 +147,7 @@
       <p>
         Ihr ORCID Profil enthält 
         <strong>
-          <xsl:value-of xmlns:orcid="xalan://org.mycore.orcid.MCRORCIDUser" select="orcid:getNumWorks()" /> Publikationen.
+          <xsl:value-of xmlns:orcid="xalan://org.mycore.orcid.user.MCRORCIDSession" select="orcid:getNumWorks()" /> Publikationen.
         </strong>
       </p>
       <p style="margin-top:2ex;">

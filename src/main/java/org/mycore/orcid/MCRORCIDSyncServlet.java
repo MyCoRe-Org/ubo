@@ -6,6 +6,8 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
+import org.mycore.orcid.user.MCRORCIDSession;
+import org.mycore.orcid.user.MCRORCIDUser;
 import org.mycore.orcid.works.MCRWorksSection;
 
 public class MCRORCIDSyncServlet extends MCRServlet {
@@ -21,7 +23,9 @@ public class MCRORCIDSyncServlet extends MCRServlet {
             return;
         }
 
-        if (!MCRORCIDUser.weAreTrustedParty()) {
+        MCRORCIDUser user = MCRORCIDSession.getORCIDUser();
+
+        if (!user.weAreTrustedParty()) {
             job.getResponse().sendError(HttpServletResponse.SC_UNAUTHORIZED,
                 "Current user did not authorize the application to update his ORCID profile");
             return;
@@ -34,7 +38,7 @@ public class MCRORCIDSyncServlet extends MCRServlet {
             return;
         }
 
-        MCRORCIDProfile profile = MCRORCIDUser.getProfile();
+        MCRORCIDProfile profile = user.getORCIDProfile();
         MCRWorksSection works = profile.getWorksSection();
 
         if (status.equals("not_in_my_orcid_profile")) {

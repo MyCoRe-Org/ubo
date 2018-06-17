@@ -14,6 +14,8 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mods.MCRMODSWrapper;
+import org.mycore.orcid.user.MCRORCIDSession;
+import org.mycore.orcid.user.MCRORCIDUser;
 import org.mycore.orcid.works.MCRWork;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserManager;
@@ -24,8 +26,8 @@ public class MCRORCIDSynchronizer {
     private static final Logger LOGGER = LogManager.getLogger(MCRORCIDSynchronizer.class);
 
     public static String getStatus(String objectID) throws JDOMException, IOException, SAXException {
-        MCRORCIDProfile profile = MCRORCIDUser.getProfile();
-        if (profile == null) {
+        MCRORCIDUser user = MCRORCIDSession.getORCIDUser();
+        if (!user.hasORCIDProfile()) {
             return "no_orcid_user";
         }
 
@@ -41,6 +43,7 @@ public class MCRORCIDSynchronizer {
             return "not_mine";
         }
 
+        MCRORCIDProfile profile = user.getORCIDProfile();
         if (profile.getWorksSection().containsWork(oid)) {
             return "in_my_orcid_profile";
         }
