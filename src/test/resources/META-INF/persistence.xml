@@ -5,6 +5,7 @@
   <persistence-unit name="ubo" transaction-type="RESOURCE_LOCAL">
 
     <mapping-file>META-INF/mycore-base-mappings.xml</mapping-file>
+    <mapping-file>META-INF/mycore-iview2-mappings.xml</mapping-file>
 
     <properties>
 

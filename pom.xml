@@ -6,7 +6,7 @@
   <parent>
     <artifactId>mycore-parent</artifactId>
     <groupId>org.mycore</groupId>
-    <version>32</version>
+    <version>37-SNAPSHOT</version>
     <relativePath />
   </parent>
 
@@ -21,7 +21,7 @@
 
   <organization>
     <name>Universitätsbibliothek Duisburg-Essen</name>
-    <url>http://www.uni-due.de/ub/</url>
+    <url>https://www.uni-due.de/ub/</url>
   </organization>
 
   <licenses>
@@ -37,7 +37,7 @@
       <name>Frank Lützenkirchen</name>
       <email>frank.luetzenkirchen (at) uni-due.de</email>
       <organization>Universität Duisburg-Essen, Universitätsbibliothek</organization>
-      <organizationUrl>http://www.uni-due.de/ub/</organizationUrl>
+      <organizationUrl>https://www.uni-due.de/ub/</organizationUrl>
       <roles>
         <role>architect</role>
         <role>developer</role>
@@ -49,7 +49,7 @@
       <name>Nils Verheyen</name>
       <email>nils.verheyen (at) uni-due.de</email>
       <organization>Universität Duisburg-Essen, Universitätsbibliothek</organization>
-      <organizationUrl>http://www.uni-due.de/ub/</organizationUrl>
+      <organizationUrl>https://www.uni-due.de/ub/</organizationUrl>
       <roles>
         <role>architect</role>
         <role>developer</role>
@@ -61,7 +61,7 @@
       <name>Kerstin Ponten</name>
       <email>kerstin.ponten (at) uni-due.de</email>
       <organization>Universität Duisburg-Essen, Universitätsbibliothek</organization>
-      <organizationUrl>http://www.uni-due.de/ub/</organizationUrl>
+      <organizationUrl>https://www.uni-due.de/ub/</organizationUrl>
       <roles>
         <role>tester</role>
         <role>support</role>
@@ -73,7 +73,7 @@
       <name>Katrin Falkenstein-Feldhoff</name>
       <email>katrin.falkenstein-feldhoff (at) uni-due.de</email>
       <organization>Universität Duisburg-Essen, Universitätsbibliothek</organization>
-      <organizationUrl>http://www.uni-due.de/ub/</organizationUrl>
+      <organizationUrl>https://www.uni-due.de/ub/</organizationUrl>
       <roles>
         <role>support</role>
       </roles>
@@ -82,22 +82,22 @@
   </developers>
 
   <scm>
-    <connection>scm:svn:http://server.mycore.de/svn/miless/trunk/miless-dozbib</connection>
-    <developerConnection>scm:svn:https://server.mycore.de/svn/miless/trunk/miless-dozbib</developerConnection>
-    <url>http://www.mycore.de/viewvc/viewvc.cgi/miless/trunk/miless-dozbib</url>
+    <connection>scm:svn:https://server.mycore.de/svn/ubo/trunk</connection>
+    <developerConnection>scm:svn:https://server.mycore.de/svn/ubo/trunk</developerConnection>
+    <url>http://www.mycore.de/viewvc/viewvc.cgi/ubo/trunk</url>
   </scm>
 
   <issueManagement>
     <system>Redmine</system>
-    <url>http://redmine.ub.uni-due.de/projects/dozbib/issues</url>
+    <url>https://redmine.ub.uni-due.de/projects/dozbib/issues</url>
   </issueManagement>
 
   <properties>
     <MCR.AppName>ubo</MCR.AppName>
     <java.target.version>1.8</java.target.version>
-    <hibernate.version>5.2.10.Final</hibernate.version>
-    <mycore.version>2017.07-SNAPSHOT</mycore.version>
-    <log4j.version>2.8.2</log4j.version>
+    <hibernate.version>5.2.14.Final</hibernate.version>
+    <mycore.version>2018.06.0-SNAPSHOT</mycore.version>
+    <log4j.version>2.11.0</log4j.version>
     <axis1.version>1.4</axis1.version>
     <timestamp>${maven.build.timestamp}</timestamp>
     <cargo.container>jetty9x</cargo.container>
@@ -369,6 +369,12 @@
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-user2</artifactId>
+      <version>${mycore.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-iview2</artifactId>
+      <!-- actually not used, but dependency required because of persistence mapping missing otherwise -->
       <version>${mycore.version}</version>
     </dependency>
     <dependency>
