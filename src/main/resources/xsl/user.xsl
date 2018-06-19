@@ -62,9 +62,9 @@
       <xsl:apply-templates select="realName" />
       <xsl:apply-templates select="eMail" />
       <xsl:apply-templates select="@name" />
-      <xsl:apply-templates select="attributes/attribute[@name='LSF']" />
+      <xsl:apply-templates select="attributes/attribute[@name='id_lsf']" />
       <xsl:call-template name="orcid" />
-      <xsl:apply-templates select="attributes/attribute[@name='SCOPUS']" />
+      <xsl:apply-templates select="attributes/attribute[@name='id_scopus']" />
     </table>
   </article>
 </xsl:template>
@@ -97,8 +97,8 @@
 
 <xsl:template name="orcid">
   <xsl:choose>
-    <xsl:when test="attributes/attribute[@name='ORCID']">
-      <xsl:apply-templates select="attributes/attribute[@name='ORCID']" />
+    <xsl:when test="attributes/attribute[@name='id_orcid']">
+      <xsl:apply-templates select="attributes/attribute[@name='id_orcid']" />
     </xsl:when>
     <xsl:otherwise>
       <xsl:call-template name="no_orcid">
@@ -133,7 +133,7 @@
   <a href="https://www.uni-due.de/ub/publikationsdienste/orcid.php">Mehr zu den Vorteilen von ORCID und Autoren-Identifikatoren...</a>
 </xsl:template>
 
-<xsl:template match="attribute[@name='ORCID']">
+<xsl:template match="attribute[@name='id_orcid']">
   <tr>
     <th style="width:30%; text-align:right" scope="row">Ihre ORCID iD:</th>
     <td>
@@ -152,7 +152,7 @@
       </p>
       <p style="margin-top:2ex;">
         <xsl:choose>
-          <xsl:when test="../attribute[@name='ORCID-AccessToken']">
+          <xsl:when test="../attribute[@name='token_orcid']">
             <span class="glyphicon glyphicon-check" aria-hidden="true" />
             Sie haben die <strong>Universitätsbibliothek Duisburg-Essen als "Trusted Party" autorisiert</strong>,
             auf Ihr ORCID Profil zuzugreifen und Ihre Publikationsdaten dort mit der Universitätsbibliographie zu synchronisieren.
@@ -167,7 +167,7 @@
   </tr>
 </xsl:template>
 
-<xsl:template match="attribute[@name='LSF']">
+<xsl:template match="attribute[@name='id_lsf']">
   <tr>
     <th style="width:30%; text-align:right" scope="row">Ihre LSF ID:</th>
     <td>
@@ -186,7 +186,7 @@
   </tr>
 </xsl:template>
 
-<xsl:template match="attribute[@name='SCOPUS']">
+<xsl:template match="attribute[@name='id_scopus']">
   <tr>
     <th style="width:30%; text-align:right" scope="row">Ihre Scopus Author ID:</th>
     <td>

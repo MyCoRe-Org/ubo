@@ -8,7 +8,8 @@
   xmlns:xlink="http://www.w3.org/1999/xlink" 
   xmlns:mcr="http://www.mycore.org/"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  exclude-result-prefixes="xsl xalan xlink i18n encoder mcr">
+  xmlns:orcid="xalan://org.mycore.orcid.user.MCRORCIDSession"
+  exclude-result-prefixes="xsl xalan xlink i18n encoder mcr orcid">
   
   <xsl:include href="shelfmark-normalization.xsl" />
   <xsl:include href="output-category.xsl" />
@@ -103,15 +104,15 @@
   
   <xsl:template name="orcid-status">
     <xsl:for-each select="ancestor::mycoreobject">
-      <xsl:variable name="status" xmlns:synchronizer="xalan://org.mycore.orcid.MCRORCIDSynchronizer" select="synchronizer:getStatus(@ID)" />
+      <xsl:variable name="status" select="orcid:getPublicationStatus(@ID)" />
       <xsl:choose>
-        <xsl:when test="$status='in_my_orcid_profile'">
+        <xsl:when test="$status='IN_MY_ORCID_PROFILE'">
           <span class="label-info" title="Diese Publikation ist auch in Ihrem ORCID Profil vorhanden">
             <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" style="width:2.5ex; height:2.5ex; margin-right:1ex" />
             <span class="glyphicon glyphicon-thumbs-up" style="color:rgb(166, 206, 57); position:relative; top:3px;" aria-hidden="true" />
           </span>
         </xsl:when>
-        <xsl:when test="$status='not_in_my_orcid_profile'">
+        <xsl:when test="$status='NOT_IN_MY_ORCID_PROFILE'">
           <span class="label-info" title="Diese Publikation ist nicht in Ihrem ORCID Profil vorhanden">
             <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" style="width:2.5ex; height:2.5ex; margin-right:1ex" />
             <span class="glyphicon glyphicon-thumbs-down" style="color:red; position:relative; top:3px;" aria-hidden="true" />
@@ -125,17 +126,17 @@
   
   <xsl:template name="orcid-sync-button">
     <xsl:variable name="id" select="ancestor::mycoreobject/@ID" />
-    <xsl:if xmlns:orcid="xalan://org.mycore.orcid.user.MCRORCIDSession" test="orcid:weAreTrustedParty()">
-      <xsl:variable name="status" xmlns:synchronizer="xalan://org.mycore.orcid.MCRORCIDSynchronizer" select="synchronizer:getStatus($id)" />
-      <xsl:if test="$status = 'not_in_my_orcid_profile'">
-        <a class="roundedButton" href="{$ServletsBaseURL}ORCIDSyncServlet?id={$id}">
+    <xsl:if test="orcid:weAreTrustedParty()">
+      <xsl:variable name="status" select="orcid:getPublicationStatus($id)" />
+      <xsl:if test="$status = 'NOT_IN_MY_ORCID_PROFILE'">
+        <button style="padding:2px 4px 6px 4px; font-weight:normal;" onClick="jQuery.ajax('{$ServletsBaseURL}WorkSyncServlet?id={$id}');">
           Ins ORCID Profil übertragen 
-        </a>
+        </button>
       </xsl:if>
-      <xsl:if test="$status = 'in_my_orcid_profile'">
-        <a class="roundedButton" href="{$ServletsBaseURL}ORCIDSyncServlet?id={$id}">
+      <xsl:if test="$status = 'IN_MY_ORCID_PROFILE'">
+        <button style="padding:2px 4px 6px 4px; font-weight:normal;" onClick="jQuery.ajax('{$ServletsBaseURL}WorkSyncServlet?id={$id}');">
           Im ORCID Profil aktualisieren
-        </a>
+        </button>
       </xsl:if>
     </xsl:if>
   </xsl:template>
