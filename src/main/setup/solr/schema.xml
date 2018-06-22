@@ -72,6 +72,8 @@
 
   <!-- Fields for mods:identifier, e.g. <mods:identifier type="doi" /> ==> id_doi -->
   <dynamicField name="id_*"  type="id" indexed="true" stored="true" multiValued="true" />
+  <dynamicField name="pub_id_*"  type="id" indexed="true" stored="true" multiValued="true" />
+  <dynamicField name="host_id_*"  type="id" indexed="true" stored="true" multiValued="true" />
   
   <!-- Fields for mods:nameIdentifier, e.g. <mods:nameIdentifier type="scopus" /> ==> nid_scopus -->
   <dynamicField name="nid_*" type="id" indexed="true" stored="true" multiValued="true" />

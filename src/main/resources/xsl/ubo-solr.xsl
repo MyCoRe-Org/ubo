@@ -243,12 +243,24 @@
     </field>
   </xsl:template>
   
-  <xsl:template match="mods:identifier[@type]" mode="solrField">
+  <xsl:template match="mods:mods/mods:identifier[@type]" mode="solrField">
     <field name="id_{@type}">
+      <xsl:value-of select="text()" />
+    </field>
+    <field name="pub_id_{@type}">
       <xsl:value-of select="text()" />
     </field>
   </xsl:template>
   
+  <xsl:template match="mods:relatedItem[(@type='host') or (@type='series')]/mods:identifier[@type]" mode="solrField">
+    <field name="id_{@type}">
+      <xsl:value-of select="text()" />
+    </field>
+    <field name="host_id_{@type}">
+      <xsl:value-of select="text()" />
+    </field>
+  </xsl:template>
+
   <xsl:template match="mods:shelfLocator" mode="solrField">
     <field name="shelfmark">
       <xsl:value-of select="text()" />
