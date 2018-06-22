@@ -29,6 +29,7 @@
 
 <xsl:variable name="head.additional">
   <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/grid12.css" />
+  <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
 </xsl:variable>
 
 <!-- ==================== Trefferliste Metadaten ==================== -->
@@ -255,7 +256,7 @@
             <xsl:call-template name="bibentry.add.to.basket" />
           </xsl:if>
           <xsl:call-template name="bibentry.subselect.return" />
-          <xsl:call-template name="orcid-sync-button" />
+          <xsl:call-template name="orcid-publish" />
           <span class="floatRight"># <xsl:value-of select="$hitNo"/></span>
         </div>
       </xsl:for-each>

@@ -16,6 +16,10 @@
 <xsl:variable name="page.title" select="'Merkliste'" />
 <xsl:variable name="PageID" select="'basket'" />
 
+<xsl:variable name="head.additional">
+  <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
+</xsl:variable>
+
 <xsl:variable name="actions">
   <xsl:for-each select="/basket[entry]">
     <div id="buttons">

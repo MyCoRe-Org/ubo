@@ -8,8 +8,7 @@
   xmlns:xlink="http://www.w3.org/1999/xlink" 
   xmlns:mcr="http://www.mycore.org/"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  xmlns:orcid="xalan://org.mycore.orcid.user.MCRORCIDSession"
-  exclude-result-prefixes="xsl xalan xlink i18n encoder mcr orcid">
+  exclude-result-prefixes="xsl xalan xlink i18n encoder mcr">
   
   <xsl:include href="shelfmark-normalization.xsl" />
   <xsl:include href="output-category.xsl" />
@@ -100,47 +99,16 @@
     </xsl:for-each>
   </xsl:template>
   
-  <!-- ========== ORCID Status ========== -->
+  <!-- ========== ORCID status and publish button ========== -->
   
   <xsl:template name="orcid-status">
-    <xsl:for-each select="ancestor::mycoreobject">
-      <xsl:variable name="status" select="orcid:getPublicationStatus(@ID)" />
-      <xsl:choose>
-        <xsl:when test="$status='IN_MY_ORCID_PROFILE'">
-          <span class="label-info" title="Diese Publikation ist auch in Ihrem ORCID Profil vorhanden">
-            <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" style="width:2.5ex; height:2.5ex; margin-right:1ex" />
-            <span class="glyphicon glyphicon-thumbs-up" style="color:rgb(166, 206, 57); position:relative; top:3px;" aria-hidden="true" />
-          </span>
-        </xsl:when>
-        <xsl:when test="$status='NOT_IN_MY_ORCID_PROFILE'">
-          <span class="label-info" title="Diese Publikation ist nicht in Ihrem ORCID Profil vorhanden">
-            <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" style="width:2.5ex; height:2.5ex; margin-right:1ex" />
-            <span class="glyphicon glyphicon-thumbs-down" style="color:red; position:relative; top:3px;" aria-hidden="true" />
-          </span>
-        </xsl:when>
-      </xsl:choose>
-    </xsl:for-each>
+    <div class="orcid-status" data-id="{ancestor::mycoreobject/@ID}" />
   </xsl:template>
   
-  <!-- ORCID Sync Button -->
-  
-  <xsl:template name="orcid-sync-button">
-    <xsl:variable name="id" select="ancestor::mycoreobject/@ID" />
-    <xsl:if test="orcid:weAreTrustedParty()">
-      <xsl:variable name="status" select="orcid:getPublicationStatus($id)" />
-      <xsl:if test="$status = 'NOT_IN_MY_ORCID_PROFILE'">
-        <button style="padding:2px 4px 6px 4px; font-weight:normal;" onClick="jQuery.ajax('{$ServletsBaseURL}WorkSyncServlet?id={$id}');">
-          Ins ORCID Profil übertragen 
-        </button>
-      </xsl:if>
-      <xsl:if test="$status = 'IN_MY_ORCID_PROFILE'">
-        <button style="padding:2px 4px 6px 4px; font-weight:normal;" onClick="jQuery.ajax('{$ServletsBaseURL}WorkSyncServlet?id={$id}');">
-          Im ORCID Profil aktualisieren
-        </button>
-      </xsl:if>
-    </xsl:if>
+  <xsl:template name="orcid-publish">
+    <div class="orcid-publish" data-id="{ancestor::mycoreobject/@ID}" />
   </xsl:template>
-  
+
   <!-- ========== URI bauen, um Dubletten zu finden ========== -->
   
   <xsl:template name="buildFindDuplicatesURI">

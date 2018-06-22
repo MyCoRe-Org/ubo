@@ -258,6 +258,7 @@
       <link rel="apple-touch-icon-precomposed" href="https://www.uni-due.de/imperia/md/images/cms/l/apple-touch-icon-precomposed.png" />
       <link rel="shortcut icon" href="https://www.uni-due.de/imperia/md/images/cms/l/apple-touch-icon.png" />
       <link rel="shortcut icon" href="{$WebApplicationBaseURL}images/favicon.ico" />
+      <script type="text/javascript">var webApplicationBaseURL = '<xsl:value-of select="$WebApplicationBaseURL" />';</script>
       <script type="text/javascript" src="{$WebApplicationBaseURL}external/jquery-1.7.min.js"></script>
       <script type="text/javascript"> jQuery.noConflict(); </script>
       <script type="text/javascript" src="{$WebApplicationBaseURL}external/html5shiv-3.5/html5shiv.js"></script>

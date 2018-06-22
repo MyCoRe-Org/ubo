@@ -1967,3 +1967,87 @@ a.ubo-facet-add, a.ubo-facet-add:hover {
 	text-decoration: none;
 	cursor: pointer;
 }
+
+div.orcid-status, div.orcid-publish {
+	margin: 0;
+	padding: 0;
+	display: inline-block;
+	vertical-align: top;
+}
+
+img.orcid-icon {
+	width: 2.5ex;
+	height: 2.5ex;
+	margin-right: 1ex
+}
+
+span.orcid-info {
+    box-sizing: border-box;
+    background-color: rgb(239,228,191);
+    border-radius: 0.25em;
+    color: rgb(0,76,147);
+    display: inline-block;
+    font-weight: bold;
+    line-height: 2.5ex;
+    padding: 0.3em 0.6em 0.3em 0.6em;
+    margin-right:0.5ex;
+    vertical-align: baseline;
+}
+
+span.orcid-in-profile-true {
+	color: rgb(166, 206, 57);
+	position: relative;
+	top: 3px;
+}
+
+span.orcid-in-profile-false {
+	color: red;
+	position: relative;
+	top: 3px;
+}
+
+button.orcid-button {
+    padding: 4px 7px 4px 7px;
+    margin-top: 0;
+	font-weight: normal;
+	background-image: linear-gradient(top, rgb(0, 114, 156), rgb(1, 70, 139));
+	background-image: -o-linear-gradient(top, rgb(0, 114, 156), rgb(1, 70, 139));
+	background-image: -moz-linear-gradient(top, rgb(0, 114, 156), rgb(1, 70, 139));
+	background-image: -webkit-linear-gradient(top, rgb(0, 114, 156), rgb(1, 70, 139));
+	background-image: -ms-linear-gradient(top, rgb(0, 114, 156), rgb(1, 70, 139));
+	background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.5, rgb(0,114, 156)), color-stop(0, rgb(1, 70, 139)));
+	filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#ff00729c', EndColorStr='#ff01468b');
+	border: 1px solid rgba(6, 72, 118, 0.7);
+	-moz-border-radius: 7px;
+	-webkit-border-radius: 7px;
+	border-radius: 7px;
+	-moz-box-shadow: 0 1px 3px #999;
+	-webkit-box-shadow: 0 1px 3px #999;
+	box-shadow: 0 1px 3px #999;
+	color: white;
+	display: inline-block;
+	text-decoration: none;
+	text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.25);
+}
+
+button.orcid-button:hover, button.orcid-button:active  {
+	background-color: #004C93;
+	text-decoration: none;
+	-moz-transition: all .2s ease-in-out 0s;
+	-webkit-transition: all .2s ease-in-out 0s;
+	-o-transition: all .2s ease-in-out 0s;
+	transition: all .2s ease-in-out 0s;
+	background-image: linear-gradient(top, rgb(255, 247, 219), rgb(239, 228, 191));
+	background-image: -o-linear-gradient(top, rgb(255, 247, 219), rgb(239, 228, 191));
+	background-image: -moz-linear-gradient(top, rgb(255, 247, 219), rgb(239, 228, 191));
+	background-image: -webkit-linear-gradient(top, rgb(255, 247, 219), rgb(239, 228, 191));
+	background-image: -ms-linear-gradient(top, rgb(255, 247, 219), rgb(239, 228, 191));
+	background-image: -webkit-gradient(linear, left bottom, left top, color-stop(1, rgb(255, 247, 219)), color-stop(0.2, rgb(239, 228, 191)));
+	filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#ffebce75', EndColorStr='#fffff8db');
+	border: 1px solid rgba(255, 247, 219, 0.7);
+	-moz-box-shadow: 0px 0px 8px #333;
+	-webkit-box-shadow: 0px 0px 8px #333;
+	box-shadow: 0px 0px 8px #333;
+	color: #004C93;
+	text-decoration: none;
+}

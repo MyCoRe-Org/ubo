@@ -53,6 +53,7 @@
   <xsl:apply-templates select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods" mode="dc-meta" />
   <xsl:apply-templates select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods" mode="highwire" />
   <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/grid12.css" />
+  <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
 </xsl:variable>
 
 <!-- ========== Navigation ========== -->
