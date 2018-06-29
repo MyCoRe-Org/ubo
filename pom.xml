@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <artifactId>mycore-parent</artifactId>
     <groupId>org.mycore</groupId>
+    <artifactId>mycore-parent</artifactId>
     <version>37-SNAPSHOT</version>
     <relativePath />
   </parent>
@@ -31,55 +30,10 @@
     </license>
   </licenses>
 
-  <developers>
-    <developer>
-      <id>mcrfluet</id>
-      <name>Frank Lützenkirchen</name>
-      <email>frank.luetzenkirchen (at) uni-due.de</email>
-      <organization>Universität Duisburg-Essen, Universitätsbibliothek</organization>
-      <organizationUrl>https://www.uni-due.de/ub/</organizationUrl>
-      <roles>
-        <role>architect</role>
-        <role>developer</role>
-      </roles>
-      <timezone>+1</timezone>
-    </developer>
-    <developer>
-      <id>mcrnverh</id>
-      <name>Nils Verheyen</name>
-      <email>nils.verheyen (at) uni-due.de</email>
-      <organization>Universität Duisburg-Essen, Universitätsbibliothek</organization>
-      <organizationUrl>https://www.uni-due.de/ub/</organizationUrl>
-      <roles>
-        <role>architect</role>
-        <role>developer</role>
-      </roles>
-      <timezone>+1</timezone>
-    </developer>
-    <developer>
-      <id>mcrkpont</id>
-      <name>Kerstin Ponten</name>
-      <email>kerstin.ponten (at) uni-due.de</email>
-      <organization>Universität Duisburg-Essen, Universitätsbibliothek</organization>
-      <organizationUrl>https://www.uni-due.de/ub/</organizationUrl>
-      <roles>
-        <role>tester</role>
-        <role>support</role>
-      </roles>
-      <timezone>+1</timezone>
-    </developer>
-    <developer>
-      <id>mcrkfafe</id>
-      <name>Katrin Falkenstein-Feldhoff</name>
-      <email>katrin.falkenstein-feldhoff (at) uni-due.de</email>
-      <organization>Universität Duisburg-Essen, Universitätsbibliothek</organization>
-      <organizationUrl>https://www.uni-due.de/ub/</organizationUrl>
-      <roles>
-        <role>support</role>
-      </roles>
-      <timezone>+1</timezone>
-    </developer>
-  </developers>
+  <issueManagement>
+    <system>Redmine</system>
+    <url>https://redmine.ub.uni-due.de/projects/dozbib/issues</url>
+  </issueManagement>
 
   <scm>
     <connection>scm:svn:https://server.mycore.de/svn/ubo/trunk</connection>
@@ -87,19 +41,9 @@
     <url>http://www.mycore.de/viewvc/viewvc.cgi/ubo/trunk</url>
   </scm>
 
-  <issueManagement>
-    <system>Redmine</system>
-    <url>https://redmine.ub.uni-due.de/projects/dozbib/issues</url>
-  </issueManagement>
-
   <properties>
     <MCR.AppName>ubo</MCR.AppName>
-    <java.target.version>1.8</java.target.version>
-    <hibernate.version>5.2.14.Final</hibernate.version>
-    <mycore.version>2018.06.0-SNAPSHOT</mycore.version>
-    <log4j.version>2.11.0</log4j.version>
     <axis1.version>1.4</axis1.version>
-    <timestamp>${maven.build.timestamp}</timestamp>
     <cargo.container>jetty9x</cargo.container>
     <cargo.container.zipUrlInstaller.downloadDir>${settings.localRepository}/../cargo/containers</cargo.container.zipUrlInstaller.downloadDir>
     <cargo.debug.address>8295</cargo.debug.address>
@@ -113,383 +57,59 @@
     <cargo.servlet.uriencoding>UTF-8</cargo.servlet.uriencoding>
     <cargo.tomcat.ajp.port>8292</cargo.tomcat.ajp.port>
     <cargo.version>1.6.7</cargo.version>
+    <hibernate.version>5.2.14.Final</hibernate.version>
+    <java.target.version>1.8</java.target.version>
     <jetty.version>9.4.8.v20171121</jetty.version>
+    <log4j.version>2.11.0</log4j.version>
+    <mycore.version>2018.06.0-SNAPSHOT</mycore.version>
     <solr.data.dir>${solr.home}/ubo/data</solr.data.dir>
     <solr.home>${user.home}/AppData/Local/MyCoRe/${MCR.AppName}/data/solr</solr.home>
+    <timestamp>${maven.build.timestamp}</timestamp>
   </properties>
 
-  <profiles>
-    <profile>
-      <id>windows</id>
-      <activation>
-        <os>
-          <family>Windows</family>
-        </os>
-      </activation>
-      <properties>
-        <user.config.dir>${user.home}/AppData/Local/MyCoRe</user.config.dir>
-      </properties>
-    </profile>
-    <profile>
-      <id>linux</id>
-      <activation>
-        <os>
-          <family>Unix</family>
-        </os>
-      </activation>
-      <properties>
-        <user.config.dir>${user.home}/.mycore</user.config.dir>
-      </properties>
-    </profile>
-    <profile>
-      <id>dev</id>
-      <properties>
-        <MCR.DataPrefix>dev</MCR.DataPrefix>
-        <cargo.jvmargs>-DMCR.AppName=${MCR.AppName} 
-        -Dsolr.solr.home=${solr.home}
-        -Dsolr.data.dir=${solr.data.dir}
-        -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=${cargo.debug.suspend},address=${cargo.debug.address}</cargo.jvmargs>
-      </properties>
-    </profile>
-  </profiles>
-
-  <dependencies>
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.10</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-csv</artifactId>
-      <version>1.5</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-discovery</groupId>
-      <artifactId>commons-discovery</artifactId>
-      <version>0.5</version>
-      <scope>runtime</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>commons-logging</groupId>
-          <artifactId>commons-logging</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>commons-httpclient</groupId>
-      <artifactId>commons-httpclient</artifactId>
-      <version>3.1</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.6</version>
-    </dependency>
-    <dependency>
-      <groupId>org.hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
-      <version>2.3.4</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>1.4.192</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.zaxxer</groupId>
-      <artifactId>HikariCP</artifactId>
-      <version>2.5.1</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-hikaricp</artifactId>
-      <version>${hibernate.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>5.1.12</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <version>9.4-1206-jdbc42</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.poi</groupId>
-      <artifactId>poi</artifactId>
-      <version>3.8</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>commons-codec</artifactId>
-          <groupId>commons-codec</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
-      <version>3.1.0</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>jaxen</groupId>
-      <artifactId>jaxen</artifactId>
-      <version>1.1.6</version>
-      <exclusions>
-        <exclusion>
-          <groupId>jdom</groupId>
-          <artifactId>jdom2</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>xom</groupId>
-          <artifactId>xom</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>xml-apis</groupId>
-          <artifactId>xml-apis</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-core</artifactId>
-      <version>${log4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-web</artifactId>
-      <version>${log4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-api</artifactId>
-      <version>${log4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-slf4j-impl</artifactId>
-      <version>${log4j.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.axis</groupId>
-      <artifactId>axis</artifactId>
-      <version>${axis1.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.axis</groupId>
-      <artifactId>axis-jaxrpc</artifactId>
-      <version>${axis1.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>wsdl4j</groupId>
-      <artifactId>wsdl4j</artifactId>
-      <version>1.6.3</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.jtidy</groupId>
-      <artifactId>jtidy</artifactId>
-      <version>r938</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jdom</groupId>
-      <artifactId>jdom2</artifactId>
-      <version>2.0.6</version>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-base</artifactId>
-      <version>${mycore.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.logging.log4j</groupId>
-          <artifactId>log4j-slf4j-impl</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-base</artifactId>
-      <version>${mycore.version}</version>
-      <type>test-jar</type>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-mods</artifactId>
-      <version>${mycore.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-orcid</artifactId>
-      <version>${mycore.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-oai</artifactId>
-      <version>${mycore.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-solr</artifactId>
-      <version>${mycore.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore.solr</groupId>
-      <artifactId>solr</artifactId>
-      <version>4.10.4.1-SNAPSHOT</version>
-      <type>war</type>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-xeditor</artifactId>
-      <version>${mycore.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-restapi</artifactId>
-      <version>${mycore.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-user2</artifactId>
-      <version>${mycore.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-iview2</artifactId>
-      <!-- actually not used, but dependency required because of persistence mapping missing otherwise -->
-      <version>${mycore.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.solr</groupId>
-      <artifactId>solr-solrj</artifactId>
-      <version>7.2.1</version>
-    </dependency>
-    <dependency>
-      <groupId>xalan</groupId>
-      <artifactId>xalan</artifactId>
-      <version>2.7.2</version>
-    </dependency>
-    <dependency>
-      <groupId>xml-apis</groupId>
-      <artifactId>xml-apis</artifactId>
-      <version>1.0.b2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars.bower</groupId>
-      <artifactId>github-com-highcharts-highcharts</artifactId>
-      <version>4.2.5</version>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>bootstrap-glyphicons</artifactId>
-      <version>bdd2cbfba0</version>
-    </dependency>    
-  </dependencies>
-
-  <repositories>
-    <repository>
-      <id>central</id>
-      <name>Central Repository</name>
-      <url>https://repo.maven.apache.org/maven2</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>MyCoRe HQ</id>
-      <url>http://artifactory.mycore.de/mycore-releases</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>MyCoRe HQ Snapshots</id>
-      <url>http://artifactory.mycore.de/mycore-snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>central</id>
-      <name>Central Repository</name>
-      <url>https://repo.maven.apache.org/maven2</url>
-      <releases>
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-    <pluginRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </pluginRepository>
-    <pluginRepository>
-      <id>MyCoRe HQ</id>
-      <url>http://artifactory.mycore.de/mycore-releases</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-    <pluginRepository>
-      <id>MyCoRe HQ Snapshots</id>
-      <url>http://artifactory.mycore.de/mycore-snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
-
   <build>
+
+    <pluginManagement>
+      <plugins>
+        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>axistools-maven-plugin</artifactId>
+                    <versionRange>[1.4,)</versionRange>
+                    <goals>
+                      <goal>wsdl2java</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute />
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
 
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>axistools-maven-plugin</artifactId>
         <version>${axis1.version}</version>
+        <configuration>
+          <packageSpace>unidue.ubo.lsf</packageSpace>
+          <subPackageByFileName>false</subPackageByFileName>
+          <testCases>false</testCases>
+          <serverSide>false</serverSide>
+        </configuration>
         <executions>
           <execution>
             <goals>
@@ -497,12 +117,6 @@
             </goals>
           </execution>
         </executions>
-        <configuration>
-          <packageSpace>unidue.ubo.lsf</packageSpace>
-          <subPackageByFileName>false</subPackageByFileName>
-          <testCases>false</testCases>
-          <serverSide>false</serverSide>
-        </configuration>
       </plugin>
 
       <plugin>
@@ -532,10 +146,10 @@
         <executions>
           <execution>
             <id>assemble</id>
-            <phase>prepare-package</phase>
             <goals>
               <goal>assemble</goal>
             </goals>
+            <phase>prepare-package</phase>
           </execution>
         </executions>
       </plugin>
@@ -546,10 +160,10 @@
         <executions>
           <execution>
             <id>copy-servlet-api</id>
-            <phase>prepare-package</phase>
             <goals>
               <goal>copy</goal>
             </goals>
+            <phase>prepare-package</phase>
             <configuration>
               <artifactItems>
                 <artifactItem>
@@ -614,38 +228,421 @@
       </plugin>
     </plugins>
 
-    <pluginManagement>
-      <plugins>
-      		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>
-                      axistools-maven-plugin
-                    </artifactId>
-                    <versionRange>[1.4,)</versionRange>
-                    <goals>
-                      <goal>wsdl2java</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <execute />
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-
   </build>
+
+  <repositories>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>central</id>
+      <name>Central Repository</name>
+      <url>https://repo.maven.apache.org/maven2</url>
+    </repository>
+    <repository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>MyCoRe HQ</id>
+      <url>http://artifactory.mycore.de/mycore-releases</url>
+    </repository>
+    <repository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>MyCoRe HQ Snapshots</id>
+      <url>http://artifactory.mycore.de/mycore-snapshots</url>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <releases>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>central</id>
+      <name>Central Repository</name>
+      <url>https://repo.maven.apache.org/maven2</url>
+    </pluginRepository>
+    <pluginRepository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </pluginRepository>
+    <pluginRepository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>MyCoRe HQ</id>
+      <url>http://artifactory.mycore.de/mycore-releases</url>
+    </pluginRepository>
+    <pluginRepository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>MyCoRe HQ Snapshots</id>
+      <url>http://artifactory.mycore.de/mycore-snapshots</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.10</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-httpclient</groupId>
+      <artifactId>commons-httpclient</artifactId>
+      <version>3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.6</version>
+    </dependency>
+    <dependency>
+      <groupId>jaxen</groupId>
+      <artifactId>jaxen</artifactId>
+      <version>1.1.6</version>
+      <exclusions>
+        <exclusion>
+          <groupId>jdom</groupId>
+          <artifactId>jdom2</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xom</groupId>
+          <artifactId>xom</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xml-apis</groupId>
+          <artifactId>xml-apis</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.jtidy</groupId>
+      <artifactId>jtidy</artifactId>
+      <version>r938</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.axis</groupId>
+      <artifactId>axis</artifactId>
+      <version>${axis1.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.axis</groupId>
+      <artifactId>axis-jaxrpc</artifactId>
+      <version>${axis1.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-csv</artifactId>
+      <version>1.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>${log4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>${log4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-web</artifactId>
+      <version>${log4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <version>3.8</version>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-codec</groupId>
+          <artifactId>commons-codec</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.solr</groupId>
+      <artifactId>solr-solrj</artifactId>
+      <version>7.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jdom</groupId>
+      <artifactId>jdom2</artifactId>
+      <version>2.0.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-base</artifactId>
+      <version>${mycore.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-slf4j-impl</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-iview2</artifactId>
+      <!-- actually not used, but dependency required because of persistence mapping missing otherwise -->
+      <version>${mycore.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-mods</artifactId>
+      <version>${mycore.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-oai</artifactId>
+      <version>${mycore.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-orcid</artifactId>
+      <version>${mycore.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-restapi</artifactId>
+      <version>${mycore.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-solr</artifactId>
+      <version>${mycore.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-user2</artifactId>
+      <version>${mycore.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-xeditor</artifactId>
+      <version>${mycore.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>bootstrap-glyphicons</artifactId>
+      <version>bdd2cbfba0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars.bower</groupId>
+      <artifactId>github-com-highcharts-highcharts</artifactId>
+      <version>4.2.5</version>
+    </dependency>
+    <dependency>
+      <groupId>xalan</groupId>
+      <artifactId>xalan</artifactId>
+      <version>2.7.2</version>
+    </dependency>
+    <dependency>
+      <groupId>xml-apis</groupId>
+      <artifactId>xml-apis</artifactId>
+      <version>1.0.b2</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore.solr</groupId>
+      <artifactId>solr</artifactId>
+      <version>4.10.4.1-SNAPSHOT</version>
+      <type>war</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+      <version>2.5.1</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-discovery</groupId>
+      <artifactId>commons-discovery</artifactId>
+      <version>0.5</version>
+      <scope>runtime</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.1.12</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j-impl</artifactId>
+      <version>${log4j.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-hikaricp</artifactId>
+      <version>${hibernate.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>9.4-1206-jdbc42</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>wsdl4j</groupId>
+      <artifactId>wsdl4j</artifactId>
+      <version>1.6.3</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>1.4.192</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>2.3.4</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-base</artifactId>
+      <version>${mycore.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <profiles>
+    <profile>
+      <id>windows</id>
+      <activation>
+        <os>
+          <family>Windows</family>
+        </os>
+      </activation>
+      <properties>
+        <user.config.dir>${user.home}/AppData/Local/MyCoRe</user.config.dir>
+      </properties>
+    </profile>
+    <profile>
+      <id>linux</id>
+      <activation>
+        <os>
+          <family>Unix</family>
+        </os>
+      </activation>
+      <properties>
+        <user.config.dir>${user.home}/.mycore</user.config.dir>
+      </properties>
+    </profile>
+    <profile>
+      <id>dev</id>
+      <properties>
+        <MCR.DataPrefix>dev</MCR.DataPrefix>
+        <cargo.jvmargs>-DMCR.AppName=${MCR.AppName} 
+        -Dsolr.solr.home=${solr.home}
+        -Dsolr.data.dir=${solr.data.dir}
+        -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=${cargo.debug.suspend},address=${cargo.debug.address}</cargo.jvmargs>
+      </properties>
+    </profile>
+  </profiles>
+
+  <developers>
+    <developer>
+      <id>mcrfluet</id>
+      <name>Frank Lützenkirchen</name>
+      <email>frank.luetzenkirchen (at) uni-due.de</email>
+      <organization>Universität Duisburg-Essen, Universitätsbibliothek</organization>
+      <organizationUrl>https://www.uni-due.de/ub/</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
+    <developer>
+      <id>mcrnverh</id>
+      <name>Nils Verheyen</name>
+      <email>nils.verheyen (at) uni-due.de</email>
+      <organization>Universität Duisburg-Essen, Universitätsbibliothek</organization>
+      <organizationUrl>https://www.uni-due.de/ub/</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
+    <developer>
+      <id>mcrkpont</id>
+      <name>Kerstin Ponten</name>
+      <email>kerstin.ponten (at) uni-due.de</email>
+      <organization>Universität Duisburg-Essen, Universitätsbibliothek</organization>
+      <organizationUrl>https://www.uni-due.de/ub/</organizationUrl>
+      <roles>
+        <role>tester</role>
+        <role>support</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
+    <developer>
+      <id>mcrkfafe</id>
+      <name>Katrin Falkenstein-Feldhoff</name>
+      <email>katrin.falkenstein-feldhoff (at) uni-due.de</email>
+      <organization>Universität Duisburg-Essen, Universitätsbibliothek</organization>
+      <organizationUrl>https://www.uni-due.de/ub/</organizationUrl>
+      <roles>
+        <role>support</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
+  </developers>
 
 </project>
