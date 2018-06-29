@@ -163,16 +163,9 @@
   <xsl:variable name="authorityOA">https://bibliographie.ub.uni-due.de/classifications/oa</xsl:variable>
 
   <xsl:template match="result/isOpenAccess">
-    <mods:classification authorityURI="{$authorityOA}">
-      <xsl:attribute name="valueURI">
-        <xsl:value-of select="$authorityOA" />
-        <xsl:text>#</xsl:text>
-        <xsl:choose>
-          <xsl:when test=".='Y'">oa</xsl:when>
-          <xsl:otherwise>closed</xsl:otherwise>
-        </xsl:choose>
-      </xsl:attribute>
-    </mods:classification>
+    <xsl:if test=".='Y'">
+      <mods:classification authorityURI="{$authorityOA}" valueURI="{$authorityOA}#oa" />
+    </xsl:if>
   </xsl:template>
   
   <xsl:template match="language">

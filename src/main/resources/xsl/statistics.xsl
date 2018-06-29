@@ -242,7 +242,7 @@
     <div id="chartOA" style="width:100%; height:350px" />
     
     <xsl:variable name="numOAdirect" select="int[@name='oa'] - sum(int[contains('green gold hybrid embargo',@name)])" /> 
-    <xsl:variable name="numOther" select="/response/result/@numFound - $numOAdirect - sum(int[contains('green gold hybrid embargo closed',@name)])" />
+    <xsl:variable name="numOther" select="/response/result/@numFound - int[@name='oa']" />
 
     <script type="text/javascript">
      jQuery(document).ready(function() {

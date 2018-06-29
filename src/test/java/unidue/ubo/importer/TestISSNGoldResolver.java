@@ -18,7 +18,6 @@ import org.jdom2.Element;
 import org.junit.Test;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRTestCase;
-import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRURIResolver;
 
 public class TestISSNGoldResolver extends MCRTestCase {
