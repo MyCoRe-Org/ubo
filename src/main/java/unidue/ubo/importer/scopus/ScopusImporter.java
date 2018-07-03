@@ -82,7 +82,7 @@ class ScopusImporter {
     }
 
     private boolean isAlreadyStored(String scopusID) {
-        SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
+        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
         SolrQuery query = new SolrQuery();
         query.setQuery(FIELD_TO_QUERY_ID + ":" + MCRSolrUtils.escapeSearchValue(scopusID));
         query.setRows(0);

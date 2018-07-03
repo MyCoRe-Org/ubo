@@ -105,10 +105,11 @@ public abstract class ImportJob {
     }
 
     private static final int MAX_SOLR_CHECKS = 10; // times
+
     private static final int SECONDS_TO_WAIT_BETWEEN_SOLR_CHECKS = 2;
 
     private void tryToWaitUntilSolrIndexingFinished() {
-        SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
+        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
         SolrQuery query = new SolrQuery();
         query.setQuery(getQueryString());
         query.setRows(0);
@@ -120,7 +121,7 @@ public abstract class ImportJob {
                 TimeUnit.SECONDS.sleep(SECONDS_TO_WAIT_BETWEEN_SOLR_CHECKS);
                 numFound = solrClient.query(query).getResults().getNumFound();
                 LOGGER.info("Check if SOLR indexed all publications: #" + numTries + " " + numFound + " / "
-                        + getNumPublications());
+                    + getNumPublications());
             } while ((numFound < getNumPublications()) && (++numTries < MAX_SOLR_CHECKS));
         } catch (Exception ex) {
             LOGGER.warn(ex);

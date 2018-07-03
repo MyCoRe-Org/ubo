@@ -133,7 +133,7 @@ public class NewPublicationWizard extends MCRServlet {
     }
 
     private boolean publicationMayAlreadyExist(String q) throws SolrServerException, IOException {
-        SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
+        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
         SolrQuery query = new SolrQuery();
         query.setQuery(q);
         query.setRows(0);

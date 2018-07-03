@@ -85,7 +85,7 @@ public class DozBibServlet extends MCRServlet {
 
         SolrQuery solrQuery = MCRQLSearchUtils.getSolrQuery(q, doc, req);
         solrQuery.setRows(0);
-        SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
+        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
         SolrDocumentList results = solrClient.query(solrQuery).getResults();
         long numFound = results.getNumFound();
 
