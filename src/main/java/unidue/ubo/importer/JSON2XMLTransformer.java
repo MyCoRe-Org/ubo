@@ -20,7 +20,7 @@ public class JSON2XMLTransformer extends MCRContentTransformer {
     @Override
     public MCRContent transform(MCRContent json) throws IOException {
         MCRContent dummy = new MCRStringContent("<dummy/>");
-        MCRContentTransformer t = MCRContentTransformerFactory.getTransformer("dummy+json2xml");
+        MCRContentTransformer t = MCRContentTransformerFactory.getTransformer("dummy-json2xml");
         MCRParameterizedTransformer pt = (MCRParameterizedTransformer) t;
         MCRParameterCollector params = new MCRParameterCollector();
         params.setParameter("json", json.asString());
