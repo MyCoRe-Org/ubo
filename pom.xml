@@ -58,6 +58,8 @@
     <cargo.tomcat.ajp.port>8292</cargo.tomcat.ajp.port>
     <cargo.version>1.6.7</cargo.version>
     <hibernate.version>5.2.14.Final</hibernate.version>
+    <httpcomponents.version>4.5.5</httpcomponents.version>
+    <httpcore.version>4.4.9</httpcore.version>
     <java.target.version>1.8</java.target.version>
     <jetty.version>9.4.8.v20171121</jetty.version>
     <log4j.version>2.11.0</log4j.version>
@@ -316,11 +318,6 @@
       <version>1.10</version>
     </dependency>
     <dependency>
-      <groupId>commons-httpclient</groupId>
-      <artifactId>commons-httpclient</artifactId>
-      <version>3.1</version>
-    </dependency>
-    <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
       <version>2.6</version>
@@ -365,6 +362,21 @@
       <version>1.5</version>
     </dependency>
     <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <version>${httpcomponents.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient-cache</artifactId>
+      <version>${httpcomponents.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpcore</artifactId>
+      <version>${httpcore.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
       <version>${log4j.version}</version>
@@ -393,7 +405,7 @@
     <dependency>
       <groupId>org.apache.solr</groupId>
       <artifactId>solr-solrj</artifactId>
-      <version>7.2.1</version>
+      <version>7.3.1</version>
     </dependency>
     <dependency>
       <groupId>org.jdom</groupId>

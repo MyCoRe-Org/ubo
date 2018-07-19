@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2016 Duisburg-Essen University Library
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v2.0
  * which accompanies this distribution, and is available at
@@ -10,13 +10,17 @@
 package unidue.ubo.importer.evaluna;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -59,17 +63,20 @@ public class EvalunaConnection {
         return this;
     }
 
-    public MCRContent getResponse() throws HttpException, IOException, JDOMException, SAXException {
+    public MCRContent getResponse() throws IOException, JDOMException, SAXException {
         Element root = new Element("interface").setAttribute("version", "1.0");
         root.addContent(buildAuthElement());
         addAllRequests(root);
 
-        PostMethod connection = postRequest(root);
-        InputStream response = connection.getResponseBodyAsStream();
-        MCRContent result = new MCRStreamContent(response);
-        result = new MCRJDOMContent( result.asXML() );
-        connection.releaseConnection();
-        
+        HttpPost post = postRequest(root);
+        CloseableHttpClient client = HttpClients.createDefault();
+        CloseableHttpResponse response = client.execute(post);
+        HttpEntity entity = response.getEntity();
+
+        MCRContent result = new MCRStreamContent(entity.getContent());
+        result = new MCRJDOMContent(result.asXML());
+        client.close();
+
         return result;
     }
 
@@ -81,14 +88,14 @@ public class EvalunaConnection {
         }
     }
 
-    private PostMethod postRequest(Element root) throws IOException, HttpException {
-        HttpClient client = new HttpClient();
-        PostMethod connection = new PostMethod(API_URL);
-        connection.addParameter("function", "api");
-        connection.addParameter("job", "request");
-        connection.addParameter("request", xml2string(root));
-        client.executeMethod(connection);
-        return connection;
+    private HttpPost postRequest(Element root) throws IOException {
+        HttpPost httpPost = new HttpPost(API_URL);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("function", "api"));
+        params.add(new BasicNameValuePair("job", "request"));
+        params.add(new BasicNameValuePair("request", xml2string(root)));
+        httpPost.setEntity(new UrlEncodedFormEntity(params));
+        return httpPost;
     }
 
     private String xml2string(Element root) {
