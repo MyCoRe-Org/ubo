@@ -113,6 +113,7 @@
     </xsl:apply-templates>
   </div>
   <div class="section">
+    <xsl:call-template name="altmetrics" />
     <div class="labels">
       <xsl:call-template name="label-year" />
       <xsl:call-template name="pubtype" />
@@ -370,6 +371,36 @@
     </strong>    
   </p>
  </xsl:if> 
+</xsl:template>
+
+<xsl:template name="altmetrics">
+  <xsl:if test="mods:identifier[contains('doi urn isbn pubmed',@type)]">
+    <script type='text/javascript' src='https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js' />
+    <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="left" style="float:right; display:inline-block; margin:0 2ex 1ex 2ex;">
+      <xsl:choose>
+        <xsl:when test="mods:identifier[@type='doi']">
+          <xsl:attribute name="data-doi">
+            <xsl:value-of select="mods:identifier[@type='doi']" />
+          </xsl:attribute> 
+        </xsl:when>
+        <xsl:when test="mods:identifier[@type='urn']">
+          <xsl:attribute name="data-uri">
+            <xsl:value-of select="mods:identifier[@type='urn']" />
+          </xsl:attribute> 
+        </xsl:when>
+        <xsl:when test="mods:identifier[@type='isbn']">
+          <xsl:attribute name="data-isbn">
+            <xsl:value-of select="mods:identifier[@type='isbn']" />
+          </xsl:attribute> 
+        </xsl:when>
+        <xsl:when test="mods:identifier[@type='pubmed']">
+          <xsl:attribute name="data-pmid">
+            <xsl:value-of select="mods:identifier[@type='pubmed']" />
+          </xsl:attribute> 
+        </xsl:when>
+      </xsl:choose>
+    </div>
+  </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>
