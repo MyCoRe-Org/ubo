@@ -52,11 +52,21 @@
   <xed:template id="genre.preface">
     <xed:include uri="webapp:import-editor.xed" ref="title" />
     <xed:include uri="webapp:import-editor.xed" ref="author" />
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />
     <xed:if test="$host_intern='journal'">      
       <xed:include uri="webapp:import-editor.xed" ref="year" />
     </xed:if>
+    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
+    <xed:include uri="webapp:import-editor.xed" ref="url" />    
+  </xed:template>
+  
+  <xed:template id="genre.review">
+    <xed:include uri="webapp:import-editor.xed" ref="title" />
+    <xed:include uri="webapp:import-editor.xed" ref="author" />
+    <xed:if test="$host_intern='journal'">      
+      <xed:include uri="webapp:import-editor.xed" ref="year" />
+    </xed:if>
+    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
+    <xed:include uri="webapp:import-editor.xed" ref="url" />    
   </xed:template>
 
   <xed:template id="genre.entry">

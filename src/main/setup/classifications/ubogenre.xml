@@ -30,6 +30,12 @@
         <label xml:lang="x-hosts" text="lexicon" />
         <label xml:lang="de" text="Lexikoneintrag" />
       </category>
+       <category ID="review">
+        <label xml:lang="en" text="Review" />
+        <label xml:lang="x-hosts" text="journal collection" />
+        <label xml:lang="de" text="Rezension" />
+        <label xml:lang="x-marcgt" text="article" />
+      </category>
     </category>
     <category ID="thesis">
       <label xml:lang="de" text="Hochschulschrift" />
