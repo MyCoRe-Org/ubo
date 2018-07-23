@@ -34,7 +34,7 @@
         <label xml:lang="en" text="Review" />
         <label xml:lang="x-hosts" text="journal collection" />
         <label xml:lang="de" text="Rezension" />
-        <label xml:lang="x-marcgt" text="article" />
+        <label xml:lang="x-marcgt" text="review" />
       </category>
     </category>
     <category ID="thesis">
