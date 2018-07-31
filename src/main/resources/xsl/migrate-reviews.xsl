@@ -5,14 +5,15 @@
   <xsl:include href="copynodes.xsl" />
   
   <xsl:variable name="tag">[Rezension]</xsl:variable>
+  <xsl:variable name="tag1"> ; [Rezension]</xsl:variable>
   <xsl:variable name="tag2">Rezension:</xsl:variable>
-  <xsl:variable name="tag3">Rezension zu:</xsl:variable>
+  <xsl:variable name="tag3">Rezension zu</xsl:variable>
   
   <xsl:template match="mods:genre[@type='intern']">
     <xsl:copy>
       <xsl:copy-of select="@*" />
       <xsl:choose>
-        <xsl:when test="../mods:titleInfo/*[contains(text(),$tag) or starts-with(text(),$tag2) or starts-with(text(),$tag3)]">
+        <xsl:when test="../mods:titleInfo/*[contains(text(),$tag) or starts-with(text(),$tag2) or contains(text(),$tag3)]">
           <xsl:text>review</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -22,13 +23,20 @@
     </xsl:copy>
   </xsl:template>
   
-  <xsl:template match="mods:subTitle[text()=$tag]" />
+  <xsl:template match="mods:subTitle[text()=$tag]" priority="1" />
   
-  <xsl:template match="mods:title[contains(text(),$tag)]">
+  <xsl:template match="mods:title[contains(text(),$tag1)]|mods:subTitle[contains(text(),$tag1)]" priority="1">
+    <xsl:copy>
+      <xsl:copy-of select="@*" />
+      <xsl:value-of select="normalize-space( concat(substring-before(text(),$tag1), ' ', substring-after(text(),$tag1) ))" />
+    </xsl:copy>
+  </xsl:template>
+  
+  <xsl:template match="mods:title[contains(text(),$tag)]|mods:subTitle[contains(text(),$tag)]">
     <xsl:copy>
       <xsl:copy-of select="@*" />
       <xsl:value-of select="normalize-space( concat(substring-before(text(),$tag), ' ', substring-after(text(),$tag) ))" />
     </xsl:copy>
   </xsl:template>
-  
+
 </xsl:stylesheet>
