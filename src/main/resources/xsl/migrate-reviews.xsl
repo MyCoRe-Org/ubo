@@ -23,7 +23,7 @@
     </xsl:copy>
   </xsl:template>
   
-  <xsl:template match="mods:subTitle[text()=$tag]" priority="1" />
+  <xsl:template match="mods:subTitle[text()=$tag]" priority="2" />
   
   <xsl:template match="mods:title[contains(text(),$tag1)]|mods:subTitle[contains(text(),$tag1)]" priority="1">
     <xsl:copy>
