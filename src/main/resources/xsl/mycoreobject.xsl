@@ -21,6 +21,7 @@
 <xsl:include href="mods-dc-meta.xsl" />
 <xsl:include href="mods-highwire.xsl" />
 <xsl:include href="mods-display.xsl" />
+<xsl:include href="mods-sherpa-romeo.xsl" />
 
 <xsl:param name="Referer" select="concat($ServletsBaseURL,'DozBibEntryServlet?id=',/mycoreobject/@ID)" />
 <xsl:param name="CurrentUserPID" />
@@ -137,6 +138,7 @@
       <xsl:apply-templates select="." mode="details_lines" />
     </div>
   </div>
+  <xsl:apply-templates select="." mode="romeo" />
   <xsl:if test="$permission.admin and mods:extension[dedup]">
     <xsl:call-template name="listDuplicates" />
   </xsl:if>
@@ -376,7 +378,7 @@
 <xsl:template name="altmetrics">
   <xsl:if test="mods:identifier[contains('doi urn isbn pubmed',@type)]">
     <script type='text/javascript' src='https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js' />
-    <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="left" style="float:right; display:inline-block; margin:0 2ex 1ex 2ex;">
+    <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="left" data-hide-no-mentions="true" style="float:right; display:inline-block; margin:0 2ex 2ex 2ex;">
       <xsl:choose>
         <xsl:when test="mods:identifier[@type='doi']">
           <xsl:attribute name="data-doi">
