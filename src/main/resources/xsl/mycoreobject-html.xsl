@@ -79,7 +79,7 @@
   <xsl:template match="mods:identifier[@type='urn']" mode="html-export">
     <div class="link">
       <xsl:text>URN: </xsl:text>
-      <a href="http://nbn-resolving.org/{text()}" target="_blank">
+      <a href="https://nbn-resolving.org/{text()}" target="_blank">
         <xsl:value-of select="text()"/>
       </a>
     </div>

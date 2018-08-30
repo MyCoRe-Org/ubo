@@ -284,7 +284,7 @@
   
   <xsl:template match="mods:identifier[@type='urn']">
     <url>
-      <xsl:value-of select="concat('http://nbn-resolving.org/',text())" />
+      <xsl:value-of select="concat('https://nbn-resolving.org/',text())" />
     </url>
   </xsl:template>
 

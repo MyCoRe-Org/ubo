@@ -783,7 +783,7 @@
 
   <!-- ========== URN ========== -->
   <xsl:template match="mods:identifier[@type='urn']">
-    <a href="http://nbn-resolving.org/{text()}">
+    <a href="https://nbn-resolving.org/{text()}">
       <xsl:value-of select="text()" />
     </a>
   </xsl:template>
