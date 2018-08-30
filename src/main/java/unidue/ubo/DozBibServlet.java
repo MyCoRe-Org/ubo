@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2016 Duisburg-Essen University Library
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v2.0
  * which accompanies this distribution, and is available at
@@ -36,7 +36,7 @@ import org.mycore.services.fieldquery.MCRQuery;
 import org.mycore.services.fieldquery.MCRQueryCondition;
 import org.mycore.services.fieldquery.MCRQueryParser;
 import org.mycore.solr.MCRSolrClientFactory;
-import org.mycore.solr.search.MCRQLSearchUtils;
+import org.mycore.solr.search.MCRSolrSearchUtils;
 
 public class DozBibServlet extends MCRServlet {
 
@@ -52,23 +52,28 @@ public class DozBibServlet extends MCRServlet {
         if (req.getParameter("query") != null) {
             String query = req.getParameter("query");
             cond.addChild(new MCRQueryParser().parse(query));
-        } else
-            for (String name : Collections.list(req.getParameterNames()))
-                if (isConditionParameter(name))
+        } else {
+            for (String name : Collections.list(req.getParameterNames())) {
+                if (isConditionParameter(name)) {
                     cond.addChild(buildFieldCondition(req, name));
+                }
+            }
+        }
 
         if (cond.getChildren().size() < 2) {
             job.getResponse().sendError(HttpServletResponse.SC_BAD_REQUEST, "Request contains no query.");
             return;
         }
 
-        if (LOGGER.isDebugEnabled())
+        if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("UBO search incoming: " + cond.toString());
+        }
 
         convertLegacyFieldNames(cond);
 
-        if (LOGGER.isDebugEnabled())
+        if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("UBO search MCRQL: " + cond.toString());
+        }
 
         Element query = new Element("query");
         query.setAttribute("mask", "ubo");
@@ -83,7 +88,7 @@ public class DozBibServlet extends MCRServlet {
         Document doc = new Document(query);
         MCRQuery q = MCRQuery.parseXML(doc);
 
-        SolrQuery solrQuery = MCRQLSearchUtils.getSolrQuery(q, doc, req);
+        SolrQuery solrQuery = MCRSolrSearchUtils.getSolrQuery(q, doc, req);
         solrQuery.setRows(0);
         SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
         SolrDocumentList results = solrClient.query(solrQuery).getResults();
@@ -94,23 +99,25 @@ public class DozBibServlet extends MCRServlet {
 
         String numPerPage = getReqParameter(req, "numPerPage", "10");
         String maxResults = getReqParameter(req, "maxResults", "0");
-        if (!"0".equals(maxResults))
+        if (!"0".equals(maxResults)) {
             numPerPage = maxResults;
-        else if (export)
+        } else if (export) {
             numPerPage = String.valueOf(numFound);
-        
+        }
+
         query.setAttribute("numPerPage", numPerPage);
 
-        solrQuery = MCRQLSearchUtils.getSolrQuery(q, doc, req);
+        solrQuery = MCRSolrSearchUtils.getSolrQuery(q, doc, req);
         StringBuffer url = new StringBuffer(MCRServlet.getServletBaseURL());
         url.append("SolrSelectProxy");
         url.append(solrQuery.toQueryString());
-        
+
         if (export) {
             url.append("&XSL.Transformer=").append(format);
             String css = job.getRequest().getParameter("css");
-            if (css != null)
+            if (css != null) {
                 url.append("&XSL.css=").append(css);
+            }
         }
 
         res.sendRedirect(res.encodeRedirectURL(url.toString()));
@@ -121,12 +128,13 @@ public class DozBibServlet extends MCRServlet {
         String operator = getReqParameter(req, name + ".operator", defaultOperator);
 
         String[] values = req.getParameterValues(name);
-        if (values.length == 1)
+        if (values.length == 1) {
             return new MCRQueryCondition(name, operator, values[0].trim());
-        else { // Multiple fields with same name, combine with OR
+        } else { // Multiple fields with same name, combine with OR
             MCROrCondition oc = new MCROrCondition();
-            for (String value : values)
+            for (String value : values) {
                 oc.addChild(new MCRQueryCondition(name, operator, value.trim()));
+            }
             return oc;
         }
     }
@@ -137,10 +145,12 @@ public class DozBibServlet extends MCRServlet {
     }
 
     private boolean isConditionParameter(String name) {
-        if (name.endsWith(".operator") || name.contains(".sortField") || name.startsWith("XSL."))
+        if (name.endsWith(".operator") || name.contains(".sortField") || name.startsWith("XSL.")) {
             return false;
-        if (Arrays.asList(new String[] { "maxResults", "numPerPage", "mode", "format", "lang", "css" }).contains(name))
+        }
+        if (Arrays.asList(new String[] { "maxResults", "numPerPage", "mode", "format", "lang", "css" }).contains(name)) {
             return false;
+        }
         return true;
     }
 
@@ -149,9 +159,9 @@ public class DozBibServlet extends MCRServlet {
         sortFieldParameters.removeIf(p -> !p.contains(".sortField"));
 
         Element sortBy = new Element("sortBy");
-        if (sortFieldParameters.isEmpty())
+        if (sortFieldParameters.isEmpty()) {
             sortBy.addContent(buildSortFieldElement("year", "descending"));
-        else {
+        } else {
             sortSortFieldParameters(sortFieldParameters);
 
             for (String parameterName : sortFieldParameters) {
@@ -188,10 +198,11 @@ public class DozBibServlet extends MCRServlet {
 
     private String getReqParameter(HttpServletRequest req, String name, String defaultValue) {
         String value = req.getParameter(name);
-        if ((value == null) || (value.trim().length() == 0))
+        if ((value == null) || (value.trim().length() == 0)) {
             return defaultValue;
-        else
+        } else {
             return value.trim();
+        }
     }
 
     private void convertLegacyFieldNames(MCRCondition cond) {
@@ -202,8 +213,9 @@ public class DozBibServlet extends MCRServlet {
             qc.setFieldName(nameNew);
         } else if (cond instanceof MCRSetCondition) {
             MCRSetCondition sc = (MCRSetCondition) cond;
-            for (MCRCondition childCond : (List<MCRCondition>) (sc.getChildren()))
+            for (MCRCondition childCond : (List<MCRCondition>) (sc.getChildren())) {
                 convertLegacyFieldNames(childCond);
+            }
         } else if (cond instanceof MCRNotCondition) {
             MCRNotCondition nc = (MCRNotCondition) cond;
             convertLegacyFieldNames(nc.getChild());
