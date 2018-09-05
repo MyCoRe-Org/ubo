@@ -670,13 +670,6 @@
 
   <xsl:variable name="creator.roles">cre aut tch pht prg</xsl:variable>
   
-  <!-- ========== Link zu Primo ========== -->
-  
-  <xsl:variable name="primo.search">
-    <xsl:text>http://primo.ub.uni-due.de/primo_library/libweb/action/dlSearch.do</xsl:text>
-    <xsl:text>?vid=UDE&amp;institution=UDE&amp;bulkSize=10&amp;indx=1&amp;onCampus=false&amp;query=</xsl:text>
-  </xsl:variable>
-
   <!-- ========== Titel ========== -->
   <xsl:template match="mods:titleInfo">
     <xsl:apply-templates select="mods:nonSort" />
