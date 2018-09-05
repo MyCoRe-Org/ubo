@@ -22,8 +22,8 @@
 
   <!-- ============ Katalogsuche Basis-URLs ============ -->
   <xsl:variable name="primo.search">
-    <xsl:text>http://primo.ub.uni-due.de/primo_library/libweb/action/dlSearch.do</xsl:text>
-    <xsl:text>?vid=UDE&amp;institution=UDE&amp;bulkSize=10&amp;indx=1&amp;onCampus=false&amp;query=</xsl:text>
+    <xsl:text>https://primo.ub.uni-due.de/primo-explore/search?tab=localude&amp;search_scope=LocalUDE</xsl:text>
+    <xsl:text>&amp;sortby=rank&amp;vid=UDE_NUI&amp;lang=de_DE&amp;mode=advanced&amp;offset=0&amp;query=</xsl:text>
   </xsl:variable>
   
   <!-- ============ Fächerliste (subject) laden ============ -->

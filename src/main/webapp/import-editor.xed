@@ -594,7 +594,7 @@
           <xed:output i18n="ubo.shelfmark" />:
         </label>
         <input id="{xed:generate-id()}" class="{$xed-validation-marker}" type="text" style="width:200px;" />
-        <a target="_blank" href="http://primo.ub.uni-due.de/">
+        <a target="_blank" href="https://primo.ub.uni-due.de/">
           <xed:output i18n="ubo.shelfmark.search" />
         </a>
       </div>
