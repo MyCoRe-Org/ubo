@@ -46,7 +46,7 @@
     <xsl:apply-templates select="preprints|postprints|pdfversion" />
     <xsl:apply-templates select="ancestor::romeoapi" mode="backlink" />
     <xsl:apply-templates select="romeocolour" />
-    <xsl:apply-templates select="paidaccess[*]" />
+    <xsl:apply-templates select="paidaccess[string-length(paidaccessurl) &gt; 0]" />
   </div>
   <div class="clear" />
 </xsl:template>
@@ -69,7 +69,7 @@
   </div>
 </xsl:template>
 
-<xsl:template match="publisher/paidaccess[*]">
+<xsl:template match="publisher/paidaccess[string-length(paidaccessurl) &gt; 0]">
   <br />
   <a href="{paidaccessurl}">
     <xsl:value-of select="i18n:translate('ubo.romeo.paidaccess')" />
