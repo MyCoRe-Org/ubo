@@ -13,20 +13,29 @@
   exclude-result-prefixes="xsl xalan i18n mods mcr encoder str basket" 
 >
 
-<xsl:include href="layout.xsl" />
 <xsl:include href="mods-display.xsl" />
 
 <xsl:param name="RequestURL" />
-
-<xsl:variable name="ContextID" select="'dozbib.new.publication'" />
+<xsl:param name="WebApplicationBaseURL" />
+<xsl:param name="ServletsBaseURL" />
+  
+<xsl:template match="/">
+  <html id="dozbib.new.publication">
+    <head>
+      <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/grid12.css" />
+      <title>
+        <xsl:call-template name="page.title" />
+      </title>
+    </head>
+    <body>
+      <xsl:apply-templates select="response" />
+    </body>
+  </html>
+</xsl:template>
 
 <xsl:variable name="breadcrumb.extensions">
   <item label="{i18n:translate('ubo.newPublicationWizard')}" href="{$WebApplicationBaseURL}newPublication.xed" />
   <item label="{i18n:translate('ubo.newPublicationWizard.duplicates')}" />
-</xsl:variable>
-
-<xsl:variable name="head.additional">
-  <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/grid12.css" />
 </xsl:variable>
 
 <!-- ==================== Trefferliste Metadaten ==================== -->
@@ -55,7 +64,7 @@
 
 <!-- ==================== Anzeige Seitentitel ==================== -->
 
-<xsl:variable name="page.title">
+<xsl:template name="page.title">
   <xsl:value-of select="i18n:translate('ubo.newPublicationWizard.duplicates')" /> 
   <xsl:text>: </xsl:text> 
   <xsl:choose>
@@ -71,7 +80,7 @@
       <xsl:value-of select="i18n:translate('result.dozbib.publicationNo')"/>
     </xsl:otherwise>
   </xsl:choose> 
-</xsl:variable>
+</xsl:template>
 
 <!-- ==================== Anzeige Dublettenliste ==================== -->
 

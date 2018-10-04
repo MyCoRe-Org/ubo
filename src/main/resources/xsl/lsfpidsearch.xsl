@@ -9,44 +9,51 @@
   exclude-result-prefixes="xsl xalan i18n"
 >
 
-<xsl:include href="layout.xsl" />
+  <xsl:param name="WebApplicationBaseURL" />
+  <xsl:param name="ServletsBaseURL" />
+  <xsl:param name="UBO.LSF.Link" />
 
-<xsl:param name="UBO.LSF.Link" />
-
-<!--  page title  -->
-<xsl:variable name="page.title" select="i18n:translate('lsf.search')" />
+<xsl:template match="/">
+  <html>
+    <head>
+      <title>
+        <xsl:value-of select="i18n:translate('lsf.search')" />
+      </title>
+      <script type="text/javascript" src="{$WebApplicationBaseURL}external/datatables-1.8.2/media/js/jquery.dataTables.min.js"><xsl:text> </xsl:text></script>
+      <script type="text/javascript" src="{$WebApplicationBaseURL}js/jQuery.dataTables.date.sort.js"><xsl:text> </xsl:text></script>
+      <script type="text/javascript" src="{$WebApplicationBaseURL}external/jquery.jsonp.js"></script>
+      <script type="text/javascript">
+        jQuery(document).ready( function() {
+          jQuery('#lsfpersons').addClass('jQDataTable').css('display', 'table');
+         
+          oTable = jQuery('#lsfpersons').dataTable({
+            "bAutoWidth": false,
+            "bPaginate": false,
+            "bJQueryUI": true,
+            "sDom": '&lt;lr&gt;t',
+            "bStateSave": true,
+            "iCookieDuration": 0,
+            "aoColumns": [
+               { "sWidth": "100px;", "sType": "html", "bSortable": false }, 
+               { "sWidth": "250px;", "sType": "html", "bSortable": false }, 
+               { "sWidth": "390px;", "bSortable": false }
+            ],
+            "oLanguage": {
+              "sSearch": "<xsl:value-of select="i18n:translate('search.jq.datatable')"/>"
+            }
+          } );
+        });
+      </script>
+    </head>
+    <body>
+      <xsl:apply-templates select="lsfpidsearch" />
+    </body>
+  </html>
+</xsl:template>
 
 <!--  navigation  -->
 <xsl:variable name="breadcrumb.extensions">
   <item label="Suche in HIS LSF" />
-</xsl:variable>
-
-<xsl:variable name="head.additional">
-  <script type="text/javascript" src="{$WebApplicationBaseURL}external/datatables-1.8.2/media/js/jquery.dataTables.min.js"><xsl:text> </xsl:text></script>
-  <script type="text/javascript" src="{$WebApplicationBaseURL}js/jQuery.dataTables.date.sort.js"><xsl:text> </xsl:text></script>
-  <script type="text/javascript" src="{$WebApplicationBaseURL}external/jquery.jsonp.js"></script>
-  <script type="text/javascript">
-    jQuery(document).ready( function() {
-      jQuery('#lsfpersons').addClass('jQDataTable').css('display', 'table');
-     
-      oTable = jQuery('#lsfpersons').dataTable({
-        "bAutoWidth": false,
-        "bPaginate": false,
-        "bJQueryUI": true,
-        "sDom": '&lt;lr&gt;t',
-        "bStateSave": true,
-        "iCookieDuration": 0,
-        "aoColumns": [
-           { "sWidth": "100px;", "sType": "html", "bSortable": false }, 
-           { "sWidth": "250px;", "sType": "html", "bSortable": false }, 
-           { "sWidth": "390px;", "bSortable": false }
-        ],
-        "oLanguage": {
-          "sSearch": "<xsl:value-of select="i18n:translate('search.jq.datatable')"/>"
-        }
-      } );
-    });
-  </script>
 </xsl:variable>
 
 <xsl:variable name="qm">'</xsl:variable>

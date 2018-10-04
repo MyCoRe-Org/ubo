@@ -26,21 +26,10 @@
     </p>
   </section>
 
-  <section class="highlight2">
-    <xinclude uri="xslStyle:statistics:solr:q=status:confirmed+year:[1980+TO+*]&amp;rows=0&amp;facet.field=year" />
-  </section>
-
-  <section class="highlight2">
-    <xinclude uri="xslStyle:statistics:solr:q=status:confirmed&amp;rows=0&amp;facet.field=subject" />
-  </section>
-
-  <section class="highlight2">
-    <xinclude uri="xslStyle:statistics:solr:q=status:confirmed&amp;rows=0&amp;facet.field=genre" />
-  </section>
-
-  <section class="highlight2">
-    <xinclude uri="xslStyle:statistics:solr:q=status:confirmed&amp;rows=0&amp;facet.field=oa" />
-  </section>
+  <xinclude uri="xslStyle:statistics:solr:q=status:confirmed+year:[1980+TO+*]&amp;rows=0&amp;facet.field=year" />
+  <xinclude uri="xslStyle:statistics:solr:q=status:confirmed&amp;rows=0&amp;facet.field=subject" />
+  <xinclude uri="xslStyle:statistics:solr:q=status:confirmed&amp;rows=0&amp;facet.field=genre" />
+  <xinclude uri="xslStyle:statistics:solr:q=status:confirmed&amp;rows=0&amp;facet.field=oa" />
 
   <section class="highlight2" xml:lang="de">
     <h3>Am häufigsten verzeichnete Personen (nur mit UDE LSF Zuordnung, Top 50, in Publikationen ab 2012):</h3>

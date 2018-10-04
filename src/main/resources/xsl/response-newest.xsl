@@ -12,7 +12,7 @@
   <xsl:param name="ServletsBaseURL" />
 
   <xsl:template match="/response">
-    <include>
+    <article class="highlight1">
       <h3>
         <xsl:value-of select="i18n:translate('ubo.newest')" />:
       </h3>
@@ -37,7 +37,7 @@
           </a>
         </p>
       </xsl:for-each>
-    </include>
+    </article>
   </xsl:template>
 
 </xsl:stylesheet>

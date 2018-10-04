@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--================== -->
-<!-- $Revision: 34567 $ $Date: 2016-02-11 16:55:53 +0100 (Do, 11 Feb 2016) $ -->
-<!--================== -->
-
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xalan="http://xml.apache.org/xalan"
@@ -13,10 +9,73 @@
 
   <xsl:output method="html" encoding="UTF-8" media-type="text/html" indent="yes" xalan:indent-amount="2" />
 
+  <xsl:param name="CurrentLang" />
+
+  <!-- ==================== HTML ==================== -->
+  
+  <xsl:template match="/html">
+    <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>
+  
+    </xsl:text>
+    <html lang="{$CurrentLang}">
+      <xsl:apply-templates select="head" />
+      <xsl:call-template name="layout.body" />
+    </html>
+  </xsl:template>
+
+  <xsl:template match="head">
+    <head>
+      <meta charset="utf-8" />
+      
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+      <meta http-equiv="cleartype" content="on" />
+      <meta http-equiv="expires" content="0" />
+      <meta http-equiv="cache-control" content="no-cache" />
+      <meta http-equiv="pragma" content="no-cache" />
+      
+      <meta name="HandheldFriendly" content="True" />
+      <meta name="MobileOptimized" content="320" />
+      <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1" />
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans|Droid+Sans+Mono" type="text/css" />
+      <link rel="stylesheet" href="{$WebApplicationBaseURL}external/jquery-ui-theme/jquery-ui-1.8.21.custom.css" />
+      <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/style.css" />
+      <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/legacy.css" />
+      <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/duepublico.css?v={$UBO.Build.TimeStamp}" />
+      <link rel="stylesheet" href="{$WebApplicationBaseURL}external/chosen/chosen.css" />
+      <link rel="stylesheet" href="{$WebApplicationBaseURL}webjars/bootstrap-glyphicons/bdd2cbfba0/css/bootstrap-glyphicons.css" />
+      
+      <xsl:text disable-output-escaping="yes">&lt;!--[if gte IE 9]&gt;</xsl:text>
+        <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/ie9fixes.css" />
+      <xsl:text disable-output-escaping="yes">&lt;![endif]--&gt;</xsl:text>
+
+      <link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://www.uni-due.de/imperia/md/images/cms/h/apple-touch-icon.png" />
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://www.uni-due.de/imperia/md/images/cms/m/apple-touch-icon.png" />
+      <link rel="apple-touch-icon-precomposed" href="https://www.uni-due.de/imperia/md/images/cms/l/apple-touch-icon-precomposed.png" />
+      <link rel="shortcut icon" href="https://www.uni-due.de/imperia/md/images/cms/l/apple-touch-icon.png" />
+      <link rel="shortcut icon" href="{$WebApplicationBaseURL}images/favicon.ico" />
+      
+      <script type="text/javascript">var webApplicationBaseURL = '<xsl:value-of select="$WebApplicationBaseURL" />';</script>
+      <script type="text/javascript" src="{$WebApplicationBaseURL}external/jquery-1.7.min.js"></script>
+      <script type="text/javascript"> jQuery.noConflict(); </script>
+      <script type="text/javascript" src="{$WebApplicationBaseURL}external/html5shiv-3.5/html5shiv.js"></script>
+      <script type="text/javascript" src="{$WebApplicationBaseURL}external/modernizr-2.5.3/modernizr.js"></script>
+      
+      <xsl:text disable-output-escaping="yes">&lt;!--[if lt IE 9]&gt;</xsl:text>
+        <script src="{$WebApplicationBaseURL}external/html5shiv-3.5/html5shiv.js"></script>
+      <xsl:text disable-output-escaping="yes">&lt;![endif]--&gt;</xsl:text>
+      
+      <xsl:copy-of select="node()" />
+    </head>
+  </xsl:template>
+
+  <!-- id of the current page -->
+  <xsl:variable name="PageID" select="/html/@id" />
+
   <!-- Parameters of MyCoRe LayoutService -->
 
   <xsl:param name="CurrentUser" />
-  <xsl:param name="CurrentLang" />
   <xsl:param name="DefaultLang" />
   <xsl:param name="WritePermission" />
   <xsl:param name="ReadPermission" />
@@ -29,19 +88,6 @@
   <!-- additional stylesheets -->
   <xsl:include href="coreFunctions.xsl" />
 
-  <!-- optional: create a variable with this name inside inner stylesheets to include additional information inside <head> -->
-  <xsl:variable name="head.additional" />
-
-  <!-- optional: last mofidied date of this page in format YYYY-MM-TT -->
-  <xsl:variable name="pageLastModified" />
-
-  <!-- id of the current page -->
-  <xsl:variable name="PageID" />
-  <xsl:variable name="ContextID" />
-
-  <!-- right column as sidebar -->
-  <xsl:variable name="sidebar" />
-  
   <!-- last navigation id calculated from navigation.xml -->
   <xsl:variable name="NavigationID" xmlns:lastPageID="xalan://unidue.ubo.LastPageID">
     <xsl:choose>
@@ -53,9 +99,6 @@
         <xsl:choose>
           <xsl:when test="(string-length($LastID) &gt; 0) and ($navigation.tree/descendant-or-self::item[@id = $LastID])">
             <xsl:value-of select="$LastID" />
-          </xsl:when>
-          <xsl:when test="(string-length($ContextID) &gt; 0) and ($navigation.tree/descendant-or-self::item[@id = $ContextID])">
-            <xsl:value-of select="lastPageID:setLastPageID($ContextID)" />
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="lastPageID:setLastPageID('home')" />
@@ -73,18 +116,6 @@
   <!-- true if current user is the guest user -->
   <xsl:variable name="isGuest" select="$CurrentUser = $MCR.Users.Guestuser.UserName"/>
 
-  <!-- html page -->
-
-  <xsl:template match="/">
-    <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>
-  
-    </xsl:text>
-    <html lang="{$CurrentLang}">
-      <xsl:call-template name="layout.head" />
-      <xsl:call-template name="layout.body" />
-    </html>
-  </xsl:template>
-
   <!-- html body -->
 
   <xsl:template name="layout.body">
@@ -92,8 +123,7 @@
       <xsl:attribute name="class">
         <xsl:text>clearfix layout</xsl:text>
         <xsl:choose>
-          <xsl:when test="/*/sidebar">2</xsl:when>
-          <xsl:when test="string-length($sidebar) &gt; 0">2</xsl:when>
+          <xsl:when test="body/aside[@id='sidebar']">2</xsl:when>
           <xsl:otherwise>1</xsl:otherwise>
         </xsl:choose>
       </xsl:attribute>
@@ -114,12 +144,7 @@
           <xsl:call-template name="layout.mainnavigation" />
         </div>
         <xsl:call-template name="layout.inhalt" />
-        <xsl:apply-templates select="/*/sidebar" />
-        <xsl:if test="string-length($sidebar) &gt; 0">
-          <aside role="complementary" id="sidebar">
-            <xsl:copy-of select="xalan:nodeset($sidebar)/*" />
-          </aside>
-        </xsl:if>
+        <xsl:copy-of select="body/aside[@id='sidebar']" />
         <xsl:call-template name="layout.footer" />
       </div>
     </xsl:element>
@@ -140,17 +165,12 @@
 
   <!-- page content -->
 
-  <xsl:variable name="actions" />
-
   <xsl:template name="layout.inhalt">
     <section role="main" id="inhalt">
     
-      <!-- ==== Buttons für Bearbeitungsaktionen ==== -->
-      <xsl:copy-of select="$actions" />
-
       <xsl:choose>
         <xsl:when test="$allowed.to.see.this.page = 'true'">
-          <xsl:apply-templates select="*" />
+          <xsl:copy-of select="body/*[not(@id='sidebar')]" />
         </xsl:when>
         <xsl:otherwise>
           <h3>
@@ -226,48 +246,6 @@
       </div>
       <div style="position: absolute; width: 9999px; visibility: hidden; display: none;" />
     </div>
-  </xsl:template>
-
-  <!-- HTML Head -->
-
-  <xsl:template name="layout.head">
-    <head>
-      <title><xsl:value-of select="$page.title" /></title>
-      <meta charset="utf-8" />
-      <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
-      <meta http-equiv="cleartype" content="on" />
-      <meta http-equiv="expires" content="0" />
-      <meta http-equiv="cache-control" content="no-cache" />
-      <meta http-equiv="pragma" content="no-cache" />
-      <meta name="HandheldFriendly" content="True" />
-      <meta name="MobileOptimized" content="320" />
-      <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1" />
-      <link href='https://fonts.googleapis.com/css?family=Droid+Sans|Droid+Sans+Mono' rel='stylesheet' type='text/css'/>
-      <link rel="stylesheet" href="{$WebApplicationBaseURL}external/jquery-ui-theme/jquery-ui-1.8.21.custom.css" />
-      <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/style.css" />
-      <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/legacy.css" />
-      <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/duepublico.css?v={$UBO.Build.TimeStamp}" />
-      <link rel="stylesheet" href="{$WebApplicationBaseURL}external/chosen/chosen.css" />
-      <link rel="stylesheet" href="{$WebApplicationBaseURL}webjars/bootstrap-glyphicons/bdd2cbfba0/css/bootstrap-glyphicons.css" />
-      <xsl:text disable-output-escaping="yes">&lt;!--[if gte IE 9]&gt;</xsl:text>
-      <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/ie9fixes.css" />
-      <xsl:text disable-output-escaping="yes">&lt;![endif]--&gt;</xsl:text>
-      <link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://www.uni-due.de/imperia/md/images/cms/h/apple-touch-icon.png" />
-      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://www.uni-due.de/imperia/md/images/cms/m/apple-touch-icon.png" />
-      <link rel="apple-touch-icon-precomposed" href="https://www.uni-due.de/imperia/md/images/cms/l/apple-touch-icon-precomposed.png" />
-      <link rel="shortcut icon" href="https://www.uni-due.de/imperia/md/images/cms/l/apple-touch-icon.png" />
-      <link rel="shortcut icon" href="{$WebApplicationBaseURL}images/favicon.ico" />
-      <script type="text/javascript">var webApplicationBaseURL = '<xsl:value-of select="$WebApplicationBaseURL" />';</script>
-      <script type="text/javascript" src="{$WebApplicationBaseURL}external/jquery-1.7.min.js"></script>
-      <script type="text/javascript"> jQuery.noConflict(); </script>
-      <script type="text/javascript" src="{$WebApplicationBaseURL}external/html5shiv-3.5/html5shiv.js"></script>
-      <script type="text/javascript" src="{$WebApplicationBaseURL}external/modernizr-2.5.3/modernizr.js"></script>
-      <xsl:text disable-output-escaping="yes">&lt;!--[if lt IE 9]&gt;</xsl:text>
-      <script src="{$WebApplicationBaseURL}external/html5shiv-3.5/html5shiv.js"></script>
-      <xsl:text disable-output-escaping="yes">&lt;![endif]--&gt;</xsl:text>
-      <xsl:copy-of select="$head.additional" />
-    </head>
   </xsl:template>
 
   <!-- Skip-Navigation -->
@@ -488,25 +466,18 @@
         </a>
       </header>
       <h1 id="seitentitel">
-        <xsl:value-of select="$page.title" disable-output-escaping="yes" />
+        <xsl:value-of select="head/title" disable-output-escaping="yes" />
       </h1>
     </div>
   </xsl:template>
   
-  <!-- right sidebar -->
-  <xsl:template match="sidebar">
-    <aside role="complementary" id="sidebar">
-      <xsl:apply-templates select="*"/>
-    </aside>
-  </xsl:template>
-
   <!-- Footer -->
 
   <xsl:template name="layout.footer">
     <footer role="contentinfo" class="clearfix">
       <xsl:call-template name="layout.metanav" />
       <p>
-        <xsl:call-template name="layout.lastModified" />
+        <xsl:apply-templates select="/html/@lastModified" />
         <xsl:text>© Universität Duisburg-Essen | </xsl:text>
         <a href="mailto:{$MCR.Mail.Address}">
           <xsl:value-of select="$MCR.Mail.Address" />
@@ -517,26 +488,22 @@
 
   <!-- Optional: Datum der letzten Änderung dieser Seite im Format YYYY-MM-TT -->
 
-  <xsl:variable name="pageLastModified" />
-
-  <xsl:template name="layout.lastModified">
-    <xsl:if test="string-length($pageLastModified) &gt; 0">
-      <xsl:value-of select="i18n:translate('webpage.modified')" />
-      <xsl:text>: </xsl:text>
-      <xsl:choose>
-        <xsl:when test="$CurrentLang = 'de'">
-          <xsl:value-of select="substring($pageLastModified,9,2)" />
-          <xsl:text>.</xsl:text>
-          <xsl:value-of select="substring($pageLastModified,6,2)" />
-          <xsl:text>.</xsl:text>
-          <xsl:value-of select="substring($pageLastModified,1,4)" />
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$pageLastModified" />
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:text> | </xsl:text>
-    </xsl:if>
+  <xsl:template match="/html/@lastModified">
+    <xsl:value-of select="i18n:translate('webpage.modified')" />
+    <xsl:text>: </xsl:text>
+    <xsl:choose>
+      <xsl:when test="$CurrentLang = 'de'">
+        <xsl:value-of select="substring(.,9,2)" />
+        <xsl:text>.</xsl:text>
+        <xsl:value-of select="substring(.,6,2)" />
+        <xsl:text>.</xsl:text>
+        <xsl:value-of select="substring(.,1,4)" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="." />
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text> | </xsl:text>
   </xsl:template>
 
   <!-- Meta-Navigation -->

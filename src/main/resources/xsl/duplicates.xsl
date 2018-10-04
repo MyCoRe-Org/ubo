@@ -2,11 +2,18 @@
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xsl xalan i18n">
 
-<xsl:include href="layout.xsl"/>
+<xsl:param name="ServletsBaseURL" />
 
-<xsl:variable name="PageID" select="'dozbib.duplicates'"/>
-
-<xsl:variable name="page.title">Dublettenbericht</xsl:variable>
+<xsl:template match="/">
+  <html id="dozbib.duplicates">
+    <head>
+      <title>Dublettenbericht</title>
+    </head>
+    <body>
+      <xsl:apply-templates select="duplicates" />
+    </body>
+  </html>
+</xsl:template>
 
 <xsl:template match="duplicates">
   <article class="highlight2">

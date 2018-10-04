@@ -15,21 +15,13 @@
   exclude-result-prefixes="xsl xalan i18n mods mcr encoder str basket" 
 >
 
-<xsl:include href="layout.xsl" />
 <xsl:include href="mods-display.xsl" />
 <xsl:include href="response-facets.xsl" />
 
 <xsl:param name="RequestURL" />
 
-<xsl:variable name="ContextID" select="'dozbib.search'" />
-
 <xsl:variable name="breadcrumb.extensions">
   <item label="{i18n:translate('result.dozbib.results')}" />
-</xsl:variable>
-
-<xsl:variable name="head.additional">
-  <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/grid12.css" />
-  <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
 </xsl:variable>
 
 <!-- ==================== Trefferliste Metadaten ==================== -->
@@ -59,7 +51,8 @@
 
 <!-- ==================== Anzeige Seitentitel ==================== -->
 
-<xsl:variable name="page.title">
+<xsl:template name="page.title">
+ <title>
   <xsl:value-of select="i18n:translate('result.dozbib.results')" /> 
   <xsl:text>: </xsl:text> 
   <xsl:choose>
@@ -75,7 +68,8 @@
       <xsl:value-of select="i18n:translate('result.dozbib.publicationNo')"/>
     </xsl:otherwise>
   </xsl:choose> 
-</xsl:variable>
+ </title>
+</xsl:template>
 
 <!-- ==================== Export-Buttons ==================== -->
 
@@ -92,7 +86,7 @@
   <xsl:value-of select="concat('rows=',$numFound)" />
 </xsl:variable>
 
-<xsl:variable name="actions">
+<xsl:template name="exportLinks">
   <xsl:if test="$numFound &gt; 0">
     <div id="buttons">
       <a class="action" href="export?{$exportParams}&amp;XSL.Transformer=mods">MODS</a>
@@ -104,15 +98,26 @@
       <a class="action" href="export?{$exportParams}&amp;fl=id,subject,oa,genre,host_genre,person_aut,person_edt,title,id_doi,id_scopus,id_pubmed,id_urn,id_duepublico,host_title,series,id_issn,id_isbn,shelfmark,year,volume,issue,pages,place,publisher&amp;wt=csv">CSV</a>
     </div>
   </xsl:if>
-</xsl:variable>
-
-<!-- ==================== Facetten / Filtern ==================== -->
-
-<xsl:variable name="sidebar">
-  <xsl:apply-templates select="/response/lst[@name='facet_counts'][lst[@name='facet_fields']/lst[int]]" />
-</xsl:variable>
+</xsl:template>
 
 <!-- ==================== Anzeige Trefferliste ==================== -->
+
+<xsl:template match="/">
+  <html id="dozbib.search">
+    <head>
+      <xsl:call-template name="page.title" />
+      <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/grid12.css" />
+      <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
+    </head>
+    <body>
+      <xsl:call-template name="exportLinks" />
+      <xsl:apply-templates select="response" />
+      <aside id="sidebar">
+        <xsl:apply-templates select="/response/lst[@name='facet_counts'][lst[@name='facet_fields']/lst[int]]" />
+      </aside>
+    </body>
+  </html>
+</xsl:template>
 
 <xsl:template match="response">
   <xsl:apply-templates select="result[@name='response']" />

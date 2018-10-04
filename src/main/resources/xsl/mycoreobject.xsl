@@ -17,7 +17,6 @@
   exclude-result-prefixes="xsl xalan ubo mods xlink i18n dc mcr encoder"  
 >
 
-<xsl:include href="layout.xsl" />
 <xsl:include href="mods-dc-meta.xsl" />
 <xsl:include href="mods-highwire.xsl" />
 <xsl:include href="mods-display.xsl" />
@@ -26,6 +25,7 @@
 <xsl:param name="Referer" select="concat($ServletsBaseURL,'DozBibEntryServlet?id=',/mycoreobject/@ID)" />
 <xsl:param name="CurrentUserPID" />
 <xsl:param name="step" />
+<xsl:param name="UBO.System.ReadOnly" />
 
 <!-- ============ Bearbeitungsrechte ========== -->
 
@@ -33,7 +33,8 @@
 
 <!-- ============ Seitentitel ============ -->
 
-<xsl:variable name="page.title"> 
+<xsl:template name="page.title"> 
+ <title>
   <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
     <xsl:for-each select="mods:name[@type='personal'][1]">
       <xsl:apply-templates select="mods:namePart[@type='family']"/>
@@ -42,24 +43,25 @@
     </xsl:for-each>
     <xsl:apply-templates select="mods:titleInfo[1]" />
   </xsl:for-each>
-</xsl:variable>
+ </title>
+</xsl:template>
 
-<xsl:variable name="pageLastModified">
+<xsl:template name="pageLastModified">
+ <xsl:attribute name="lastModified">
   <xsl:value-of select="substring-before(/mycoreobject/service/servdates/servdate[@type='modifydate'],'T')" />
-</xsl:variable>
+ </xsl:attribute>
+</xsl:template>
 
 <!-- ========== Dublin Core and Highwire Press meta tags ========== -->
 
-<xsl:variable name="head.additional">
+<xsl:template name="head.additional">
   <xsl:apply-templates select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods" mode="dc-meta" />
   <xsl:apply-templates select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods" mode="highwire" />
   <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/grid12.css" />
   <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
-</xsl:variable>
+</xsl:template>
 
 <!-- ========== Navigation ========== -->
-
-<xsl:variable name="ContextID" select="'dozbib'" />
 
 <xsl:variable name="breadcrumb.extensions">
   <item label="{i18n:translate('result.dozbib.results')}" />
@@ -68,7 +70,7 @@
 
 <!-- ============ Aktionen ============ -->
 
-<xsl:variable name="actions">
+<xsl:template name="actions">
   <div id="buttons">
     <xsl:if test="$permission.admin and (string-length($step) = 0) and not ($UBO.System.ReadOnly = 'true')">
       <a class="action" href="{$WebApplicationBaseURL}edit-publication.xed?id={/mycoreobject/@ID}">
@@ -101,7 +103,23 @@
       </xsl:if>    
     </xsl:if>
   </div>
-</xsl:variable>
+</xsl:template>
+
+<!-- ============ Seite ============ -->
+
+<xsl:template match="/">
+  <html>
+    <xsl:call-template name="pageLastModified" />
+    <head>
+      <xsl:call-template name="head.additional" />
+      <xsl:call-template name="page.title" />
+    </head>
+    <body>
+      <xsl:call-template name="actions" />
+      <xsl:apply-templates select="mycoreobject" />
+    </body>
+  </html>
+</xsl:template>
 
 <!-- ============ Rechte Seite: Inhalte ============ -->
 

@@ -9,10 +9,20 @@
   exclude-result-prefixes="xsl xalan i18n mods"
 >
 
-<xsl:include href="layout.xsl" />
+<xsl:param name="ServletsBaseURL" />
 
-<xsl:variable name="PageID">dozbib.list-wizard</xsl:variable>
-<xsl:variable name="page.title" select="i18n:translate('listWizard.title')" />
+<xsl:template match="/">
+  <html id="dozbib.list-wizard">
+    <head>
+      <title>
+        <xsl:value-of select="i18n:translate('listWizard.title')" />
+      </title>
+    </head>
+    <body>
+      <xsl:apply-templates select="list-wizard" />
+    </body>
+  </html>
+</xsl:template>
 
 <xsl:param name="UBO.LSF.Link" />
 

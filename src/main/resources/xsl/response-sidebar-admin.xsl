@@ -11,16 +11,14 @@
   <xsl:param name="ServletsBaseURL" />
 
   <xsl:template match="/response">
-    <include>
-      <xsl:if xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()"> 
-        <article class="highlight2">
-          <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_fields']/lst[@name='status']" />
-          <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_ranges']/lst[@name='modified']/lst[@name='counts']" />
-          <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_ranges']/lst[@name='created']/lst[@name='counts']" />
-          <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_fields']/lst[@name='importID']" />
-        </article>
-      </xsl:if>
-    </include>
+    <xsl:if xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()"> 
+      <article class="highlight2">
+        <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_fields']/lst[@name='status']" />
+        <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_ranges']/lst[@name='modified']/lst[@name='counts']" />
+        <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_ranges']/lst[@name='created']/lst[@name='counts']" />
+        <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_fields']/lst[@name='importID']" />
+      </article>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="lst[@name='facet_fields']/lst[@name='status']">

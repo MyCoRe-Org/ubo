@@ -69,14 +69,13 @@
     </xed:form>
   </article>
 
-  <article class="highlight1">
-    <xinclude uri="xslStyle:response-newest:solr:q=status:confirmed+AND+year:[2017+TO+2018]&amp;rows=4&amp;sort=created+desc,year+desc&amp;facet=false&amp;fl=id,year" />
-  </article>
+  <xinclude uri="xslStyle:response-newest:solr:q=status:confirmed+AND+year:[2017+TO+2018]&amp;rows=4&amp;sort=created+desc,year+desc&amp;facet=false&amp;fl=id,year" />
   
-  <sidebar>
+  <aside id="sidebar">
     <xinclude uri="xslStyle:response-sidebar-mini:solr:q=status:confirmed&amp;rows=0" />
     <xinclude uri="xslStyle:response-sidebar-admin:solr:q=*:*&amp;rows=0&amp;facet=true&amp;facet.field=status&amp;facet.mincount=0&amp;facet.range=created&amp;facet.range=modified&amp;facet.range.start=NOW/DAY-30DAY&amp;facet.range.end=NOW&amp;facet.range.gap=%2B1DAY" />
     <xinclude uri="xslStyle:response-sidebar-admin:solr:q=status:imported+AND+importID:*&amp;rows=0&amp;facet=true&amp;facet.sort=index&amp;facet.limit=-1&amp;facet.field=importID" />
+ 
     <section class="highlight1" xml:lang="de">
       <hgroup>
         <h2>Kontakt:</h2>
@@ -105,6 +104,6 @@
         Phone: 0201 / 183-3728
       </p>
     </section>
-  </sidebar>
+  </aside>
     
 </webpage>

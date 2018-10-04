@@ -5,7 +5,7 @@
   <title xml:lang="de">Impressum</title>
   <title xml:lang="en">Imprint</title>
 
-  <sidebar>
+  <aside id="sidebar">
     <section class="highlight2">
       <h2>Adresse der Universität Duisburg-Essen</h2>
       <p>
@@ -65,7 +65,7 @@
       <a href="mailto:abuse@uni-due.de"> abuse@uni-due.de</a>
       </p>
     </section>
-  </sidebar>
+  </aside>
   
   <section>
     <h2>Impressum</h2>

@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xlink">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="i18n">
 
-  <xsl:include href="layout.xsl" />
-
-  <xsl:variable name="page.title" select="i18n:translate('error.title',concat(' ',/mcr_error/@HttpError))" />
+  <xsl:template match="/">
+    <html>
+      <head>
+        <title>
+          <xsl:value-of select="i18n:translate('error.title',concat(' ',/mcr_error/@HttpError))" />
+        </title>
+      </head>
+      <body>
+        <xsl:apply-templates select="mcr_error" />
+      </body>
+    </html>
+  </xsl:template>
 
   <!-- MCRServlet.generateErrorMessage() was called -->
   <xsl:template match="mcr_error">

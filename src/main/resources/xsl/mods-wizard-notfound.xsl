@@ -13,26 +13,28 @@
   exclude-result-prefixes="xsl xalan i18n mods mcr encoder str basket" 
 >
 
-<xsl:include href="layout.xsl" />
 <xsl:include href="mods-display.xsl" />
 
+<xsl:param name="WebApplicationBaseURL" />
 <xsl:param name="RequestURL" />
 
-<xsl:variable name="ContextID" select="'dozbib.new.publication'" />
+<xsl:template match="/">
+  <html id="dozbib.new.publication">
+    <head>
+      <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/grid12.css" />
+      <title>
+        <xsl:value-of select="i18n:translate('ubo.newPublicationWizard.notFound')" />
+      </title>
+    </head>
+    <body>
+      <xsl:apply-templates select="mods:mods" />
+    </body>
+  </html>
+</xsl:template>
 
 <xsl:variable name="breadcrumb.extensions">
   <item label="{i18n:translate('ubo.newPublicationWizard')}" href="{$WebApplicationBaseURL}newPublication.xed" />
   <item label="{i18n:translate('ubo.newPublicationWizard.notFound')}" />
-</xsl:variable>
-
-<xsl:variable name="head.additional">
-  <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/grid12.css" />
-</xsl:variable>
-
-<!-- ==================== Anzeige Seitentitel ==================== -->
-
-<xsl:variable name="page.title">
-  <xsl:value-of select="i18n:translate('ubo.newPublicationWizard.notFound')" />
 </xsl:variable>
 
 <xsl:template match="mods:mods">

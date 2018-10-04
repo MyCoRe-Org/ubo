@@ -8,20 +8,27 @@
   xmlns:mods="http://www.loc.gov/mods/v3"
   exclude-result-prefixes="xsl xalan i18n mods encoder">
 
-<xsl:include href="layout.xsl" />
-
 <xsl:param name="error" />
 <xsl:param name="url" />
 
+<xsl:param name="WebApplicationBaseURL" />
+<xsl:param name="ServletsBaseURL" />
 <xsl:param name="UBO.LSF.Link" />
 <xsl:param name="UBO.Scopus.Author.Link" />
 
-<xsl:variable name="PageID">profile</xsl:variable>
-<xsl:variable name="page.title" select="concat('Mein Profil: ',/user/@name)" />
-
-<xsl:variable name="breadcrumb.extensions">
-  <item label="{$page.title}" />
-</xsl:variable>
+<xsl:template match="/">
+  <html id="profile">
+    <head>
+      <title>
+        <xsl:text>Mein Profil: </xsl:text>
+        <xsl:value-of select="/user/@name" />
+      </title>
+    </head>
+    <body>
+      <xsl:apply-templates select="user" />
+    </body>
+  </html>
+</xsl:template>
 
 <xsl:template match="user">
 

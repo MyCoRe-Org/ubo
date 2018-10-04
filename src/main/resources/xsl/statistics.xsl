@@ -14,22 +14,21 @@
   <xsl:variable name="count" select="concat(i18n:translate('stats.count'),' ',i18n:translate('ubo.publications'))" />
 
   <xsl:template match="/response">
-    <xinclude>
-      <xsl:for-each select="lst[@name='facet_counts']">
-        <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='year'][int]" />
-        <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='subject'][int]" />
-        <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='genre'][int]" />
-        <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='oa'][int]" />
-        <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='facet_person'][int]" />
-        <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='nid_lsf'][int]" />
-        <xsl:apply-templates select="lst[@name='facet_pivot']/arr[@name='name_id_type,name_id_type']" />
-      </xsl:for-each>
-    </xinclude>
+    <xsl:for-each select="lst[@name='facet_counts']">
+      <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='year'][int]" />
+      <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='subject'][int]" />
+      <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='genre'][int]" />
+      <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='oa'][int]" />
+      <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='facet_person'][int]" />
+      <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='nid_lsf'][int]" />
+      <xsl:apply-templates select="lst[@name='facet_pivot']/arr[@name='name_id_type,name_id_type']" />
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="lst[@name='facet_fields']/lst[@name='year']">
     <xsl:variable name="title" select="concat(i18n:translate('ubo.publications'),' / ',i18n:translate('facets.facet.year'))" />
     
+    <section class="highlight2">
     <div id="chartYear" style="width:100%; height:350px;" />
 
     <script type="text/javascript">
@@ -88,6 +87,7 @@
           });
         });
     </script>
+    </section>
   </xsl:template>
   
   <xsl:variable name="subjects" select="document('resource:fachreferate.xml')/fachreferate" />
@@ -95,6 +95,7 @@
   <xsl:template match="lst[@name='facet_fields']/lst[@name='subject']">
     <xsl:variable name="title" select="concat(i18n:translate('ubo.publications'),' / ',i18n:translate('facets.facet.subject'))" />
 
+    <section class="highlight2">
     <div id="chartSubject" style="width:100%; height:{50 + count(int) * 30}px" />
 
     <script type="text/javascript">
@@ -162,6 +163,7 @@
         });
       });
     </script>
+    </section>
   </xsl:template>
 
   <xsl:variable name="genres" select="document('classification:metadata:-1:children:ubogenre')/mycoreclass/categories" />
@@ -169,6 +171,7 @@
   <xsl:template match="lst[@name='facet_fields']/lst[@name='genre']">
     <xsl:variable name="title" select="concat(i18n:translate('ubo.publications'),' / ',i18n:translate('facets.facet.genre'))" />
 
+    <section class="highlight2">
     <div id="chartGenre" style="width:100%; height:350px" />
     
     <script type="text/javascript">
@@ -232,6 +235,7 @@
     });
  });
     </script>
+    </section>
   </xsl:template>
 
   <xsl:variable name="oa" select="document('classification:metadata:-1:children:oa')/mycoreclass/categories" />
@@ -239,6 +243,7 @@
   <xsl:template match="lst[@name='facet_fields']/lst[@name='oa']">
     <xsl:variable name="title">Open Access?</xsl:variable>
 
+    <section class="highlight2">
     <div id="chartOA" style="width:100%; height:350px" />
     
     <xsl:variable name="numOAdirect" select="int[@name='oa'] - sum(int[contains('green gold hybrid embargo',@name)])" /> 
@@ -328,11 +333,13 @@
     });
  });
     </script>
+    </section>
   </xsl:template>
 
   <xsl:template match="lst[@name='facet_fields']/lst[@name='facet_person']">
     <xsl:variable name="title" select="concat(i18n:translate('ubo.publications'),' / ',i18n:translate('facets.facet.person'))" />
 
+    <section class="highlight2">
     <div id="chartPerson" style="width:100%; height:{50 + count(int) * 30}px" />
     
     <script type="text/javascript">
@@ -400,6 +407,7 @@
         });
       });
     </script>
+    </section>
   </xsl:template>
   
   <xsl:template match="lst[@name='facet_fields']/lst[@name='nid_lsf']">
@@ -423,6 +431,7 @@
 
     <xsl:variable name="title" select="concat(i18n:translate('ubo.publications'),' / ',i18n:translate('facets.facet.nid_lsf'))" />
 
+    <section class="highlight2">
     <div id="chartLSF" style="width:100%; height:{50 + count(int) * 30}px" />
     
     <script type="text/javascript">
@@ -492,6 +501,7 @@
         });
       });
     </script>
+    </section>
   </xsl:template>  
 
   <xsl:template match="lst/arr[@name='name_id_type,name_id_type']">

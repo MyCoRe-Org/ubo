@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <xsl:stylesheet
   version="1.0"
@@ -10,17 +10,24 @@
   exclude-result-prefixes="xsl xalan i18n mods java"
 >
 
-<xsl:include href="layout.xsl" />
 <xsl:include href="mods-display.xsl" />
 
-<xsl:variable name="page.title" select="'Merkliste'" />
-<xsl:variable name="PageID" select="'basket'" />
+<xsl:param name="UBO.System.ReadOnly" />
 
-<xsl:variable name="head.additional">
-  <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
-</xsl:variable>
+<xsl:template match="/">
+  <html id="basket">
+    <head>
+      <title>Merkliste</title>
+      <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
+    </head>
+    <body>
+      <xsl:call-template name="actions" />
+      <xsl:apply-templates select="basket" />
+    </body>
+  </html>
+</xsl:template>
 
-<xsl:variable name="actions">
+<xsl:template name="actions">
   <xsl:for-each select="/basket[entry]">
     <div id="buttons">
       <a class="action" href="{$ServletsBaseURL}MCRBasketServlet?type=bibentries&amp;action=clear">
@@ -31,7 +38,7 @@
         <xsl:when xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()">
           <a class="action" href="{$WebApplicationBaseURL}edit-contributors.xed">Personen zuordnen</a>
           <xsl:if test="count(/basket/entry) &gt; 1">
-            <a class="action" href="BasketPubMerger?commit=false&amp;target=publications">Zusammenführen</a> 
+            <a class="action" href="BasketPubMerger?commit=false&amp;target=publications">ZusammenfÃ¼hren</a> 
             <a class="action" href="BasketPubMerger?commit=false&amp;target=hosts">Zusammenhosten</a>
           </xsl:if>
         </xsl:when>
@@ -46,7 +53,7 @@
       </xsl:if>
     </div>
   </xsl:for-each>
-</xsl:variable>
+</xsl:template>
 
 <xsl:template name="basketNumEntries">
   <div class="section">

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!-- ============================================== -->
 <!-- $Revision: 35435 $ $Date: 2016-05-24 10:54:17 +0200 (Di, 24 Mai 2016) $ -->
@@ -9,21 +9,24 @@
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" 
   exclude-result-prefixes="xsl i18n">
 
-  <xsl:include href="layout.xsl" />
+  <xsl:param name="CurrentLang" />
+  <xsl:param name="DefaultLang" />
 
-  <xsl:variable name="PageID" select="/webpage/@id" />
-  <xsl:variable name="page.title">
-    <xsl:for-each select="/webpage">
-      <xsl:call-template name="build.title" />
-    </xsl:for-each>
-  </xsl:variable>
-
-  <xsl:variable name="pageLastModified" select="substring-before(substring-after(/udepage/@lastModified,' '),' ')" />
-
-  <xsl:variable name="breadcrumb.extensions">
-    <item label="{$page.title}" />
-  </xsl:variable>
-
+  <xsl:template match="/webpage">
+    <html>
+      <xsl:copy-of select="@id" />
+      <xsl:copy-of select="@lastModified" />
+      <head>
+        <title>
+          <xsl:call-template name="build.title" />
+        </title>
+      </head>
+      <body>
+        <xsl:apply-templates select="*" />
+      </body>
+    </html>
+  </xsl:template>
+  
   <xsl:template name="build.title">
     <xsl:choose>
       <xsl:when test="title[lang($CurrentLang)]">
@@ -41,6 +44,16 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:variable name="breadcrumb.extensions">
+    <item>
+      <xsl:attribute name="label">
+        <xsl:for-each select="/webpage">
+          <xsl:call-template name="build.title" />
+        </xsl:for-each> 
+      </xsl:attribute>
+    </item>
+  </xsl:variable>
+
   <!-- copy -->
 
   <xsl:template match="*">
@@ -52,12 +65,6 @@
     </xsl:copy>
   </xsl:template>
 
-  <!-- webpage -->
-
-  <xsl:template match="webpage">
-    <xsl:apply-templates select="section|upload|*[not(name()='sidebar')]" />
-  </xsl:template>
-  
   <!-- Section -->
 
   <xsl:template match="section">
@@ -98,7 +105,7 @@
   <!-- Dynamic includes -->
   
   <xsl:template match="xinclude">
-    <xsl:copy-of select="document(@uri)/*/node()" />
+    <xsl:apply-templates select="document(@uri)/*" />
   </xsl:template>
   
 </xsl:stylesheet>
