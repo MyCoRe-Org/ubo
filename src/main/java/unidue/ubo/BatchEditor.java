@@ -32,7 +32,7 @@ import org.mycore.frontend.cli.annotation.MCRCommandGroup;
  *
  * @author Frank L\u00FCtzenkirchen
  */
-@MCRCommandGroup(name = "editor")
+@MCRCommandGroup(name = "Batch Editor")
 public class BatchEditor extends MCRAbstractCommands {
 
     private static final Collection<Namespace> NS = MCRConstants.getStandardNamespaces();
