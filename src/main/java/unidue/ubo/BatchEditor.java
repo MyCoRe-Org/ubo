@@ -17,6 +17,7 @@ import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRNodeBuilder;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -55,7 +56,7 @@ public class BatchEditor extends MCRAbstractCommands {
         help = "Edit XML elements in object {0} at level {1} in object {1}, add field {2} with value {3}",
         order = 2)
     public static void batchAdd(String oid, String level, String field, String value)
-        throws JaxenException, MCRPersistenceException, MCRAccessException {
+        throws JaxenException, MCRPersistenceException, MCRAccessException, IOException {
         edit(oid, level, Action.ADD, field, value, null, null);
     }
 
@@ -64,7 +65,7 @@ public class BatchEditor extends MCRAbstractCommands {
         order = 1)
     public static void batchAddIf(String oid, String level, String fieldIf, String valueIf, String field2Add,
         String value2Add)
-        throws JaxenException, MCRPersistenceException, MCRAccessException {
+        throws JaxenException, MCRPersistenceException, MCRAccessException, IOException {
         edit(oid, level, Action.ADD_IF, fieldIf, valueIf, field2Add, value2Add);
     }
 
@@ -72,7 +73,7 @@ public class BatchEditor extends MCRAbstractCommands {
         help = "Edit XML elements at in object {0} at level {1}, remove field {2} where value is {3}",
         order = 2)
     public static void batchRemove(String oid, String level, String field, String value)
-        throws MCRPersistenceException, MCRAccessException, JaxenException {
+        throws MCRPersistenceException, MCRAccessException, JaxenException, IOException {
         edit(oid, level, Action.REMOVE, field, value, null, null);
     }
 
@@ -81,7 +82,7 @@ public class BatchEditor extends MCRAbstractCommands {
         order = 1)
     public static void batchRemoveIf(String oid, String level, String fieldIf, String valueIf, String field2Rem,
         String value2Rem)
-        throws MCRPersistenceException, MCRAccessException, JaxenException {
+        throws MCRPersistenceException, MCRAccessException, JaxenException, IOException {
         edit(oid, level, Action.REMOVE_IF, fieldIf, valueIf, field2Rem, value2Rem);
     }
 
@@ -96,10 +97,11 @@ public class BatchEditor extends MCRAbstractCommands {
 
     public static void edit(String oid, String level, Action a, String field1, String value1, String field2,
         String value2)
-        throws JaxenException, MCRPersistenceException, MCRAccessException {
-        Document xml = getObjectXML(oid);
+        throws JaxenException, MCRPersistenceException, MCRAccessException, IOException {
+        Document xmlOld = getObjectXML(oid);
+        Document xmlNew = xmlOld.clone();
 
-        for (Element base : getlevelElements(xml, level)) {
+        for (Element base : getlevelElements(xmlNew, level)) {
             if (a == Action.ADD) {
                 add(base, field1, value1);
             } else if (a == Action.REMOVE) {
@@ -121,7 +123,7 @@ public class BatchEditor extends MCRAbstractCommands {
             }
         }
 
-        saveModifiedObject(xml);
+        saveIfModified(xmlOld, xmlNew);
     }
 
     private static Document getObjectXML(String objectID) {
@@ -130,9 +132,13 @@ public class BatchEditor extends MCRAbstractCommands {
         return obj.createXML();
     }
 
-    private static void saveModifiedObject(Document xml) throws MCRAccessException {
-        MCRObject obj = new MCRObject(xml);
-        MCRMetadataManager.update(obj);
+    private static void saveIfModified(Document xmlOld, Document xmlNew) throws MCRAccessException, IOException {
+        String oldData = new MCRJDOMContent(xmlOld).asString();
+        String newData = new MCRJDOMContent(xmlNew).asString();
+        if (!oldData.equals(newData)) {
+            MCRObject obj = new MCRObject(xmlNew);
+            MCRMetadataManager.update(obj);
+        }
     }
 
     private static List<Element> getlevelElements(Document xml, String level) {
