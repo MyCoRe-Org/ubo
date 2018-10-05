@@ -3,77 +3,80 @@
 <webpage lastModified="$Date: 2015-07-17 10:07:09 +0200 (Fr, 17 Jul 2015) $" id="dozbib.edit.contributors">
   <title xml:lang="de">Personen zuordnen / korrigieren</title>
   <title xml:lang="en">Assign / edit persons</title>
-  <article  class="highlight0" id="sectionedit">
-    <p>
-      Um die Autoren oder Herausgeber der Publikationen eindeutig Hochschulangehörigen zuordnen zu können,
-      müssen die Namen den Personeneinträgen im Online-Personalverzeichnis der Hochschule (HIS LSF) 
-      über die Personen-ID (PID) zugewiesen werden. Mit diesem Formular können Sie 
-      <strong>die Schreibweise von  Namen in der Publikationsliste korrigieren</strong>. 
-      Weiterhin sollten Sie über den Button "Person auswählen" 
-      möglichst viele <strong>Namen eindeutig Personen aus HIS LSF zuordnen</strong>. 
-      Nur so ist später eine exakte Suche nach den Publikationen einer bestimmten Person möglich. 
-    </p>
-    <p>
-      In der linken Spalte sehen sie die Häufigkeit, in der der Name in der Publikationsliste auftritt.
-      Die Liste ist absteigend sortiert, so dass <strong>die häufigsten Namen zuerst aufgelistet</strong> 
-      sind. Es werden nur die 50 häufigsten Namen aufgelistet. In der rechten Spalte sehen Sie den bisherigen Eintrag in der 
-      Publikationsliste ("Nachname, Vorname [LSF PID]"), den Sie hier ggf. korrigieren können. 
-    </p>  
-  
-    <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
-      <xed:source uri="nameLister:foo" />
-      <xed:cancel url="servlets/MCRBasketServlet?action=show&amp;type=bibentries" />
-
-      <div style="margin-top:2ex; margin-bottom:2ex;">
-        <button class="roundedButton" type="submit" xed:target="servlet" xed:href="BasketName2PIDEditor">
-          Änderungen speichern
-        </button>
-        <button class="roundedButton" type="submit" xed:target="cancel">
-          <xed:output i18n="button.cancel" />
-        </button>
-      </div>      
+  <article  class="card" id="sectionedit">
+    <div class="card-body">
+      <p>
+	Um die Autoren oder Herausgeber der Publikationen eindeutig Hochschulangehörigen zuordnen zu können,
+	müssen die Namen den Personeneinträgen im Online-Personalverzeichnis der Hochschule (HIS LSF) 
+	über die Personen-ID (PID) zugewiesen werden. Mit diesem Formular können Sie 
+	<strong>die Schreibweise von  Namen in der Publikationsliste korrigieren</strong>. 
+	Weiterhin sollten Sie über den Button "Person auswählen" 
+	möglichst viele <strong>Namen eindeutig Personen aus HIS LSF zuordnen</strong>. 
+	Nur so ist später eine exakte Suche nach den Publikationen einer bestimmten Person möglich. 
+      </p>
+      <p>
+	In der linken Spalte sehen sie die Häufigkeit, in der der Name in der Publikationsliste auftritt.
+	Die Liste ist absteigend sortiert, so dass <strong>die häufigsten Namen zuerst aufgelistet</strong> 
+	sind. Es werden nur die 50 häufigsten Namen aufgelistet. In der rechten Spalte sehen Sie den bisherigen Eintrag in der 
+	Publikationsliste ("Nachname, Vorname [LSF PID]"), den Sie hier ggf. korrigieren können. 
+      </p>  
       
-      <xed:bind xpath="/nameEntries">
-        <table style="width:auto;">
-          <tr>
-            <th>Häufigkeit:</th>
-            <th>Nachname, Vorname:</th>
-            <th>LSF ID:</th>
-          </tr>
-          <xed:repeat xpath="nameEntry" max="100">
+      <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
+	<xed:source uri="nameLister:foo" />
+	<xed:cancel url="servlets/MCRBasketServlet?action=show&amp;type=bibentries" />
+
+	<div>
+          <button class="btn btn-primary" type="submit" xed:target="servlet" xed:href="BasketName2PIDEditor">
+            Änderungen speichern
+          </button>
+          <button class="btn btn-primary" type="submit" xed:target="cancel">
+            <xed:output i18n="button.cancel" />
+          </button>
+	</div>      
+	
+	<xed:bind xpath="/nameEntries">
+          <table class="table table-bordered mt-2">
             <tr>
-              <td>
-                <xed:output value="@num" />
-              </td>
-              <xed:bind xpath="mods:name[@type='personal']">
-                <td>
-                  <xed:bind xpath="mods:namePart[@type='family']">
-                    <input type="text" style="width:200px" class="{$xed-validation-marker}" />
-                    <xed:validate required="true" display="here"><br/>Nachname muss eingegeben werden!</xed:validate>
-                  </xed:bind>
-                  <xed:bind xpath="mods:namePart[@type='given']">
-                    <input type="text" style="width:150px" />
-                  </xed:bind>
-                  <br/>
-                  <xed:output value="../@key" />
-                  <xed:bind xpath="mods:nameIdentifier[@type='lsf']" />
-                </td>
-                <td>
-                  <button class="roundedButton" style="width:80px;" type="submit" xed:target="subselect" xed:href="../lsfpidsearch.html?lastName={mods:namePart[@type='family']}&amp;firstName={mods:namePart[@type='given']}&amp;pid={mods:nameIdentifier[@type='lsf']}">
-                    <xed:choose>
-                      <xed:when test="string-length(mods:nameIdentifier[@type='lsf']) &gt; 0">
-                        <xed:output value="mods:nameIdentifier[@type='lsf']" />
-                      </xed:when>
-                      <xed:otherwise>- ? -</xed:otherwise>
-                    </xed:choose>
-                   </button>
-                </td>
-              </xed:bind>
+              <th>Häufigkeit:</th>
+              <th>Nachname, Vorname:</th>
+              <th>LSF ID:</th>
             </tr>
-          </xed:repeat>
-        </table>
-      </xed:bind>
-    </xed:form>
-    
+            <xed:repeat xpath="nameEntry" max="100">
+              <tr>
+		<td>
+                  <xed:output value="@num" />
+		</td>
+		<xed:bind xpath="mods:name[@type='personal']">
+                  <td>
+		    <div class="form-inline">
+                      <xed:bind xpath="mods:namePart[@type='family']">
+			<input type="text" class="{$xed-validation-marker} form-control col-sm-7" />
+			<xed:validate required="true" display="here"><br/>Nachname muss eingegeben werden!</xed:validate>
+                      </xed:bind>
+                      <xed:bind xpath="mods:namePart[@type='given']">
+			<input type="text" class="form-control col-sm-4 ml-auto"/>
+                      </xed:bind>
+                      <br/>
+                      <xed:output value="../@key" />
+                      <xed:bind xpath="mods:nameIdentifier[@type='lsf']" />
+		    </div>
+                  </td>
+                  <td>
+                    <button class="btn btn-sm btn-primary btn-block" type="submit" xed:target="subselect" xed:href="../lsfpidsearch.html?lastName={mods:namePart[@type='family']}&amp;firstName={mods:namePart[@type='given']}&amp;pid={mods:nameIdentifier[@type='lsf']}">
+                      <xed:choose>
+			<xed:when test="string-length(mods:nameIdentifier[@type='lsf']) &gt; 0">
+                          <xed:output value="mods:nameIdentifier[@type='lsf']" />
+			</xed:when>
+			<xed:otherwise>- ? -</xed:otherwise>
+                      </xed:choose>
+                    </button>
+                  </td>
+		</xed:bind>
+              </tr>
+            </xed:repeat>
+          </table>
+	</xed:bind>
+      </xed:form>
+    </div>
   </article>
 </webpage>

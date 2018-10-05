@@ -1,0 +1,71 @@
+// override bootstrap sass variables specified here:
+// http://getbootstrap.com/customize/#less-variables
+@import "variables";
+
+// current stable bootstrap version
+@import "../webjars/bootstrap/4.1.3/scss/bootstrap";
+
+// cmo specific styles
+//@import "cmo/base";
+
+
+// necessary extensions/replacements/changes based on MyCoRe specific css-classes
+
+.has-error {
+  @extend .border-danger;
+}
+
+.validation-failures ul li {
+    color: red;
+}
+
+.bg-card-body1 {
+    @extend .bg-light;
+}
+
+.bg-card-body2 {
+    @extend .bg-white;
+}
+
+// facets (sidebar searchresults etc.)
+.mycore-facet-count:after {
+    content: " | ";
+}
+
+.mycore-facet-exclude, .mycore-facet-remove {
+    @extend .mr-1;
+    color: red;
+}
+
+
+// shortcut-classes for forms
+.mycore-form-label {
+    @extend .col-lg-2;
+    @extend .col-md-3;
+    @extend .col-sm-3;
+    @extend .justify-content-sm-end;
+    @extend .pl-0;
+    @extend .mr-3;
+}
+
+// actually used for input AND select AND textarea
+.mycore-form-input {
+    @extend .form-control;
+    @extend .col-lg-4;
+    @extend .col-md-5;
+    @extend .col-sm-5;
+}
+
+// shortcut-classes for lists
+.mycore-list-item {
+    @extend .list-group-item;
+    @extend .border-0;
+    @extend .py-0;
+}
+
+// sidebar facets
+.mycore-slidetoggle {
+    @extend .text-primary;
+    text-decoration: underline;
+    cursor: pointer;
+}

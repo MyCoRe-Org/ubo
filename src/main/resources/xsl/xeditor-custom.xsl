@@ -36,8 +36,29 @@
         </xsl:when>
       </xsl:choose>
     </xsl:variable>
+    <xsl:variable name="fa-unicode">
+      <xsl:choose>
+        <xsl:when test=".='append'">
+          <xsl:value-of select="'&#xf067;'" />
+        </xsl:when>
+        <xsl:when test=".='insert'">
+          <xsl:value-of select="'&#xf067;'" />
+        </xsl:when>
+        <xsl:when test=".='remove'">
+          <xsl:value-of select="'&#xf068;'" />
+        </xsl:when>
+        <xsl:when test=".='up'">
+          <xsl:value-of select="'&#xf062;'" />
+        </xsl:when>
+        <xsl:when test=".='down'">
+          <xsl:value-of select="'&#xf063;'" />
+        </xsl:when>
+      </xsl:choose>
+    </xsl:variable>
 
-    <input type="image" class="roundedButton xeditor-pmud" tabindex="999" src="{$WebApplicationBaseURL}images/pmud-{$symbol}.png" name="{$name}" title="{$symbol}" />
+    <div class="form-control border-0" style="max-width:20%;">
+      <input type="image" class="xeditor-pmud fas" tabindex="999" name="{$name}" title="{$symbol}" value="{$fa-unicode}" style="color:Tomato; font-size:25px;"/>
+    </div>
   </xsl:template>
 
   <!-- ========== Validation error messages: <xed:validate /> ========== -->

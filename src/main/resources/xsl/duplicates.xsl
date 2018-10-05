@@ -16,27 +16,29 @@
 </xsl:template>
 
 <xsl:template match="duplicates">
-  <article class="highlight2">
-    <h2>
-      <xsl:text>Es wurden </xsl:text>
-      <xsl:value-of select="count(group)" /> 
-      <xsl:text> Gruppen mit </xsl:text>
-      <xsl:value-of select="count(group/id)" />
-      <xsl:text> Publikationen gefunden:</xsl:text>
-    </h2>
-    <table>
-      <tr>
-        <th style="width:10%">Anzeigen</th>
-        <th style="width:5%">#</th>
-        <th style="width:15%">IDs</th>
-        <th style="width:70%">Kriterium</th>
-      </tr>
-      <xsl:apply-templates select="group">
-        <xsl:sort select="count(id)" data-type="number" />
-        <xsl:sort select="count(key)" data-type="number" order="descending"/>
-        <xsl:sort select="id" data-type="number" order="descending" />
-      </xsl:apply-templates>
-    </table>
+  <article class="card">
+    <div class="card-body">
+      <h2>
+	<xsl:text>Es wurden </xsl:text>
+	<xsl:value-of select="count(group)" /> 
+	<xsl:text> Gruppen mit </xsl:text>
+	<xsl:value-of select="count(group/id)" />
+	<xsl:text> Publikationen gefunden:</xsl:text>
+      </h2>
+      <table class="table">
+	<tr>
+          <th>Anzeigen</th>
+          <th>#</th>
+          <th>IDs</th>
+          <th>Kriterium</th>
+	</tr>
+	<xsl:apply-templates select="group">
+          <xsl:sort select="count(id)" data-type="number" />
+          <xsl:sort select="count(key)" data-type="number" order="descending"/>
+          <xsl:sort select="id" data-type="number" order="descending" />
+	</xsl:apply-templates>
+      </table>
+    </div>
   </article>
 </xsl:template>
 
