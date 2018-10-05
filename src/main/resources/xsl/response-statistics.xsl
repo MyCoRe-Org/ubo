@@ -32,9 +32,8 @@
   </xsl:template>
 
   <xsl:template match="response" priority="1">
-    <script src="{$WebApplicationBaseURL}external/jquery-ui-1.8.12.custom.min.js" type="text/javascript"></script>
-    <script src="{$WebApplicationBaseURL}webjars/github-com-highcharts-highcharts/4.2.5/lib/highcharts.src.js" type="text/javascript"></script>
-    <script src="{$WebApplicationBaseURL}webjars/github-com-highcharts-highcharts/4.2.5/lib/themes/grid.js" type="text/javascript"></script>
+    <script src="webjars/highcharts/5.0.1/highcharts.src.js" type="text/javascript"></script>
+    <script src="webjars/highcharts/5.0.1/themes/grid.js" type="text/javascript"></script>
     
     <div id="chartDialog" />
     

@@ -4,22 +4,24 @@
   <title xml:lang="de">Suchfeld ""subject"</title>
   <title xml:lang="en">Search field ""subject</title>
     
-<article  class="highlight0" xml:lang="de" id="sectionlast">
-  <xed:form>
-    <xed:source uri="resource:fachreferate.xml" />
-    <xed:bind xpath="/fachreferate">
-      <dl class="ubo-export">
-        <xed:repeat xpath="item">
-          <dt>
-            <xed:output value="@value" />
-          </dt>
-          <dd>
-            <xed:output value="@label" />
-          </dd>
-        </xed:repeat>
-      </dl>
-    </xed:bind>
-  </xed:form>
-</article>
+  <article  class="card" xml:lang="de" id="sectionlast">
+    <div class="card-body">
+      <xed:form>
+	<xed:source uri="resource:fachreferate.xml" />
+	<xed:bind xpath="/fachreferate">
+	  <dl class="mycore-export">
+            <xed:repeat xpath="item">
+              <dt>
+		<xed:output value="@value" />
+              </dt>
+              <dd>
+		<xed:output value="@label" />
+              </dd>
+            </xed:repeat>
+	  </dl>
+	</xed:bind>
+      </xed:form>
+    </div>
+  </article>
   
 </webpage>

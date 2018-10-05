@@ -4,147 +4,145 @@
   <title xml:lang="de">Publikation erfassen</title>
   <title xml:lang="en">Acquire publication</title>
  
-  <script type="text/javascript" src="external/jquery-tools-1.2.7/jquery.tools.min.js"></script>
-  <script type="text/javascript" src="js/editor.validation.failed.tooltip.js"></script>
-     
-  <article class="highlight1" xml:lang="de">  
-  <p>
-    Die mit <strong>*</strong> gekennzeichneten Felder sind <strong>Pflichtfelder</strong>.
-    Durch klicken auf <strong>[+]</strong> können Sie ein <strong>Eingabefeld wiederholen</strong>!
-    </p>
-    <p>
-    Bitte tragen Sie möglichst vollständig die Angaben zu Ihrem Titel in das Formular ein.
-    Wenn Sie (Zweit-)Veröffentlichungsrechte an dieser Publikation haben, können Sie sie über DuEPublico
-    im Volltext archivieren und im Sinne des Open Access weltweit frei zugänglich zu machen. Informationen dazu
-    finden Sie auf unseren <a href="https://www.uni-due.de/ub/openaccess/">Open Access-Seiten</a>. 
-    </p>
+  <article class="card mb-3" xml:lang="de">
+    <div class="card-body bg-beige">
+      <p>
+	Die mit <strong>*</strong> gekennzeichneten Felder sind <strong>Pflichtfelder</strong>.
+	Durch klicken auf <strong>[+]</strong> können Sie ein <strong>Eingabefeld wiederholen</strong>!
+      </p>
+      <p>
+	Bitte tragen Sie möglichst vollständig die Angaben zu Ihrem Titel in das Formular ein.
+	Wenn Sie (Zweit-)Veröffentlichungsrechte an dieser Publikation haben, können Sie sie über DuEPublico
+	im Volltext archivieren und im Sinne des Open Access weltweit frei zugänglich zu machen. Informationen dazu
+	finden Sie auf unseren <a href="https://www.uni-due.de/ub/openaccess/">Open Access-Seiten</a>.
+      </p>
+    </div>
   </article>
-  <article class="highlight1" xml:lang="en">
-    <p>
-    Fields marked with <strong>*</strong>  are <strong>required fields</strong>. 
-    By clicking on <strong>[+]</strong> you can repeat an input field!
-    </p>
-    <p>
-    Please, enter the bibliographic information on your title as complete as possible. 
-    Should you have a right of (secondary) exploitation for this publication you have the possibility to archive your 
-    publication online in full text form in DuEPubico and make it freely accessible worldwide in the spirit of Open Access. 
-    You can find further information on 
-    our <a href="https://www.uni-due.de/ub/en/openaccess/">Open Access pages</a>.
-    </p>
+  <article class="card mb-3" xml:lang="en">
+    <div class="card-body bg-beige">
+      <p>
+	Fields marked with <strong>*</strong>  are <strong>required fields</strong>.
+	By clicking on <strong>[+]</strong> you can repeat an input field!
+      </p>
+      <p>
+	Please, enter the bibliographic information on your title as complete as possible.
+	Should you have a right of (secondary) exploitation for this publication you have the possibility to archive your
+	publication online in full text form in DuEPubico and make it freely accessible worldwide in the spirit of Open Access.
+	You can find further information on
+	our <a href="https://www.uni-due.de/ub/en/openaccess/">Open Access pages</a>.
+      </p>
+    </div>
   </article>
   
-  <article  class="highlight0" id="form">
-  
-  <script type="text/javascript" src="external/jquery-ui-1.8.21.custom.min.js"></script>
-  <script type="text/javascript" src="external/chosen/chosen.jquery.min.js"></script>
+  <article  class="card" id="form">
+    <div class="card-body">
+      <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
+	
+	<xed:source uri="xslStyle:mods-preprocessor:mcrobject:{$id}" />
+	<xed:source uri="xslStyle:mods2mycoreobject,mods-preprocessor:session:{$key}" />
+	
+	<xed:cancel url="servlets/DozBibEntryServlet?id={$id}" />
+	<xed:cancel url="newPublication.xed" />
+	
+	<xed:post-processor xsl="mods-postprocessor.xsl" />    
+	
+	<xed:bind xpath="/mycoreobject">
+	  <xed:include uri="webapp:import-editor.xed" ref="common.metafields" />
+	  
+	  <input type="hidden" name="mode" value="save" />
+	  
+	  <xed:include uri="webapp:import-editor.xed" ref="validation" />
 
-  <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form">
-  
-    <xed:source uri="xslStyle:mods-preprocessor:mcrobject:{$id}" />
-    <xed:source uri="xslStyle:mods2mycoreobject,mods-preprocessor:session:{$key}" />
-    
-    <xed:cancel url="servlets/DozBibEntryServlet?id={$id}" />
-    <xed:cancel url="newPublication.xed" />
-    
-    <xed:post-processor xsl="mods-postprocessor.xsl" />    
-    
-    <xed:bind xpath="/mycoreobject">
-      <xed:include uri="webapp:import-editor.xed" ref="common.metafields" />
-     
-      <input type="hidden" name="mode" value="save" />
-      
-      <xed:include uri="webapp:import-editor.xed" ref="validation" />
+	  <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer/mods:mods">
 
-      <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer/mods:mods">
+            <xed:load-resource name="genres" uri="classification:metadata:-1:children:ubogenre" />
 
-        <xed:load-resource name="genres" uri="classification:metadata:-1:children:ubogenre" />
+            <!-- Request parameter genre always overrides existing value in entry -->
+            <!-- If parameter genre is missing, use existing genre: you do not need the parameter to edit existing as-is -->
+            <xed:choose>
+              <xed:when test="string-length($genre) &gt; 0">
+		<xed:bind xpath="mods:genre[@type='intern']" set="{$genre}" name="genre_intern" />
+              </xed:when>
+              <xed:otherwise>
+		<xed:bind xpath="mods:genre[@type='intern']" name="genre_intern" />
+              </xed:otherwise>
+            </xed:choose>
 
-        <!-- Request parameter genre always overrides existing value in entry -->
-        <!-- If parameter genre is missing, use existing genre: you do not need the parameter to edit existing as-is -->
-        <xed:choose>
-          <xed:when test="string-length($genre) &gt; 0">
-            <xed:bind xpath="mods:genre[@type='intern']" set="{$genre}" name="genre_intern" />
-          </xed:when>
-          <xed:otherwise>
-            <xed:bind xpath="mods:genre[@type='intern']" name="genre_intern" />
-          </xed:otherwise>
-        </xed:choose>
+            <!-- Request parameter host always overrides existing value in entry -->
+            <!-- host=standalone means this publication has no host -->
+            <!-- If parameter host is missing, use existing host: you do not need the parameter to edit existing as-is -->
+            <xed:choose>
+              <xed:when test="$host = 'standalone'">
+		<xed:param name="host_intern" default="standalone" />
+              </xed:when>
+              <xed:when test="string-length($host) &gt; 0">
+		<xed:bind xpath="mods:relatedItem[@type='host']/mods:genre[@type='intern']" set="{$host}" name="host_intern" />
+              </xed:when>
+              <xed:when test="mods:relatedItem[@type='host']">
+		<xed:bind xpath="mods:relatedItem[@type='host']/mods:genre[@type='intern']" name="host_intern" />
+              </xed:when>        
+              <xed:otherwise>
+		<xed:param name="host_intern" default="standalone" />
+              </xed:otherwise>
+            </xed:choose>
 
-        <!-- Request parameter host always overrides existing value in entry -->
-        <!-- host=standalone means this publication has no host -->
-        <!-- If parameter host is missing, use existing host: you do not need the parameter to edit existing as-is -->
-        <xed:choose>
-          <xed:when test="$host = 'standalone'">
-            <xed:param name="host_intern" default="standalone" />
-          </xed:when>
-          <xed:when test="string-length($host) &gt; 0">
-            <xed:bind xpath="mods:relatedItem[@type='host']/mods:genre[@type='intern']" set="{$host}" name="host_intern" />
-          </xed:when>
-          <xed:when test="mods:relatedItem[@type='host']">
-            <xed:bind xpath="mods:relatedItem[@type='host']/mods:genre[@type='intern']" name="host_intern" />
-          </xed:when>        
-          <xed:otherwise>
-            <xed:param name="host_intern" default="standalone" />
-          </xed:otherwise>
-        </xed:choose>
+            <fieldset>
 
-        <fieldset>
+              <legend>
+		<xed:include uri="webapp:import-editor.xed" ref="legend.ID" />
+		<xed:output value="$genres//category[@ID=$genre_intern]/label[lang($CurrentLang)]/@text" />
+		<xed:if test="not($host_intern='standalone')">
+		  <xed:output value="concat(' in ',$genres//category[@ID=$host_intern]/label[lang($CurrentLang)]/@text)" />
+		</xed:if>
+              </legend>
 
-          <legend>
-            <xed:include uri="webapp:import-editor.xed" ref="legend.ID" />
-            <xed:output value="$genres//category[@ID=$genre_intern]/label[lang($CurrentLang)]/@text" />
+              <xed:include uri="webapp:import-editor.xed" ref="status" />
+              <xed:include uri="webapp:import-editor.xed" ref="subject" />
+              <xed:include uri="webapp:import-editor.xed" ref="origin" />
+              <xed:include uri="webapp:import-editor.xed" ref="tags" />    
+            </fieldset>
+            
+            <fieldset>
+              <legend>
+		<xed:output value="concat($genres//category[@ID=$genre_intern]/label[lang($CurrentLang)]/@text,':')" />
+              </legend>
+              <xed:include uri="webapp:import-genres.xed" ref="genre.{$genre_intern}" />
+            </fieldset>
+
             <xed:if test="not($host_intern='standalone')">
-              <xed:output value="concat(' in ',$genres//category[@ID=$host_intern]/label[lang($CurrentLang)]/@text)" />
+              <fieldset>
+		<legend>
+		  <xed:output value="concat('erschienen in ',$genres//category[@ID=$host_intern]/label[lang($CurrentLang)]/@text,':')" />
+		</legend>
+		<xed:bind xpath="mods:relatedItem[@type='host']">
+		  <xed:choose>
+                    <xed:when test="@xlink:href">
+                      <xed:include uri="webapp:import-editor.xed" ref="linked.relatedItem" />
+                      <xed:include uri="webapp:import-genres.xed" ref="host.{$host_intern}.linked" />
+                    </xed:when>
+                    <xed:otherwise>
+                      <xed:include uri="webapp:import-genres.xed" ref="host.{$host_intern}" />
+                    </xed:otherwise>
+		  </xed:choose>
+		</xed:bind>
+		<xed:validate xpath="//mods:relatedItem[@type='host']/mods:titleInfo/mods:title" required="true" i18n="ubo.title.validation.host" display="global" />
+              </fieldset>
             </xed:if>
-          </legend>
 
-          <xed:include uri="webapp:import-editor.xed" ref="status" />    
-          <xed:include uri="webapp:import-editor.xed" ref="subject" />    
-          <xed:include uri="webapp:import-editor.xed" ref="origin" />    
-          <xed:include uri="webapp:import-editor.xed" ref="tags" />    
-        </fieldset>
-          
-        <fieldset>
-          <legend>
-            <xed:output value="concat($genres//category[@ID=$genre_intern]/label[lang($CurrentLang)]/@text,':')" />
-          </legend>
-          <xed:include uri="webapp:import-genres.xed" ref="genre.{$genre_intern}" />
-        </fieldset>
+            <fieldset>
+              <xed:include uri="webapp:import-editor.xed" ref="languages" />    
+              <xed:include uri="webapp:import-editor.xed" ref="topics" />    
+              <xed:include uri="webapp:import-editor.xed" ref="abstract" />    
+            </fieldset>
+            
+	  </xed:bind>
 
-        <xed:if test="not($host_intern='standalone')">
-          <fieldset>
-            <legend>
-              <xed:output value="concat('erschienen in ',$genres//category[@ID=$host_intern]/label[lang($CurrentLang)]/@text,':')" />
-            </legend>
-            <xed:bind xpath="mods:relatedItem[@type='host']">
-              <xed:choose>
-                <xed:when test="@xlink:href">
-                  <xed:include uri="webapp:import-editor.xed" ref="linked.relatedItem" />
-                  <xed:include uri="webapp:import-genres.xed" ref="host.{$host_intern}.linked" />
-                </xed:when>
-                <xed:otherwise>
-                  <xed:include uri="webapp:import-genres.xed" ref="host.{$host_intern}" />
-                </xed:otherwise>
-              </xed:choose>
-            </xed:bind>
-            <xed:validate xpath="//mods:relatedItem[@type='host']/mods:titleInfo/mods:title" required="true" i18n="ubo.title.validation.host" display="global" />
-          </fieldset>
-        </xed:if>
-
-        <fieldset>
-          <xed:include uri="webapp:import-editor.xed" ref="languages" />    
-          <xed:include uri="webapp:import-editor.xed" ref="topics" />    
-          <xed:include uri="webapp:import-editor.xed" ref="abstract" />    
-        </fieldset>
-        
-      </xed:bind>
-
-      <xed:include uri="webapp:import-editor.xed" ref="cleanup" />
-      <xed:include uri="webapp:import-editor.xed" ref="cancel.submit" />
-      
-    </xed:bind>
-    
-  </xed:form>
-  
-   </article>
+	  <xed:include uri="webapp:import-editor.xed" ref="cleanup" />
+	  <xed:include uri="webapp:import-editor.xed" ref="cancel.submit" />
+	  
+	</xed:bind>
+	
+      </xed:form>
+    </div>
+  </article>
 </webpage>

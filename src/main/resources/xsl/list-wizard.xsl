@@ -53,35 +53,37 @@
     <xsl:apply-templates select="sort-by/field" />
   </xsl:variable>
 
-  <article class="highlight2">
-    <hgroup>
-      <h2>
-        <xsl:value-of select="i18n:translate('listWizard.title')" />
-      </h2>
-    </hgroup>
-    <p>
-      <xsl:apply-templates select="mods:name" mode="display" />
-      <xsl:apply-templates select="tag" mode="display" />
-    </p>
-    <p>
-      <xsl:value-of select="i18n:translate('listWizard.link')" />
-      <xsl:text>:</xsl:text>
-      <br/>
-      <a href="{$url}">
-        <xsl:value-of select="$url" />
-      </a>
-    </p>
-    <xsl:if test="format='html'">
+  <article class="card">
+    <div class="card-body">
+      <hgroup>
+	<h2>
+          <xsl:value-of select="i18n:translate('listWizard.title')" />
+	</h2>
+      </hgroup>
       <p>
-        Über einen iframe können Sie diese Publikationsliste auch direkt in Ihre eigene Webseite einbetten, statt nur darauf zu verlinken. 
-        Fügen Sie dazu in Ihre Webseite z. B. das folgende Element ein:
+	<xsl:apply-templates select="mods:name" mode="display" />
+	<xsl:apply-templates select="tag" mode="display" />
       </p>
-      <code>
-        &lt;iframe scrolling="yes" width="90%" height="300" <br/>
-        src="<xsl:value-of select="$url" />" /&gt;
-      </code>
-      <iframe style="display:block; margin-top:2ex;" scrolling="yes" width="90%" height="300" src="{$url}" />
-    </xsl:if>
+      <p>
+	<xsl:value-of select="i18n:translate('listWizard.link')" />
+	<xsl:text>:</xsl:text>
+	<br/>
+	<a href="{$url}">
+          <xsl:value-of select="$url" />
+	</a>
+      </p>
+      <xsl:if test="format='html'">
+	<p>
+          Über einen iframe können Sie diese Publikationsliste auch direkt in Ihre eigene Webseite einbetten, statt nur darauf zu verlinken. 
+          Fügen Sie dazu in Ihre Webseite z. B. das folgende Element ein:
+	</p>
+	<code>
+          &lt;iframe scrolling="yes" width="90%" height="300" <br/>
+          src="<xsl:value-of select="$url" />" /&gt;
+	</code>
+	<iframe style="display:block; margin-top:2ex;" scrolling="yes" width="90%" height="300" src="{$url}" />
+      </xsl:if>
+    </div>
   </article>
   
 </xsl:template>

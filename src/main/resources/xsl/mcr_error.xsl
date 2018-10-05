@@ -18,38 +18,42 @@
 
   <!-- MCRServlet.generateErrorMessage() was called -->
   <xsl:template match="mcr_error">
-    <div class="section" id="sectionlast">
-      <p>
-        <xsl:value-of select="concat(i18n:translate('error.intro'),' :')" />
-      </p>
-      <pre style="padding-left:3ex;">
-        <xsl:value-of select="text()" />
-      </pre>
-      <xsl:choose>
-        <xsl:when test="exception">
-          <xsl:apply-templates select="exception" />
-        </xsl:when>
-        <xsl:otherwise>
-          <p>
-            <xsl:value-of select="i18n:translate('error.noInfo')" />
-          </p>
-        </xsl:otherwise>
-      </xsl:choose>
+    <div class="section card" id="sectionlast">
+      <div class="card-body">
+	<p>
+          <xsl:value-of select="concat(i18n:translate('error.intro'),' :')" />
+	</p>
+	<pre style="padding-left:3ex;">
+          <xsl:value-of select="text()" />
+	</pre>
+	<xsl:choose>
+          <xsl:when test="exception">
+            <xsl:apply-templates select="exception" />
+          </xsl:when>
+          <xsl:otherwise>
+            <p>
+              <xsl:value-of select="i18n:translate('error.noInfo')" />
+            </p>
+          </xsl:otherwise>
+	</xsl:choose>
+      </div>
     </div>
   </xsl:template>
 
   <!-- MCRErrorServlet generated this page -->
   <xsl:template match="mcr_error[@errorServlet]">
-    <div class="section" id="sectionlast">
-      <p>
-        <xsl:call-template name="lf2br">
-          <xsl:with-param name="string" select="text()" />
-        </xsl:call-template>
-      </p>
-      <p>
-        <xsl:value-of select="i18n:translate('error.requestURI',@requestURI)" />
-      </p>
-      <xsl:apply-templates select="exception" />
+    <div class="section card" id="sectionlast">
+      <div class="card-body">
+	<p>
+          <xsl:call-template name="lf2br">
+            <xsl:with-param name="string" select="text()" />
+          </xsl:call-template>
+	</p>
+	<p>
+          <xsl:value-of select="i18n:translate('error.requestURI',@requestURI)" />
+	</p>
+	<xsl:apply-templates select="exception" />
+      </div>
     </div>
   </xsl:template>
 
