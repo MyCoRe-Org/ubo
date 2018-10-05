@@ -7,7 +7,7 @@
   <script type="text/javascript" src="external/jquery-tools-1.2.7/jquery.tools.min.js"></script>
   <script type="text/javascript" src="js/editor.validation.failed.tooltip.js"></script>
      
-  <section class="highlight1" xml:lang="de">  
+  <article class="highlight1" xml:lang="de">  
   <p>
     Die mit <strong>*</strong> gekennzeichneten Felder sind <strong>Pflichtfelder</strong>.
     Durch klicken auf <strong>[+]</strong> können Sie ein <strong>Eingabefeld wiederholen</strong>!
@@ -18,8 +18,8 @@
     im Volltext archivieren und im Sinne des Open Access weltweit frei zugänglich zu machen. Informationen dazu
     finden Sie auf unseren <a href="https://www.uni-due.de/ub/openaccess/">Open Access-Seiten</a>. 
     </p>
-  </section>
-  <section class="highlight1" xml:lang="en">
+  </article>
+  <article class="highlight1" xml:lang="en">
     <p>
     Fields marked with <strong>*</strong>  are <strong>required fields</strong>. 
     By clicking on <strong>[+]</strong> you can repeat an input field!
@@ -31,9 +31,9 @@
     You can find further information on 
     our <a href="https://www.uni-due.de/ub/en/openaccess/">Open Access pages</a>.
     </p>
-  </section>
+  </article>
   
-  <section id="form">
+  <article  class="highlight0" id="form">
   
   <script type="text/javascript" src="external/jquery-ui-1.8.21.custom.min.js"></script>
   <script type="text/javascript" src="external/chosen/chosen.jquery.min.js"></script>
@@ -146,5 +146,5 @@
     
   </xed:form>
   
-   </section>
+   </article>
 </webpage>

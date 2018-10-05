@@ -3,7 +3,7 @@
 <webpage lastModified="$Date: 2015-07-17 10:07:09 +0200 (Fr, 17 Jul 2015) $" id="dozbib.edit.contributors">
   <title xml:lang="de">Personen zuordnen / korrigieren</title>
   <title xml:lang="en">Assign / edit persons</title>
-  <section id="sectionedit">
+  <article  class="highlight0" id="sectionedit">
     <p>
       Um die Autoren oder Herausgeber der Publikationen eindeutig Hochschulangehörigen zuordnen zu können,
       müssen die Namen den Personeneinträgen im Online-Personalverzeichnis der Hochschule (HIS LSF) 
@@ -75,5 +75,5 @@
       </xed:bind>
     </xed:form>
     
-  </section>
+  </article>
 </webpage>

@@ -6,7 +6,7 @@
   <title xml:lang="en">Imprint</title>
 
   <aside id="sidebar">
-    <section class="highlight2">
+    <article class="highlight2">
       <h2>Adresse der Universität Duisburg-Essen</h2>
       <p>
         Campus Duisburg:
@@ -30,8 +30,8 @@
         <br />
         Fax.: 0201 / 183-3536                
       </p>           
-    </section>
-    <section class="highlight2">
+    </article>
+    <article class="highlight2">
       <p>Gesetzliche Vertretung</p>
       <h2>Der Rektor der Universität Duisburg-Essen</h2>
       <p>
@@ -48,26 +48,26 @@
       <br />
       Tel.: +49 201 183 – 0
       </p>
-    </section>
-    <section class="highlight2">
+    </article>
+    <article class="highlight2">
       <h2>Redaktion Universitätsbibliographie</h2>
       <p>
       Die Universitätsbibliographie wird von der Universitätsbibliothek Duisburg-Essen betrieben.
       <br />
       <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a>
       </p>
-    </section>
-    <section class="highlight2">
+    </article>
+    <article class="highlight2">
       <h2>Meldungen über missbräuchliche Nutzungen,</h2>
       <p>
       die von Stationen aus dem IP-Namensbereich uni-due.de, uni-duisburg-essen.de, uni-duisburg.de und uni-essen.de ausgehen, senden Sie bitte an die Email-Adresse:
       <br />
       <a href="mailto:abuse@uni-due.de"> abuse@uni-due.de</a>
       </p>
-    </section>
+    </article>
   </aside>
   
-  <section>
+  <article>
     <h2>Impressum</h2>
     <p>
     Die Universität Duisburg-Essen (UDE) ist eine vom Land Nordrhein-Westfalen getragene, rechtsfähige Körperschaft des öffentlichen Rechts. 
@@ -135,6 +135,6 @@
     <a href="http://ec.europa.eu/consumers/odr/"> http://ec.europa.eu/consumers/odr/</a>
     </p>
     
-  </section>
+  </article>
 
 </webpage>

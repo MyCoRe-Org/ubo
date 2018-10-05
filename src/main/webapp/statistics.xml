@@ -9,44 +9,44 @@
   <script src="webjars/github-com-highcharts-highcharts/4.2.5/lib/themes/grid.js" type="text/javascript"></script>
   <div id="chartDialog" />
 
-  <section class="highlight1" xml:lang="de">
+  <article class="highlight1" xml:lang="de">
     <h3>Hinweis:</h3>
     <p>
       Diese Statistiken werden <strong>live</strong> über den gesamten Datenbestand gebildet. 
       Alternativ können Sie auch beliebige Suchergebnisse aus der Trefferliste heraus statistisch darstellen.
       Zur Vergrößerung in einen leeren Bereich des jeweiligen Charts klicken!
     </p>
-  </section>
-  <section class="highlight1" xml:lang="en">
+  </article>
+  <article class="highlight1" xml:lang="en">
     <h3>Notice:</h3>
     <p>
       These statistics are built <strong>live</strong> for all publications listed here. 
       Alternatively, you can also display statistics for any search results, right from the result list.
       To enlarge, click on an empty area within the chart!
     </p>
-  </section>
+  </article>
 
   <xinclude uri="xslStyle:statistics:solr:q=status:confirmed+year:[1980+TO+*]&amp;rows=0&amp;facet.field=year" />
   <xinclude uri="xslStyle:statistics:solr:q=status:confirmed&amp;rows=0&amp;facet.field=subject" />
   <xinclude uri="xslStyle:statistics:solr:q=status:confirmed&amp;rows=0&amp;facet.field=genre" />
   <xinclude uri="xslStyle:statistics:solr:q=status:confirmed&amp;rows=0&amp;facet.field=oa" />
 
-  <section class="highlight2" xml:lang="de">
+  <article class="highlight2" xml:lang="de">
     <h3>Am häufigsten verzeichnete Personen (nur mit UDE LSF Zuordnung, Top 50, in Publikationen ab 2012):</h3>
     <xinclude uri="xslStyle:statistics:solr:q=status:confirmed+year:[2012+TO+*]&amp;rows=0&amp;facet.field=nid_lsf&amp;facet.limit=50" />
-  </section>
-  <section class="highlight2" xml:lang="en">
+  </article>
+  <article class="highlight2" xml:lang="en">
     <h3>Most frequently listed staff (University members only that are linked to HIS LSF, top 50, in publications from 2012):</h3>
     <xinclude uri="xslStyle:statistics:solr:q=status:confirmed+year:[2012+TO+*]&amp;rows=0&amp;facet.field=nid_lsf&amp;facet.limit=50" />
-  </section>
+  </article>
 
-  <section class="highlight2" xml:lang="de">
+  <article class="highlight2" xml:lang="de">
     <h3>In Publikationen verwendete Autoren-Identifikatoren:</h3>
     <xinclude uri="xslStyle:statistics:solr:q=objectKind:name&amp;rows=0&amp;facet.pivot=name_id_type,name_id_type" />
-  </section>
-  <section class="highlight2" xml:lang="en">
+  </article>
+  <article class="highlight2" xml:lang="en">
     <h3>Author identifier schemes used in publications:</h3>
     <xinclude uri="xslStyle:statistics:solr:q=objectKind:name&amp;rows=0&amp;facet.pivot=name_id_type,name_id_type" />
-  </section>
+  </article>
 
  </webpage>

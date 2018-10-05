@@ -170,7 +170,7 @@
     
       <xsl:choose>
         <xsl:when test="$allowed.to.see.this.page = 'true'">
-          <xsl:copy-of select="body/*[not(@id='sidebar')]" />
+          <xsl:copy-of select="body/*[not(@id='sidebar')][not(@id='breadcrumb')]" />
         </xsl:when>
         <xsl:otherwise>
           <h3>
@@ -260,31 +260,27 @@
 
   <!-- Brotkrumen-Navigation -->
 
-  <xsl:variable name="breadcrumb.extensions" />
-  <xsl:variable name="breadcrumb" />
-
   <xsl:template name="layout.breadcrumbPath">
+    <span>
+      <a href="https://www.uni-due.de/ub/">
+        <xsl:value-of select="i18n:translate('navigation.UB')" />
+      </a>
+    </span>
+    <span>
+      <a href="{$WebApplicationBaseURL}">
+        <xsl:value-of select="i18n:translate('navigation.Home')" />
+      </a>
+    </span>
+
+    <xsl:apply-templates mode="breadcrumb"
+      select="$CurrentItem/ancestor-or-self::item[@label|label][ancestor-or-self::*=$navigation.tree[@role='main']]" />
+
+    <xsl:for-each select="body/ul[@id='breadcrumb']/li">
       <span>
-        <a href="https://www.uni-due.de/ub/">
-          <xsl:value-of select="i18n:translate('navigation.UB')" />
-        </a>
+        <xsl:copy-of select="node()" />
       </span>
-      <span>
-        <a href="{$WebApplicationBaseURL}">
-          <xsl:value-of select="i18n:translate('navigation.Home')" />
-        </a>
-      </span>
+    </xsl:for-each>
 
-      <xsl:apply-templates mode="breadcrumb"
-        select="$CurrentItem/ancestor-or-self::item[@label|label][ancestor-or-self::*=$navigation.tree[@role='main']]" />
-
-      <xsl:apply-templates mode="breadcrumb" select="xalan:nodeset($breadcrumb.extensions)/item" />
-
-      <xsl:if test="string-length($breadcrumb) > 0">
-        <span>
-          <xsl:value-of select="$breadcrumb" />
-        </span>
-      </xsl:if>
   </xsl:template>
 
   <xsl:template match="item" mode="breadcrumb">

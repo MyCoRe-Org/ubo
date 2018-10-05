@@ -4,7 +4,7 @@
   <title xml:lang="de">Anmelden</title>
   <title xml:lang="en">Login</title>
 
-  <section class="highlight2">
+  <article class="highlight2">
 
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form" style="margin:0; padding:0;">
       <xed:cancel url="{$cancel}" />
@@ -63,5 +63,5 @@
 
       </xed:bind>
     </xed:form>
-  </section>
+  </article>
 </webpage>

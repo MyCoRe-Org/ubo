@@ -4,7 +4,7 @@
  <title xml:lang="de">Kontakt - Universitätsbibliographie</title>
  <title xml:lang="en">Contact - University Bibliography</title>
  
- <section class="highlight1" xml:lang="de"><h3>Kontakt</h3>
+ <article class="highlight1" xml:lang="de"><h3>Kontakt</h3>
     <p>
     Haben Sie Fragen zur Universitätsbibliographie oder benötigen Hilfe oder Beratung, melden Sie sich bei uns:     
     </p>
@@ -13,9 +13,9 @@
     <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a><br/>
     Tel.: 0201 / 183-3728 <br/>      
     </p>
-  </section>
+  </article>
 
-  <section class="highlight1" xml:lang="en">   
+  <article class="highlight1" xml:lang="en">   
     <h3>Contact</h3> 
     <p>
     If you have questions to the university library, or need advice or consultation, please contact us: 
@@ -25,7 +25,7 @@
     <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a><br/>
     Phone: 0201 / 183-3728 <br/>      
     </p>
-  </section>
+  </article>
      
     
 </webpage>

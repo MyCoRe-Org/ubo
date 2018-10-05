@@ -4,7 +4,7 @@
   <title xml:lang="de">Publikationstyp wählen</title>
   <title xml:lang="en">Choose publication type</title>
   
-  <section class="highlight2">
+  <article class="highlight2">
     <xed:form class="ubo-form" role="form" xmlns:xed="http://www.mycore.de/xeditor">
     
       <xed:source uri="session:ubo.submission" />
@@ -135,6 +135,6 @@
       <xed:cleanup-rule xpath="//mods:relatedItem" relevant-if="not(mods:genre[@type='intern']='standalone')" />
       
     </xed:form>
-  </section>
+  </article>
     
 </webpage>

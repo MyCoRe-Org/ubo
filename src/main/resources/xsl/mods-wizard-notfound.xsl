@@ -27,15 +27,24 @@
       </title>
     </head>
     <body>
+      <xsl:call-template name="breadcrumb" />
       <xsl:apply-templates select="mods:mods" />
     </body>
   </html>
 </xsl:template>
 
-<xsl:variable name="breadcrumb.extensions">
-  <item label="{i18n:translate('ubo.newPublicationWizard')}" href="{$WebApplicationBaseURL}newPublication.xed" />
-  <item label="{i18n:translate('ubo.newPublicationWizard.notFound')}" />
-</xsl:variable>
+<xsl:template name="breadcrumb">
+  <ul id="breadcrumb">
+    <li>
+      <a href="{$WebApplicationBaseURL}newPublication.xed">
+        <xsl:value-of select="i18n:translate('ubo.newPublicationWizard')" />
+      </a>
+    </li>
+    <li>
+      <xsl:value-of select="i18n:translate('ubo.newPublicationWizard.notFound')" />
+    </li>
+  </ul>
+</xsl:template>
 
 <xsl:template match="mods:mods">
   <article class="highlight2">

@@ -8,7 +8,7 @@
   <script type="text/javascript" src="external/jquery-ui-1.8.21.custom.min.js"></script>
   <script type="text/javascript" src="external/chosen/chosen.jquery.min.js"></script>
      
-  <section>
+  <article>
   
     <p>
       Über dieses Formular können Sie eine Literaturliste im
@@ -94,5 +94,5 @@
       jQuery(document).ready(function() { jQuery('select[class*="autocomplete"]').chosen({search_contains: true}); });
     </script>
 
-  </section>
+  </article>
 </webpage>

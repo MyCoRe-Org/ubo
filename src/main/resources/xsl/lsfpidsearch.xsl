@@ -46,15 +46,18 @@
       </script>
     </head>
     <body>
+      <xsl:call-template name="breadcrumb" />
       <xsl:apply-templates select="lsfpidsearch" />
     </body>
   </html>
 </xsl:template>
 
 <!--  navigation  -->
-<xsl:variable name="breadcrumb.extensions">
-  <item label="Suche in HIS LSF" />
-</xsl:variable>
+<xsl:template name="breadcrumb">
+  <ul id="breadcrumb">
+    <li>Suche in HIS LSF</li>
+  </ul>
+</xsl:template>
 
 <xsl:variable name="qm">'</xsl:variable>
 <xsl:variable name="xpathLSF"    select="encoder:encode(concat('mods:nameIdentifier[@type=',$qm,'lsf',$qm,']'),'UTF-8')" />

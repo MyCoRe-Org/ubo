@@ -7,7 +7,7 @@
  <script type="text/javascript" src="/external/jquery-tools-1.2.7/jquery.tools.min.js"></script>
  <script type="text/javascript" src="/js/editor.validation.failed.tooltip.js"></script>
   
- <section class="highlight2">
+ <article class="highlight2">
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form" style="margin:0; padding:0;">
       <fieldset style="margin:0; padding:0;">
         <legend>
@@ -96,9 +96,9 @@
         
       </fieldset>
     </xed:form>
-  </section>
+  </article>
   
-<section xml:lang="de">
+<article class="highlight0" xml:lang="de">
 <p>
   Die folgenden Suchfelder sind verfügbar:
 </p>
@@ -147,9 +147,9 @@
 
 </table>
 </p>
-</section>
+</article>
 
-<section xml:lang="en">
+<article class="highlight0" xml:lang="en">
 <p>
   The following search fields are available:
 </p>
@@ -198,6 +198,6 @@
 
 </table>
 </p>
-</section>
+</article>
 
 </webpage>

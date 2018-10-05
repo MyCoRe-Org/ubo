@@ -4,7 +4,7 @@
  <title xml:lang="de">Willkommen bei der Universitätsbibliographie der UDE</title>
  <title xml:lang="en">Welcome to Bibliography of UDE</title>
  
- <section class="highlight1" xml:lang="de">  
+ <article class="highlight1" xml:lang="de">  
    <h3>Die Universitätsbibliographie</h3>
     <p>
       ist der zentrale Publikationsnachweis der Universität Duisburg-Essen, der online die Publikationstätigkeit der Hochschulangehörigen verzeichnet.
@@ -16,8 +16,8 @@
       Helfen Sie uns bei der Vervollständigung!<br/>
       <a href="../newPublication.xed">Hier können Sie Ihre Publikation an die Universitätsbibliographie melden</a>
     </p>
-  </section>
-  <section class="highlight1" xml:lang="en">   
+  </article>
+  <article class="highlight1" xml:lang="en">   
     <h3>The University Bibliography</h3> 
     <p>
       is the central resource of Duisburg-Essen University that lists all publication activities of the university members.
@@ -30,7 +30,7 @@
       Help us to complete the bibliography!<br/>
       <a href="../newPublication.xed">Here you can register your own publication</a>
     </p>
-  </section>
+  </article>
 
   <article class="highlight2">
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form" style="margin:0; padding:0;">
@@ -76,7 +76,7 @@
     <xinclude uri="xslStyle:response-sidebar-admin:solr:q=*:*&amp;rows=0&amp;facet=true&amp;facet.field=status&amp;facet.mincount=0&amp;facet.range=created&amp;facet.range=modified&amp;facet.range.start=NOW/DAY-30DAY&amp;facet.range.end=NOW&amp;facet.range.gap=%2B1DAY" />
     <xinclude uri="xslStyle:response-sidebar-admin:solr:q=status:imported+AND+importID:*&amp;rows=0&amp;facet=true&amp;facet.sort=index&amp;facet.limit=-1&amp;facet.field=importID" />
  
-    <section class="highlight1" xml:lang="de">
+    <article class="highlight1" xml:lang="de">
       <hgroup>
         <h2>Kontakt:</h2>
       </hgroup>
@@ -89,8 +89,8 @@
         Universitätsbibliothek<br/>
         Tel.: 0201 / 183-3728
       </p>
-    </section>
-    <section class="highlight1" xml:lang="en">
+    </article>
+    <article class="highlight1" xml:lang="en">
       <hgroup>
         <h2>Contact:</h2>
       </hgroup>
@@ -103,7 +103,7 @@
         University library<br/>
         Phone: 0201 / 183-3728
       </p>
-    </section>
+    </article>
   </aside>
     
 </webpage>

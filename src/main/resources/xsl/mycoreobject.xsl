@@ -63,10 +63,18 @@
 
 <!-- ========== Navigation ========== -->
 
-<xsl:variable name="breadcrumb.extensions">
-  <item label="{i18n:translate('result.dozbib.results')}" />
-  <item label="{i18n:translate('result.dozbib.entry')} {number(substring-after(/mycoreobject/@ID,'ubo_mods_'))}" />
-</xsl:variable>
+<xsl:template name="breadcrumb">
+  <ul id="breadcrumb">
+    <li>
+      <xsl:value-of select="i18n:translate('result.dozbib.results')" />
+    </li>
+    <li>
+      <xsl:value-of select="i18n:translate('result.dozbib.entry')" />
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="number(substring-after(/mycoreobject/@ID,'ubo_mods_'))" />
+    </li>
+  </ul>
+</xsl:template>
 
 <!-- ============ Aktionen ============ -->
 
@@ -115,6 +123,7 @@
       <xsl:call-template name="page.title" />
     </head>
     <body>
+      <xsl:call-template name="breadcrumb" />
       <xsl:call-template name="actions" />
       <xsl:apply-templates select="mycoreobject" />
     </body>

@@ -7,7 +7,7 @@
   <script type="text/javascript" src="external/jquery-tools-1.2.7/jquery.tools.min.js"></script>
   <script type="text/javascript" src="js/editor.validation.failed.tooltip.js"></script>
      
-  <section>
+  <article>
     <script type="text/javascript" src="external/jquery-ui-1.8.21.custom.min.js"></script>
     <script type="text/javascript" src="external/chosen/chosen.jquery.min.js"></script>
 
@@ -106,6 +106,6 @@
         
       </xed:bind>
     </xed:form>
-  </section>
+  </article>
     
 </webpage>

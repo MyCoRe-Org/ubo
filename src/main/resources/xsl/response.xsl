@@ -20,10 +20,6 @@
 
 <xsl:param name="RequestURL" />
 
-<xsl:variable name="breadcrumb.extensions">
-  <item label="{i18n:translate('result.dozbib.results')}" />
-</xsl:variable>
-
 <!-- ==================== Trefferliste Metadaten ==================== -->
 
 <xsl:variable name="numFound" select="/response/result[@name='response']/@numFound" />
@@ -102,6 +98,14 @@
 
 <!-- ==================== Anzeige Trefferliste ==================== -->
 
+<xsl:template name="breadcrumb">
+  <ul id="breadcrumb">
+    <li>
+      <xsl:value-of select="i18n:translate('result.dozbib.results')" />
+    </li>
+  </ul>
+</xsl:template>
+
 <xsl:template match="/">
   <html id="dozbib.search">
     <head>
@@ -110,6 +114,7 @@
       <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
     </head>
     <body>
+      <xsl:call-template name="breadcrumb" />
       <xsl:call-template name="exportLinks" />
       <xsl:apply-templates select="response" />
       <aside id="sidebar">

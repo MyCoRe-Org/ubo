@@ -4,22 +4,25 @@
  <title xml:lang="de">Persönliche Publikationsliste erstellen</title>
  <title xml:lang="en">Build your personal publication list</title>
 
-  <section xml:lang="de" class="highlight1" title="Publikationslisten in Imperia">
+  <article xml:lang="de" class="highlight1">
+    <h3>Publikationslisten in Imperia</h3>
     <p>
       In UDE-Webseiten, die mit dem Content-Management-System 
       <a href="https://www.uni-due.de/zim/services/cms/" target="_blank">Imperia</a> erstellt sind, kann ganz einfach durch 
       Aktivierung des <strong>Moduls "Mitarbeiter-Publikationsliste"</strong> eine Publikationsliste eingebunden werden. 
     </p>
-  </section>
-  <section xml:lang="en" class="highlight1" title="Publication list in Imperia">
+  </article>
+  <article xml:lang="en" class="highlight1">
+    <h3>Publication list in Imperia</h3>
     <p>
       On webpages of UDE which are built using the content management system 
       <a href="https://www.uni-due.de/zim/services/cms/" target="_blank">Imperia</a>, you can easily activate  
       the <strong>Imperia module "Mitarbeiter-Publikationsliste"</strong> to integrate your personal publication list on any webpage. 
     </p>
-  </section>
+  </article>
 
-  <section xml:lang="de" class="highlight2" title="Persönliche Publikationsliste erstellen">
+  <article xml:lang="de" class="highlight2">
+    <h3>Persönliche Publikationsliste erstellen</h3>
     <p>
       Alternativ können Sie über das folgende Formular persönliche Publikationslisten direkt aus der Universitätsbibliographie erstellen und 
       in verschiedenen Formaten verlinken oder ausgeben. Voraussetzung ist, dass die Publikationen mit Ihrer HIS LSF Personen-ID verknüpft sind.
@@ -27,8 +30,9 @@
       Falls Einträge korrigiert werden müssen, <a href="contact.xml">sprechen Sie uns an.</a>
       Sie können auch Publikationen über vergebene "Tags" auswählen.   
     </p>
-  </section>
-  <section xml:lang="en" class="highlight2" title="Create personal publication list">
+  </article>
+  <article xml:lang="en" class="highlight2">
+    <h3>Create personal publication list</h3>
     <p>
       Alternatively, you can use the following form to create your personal publication list directly from university bibliography data to  
       link it or output it in various formats. This requires that the publications are linked with your own HIS LSF person ID.
@@ -36,9 +40,9 @@
       in case entries have to be corrected, <a href="contact.xml">contact us.</a>
       You can also choose publications by "tags". 
     </p>
-  </section>
+  </article>
   
-  <section class="highlight2">
+  <article class="highlight2">
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form" style="margin:0; padding:0;">
       <xed:bind xpath="/list-wizard">
       
@@ -164,6 +168,6 @@
         
       </xed:bind>
     </xed:form>
-  </section>
+  </article>
 
 </webpage>

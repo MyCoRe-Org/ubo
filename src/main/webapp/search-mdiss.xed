@@ -4,25 +4,25 @@
   <title xml:lang="de">Suche nach Dissertationen der medizinischen Fakultätt</title>
   <title xml:lang="en">Search for doctoral thesis in medical faculty</title>
 
-  <section xml:lang="de">
+  <article class="highlight0" xml:lang="de">
     <p>
       Hierkönnen Sie nach Dissertationen suchen, die in der medizinischen Fakultät
       geschrieben wurden. Die Suche basiert auf den Einträgen
       der Universitätsbibliographie, daher werden sowohl elektronische Dissertationen 
       mit Volltext, als auch herkömmliche Publikationen als reine Nachweise gefunden.  
     </p>
-  </section>
+  </article>
 
-  <section xml:lang="en">
+  <article class="highlight0" xml:lang="en">
     <p>
       Here you can search for thesis papers, written at the medical faculty. 
       The search is based on the entries in the
       university bibliography, therefore electronic dissertations including full text
       online as well as ordinary publications as reference are found.  
     </p>
-  </section>
+  </article>
 
-  <section class="highlight2">
+  <article class="highlight2">
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form" style="margin:0; padding:0;">
       <fieldset style="margin:0; padding:0;">
         <legend>
@@ -78,5 +78,5 @@
       <xed:cleanup-rule xpath="//*[@field]" relevant-if="string-length(@value) &gt; 0" />
       
     </xed:form>
-  </section>
+  </article>
 </webpage>
