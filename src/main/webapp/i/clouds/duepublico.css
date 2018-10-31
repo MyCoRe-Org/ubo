@@ -1788,11 +1788,12 @@ div.duplicates .label-info {
     color: white;
     display: inline-block;
     font-weight: normal;
-    line-height: 1.5ex;
+    line-height: 1ex;
     padding:0.5ex;
-    margin-left: 0.5ex;
+    margin-left: 0.3ex;
     margin-right: 0.2ex;
-    vertical-align: middle;
+    vertical-align: 1ex;
+    font-size: 70%;
 }
 
 .nameIdentifier a {
@@ -1801,17 +1802,21 @@ div.duplicates .label-info {
 }
 
 .personalName {
+	display: inline-block;
 	white-space:nowrap;
+	margin-right:1.3ex;
+    line-height:3.3ex;
 }
 
-.hasNameIdentifier {
-    box-sizing: border-box;
-    border-radius: 0.25em;
-    border:1px solid rgb(0,76,147);
-    margin:0.2ex;
-    padding:0.3ex;
-    line-height:3.5ex;
-    cursor:pointer;
+.personalName a {
+	cursor:pointer;
+}
+
+img.orcid {
+	width: 2.4ex;
+	height: 2.4ex;
+	padding: 0 0.6ex 0 0.6ex;
+	vertical-align: middle;
 }
 
 .ubo_details .grid_3, .ubo_details .grid_9 {

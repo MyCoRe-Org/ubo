@@ -15,6 +15,7 @@
 <xsl:param name="ServletsBaseURL" />
 <xsl:param name="UBO.LSF.Link" />
 <xsl:param name="UBO.Scopus.Author.Link" />
+<xsl:param name="MCR.ORCID.LinkURL" />
 
 <xsl:template match="/">
   <html id="profile">
@@ -59,7 +60,7 @@
     </p>
     <p>
       Helfen Sie uns bei der korrekten Zuordnung Ihrer Publikationen!<br/>
-      Verknüpfen Sie Ihre Benutzerkennung mit Ihrer ORCID iD, damit wir 
+      Verknüpfen Sie Ihre Benutzerkennung mit Ihrer ORCID® iD, damit wir 
       Ihre Publikationslisten synchronisieren können:<br/>
       <a href="https://www.uni-due.de/ub/publikationsdienste/orcid.php">Mehr zu den Vorteilen von ORCID und Autoren-Identifikatoren...</a>
     </p>
@@ -125,9 +126,10 @@
 
 <xsl:template name="oauth_link">
   <span class="glyphicon glyphicon-hand-right" aria-hidden="true" style="margin-right:1ex;" />
-  <strong>ORCID iD verknüpfen und viele Vorteile nutzen:</strong><br/>
-  <a href="{$WebApplicationBaseURL}orcid">Melden Sie sich mit Ihrer ORCID iD an und autorisieren Sie die UB Duisburg-Essen,</a>
-  auf Ihr ORCID Profil zuzugreifen. Wir können dann
+  <strong>ORCID® iD verknüpfen und viele Vorteile nutzen:</strong><br/>
+  <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid" />
+  <a href="{$WebApplicationBaseURL}orcid">Registrieren oder verknüpfen Sie Ihre ORCID iD</a> 
+  und autorisieren Sie die UB Duisburg-Essen, auf Ihr ORCID Profil zuzugreifen. Wir können dann
   <ul style="margin-top:1ex;">
     <li>
       Publikationsdaten aus Ihrem ORCID Profil importieren und regelmäßig mit der Universitätsbibliographie synchronisieren. 
@@ -145,9 +147,9 @@
     <th style="width:30%; text-align:right" scope="row">Ihre ORCID iD:</th>
     <td>
       <p>
-        <xsl:variable name="url" select="concat('https://sandbox.orcid.org/',@value)" />
+        <xsl:variable name="url" select="concat($MCR.ORCID.LinkURL,@value)" />
         <a href="{$url}">
-          <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" style="width:2.5ex; height:2.5ex; margin-right:1ex" />
+          <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid" />
           <xsl:value-of select="$url" />
         </a>
       </p>
