@@ -1819,6 +1819,37 @@ img.orcid {
 	vertical-align: middle;
 }
 
+a.orcidAuthLink {
+	display:inline-block;
+    margin-bottom:1ex;
+    cursor:pointer;
+    border: 1px solid #d3d3d3;
+    -moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;    
+    padding: .3em;
+    background-color: #fff;
+    box-shadow: 1px 1px 3px #999;
+    color: #999;
+    font-weight: bold;
+    line-height: 2em;
+    vertical-align: middle;
+}
+
+table.userProfile {
+	width: 100%;
+	margin-bottom: 0;
+}
+
+table.userProfile tr {
+	line-height: 1.7em;
+}
+
+table.userProfile tr th {
+	width:30%;
+	text-align:right;
+}
+
 .ubo_details .grid_3, .ubo_details .grid_9 {
   margin-bottom:0.35ex;	
 }
