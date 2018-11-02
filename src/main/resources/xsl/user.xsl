@@ -231,7 +231,7 @@
     </h3>
     <ul>
       <xsl:call-template name="numPublicationsUBO" />
-      <xsl:apply-templates select="attributes/attribute[@name='id_orcid']" mode="publications" />
+      <xsl:apply-templates select="attributes[attribute[@name='token_orcid']]/attribute[@name='id_orcid']" mode="publications" />
     </ul>
   </article>
 </xsl:template>
