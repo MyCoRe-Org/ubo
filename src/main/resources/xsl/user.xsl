@@ -95,7 +95,7 @@
     <td>
       <xsl:variable name="url" select="concat($MCR.ORCID.LinkURL,@value)" />
       <a href="{$url}">
-        <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid" />
+        <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
         <xsl:value-of select="$url" />
       </a>
     </td>
@@ -219,7 +219,7 @@
 
 <xsl:template name="orcidOAuthLink">
   <a href="{$WebApplicationBaseURL}orcid" class="orcidAuthLink">
-    <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid" />
+    <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
     <xsl:value-of select="i18n:translate('orcid.oauth.link')" />
   </a>
 </xsl:template>

@@ -320,7 +320,7 @@
   <xsl:template match="mods:nameIdentifier[@type='orcid']">
     <xsl:variable name="url" select="concat($MCR.ORCID.LinkURL,text())" />
     <a href="{$url}">
-      <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid" />
+      <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
       <xsl:value-of select="$url" />
     </a>
   </xsl:template>

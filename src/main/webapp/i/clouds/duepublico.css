@@ -1812,13 +1812,6 @@ div.duplicates .label-info {
 	cursor:pointer;
 }
 
-img.orcid {
-	width: 2.4ex;
-	height: 2.4ex;
-	padding: 0 0.6ex 0 0.6ex;
-	vertical-align: middle;
-}
-
 a.orcidAuthLink {
 	display:inline-block;
     margin-bottom:1ex;
@@ -2011,12 +2004,6 @@ div.orcid-status, div.orcid-publish {
 	vertical-align: top;
 }
 
-img.orcid-icon {
-	width: 2.5ex;
-	height: 2.5ex;
-	margin-right: 1ex
-}
-
 span.orcid-info {
     box-sizing: border-box;
     background-color: rgb(239,228,191);
@@ -2042,11 +2029,18 @@ span.orcid-in-profile-false {
 	top: 3px;
 }
 
+img.orcid-icon {
+	width: 2.4ex;
+	height: 2.4ex;
+	padding: 0 0.6ex 0 0.6ex;
+	vertical-align: middle;
+}
+
 button.orcid-button {
-    padding: 4px 7px 4px 7px;
+    padding: 2px 7px 3px 7px;
     margin-top: 0;
 	font-weight: normal;
-	background-image: linear-gradient(top, rgb(0, 114, 156), rgb(1, 70, 139));
+	line-height: 15px;
 	background-image: -o-linear-gradient(top, rgb(0, 114, 156), rgb(1, 70, 139));
 	background-image: -moz-linear-gradient(top, rgb(0, 114, 156), rgb(1, 70, 139));
 	background-image: -webkit-linear-gradient(top, rgb(0, 114, 156), rgb(1, 70, 139));

@@ -57,6 +57,8 @@
       <link rel="shortcut icon" href="{$WebApplicationBaseURL}images/favicon.ico" />
       
       <script type="text/javascript">var webApplicationBaseURL = '<xsl:value-of select="$WebApplicationBaseURL" />';</script>
+      <script type="text/javascript">var currentLang = '<xsl:value-of select="$CurrentLang" />';</script>
+
       <script type="text/javascript" src="{$WebApplicationBaseURL}external/jquery-1.7.min.js"></script>
       <script type="text/javascript"> jQuery.noConflict(); </script>
       <script type="text/javascript" src="{$WebApplicationBaseURL}external/html5shiv-3.5/html5shiv.js"></script>
@@ -397,7 +399,7 @@
     <xsl:if test="$trustedParty = 'true'">
       <xsl:variable name="orcid" select="orcidUser:getORCID($orcidUser)" xmlns:orcidUser="xalan://org.mycore.orcid.user.MCRORCIDUser" />
       <a href="{$MCR.ORCID.LinkURL}{$orcid}">
-        <img alt="ORCID {$orcid}" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid" />
+        <img alt="ORCID {$orcid}" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
       </a>
     </xsl:if>
   </xsl:template>
