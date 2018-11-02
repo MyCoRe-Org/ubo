@@ -133,9 +133,6 @@
 <xsl:template name="orcid">
   <article class="highlight1">
     <xsl:choose>
-      <xsl:when test="string-length($error) &gt; 0">
-        <xsl:call-template name="orcidIntegrationRejected" />
-      </xsl:when>
       <xsl:when test="attributes/attribute[@name='token_orcid']">
         <xsl:call-template name="orcidIntegrationConfirmed" />
       </xsl:when>
@@ -150,29 +147,6 @@
       </a>
     </p>
   </article>
-</xsl:template>
-
-<xsl:template name="orcidIntegrationRejected">
-  <xsl:attribute name="style">background-color:red; color:yellow</xsl:attribute>
-  <h3 style="margin-bottom: 0.5em;">
-    <xsl:value-of select="i18n:translate('orcid.integration.rejected.headline')" />
-  </h3>
-  <p>
-    <xsl:choose>
-      <xsl:when test="$error='access_denied'">
-        <xsl:value-of select="i18n:translate('orcid.integration.rejected.denied')" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="i18n:translate('orcid.integration.rejected.error')" />
-        <xsl:text> :</xsl:text>
-        <xsl:value-of select="$error" />
-      </xsl:otherwise>
-    </xsl:choose>
-  </p>
-  <p>
-    <xsl:value-of select="i18n:translate('orcid.integration.rejected.retry')" />
-  </p>
-  <xsl:call-template name="orcidOAuthLink" />
 </xsl:template>
 
 <xsl:template name="orcidIntegrationConfirmed">
@@ -203,7 +177,25 @@
   <p>
     <xsl:value-of select="i18n:translate('orcid.integration.pending.intro')" />
   </p>
-  <xsl:call-template name="orcidOAuthLink" />
+  <script type="text/javascript">
+    function orcidOAuth() {
+      <!-- Force logout before login -->
+      jQuery.ajax({ 
+        url: '<xsl:value-of select='$MCR.ORCID.LinkURL' />userStatus.json?logUserOut=true', 
+        dataType: 'jsonp',
+        success: function(result,status,xhr) {
+          <!-- Login in popup window --> 
+          window.open("<xsl:value-of select='$WebApplicationBaseURL' />orcid",
+            "_blank", "toolbar=no, scrollbars=yes, width=500, height=600, top=500, left=500");
+        },
+        error: function (xhr, status, error) { alert(status); }
+      });
+    }
+  </script>
+  <button id="orcid-oauth-button" onclick="orcidOAuth();" title="({i18n:translate('orcid.integration.popup.tooltip')})">
+    <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
+    <xsl:value-of select="i18n:translate('orcid.oauth.link')" />
+  </button>
   <p>
     <xsl:value-of select="i18n:translate('orcid.integration.pending.authorize')" />
   </p>
@@ -215,13 +207,6 @@
       <xsl:value-of select="i18n:translate('orcid.integration.publish')" />
     </li>
   </ul>
-</xsl:template>
-
-<xsl:template name="orcidOAuthLink">
-  <a href="{$WebApplicationBaseURL}orcid" class="orcidAuthLink">
-    <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
-    <xsl:value-of select="i18n:translate('orcid.oauth.link')" />
-  </a>
 </xsl:template>
 
 <xsl:template name="publications">

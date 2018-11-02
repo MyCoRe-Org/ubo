@@ -1812,7 +1812,7 @@ div.duplicates .label-info {
 	cursor:pointer;
 }
 
-a.orcidAuthLink {
+button#orcid-oauth-button {
 	display:inline-block;
     margin-bottom:1ex;
     cursor:pointer;
