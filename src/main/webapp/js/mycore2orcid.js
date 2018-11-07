@@ -7,8 +7,10 @@ var orcidI18n;
 
 jQuery(document).ready(function() {
 	var orcidI18nURL = webApplicationBaseURL + "rsc/locale/translate/" + currentLang + "/orcid.publication.*";
-	jQuery.getJSON(orcidI18nURL, function(data) {
-		orcidI18n = data;
+	jQuery.ajax({ async: false, type: 'GET', url: orcidI18nURL, 
+		success: function(data) {
+			orcidI18n = data;
+		}
 	});
 	
 	jQuery('div.orcid-status').each(function() {
@@ -59,16 +61,21 @@ function updateORCIDPublishButton(div, status) {
 		jQuery(div).html(html);
 		jQuery(div).find('.orcid-button').click( function() {
 					div = this;
-					jQuery.get(orcidPublishURL + id, function(newStatus) {
-						alert(orcidI18n['orcid.publication.action.confirmation']);
-						jQuery("div.orcid-status[data-id='" + id + "']").each(
-								function() {
-									setORCIDPublicationStatus(this, newStatus);
-								});
-						jQuery("div.orcid-publish[data-id='" + id + "']").each(
-								function() {
-									updateORCIDPublishButton(this, newStatus);
-								});
+					jQuery.ajax({ async: false, type: 'GET', url: orcidPublishURL + id, 
+						success: function(newStatus) {
+							alert(orcidI18n['orcid.publication.action.confirmation']);
+							jQuery("div.orcid-status[data-id='" + id + "']").each(
+									function() {
+										setORCIDPublicationStatus(this, newStatus);
+									});
+							jQuery("div.orcid-publish[data-id='" + id + "']").each(
+									function() {
+										updateORCIDPublishButton(this, newStatus);
+									});
+						},
+						error: function (xhr, ajaxOptions, thrownError) {
+					        alert(xhr.status + ": " + thrownError );
+					      }
 					});
 				});
 	}
