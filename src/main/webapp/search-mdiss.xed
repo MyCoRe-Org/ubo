@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <webpage lastModified="$Date: 2011-08-03 12:16:35 +0200 (Mi, 03 Aug 2011) $" id="dozbib.search-mdiss">
-  <title xml:lang="de">Suche nach Dissertationen der medizinischen Fakultätt</title>
+  <title xml:lang="de">Suche nach Dissertationen der medizinischen Fakultät</title>
   <title xml:lang="en">Search for doctoral thesis in medical faculty</title>
 
   <article class="highlight0" xml:lang="de">
     <p>
-      Hierkönnen Sie nach Dissertationen suchen, die in der medizinischen Fakultät
+      Hier können Sie nach Dissertationen suchen, die in der medizinischen Fakultät
       geschrieben wurden. Die Suche basiert auf den Einträgen
       der Universitätsbibliographie, daher werden sowohl elektronische Dissertationen 
       mit Volltext, als auch herkömmliche Publikationen als reine Nachweise gefunden.  
