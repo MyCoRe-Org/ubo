@@ -526,7 +526,7 @@
   </xed:template>
 
   <xed:template id="doi.urn.duepublico">
-    <xed:repeat xpath="mods:identifier[contains('doi urn pubmed ieee scopus duepublico',@type)]">
+    <xed:repeat xpath="mods:identifier[contains('doi urn pubmed ieee scopus arxiv duepublico',@type)]">
       <div>
         <xed:bind xpath="@type" default="doi">
           <select class="label" style="margin-left:6px; width:167px;">
@@ -534,6 +534,7 @@
             <option value="urn">URN</option>
             <option value="pubmed">PubMed ID</option>
             <option value="ieee">IEEE ID</option>
+            <option value="arxiv">arXiv.org ID</option>
             <option value="scopus">Scopus ID</option>
             <option value="duepublico">DuEPublico ID</option>
           </select>
@@ -546,7 +547,7 @@
   </xed:template>
 
   <xed:template id="identifier">
-    <xed:repeat xpath="mods:identifier[contains('doi urn hdl pubmed ieee zdb ppn hbz scopus evaluna isi isbn issn duepublico',@type)]">
+    <xed:repeat xpath="mods:identifier[contains('doi urn hdl pubmed ieee arxiv zdb ppn hbz scopus evaluna isi isbn issn duepublico',@type)]">
       <div>
         <xed:bind xpath="@type" default="doi">
           <select class="label" style="margin-left:6px; width:167px;">
@@ -557,6 +558,7 @@
             <option value="issn">ISSN</option>
             <option value="pubmed">PubMed ID</option>
             <option value="ieee">IEEE ID</option>
+            <option value="arxiv">arXiv.org ID</option>
             <option value="zdb">ZDB ID</option>
             <option value="scopus">Scopus ID</option>
             <option value="isi">Web of Science ID</option>

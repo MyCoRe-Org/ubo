@@ -37,6 +37,7 @@
                     <option value="pubmed">PubMed ID</option>
                     <option value="scopus">Scopus ID</option>
                     <option value="ieee">IEEE Article No.</option>
+                    <option value="arxiv">arXiv.org ID</option>
                     <option value="isbn">ISBN</option>
                     <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
                       <option value="duepublico">DuEPublico ID</option>

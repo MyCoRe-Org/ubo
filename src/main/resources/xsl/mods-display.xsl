@@ -815,6 +815,15 @@
     </a>
   </xsl:template>
 
+  <!-- ========== arXiv.org ID ========== -->
+  <xsl:param name="UBO.arXiv.Link" />
+  
+  <xsl:template match="mods:identifier[@type='arxiv']">
+    <a href="{$UBO.arXiv.Link}{text()}">
+      <xsl:value-of select="text()" />
+    </a>
+  </xsl:template>
+
   <!-- ========== Web of Science ID ========== -->
   <xsl:param name="UBO.WebOfScience.Link" />
   
