@@ -290,8 +290,8 @@
               </xsl:attribute>
             </xsl:if>
             <xsl:apply-templates select="." />
-            <xsl:apply-templates select="mods:nameIdentifier[not(@type='orcid')]" />
             <xsl:apply-templates select="mods:nameIdentifier[@type='orcid']" />
+            <xsl:apply-templates select="mods:nameIdentifier[not(@type='orcid')]" />
             <xsl:if test="position() != last()">
               <xsl:text>; </xsl:text>
             </xsl:if>
@@ -319,9 +319,8 @@
   
   <xsl:template match="mods:nameIdentifier[@type='orcid']">
     <xsl:variable name="url" select="concat($MCR.ORCID.LinkURL,text())" />
-    <a href="{$url}">
+    <a href="{$url}" title="ORCID iD: {text()}">
       <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
-      <xsl:value-of select="$url" />
     </a>
   </xsl:template>
 
