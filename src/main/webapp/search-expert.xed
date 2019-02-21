@@ -112,7 +112,7 @@
   <tr class="background1"><td>person</td><td>Name</td><td>Personenname (Autoren, Herausgeber oder andere), mit jeder Rolle kombinierbar (siehe häufigste Beispiele unten) vgl. <a href="rollen.xed">diese Liste</a> </td><td>=, contains, like</td></tr>
   <tr class="background2"><td>person_aut</td><td>Name</td><td>Autor</td><td>=, contains, like</td></tr>
   <tr class="background1"><td>person_edt</td><td>Name</td><td>Herausgeber, Verlag</td><td>=, contains, like</td></tr>
-  <tr class="background2"><td>person_ths</td><td>Name</td><td>Doktorvater, BetreuerIn bei Dissertationen</td><td>=, contains, like</td></tr>  
+  <tr class="background2"><td>person_ths</td><td>Name</td><td>Doktorvater, BetreuerIn bei Dissertationen (Akademische Betreuung)</td><td>=, contains, like</td></tr>  
   <tr class="background1"><td>nid_lsf</td><td>ID</td><td>Personen-ID aus HIS LSF</td><td> =, contains * </td></tr>
   <tr class="background2"><td>ae_lsf</td><td>ID</td><td>Autoren- oder Herausgeber-ID aus HIS LSF</td><td> =, contains * </td></tr>
   <tr class="background1"><td>nid_orcid</td><td>ID</td><td>ORCID</td><td> =, contains *</td></tr>

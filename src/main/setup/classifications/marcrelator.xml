@@ -49,7 +49,7 @@
       <category ID="ths">
         <label xml:lang="en" text="Thesis advisor" description="Use for a person under whose supervision a degree candidate develops and presents a thesis, mémoire, or text of a dissertation. " />
         <label xml:lang="x-miless" text="advisor" />
-        <label xml:lang="de" text="Betreuer(in), Doktorvater" description="Eine Person, unter deren Betreuung ein Kandidat eine Dissertation oder Abschlussarbeit entwickelt und präsentiert." />
+        <label xml:lang="de" text="Akademische Betreuung" description="Eine Person, unter deren Betreuung ein Kandidat eine Dissertation oder Abschlussarbeit entwickelt und präsentiert." />
       </category>
       <category ID="rev">
         <label xml:lang="en" text="Reviewer" description="Use for a person or organization responsible for the review of a book, motion picture, performance, etc." />

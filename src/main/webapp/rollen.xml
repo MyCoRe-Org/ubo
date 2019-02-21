@@ -10,7 +10,7 @@
     <label xml:lang="en">Editor</label>
   </item>
   <item value="ths">
-    <label xml:lang="de">BetreuerIn/Doktorvater</label>
+    <label xml:lang="de">Akademische Betreuung</label>
     <label xml:lang="en">Thesis advisor</label>
   </item>  
   <item value="red">
