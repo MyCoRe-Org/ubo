@@ -40,7 +40,8 @@
                     <option value="arxiv">arXiv.org ID</option>
                     <option value="isbn">ISBN</option>
                     <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
-                      <option value="duepublico">DuEPublico ID</option>
+                      <option value="duepublico">DuEPublico 1 ID</option>
+                      <option value="duepublico2">DuEPublico 2 ID</option>
                       <option value="evaluna">EVALuna Biblio ID</option>
                       <option value="zdb">ZDB ID</option>
                       <option value="ppn">GBV/SWB PPN</option>
@@ -57,6 +58,7 @@
           <xed:validate xpath="//mods:identifier[@type='issn']" matches="[0-9X]{4}\-[0-9X]{4}" i18n="ubo.identifier.issn.validation" display="global" />
           <xed:validate xpath="//mods:identifier[@type='isbn']" matches="^((978|979)-?)?([\d -]{12}|\d{9})(\d|X)$" i18n="ubo.identifier.isbn.validation" display="global" />
           <xed:validate xpath="//mods:identifier[@type='duepublico']" matches="\d+" display="global" />
+          <xed:validate xpath="//mods:identifier[@type='duepublico2']" matches="duepublico_mods_\d\d\d\d\d\d\d\d" display="global" />
 
           <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
             <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
@@ -109,7 +111,7 @@
       <a href="https://www.uni-due.de/ub/abisz/refworks.shtml" target="_blank">RefWorks</a>, 
       BibTeX oder <a href="https://www.uni-due.de/ub/abisz/refworks.shtml" target="_blank">Citavi</a> 
       erstellt haben, können Sie diese Listen gerne bei uns abliefern. Die Daten werden dann von uns in
-      DuEPublico importiert. <br />
+      die Universitätsbibliographie importiert. <br />
       Bitte schicken Sie eine
       E-Mail an: <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a><br/><br />
     </p>
@@ -126,7 +128,7 @@
       of literature management programs such as 
       <a href="https://www.uni-due.de/ub/en/erefworks.shtml" target="_blank">RefWorks</a>, BibTex, or 
       <a href="https://www.uni-due.de/ub/en/ecitavi.shtml" target="_blank">Citavi</a>, you are welcome to 
-      submit these lists to us. We will then import the data into DuEPublico.<br />
+      submit these lists to us. We will then import the data into the university bibliography.<br />
       Please send an e-mail to:
       <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a><br/><br />     
     </p>    

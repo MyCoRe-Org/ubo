@@ -833,8 +833,15 @@
   </xsl:template>
 
   <!-- ========== DuEPublico ID ========== -->
+  
   <xsl:template match="mods:identifier[@type='duepublico']">
-    <a href="http://duepublico.uni-duisburg-essen.de/servlets/DocumentServlet?id={text()}">
+    <a href="https://duepublico.uni-due.de/servlets/DocumentServlet?id={text()}">
+      <xsl:value-of select="text()" />
+    </a>
+  </xsl:template>
+
+  <xsl:template match="mods:identifier[@type='duepublico2']">
+    <a href="https://duepublico2.uni-due.de/receive/{text()}">
       <xsl:value-of select="text()" />
     </a>
   </xsl:template>

@@ -75,7 +75,7 @@
   <xsl:call-template name="copy-and-apply" />
 </xsl:template>
 
-<xsl:template match="mods:identifier[contains('|isbn|issn|doi|urn|pubmed|ieee|arxiv|hdl|zdb|isi|evaluna|ppn|hbz|scopus|duepublico|',concat('|',@type,'|'))]|mods:identifier/@type">
+<xsl:template match="mods:identifier[contains('|isbn|issn|doi|urn|pubmed|ieee|arxiv|hdl|zdb|isi|evaluna|ppn|hbz|scopus|duepublico|duepublico2|',concat('|',@type,'|'))]|mods:identifier/@type">
   <xsl:call-template name="copy-and-apply" />
 </xsl:template>
 

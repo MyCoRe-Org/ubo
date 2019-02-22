@@ -169,7 +169,14 @@
 
   <xsl:template match="mods:identifier[@type='duepublico']" mode="qdc">
     <dc:identifier scheme="dcterms:URI">
-      <xsl:text>http://duepublico.uni-duisburg-essen.de/servlets/DocumentServlet?id=</xsl:text>
+      <xsl:text>https://duepublico.uni-due.de/servlets/DocumentServlet?id=</xsl:text>
+      <xsl:value-of select="text()" />
+    </dc:identifier>
+  </xsl:template>
+ 
+  <xsl:template match="mods:identifier[@type='duepublico2']" mode="qdc">
+    <dc:identifier scheme="dcterms:URI">
+      <xsl:text>https://duepublico2.uni-due.de/receive/</xsl:text>
       <xsl:value-of select="text()" />
     </dc:identifier>
   </xsl:template>

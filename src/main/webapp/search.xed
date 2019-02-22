@@ -106,7 +106,8 @@
                     <option value="id_urn"        >URN:</option>
                     <option value="id_issn"       >ISSN:</option>
                     <option value="id_isbn"       >ISBN:</option>
-                    <option value="id_duepublico" >DuEPublico ID:</option>
+                    <option value="id_duepublico" >DuEPublico 1 ID:</option>
+                    <option value="id_duepublico2">DuEPublico 2 ID:</option>
                     <option value="id_pubmed"     >PubMed ID:</option>
                     <option value="id_scopus"     >Scopus ID:</option>
                     <option value="shelfmark"     >Signatur:</option>
