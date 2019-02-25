@@ -225,11 +225,19 @@
   <xsl:template match="mods:identifier[@type='duepublico']" mode="dc">
     <dc:publisher>Universitätsbibliothek Duisburg-Essen, Dokumenten- und Publikationsserver DuEPublico</dc:publisher>
     <dc:identifier>
-      <xsl:text>http://duepublico.uni-duisburg-essen.de/servlets/DocumentServlet?id=</xsl:text>
+      <xsl:text>https://duepublico.uni-due.de/servlets/DocumentServlet?id=</xsl:text>
       <xsl:value-of select="text()" />
     </dc:identifier>
   </xsl:template>
  
+  <xsl:template match="mods:identifier[@type='duepublico2']" mode="dc">
+    <dc:publisher>Universitätsbibliothek Duisburg-Essen, Dokumenten- und Publikationsserver DuEPublico</dc:publisher>
+    <dc:identifier>
+      <xsl:text>https://duepublico2.uni-due.de/receive/</xsl:text>
+      <xsl:value-of select="text()" />
+    </dc:identifier>
+  </xsl:template>
+
   <xsl:template match="mods:identifier" mode="dc">
     <xsl:value-of select="text()" />
   </xsl:template>

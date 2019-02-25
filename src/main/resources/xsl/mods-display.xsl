@@ -4,11 +4,12 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:xalan="http://xml.apache.org/xalan" 
+  xmlns:check="xalan://unidue.ubo.AccessControl" 
   xmlns:encoder="xalan://java.net.URLEncoder" 
   xmlns:xlink="http://www.w3.org/1999/xlink" 
   xmlns:mcr="http://www.mycore.org/"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  exclude-result-prefixes="xsl xalan xlink i18n encoder mcr">
+  exclude-result-prefixes="xsl xalan xlink i18n encoder mcr check">
   
   <xsl:include href="shelfmark-normalization.xsl" />
   <xsl:include href="output-category.xsl" />
@@ -282,24 +283,19 @@
       </div>
       <div class="grid_9">
         <xsl:for-each select="$list">
-          <span>
-            <xsl:attribute name="class">
-              <xsl:text>personalName</xsl:text>
-              <xsl:if test="mods:nameIdentifier|mods:affiliation">
-                <xsl:text> hasNameIdentifier</xsl:text>
-              </xsl:if>
-            </xsl:attribute>
-            <xsl:if test="mods:affiliation">
+          <span class="personalName">
+            <xsl:if test="mods:affiliation and check:currentUserIsAdmin()">
               <xsl:attribute name="title">
                 <xsl:apply-templates select="mods:affiliation" mode="details" />
               </xsl:attribute>
             </xsl:if>
             <xsl:apply-templates select="." />
-            <xsl:apply-templates select="mods:nameIdentifier" />
+            <xsl:apply-templates select="mods:nameIdentifier[@type='orcid']" />
+            <xsl:apply-templates select="mods:nameIdentifier[not(@type='orcid')]" />
+            <xsl:if test="position() != last()">
+              <xsl:text>; </xsl:text>
+            </xsl:if>
           </span>
-          <xsl:if test="position() != last()">
-            <xsl:text>; </xsl:text>
-          </xsl:if>
         </xsl:for-each>
       </div>
       <div class="clear" />
@@ -319,10 +315,13 @@
     </span>
   </xsl:template>
   
+  <xsl:param name="MCR.ORCID.LinkURL" />
+  
   <xsl:template match="mods:nameIdentifier[@type='orcid']">
-    <span class="nameIdentifier" title="ORCID: {.}">
-      <a href="https://orcid.org/{.}">ORCID</a>
-    </span>
+    <xsl:variable name="url" select="concat($MCR.ORCID.LinkURL,text())" />
+    <a href="{$url}" title="ORCID iD: {text()}">
+      <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
+    </a>
   </xsl:template>
 
   <xsl:template match="mods:nameIdentifier[@type='researcherid']">
@@ -815,6 +814,15 @@
     </a>
   </xsl:template>
 
+  <!-- ========== arXiv.org ID ========== -->
+  <xsl:param name="UBO.arXiv.Link" />
+  
+  <xsl:template match="mods:identifier[@type='arxiv']">
+    <a href="{$UBO.arXiv.Link}{text()}">
+      <xsl:value-of select="text()" />
+    </a>
+  </xsl:template>
+
   <!-- ========== Web of Science ID ========== -->
   <xsl:param name="UBO.WebOfScience.Link" />
   
@@ -825,8 +833,15 @@
   </xsl:template>
 
   <!-- ========== DuEPublico ID ========== -->
+  
   <xsl:template match="mods:identifier[@type='duepublico']">
-    <a href="http://duepublico.uni-duisburg-essen.de/servlets/DocumentServlet?id={text()}">
+    <a href="https://duepublico.uni-due.de/servlets/DocumentServlet?id={text()}">
+      <xsl:value-of select="text()" />
+    </a>
+  </xsl:template>
+
+  <xsl:template match="mods:identifier[@type='duepublico2']">
+    <a href="https://duepublico2.uni-due.de/receive/{text()}">
       <xsl:value-of select="text()" />
     </a>
   </xsl:template>

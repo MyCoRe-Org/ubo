@@ -92,7 +92,7 @@
   </xsl:copy>
 </xsl:template>
 
-<xsl:template match="mods:identifier[@type='duepublico']" mode="copy-mods">
+<xsl:template match="mods:identifier[(@type='duepublico') or (@type='duepublico2')]" mode="copy-mods">
   <xsl:if test="not(../mods:location)">
     <mods:location>
       <xsl:apply-templates select="." mode="duepublico.url" />
@@ -102,15 +102,22 @@
 
 <xsl:template match="mods:identifier[@type='duepublico']" mode="duepublico.url">
   <mods:url access="object in context">
-    <xsl:text>http://duepublico.uni-duisburg-essen.de/servlets/DocumentServlet?id=</xsl:text>
+    <xsl:text>https://duepublico.uni-due.de/servlets/DocumentServlet?id=</xsl:text>
     <xsl:value-of select="." />
   </mods:url>
 </xsl:template>
 
-<xsl:template match="mods:location[../mods:identifier[@type='duepublico']]" mode="copy-mods">
+<xsl:template match="mods:identifier[@type='duepublico2']" mode="duepublico.url">
+  <mods:url access="object in context">
+    <xsl:text>https://duepublico2.uni-due.de/receive/</xsl:text>
+    <xsl:value-of select="." />
+  </mods:url>
+</xsl:template>
+
+<xsl:template match="mods:location[../mods:identifier[(@type='duepublico') or (@type='duepublico2')]]" mode="copy-mods">
   <xsl:copy>
     <xsl:apply-templates select="node()" mode="copy-mods" />
-    <xsl:apply-templates select="../mods:identifier[@type='duepublico']" mode="duepublico.url" />
+    <xsl:apply-templates select="../mods:identifier[(@type='duepublico') or (@type='duepublico2')]" mode="duepublico.url" />
   </xsl:copy>
 </xsl:template>
 

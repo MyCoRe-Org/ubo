@@ -63,7 +63,7 @@
     <java.target.version>1.8</java.target.version>
     <jetty.version>9.4.11.v20180605</jetty.version>
     <log4j.version>2.11.0</log4j.version>
-    <mycore.version>2018.06.0.1-SNAPSHOT</mycore.version>
+    <mycore.version>2018.06.0.2-SNAPSHOT</mycore.version>
     <solr.data.dir>${solr.home}/ubo/data</solr.data.dir>
     <solr.home>${user.home}/AppData/Local/MyCoRe/${MCR.AppName}/data/solr</solr.home>
     <timestamp>${maven.build.timestamp}</timestamp>

@@ -17,6 +17,7 @@
     <xsl:copy>
       <mods:genre type="intern">dissertation</mods:genre>
       <xsl:copy-of select="mods:classification[contains(@valueURI,'classifications/ORIGIN#')]" />
+      <xsl:apply-templates select="mods:name[contains(@authorityURI,'mir_institutes')]" />
       <xsl:apply-templates select="mods:titleInfo" />
       <xsl:apply-templates select="mods:name[@type='personal'][contains('aut ths',mods:role/mods:roleTerm)]" />
       <xsl:apply-templates select="mods:originInfo" />
@@ -28,6 +29,12 @@
       <xsl:copy-of select="mods:abstract" />
       <xsl:call-template name="oa" />
     </xsl:copy>
+  </xsl:template>
+  
+  <xsl:template match="mods:name[contains(@authorityURI,'mir_institutes')]">
+    <xsl:variable name="id" select="substring-after(@valueURI,'#')" />
+    <xsl:variable name="uri">https://bibliographie.ub.uni-due.de/classifications/ORIGIN</xsl:variable>
+    <mods:classification authorityURI="{$uri}" valueURI="{$uri}#{$id}" />
   </xsl:template>
 
   <xsl:template match="mods:titleInfo">
@@ -51,6 +58,9 @@
       <xsl:copy-of select="mods:role" />
       <xsl:copy-of select="mods:namePart" />
       <xsl:apply-templates select="@valueURI" />
+      <xsl:copy-of select="mods:nameIdentifier[@type='lsf']" />
+      <xsl:copy-of select="mods:nameIdentifier[@type='gnd']" />
+      <xsl:copy-of select="mods:nameIdentifier[@type='orcid']" />
     </mods:name>
   </xsl:template>
   
@@ -70,6 +80,9 @@
         <mods:placeTerm type="text">Duisburg, Essen</mods:placeTerm>
       </mods:place>
       <xsl:choose>
+        <xsl:when test="mods:dateIssued">
+          <xsl:copy-of select="mods:dateIssued"  />
+        </xsl:when>
         <xsl:when test="mods:dateCreated">
           <xsl:apply-templates select="mods:dateCreated"  />
         </xsl:when>
@@ -96,12 +109,18 @@
     </mods:note>
   </xsl:template>
   
-  <xsl:template match="@ID">
+  <xsl:template match="@ID[starts-with(.,'miless')]">
     <mods:identifier type="duepublico">
       <xsl:value-of select="number(substring-after(.,'miless_mods_'))" />
     </mods:identifier>
   </xsl:template>
   
+  <xsl:template match="@ID[starts-with(.,'duepublico')]">
+    <mods:identifier type="duepublico2">
+      <xsl:value-of select="." />
+    </mods:identifier>
+  </xsl:template>
+
   <xsl:template match="mods:identifier[@type='doi']">
     <mods:identifier type="doi">
       <xsl:value-of select="substring-after(.,'doi:')" />

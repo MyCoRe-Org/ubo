@@ -22,6 +22,7 @@
     <xed:validate xpath="//mods:identifier[@type='issn']" matches="[0-9X]{4}\-[0-9X]{4}" i18n="ubo.identifier.issn.validation" display="global" />
     <xed:validate xpath="//mods:identifier[@type='isbn']" matches="^((978|979)-?)?([\d -]{12}|\d{9})(\d|X)$" i18n="ubo.identifier.isbn.validation" display="global" />
     <xed:validate xpath="//mods:identifier[@type='duepublico']" matches="\d+" display="global" />
+    <xed:validate xpath="//mods:identifier[@type='duepublico2']" matches="duepublico_mods_\d\d\d\d\d\d\d\d" display="global" />
     <xed:validate xpath="//mods:location/mods:url" matches="(f|ht)tp(s?)://[\w\d.]+\S*" i18n="ubo.link.validation" display="global" />
     <xed:validate xpath="//mods:location/mods:url" matches="^((?!doi.org/10).)*$" i18n="ubo.link.validation.not.doi" display="global" />
     <xed:validate xpath="//mods:location/mods:shelfLocator" matches="([ED]\d\d\/\d\d\s[A-Za-z]+\s\d+.*)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
@@ -526,7 +527,7 @@
   </xed:template>
 
   <xed:template id="doi.urn.duepublico">
-    <xed:repeat xpath="mods:identifier[contains('doi urn pubmed ieee scopus duepublico',@type)]">
+    <xed:repeat xpath="mods:identifier[contains('doi urn pubmed ieee scopus arxiv duepublico duepublico2',@type)]">
       <div>
         <xed:bind xpath="@type" default="doi">
           <select class="label" style="margin-left:6px; width:167px;">
@@ -534,8 +535,10 @@
             <option value="urn">URN</option>
             <option value="pubmed">PubMed ID</option>
             <option value="ieee">IEEE ID</option>
+            <option value="arxiv">arXiv.org ID</option>
             <option value="scopus">Scopus ID</option>
-            <option value="duepublico">DuEPublico ID</option>
+            <option value="duepublico">DuEPublico 1 ID</option>
+            <option value="duepublico2">DuEPublico 2 ID</option>
           </select>
           <span style="display:inline-block; width:auto; margin-right:1ex;">:</span>
         </xed:bind>
@@ -546,7 +549,7 @@
   </xed:template>
 
   <xed:template id="identifier">
-    <xed:repeat xpath="mods:identifier[contains('doi urn hdl pubmed ieee zdb ppn hbz scopus evaluna isi isbn issn duepublico',@type)]">
+    <xed:repeat xpath="mods:identifier[contains('doi urn hdl pubmed ieee arxiv zdb ppn hbz scopus evaluna isi isbn issn duepublico duepublico2',@type)]">
       <div>
         <xed:bind xpath="@type" default="doi">
           <select class="label" style="margin-left:6px; width:167px;">
@@ -557,13 +560,15 @@
             <option value="issn">ISSN</option>
             <option value="pubmed">PubMed ID</option>
             <option value="ieee">IEEE ID</option>
+            <option value="arxiv">arXiv.org ID</option>
             <option value="zdb">ZDB ID</option>
             <option value="scopus">Scopus ID</option>
             <option value="isi">Web of Science ID</option>
             <option value="evaluna">EVALuna ID</option>
             <option value="ppn">GBV PPN</option>
             <option value="hbz">HBZ HT-Nummer</option>
-            <option value="duepublico">DuEPublico ID</option>
+            <option value="duepublico">DuEPublico 1 ID</option>
+            <option value="duepublico2">DuEPublico 2 ID</option>
           </select>
           <span style="display:inline-block; width:auto; margin-right:1ex;">:</span>
         </xed:bind>

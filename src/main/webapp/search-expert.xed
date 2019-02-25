@@ -112,7 +112,7 @@
   <tr class="background1"><td>person</td><td>Name</td><td>Personenname (Autoren, Herausgeber oder andere), mit jeder Rolle kombinierbar (siehe häufigste Beispiele unten) vgl. <a href="rollen.xed">diese Liste</a> </td><td>=, contains, like</td></tr>
   <tr class="background2"><td>person_aut</td><td>Name</td><td>Autor</td><td>=, contains, like</td></tr>
   <tr class="background1"><td>person_edt</td><td>Name</td><td>Herausgeber, Verlag</td><td>=, contains, like</td></tr>
-  <tr class="background2"><td>person_ths</td><td>Name</td><td>Doktorvater, BetreuerIn bei Dissertationen</td><td>=, contains, like</td></tr>  
+  <tr class="background2"><td>person_ths</td><td>Name</td><td>Doktorvater, BetreuerIn bei Dissertationen (Akademische Betreuung)</td><td>=, contains, like</td></tr>  
   <tr class="background1"><td>nid_lsf</td><td>ID</td><td>Personen-ID aus HIS LSF</td><td> =, contains * </td></tr>
   <tr class="background2"><td>ae_lsf</td><td>ID</td><td>Autoren- oder Herausgeber-ID aus HIS LSF</td><td> =, contains * </td></tr>
   <tr class="background1"><td>nid_orcid</td><td>ID</td><td>ORCID</td><td> =, contains *</td></tr>
@@ -128,7 +128,8 @@
   <tr class="background1"><td>id_doi</td><td>ID</td><td>DOI</td><td> =, contains * </td></tr>
   <tr class="background2"><td>id_urn</td><td>ID</td><td>URN</td><td> =, contains * </td></tr>
   <tr class="background1"><td>id_scopus</td><td>ID</td><td>ID der Publikation in SCOPUS</td><td> =, contains * </td></tr>
-  <tr class="background2"><td>id_duepublico</td><td>ID</td><td>ID eines verknüpften DuEPublico-Dokumentes</td><td> =, contains * </td></tr>
+  <tr class="background2"><td>id_duepublico</td><td>ID</td><td>ID eines verknüpften Dokumentes in DuEPublico 1</td><td> =, contains * </td></tr>
+  <tr class="background2"><td>id_duepublico2</td><td>ID</td><td>ID eines verknüpften Dokumentes in DuEPublico 2</td><td> =, contains * </td></tr>
   <tr class="background1"><td>shelfmark</td><td>ID</td><td>Signatur der Universitätsbibliothek</td><td> =, contains *</td></tr>
   <tr class="background2"><td>journal</td><td>Text</td><td>Titel der Zeitschrift</td><td>=, contains, like, phrase</td></tr>
   <tr class="background1"><td>series</td><td>Text</td><td>Bezeichnung der Serie</td><td>=, contains, like, phrase</td></tr>
@@ -179,7 +180,8 @@
   <tr class="background2"><td>id_doi</td><td>ID</td><td>DOI</td><td> =, contains * </td></tr>
   <tr class="background1"><td>id_urn</td><td>ID</td><td>URN</td><td> =, contains * </td></tr>
   <tr class="background2"><td>id_scopus</td><td>ID</td><td>ID of publication in SCOPUS</td><td> =, contains * </td></tr>
-  <tr class="background1"><td>id_duepublico</td><td>ID</td><td>ID of a linked DuEPublico document</td><td> =, contains * </td></tr>
+  <tr class="background1"><td>id_duepublico</td><td>ID</td><td>ID of a linked DuEPublico 1 document</td><td> =, contains * </td></tr>
+  <tr class="background1"><td>id_duepublico2</td><td>ID</td><td>ID of a linked DuEPublico 2 document</td><td> =, contains * </td></tr>
   <tr class="background2"><td>shelfmark</td><td>ID</td><td>signature from the  university library</td><td> =, contains * </td></tr>
   <tr class="background1"><td>journal</td><td>text</td><td>title of the journal</td><td>=, contains, like, phrase</td></tr>
   <tr class="background2"><td>series</td><td>text</td><td>name of the series</td><td>=, contains, like, phrase</td></tr>

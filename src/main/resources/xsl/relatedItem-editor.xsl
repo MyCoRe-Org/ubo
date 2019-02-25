@@ -37,6 +37,7 @@
         <xsl:apply-templates select="mods:identifier[@type='doi']" mode="html-export" />
         <xsl:apply-templates select="mods:identifier[@type='urn']" mode="html-export" /> 
         <xsl:apply-templates select="mods:identifier[@type='duepublico']" mode="html-export" /> 
+        <xsl:apply-templates select="mods:identifier[@type='duepublico2']" mode="html-export" /> 
       </xsl:for-each>
     </xed:template>
   </xsl:template>

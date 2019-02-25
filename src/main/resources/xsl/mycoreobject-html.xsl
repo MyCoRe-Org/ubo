@@ -30,6 +30,7 @@
     <xsl:apply-templates select="mods:identifier[@type='doi']" mode="html-export" />
     <xsl:apply-templates select="mods:identifier[@type='urn']" mode="html-export" /> 
     <xsl:apply-templates select="mods:identifier[@type='duepublico']" mode="html-export" /> 
+    <xsl:apply-templates select="mods:identifier[@type='duepublico2']" mode="html-export" /> 
   </xsl:template>
 
   <!-- ========== Liste von ISBNs oder ISSNs =========== -->
@@ -54,7 +55,17 @@
   <xsl:template match="mods:identifier[@type='duepublico']" mode="html-export">
     <div class="link">
       <xsl:value-of select="i18n:translate('result.dozbib.fulltext')"/>:
-      <a href="http://duepublico.uni-duisburg-essen.de/servlets/DocumentServlet?id={text()}" target="_blank">
+      <a href="https://duepublico.uni-due.de/servlets/DocumentServlet?id={text()}" target="_blank">
+        <xsl:value-of select="i18n:translate('document')"/>
+        <xsl:value-of select="text()"/>
+      </a>
+    </div>
+  </xsl:template>
+
+  <xsl:template match="mods:identifier[@type='duepublico2']" mode="html-export">
+    <div class="link">
+      <xsl:value-of select="i18n:translate('result.dozbib.fulltext')"/>:
+      <a href="https://duepublico2.uni-due.de/receive/{text()}" target="_blank">
         <xsl:value-of select="i18n:translate('document')"/>
         <xsl:value-of select="text()"/>
       </a>
