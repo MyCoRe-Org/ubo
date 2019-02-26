@@ -122,9 +122,18 @@
   </xsl:template>
 
   <xsl:template match="mods:identifier[@type='doi']">
-    <mods:identifier type="doi">
-      <xsl:value-of select="substring-after(.,'doi:')" />
-    </mods:identifier>
+    <xsl:copy>
+      <xsl:copy-of select="@type" />
+      <xsl:choose>
+        <!-- legacy miless DOI entry starts with "doi:" -->
+        <xsl:when test="starts-with(.,'doi:')">
+          <xsl:value-of select="substring-after(.,'doi:')" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="." />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:copy>
   </xsl:template>
 
   <xsl:variable name="authorityOA">https://bibliographie.ub.uni-due.de/classifications/oa</xsl:variable>
