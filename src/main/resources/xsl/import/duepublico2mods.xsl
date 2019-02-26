@@ -79,29 +79,11 @@
       <mods:place>
         <mods:placeTerm type="text">Duisburg, Essen</mods:placeTerm>
       </mods:place>
-      <xsl:choose>
-        <xsl:when test="mods:dateIssued">
-          <xsl:copy-of select="mods:dateIssued"  />
-        </xsl:when>
-        <xsl:when test="mods:dateCreated">
-          <xsl:apply-templates select="mods:dateCreated"  />
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select="mods:dateModified"  />
-        </xsl:otherwise>
-      </xsl:choose>    
+      <xsl:copy-of select="mods:dateIssued"  />
     </mods:originInfo>
     <xsl:apply-templates select="mods:dateOther[@type='accepted']" />
   </xsl:template>
   
-  <!-- source has no dateIssued, guess from other dates -->
-  <xsl:template match="mods:dateCreated|mods:dateModified">
-    <mods:dateIssued encoding="w3cdtf">
-      <xsl:value-of select="substring-before(.,'-')" />
-    </mods:dateIssued>
-  </xsl:template>
-  
-  <!-- Hochschulschriftenvermerk -->
   <xsl:template match="mods:dateOther">
     <mods:note>
       <xsl:text>Dissertation, Universität Duisburg-Essen, </xsl:text>
