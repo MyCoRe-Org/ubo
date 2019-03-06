@@ -109,7 +109,7 @@
   <!-- html body -->
 
   <xsl:template name="layout.body">
-    <body class="d-flex flex-column" style="height: 100vh;">
+    <body class="d-flex flex-column" style="height: 100%;">
       <xsl:call-template name="layout.header" />
 
       <div class="container bg-white d-flex flex-column flex-grow-1">
@@ -145,24 +145,6 @@
           <xsl:call-template name="layout.footer" />
         </footer>
       </div>
-<!--      <div id="container" class="clearfix">
-        <xsl:call-template name="layout.skip" />
-        <div>
-          <xsl:call-template name="layout.h1" />
-          <xsl:call-template name="layout.mastHead" />
-        </div>
-        <section id="breadcrumb" style="padding-right:0; width:74%;">
-          <xsl:call-template name="layout.breadcrumbPath" />
-          <xsl:call-template name="layout.basket.info" />
-        </section>
-        <div id="leftbar">
-          <xsl:call-template name="layout.login" />
-          <xsl:call-template name="layout.mainnavigation" />
-        </div>
-        <xsl:call-template name="layout.inhalt" />
-        <xsl:copy-of select="body/aside[@id='sidebar']" />
-        <xsl:call-template name="layout.footer" />
-      </div>-->
     </body>
   </xsl:template>
 

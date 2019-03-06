@@ -32,8 +32,8 @@
   </xsl:template>
 
   <xsl:template match="response" priority="1">
-    <script src="webjars/highcharts/5.0.1/highcharts.src.js" type="text/javascript"></script>
-    <script src="webjars/highcharts/5.0.1/themes/grid.js" type="text/javascript"></script>
+    <script src="{$WebApplicationBaseURL}webjars/highcharts/5.0.1/highcharts.src.js" type="text/javascript"></script>
+    <script src="{$WebApplicationBaseURL}webjars/highcharts/5.0.1/themes/grid.js" type="text/javascript"></script>
     
     <div id="chartDialog" />
     
