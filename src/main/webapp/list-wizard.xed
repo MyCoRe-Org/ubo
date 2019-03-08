@@ -4,170 +4,190 @@
  <title xml:lang="de">Persönliche Publikationsliste erstellen</title>
  <title xml:lang="en">Build your personal publication list</title>
 
-  <article xml:lang="de" class="highlight1">
-    <h3>Publikationslisten in Imperia</h3>
-    <p>
-      In UDE-Webseiten, die mit dem Content-Management-System 
-      <a href="https://www.uni-due.de/zim/services/cms/" target="_blank">Imperia</a> erstellt sind, kann ganz einfach durch 
-      Aktivierung des <strong>Moduls "Mitarbeiter-Publikationsliste"</strong> eine Publikationsliste eingebunden werden. 
-    </p>
-  </article>
-  <article xml:lang="en" class="highlight1">
-    <h3>Publication list in Imperia</h3>
-    <p>
-      On webpages of UDE which are built using the content management system 
-      <a href="https://www.uni-due.de/zim/services/cms/" target="_blank">Imperia</a>, you can easily activate  
-      the <strong>Imperia module "Mitarbeiter-Publikationsliste"</strong> to integrate your personal publication list on any webpage. 
-    </p>
+  <article xml:lang="de" class="card mb-1">
+    <div class="card-body bg-beige">
+      <h3>Publikationslisten in Imperia</h3>
+      <p>
+        In UDE-Webseiten, die mit dem Content-Management-System
+        <a href="https://www.uni-due.de/zim/services/cms/" target="_blank">Imperia</a> erstellt sind, kann ganz einfach durch
+        Aktivierung des <strong>Moduls "Mitarbeiter-Publikationsliste"</strong> eine Publikationsliste eingebunden werden.
+      </p>
+    </div>
   </article>
 
-  <article xml:lang="de" class="highlight2">
-    <h3>Persönliche Publikationsliste erstellen</h3>
-    <p>
-      Alternativ können Sie über das folgende Formular persönliche Publikationslisten direkt aus der Universitätsbibliographie erstellen und 
-      in verschiedenen Formaten verlinken oder ausgeben. Voraussetzung ist, dass die Publikationen mit Ihrer HIS LSF Personen-ID verknüpft sind.
-      Falls Publikationen fehlen, <a href="newPublication.xed">melden Sie diese hier.</a>
-      Falls Einträge korrigiert werden müssen, <a href="contact.xml">sprechen Sie uns an.</a>
-      Sie können auch Publikationen über vergebene "Tags" auswählen.   
-    </p>
+  <article xml:lang="en" class="card mb-1">
+    <div class="card-body bg-beige">
+      <h3>Publication list in Imperia</h3>
+      <p>
+        On webpages of UDE which are built using the content management system
+        <a href="https://www.uni-due.de/zim/services/cms/" target="_blank">Imperia</a>, you can easily activate
+        the <strong>Imperia module "Mitarbeiter-Publikationsliste"</strong> to integrate your personal publication list on any webpage.
+      </p>
+    </div>
   </article>
-  <article xml:lang="en" class="highlight2">
-    <h3>Create personal publication list</h3>
-    <p>
-      Alternatively, you can use the following form to create your personal publication list directly from university bibliography data to  
-      link it or output it in various formats. This requires that the publications are linked with your own HIS LSF person ID.
-      In case publications are missing, <a href="newPublication.xed">you can enter them here.</a>
-      in case entries have to be corrected, <a href="contact.xml">contact us.</a>
-      You can also choose publications by "tags". 
-    </p>
+
+  <article xml:lang="de" class="card mb-1">
+    <div class="card-body">
+      <h3>Persönliche Publikationsliste erstellen</h3>
+      <p>
+        Alternativ können Sie über das folgende Formular persönliche Publikationslisten direkt aus der Universitätsbibliographie erstellen und
+        in verschiedenen Formaten verlinken oder ausgeben. Voraussetzung ist, dass die Publikationen mit Ihrer HIS LSF Personen-ID verknüpft sind.
+        Falls Publikationen fehlen, <a href="newPublication.xed">melden Sie diese hier.</a>
+        Falls Einträge korrigiert werden müssen, <a href="contact.xml">sprechen Sie uns an.</a>
+        Sie können auch Publikationen über vergebene "Tags" auswählen.
+      </p>
+    </div>
+  </article>
+
+  <article xml:lang="en" class="card mb-1">
+    <div class="card-body">
+      <h3>Create personal publication list</h3>
+      <p>
+        Alternatively, you can use the following form to create your personal publication list directly from university bibliography data to
+        link it or output it in various formats. This requires that the publications are linked with your own HIS LSF person ID.
+        In case publications are missing, <a href="newPublication.xed">you can enter them here.</a>
+        in case entries have to be corrected, <a href="contact.xml">contact us.</a>
+        You can also choose publications by "tags".
+      </p>
+    </div>
   </article>
   
-  <article class="highlight2">
-    <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form" style="margin:0; padding:0;">
-      <xed:bind xpath="/list-wizard">
-      
-        <xed:if test="$xed-validation-failed">
-          <div class="validation-failures">
-            <h3>
-              <xed:output i18n="form.validation.failed" />
-            </h3>
-            <ul>
-              <xed:display-validation-messages />
-            </ul>
-          </div>
-        </xed:if>
-        <!-- at least one PID or tag must be given: -->
-        <xed:validate test="tag[string-length(.) &gt; 0] or mods:name[string-length(mods:nameIdentifier) &gt; 0]" display="global" i18n="listWizard.tagOrPIDRequired" />
-        
-        <fieldset>
-          <xed:repeat xpath="mods:name">
-            <div>
-              <label for="{xed:generate-id()}">
-                <xed:if test="preceding::mods:name"><xed:output i18n="search.or" /></xed:if>
-                <xed:output i18n="ubo.role.author" /> / <xed:output i18n="ubo.role.editor" />: 
-              </label>
-              <xed:choose>
-                <xed:when test="string-length(mods:nameIdentifier[@type='lsf']) &gt; 0">
-                  <span id="{xed:generate-id()}" style="display:inline-block; width:auto;">
-                    <xed:output value="mods:namePart[@type='family']" /><xed:if test="mods:namePart[@type='given']"><xed:output value="concat(', ',mods:namePart[@type='given'])" /></xed:if>
-                  </span>
-                  <span style="display:inline-block; width:auto;">
-                    <xed:bind xpath="mods:nameIdentifier[@type='lsf']">
-                      <xed:output value="concat('(LSF ID: ',.,')')" />
-                    </xed:bind>
-                  </span>
-                </xed:when>
-                <xed:otherwise>
-                  <span style="display:inline-block; width:auto;">
-                    <button class="roundedButton" type="submit" xed:target="subselect" xed:href="../lsfpidsearch.html">
-                      <xed:output i18n="listWizard.subselect" />
-                    </button>
-                  </span>
-                </xed:otherwise>
-              </xed:choose>
-              <xed:controls>append remove</xed:controls>
+  <article class="card">
+    <div class="card-body">
+      <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
+        <xed:bind xpath="/list-wizard">
+
+          <xed:if test="$xed-validation-failed">
+            <div class="validation-failures">
+              <h3>
+                <xed:output i18n="form.validation.failed" />
+              </h3>
+              <ul>
+                <xed:display-validation-messages />
+              </ul>
             </div>
-          </xed:repeat>
-          
-          <xed:repeat xpath="tag">
-            <div>
-              <label for="{xed:generate-id()}">
+          </xed:if>
+          <!-- at least one PID or tag must be given: -->
+          <xed:validate test="tag[string-length(.) &gt; 0] or mods:name[string-length(mods:nameIdentifier) &gt; 0]" display="global" i18n="listWizard.tagOrPIDRequired" />
+
+          <fieldset class="form-group">
+            <xed:repeat xpath="mods:name">
+              <div class="form-group form-inline">
+                <label for="{xed:generate-id()}" class="mycore-form-label">
+                  <xed:if test="preceding::mods:name"><xed:output i18n="search.or" /></xed:if>
+                  <xed:output i18n="ubo.role.author" /> / <xed:output i18n="ubo.role.editor" />:
+                </label>
                 <xed:choose>
-                  <xed:when test="preceding::tag"><xed:output i18n="search.or" /></xed:when>
-                  <xed:otherwise><xed:output i18n="search.and" /></xed:otherwise>
+                  <xed:when test="string-length(mods:nameIdentifier[@type='lsf']) &gt; 0">
+                    <span id="{xed:generate-id()}"> 
+                      <xed:output value="mods:namePart[@type='family']" /><xed:if test="mods:namePart[@type='given']"><xed:output value="concat(', ',mods:namePart[@type='given'])" /></xed:if>
+                    </span>
+                    <span>
+                      <xed:bind xpath="mods:nameIdentifier[@type='lsf']">
+                        <xed:output value="concat('(LSF ID: ',.,')')" />
+                      </xed:bind>
+                    </span>
+                  </xed:when>
+                  <xed:otherwise>
+                    <div class="col-sm-4 col pl-0 justify-content-start">
+                      <button class="btn btn-sm btn-primary" type="submit" xed:target="subselect" xed:href="../lsfpidsearch.html">
+                        <xed:output i18n="listWizard.subselect" />
+                      </button>
+                    </div>
+                  </xed:otherwise>
                 </xed:choose>
-                <xed:output i18n="listWizard.tag" />:
+                <xed:controls>append remove</xed:controls>
+              </div>
+            </xed:repeat>
+
+            <xed:repeat xpath="tag">
+              <div class="form-group form-inline">
+                <label for="{xed:generate-id()}" class="mycore-form-label">
+                  <xed:choose>
+                    <xed:when test="preceding::tag"><xed:output i18n="search.or" /></xed:when>
+                    <xed:otherwise><xed:output i18n="search.and" /></xed:otherwise>
+                  </xed:choose>
+                  <xed:output i18n="listWizard.tag" />:
+                </label>
+                <input id="{xed:generate-id()}" type="text" class="mycore-form-input"/>
+                <xed:controls>append remove</xed:controls>
+              </div>
+            </xed:repeat>
+
+            <xed:bind xpath="min-year">
+              <div class="form-group form-inline">
+                <label for="year" class="mycore-form-label">
+                  <xed:output i18n="search.and" />
+                  <xed:output i18n="search.dozbib.year.publication" />
+                  <span class="ml-1">&gt;=</span>
+                </label>
+                <input id="year" type="text" class="{$xed-validation-marker} mycore-form-input" placeholder="{i18n:edit.year.placeholder}" />
+                <xed:validate matches="[\d]{4}" display="global" i18n="condition.yearDoz" />
+              </div>
+            </xed:bind>
+
+            <div class="form-group form-inline">
+              <label class="mycore-form-label align-self-start">
+                <xed:output i18n="search.sort" />
               </label>
-              <input id="{xed:generate-id()}" type="text" style="width:10em;" />
-              <xed:controls>append remove</xed:controls>
+              <div class="col pl-0">
+                <xed:repeat xpath="sort-by/field" max="3">
+                  <div class="form-inline mb-lg-3">
+                    <div class="align-self-center mr-sm-2">
+                      <xed:output i18n="search.sort.by" />
+                    </div>
+                    <xed:bind xpath="@name">
+                      <select class="form-control mr-sm-3 mb-1">
+                        <option value="year"         ><xed:output i18n="ubo.date.issued.4" /></option>
+                        <option value="sortby_person"><xed:output i18n="document.creators.one" /></option>
+                        <option value="sortby_title" ><xed:output i18n="document.title" /></option>
+                      </select>
+                    </xed:bind>
+                    <xed:bind xpath="@order">
+                      <select class="form-control mr-sm-3">
+                        <option value="descending"><xed:output i18n="search.sort.desc" /></option>
+                        <option value="ascending" ><xed:output i18n="search.sort.asc" /></option>
+                      </select>
+                    </xed:bind>
+                    <xed:controls />
+                  </div>
+                </xed:repeat>
+              </div>
             </div>
-          </xed:repeat>
 
-          <xed:bind xpath="min-year">
-            <div>
-              <label for="year">
-                <xed:output i18n="search.and" />
-                <xed:output i18n="search.dozbib.year.publication" />
-                <span>&gt;=</span>
-              </label>
-              <input id="year" type="text" class="{$xed-validation-marker}" style="width:5em;" placeholder="{i18n:edit.year.placeholder}" />
-              <xed:validate matches="[\d]{4}" display="global" i18n="condition.yearDoz" />
-            </div>
-          </xed:bind>
-          
-          <div>
-            <label>
-              <xed:output i18n="search.sort" />
-            </label>
-            <div style="display:inline-block;">
-              <xed:repeat xpath="sort-by/field" max="3">
-                <div>
-                  <xed:output i18n="search.sort.by" />
-                  <xed:bind xpath="@name">
-                    <select>
-                      <option value="year"        ><xed:output i18n="ubo.date.issued.4" /></option>
-                      <option value="sortby_person" ><xed:output i18n="document.creators.one" /></option>
-                      <option value="sortby_title"><xed:output i18n="document.title" /></option>
-                    </select>
-                  </xed:bind>
-                  <xed:bind xpath="@order">
-                    <select>
-                      <option value="descending"><xed:output i18n="search.sort.desc" /></option>
-                      <option value="ascending" ><xed:output i18n="search.sort.asc" /></option>
-                    </select>
-                  </xed:bind>
-                  <xed:controls />
-                </div>
-              </xed:repeat>
-            </div>
-          </div>
+            <xed:bind xpath="format">
+              <div class="form-group form-inline">
+                <label for="format" class="mycore-form-label">
+                  <xed:output i18n="listWizard.format" />:
+                </label>
+                <select id="format" class="mycore-form-input">
+                  <option value="pdf">PDF</option>
+                  <option value="html">HTML</option>
+                  <option value="mods">MODS XML</option>
+                  <option value="bibtex">BibTeX</option>
+                  <option value="endnote">Endnote</option>
+                  <option value="ris">RIS</option>
+                  <option value="ubo"><xed:output i18n="listWizard.format.ubo" /></option>
+                </select>
+              </div>
+            </xed:bind>
 
-          <xed:bind xpath="format">
-            <div>
-              <label for="format"><xed:output i18n="listWizard.format" />:</label>
-              <select id="format">
-                <option value="pdf">PDF</option>
-                <option value="html">HTML</option>
-                <option value="mods">MODS XML</option>
-                <option value="bibtex">BibTeX</option>
-                <option value="endnote">Endnote</option>
-                <option value="ris">RIS</option>
-                <option value="ubo"><xed:output i18n="listWizard.format.ubo" /></option>
-              </select>
+            <div class="form-group form-inline">
+              <label class="mycore-form-label">
+	      </label>
+              <div class="cancel-submit">
+                <button class="btn btn-sm btn-primary" type="submit" xed:target="layout">
+                  <xed:output i18n="listWizard.submit" />
+                </button>
+              </div>
             </div>
-          </xed:bind>
+          </fieldset>
 
-          <div class="cancel-submit" style="margin-top:2ex;">
-            <button class="roundedButton" type="submit" xed:target="layout">
-              <xed:output i18n="listWizard.submit" />
-            </button>
-          </div>
-        </fieldset>
-        
-        <xed:cleanup-rule xpath="//mods:name" relevant-if="(mods:namePart|mods:displayForm) or (string-length(@valueURI) &gt; 0) or (string-length(@valueURIxEditor) &gt; 0)" />
-        
-      </xed:bind>
-    </xed:form>
+          <xed:cleanup-rule xpath="//mods:name" relevant-if="(mods:namePart|mods:displayForm) or (string-length(@valueURI) &gt; 0) or (string-length(@valueURIxEditor) &gt; 0)" />
+
+        </xed:bind>
+      </xed:form>
+    </div>
   </article>
 
 </webpage>

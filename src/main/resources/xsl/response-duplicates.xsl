@@ -22,7 +22,6 @@
 <xsl:template match="/">
   <html id="dozbib.new.publication">
     <head>
-      <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/grid12.css" />
       <title>
         <xsl:call-template name="page.title" />
       </title>
@@ -94,40 +93,43 @@
 <!-- ==================== Anzeige Dublettenliste ==================== -->
 
 <xsl:template match="response">
-  <article class="highlight2">
-    <hgroup>
-      <h2><xsl:value-of select="i18n:translate('ubo.newPublicationWizard.duplicates.headline')"/>:</h2>
-    </hgroup>
-    <xsl:copy-of select="document('xslStyle:mods-wizard-display:session:ubo.submission')/*" />
-    <p style="margin-top:1ex;">
-      <strong>
-        <xsl:value-of select="i18n:translate('ubo.newPublicationWizard.duplicates.pleaseCheck')"/>
-      </strong>
-      <form method="get" action="{$ServletsBaseURL}NewPublicationWizard" style="margin:0;">
-        <input type="hidden" name="step" value="genres" />
-        <input type="submit" class="roundedButton" value="{i18n:translate('ubo.newPublicationWizard.duplicates.noContinue')}" />
-      </form>  
-    </p>
+  <article class="card mb-2">
+    <div class="card-body">
+      <hgroup>
+        <h2><xsl:value-of select="i18n:translate('ubo.newPublicationWizard.duplicates.headline')"/>:</h2>
+      </hgroup>
+      <xsl:copy-of select="document('xslStyle:mods-wizard-display:session:ubo.submission')/*" />
+      <p>
+        <strong>
+          <xsl:value-of select="i18n:translate('ubo.newPublicationWizard.duplicates.pleaseCheck')"/>
+        </strong>
+        <form method="get" action="{$ServletsBaseURL}NewPublicationWizard">
+          <input type="hidden" name="step" value="genres" />
+          <input type="submit" class="btn btn-sm btn-primary btn-block" value="{i18n:translate('ubo.newPublicationWizard.duplicates.noContinue')}" />
+        </form>
+      </p>
+    </div>
   </article>
   <xsl:apply-templates select="result[@name='response']" />
 </xsl:template>
 
 <xsl:template match="result[@name='response']">
-  <div class="container_12" style="margin-top:1ex;">
-    <xsl:if test="$numFound = 0">
-      <p>
-        <xsl:value-of select="i18n:translate('result.dozbib.publicationNo')" />
-      </p>
-    </xsl:if>
-    <xsl:if test="$numFound &gt; 0">
-      <ol class="results">
-        <xsl:apply-templates select="doc">
-          <xsl:with-param name="start" select="@start"/>
-        </xsl:apply-templates>
-      </ol>
-    </xsl:if>
-  </div>
-  <div class="clear"></div>
+  <xsl:if test="$numFound = 0">
+    <div class="card">
+      <div class="card-body">
+        <p>
+          <xsl:value-of select="i18n:translate('result.dozbib.publicationNo')" />
+        </p>
+      </div>
+    </div>
+  </xsl:if>
+
+  <xsl:if test="$numFound &gt; 0">
+    <xsl:apply-templates select="doc">
+      <xsl:with-param name="start" select="@start"/>
+    </xsl:apply-templates>
+  </xsl:if>
+
 </xsl:template>
 
 <!-- ==================== Anzeige Dublette ==================== -->
@@ -136,23 +138,23 @@
   <xsl:param name="start" />
   <xsl:variable name="hitNo" select="$start + position()" />
   
-  <div class="grid_12">
-    <div class="hit">
+  <div class="result mt-2 mb-2">
+    <div class="hit card">
       <xsl:variable name="id" select="str[@name='id']" />
       <xsl:variable name="mycoreobject" select="document(concat('mcrobject:',$id))/mycoreobject" />
       <xsl:for-each select="$mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
-        <div class="labels">
+        <div class="labels card-header">
           <xsl:call-template name="label-year" />
           <xsl:call-template name="pubtype" />
         </div>
-        <div class="content bibentry">  
+        <div class="content bibentry card-body">
           <xsl:apply-templates select="." mode="cite"> 
             <xsl:with-param name="mode">divs</xsl:with-param> 
           </xsl:apply-templates>
         </div>
-        <div class="footer">
+        <div class="footer card-footer">
           <xsl:call-template name="bibentry.show.details" />
-          <span class="floatRight"># <xsl:value-of select="$hitNo"/></span>
+          <span class="float-right"># <xsl:value-of select="$hitNo"/></span>
         </div>
       </xsl:for-each>
     </div>
@@ -160,10 +162,10 @@
 </xsl:template>
 
 <xsl:template name="bibentry.show.details">
-  <form action="{$ServletsBaseURL}DozBibEntryServlet" method="get">
+  <form class="d-inline" action="{$ServletsBaseURL}DozBibEntryServlet" method="get">
     <input type="hidden" name="mode" value="show"/>
     <input type="hidden" name="id" value="{ancestor::mycoreobject/@ID}"/>
-    <input type="submit" class="roundedButton" value="{i18n:translate('result.dozbib.info')}" />
+    <input type="submit" class="btn btn-sm btn-primary" value="{i18n:translate('result.dozbib.info')}" />
   </form>
 </xsl:template>
 
