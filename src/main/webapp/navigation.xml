@@ -14,7 +14,7 @@
   <item id="dozbib.search-simple" ref="search.xed">
     <label xml:lang="de">Erweiterte Suche</label>
     <label xml:lang="en">Advanced search</label>
-    <item id="dozbib.search" />      
+    <item id="dozbib.search" />
   </item>
   <item id="dozbib.search-expert" ref="search-expert.xed" role="admin">
     <label xml:lang="de">Expertensuche</label>

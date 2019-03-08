@@ -30,25 +30,28 @@
 </xsl:template>
 
 <xsl:template match="romeoapi[publishers/publisher]">
-  <div class="section highlight1 container_12" style="padding-top:2ex; padding-bottom:2ex; margin-top:2ex;">
-    <xsl:apply-templates select="publishers/publisher" />
+  <div class="card mt-3 bg-beige">
+    <div class="card-body">
+      <div class="row">
+        <xsl:apply-templates select="publishers/publisher" />
+      </div>
+    </div>
   </div>
 </xsl:template>
 
 <xsl:template match="romeoapi/publishers/publisher">
   <xsl:variable name="issn" select="ancestor::romeoapi/header/parameters/parameter[parametername='issn']/parametervalue" />
-  <div class="grid_3 label">
-    <a href="{$MCR.MODS.SherpaRomeo.LinkISSN}{$issn}">
+  <div class="col-2 align-self-center">
+    <a class="float-right" href="{$MCR.MODS.SherpaRomeo.LinkISSN}{$issn}">
       <img src="{$WebApplicationBaseURL}images/romeosmall.gif" width="100" height="54" alt="SHERPA/RoMEO Database" border="0" />
     </a>
   </div>
-  <div class="grid_9">
+  <div class="col-10">
     <xsl:apply-templates select="preprints|postprints|pdfversion" />
     <xsl:apply-templates select="ancestor::romeoapi" mode="backlink" />
     <xsl:apply-templates select="romeocolour" />
     <xsl:apply-templates select="paidaccess[string-length(paidaccessurl) &gt; 0]" />
   </div>
-  <div class="clear" />
 </xsl:template>
 
 <xsl:template match="romeoapi" mode="backlink">

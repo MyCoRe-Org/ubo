@@ -32,7 +32,7 @@
   <field name="issue"      type="text"      indexed="false" stored="true" multiValued="false" />
   <field name="pages"      type="text"      indexed="false" stored="true" multiValued="false" />
   <field name="place"      type="text"      indexed="false" stored="true" multiValued="true" />
-  <field name="publisher"  type="text"      indexed="false" stored="true" multiValued="true" />
+  <field name="publisher"  type="text"      indexed="true" stored="true"  multiValued="true" />
   <field name="conference" type="text"      indexed="true" stored="false" multiValued="false" />
   <field name="topic"      type="text"      indexed="true" stored="false" multiValued="true"  />
   <field name="note"       type="text"      indexed="true" stored="false" multiValued="true"  />
@@ -55,6 +55,9 @@
 
   <field name="facet_host_title" type="string" indexed="true" stored="false" multiValued="true"  />
   <copyField source="host_title" dest="facet_host_title"/>
+
+  <field name="facet_publisher" type="string" indexed="true" stored="false" multiValued="true"  />
+  <copyField source="publisher" dest="facet_publisher"/>
 
   <!-- Field for experimental word cloud -->
   <field name="wordcloud" type="wordcloud" indexed="true" stored="false" multiValued="true" />

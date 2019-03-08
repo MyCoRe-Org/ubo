@@ -11,11 +11,18 @@
 
   <xsl:param name="CurrentLang" />
 
+  <xsl:variable name="jquery.version" select="'3.3.1'" />
+  <xsl:variable name="jquery-ui.version" select="'1.12.1'" />
+  <xsl:variable name="chosen.version" select="'1.8.7'" />
+  <xsl:variable name="bootstrap.version" select="'4.1.3'" />
+  <xsl:variable name="font-awesome.version" select="'5.5.0'" />
+
+
   <!-- ==================== HTML ==================== -->
   
   <xsl:template match="/html">
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>
-  
+
     </xsl:text>
     <html lang="{$CurrentLang}">
       <xsl:apply-templates select="head" />
@@ -26,30 +33,20 @@
   <xsl:template match="head">
     <head>
       <meta charset="utf-8" />
-      
-      <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
-      <meta http-equiv="cleartype" content="on" />
-      <meta http-equiv="expires" content="0" />
-      <meta http-equiv="cache-control" content="no-cache" />
-      <meta http-equiv="pragma" content="no-cache" />
-      
-      <meta name="HandheldFriendly" content="True" />
-      <meta name="MobileOptimized" content="320" />
-      <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1" />
-      
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans|Droid+Sans+Mono" type="text/css" />
-      <link rel="stylesheet" href="{$WebApplicationBaseURL}external/jquery-ui-theme/jquery-ui-1.8.21.custom.css" />
-      <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/style.css" />
-      <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/legacy.css" />
-      <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/duepublico.css?v={$UBO.Build.TimeStamp}" />
-      <link rel="stylesheet" href="{$WebApplicationBaseURL}external/chosen/chosen.css" />
-      <link rel="stylesheet" href="{$WebApplicationBaseURL}webjars/bootstrap-glyphicons/bdd2cbfba0/css/bootstrap-glyphicons.css" />
-      
-      <xsl:text disable-output-escaping="yes">&lt;!--[if gte IE 9]&gt;</xsl:text>
-        <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/ie9fixes.css" />
-      <xsl:text disable-output-escaping="yes">&lt;![endif]--&gt;</xsl:text>
 
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <meta http-equiv="x-ua-compatible" content="ie=edge" />
+
+      <link href="{$WebApplicationBaseURL}rsc/sass/scss/bootstrap-ubo.css" rel="stylesheet" />
+      <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/jquery/{$jquery.version}/jquery.min.js"></script>
+      <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/bootstrap/{$bootstrap.version}/js/bootstrap.bundle.min.js"></script>
+      <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/chosen-js/{$chosen.version}/chosen.jquery.min.js"></script>
+      <link href="{$WebApplicationBaseURL}webjars/chosen-js/{$chosen.version}/chosen.min.css" rel="stylesheet" />
+      <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/jquery-ui/{$jquery-ui.version}/jquery-ui.js"></script>
+      <link rel="stylesheet" href="{$WebApplicationBaseURL}webjars/jquery-ui/{$jquery-ui.version}/jquery-ui.css" type="text/css"/>
+      <link rel="stylesheet" href="{$WebApplicationBaseURL}webjars/font-awesome/{$font-awesome.version}/css/all.css" type="text/css"/>
+      <link rel="stylesheet" href="{$WebApplicationBaseURL}webjars/bootstrap-glyphicons/bdd2cbfba0/css/bootstrap-glyphicons.css" type="text/css"/>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans|Droid+Sans+Mono" type="text/css" />
       <link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://www.uni-due.de/imperia/md/images/cms/h/apple-touch-icon.png" />
       <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://www.uni-due.de/imperia/md/images/cms/m/apple-touch-icon.png" />
       <link rel="apple-touch-icon-precomposed" href="https://www.uni-due.de/imperia/md/images/cms/l/apple-touch-icon-precomposed.png" />
@@ -59,15 +56,6 @@
       <script type="text/javascript">var webApplicationBaseURL = '<xsl:value-of select="$WebApplicationBaseURL" />';</script>
       <script type="text/javascript">var currentLang = '<xsl:value-of select="$CurrentLang" />';</script>
 
-      <script type="text/javascript" src="{$WebApplicationBaseURL}external/jquery-1.7.min.js"></script>
-      <script type="text/javascript"> jQuery.noConflict(); </script>
-      <script type="text/javascript" src="{$WebApplicationBaseURL}external/html5shiv-3.5/html5shiv.js"></script>
-      <script type="text/javascript" src="{$WebApplicationBaseURL}external/modernizr-2.5.3/modernizr.js"></script>
-      
-      <xsl:text disable-output-escaping="yes">&lt;!--[if lt IE 9]&gt;</xsl:text>
-        <script src="{$WebApplicationBaseURL}external/html5shiv-3.5/html5shiv.js"></script>
-      <xsl:text disable-output-escaping="yes">&lt;![endif]--&gt;</xsl:text>
-      
       <xsl:copy-of select="node()" />
     </head>
   </xsl:template>
@@ -121,47 +109,93 @@
   <!-- html body -->
 
   <xsl:template name="layout.body">
-    <xsl:element name="body">
-      <xsl:attribute name="class">
-        <xsl:text>clearfix layout</xsl:text>
-        <xsl:choose>
-          <xsl:when test="body/aside[@id='sidebar']">2</xsl:when>
-          <xsl:otherwise>1</xsl:otherwise>
-        </xsl:choose>
-      </xsl:attribute>
-      
-      <xsl:call-template name="layout.colorbox" />
-      <div id="container" class="clearfix">
-        <xsl:call-template name="layout.skip" />
-        <div>
-          <xsl:call-template name="layout.h1" />
-          <xsl:call-template name="layout.mastHead" />
+    <body class="d-flex flex-column" style="height: 100%;">
+      <xsl:call-template name="layout.header" />
+
+      <div class="container bg-white d-flex flex-column flex-grow-1">
+        <div class="row mb-auto">
+          <div class="col">
+            <div class="row">
+              <div class="col-lg-9">
+                <xsl:call-template name="layout.pageTitle"/>
+                <xsl:call-template name="layout.breadcrumbPath"/>
+              </div>
+              <div class="col-lg-3 pl-lg-0 d-flex">
+                <xsl:call-template name="layout.basket.info"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg">
+                <xsl:call-template name="layout.inhalt" />
+              </div>
+              <xsl:if test="body/aside[@id='sidebar']">
+                <div class="col-lg-3 pl-lg-0">
+                  <xsl:copy-of select="body/aside[@id='sidebar']" />
+                </div>
+              </xsl:if>
+            </div>
+          </div>
         </div>
-        <section id="breadcrumb" style="padding-right:0; width:74%;">
-          <xsl:call-template name="layout.breadcrumbPath" />
-          <xsl:call-template name="layout.basket.info" />
-        </section>
-        <div id="leftbar">
-          <xsl:call-template name="layout.login" />
-          <xsl:call-template name="layout.mainnavigation" />
+        <div class="row">
+          <div class="col">
+            <hr class="mb-0"/>
+          </div>
         </div>
-        <xsl:call-template name="layout.inhalt" />
-        <xsl:copy-of select="body/aside[@id='sidebar']" />
-        <xsl:call-template name="layout.footer" />
+        <footer class="row">
+          <xsl:call-template name="layout.footer" />
+        </footer>
       </div>
-    </xsl:element>
+    </body>
+  </xsl:template>
+
+  <xsl:template name="layout.header">
+    <div class="container bg-white">
+      <div class="row">
+          <div class="col">
+            <h3 class="text-muted">
+              <a href="https://www.uni-due.de/">Universität Duisburg-Essen</a>
+            </h3>
+          </div>
+          <div class="col">
+            <div class="nav nav-pills float-right">
+              <xsl:call-template name="layout.login"/>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="container bg-light">
+        <xsl:call-template name="layout.mainnavigation"/>
+    </div>
+
+    <div class="jumbotron m-0">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            Universitätsbibliographie
+          </div>
+          <div class="col">
+            <span class="float-right">
+              <a href="https://www.uni-due.de/" id="ude-logo" class="containsimage"><img alt="Logo" src="https://bibliographie.ub.uni-due.de/images/ude-logo.png"/></a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
   </xsl:template>
 
   <xsl:template name="layout.basket.info">
-    <div id="basket-info" style="float:right; margin:0; padding:0; display:inline-block;">
-      <a href="{$ServletsBaseURL}MCRBasketServlet?action=show&amp;type=bibentries">
-        <span class="glyphicon glyphicon-bookmark" aria-hidden="true" />
-        <span><xsl:value-of select="i18n:translate('basket')" />:</span>
-        <span id="basket-info-num">
-          <xsl:value-of xmlns:basket="xalan://unidue.ubo.basket.BasketUtils" select="basket:size()" />
-        </span>
-        <span><xsl:value-of select="i18n:translate('ubo.publications')" /></span>
-      </a>
+    <div id="basket-info" class="card my-3 w-100">
+      <div class="card-body">
+	<a href="{$ServletsBaseURL}MCRBasketServlet?action=show&amp;type=bibentries">
+          <span class="glyphicon glyphicon-bookmark mr-1" aria-hidden="true" />
+          <span class="mr-1"><xsl:value-of select="i18n:translate('basket')" />:</span>
+          <span class="mr-1" id="basket-info-num">
+            <xsl:value-of xmlns:basket="xalan://unidue.ubo.basket.BasketUtils" select="basket:size()" />
+          </span>
+          <span class="mr-1"><xsl:value-of select="i18n:translate('ubo.publications')" /></span>
+	</a>
+      </div>
     </div>
   </xsl:template>
 
@@ -204,14 +238,6 @@
       <xsl:when xmlns:check="xalan://org.mycore.common.xml.MCRXMLFunctions" test="check:isCurrentUserInRole(@role)">true</xsl:when>
       <xsl:otherwise>false</xsl:otherwise>
     </xsl:choose>
-  </xsl:template>
-
-  <!-- H 1 -->
-
-  <xsl:template name="layout.h1">
-    <h1>
-      <a href="https://www.uni-due.de/">Universität Duisburg-Essen</a>
-    </h1>
   </xsl:template>
 
   <!-- Colorbox -->
@@ -263,50 +289,43 @@
   <!-- Brotkrumen-Navigation -->
 
   <xsl:template name="layout.breadcrumbPath">
-    <span>
-      <a href="https://www.uni-due.de/ub/">
-        <xsl:value-of select="i18n:translate('navigation.UB')" />
-      </a>
-    </span>
-    <span>
-      <a href="{$WebApplicationBaseURL}">
-        <xsl:value-of select="i18n:translate('navigation.Home')" />
-      </a>
-    </span>
-
-    <xsl:apply-templates mode="breadcrumb"
-      select="$CurrentItem/ancestor-or-self::item[@label|label][ancestor-or-self::*=$navigation.tree[@role='main']]" />
-
-    <xsl:for-each select="body/ul[@id='breadcrumb']/li">
-      <span>
-        <xsl:copy-of select="node()" />
-      </span>
-    </xsl:for-each>
-
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="https://www.uni-due.de/ub/">
+            <xsl:value-of select="i18n:translate('navigation.UB')" />
+          </a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="{$WebApplicationBaseURL}">
+            <xsl:value-of select="i18n:translate('navigation.Home')" />
+          </a>
+        </li>
+        <xsl:apply-templates mode="breadcrumb"
+                             select="$CurrentItem/ancestor-or-self::item[@label|label][ancestor-or-self::*=$navigation.tree[@role='main']]" />
+        <xsl:for-each select="body/ul[@id='breadcrumb']/li">
+          <li class="breadcrumb-item">
+              <xsl:copy-of select="node()" />
+          </li>
+        </xsl:for-each>
+      </ol>
+    </nav>
   </xsl:template>
 
   <xsl:template match="item" mode="breadcrumb">
-    <span>
+    <li class="breadcrumb-item">
       <xsl:call-template name="output.item.label" />
-    </span>
+    </li>
   </xsl:template>
 
   <!-- Ausgabe Link und Bezeichnung des Menüpunktes -->
 
   <xsl:template name="output.item.label">
-    
-    <!-- add class="current for selected items" -->
-    <xsl:variable name="class">
-      <xsl:if test="@id and (@id = $PageID)">
-        <xsl:value-of select="'current'"/>
-      </xsl:if>
-    </xsl:variable>
-    
     <xsl:choose>
 
       <!-- ==== link to external url ==== -->
       <xsl:when test="@href">
-        <a href="{@href}" class="{$class}">
+        <a class="nav-link" href="{@href}">
           <xsl:copy-of select="@target" />
           <xsl:call-template name="output.label.for.lang" />
         </a>
@@ -314,7 +333,7 @@
 
       <!-- ==== link to internal url ==== -->
       <xsl:when test="@ref">
-        <a href="{$WebApplicationBaseURL}{@ref}" class="{$class}">
+        <a class="nav-link" href="{$WebApplicationBaseURL}{@ref}">
           <xsl:copy-of select="@target" />
           <xsl:call-template name="output.label.for.lang" />
         </a>
@@ -326,6 +345,7 @@
       </xsl:otherwise>
 
     </xsl:choose>
+
   </xsl:template>
 
   <!-- print label in current language -->
@@ -346,8 +366,9 @@
 
   <!-- current user and login formular-->
   <xsl:template name="layout.login">
-    <div id="login">
-      <span class="user">
+
+    <div class="nav-item mr-2">
+      <span class="user btn p-0" style="cursor: default;">
         <xsl:text>[ </xsl:text>
         <xsl:choose>
           <xsl:when test="$CurrentUser = $MCR.Users.Guestuser.UserName">
@@ -366,25 +387,51 @@
 
         <xsl:call-template name="orcidUser" />        
       </span>
-
+    </div>
+    <div class="nav-item mr-2">
       <xsl:choose>
         <xsl:when test="/webpage/@id='login'" />
         <xsl:when test="$CurrentUser = $MCR.Users.Guestuser.UserName">
           <form action="{$WebApplicationBaseURL}login.xed" method="get">
             <input type="hidden" name="url" value="{$RequestURL}" />
-            <input class="roundedButton" style="border:0;" type="submit" name="{i18n:translate('component.user2.button.login')}" value="{i18n:translate('component.user2.button.login')}" />
+            <input class="btn btn-link p-0" type="submit" name="{i18n:translate('component.user2.button.login')}" value="{i18n:translate('component.user2.button.login')}" />
           </form>
         </xsl:when>
         <xsl:otherwise>
           <form action="{$ServletsBaseURL}logout" method="get">
-            <input type="hidden" name="url" value="{$WebApplicationBaseURL}" />
-            <input class="roundedButton" style="border:0;" type="submit" name="{i18n:translate('login.logOut')}" value="{i18n:translate('login.logOut')}" />
+            <input type="hidden" name="url" value="{$RequestURL}" />
+            <input class="btn btn-link p-0" style="border:0;" type="submit" name="{i18n:translate('login.logOut')}" value="{i18n:translate('login.logOut')}" />
           </form>
         </xsl:otherwise>
       </xsl:choose>
-      
-      <div class="clearfix"/>
     </div>
+    <div class="nav-item">
+      <span class="btn p-0">
+        <a>
+          <xsl:attribute name="href">
+            <xsl:choose>
+              <xsl:when test="$CurrentLang='de'">
+                <xsl:call-template name="UrlSetParam">
+                  <xsl:with-param name="url" select="$RequestURL" />
+                  <xsl:with-param name="par" select="'lang'" />
+                  <xsl:with-param name="value" select="'en'" />
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:when test="$CurrentLang='en'">
+                <xsl:call-template name="UrlSetParam">
+                  <xsl:with-param name="url" select="$RequestURL" />
+                  <xsl:with-param name="par" select="'lang'" />
+                  <xsl:with-param name="value" select="'de'" />
+                </xsl:call-template>
+              </xsl:when>
+            </xsl:choose>
+          </xsl:attribute>
+          <img src="{$WebApplicationBaseURL}images/lang_{$CurrentLang}.gif" alt="{i18n:translate('navigation.Language')}" />
+          <xsl:value-of select="i18n:translate('navigation.ende')"/>
+        </a>
+      </span>
+    </div>
+
   </xsl:template>
 
   <!-- If current user has ORCID and we are his trusted party, display ORCID icon to indicate that -->  
@@ -408,44 +455,25 @@
 
   <xsl:template name="layout.mainnavigation">
   
-    <nav role="navigation" id="hauptnavigation">
-      <ul id="mainnav">
-        <!-- Find the item that is the root of the navigation tree to display -->
-        <xsl:for-each select="$navigation.tree">
-          <xsl:apply-templates select="item[@label|label]" mode="navigation" />
-        </xsl:for-each>
-      </ul>
-      <ul id="languagenav">
-        <li>
-          <a>
-            <xsl:attribute name="href">
-              <xsl:choose>
-                <xsl:when test="$CurrentLang='de'">
-                  <xsl:call-template name="UrlSetParam">
-                    <xsl:with-param name="url" select="$RequestURL" />
-                    <xsl:with-param name="par" select="'lang'" />
-                    <xsl:with-param name="value" select="'en'" />
-                  </xsl:call-template>
-                </xsl:when>
-                <xsl:when test="$CurrentLang='en'">
-                  <xsl:call-template name="UrlSetParam">
-                    <xsl:with-param name="url" select="$RequestURL" />
-                    <xsl:with-param name="par" select="'lang'" />
-                    <xsl:with-param name="value" select="'de'" />
-                  </xsl:call-template>
-                </xsl:when>
-              </xsl:choose>
-            </xsl:attribute>
-            <img src="{$WebApplicationBaseURL}images/lang_{$CurrentLang}.gif" alt="{i18n:translate('navigation.Language')}" />
-            <xsl:value-of select="i18n:translate('navigation.ende')"/>
-          </a>
-        </li>
-      </ul>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" role="navigation" id="hauptnavigation">
+      <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav" id="mainnav">
+          <!-- Find the item that is the root of the navigation tree to display -->
+          <xsl:for-each select="$navigation.tree">
+            <xsl:apply-templates select="item[@label|label]" mode="navigation" />
+          </xsl:for-each>
+        </ul>
+      </div>
     </nav>
   </xsl:template>
 
-  <!-- Menüpunkt im Navigationsmenü -->
 
+
+  <!-- Menüpunkt im Navigationsmenü -->
   <xsl:template match="item" mode="navigation">
 
     <!-- ==== Prüfe ob aktueller Benutzer berechtigt ist, diesen Menüpunkt zu sehen ==== -->
@@ -453,21 +481,53 @@
       <xsl:call-template name="check.allowed" />
     </xsl:variable>
 
-    <!-- print single menu option -->
+    <!-- add class="active for selected items" -->
+    <xsl:variable name="class_active">
+      <xsl:if test="@id and (@id = $PageID)">
+        <xsl:value-of select="'active'"/>
+      </xsl:if>
+      <xsl:if test="./item[@id = $PageID]">
+        <xsl:value-of select="'active'"/>
+      </xsl:if>
+    </xsl:variable>
+
     <xsl:if test="$allowed = 'true'">
-      <xsl:element name="li">
-        <xsl:if test="@class != ''">
-          <xsl:attribute name="class">
-            <xsl:value-of select="@class"/>
-          </xsl:attribute>
-        </xsl:if>
-        <xsl:call-template name="output.item.label" />
-        <xsl:if test="descendant::item[@id = $NavigationID]">
-          <ul>
-            <xsl:apply-templates select="item[@label|label]" mode="navigation" />
-          </ul>
-        </xsl:if>
-      </xsl:element>
+
+      <xsl:choose>
+        <xsl:when test="count(./item/@ref) &gt; 0">
+          <!-- print dropdown menu option -->
+          <li class="nav-item dropdown {$class_active}">
+            <xsl:if test="@class != ''">
+              <xsl:attribute name="class">
+                <xsl:value-of select="concat('nav-item dropdown', $class_active, ' ', @class)"/>
+              </xsl:attribute>
+            </xsl:if>
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+              <xsl:call-template name="output.label.for.lang" />
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <xsl:for-each select="./item">
+                <a class="dropdown-item" href="{@ref}">
+                  <xsl:copy-of select="@target" />
+                  <xsl:call-template name="output.label.for.lang" />
+                </a>
+              </xsl:for-each>
+            </div>
+          </li>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- print single menu option -->
+          <li class="nav-item {$class_active}">
+            <xsl:if test="@class != ''">
+              <xsl:attribute name="class">
+                <xsl:value-of select="concat('nav-item ', $class_active, ' ', @class)"/>
+              </xsl:attribute>
+            </xsl:if>
+            <xsl:call-template name="output.item.label"/>
+          </li>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:if>
 
   </xsl:template>
@@ -475,34 +535,39 @@
   <!-- Master Head -->
 
   <xsl:template name="layout.mastHead">
-    <div id="masthead">
-      <header role="banner" class="clearfix">
-        <h2>
-          <a href="{$WebApplicationBaseURL}">Universitätsbibliographie</a>
-        </h2>
-        <a class="containsimage" id="ude-logo" href="https://www.uni-due.de/">
-          <img src="{$WebApplicationBaseURL}images/ude-logo.png" alt="Logo" />
-        </a>
-      </header>
-      <h1 id="seitentitel">
-        <xsl:value-of select="head/title" disable-output-escaping="yes" />
-      </h1>
+    <div class="col">
+      <h2>
+        <a href="{$WebApplicationBaseURL}">Universitätsbibliographie</a>
+      </h2>
     </div>
+    <div class="col text-right p-0">
+      <a class="containsimage" id="ude-logo" href="https://www.uni-due.de/">
+        <img src="{$WebApplicationBaseURL}images/ude-logo.png" alt="Logo" />
+      </a>
+    </div>
+  </xsl:template>
+
+  <xsl:template name="layout.pageTitle">
+    <h1 id="seitentitel">
+      <xsl:value-of select="head/title" disable-output-escaping="yes" />
+    </h1>
   </xsl:template>
   
   <!-- Footer -->
 
   <xsl:template name="layout.footer">
-    <footer role="contentinfo" class="clearfix">
+    <div class="col-lg-2">
       <xsl:call-template name="layout.metanav" />
-      <p>
+    </div>
+    <div class="col-lg d-flex align-items-center">
+      <p class="ml-lg-auto mb-0">
         <xsl:apply-templates select="/html/@lastModified" />
         <xsl:text>© Universität Duisburg-Essen | </xsl:text>
         <a href="mailto:{$MCR.Mail.Address}">
           <xsl:value-of select="$MCR.Mail.Address" />
         </a>
       </p>
-    </footer>
+    </div>
   </xsl:template>
 
   <!-- Optional: Datum der letzten Änderung dieser Seite im Format YYYY-MM-TT -->
@@ -529,8 +594,8 @@
 
   <xsl:template name="layout.metanav">
     <xsl:variable name="metanavigation" select="$navigation.tree/item[@role='meta']/item"/>
-    <nav id="metanav">
-      <ul>
+    <nav class="navbar navbar navbar-expand">
+      <ul class="navbar-nav">
         <!-- Find the item that is the root of the navigation tree to display -->
         <xsl:for-each select="$metanavigation" >
           <xsl:choose>

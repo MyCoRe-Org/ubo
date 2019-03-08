@@ -4,13 +4,13 @@
   <title xml:lang="de">Publikationstyp wählen</title>
   <title xml:lang="en">Choose publication type</title>
   
-  <article class="highlight2">
-    <xed:form class="ubo-form" role="form" xmlns:xed="http://www.mycore.de/xeditor">
-    
-      <xed:source uri="session:ubo.submission" />
-    
-      <xed:bind xpath="/mods:mods">
-        <fieldset>
+  <article class="card">
+    <div class="card-body">
+      <xed:form class="inline-form" role="form" xmlns:xed="http://www.mycore.de/xeditor">
+
+        <xed:source uri="session:ubo.submission" />
+
+        <xed:bind xpath="/mods:mods">
 
           <legend><xed:output i18n="ubo.newPublicationWizard.choosePublicationType" />:</legend>
 
@@ -20,121 +20,131 @@
             </p>
           </div>
 
-          <div>
-            <label for="publication"><xed:output i18n="ubo.publication" />:</label>
-            <div style="display:inline-block; width:525px;" id="publication">
+          <div class="form-inline form-group">
+            <label class="mycore-form-label" for="publication">
+	      <xed:output i18n="ubo.publication" />:
+	    </label>
+            <div id="publication" class="col-sm-4 px-0">
               <xed:include uri="xslStyle:mods-wizard-display:session:ubo.submission" />
             </div>
           </div>
 
           <xed:bind xpath="mods:genre[@type='intern']">
-            <div>
-              <label for="genre" style="vertical-align:bottom;"><xed:output i18n="ubo.genre" />:</label>
-              <select id="genre" size="1">
+            <div class="form-inline form-group">
+              <label class="mycore-form-label" for="genre">
+		<xed:output i18n="ubo.genre" />:
+	      </label>
+              <select class="mycore-form-input" id="genre" size="1">
                 <xed:include uri="xslStyle:genre-filter,items2options:classification:editor:-1:children:ubogenre" />
               </select>
             </div>
           </xed:bind>
-                    
 
           <xed:bind xpath="mods:relatedItem[@type='host']/mods:genre[@type='intern']">
-            <div> 
-              <label for="host" style="vertical-align:bottom;"><xed:output i18n="ubo.newPublicationWizard.publishedIn" />:</label>
-              <select id="host" size="1">
+            <div class="form-inline form-group">
+              <label class="mycore-form-label" for="host">
+		<xed:output i18n="ubo.newPublicationWizard.publishedIn" />:
+	      </label>
+              <select class="mycore-form-input" id="host" size="1">
                 <xed:include uri="xslStyle:host-filter,items2options:classification:editor:-1:children:ubogenre" />
               </select>
             </div>
           </xed:bind>
-          
+
           <xed:bind xpath="@form" default="edit-publication.xed">
             <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
-              <div style="margin-top:3ex;">
-                <label for="form" style="vertical-align:bottom;">Ziel-Formular:</label>
-                <select id="form">
+	      <div class="form-inline form-group">
+		<label for="form" class="mycore-form-label">
+		  Ziel-Formular:
+		</label>
+		<select id="form" class="mycore-form-input">
                   <option value="edit-publication.xed">Standard-Formular</option>
                   <option value="edit-admin.xed">Admin-Formular</option>
-                </select>
-              </div>
+		</select>
+	      </div>
             </xed:if>
           </xed:bind>
-          
+
           <div class="cancel-submit">
-            <button class="roundedButton" type="submit" xed:target="servlet" xed:href="NewPublicationWizard">
-              <xed:output i18n="button.next" />
-            </button>
+            <div class="form-inline form-group">
+              <label class="mycore-form-label">
+              </label>
+              <button class="btn btn-sm btn-primary" type="submit" xed:target="servlet" xed:href="NewPublicationWizard">
+                <xed:output i18n="button.next" />
+              </button>
+            </div>
           </div>
 
-        </fieldset>
-        
-        <script type="text/javascript">
-          var GenreXML;
-          
-          function findCategory(id) {
-            return jQuery(GenreXML).find('[ID="' + id + '"]')[0];
-          }
-          
-          function getLabel(category, lang) {
-            return jQuery(category).children('label[xml\\:lang="' + lang + '"]').attr('text');
-          }
-          
-          function createOption(id, currentHost) {
-            var category = findCategory(id);
-            var title = getLabel(category,'<xed:output value="$CurrentLang" />');
-            
-            if( id == currentHost )
-              return '&lt;option selected="selected" value="' + id + '"&gt;' + title + '&lt;/option&gt;';
-            else
-              return '&lt;option value="' + id + '"&gt;' + title + '&lt;/option&gt;';
-          }
-          
-          function changeHostOptions() {
-            var currentHost = jQuery('#host option:selected')[0].value;
-          
-            jQuery('#host').empty();
-            jQuery('#host').parent().show();
-          
-            var id = jQuery('#genre option:selected')[0].value;
-            var category = findCategory(id);
-            var host = getLabel(category,'x-hosts');
-          
-            if (!(typeof host === 'undefined')) {
-              var hosts = host.split(' ');
-              jQuery.each( hosts, function(ind, val) {
-                if (val == 'standalone') {
-                  jQuery('#host').append('&lt;option value="standalone"&gt; --- &lt;/option&gt;');
-                } else {
-                  jQuery('#host').append( createOption(val, currentHost) );
+          <script type="text/javascript">
+            var GenreXML;
+
+            function findCategory(id) {
+              return jQuery(GenreXML).find('[ID="' + id + '"]')[0];
+            }
+
+            function getLabel(category, lang) {
+              return jQuery(category).children('label[xml\\:lang="' + lang + '"]').attr('text');
+            }
+
+            function createOption(id, currentHost) {
+              var category = findCategory(id);
+              var title = getLabel(category,'<xed:output value="$CurrentLang" />');
+
+              if( id == currentHost )
+                return '&lt;option selected="selected" value="' + id + '"&gt;' + title + '&lt;/option&gt;';
+              else
+                return '&lt;option value="' + id + '"&gt;' + title + '&lt;/option&gt;';
+            }
+
+            function changeHostOptions() {
+              var currentHost = jQuery('#host option:selected')[0].value;
+
+              jQuery('#host').empty();
+              jQuery('#host').parent().show();
+
+              var id = jQuery('#genre option:selected')[0].value;
+              var category = findCategory(id);
+              var host = getLabel(category,'x-hosts');
+
+              if (!(typeof host === 'undefined')) {
+                var hosts = host.split(' ');
+                jQuery.each( hosts, function(ind, val) {
+                  if (val == 'standalone') {
+                    jQuery('#host').append('&lt;option value="standalone"&gt; --- &lt;/option&gt;');
+                  } else {
+                    jQuery('#host').append( createOption(val, currentHost) );
+                  }
+                });
+                if (hosts.length == '1' &amp;&amp; hosts[0] == 'standalone') {
+                  jQuery('#host').parent().hide();
                 }
-              });
-              if (hosts.length == '1' &amp;&amp; hosts[0] == 'standalone') {
+              } else {
                 jQuery('#host').parent().hide();
               }
-            } else {
-              jQuery('#host').parent().hide();
             }
-          }
-          
-          jQuery(document).ready(function() {
-            jQuery('#genre').change(function() {
-              changeHostOptions();
+
+            jQuery(document).ready(function() {
+              jQuery('#genre').change(function() {
+                changeHostOptions();
+              });
+              jQuery.ajax({
+                method : "GET",
+                url : "api/v1/classifications/ubogenre",
+                dataType : "xml"
+              }).done(function(xml) {
+                GenreXML = xml;
+                changeHostOptions();
+              });
             });
-            jQuery.ajax({
-              method : "GET",
-              url : "api/v1/classifications/ubogenre",
-              dataType : "xml"
-            }).done(function(xml) {
-              GenreXML = xml;
-              changeHostOptions();
-            });
-          });
-        </script>
-        
-      </xed:bind>
-      
-      <xed:cleanup-rule xpath="//mods:*" relevant-if="(string-length(normalize-space(text())) &gt; 0) or * or contains(@valueURI,'/classifications/')" />
-      <xed:cleanup-rule xpath="//mods:relatedItem" relevant-if="not(mods:genre[@type='intern']='standalone')" />
-      
-    </xed:form>
+          </script>
+
+        </xed:bind>
+
+        <xed:cleanup-rule xpath="//mods:*" relevant-if="(string-length(normalize-space(text())) &gt; 0) or * or contains(@valueURI,'/classifications/')" />
+        <xed:cleanup-rule xpath="//mods:relatedItem" relevant-if="not(mods:genre[@type='intern']='standalone')" />
+
+      </xed:form>
+    </div>
   </article>
     
 </webpage>
