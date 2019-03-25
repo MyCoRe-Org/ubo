@@ -9,6 +9,12 @@
       <label xml:lang="x-hosts" text="journal standalone" />
       <label xml:lang="de" text="Artikel/Aufsatz" />
       <label xml:lang="en" text="article/chapter" />
+      <category ID="abstract">
+        <label xml:lang="de" text="Abstract" />
+        <label xml:lang="en" text="abstract" />
+        <label xml:lang="x-hosts" text="journal proceedings standalone" />
+        <label xml:lang="x-marcgt" text="abstract_or_summary" /> 
+      </category>
       <category ID="chapter">
         <label xml:lang="de" text="Buchaufsatz/Kapitel" />
         <label xml:lang="en" text="book article/chapter" />
