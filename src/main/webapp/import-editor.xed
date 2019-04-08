@@ -97,7 +97,7 @@
   </xed:template>
   
   <xed:template id="origin">
-    <xed:repeat xpath="mods:classification[@classID='ORIGIN']" max="5">
+    <xed:repeat xpath="mods:classification[@classID='ORIGIN']" max="10">
       <div>
         <label for="{xed:generate-id()}">
           <xed:if test="$genre_intern = 'dissertation'">
