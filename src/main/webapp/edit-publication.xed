@@ -133,8 +133,10 @@
 
         <fieldset>
           <xed:include uri="webapp:import-editor.xed" ref="languages" />    
-          <xed:include uri="webapp:import-editor.xed" ref="topics" />    
+          <xed:include uri="webapp:import-editor.xed" ref="topics" />  
+         <xed:if test="not($genre_intern='abstract')">   
           <xed:include uri="webapp:import-editor.xed" ref="abstract" />    
+         </xed:if> 
         </fieldset>
         
       </xed:bind>
