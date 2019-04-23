@@ -132,7 +132,7 @@
 
 <xsl:template match="basket">
 
-  <article class="card bg-beige rounded-0">
+  <article class="card bg-alternative rounded-0">
     <div class="card-body">
       <p>
         <xsl:value-of select="i18n:translate('basket.introduction')" />

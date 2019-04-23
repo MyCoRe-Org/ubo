@@ -5,7 +5,7 @@
  <title xml:lang="en">Build your personal publication list</title>
 
   <article xml:lang="de" class="card mb-1">
-    <div class="card-body bg-beige">
+    <div class="card-body bg-alternative">
       <h3>Publikationslisten in Imperia</h3>
       <p>
         In UDE-Webseiten, die mit dem Content-Management-System
@@ -16,7 +16,7 @@
   </article>
 
   <article xml:lang="en" class="card mb-1">
-    <div class="card-body bg-beige">
+    <div class="card-body bg-alternative">
       <h3>Publication list in Imperia</h3>
       <p>
         On webpages of UDE which are built using the content management system

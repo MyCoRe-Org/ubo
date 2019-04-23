@@ -193,7 +193,7 @@
 
 <xsl:template match="/mycoreobject/structure/children[child]">
   <div class="labels">
-    <span class="badge badge-beige mr-1">
+    <span class="badge badge-alternative mr-1">
       <xsl:value-of select="i18n:translate('ubo.relatedItem.host.contains')"/>
       <xsl:text>: </xsl:text>
       <a href="solr/select?q=link:{/mycoreobject/@ID}&amp;sort=year+desc">

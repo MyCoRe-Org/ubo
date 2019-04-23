@@ -30,7 +30,7 @@
 </xsl:template>
 
 <xsl:template match="romeoapi[publishers/publisher]">
-  <div class="card mt-3 bg-beige">
+  <div class="card mt-3 bg-alternative">
     <div class="card-body">
       <div class="row">
         <xsl:apply-templates select="publishers/publisher" />

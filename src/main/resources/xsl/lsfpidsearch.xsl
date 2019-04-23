@@ -69,7 +69,7 @@
 <xsl:template match="lsfpidsearch">
   
   <article class="card mb-2">
-    <div class="card-body bg-beige">
+    <div class="card-body bg-alternative">
       <p>
 	<xsl:value-of select="i18n:translate('lsf.searchText.1')"/>
 	<xsl:if test="not(contains(@referrer,'list-wizard'))">

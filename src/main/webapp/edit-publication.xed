@@ -5,7 +5,7 @@
   <title xml:lang="en">Acquire publication</title>
  
   <article class="card mb-3" xml:lang="de">
-    <div class="card-body bg-beige">
+    <div class="card-body bg-alternative">
       <p>
 	Die mit <strong>*</strong> gekennzeichneten Felder sind <strong>Pflichtfelder</strong>.
 	Durch klicken auf <strong>[+]</strong> können Sie ein <strong>Eingabefeld wiederholen</strong>!
@@ -19,7 +19,7 @@
     </div>
   </article>
   <article class="card mb-3" xml:lang="en">
-    <div class="card-body bg-beige">
+    <div class="card-body bg-alternative">
       <p>
 	Fields marked with <strong>*</strong>  are <strong>required fields</strong>.
 	By clicking on <strong>[+]</strong> you can repeat an input field!

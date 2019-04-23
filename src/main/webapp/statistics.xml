@@ -10,7 +10,7 @@
   <div id="chartDialog" />
 
   <article class="card mb-3" xml:lang="de">
-    <div class="card-body bg-beige">
+    <div class="card-body bg-alternative">
       <h3>Hinweis:</h3>
       <p>
         Diese Statistiken werden <strong>live</strong> über den gesamten Datenbestand gebildet.
@@ -21,7 +21,7 @@
   </article>
 
   <article class="card mb-3" xml:lang="en">
-    <div class="card-body bg-beige">
+    <div class="card-body bg-alternative">
       <h3>Notice:</h3>
       <p>
         These statistics are built <strong>live</strong> for all publications listed here.
