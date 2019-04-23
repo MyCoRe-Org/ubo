@@ -86,3 +86,13 @@ button.xeditor-pmud.fas {
   border: none;
   background: none;
 }
+
+.xeditor-pmud {
+    color: $pmud-color;
+    font-size:25px;
+}
+
+.xeditor-pmud:hover {
+    color: $pmud-color-hover;
+    font-size: 25px;
+}
