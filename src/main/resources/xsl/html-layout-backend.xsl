@@ -125,6 +125,15 @@
     </xsl:if>
   </xsl:template>
 
+  <!-- Main-Navigation -->
+
+  <xsl:template name="layout.mainnav">
+    <!-- Find the item that is the root of the navigation tree to display -->
+    <xsl:for-each select="$navigation.tree/item[@menu='main']">
+      <xsl:apply-templates select="item[@label|label]" mode="navigation" />
+    </xsl:for-each>
+  </xsl:template>
+
   <!-- Meta-Navigation -->
 
   <xsl:template name="layout.metanav">

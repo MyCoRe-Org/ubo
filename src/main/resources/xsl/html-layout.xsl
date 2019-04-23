@@ -307,10 +307,7 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav" id="mainnav">
-          <!-- Find the item that is the root of the navigation tree to display -->
-          <xsl:for-each select="$navigation.tree">
-            <xsl:apply-templates select="item[@label|label]" mode="navigation" />
-          </xsl:for-each>
+          <xsl:call-template name="layout.mainnav" />
         </ul>
       </div>
     </nav>
