@@ -17,6 +17,11 @@
   <xsl:variable name="bootstrap.version" select="'4.1.3'" />
   <xsl:variable name="font-awesome.version" select="'5.5.0'" />
 
+  <!-- ==================== IMPORTS ==================== -->
+  <!-- additional stylesheets -->
+  <xsl:include href="coreFunctions.xsl" />
+  <xsl:include href="html-layout-backend.xsl" />
+
 
   <!-- ==================== HTML ==================== -->
   
@@ -60,56 +65,11 @@
     </head>
   </xsl:template>
 
-  <!-- id of the current page -->
-  <xsl:variable name="PageID" select="/html/@id" />
-
-  <!-- Parameters of MyCoRe LayoutService -->
-
-  <xsl:param name="CurrentUser" />
-  <xsl:param name="DefaultLang" />
-  <xsl:param name="WritePermission" />
-  <xsl:param name="ReadPermission" />
-  <xsl:param name="UBO.System.ReadOnly" />
-  <xsl:param name="UBO.Build.TimeStamp" select="''" />
-
-  <xsl:param name="MCR.Users.Guestuser.UserName" />
-  <xsl:param name="MCR.Mail.Address" />
-
-  <!-- additional stylesheets -->
-  <xsl:include href="coreFunctions.xsl" />
-
-  <!-- last navigation id calculated from navigation.xml -->
-  <xsl:variable name="NavigationID" xmlns:lastPageID="xalan://unidue.ubo.LastPageID">
-    <xsl:choose>
-      <xsl:when test="(string-length($PageID) &gt; 0) and ($navigation.tree/descendant-or-self::item[@id = $PageID])">
-        <xsl:value-of select="lastPageID:setLastPageID($PageID)" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:variable name="LastID" select="lastPageID:getLastPageID()" />
-        <xsl:choose>
-          <xsl:when test="(string-length($LastID) &gt; 0) and ($navigation.tree/descendant-or-self::item[@id = $LastID])">
-            <xsl:value-of select="$LastID" />
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="lastPageID:setLastPageID('home')" />
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
-  <!-- load navigation from navigation.xml -->
-  <xsl:variable name="navigation.tree" select="document('webapp:navigation.xml')/navigation" />
-
-  <xsl:variable name="CurrentItem" select="$navigation.tree/descendant-or-self::item[@id = $NavigationID]" />
-  
-  <!-- true if current user is the guest user -->
-  <xsl:variable name="isGuest" select="$CurrentUser = $MCR.Users.Guestuser.UserName"/>
 
   <!-- html body -->
 
   <xsl:template name="layout.body">
-    <body class="d-flex flex-column" style="height: 100%;">
+    <body class="d-flex flex-column">
       <xsl:call-template name="layout.header" />
 
       <div class="container bg-white d-flex flex-column flex-grow-1">
@@ -215,75 +175,6 @@
         </xsl:otherwise>
       </xsl:choose>
     </section>
-  </xsl:template>
-
-  <!-- ========== Prüfe auf Berechtigung des Benutzers ======== -->
-  
-  <xsl:variable name="allowed.to.see.this.page">
-    <xsl:for-each select="$CurrentItem">
-      <xsl:choose>
-        <xsl:when test="ancestor-or-self::item[@role]">
-          <xsl:for-each select="(ancestor-or-self::item[@role])[last()]">
-            <xsl:call-template name="check.allowed" />
-          </xsl:for-each>
-        </xsl:when>
-        <xsl:otherwise>true</xsl:otherwise>
-      </xsl:choose>
-    </xsl:for-each>
-  </xsl:variable>
-  
-  <xsl:template name="check.allowed">
-    <xsl:choose> 
-      <xsl:when test="not(@role)">true</xsl:when>
-      <xsl:when xmlns:check="xalan://org.mycore.common.xml.MCRXMLFunctions" test="check:isCurrentUserInRole(@role)">true</xsl:when>
-      <xsl:otherwise>false</xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-  <!-- Colorbox -->
-
-  <xsl:template name="layout.colorbox">
-    <div style="display: none;" id="cboxOverlay" />
-    <div id="colorbox" style="padding-bottom: 57px; padding-right: 28px; display: none;">
-      <div id="cboxWrapper">
-        <div style="">
-          <div style="float: left;" id="cboxTopLeft" />
-          <div style="float: left;" id="cboxTopCenter" />
-          <div style="float: left;" id="cboxTopRight" />
-        </div>
-        <div style="clear: left;">
-          <div style="float: left;" id="cboxMiddleLeft" />
-          <div style="float: left;" id="cboxContent">
-            <div style="width: 0pt; height: 0pt; overflow: hidden;" id="cboxLoadedContent" />
-            <div id="cboxLoadingOverlay" />
-            <div id="cboxLoadingGraphic" />
-            <div id="cboxTitle" />
-            <div id="cboxCurrent" />
-            <div id="cboxNext" />
-            <div id="cboxPrevious" />
-            <div id="cboxSlideshow" />
-            <div id="cboxClose" />
-          </div>
-          <div style="float: left;" id="cboxMiddleRight" />
-        </div>
-        <div style="clear: left;">
-          <div style="float: left;" id="cboxBottomLeft" />
-          <div style="float: left;" id="cboxBottomCenter" />
-          <div style="float: left;" id="cboxBottomRight" />
-        </div>
-      </div>
-      <div style="position: absolute; width: 9999px; visibility: hidden; display: none;" />
-    </div>
-  </xsl:template>
-
-  <!-- Skip-Navigation -->
-
-  <xsl:template name="layout.skip">
-    <ul id="skip">
-      <li><a href="#inhalt">Inhalt</a></li>
-      <li><a href="#zielgruppen">Zielgruppeneinstieg</a></li>
-      <li><a href="#hauptnavigation">Hauptnavigation</a></li>
-    </ul>
   </xsl:template>
 
   <!-- Brotkrumen-Navigation -->
@@ -530,21 +421,6 @@
       </xsl:choose>
     </xsl:if>
 
-  </xsl:template>
-
-  <!-- Master Head -->
-
-  <xsl:template name="layout.mastHead">
-    <div class="col">
-      <h2>
-        <a href="{$WebApplicationBaseURL}">Universitätsbibliographie</a>
-      </h2>
-    </div>
-    <div class="col text-right p-0">
-      <a class="containsimage" id="ude-logo" href="https://www.uni-due.de/">
-        <img src="{$WebApplicationBaseURL}images/ude-logo.png" alt="Logo" />
-      </a>
-    </div>
   </xsl:template>
 
   <xsl:template name="layout.pageTitle">

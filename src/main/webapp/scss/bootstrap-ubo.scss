@@ -1,6 +1,6 @@
 // override bootstrap sass variables specified here:
 // http://getbootstrap.com/customize/#less-variables
-@import "variables";
+@import "variables-ubo";
 
 // current stable bootstrap version
 @import "../webjars/bootstrap/4.1.3/scss/bootstrap";
@@ -10,6 +10,10 @@
 
 
 // necessary extensions/replacements/changes based on MyCoRe specific css-classes
+
+html, body {
+  height: 100%;
+}
 
 .has-error {
   @extend .border-danger;
