@@ -148,7 +148,7 @@
     <div id="basket-info" class="card my-3 w-100">
       <div class="card-body">
 	<a href="{$ServletsBaseURL}MCRBasketServlet?action=show&amp;type=bibentries">
-          <span class="glyphicon glyphicon-bookmark mr-1" aria-hidden="true" />
+          <span class="fas fa-bookmark mr-1" aria-hidden="true" />
           <span class="mr-1"><xsl:value-of select="i18n:translate('basket')" />:</span>
           <span class="mr-1" id="basket-info-num">
             <xsl:value-of xmlns:basket="xalan://unidue.ubo.basket.BasketUtils" select="basket:size()" />
@@ -207,52 +207,6 @@
     <li class="breadcrumb-item">
       <xsl:call-template name="output.item.label" />
     </li>
-  </xsl:template>
-
-  <!-- Ausgabe Link und Bezeichnung des Menüpunktes -->
-
-  <xsl:template name="output.item.label">
-    <xsl:choose>
-
-      <!-- ==== link to external url ==== -->
-      <xsl:when test="@href">
-        <a class="nav-link" href="{@href}">
-          <xsl:copy-of select="@target" />
-          <xsl:call-template name="output.label.for.lang" />
-        </a>
-      </xsl:when>
-
-      <!-- ==== link to internal url ==== -->
-      <xsl:when test="@ref">
-        <a class="nav-link" href="{$WebApplicationBaseURL}{@ref}">
-          <xsl:copy-of select="@target" />
-          <xsl:call-template name="output.label.for.lang" />
-        </a>
-      </xsl:when>
-
-      <!-- no link -->
-      <xsl:otherwise>
-        <xsl:call-template name="output.label.for.lang" />
-      </xsl:otherwise>
-
-    </xsl:choose>
-
-  </xsl:template>
-
-  <!-- print label in current language -->
-
-  <xsl:template name="output.label.for.lang">
-    <xsl:choose>
-      <xsl:when test="label[lang($CurrentLang)]">
-        <xsl:value-of select="label[lang($CurrentLang)]" />
-      </xsl:when>
-      <xsl:when test="label[lang($DefaultLang)]">
-        <xsl:value-of select="label[lang($DefaultLang)]" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="@label" />
-      </xsl:otherwise>
-    </xsl:choose>
   </xsl:template>
 
   <!-- current user and login formular-->
@@ -362,67 +316,6 @@
     </nav>
   </xsl:template>
 
-
-
-  <!-- Menüpunkt im Navigationsmenü -->
-  <xsl:template match="item" mode="navigation">
-
-    <!-- ==== Prüfe ob aktueller Benutzer berechtigt ist, diesen Menüpunkt zu sehen ==== -->
-    <xsl:variable name="allowed">
-      <xsl:call-template name="check.allowed" />
-    </xsl:variable>
-
-    <!-- add class="active for selected items" -->
-    <xsl:variable name="class_active">
-      <xsl:if test="@id and (@id = $PageID)">
-        <xsl:value-of select="'active'"/>
-      </xsl:if>
-      <xsl:if test="./item[@id = $PageID]">
-        <xsl:value-of select="'active'"/>
-      </xsl:if>
-    </xsl:variable>
-
-    <xsl:if test="$allowed = 'true'">
-
-      <xsl:choose>
-        <xsl:when test="count(./item/@ref) &gt; 0">
-          <!-- print dropdown menu option -->
-          <li class="nav-item dropdown {$class_active}">
-            <xsl:if test="@class != ''">
-              <xsl:attribute name="class">
-                <xsl:value-of select="concat('nav-item dropdown', $class_active, ' ', @class)"/>
-              </xsl:attribute>
-            </xsl:if>
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-               aria-haspopup="true" aria-expanded="false">
-              <xsl:call-template name="output.label.for.lang" />
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <xsl:for-each select="./item">
-                <a class="dropdown-item" href="{@ref}">
-                  <xsl:copy-of select="@target" />
-                  <xsl:call-template name="output.label.for.lang" />
-                </a>
-              </xsl:for-each>
-            </div>
-          </li>
-        </xsl:when>
-        <xsl:otherwise>
-          <!-- print single menu option -->
-          <li class="nav-item {$class_active}">
-            <xsl:if test="@class != ''">
-              <xsl:attribute name="class">
-                <xsl:value-of select="concat('nav-item ', $class_active, ' ', @class)"/>
-              </xsl:attribute>
-            </xsl:if>
-            <xsl:call-template name="output.item.label"/>
-          </li>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:if>
-
-  </xsl:template>
-
   <xsl:template name="layout.pageTitle">
     <h1 id="seitentitel">
       <xsl:value-of select="head/title" disable-output-escaping="yes" />
@@ -437,7 +330,15 @@
     </div>
     <div class="col-lg d-flex align-items-center">
       <p class="ml-lg-auto mb-0">
-        <xsl:apply-templates select="/html/@lastModified" />
+        <xsl:variable name="lastModified">
+          <xsl:variable name="lastModified_pre">
+            <xsl:apply-templates select="/html/@lastModified" />
+          </xsl:variable>
+          <xsl:if test="string($lastModified_pre)">
+            <xsl:value-of select="concat($lastModified_pre, ' | ')"/>
+          </xsl:if>
+        </xsl:variable>
+        <xsl:value-of select="$lastModified"/>
         <xsl:text>© Universität Duisburg-Essen | </xsl:text>
         <a href="mailto:{$MCR.Mail.Address}">
           <xsl:value-of select="$MCR.Mail.Address" />
@@ -446,60 +347,5 @@
     </div>
   </xsl:template>
 
-  <!-- Optional: Datum der letzten Änderung dieser Seite im Format YYYY-MM-TT -->
-
-  <xsl:template match="/html/@lastModified">
-    <xsl:value-of select="i18n:translate('webpage.modified')" />
-    <xsl:text>: </xsl:text>
-    <xsl:choose>
-      <xsl:when test="$CurrentLang = 'de'">
-        <xsl:value-of select="substring(.,9,2)" />
-        <xsl:text>.</xsl:text>
-        <xsl:value-of select="substring(.,6,2)" />
-        <xsl:text>.</xsl:text>
-        <xsl:value-of select="substring(.,1,4)" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="." />
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text> | </xsl:text>
-  </xsl:template>
-
-  <!-- Meta-Navigation -->
-
-  <xsl:template name="layout.metanav">
-    <xsl:variable name="metanavigation" select="$navigation.tree/item[@role='meta']/item"/>
-    <nav class="navbar navbar navbar-expand">
-      <ul class="navbar-nav">
-        <!-- Find the item that is the root of the navigation tree to display -->
-        <xsl:for-each select="$metanavigation" >
-          <xsl:choose>
-            <!-- There is an item that should be displayed as root of the tree -->
-            <xsl:when test="name()='item'">
-              <xsl:apply-templates select="." mode="navigation" />
-            </xsl:when>
-            <!-- Display the complete navigation tree down from top -->
-            <xsl:otherwise>
-              <xsl:apply-templates select="item[@label|label]" mode="navigation" />
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:for-each>
-      </ul>
-    </nav>
-  </xsl:template>
-
-  <!-- print out message that the system is in read only mode -->
-
-  <xsl:param name="UBO.System.ReadOnly.Message" />
-  <xsl:template name="local.readonly.message">
-    <xsl:if test="($WritePermission = 'true') and ($UBO.System.ReadOnly = 'true')">
-      <div class="section">
-        <span style="color:red">
-          <xsl:value-of select="$UBO.System.ReadOnly.Message" />
-        </span>
-      </div>
-    </xsl:if>
-  </xsl:template>
 
 </xsl:stylesheet>
