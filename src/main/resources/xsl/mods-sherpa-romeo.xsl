@@ -64,9 +64,9 @@
     <xsl:value-of select="i18n:translate(concat('ubo.romeo.',name()))" />
     <xsl:text>: </xsl:text>
     <xsl:for-each select="prearchiving|postarchiving|pdfarchiving">
-      <xsl:variable name="glyphicon" select="i18n:translate(concat('ubo.romeo.icon.',.))" />
+      <xsl:variable name="fa-icon" select="i18n:translate(concat('ubo.romeo.icon.',.))" />
       <xsl:variable name="colour"    select="i18n:translate(concat('ubo.romeo.icon.colour.',.))" />
-      <span aria-hidden="true" class="glyphicon glyphicon-{$glyphicon}" style="margin: 0 0.5ex 0 0.5ex; color:{$colour}" />
+      <span aria-hidden="true" class="fas fa-{$fa-icon}" style="margin: 0 0.5ex 0 0.5ex; color:{$colour}" />
       <xsl:value-of select="i18n:translate(concat('ubo.romeo.text.',text()))" />  
     </xsl:for-each>
   </div>
