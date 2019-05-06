@@ -34,6 +34,9 @@
       <category ID="ZFH">
         <label xml:lang="de" text="Zentrum für Hochschulqualitätsentwicklung (ZHQE)" />
       </category>
+	  <category ID="FGF" >
+        <label xml:lang="de" text="Koordinations- und Forschungsstelle des Netzwerks Frauen- und Geschlechterforschung NRW" />
+      </category>
       <category ID="HS">
         <label xml:lang="de" text="Hochschulsport" />
       </category>

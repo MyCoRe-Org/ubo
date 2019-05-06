@@ -6,9 +6,15 @@
 
   <categories>
     <category ID="article">
-      <label xml:lang="x-hosts" text="journal standalone" />
+      <label xml:lang="x-hosts" text="journal blog standalone" />
       <label xml:lang="de" text="Artikel/Aufsatz" />
       <label xml:lang="en" text="article/chapter" />
+      <category ID="abstract">
+        <label xml:lang="de" text="Abstract" />
+        <label xml:lang="en" text="abstract" />
+        <label xml:lang="x-hosts" text="journal proceedings standalone" />
+        <label xml:lang="x-marcgt" text="abstract_or_summary" /> 
+      </category>
       <category ID="chapter">
         <label xml:lang="de" text="Buchaufsatz/Kapitel" />
         <label xml:lang="en" text="book article/chapter" />
@@ -84,6 +90,11 @@
       <label xml:lang="x-hosts" text="standalone" />
       <label xml:lang="de" text="Serie" />
       <label xml:lang="en" text="series" />
+      <category ID="blog">
+      <label xml:lang="x-hosts" text="standalone" />
+      <label xml:lang="de" text="Blog" />
+      <label xml:lang="en" text="blog" />
+    </category>
     </category>
     <category ID="poster">
       <label xml:lang="en" text="Poster" />

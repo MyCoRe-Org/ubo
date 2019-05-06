@@ -97,9 +97,9 @@
   </xed:template>
   
   <xed:template id="origin">
-    <xed:repeat xpath="mods:classification[@classID='ORIGIN']" max="5">
-      <div class="form-inline form-group">
-        <label for="{xed:generate-id()}" class="mycore-form-label">
+    <xed:repeat xpath="mods:classification[@classID='ORIGIN']" max="10">
+      <div>
+        <label for="{xed:generate-id()}">
           <xed:if test="$genre_intern = 'dissertation'">
             <xed:output value="'*'" />
             <xed:validate xpath="//mods:classification[@classID='ORIGIN']" required="true" i18n="condition.institution" display="global" />

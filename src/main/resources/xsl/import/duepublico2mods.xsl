@@ -26,7 +26,7 @@
       <xsl:apply-templates select="/mycoreobject/@ID" /> 
       <xsl:copy-of select="mods:language" />
       <xsl:copy-of select="mods:subject[mods:topic]" />
-      <xsl:copy-of select="mods:abstract" />
+      <xsl:apply-templates select="mods:abstract" />
       <xsl:call-template name="oa" />
     </xsl:copy>
   </xsl:template>
@@ -116,6 +116,15 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:copy>
+  </xsl:template>
+  
+  <xsl:template match="mods:abstract">
+    <xsl:if test="string-length(text()) &gt; 0">
+      <xsl:copy>
+        <xsl:copy-of select="@xml:lang" />
+        <xsl:copy-of select="text()" />
+      </xsl:copy>
+    </xsl:if>
   </xsl:template>
 
   <xsl:variable name="authorityOA">https://bibliographie.ub.uni-due.de/classifications/oa</xsl:variable>

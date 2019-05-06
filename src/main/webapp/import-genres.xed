@@ -42,6 +42,16 @@
     <xed:include uri="webapp:import-editor.xed" ref="url" />
   </xed:template>
   
+  <xed:template id="genre.abstract">
+    <xed:include uri="webapp:import-editor.xed" ref="title" />
+    <xed:include uri="webapp:import-editor.xed" ref="author" />
+    <xed:if test="$host_intern='journal'">      
+      <xed:include uri="webapp:import-editor.xed" ref="year" />
+    </xed:if>
+    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
+    <xed:include uri="webapp:import-editor.xed" ref="url" />
+  </xed:template>
+  
   <xed:template id="genre.chapter">
     <xed:include uri="webapp:import-editor.xed" ref="title" />
     <xed:include uri="webapp:import-editor.xed" ref="author" />
@@ -193,6 +203,15 @@
     <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
     <xed:include uri="webapp:import-editor.xed" ref="url" />
   </xed:template>
+  
+  <xed:template id="genre.blog">
+    <xed:include uri="webapp:import-editor.xed" ref="title" />
+    <xed:include uri="webapp:import-editor.xed" ref="editor" />
+    <xed:include uri="webapp:import-editor.xed" ref="issn" />
+    <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
+    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
+    <xed:include uri="webapp:import-editor.xed" ref="url" />
+  </xed:template>
 
   <xed:template id="host.journal">
     <xed:include uri="webapp:import-editor.xed" ref="host.title" />
@@ -207,6 +226,14 @@
     <xed:include uri="webapp:import-editor.xed" ref="volume" />
     <xed:include uri="webapp:import-editor.xed" ref="issue" />
     <xed:include uri="webapp:import-editor.xed" ref="pages" />
+  </xed:template>
+  
+  <xed:template id="host.blog">
+    <xed:include uri="webapp:import-editor.xed" ref="host.title" />
+    <xed:include uri="webapp:import-editor.xed" ref="editor" />    
+    <xed:include uri="webapp:import-editor.xed" ref="issn" />
+    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
+    <xed:include uri="webapp:import-editor.xed" ref="url" />
   </xed:template>
 
   <xed:template id="host.collection">
