@@ -58,12 +58,12 @@
   
   <item role="meta">
     <item ref="contact.xml">
-      <label xml:lang="de">KONTAKT</label>
-      <label xml:lang="en">CONTACT</label>
+      <label xml:lang="de">Kontakt</label>
+      <label xml:lang="en">Contact</label>
     </item>
     <item ref="impressum.xml">
-      <label xml:lang="de">IMPRESSUM</label>
-      <label xml:lang="en">IMPRINT</label>
+      <label xml:lang="de">Impressum</label>
+      <label xml:lang="en">Imprint</label>
     </item>
   </item>
 

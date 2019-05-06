@@ -87,7 +87,7 @@
     <article class="card" xml:lang="de">
       <div class="card-body bg-alternative">
         <hgroup>
-          <h2>Kontakt:</h2>
+          <h3>Kontakt:</h3>
         </hgroup>
         <p>
           <a href="mailto:universitaetsbibliographie@ub.uni-due.de">
@@ -103,7 +103,7 @@
     <article class="card" xml:lang="en">
       <div class="card-body bg-alternative">
         <hgroup>
-          <h2>Contact:</h2>
+          <h3>Contact:</h3>
         </hgroup>
         <p>
           <a href="mailto:universitaetsbibliographie@ub.uni-due.de">
