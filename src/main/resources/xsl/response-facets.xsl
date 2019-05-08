@@ -63,7 +63,7 @@
 
             <li class="mycore-list-item">
               <a class="mycore-facet-remove" href="{$removeURL}">
-                <span class="glyphicon glyphicon-remove-circle" aria-hidden="true" />
+                <span class="far fa-times-circle" aria-hidden="true" />
               </a>
               <span class="mycore-facet-filter">
                 <xsl:choose>
@@ -171,7 +171,7 @@
     <xsl:choose>
       <xsl:when test="number(text()) &lt; number($numFound)"> <!-- When count = 100%, filtering makes no sense -->
         <a class="mycore-facet-exclude" href="{$baseURL}{encoder:encode($fq_not)}{$fq}"> <!-- Link to exclude this facet value -->
-          <span class="glyphicon glyphicon-remove-circle" aria-hidden="true" />
+          <span class="far fa-times-circle" aria-hidden="true" />
         </a>
         <a class="mycore-facet-add" href="{$baseURL}{$fq}">
           <span class="mycore-facet-value">

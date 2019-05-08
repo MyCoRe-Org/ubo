@@ -25,7 +25,7 @@
 
   <xsl:template match="lst[@name='facet_fields']/lst[@name='status']">
     <hgroup>
-      <h2>Publikationen nach Status:</h2>
+      <h3>Publikationen nach Status:</h3>
     </hgroup>
     <ul class="list-group list-group-flush">
       <xsl:for-each select="int">
@@ -42,7 +42,7 @@
 
   <xsl:template match="lst[@name='facet_fields']/lst[@name='importID']">
     <hgroup>
-      <h2>Zuletzt importierte Listen:</h2>
+      <h3>Zuletzt importierte Listen:</h3>
     </hgroup>
     <ul class="list-group list-group-flush">
       <xsl:for-each select="int">
@@ -62,7 +62,7 @@
     <xsl:variable name="numDays" select="count(int)" />
     <xsl:variable name="dateField" select="../@name" /> <!-- created|modified -->
     <hgroup>
-      <h2><xsl:value-of select="i18n:translate(concat('facets.facet.',$dateField))" />:</h2>
+      <h3><xsl:value-of select="i18n:translate(concat('facets.facet.',$dateField))" />:</h3>
     </hgroup>
     <ul class="list-group list-group-flush"> 
       <xsl:call-template name="output.value">

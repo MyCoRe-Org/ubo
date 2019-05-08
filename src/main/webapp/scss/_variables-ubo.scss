@@ -1,8 +1,11 @@
-$body-bg: #efe4bf;
+$body-bg: #efe4bf !default;
+
+$pmud-color: Tomato !default;
+$pmud-color-hover: Tomato !default;
 
 /* add new custom colors */
 $theme-colors: (
-  beige: $body-bg
+  alternative: $body-bg
 );
 
 $grid-breakpoints: (

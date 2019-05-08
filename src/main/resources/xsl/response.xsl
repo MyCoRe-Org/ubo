@@ -241,14 +241,14 @@
     <xsl:when test="$condition">
       <li class="page-item">
         <a class="page-link" href="{$resultsPageURL}{$start}">
-          <span class="glyphicon glyphicon-{$icon}" aria-hidden="true"></span>
+          <span class="fas fa-{$icon}" aria-hidden="true"></span>
         </a>
       </li>
     </xsl:when>
     <xsl:otherwise>
       <li class="page-item disabled">
         <a class="page-link" href="#">
-          <span class="glyphicon glyphicon-{$icon}" aria-hidden="true"></span>
+          <span class="fas fa-{$icon}" aria-hidden="true"></span>
         </a>
       </li>
     </xsl:otherwise>

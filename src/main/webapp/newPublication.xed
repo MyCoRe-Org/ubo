@@ -114,7 +114,7 @@
   </article>
   
   <article class="card mb-1" xml:lang="de">
-    <div class="card-body bg-beige">
+    <div class="card-body bg-alternative">
       <h2>Literaturlisten</h2>
       <p>
         Sollten Sie über <strong>Literaturlisten</strong> verfügen, die Sie mit Hilfe von
@@ -135,7 +135,7 @@
   </article>
 
   <article class="card mb-1" xml:lang="en">
-    <div class="card-body bg-beige">
+    <div class="card-body bg-alternative">
       <h2>Lists of literature</h2>
       <p>
         If you have <strong>lists of literature</strong> at your disposal that you have compiled with the aid
@@ -197,7 +197,7 @@
   </article>  
   
   <article class="card mb-1" xml:lang="de">
-    <div class="card-body bg-beige">
+    <div class="card-body bg-alternative">
       <h2>Personengruppen, die Publikationen melden können bzw. sollten</h2>
       <p>
         Folgende Personengruppen sollten als Angehörige der Universität Duisburg-Essen
@@ -211,7 +211,7 @@
   </article>
 
   <article class="card mb-1" xml:lang="en">
-    <div class="card-body bg-beige">
+    <div class="card-body bg-alternative">
       <h2>Groups of persons which can -  or should - register their publications</h2>
       <p>
         The following groups of persons as members of Duisburg Essen University should

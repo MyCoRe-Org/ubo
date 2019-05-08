@@ -85,9 +85,9 @@
     <xinclude uri="xslStyle:response-sidebar-admin:solr:q=status:imported+AND+importID:*&amp;rows=0&amp;facet=true&amp;facet.sort=index&amp;facet.limit=-1&amp;facet.field=importID" />
  
     <article class="card" xml:lang="de">
-      <div class="card-body bg-beige">
+      <div class="card-body bg-alternative">
         <hgroup>
-          <h2>Kontakt:</h2>
+          <h3>Kontakt:</h3>
         </hgroup>
         <p>
           <a href="mailto:universitaetsbibliographie@ub.uni-due.de">
@@ -101,9 +101,9 @@
       </div>
     </article>
     <article class="card" xml:lang="en">
-      <div class="card-body bg-beige">
+      <div class="card-body bg-alternative">
         <hgroup>
-          <h2>Contact:</h2>
+          <h3>Contact:</h3>
         </hgroup>
         <p>
           <a href="mailto:universitaetsbibliographie@ub.uni-due.de">

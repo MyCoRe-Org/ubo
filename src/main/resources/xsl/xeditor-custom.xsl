@@ -56,8 +56,8 @@
       </xsl:choose>
     </xsl:variable>
 
-    <div class="form-control border-0" style="max-width:20%;">
-      <button name="{$name}" class="xeditor-pmud fas" title="{$symbol}" tabindex="999" style="color:Tomato; font-size:25px;">
+    <div class="form-control border-0 px-2" style="max-width:20%;">
+      <button name="{$name}" class="xeditor-pmud fas" title="{$symbol}" tabindex="999">
         <i class="fas {$fa-class}"></i>
       </button>
     </div>
