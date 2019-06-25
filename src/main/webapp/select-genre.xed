@@ -41,6 +41,7 @@
             <div> 
               <label for="host" style="vertical-align:bottom;"><xed:output i18n="ubo.newPublicationWizard.publishedIn" />:</label>
               <select id="host" size="1">
+                <option value=""><xed:output i18n="search.select" /></option>
                 <xed:include uri="xslStyle:host-filter,items2options:classification:editor:-1:children:ubogenre" />
               </select>
             </div>
