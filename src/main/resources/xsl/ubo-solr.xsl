@@ -27,7 +27,7 @@
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:genre[@type='intern']" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="solrField" />
-    <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:titleInfo" mode="solrField.host" />
+    <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:titleInfo[not(@type)]" mode="solrField.host" />
     <xsl:apply-templates select="mods:relatedItem[@type='host'][mods:genre='journal']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:part" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:originInfo" mode="solrField" />
@@ -35,7 +35,7 @@
     <xsl:apply-templates select="descendant::mods:name[@type='conference']" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:dateIssued[1][translate(text(),'1234567890','YYYYYYYYYY')='YYYY']" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:identifier[@type]" mode="solrField" />
-    <xsl:apply-templates select="descendant::mods:shelfLocator" mode="solrField" />
+    <xsl:apply-templates select="descendant::mods:shelfLFocator" mode="solrField" />
     <xsl:apply-templates select="mods:subject" mode="solrField" />
     <xsl:apply-templates select="mods:note" mode="solrField" />
     <xsl:apply-templates select="mods:abstract" mode="solrField" />
@@ -87,7 +87,7 @@
     </xsl:if>
   </xsl:template>
   
-  <xsl:template match="mods:relatedItem[@type='host']/mods:titleInfo" mode="solrField.host">
+  <xsl:template match="mods:relatedItem[@type='host']/mods:titleInfo[not(@type)]" mode="solrField.host">
     <xsl:call-template name="buildTitleField">
       <xsl:with-param name="name">host_title</xsl:with-param>
     </xsl:call-template>
