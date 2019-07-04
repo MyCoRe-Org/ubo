@@ -16,16 +16,30 @@
   </xsl:template>
   
   <xsl:template name="genres2genreIntern">
-    <xsl:variable name="mappedGenreIDs">
-      <xsl:apply-templates select="mods:genre" />
-      <xsl:text> </xsl:text>
-    </xsl:variable>
-    <xsl:variable name="firstGenre" select="normalize-space(substring-before($mappedGenreIDs,' '))" />
-    <xsl:if test="string-length($firstGenre) &gt; 0">
-      <mods:genre type="intern">
-        <xsl:value-of select="$firstGenre" />
-      </mods:genre>
-    </xsl:if>
+    <mods:genre type="intern">
+      <xsl:choose>
+        <xsl:when test="mods:genre[@type='intern']">
+          <xsl:value-of select="mods:genre[@type='intern'][1]" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:variable name="mappedGenreIDs">
+            <xsl:apply-templates select="mods:genre" />
+            <xsl:text> </xsl:text>
+          </xsl:variable>
+          <xsl:variable name="firstGenre" select="normalize-space(substring-before($mappedGenreIDs,' '))" />
+          <xsl:choose>
+            <xsl:when test="string-length($firstGenre) &gt; 0">
+              <xsl:value-of select="$firstGenre" />
+            </xsl:when>
+            <xsl:when test="@type='series'">series</xsl:when>
+            <xsl:when test="mods:identifier[@type='issn']">journal</xsl:when>
+            <xsl:when test="mods:identifier[@type='isbn']">collection</xsl:when>
+            <xsl:when test="local-name()='relatedItem'">journal</xsl:when>
+            <xsl:otherwise>article</xsl:otherwise>
+          </xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
+    </mods:genre>
   </xsl:template>
 
   <xsl:template match="mods:mods/mods:genre">
@@ -35,11 +49,13 @@
       <xsl:when test="$genre='journal'">journal</xsl:when>
       <xsl:when test="$genre='journals'">article</xsl:when>
       <xsl:when test="$genre='journal article'">article</xsl:when>
+      <xsl:when test="$genre='journal-article'">article</xsl:when>
       <xsl:when test="$genre='article'">article</xsl:when>
       <xsl:when test="$genre='article in press'">article</xsl:when>
       <xsl:when test="$genre='business article'">article</xsl:when>
       <xsl:when test="$genre='book' and ancestor::mods:relatedItem/@type='host'">collection</xsl:when>
       <xsl:when test="$genre='book'">book</xsl:when>
+      <xsl:when test="$genre='monograph'">book</xsl:when>
       <xsl:when test="$genre='book series'">series</xsl:when>
       <xsl:when test="$genre='conferences'">chapter</xsl:when>
       <xsl:when test="$genre='conference paper'">chapter</xsl:when>
@@ -50,6 +66,8 @@
       <xsl:when test="$genre='working paper'">book</xsl:when>
       <xsl:when test="$genre='review'">article</xsl:when>
       <xsl:when test="$genre='book chapter'">chapter</xsl:when>
+      <xsl:when test="$genre='book-chapter'">chapter</xsl:when>
+      <xsl:when test="$genre='book-part'">chapter</xsl:when>
       <xsl:when test="$genre='letter'">article</xsl:when>
       <xsl:when test="$genre='note'">article</xsl:when>
       <xsl:when test="$genre='short survey'">article</xsl:when>
@@ -92,19 +110,35 @@
   </xsl:template>
 
   <xsl:template match="mods:relatedItem[@type='host']/mods:genre">
-    <xsl:variable name="genre" select="normalize-space(translate(../../mods:genre[1],'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'))" />
+    <xsl:variable name="child_genre" select="normalize-space(translate(../../mods:genre[1],'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'))" />
+    <xsl:variable name="genre" select="normalize-space(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'))" />
     <xsl:choose>
-      <xsl:when test="$genre='conference'">proceedings</xsl:when>
+      <xsl:when test="$child_genre='conference'">proceedings</xsl:when>
+      <xsl:when test="$child_genre='conferences'">proceedings</xsl:when>
+      <xsl:when test="$child_genre='incollection'">collection</xsl:when>
+      <xsl:when test="$child_genre='inproceedings'">proceedings</xsl:when>
+      <xsl:when test="$child_genre='inbook'">collection</xsl:when>
+      <xsl:when test="$child_genre='edited-book'">collection</xsl:when>
+      <xsl:when test="$child_genre='article'">journal</xsl:when>
+      <xsl:when test="$child_genre='journal-article'">journal</xsl:when>
+      <xsl:when test="$child_genre='book-chapter'">collection</xsl:when>
+      <xsl:when test="$child_genre='techreport'">collection</xsl:when>
+      <xsl:when test="$child_genre='misc'">collection</xsl:when>
+      <xsl:when test="$child_genre='unpublished'">collection</xsl:when>
+      <xsl:when test="$child_genre='other'">collection</xsl:when> 
+      <xsl:when test="$genre='trade journal'">journal</xsl:when>
+      <xsl:when test="$genre='journal'">journal</xsl:when>
+      <xsl:when test="$genre='journals'">journal</xsl:when>
+      <xsl:when test="$genre='book'">book</xsl:when>
+      <xsl:when test="$genre='monograph'">book</xsl:when>
+      <xsl:when test="$genre='book series'">series</xsl:when>
       <xsl:when test="$genre='conferences'">proceedings</xsl:when>
-      <xsl:when test="$genre='incollection'">collection</xsl:when>
-      <xsl:when test="$genre='inproceedings'">proceedings</xsl:when>
-      <xsl:when test="$genre='inbook'">collection</xsl:when>
-      <xsl:when test="$genre='article'">journal</xsl:when>
-      <xsl:when test="$genre='techreport'">collection</xsl:when>
-      <xsl:when test="$genre='misc'">collection</xsl:when>
-      <xsl:when test="$genre='unpublished'">collection</xsl:when>
-      <xsl:when test="$genre='other'">collection</xsl:when> 
-      <xsl:otherwise>journal</xsl:otherwise>
+      <xsl:when test="$genre='festschrift'">festschrift</xsl:when>   
+      <xsl:when test="$genre='conference'">proceedings</xsl:when>
+      <xsl:when test="$genre='collection'">collection</xsl:when>
+      <xsl:when test="$genre='proceedings'">proceedings</xsl:when>
+      <xsl:when test="$genre='booklet'">book</xsl:when>
+      <xsl:when test="$genre='manual'">book</xsl:when>
     </xsl:choose>
     <xsl:text> </xsl:text>
   </xsl:template>
