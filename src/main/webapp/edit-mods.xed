@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- Form to edit the raw MODS metadata -->
+
+<webpage lastModified="$Date: 2016-02-01 15:05:21 +0100 (Mo, 01 Feb 2016) $" id="dozbib.edit.mods">
+  <title xml:lang="de">MODS bearbeiten</title>
+ 
+  <article class="highlight0" id="form">
+  
+    <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form">
+  
+      <xed:source uri="xslStyle:mycoreobject-mods2text:mcrobject:{$id}" />
+      <xed:cancel url="servlets/DozBibEntryServlet?id={$id}" />
+      
+      <xed:post-processor xsl="mycoreobject-text2mods.xsl" /> 
+        
+      <xed:bind xpath="/mycoreobject">
+        <xed:choose>
+          <xed:when test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+            <xed:include uri="webapp:edit-mods.xed" ref="editor" />
+          </xed:when>
+          <xed:otherwise>
+            <p>Sie sind nicht berechtigt, dieses Formular zu verwenden.</p>
+          </xed:otherwise>
+        </xed:choose>
+      </xed:bind>
+      
+      <xed:template id="editor">
+        <input type="hidden" name="mode" value="save" />
+        <fieldset>
+          <legend>MODS bearbeiten:</legend>
+          <div style="margin:1ex;">
+
+            <xed:bind xpath="metadata/def.modsContainer/modsContainer">
+              <p>Wissen Sie was Sie tun? Bitte seien Sie <strong>SEHR</strong> vorsichtig!</p>
+              <p>
+                <a href="http://www.loc.gov/standards/mods/userguide/generalapp.html#top_level">
+                  Metadata Object Description Schema (MODS): Spezifikation
+                </a>
+              </p>
+              <textarea style="width:100%; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; box-sizing:border-box; font-family:monospaced; font-size:120%;" rows="15" />
+            </xed:bind>
+
+            <div style="margin-top:2ex;">
+              <button class="roundedButton" type="submit" xed:target="cancel">Abbrechen</button>
+              <button class="roundedButton" type="submit" xed:target="layout">Vorschau</button>
+              <button class="roundedButton" type="submit" xed:target="servlet" xed:href="DozBibEntryServlet">Speichern</button>
+            </div>
+          </div>
+        </fieldset>
+      </xed:template>      
+    
+    </xed:form>
+  </article>
+</webpage>

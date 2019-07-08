@@ -85,6 +85,7 @@
         <xsl:value-of select="i18n:translate('button.edit')" />
       </a>
       <a class="action" href="{$WebApplicationBaseURL}edit-admin.xed?id={/mycoreobject/@ID}">Admin</a>
+      <a class="action" href="{$WebApplicationBaseURL}edit-mods.xed?id={/mycoreobject/@ID}">MODS</a>
       <xsl:if test="not(/mycoreobject/structure/children/child)">
         <a class="action" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.step=ask.delete">
           <xsl:value-of select="i18n:translate('button.delete')" />
@@ -102,13 +103,11 @@
         <xsl:value-of select="i18n:translate('button.basketAdd')" />
       </a>
     </xsl:if>
-    <xsl:if test="string-length($step) = 0">
+    <xsl:if test="(string-length($step) = 0) and not($permission.admin)">
       <a class="action" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.xml?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=mods">MODS</a>
-      <xsl:if test="not($permission.admin)">
-        <a class="action" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.bib?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=bibtex">BibTeX</a>
-        <a class="action" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.enl?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=endnote">EndNote</a>
-        <a class="action" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.ris?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=ris">RIS</a>
-      </xsl:if>    
+      <a class="action" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.bib?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=bibtex">BibTeX</a>
+      <a class="action" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.enl?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=endnote">EndNote</a>
+      <a class="action" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.ris?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=ris">RIS</a>
     </xsl:if>
   </div>
 </xsl:template>
