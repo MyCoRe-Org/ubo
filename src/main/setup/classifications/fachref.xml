@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="fachref">
+
+	<label xml:lang="en" text="Subject, subject librarians " />
+	<label xml:lang="de" text="Fach, Fachrefrat " />
+
+	<categories>
+		<category ID="sonst">
+			<label xml:lang="de" text="Allgemeines, Sonstiges" />
+			<label xml:lang="en" text="General, miscellaneous" />
+			<label xml:lang="x-e-mail" text="burkhard.gutleben@uni-due.de" />
+		</category>
+		<category ID="avslw">
+			<label xml:lang="de" text="Allgemeine u. vergleichende Sprach- und Literaturwissenschaften" />
+			<label xml:lang="en" text="General and Comparative Literature and Linguistics" />
+			<label xml:lang="x-e-mail" text="dorothee.graf@uni-due.de" />
+		</category>
+		<category ID="anko">
+			<label xml:lang="de" text="Angewandte Kognitionswissenschaft" />
+			<label xml:lang="en" text="Applied Cognitive Science" />
+			<label xml:lang="x-e-mail" text="anke.petschenka@uni-due.de" />
+		</category>		
+		<category ID="ang">
+			<label xml:lang="de" text="Anglistik" />
+			<label xml:lang="en" text="Anglophone Studies" />
+			<label xml:lang="x-e-mail" text=">meike.bohlmann@uni-due.de" />
+		</category>
+		<category ID="bau">
+			<label xml:lang="de" text="Bauwissenschaften" />
+			<label xml:lang="en" text="Civil Engineering" />
+			<label xml:lang="x-e-mail" text="fachreferat-bauwissenschaften@ub.uni-due.de" />
+		</category>
+		<category ID="bio">
+			<label xml:lang="de" text="Biologie" />
+			<label xml:lang="en" text="Biology" />
+			<label xml:lang="x-e-mail" text="eike.spielberg@uni-due.de" />
+		</category>
+		<category ID="chem">
+			<label xml:lang="de" text="Chemie" />
+			<label xml:lang="en" text="Chemistry" />
+			<label xml:lang="x-e-mail" text="andreas.sprick@uni-due.de" />
+		</category>
+		<category ID="ele">
+			<label xml:lang="de" text="Elektrotechnik" />
+			<label xml:lang="en" text="Electrical Engineering and Information Technology" />
+			<label xml:lang="x-e-mail" text="felix.schmidt@uni-due.de eike.spielberg@uni-due.de" />
+		</category>
+		<category ID="erz">
+			<label xml:lang="de" text="Erziehungswissenschaften" />
+			<label xml:lang="en" text="Educational Science" />
+			<label xml:lang="x-e-mail" text="ulrike.scholle@uni-due.de" />
+		</category>
+		<category ID="geo">
+			<label xml:lang="de" text="Geographie" />
+			<label xml:lang="en" text="Geography" />
+			<label xml:lang="x-e-mail" text="eike.spielberg@uni-due.de" />
+		</category>
+		<category ID="ger">
+			<label xml:lang="de" text="Germanistik" />
+			<label xml:lang="en" text="German Language and Literature Studies" />
+			<label xml:lang="x-e-mail" text="dorothee.graf@uni-due.de" />
+		</category>
+		<category ID="gesch">
+			<label xml:lang="de" text="Geschichte" />
+			<label xml:lang="en" text="History" />
+			<label xml:lang="x-e-mail" text="rosemarie.kosche@uni-due.de" />
+		</category>
+		<category ID="inf">
+			<label xml:lang="de" text="Informatik" />
+			<label xml:lang="en" text="Computer Science" />
+			<label xml:lang="x-e-mail" text="frank.luetzenkirchen@uni-due.de" />
+		</category>
+		<category ID="kowi">
+			<label xml:lang="de" text="Kommunikationswissenschaft" />
+			<label xml:lang="en" text="Communication Studies" />
+			<label xml:lang="x-e-mail" text="rosemarie.kosche@uni-due.de" />
+		</category>
+		<category ID="kud">
+			<label xml:lang="de" text="Kunst, Design" />
+			<label xml:lang="en" text="Art and Design" />
+			<label xml:lang="x-e-mail" text="anke.petschenka@uni-due.de" />
+		</category>
+		<category ID="masch">
+			<label xml:lang="de" text="Maschinenbau" />
+			<label xml:lang="en" text="Mechanical Engineering" />
+			<label xml:lang="x-e-mail" text="felix.schmidt@uni-due.de eike.spielberg@uni-due.de" />
+		</category>
+		<category ID="mater">
+			<label xml:lang="de" text="Materialtechnik" />
+			<label xml:lang="en" text="Materials Engineering" />
+			<label xml:lang="x-e-mail" text="felix.schmidt@uni-due.de eike.spielberg@uni-due.de" />
+		</category>
+		<category ID="math">
+			<label xml:lang="de" text="Mathematik" />
+			<label xml:lang="en" text="Mathematics" />
+			<label xml:lang="x-e-mail" text="fachreferat-mathematik@ub.uni-due.de" />
+		</category>
+		<category ID="med">
+			<label xml:lang="de" text="Medizin" />
+			<label xml:lang="en" text="Medicine" />
+			<label xml:lang="x-e-mail" text="katrin.wibker@uni-due.de" />
+		</category>
+		<category ID="mus">
+			<label xml:lang="de" text="Musik" />
+			<label xml:lang="en" text="Music" />			
+		</category>
+		<category ID="nieder">
+			<label xml:lang="de" text="Niederlandistik" />
+			<label xml:lang="en" text="Dutch Language and Culture" />
+			<label xml:lang="x-e-mail" text="burkhard.gutleben@uni-due.de" />
+		</category>
+		<category ID="oawi">
+			<label xml:lang="de" text="Ostasienwissenschaften" />
+			<label xml:lang="en" text="East Asian Studies" />
+			<label xml:lang="x-e-mail" text="rita.nemeth@uni-due.de christina.klaere@uni-due.de delia.bauer-krupp@uni-due.de" />
+		</category>
+		<category ID="philo">
+			<label xml:lang="de" text="Philosophie" />
+			<label xml:lang="en" text="Philosophy" />
+			<label xml:lang="x-e-mail" text="anke.petschenka@uni-due.de" />
+		</category>
+		<category ID="phys">
+			<label xml:lang="de" text="Physik (inkl. Astronomie)" />
+			<label xml:lang="en" text="Physics (incl. Astronomy)" />
+			<label xml:lang="x-e-mail" text="felix.schmidt@uni-due.de" />
+		</category>
+		<category ID="pol">
+			<label xml:lang="de" text="Politikwissenschaft" />
+			<label xml:lang="en" text="Political Science" />
+			<label xml:lang="x-e-mail" text="delia.bauer-krupp@uni-due.de" />
+		</category>
+		<category ID="psy">
+			<label xml:lang="de" text="Psychologie" />
+			<label xml:lang="en" text="Psychology" />
+			<label xml:lang="x-e-mail" text="anke.petschenka@uni-due.de" />
+		</category>
+		<category ID="recht">
+			<label xml:lang="de" text="Rechtswissenschaften" />
+			<label xml:lang="en" text="Law" />
+			<label xml:lang="x-e-mail" text="christina.klaere@uni-due.de" />
+		</category>
+		<category ID="rom">
+			<label xml:lang="de" text="Romanistik" />
+			<label xml:lang="en" text="Romance Studies" />
+			<label xml:lang="x-e-mail" text="hendrik.friggemann@uni-due.de" />
+		</category>
+		<category ID="sophil">
+			<label xml:lang="de" text="Sonstige Philologien" />
+			<label xml:lang="en" text="Other Languages and Literature Studies" />
+			<label xml:lang="x-e-mail" text="dorothee.graf@uni-due.de" />
+		</category>
+		<category ID="sowi">
+			<label xml:lang="de" text="Soziologie, Sozialwissenschaften" />
+			<label xml:lang="en" text="Sociology, Social Sciences" />
+			<label xml:lang="x-e-mail" text="delia.bauer-krupp@uni-due.de hanno.brockmann@uni-due.de" />
+		</category>
+		<category ID="sport">
+			<label xml:lang="de" text="Sport- und Bewegungswissenschaften" />
+			<label xml:lang="en" text="Sports and Kinesiology" />
+			<label xml:lang="x-e-mail" text="doris.pohl@uni-due.de" />
+		</category>
+		<category ID="tech">
+			<label xml:lang="de" text="Technik" />
+			<label xml:lang="en" text="Technology" />
+			<label xml:lang="x-e-mail" text="felix.schmidt@uni-due.de" />
+		</category>
+		<category ID="theo">
+			<label xml:lang="de" text="Theologie" />
+			<label xml:lang="en" text="Theology" />
+			<label xml:lang="x-e-mail" text="rosemarie.kosche@uni-due.de" />
+		</category>
+		<category ID="turk">
+			<label xml:lang="de" text="Turkistik, Türkisch" />
+			<label xml:lang="en" text="Turkish Studies" />
+			<label xml:lang="x-e-mail" text="tuerklit@ub.uni-due.de" />
+		</category>
+		<category ID="wiwi">
+			<label xml:lang="de" text="Wirtschaftswissenschaften" />
+			<label xml:lang="en" text="Economics" />
+			<label xml:lang="x-e-mail" text="christina.klaere@uni-due.de hanno.brockmann@uni-due.de" />
+		</category>
+	</categories>
+</mycoreclass>
