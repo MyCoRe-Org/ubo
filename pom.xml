@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.mycore</groupId>
     <artifactId>mycore-parent</artifactId>
-    <version>40-SNAPSHOT</version>
+    <version>41-SNAPSHOT</version>
     <relativePath />
   </parent>
 
@@ -63,7 +63,7 @@
     <java.target.version>11</java.target.version>
     <jetty.version>9.4.15.v20190215</jetty.version>
     <log4j.version>2.11.0</log4j.version>
-    <mycore.version>2019.05-SNAPSHOT</mycore.version>
+    <mycore.version>2019.08-SNAPSHOT</mycore.version>
     <solr.data.dir>${solr.home}/ubo/data</solr.data.dir>
     <solr.home>${user.home}/AppData/Local/MyCoRe/${MCR.AppName}/data/solr</solr.home>
     <timestamp>${maven.build.timestamp}</timestamp>
@@ -609,6 +609,11 @@
         <groupId>org.webjars</groupId>
         <artifactId>font-awesome</artifactId>
         <version>5.5.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>28.0-jre</version>
     </dependency>
   </dependencies>
 
