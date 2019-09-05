@@ -100,6 +100,7 @@ public class DozBibServlet extends MCRServlet {
         String numPerPage = getReqParameter(req, "numPerPage", "10");
         String maxResults = getReqParameter(req, "maxResults", "0");
         if (!"0".equals(maxResults)) {
+            query.setAttribute("maxResults", maxResults);
             numPerPage = maxResults;
         } else if (export) {
             numPerPage = String.valueOf(numFound);
@@ -107,6 +108,7 @@ public class DozBibServlet extends MCRServlet {
 
         query.setAttribute("numPerPage", numPerPage);
 
+        q = MCRQuery.parseXML(doc);
         solrQuery = MCRSolrSearchUtils.getSolrQuery(q, doc, req);
         StringBuffer url = new StringBuffer(MCRServlet.getServletBaseURL());
         url.append("SolrSelectProxy");
