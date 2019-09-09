@@ -89,7 +89,7 @@
         </label>
         <select id="{xed:generate-id()}" class="{$xed-validation-marker}" style="width:400px;">
           <option value=""><xed:output i18n="search.select" /></option>
-          <xed:include uri="xslStyle:items2options:classification:editor:-1:children:fachref" />
+          <xed:include uri="xslStyle:items2options:classification:editor:-1:children:fachreferate" />
         </select>
         <xed:controls />
       </div>
