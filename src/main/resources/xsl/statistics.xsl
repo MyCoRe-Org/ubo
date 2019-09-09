@@ -90,8 +90,6 @@
     </section>
   </xsl:template>
   
-  <xsl:variable name="subjects" select="document('resource:fachreferate.xml')/fachreferate" />
-
   <xsl:template match="lst[@name='facet_fields']/lst[@name='subject']">
     <xsl:variable name="title" select="concat(i18n:translate('ubo.publications'),' / ',i18n:translate('facets.facet.subject'))" />
 
@@ -127,7 +125,7 @@
           xAxis: { categories: [
             <xsl:for-each select="int">
               <xsl:sort select="text()" data-type="number" order="descending" />
-              '<xsl:value-of select="$subjects/item[@value=current()/@name]/@label"/>'
+              '<xsl:value-of select="document(concat('classification:editor:0:parents:fachref:',encoder:encode(current()/@name,'UTF-8')))/items/item/label[lang($CurrentLang)]" />'
               <xsl:if test="position() != last()">, </xsl:if>
             </xsl:for-each>
             ],

@@ -121,13 +121,12 @@
   </xsl:copy>
 </xsl:template>
 
-<xsl:variable name="subjects" select="document('resource:fachreferate.xml')/fachreferate" />
-
 <xsl:template match="mods:classification[contains(@authorityURI,'fachreferate')]" mode="copy-mods">
   <xsl:copy>
     <xsl:copy-of select="@*" />
     <xsl:variable name="categoryID" select="substring-after(@valueURI,'#')" />
-    <xsl:value-of select="$subjects/item[@value=$categoryID]/@label"/>
+    <xsl:variable name="uri" select="concat('classification:editor:0:parents:fachreferate:',$categoryID)" />
+    <xsl:value-of select="document($uri)/items/item/label[lang($CurrentLang)]" />
   </xsl:copy>
 </xsl:template>
 

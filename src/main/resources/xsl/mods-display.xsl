@@ -27,9 +27,6 @@
     <xsl:text>&amp;sortby=rank&amp;vid=UDE_NUI&amp;lang=de_DE&amp;mode=advanced&amp;offset=0&amp;query=</xsl:text>
   </xsl:variable>
   
-  <!-- ============ Fächerliste (subject) laden ============ -->
-  <xsl:variable name="subjects" select="document('resource:fachreferate.xml')/fachreferate" />
-  
   <!-- ============ Ausgabe Publikationsart ============ -->
   
   <xsl:template name="pubtype">
@@ -46,7 +43,10 @@
   
   <xsl:template match="mods:mods/mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info">
     <span class="label-info">
-      <xsl:value-of select="$subjects/item[@value=substring-after(current()/@valueURI,'#')]/@label"/>
+      <xsl:call-template name="output.category">
+        <xsl:with-param name="classID" select="'fachreferate'" />
+        <xsl:with-param name="categID" select="substring-after(@valueURI,'#')" />
+      </xsl:call-template>
     </span>
   </xsl:template>
   

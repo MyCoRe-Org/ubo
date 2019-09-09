@@ -27,11 +27,11 @@
     <xsl:apply-templates select="mods:language/mods:languageTerm" mode="dc" />
   </xsl:template>
 
-  <xsl:variable name="subjects" select="document('resource:fachreferate.xml')/fachreferate" />
-
   <xsl:template match="mods:classification[contains(@authorityURI,'fachreferate')]" mode="dc">
     <dc:subject>
-      <xsl:value-of select="$subjects/item[@value=substring-after(current()/@valueURI,'#')]/@label"/>
+      <xsl:variable name="categoryID" select="substring-after(current()/@valueURI,'#')" />
+      <xsl:variable name="uri" select="concat('classification:editor:0:parents:fachreferate:',encoder:encode($categoryID,'UTF-8'))" />
+      <xsl:value-of select="document($uri)/items/item/label[lang($CurrentLang)]" />
     </dc:subject>
   </xsl:template>
 

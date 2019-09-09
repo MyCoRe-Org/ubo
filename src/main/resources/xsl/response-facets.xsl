@@ -187,8 +187,6 @@
   </li>
 </xsl:template>
 
-<xsl:variable name="subjects" select="document('resource:fachreferate.xml')/fachreferate" />
-
 <!-- Output facet value: some must be translated to a label, e.g. subject, genre -->
 <xsl:template name="output.facet.value">
   <xsl:param name="prefix" />
@@ -199,7 +197,8 @@
     <xsl:value-of select="$prefix" />
     <xsl:choose>
       <xsl:when test="$type='subject'">
-        <xsl:value-of select="$subjects/item[@value=$value]/@label" />
+        <xsl:variable name="uri" select="concat('classification:editor:0:parents:fachref:',$value)" />
+        <xsl:value-of select="document($uri)/items/item/label[lang($CurrentLang)]" />
       </xsl:when>
       <xsl:when test="$type='oa'">
         <xsl:value-of select="$oa//category[@ID=$value]/label[lang($CurrentLang)]/@text" />
