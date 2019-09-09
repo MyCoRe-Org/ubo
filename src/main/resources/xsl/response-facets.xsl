@@ -197,7 +197,7 @@
     <xsl:value-of select="$prefix" />
     <xsl:choose>
       <xsl:when test="$type='subject'">
-        <xsl:variable name="uri" select="concat('classification:editor:0:parents:fachref:',$value)" />
+        <xsl:variable name="uri" select="concat('classification:editor:0:parents:fachreferate:',$value)" />
         <xsl:value-of select="document($uri)/items/item/label[lang($CurrentLang)]" />
       </xsl:when>
       <xsl:when test="$type='oa'">
