@@ -39,6 +39,7 @@
   <field name="abstract"   type="text"      indexed="true" stored="false" multiValued="true"  />
   <field name="year"       type="int"       indexed="true" stored="true"  multiValued="false" />
   <field name="year_diss"  type="int"       indexed="true" stored="false" multiValued="false" />
+  <field name="host_year"  type="int"       indexed="true" stored="true"  multiValued="false" />
   <field name="lang"       type="id"        indexed="true" stored="false" multiValued="true"  />
   <field name="shelfmark"  type="shelfmark" indexed="true" stored="true"  multiValued="true"  />
   <field name="tag"        type="id"        indexed="true" stored="false" multiValued="true"  />

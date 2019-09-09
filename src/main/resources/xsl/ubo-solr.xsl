@@ -34,6 +34,7 @@
     <xsl:apply-templates select="descendant::mods:relatedItem[@type='series']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:name[@type='conference']" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:dateIssued[1][translate(text(),'1234567890','YYYYYYYYYY')='YYYY']" mode="solrField" />
+    <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:originInfo/mods:dateIssued[1][translate(text(),'1234567890','YYYYYYYYYY')='YYYY']" mode="solrField.host" />
     <xsl:apply-templates select="descendant::mods:identifier[@type]" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:shelfLFocator" mode="solrField" />
     <xsl:apply-templates select="mods:subject" mode="solrField" />
@@ -243,6 +244,12 @@
     </field>
   </xsl:template>
   
+  <xsl:template match="mods:relatedItem[@type='host']/mods:originInfo/mods:dateIssued" mode="solrField.host">
+    <field name="host_year">
+      <xsl:value-of select="text()" />
+    </field>
+  </xsl:template>
+
   <xsl:template match="mods:mods/mods:identifier[@type]" mode="solrField">
     <field name="id_{@type}">
       <xsl:value-of select="text()" />
