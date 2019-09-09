@@ -46,7 +46,7 @@
     <xsl:variable name="uri" select="concat('classification:metadata:0:parents:fachreferate:',$subject)" />
     <xsl:for-each select="document($uri)//category[@ID=$subject]/label[@xml:lang='x-e-mail']">
       <xsl:for-each select="xalan:tokenize(@text)">
-        <to><xsl:copy-of select="@text" /></to>
+        <to><xsl:value-of select="." /></to>
       </xsl:for-each>
     </xsl:for-each>
   </xsl:for-each>
