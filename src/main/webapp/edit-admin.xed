@@ -68,6 +68,7 @@
               <xed:include uri="webapp:import-editor.xed" ref="url" />
               <xed:include uri="webapp:import-editor.xed" ref="languages" />    
           </fieldset>
+          <xed:include uri="webapp:import-editor.xed" ref="relations" />    
           <fieldset>
             <legend>erschienen in:</legend>
             <xed:bind xpath="mods:relatedItem[@type='host']">
