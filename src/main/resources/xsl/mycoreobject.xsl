@@ -108,6 +108,8 @@
       <a class="action" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.bib?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=bibtex">BibTeX</a>
       <a class="action" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.enl?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=endnote">EndNote</a>
       <a class="action" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.ris?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=ris">RIS</a>
+      <a class="action" href="{$ServletsBaseURL}CSLServlet?id={/mycoreobject/@ID}&amp;style=university-of-york-mla&amp;format=html">MLA</a>
+      <a class="action" href="{$ServletsBaseURL}CSLServlet?id={/mycoreobject/@ID}&amp;style=&amp;format=html">CSL</a>
     </xsl:if>
   </div>
 </xsl:template>
