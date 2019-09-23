@@ -14,7 +14,7 @@ public class MCRUserMatcherDummy implements MCRUserMatcher {
 
     @Override
     public MCRUser matchUser(MCRUser mcrUser) {
-        LOGGER.info("MCRUserMatcherDummy got called!");
+        LOGGER.debug("MCRUserMatcherDummy got called!");
         return mcrUser;
     }
 }

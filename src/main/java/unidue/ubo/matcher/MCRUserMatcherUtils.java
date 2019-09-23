@@ -53,7 +53,6 @@ public class MCRUserMatcherUtils {
      * @param user the MCRUser whose attributes will be enriched
      * @param nameIdentifiers the mods:nameIdentifiers that should be added, if they are not already present
      */
-
     public static void enrichUserWithGivenNameIdentifiers(MCRUser user, Map<String, String> nameIdentifiers) {
         Map<String, String> userAttributes = user.getAttributes();
         for(Map.Entry<String, String> nameIdentifier : nameIdentifiers.entrySet()) {

@@ -32,7 +32,7 @@ public class MCRUserMatcherLocal implements MCRUserMatcher {
         } else if(matchingUsers.size() == 1) {
             MCRUser matchingUser = matchingUsers.get(0);
 
-            LOGGER.info("Found local matching user! Matched user: {} and attributes: {} with local user: {} and attributes: {}",
+            LOGGER.debug("Found local matching user! Matched user: {} and attributes: {} with local user: {} and attributes: {}",
                     mcrUser.getUserName(), mcrUser.getAttributes(), matchingUser.getUserName(), matchingUser.getAttributes());
 
             matchingUser.getAttributes().putAll(mcrUser.getAttributes());
