@@ -38,6 +38,11 @@ import java.util.List;
  * 4. Extend the mods:name -> mods:nameIdentifier element of the publication with the configured "lead-ID" if it is
  * not present but available in the matched MCRUsers attributes.
  *
+ * The following properties in the mycore.properties are used:
+ * MCR.user2.matching.chain (Multiple implementations separated by ",")
+ * Example:
+ * MCR.user2.matching.chain=unidue.ubo.matcher.MCRUserMatcherLDAP,unidue.ubo.matcher.MCRUserMatcherDummy
+ *
  * @author Pascal Rost
  */
 public class PublicationEventHandler extends MCREventHandlerBase {
@@ -87,7 +92,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
 
             for(MCRUserMatcher matcher : matchers) {
                 MCRUser enrichedMCRUser = matcher.matchUser(mcrUser);
-                LOGGER.info("Current attributes for user: {} of mods:name: {}, attributes: {}",
+                LOGGER.debug("Current attributes for user: {} of mods:name: {}, attributes: {}",
                         enrichedMCRUser.getUserName(),
                         new XMLOutputter(Format.getPrettyFormat()).outputString(modsNameElement),
                         enrichedMCRUser.getAttributes());
