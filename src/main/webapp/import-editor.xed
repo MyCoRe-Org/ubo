@@ -687,7 +687,7 @@
           <button type="submit" class="roundedButton" name="_xed_submit_remove:/mycoreobject/descendant::mods:relatedItem/@xlink:href[.='{.}']|host">
             <xed:output i18n="ubo.relatedItem.host.unlink" /> 
           </button>
-          <button class="roundedButton" type="submit" xed:target="subselect" xed:href="../search.xed?genre={../mods:genre[@type='intern']}">
+          <button class="roundedButton" type="submit" xed:target="subselect" xed:href="../search.xed?id_type=id&amp;genre={../mods:genre[@type='intern']}">
             <xed:output i18n="ubo.relatedItem.host.select" />
           </button>
         </div>
