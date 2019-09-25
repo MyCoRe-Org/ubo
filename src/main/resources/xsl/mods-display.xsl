@@ -587,8 +587,8 @@
       </div>
       <div class="grid_9">
         <xsl:choose>
-          <xsl:when test="../@xlink:href">
-            <a href="{$ServletsBaseURL}DozBibEntryServlet?id={../@xlink:href}">
+          <xsl:when test="@xlink:href">
+            <a href="{$ServletsBaseURL}DozBibEntryServlet?id={@xlink:href}">
               <xsl:apply-templates select="." mode="cite" />
             </a>
           </xsl:when>
