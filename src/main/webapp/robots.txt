@@ -6,4 +6,5 @@ Disallow: /servlets/MCRExportServlet
 Disallow: /servlets/solr
 Disallow: /servlets/MCRQLSearchServlet
 Disallow: /servlets/MCRSOLRProxyServlet
+Disallow: /servlets/CSLServlet
 Disallow: /api
