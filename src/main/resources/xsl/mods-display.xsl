@@ -583,19 +583,19 @@
   <xsl:template match="mods:relatedItem[not(@type='host') and not(@type='series')]" mode="details">
     <div class="ubo_related_details">
       <div class="grid_3 label">
-        <xsl:value-of select="i18n:translate(concat('ubo.relatedItem.',@type))" />
-      </div>
-      <div class="grid_9">
         <xsl:choose>
           <xsl:when test="@xlink:href">
             <a href="{$ServletsBaseURL}DozBibEntryServlet?id={@xlink:href}">
-              <xsl:apply-templates select="." mode="cite" />
+              <xsl:value-of select="i18n:translate(concat('ubo.relatedItem.',@type))" />
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:apply-templates select="." mode="cite" />
+            <xsl:value-of select="i18n:translate(concat('ubo.relatedItem.',@type))" />
           </xsl:otherwise>
         </xsl:choose>
+      </div>
+      <div class="grid_9">
+        <xsl:apply-templates select="." mode="cite" />
       </div>
       <div class="clear" />
     </div>
