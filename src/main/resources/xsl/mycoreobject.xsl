@@ -80,22 +80,26 @@
 
 <xsl:template name="actions">
   <div id="buttons">
-    <xsl:if test="$permission.admin and (string-length($step) = 0) and not ($UBO.System.ReadOnly = 'true')">
-      <a class="action" href="{$WebApplicationBaseURL}edit-publication.xed?id={/mycoreobject/@ID}">
-        <xsl:value-of select="i18n:translate('button.edit')" />
-      </a>
-      <a class="action" href="{$WebApplicationBaseURL}edit-admin.xed?id={/mycoreobject/@ID}">Admin</a>
-      <a class="action" href="{$WebApplicationBaseURL}edit-mods.xed?id={/mycoreobject/@ID}">MODS</a>
-      <xsl:if test="not(/mycoreobject/structure/children/child)">
-        <a class="action" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.step=ask.delete">
-          <xsl:value-of select="i18n:translate('button.delete')" />
+    <xsl:if test="$permission.admin and not($UBO.System.ReadOnly = 'true')">
+      <xsl:if test="(string-length($step) = 0) or contains($step,'merged')">
+        <a class="action" href="{$WebApplicationBaseURL}edit-publication.xed?id={/mycoreobject/@ID}">
+          <xsl:value-of select="i18n:translate('button.edit')" />
         </a>
+        <a class="action" href="{$WebApplicationBaseURL}edit-admin.xed?id={/mycoreobject/@ID}">Admin</a>
+        <a class="action" href="{$WebApplicationBaseURL}edit-mods.xed?id={/mycoreobject/@ID}">MODS</a>
       </xsl:if>
-      <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host'][string-length(@xlink:href)=0]">
-        <!-- Button to extract mods:relatedItem[@type='host'] to a new separate entry -->
-        <a class="action" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;mode=xhost">
-          <xsl:value-of select="i18n:translate('ubo.relatedItem.host.separate')" />
-        </a>
+      <xsl:if test="string-length($step) = 0">
+        <xsl:if test="not(/mycoreobject/structure/children/child)">
+          <a class="action" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.step=ask.delete">
+            <xsl:value-of select="i18n:translate('button.delete')" />
+          </a>
+        </xsl:if>
+        <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host'][string-length(@xlink:href)=0]">
+          <!-- Button to extract mods:relatedItem[@type='host'] to a new separate entry -->
+          <a class="action" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;mode=xhost">
+            <xsl:value-of select="i18n:translate('ubo.relatedItem.host.separate')" />
+          </a>
+        </xsl:if>
       </xsl:if>
     </xsl:if>
     <xsl:if xmlns:basket="xalan://unidue.ubo.basket.BasketUtils" test="basket:hasSpace() and not(basket:contains(string(/mycoreobject/@ID)))">
