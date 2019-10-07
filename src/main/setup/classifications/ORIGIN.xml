@@ -788,6 +788,14 @@
           <category ID="18.01.04">
             <label xml:lang="de" text="Computergraphik und Wissenschaftliches Rechnen" />
           </category>
+          <category ID="18.01.17">
+            <label xml:lang="de" text="Eingebettete Systeme der Informatik"/>    
+            <label xml:lang="en" text="Embedded Systems of Computer Science"/>
+          </category>
+          <category ID="18.01.18">
+            <label xml:lang="de" text="Formale Methoden der Informatik"/>    
+            <label xml:lang="en" text="Formal Methods in Computer Science"/>
+          </category>
           <category ID="18.01.20">
             <label xml:lang="de" text="Hochleistungsrechnen" />
           </category>
@@ -803,6 +811,9 @@
           <category ID="18.01.03">
             <label xml:lang="de" text="Kooperative und lernunterstützende Systeme" />
           </category>
+          <category ID="18.01.19">
+            <label xml:lang="de" text="Social Computing"/> 
+          </category>
           <category ID="18.01.08">
             <label xml:lang="de" text="Mathematische Methoden der Datenübertragung" />
           </category>
@@ -817,6 +828,10 @@
           </category>
           <category ID="18.01.11">
             <label xml:lang="de" text="Theoretische Informatik" />
+          </category>
+          <category ID="18.01.22">
+            <label xml:lang="de" text="Sprachtechnologie"/> 
+            <label xml:lang="en" text="Language Technology Lab"/>
           </category>
           <category ID="18.01.12">
             <label xml:lang="de" text="Verteilte Systeme" />
