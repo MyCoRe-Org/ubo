@@ -10,6 +10,12 @@
 
   <xsl:output method="xml" />
 
+  <xsl:template match="/entry[error]">
+    <error>
+      <xsl:value-of select="message" />
+    </error>
+  </xsl:template>
+
   <xsl:template match="/entry">
     <mods:mods>
       <xsl:apply-templates select="title" />
