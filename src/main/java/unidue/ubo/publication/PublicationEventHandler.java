@@ -39,9 +39,14 @@ import java.util.List;
  * not present but available in the matched MCRUsers attributes.
  *
  * The following properties in the mycore.properties are used:
+ *
  * MCR.user2.matching.chain (Multiple implementations separated by ",")
  * Example:
  * MCR.user2.matching.chain=unidue.ubo.matcher.MCRUserMatcherLDAP,unidue.ubo.matcher.MCRUserMatcherDummy
+ *
+ * MCR.user2.matching.lead_id
+ * Example:
+ * MCR.user2.matching.lead_id=id_scopus
  *
  * @author Pascal Rost
  */
@@ -50,6 +55,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     private final static Logger LOGGER = LogManager.getLogger(PublicationEventHandler.class);
 
     private final static String CONFIG_MATCHERS = "MCR.user2.matching.chain";
+    private final static String CONFIG_LEAD_ID = "MCR.user2.matching.lead_id";
 
     private List<MCRUserMatcher> loadMatcherImplementationChain() {
         List<MCRUserMatcher> matchers = new ArrayList<>();
@@ -71,6 +77,11 @@ public class PublicationEventHandler extends MCREventHandlerBase {
         return matchers;
     }
 
+    private String loadLeadIDName() {
+        MCRConfiguration config = MCRConfiguration.instance();
+        return config.getString(CONFIG_LEAD_ID, "");
+    }
+
     @Override
     protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {
         // TODO: remove this, since this EventHandler should only work for "ObjectCreated" events!
@@ -81,6 +92,9 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     protected void handleObjectCreated(MCREvent evt, MCRObject obj) {
         // get all mods:name from persons (authors etc.) of the publication
         List<Element> modsNameElements = MCRUserMatcherUtils.getNameElements(obj);
+
+        // leadIDName -> if the matched MCRUser has this ID set in the attributes, enrich the publication with it
+        String leadIDName = loadLeadIDName();
 
         // for every mods:name element, call our configured Implementation(s) of MCRUserMatcher
         List<MCRUserMatcher> matchers = loadMatcherImplementationChain();
@@ -100,8 +114,37 @@ public class PublicationEventHandler extends MCREventHandlerBase {
 
             MCRUser mcrUserFinal = localMatcher.matchUser(mcrUser);
             MCRUserManager.updateUser(mcrUserFinal);
-        }
 
-        // TODO: extend publication with configured "lead-ID" of the matched authors/MCRUsers
+            enrichModsNameElementByLeadID(modsNameElement, leadIDName, mcrUserFinal);
+        }
+        LOGGER.debug("Final document: {}", new XMLOutputter(Format.getPrettyFormat()).outputString(obj.createXML()));
+    }
+
+    /**
+     * Enriches the mods:name-element that corresponds to the given MCRUser with a mods:nameIdentifier-element if the
+     * given MCRUser has an attribute with the name of the so called "lead_id" that is configured in the
+     * mycore.properties and given as parameter "leadIDName".
+     * A new mods:nameIdentifier-element with type "lead_id" and its value will only be created if no other
+     * mods:nameIdentifier-element with the same ID/type exists as a sub-element of the given modsNameElement.
+
+     * @param modsNameElement the mods:name-element which will be enriched
+     * @param leadIDName the "lead_id" (as configured in the mycore.properties)
+     * @param mcrUser the MCRUser corresponding to the modsNameElement
+     */
+    private void enrichModsNameElementByLeadID(Element modsNameElement, String leadIDName, MCRUser mcrUser) {
+        if(StringUtils.isNotEmpty(leadIDName) && mcrUser.getAttributes().containsKey(leadIDName)) {
+            String leadIDValue = mcrUser.getUserAttribute(leadIDName);
+            if(StringUtils.isNotEmpty(leadIDValue)) {
+                String leadIDModsName = leadIDName.replace("id_", "");
+                if(MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, leadIDModsName)) {
+                    Element nameIdentifier = new Element("nameIdentifier", MCRUserMatcherUtils.MODS_NAMESPACE)
+                            .setAttribute("type", leadIDModsName)
+                            .setText(leadIDValue);
+                    modsNameElement.addContent(nameIdentifier);
+                    LOGGER.info("Enriched publication for MCRUser: {}, with nameIdentifier of type: {} (lead_id) " +
+                            "and value: {}", mcrUser.getUserName(), leadIDModsName, leadIDValue);
+                }
+            }
+        }
     }
 }
