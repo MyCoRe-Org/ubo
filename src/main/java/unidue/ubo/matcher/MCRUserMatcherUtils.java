@@ -48,6 +48,10 @@ public class MCRUserMatcherUtils {
         return nameIdentifiers;
     }
 
+    public static boolean containsNameIdentifierWithType(Element modsNameElement, String identifierType) {
+        return MCRUserMatcherUtils.getNameIdentifiers(modsNameElement).containsKey(identifierType);
+    }
+
     /**
      * Extend the MCRUsers attributes by the given mods:nameIdentifiers if the user does not already have these IDs
      * @param user the MCRUser whose attributes will be enriched
