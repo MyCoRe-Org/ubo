@@ -30,7 +30,7 @@
   <!-- ============ Ausgabe Publikationsart ============ -->
   
   <xsl:template name="pubtype">
-    <span class="label-info">
+    <span class="label-info badge badge-secondary mr-1">
       <xsl:apply-templates select="mods:genre[@type='intern']" />
       <xsl:for-each select="mods:relatedItem[@type='host']/mods:genre[@type='intern']">
         <xsl:text> in </xsl:text>
@@ -42,7 +42,7 @@
   <!-- ============ Ausgabe Fach ============ -->
   
   <xsl:template match="mods:mods/mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info">
-    <span class="label-info">
+    <span class="label-info badge badge-secondary mr-1">
       <xsl:call-template name="output.category">
         <xsl:with-param name="classID" select="'fachreferate'" />
         <xsl:with-param name="categID" select="substring-after(@valueURI,'#')" />
@@ -50,10 +50,10 @@
     </span>
   </xsl:template>
   
-  <!-- ========== Ausgabe Fakultät ========== -->
+  <!-- ========== Ausgabe FakultÃ¤t ========== -->
   
   <xsl:template match="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info">
-    <span class="label-info">
+    <span class="label-info badge badge-secondary mr-1">
       <xsl:call-template name="output.category">
         <xsl:with-param name="classID" select="'ORIGIN'" />
         <xsl:with-param name="categID" select="substring-after(@valueURI,'#')" />
@@ -76,25 +76,26 @@
   
   <xsl:template match="mods:classification[contains(@authorityURI,'oa')]" mode="label-info">
     <xsl:variable name="category" select="$oa//category[@ID=substring-after(current()/@valueURI,'#')]" />
-    <span class="label-info" style="background-color:{$category/label[lang('x-color')]/@text}">
+    <span class="label-info badge badge-inverse mr-1" style="background-color:{$category/label[lang('x-color')]/@text}">
       <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
     </span>
   </xsl:template>
   
   <xsl:template match="mods:classification[contains(@authorityURI,'oa')]" mode="details">
-    <div class="grid_3 label">Open Access?</div>
-    <div class="grid_9">
-      <xsl:variable name="category" select="$oa//category[@ID=substring-after(current()/@valueURI,'#')]" />
-      <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
+    <div class="row">
+      <div class="col-3">Open Access?</div>
+      <div class="col-9">
+        <xsl:variable name="category" select="$oa//category[@ID=substring-after(current()/@valueURI,'#')]" />
+        <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
+      </div>
     </div>
-    <div class="clear" />
   </xsl:template>
   
   <!-- ========== Ausgabe Jahr ========== -->
   
   <xsl:template name="label-year">
     <xsl:for-each select="descendant-or-self::mods:dateIssued[not(ancestor::mods:relatedItem[not(@type='host')])][1]">
-      <span class="label-info">
+      <span class="label-info badge badge-secondary mr-1">
         <xsl:value-of select="text()" />
       </span>
     </xsl:for-each>
@@ -107,7 +108,7 @@
   </xsl:template>
   
   <xsl:template name="orcid-publish">
-    <div class="orcid-publish" data-id="{ancestor::mycoreobject/@ID}" />
+    <div class="orcid-publish d-inline" data-id="{ancestor::mycoreobject/@ID}" />
   </xsl:template>
 
   <!-- ========== URI bauen, um Dubletten zu finden ========== -->
@@ -126,7 +127,7 @@
   
   <!-- ========== Zitierform ========== -->
   <xsl:template match="mods:mods|mods:relatedItem" mode="cite">
-    <xsl:param name="mode">plain</xsl:param> <!-- plain: Als Fließtext formatieren, sonst mit <div>'s -->
+    <xsl:param name="mode">plain</xsl:param> <!-- plain: Als FlieÃŸtext formatieren, sonst mit <div>'s -->
 
     <xsl:apply-templates select="." mode="cite.title.name">
       <xsl:with-param name="mode" select="$mode" />
@@ -180,7 +181,7 @@
     <xsl:call-template name="output.line">
       <xsl:with-param name="selected" select="mods:titleInfo[1]" />
       <xsl:with-param name="mode" select="$mode" />
-      <xsl:with-param name="class" select="'title'" />
+      <xsl:with-param name="class" select="'title font-weight-bold'" />
     </xsl:call-template>
   </xsl:template>
 
@@ -249,7 +250,7 @@
     </xsl:if>
   </xsl:template>
   
-  <!-- ========== Überordnung (In:) ========== -->
+  <!-- ========== Ãœberordnung (In:) ========== -->
   <xsl:template match="mods:relatedItem[@type='host']" mode="brief">
     <xsl:text>In: </xsl:text>
     <xsl:apply-templates select="." mode="cite" />
@@ -277,11 +278,13 @@
     <xsl:variable name="role" select="mods:role/mods:roleTerm[@type='code']" />
     <xsl:variable name="list" select="../mods:name[mods:role/mods:roleTerm[@type='code']=$role]" />
     <xsl:if test="count($list[1]|.)=1">
-      <div class="grid_3 label">
-        <xsl:apply-templates select="$role" />
-        <xsl:text>:</xsl:text>
+      <div class="row">
+        <div class="col-3">
+          <xsl:apply-templates select="$role" />
+          <xsl:text>:</xsl:text>
+        </div>
       </div>
-      <div class="grid_9">
+      <div class="col-9">
         <xsl:for-each select="$list">
           <span class="personalName">
             <xsl:if test="mods:affiliation and check:currentUserIsAdmin()">
@@ -298,7 +301,6 @@
           </span>
         </xsl:for-each>
       </div>
-      <div class="clear" />
     </xsl:if>
   </xsl:template>
   
@@ -352,178 +354,192 @@
 
   <!-- ========== Konferenz ========== -->
   <xsl:template match="mods:name[@type='conference']" mode="details">
-    <div class="grid_3 label">
-      <xsl:value-of select="i18n:translate('ubo.conference')" />
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="i18n:translate('ubo.conference')" />
+      </div>
+      <div class="col-9">
+        <xsl:value-of select="mods:namePart" />
+      </div>
     </div>
-    <div class="grid_9">
-      <xsl:value-of select="mods:namePart" />
-    </div>
-    <div class="clear" />
   </xsl:template>
 
   <!-- ========== Titel mit Typ und Sprache ========== -->
   <xsl:template match="mods:titleInfo" mode="details">
-    <div class="grid_3 label">
-      <xsl:value-of select="i18n:translate('ubo.title.type')" />
-      <xsl:apply-templates select="@xml:lang" />
-      <xsl:apply-templates select="@type" />
-      <xsl:text>:</xsl:text>
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="i18n:translate('ubo.title.type')" />
+        <xsl:apply-templates select="@xml:lang" />
+        <xsl:apply-templates select="@type" />
+        <xsl:text>:</xsl:text>
+      </div>
+      <div class="col-9">
+        <xsl:apply-templates select="." />
+      </div>
     </div>
-    <div class="grid_9">
-      <xsl:apply-templates select="." />
-    </div>
-    <div class="clear" />
   </xsl:template>
   
-   <!-- ========== Erster Titel der Überordnung/Serie in Detailansicht, Tabelle ========== -->
+   <!-- ========== Erster Titel der Ãœberordnung/Serie in Detailansicht, Tabelle ========== -->
   <xsl:template match="mods:relatedItem/mods:titleInfo[1]" mode="details" priority="1">
-    <div class="grid_3 label">
-      <xsl:value-of select="i18n:translate(concat('ubo.relatedItem.',../@type))" />
-    </div>
-    <div class="grid_9">
-      <xsl:choose>
-        <xsl:when test="../@xlink:href">
-          <a href="{$ServletsBaseURL}DozBibEntryServlet?id={../@xlink:href}">
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="i18n:translate(concat('ubo.relatedItem.',../@type))" />
+      </div>
+      <div class="col-9">
+        <xsl:choose>
+          <xsl:when test="../@xlink:href">
+            <a href="{$ServletsBaseURL}DozBibEntryServlet?id={../@xlink:href}">
+              <xsl:apply-templates select="." />
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
             <xsl:apply-templates select="." />
-          </a>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select="." />
-        </xsl:otherwise>
-      </xsl:choose>
+          </xsl:otherwise>
+        </xsl:choose>
+      </div>
     </div>
-    <div class="clear" />
   </xsl:template>
 
   <!-- ========== Auflage ========== -->
   <xsl:template match="mods:edition" mode="details">
-    <div class="grid_3 label">
-      <xsl:value-of select="i18n:translate('ubo.edition')" />
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="i18n:translate('ubo.edition')" />
+      </div>
+      <div class="col-9">
+        <xsl:apply-templates select="." />
+      </div>
     </div>
-    <div class="grid_9">
-      <xsl:apply-templates select="." />
-    </div>
-    <div class="clear" />
   </xsl:template>
   
   <!-- ========== Erscheinungsort ========== -->
   <xsl:template match="mods:place" mode="details">
-    <div class="grid_3 label">
-      <xsl:value-of select="i18n:translate('ubo.place')" />
-      <xsl:text>:</xsl:text>
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="i18n:translate('ubo.place')" />
+        <xsl:text>:</xsl:text>
+      </div>
+      <div class="col-9">
+        <xsl:apply-templates select="." />
+      </div>
     </div>
-    <div class="grid_9">
-      <xsl:apply-templates select="." />
-    </div>
-    <div class="clear" />
   </xsl:template>
 
   <!-- ========== Land bei Patent ========== -->
   <xsl:template match="mods:place[../../mods:genre='patent']" mode="details">
-    <div class="grid_3 label">
-      <xsl:value-of select="i18n:translate('ubo.place.country')" />
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="i18n:translate('ubo.place.country')" />
+      </div>
+      <div class="col-9">
+        <xsl:apply-templates select="." />
+      </div>
     </div>
-    <div class="grid_9">
-      <xsl:apply-templates select="." />
-    </div>
-    <div class="clear" />
   </xsl:template>
 
   <!-- ========== Verlag ========== -->
   <xsl:template match="mods:publisher" mode="details">
-    <div class="grid_3 label">
-      <xsl:value-of select="i18n:translate('ubo.publisher')" />
-      <xsl:text>:</xsl:text>
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="i18n:translate('ubo.publisher')" />
+        <xsl:text>:</xsl:text>
+      </div>
+      <div class="col-9">
+        <xsl:apply-templates select="." />
+      </div>
     </div>
-    <div class="grid_9">
-      <xsl:apply-templates select="." />
-    </div>
-    <div class="clear" />
   </xsl:template>
 
   <!-- ========== Sender bei Audio/Video ========== -->
   <xsl:template match="mods:publisher[(../../mods:genre='audio') or (../../mods:genre='video') or (../../mods:genre='broadcasting')]" mode="details">
-    <div class="grid_3 label">
-      <xsl:value-of select="i18n:translate('ubo.publisher.station')" />
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="i18n:translate('ubo.publisher.station')" />
+      </div>
+      <div class="col-9">
+        <xsl:apply-templates select="." />
+      </div>
     </div>
-    <div class="grid_9">
-      <xsl:apply-templates select="." />
-    </div>
-    <div class="clear" />
   </xsl:template>
 
   <!-- ========== Erscheinungsjahr/datum ========== -->
   <xsl:template match="mods:dateIssued" mode="details">
-    <div class="grid_3 label">
-      <xsl:value-of select="i18n:translate(concat('ubo.date.issued.',string-length(.)))" />
-      <xsl:text>:</xsl:text>
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="i18n:translate(concat('ubo.date.issued.',string-length(.)))" />
+        <xsl:text>:</xsl:text>
+      </div>
+      <div class="col-9">
+        <xsl:value-of select="text()" />
+      </div>
     </div>
-    <div class="grid_9">
-      <xsl:value-of select="text()" />
-    </div>
-    <div class="clear" />
   </xsl:template>
   
   <!-- ========== Sendedatum ========== -->
   <xsl:template match="mods:dateIssued[(../../mods:genre='audio') or (../../mods:genre='video') or (../../mods:genre='broadcasting')]" mode="details">
-    <div class="grid_3 label">
-      <xsl:value-of select="i18n:translate('ubo.date.broadcasted')" />
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="i18n:translate('ubo.date.broadcasted')" />
+      </div>
+      <div class="col-9">
+        <xsl:value-of select="text()" />
+      </div>
     </div>
-    <div class="grid_9">
-      <xsl:value-of select="text()" />
-    </div>
-    <div class="clear" />
   </xsl:template>
 
   <!-- ========== Umfang ========== -->
   <xsl:template match="mods:physicalDescription/mods:extent" mode="details">
-    <div class="grid_3 label">
-      <xsl:value-of select="i18n:translate('ubo.extent')" />
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="i18n:translate('ubo.extent')" />
+      </div>
+      <div class="col-9">
+        <xsl:value-of select="text()" />
+      </div>
     </div>
-    <div class="grid_9">
-      <xsl:value-of select="text()" />
-    </div>
-    <div class="clear" />
   </xsl:template>
   
   <!-- ========== Identifier mit Typ ========== -->
   <xsl:template match="mods:identifier" mode="details">
-    <div class="grid_3 label">
-      <xsl:value-of select="i18n:translate(concat('ubo.identifier.',@type))" />:
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="i18n:translate(concat('ubo.identifier.',@type))" />:
+      </div>
+      <div class="col-9">
+        <xsl:apply-templates select="." />
+      </div>
     </div>
-    <div class="grid_9">
-      <xsl:apply-templates select="." />
-    </div>
-    <div class="clear" />
   </xsl:template>
   
   <!-- ========== Link mit Typ ========== -->
   <xsl:template match="mods:location/mods:url" mode="details">
-    <div class="grid_3 label">
-      <xsl:choose>
-        <xsl:when test="@access">
-          <xsl:value-of select="i18n:translate(concat('ubo.link.',translate(@access,' ','_')))" />
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="i18n:translate('ubo.link')" />
-        </xsl:otherwise>
-      </xsl:choose>
+    <div class="row">
+      <div class="col-3">
+        <xsl:choose>
+          <xsl:when test="@access">
+            <xsl:value-of select="i18n:translate(concat('ubo.link.',translate(@access,' ','_')))" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="i18n:translate('ubo.link')" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </div>
+      <div class="col-9">
+        <xsl:apply-templates select="." />
+      </div>
     </div>
-    <div class="grid_9">
-      <xsl:apply-templates select="." />
-    </div>
-    <div class="clear" />
   </xsl:template>
   
   <!-- ========== Genre ========== -->
   <xsl:template name="genres">
-    <div class="grid_3 label">
-      <xsl:value-of select="i18n:translate('ubo.genre')" />:
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="i18n:translate('ubo.genre')" />:
+      </div>
+      <div class="col-9">
+        <xsl:apply-templates select="mods:genre" mode="details" />
+      </div>
     </div>
-    <div class="grid_9">
-      <xsl:apply-templates select="mods:genre" mode="details" />
-    </div>
-    <div class="clear" />
   </xsl:template>
 
   <xsl:template match="mods:genre[@type='intern']" mode="details">
@@ -542,40 +558,43 @@
 
   <!-- ========== Notiz, Kommentar ========== -->
   <xsl:template match="mods:note" mode="details">
-    <div class="grid_3 label">
-      <xsl:value-of select="i18n:translate('ubo.note')" />
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="i18n:translate('ubo.note')" />
+      </div>
+      <div class="col-9">
+        <xsl:apply-templates select="." />
+      </div>
     </div>
-    <div class="grid_9">
-      <xsl:apply-templates select="." />
-    </div>
-    <div class="clear" />
   </xsl:template>
 
   <!-- ========== Sprache der Publikation ========== -->
   <xsl:template match="mods:language" mode="details">
-    <div class="grid_3 label">
-       <xsl:value-of select="i18n:translate('ubo.language')" />
+    <div class="row">
+      <div class="col-3">
+         <xsl:value-of select="i18n:translate('ubo.language')" />
+      </div>
+      <div class="col-9">
+        <xsl:apply-templates select="mods:languageTerm" />
+      </div>
     </div>
-    <div class="grid_9">
-      <xsl:apply-templates select="mods:languageTerm" />
-    </div>
-    <div class="clear" />
   </xsl:template>
 
   <!-- ========== Signatur ========== -->
   <xsl:template match="mods:location/mods:shelfLocator" mode="details">
-    <div class="grid_3 label">
-      <xsl:value-of select="i18n:translate('ubo.shelfmark')" />
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="i18n:translate('ubo.shelfmark')" />
+      </div>
+      <div class="col-9">
+        <xsl:apply-templates select="." />
+      </div>
     </div>
-    <div class="grid_9">
-      <xsl:apply-templates select="." />
-    </div>
-    <div class="clear" />
   </xsl:template>
   
-  <!-- ========== Verweise/Überordnung ========== -->
+  <!-- ========== Verweise/Ãœberordnung ========== -->
   <xsl:template match="mods:relatedItem[(@type='host') or (@type='series')]" mode="details">
-    <div class="ubo_related_details">
+    <div class="ubo_related_details border-top border-bottom border-dark my-1">
       <xsl:apply-templates select="." mode="details_lines" />
     </div>
   </xsl:template>
@@ -604,11 +623,12 @@
   <!-- ========== part ========== -->
 
   <xsl:template match="mods:part" mode="details">
-    <div class="grid_3 label">in:</div>
-    <div class="grid_9">
-      <xsl:apply-templates select="." />
+    <div class="row">
+      <div class="col-3">in:</div>
+      <div class="col-9">
+        <xsl:apply-templates select="." />
+      </div>
     </div>
-    <div class="clear" />
   </xsl:template>
 
   <!-- ========== details_lines ========== -->
@@ -639,39 +659,41 @@
   <!-- =========== Schlagworte =========== -->
   <xsl:template name="subject.topic">
     <xsl:if test="mods:subject/mods:topic">
-      <div class="grid_3 label">
-        <xsl:value-of select="i18n:translate('ubo.subject.topic')" />
-        <xsl:text>:</xsl:text>
-      </div>
-      <div class="grid_9">
-        <xsl:for-each select="mods:subject[mods:topic]">
-          <xsl:for-each select="mods:topic">
-            <xsl:value-of select="." />
-            <xsl:if test="position() != last()"> &#187; </xsl:if>
+      <div class="row">
+        <div class="col-3">
+          <xsl:value-of select="i18n:translate('ubo.subject.topic')" />
+          <xsl:text>:</xsl:text>
+        </div>
+        <div class="col-9">
+          <xsl:for-each select="mods:subject[mods:topic]">
+            <xsl:for-each select="mods:topic">
+              <xsl:value-of select="." />
+              <xsl:if test="position() != last()"> &#187; </xsl:if>
+            </xsl:for-each>
+            <xsl:if test="position() != last()"> ; </xsl:if>
           </xsl:for-each>
-          <xsl:if test="position() != last()"> ; </xsl:if>
-        </xsl:for-each>
-        <xsl:apply-templates select="." />
+          <xsl:apply-templates select="." />
+        </div>
       </div>
-      <div class="clear" />
     </xsl:if>
   </xsl:template>
   
   <!-- =========== Link zum Abstract ========== --> 
   <xsl:template match="mods:abstract/@xlink:href" mode="details">
-    <div class="grid_3 label">
-      <xsl:value-of select="i18n:translate('ubo.abstract')" />
-      <xsl:apply-templates select="../@xml:lang" />
-      <xsl:text>:</xsl:text>
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="i18n:translate('ubo.abstract')" />
+        <xsl:apply-templates select="../@xml:lang" />
+        <xsl:text>:</xsl:text>
+      </div>
+      <div class="col-9">
+        <xsl:apply-templates select="." />
+      </div>
     </div>
-    <div class="grid_9">
-      <xsl:apply-templates select="." />
-    </div>
-    <div class="clear" />
   </xsl:template>
 
   <xsl:template match="mods:abstract[string-length(.) &gt; 0]" mode="details">
-    <div style="padding:1ex;">
+    <div>
       <h3>
         <xsl:value-of select="i18n:translate('ubo.abstract')" />
         <xsl:apply-templates select="@xml:lang" />
@@ -697,7 +719,7 @@
     <xsl:apply-templates select="mods:subTitle" />
   </xsl:template>
 
-  <!-- ========== Führende Artikel: Der, Die, Das ========== -->
+  <!-- ========== FÃ¼hrende Artikel: Der, Die, Das ========== -->
   <xsl:template match="mods:nonSort">
     <xsl:value-of select="text()" />
     <xsl:text> </xsl:text>
@@ -719,14 +741,14 @@
     <xsl:value-of select="text()" />
   </xsl:template>
 
-  <!-- ========== Typ des Titels: Haupttitel, abgekürzt, übersetzt, ... ========== -->
+  <!-- ========== Typ des Titels: Haupttitel, abgekÃ¼rzt, Ã¼bersetzt, ... ========== -->
   <xsl:template match="mods:titleInfo/@type">
     <xsl:text> (</xsl:text>
     <xsl:value-of select="i18n:translate(concat('ubo.title.type.',.))" />
     <xsl:text>)</xsl:text>
   </xsl:template>
 
-  <!-- ========== Rolle einer Person oder Körperschaft ========== -->
+  <!-- ========== Rolle einer Person oder KÃ¶rperschaft ========== -->
   <xsl:template match="mods:roleTerm[@type='code' and @authority='marcrelator']">
     <xsl:variable name="uri" select="concat('classification:metadata:0:children:marcrelator:',.)" />
     <xsl:apply-templates select="document($uri)/mycoreclass/categories/category[1]" />
@@ -904,7 +926,7 @@
   <!-- ========== Auflage ========== -->
   <xsl:template match="mods:edition">
     <xsl:value-of select="text()" />
-    <!-- Wenn Auflage nicht "Aufl." oder "Ed." und nur Ziffern enthält (Auflagennummer), ergänze "Aufl." -->    
+    <!-- Wenn Auflage nicht "Aufl." oder "Ed." und nur Ziffern enthÃ¤lt (Auflagennummer), ergÃ¤nze "Aufl." -->    
     <xsl:if test="not(contains(translate(text(),'AaUuEeDd','@@@@@@@@'),'@')) and (string-length(translate(text(),'0123456789. ','')) = 0)">
       <xsl:if test="substring(.,string-length(.)) != '.'">
         <xsl:text>.</xsl:text>
@@ -1060,7 +1082,7 @@
     </a>
   </xsl:template>
   
-  <!-- ========== ( Serie ; Bandzählung ) ========== -->
+  <!-- ========== ( Serie ; BandzÃ¤hlung ) ========== -->
   <xsl:template match="mods:relatedItem[@type='series']">
     <xsl:text>(</xsl:text>
     <xsl:apply-templates select="mods:titleInfo[1]" />

@@ -12,31 +12,33 @@
   <xsl:param name="ServletsBaseURL" />
 
   <xsl:template match="/response">
-    <article class="highlight1">
-      <h3>
-        <xsl:value-of select="i18n:translate('ubo.newest')" />:
-      </h3>
-      <xsl:for-each select="result[@name='response']">
-        <ul style="margin-top:1ex;">
-          <xsl:for-each select="doc">
-            <li style="margin-bottom:1ex;">
-              <xsl:variable name="id" select="str[@name='id']" />
-              <xsl:variable name="mycoreobject" select="document(concat('mcrobject:',$id))/mycoreobject" />
-              <div class="content bibentry">
-                <xsl:apply-templates select="$mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods" mode="cite">
-                  <xsl:with-param name="mode">divs</xsl:with-param>
-                </xsl:apply-templates>
-              </div>
-            </li>
-          </xsl:for-each>
-        </ul>
-        <xsl:variable name="year" select="doc[1]/int[@name='year']" />
-        <p>
-          <a href="{$ServletsBaseURL}solr/select?q=status:confirmed+AND+year:[{$year - 1}+TO+{$year}]&amp;sort=year+desc,created+desc">
-            <xsl:value-of select="i18n:translate('ubo.more')" />...
-          </a>
-        </p>
-      </xsl:for-each>
+    <article class="card">
+      <div class="card-body">
+        <h3>
+          <xsl:value-of select="i18n:translate('ubo.newest')" />:
+        </h3>
+        <xsl:for-each select="result[@name='response']">
+          <ul class="list-group">
+            <xsl:for-each select="doc">
+              <li class="list-group-item">
+                <xsl:variable name="id" select="str[@name='id']" />
+                <xsl:variable name="mycoreobject" select="document(concat('mcrobject:',$id))/mycoreobject" />
+                <div class="content bibentry">
+                  <xsl:apply-templates select="$mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods" mode="cite">
+                    <xsl:with-param name="mode">divs</xsl:with-param>
+                  </xsl:apply-templates>
+                </div>
+              </li>
+            </xsl:for-each>
+          </ul>
+          <xsl:variable name="year" select="doc[1]/int[@name='year']" />
+          <p>
+            <a href="{$ServletsBaseURL}solr/select?q=status:confirmed+AND+year:[{$year - 1}+TO+{$year}]&amp;sort=year+desc,created+desc">
+              <xsl:value-of select="i18n:translate('ubo.more')" />...
+            </a>
+          </p>
+        </xsl:for-each>
+      </div>
     </article>
   </xsl:template>
 

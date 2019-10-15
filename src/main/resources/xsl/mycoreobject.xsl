@@ -57,7 +57,6 @@
 <xsl:template name="head.additional">
   <xsl:apply-templates select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods" mode="dc-meta" />
   <xsl:apply-templates select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods" mode="highwire" />
-  <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/grid12.css" />
   <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
 </xsl:template>
 
@@ -79,40 +78,40 @@
 <!-- ============ Aktionen ============ -->
 
 <xsl:template name="actions">
-  <div id="buttons">
+  <div id="buttons" class="btn-group mb-3 flex-wrap">
     <xsl:if test="$permission.admin and not($UBO.System.ReadOnly = 'true')">
       <xsl:if test="(string-length($step) = 0) or contains($step,'merged')">
-        <a class="action" href="{$WebApplicationBaseURL}edit-publication.xed?id={/mycoreobject/@ID}">
+        <a class="action btn btn-sm btn-primary mb-1" href="{$WebApplicationBaseURL}edit-publication.xed?id={/mycoreobject/@ID}">
           <xsl:value-of select="i18n:translate('button.edit')" />
         </a>
-        <a class="action" href="{$WebApplicationBaseURL}edit-admin.xed?id={/mycoreobject/@ID}">Admin</a>
-        <a class="action" href="{$WebApplicationBaseURL}edit-mods.xed?id={/mycoreobject/@ID}">MODS</a>
+        <a class="action btn btn-sm btn-primary mb-1" href="{$WebApplicationBaseURL}edit-admin.xed?id={/mycoreobject/@ID}">Admin</a>
+        <a class="action btn btn-sm btn-primary mb-1" href="{$WebApplicationBaseURL}edit-mods.xed?id={/mycoreobject/@ID}">MODS</a>
       </xsl:if>
       <xsl:if test="string-length($step) = 0">
         <xsl:if test="not(/mycoreobject/structure/children/child)">
-          <a class="action" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.step=ask.delete">
+          <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.step=ask.delete">
             <xsl:value-of select="i18n:translate('button.delete')" />
           </a>
         </xsl:if>
         <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host'][string-length(@xlink:href)=0]">
           <!-- Button to extract mods:relatedItem[@type='host'] to a new separate entry -->
-          <a class="action" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;mode=xhost">
+          <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;mode=xhost">
             <xsl:value-of select="i18n:translate('ubo.relatedItem.host.separate')" />
           </a>
         </xsl:if>
       </xsl:if>
     </xsl:if>
     <xsl:if xmlns:basket="xalan://unidue.ubo.basket.BasketUtils" test="basket:hasSpace() and not(basket:contains(string(/mycoreobject/@ID)))">
-      <a class="action" href="{$ServletsBaseURL}MCRBasketServlet?type=bibentries&amp;action=add&amp;resolve=true&amp;id={/mycoreobject/@ID}&amp;uri=mcrobject:{/mycoreobject/@ID}">
+      <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRBasketServlet?type=bibentries&amp;action=add&amp;resolve=true&amp;id={/mycoreobject/@ID}&amp;uri=mcrobject:{/mycoreobject/@ID}">
         <xsl:value-of select="i18n:translate('button.basketAdd')" />
       </a>
     </xsl:if>
     <xsl:if test="(string-length($step) = 0) and not($permission.admin)">
-      <a class="action" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.xml?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=mods">MODS</a>
-      <a class="action" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.bib?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=bibtex">BibTeX</a>
-      <a class="action" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.enl?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=endnote">EndNote</a>
-      <a class="action" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.ris?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=ris">RIS</a>
-      <a class="action" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.txt?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=ieee-text">IEEE</a>
+      <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.xml?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=mods">MODS</a>
+      <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.bib?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=bibtex">BibTeX</a>
+      <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.enl?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=endnote">EndNote</a>
+      <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.ris?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=ris">RIS</a>
+      <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.txt?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=ieee-text">IEEE</a>
     </xsl:if>
   </div>
 </xsl:template>
@@ -137,48 +136,68 @@
 <!-- ============ Rechte Seite: Inhalte ============ -->
 
 <xsl:template match="mycoreobject">
- <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
-  <xsl:call-template name="steps.and.actions" /> 
-  <div class="section bibentry highlight2" style="padding:1ex;">
-    <xsl:apply-templates select="." mode="cite">
-      <xsl:with-param name="mode">divs</xsl:with-param>
-    </xsl:apply-templates>
-  </div>
-  <div class="section">
-    <xsl:call-template name="altmetrics" />
-    <div class="labels">
-      <xsl:call-template name="label-year" />
-      <xsl:call-template name="pubtype" />
-      <xsl:call-template name="label-oa" />
-      <xsl:call-template name="orcid-status" />
-    </div>
-    <div class="labels">
-      <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info" />
-      <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info" />
-    </div>
-    <xsl:if test="mods:extension/tag">
-      <div class="labels">
-        <xsl:apply-templates select="mods:extension/tag" />
+  <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
+    <xsl:call-template name="steps.and.actions" />
+    <div class="section bibentry card">
+      <div class="card-body">
+        <xsl:apply-templates select="." mode="cite">
+          <xsl:with-param name="mode">divs</xsl:with-param>
+        </xsl:apply-templates>
       </div>
-    </xsl:if>
-    <xsl:apply-templates select="/mycoreobject/service/servflags/servflag[@type='status']" />
-    <xsl:apply-templates select="/mycoreobject/structure/children[child]" />
-  </div>
-  <div class="section highlight2" style="padding-top:2ex; padding-bottom:2ex;">
-    <div class="container_12 ubo_details">
-      <xsl:apply-templates select="." mode="details_lines" />
     </div>
-  </div>
-  <xsl:apply-templates select="." mode="romeo" />
-  <xsl:if test="$permission.admin and mods:extension[dedup]">
-    <xsl:call-template name="listDuplicates" />
-  </xsl:if>
- </xsl:for-each>
+    <div class="section row m-1">
+      <div class="col pl-0">
+        <div class="row">
+          <div class="col">
+            <xsl:call-template name="label-year" />
+            <xsl:call-template name="pubtype" />
+            <xsl:call-template name="label-oa" />
+            <xsl:call-template name="orcid-status" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info" />
+            <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info" />
+          </div>
+        </div>
+        <xsl:if test="mods:extension/tag">
+          <div class="row">
+            <div class="col">
+              <xsl:apply-templates select="mods:extension/tag" />
+            </div>
+          </div>
+        </xsl:if>
+        <div class="row">
+          <div class="col">
+            <xsl:apply-templates select="/mycoreobject/service/servflags/servflag[@type='status']" />
+            <xsl:apply-templates select="/mycoreobject/structure/children[child]" />
+          </div>
+        </div>
+      </div>
+      <div class="col align-self-center pr-0">
+        <xsl:call-template name="altmetrics" />
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="ubo_details card">
+        <div class="card-body">
+          <xsl:apply-templates select="." mode="details_lines" />
+        </div>
+      </div>
+    </div>
+
+    <xsl:apply-templates select="." mode="romeo" />
+    <xsl:if test="$permission.admin and mods:extension[dedup]">
+      <xsl:call-template name="listDuplicates" />
+    </xsl:if>
+  </xsl:for-each>
 </xsl:template>
 
 <xsl:template match="/mycoreobject/structure/children[child]">
   <div class="labels">
-    <span class="label-info">
+    <span class="badge badge-alternative mr-1">
       <xsl:value-of select="i18n:translate('ubo.relatedItem.host.contains')"/>
       <xsl:text>: </xsl:text>
       <a href="solr/select?q=link:{/mycoreobject/@ID}&amp;sort=year+desc">
@@ -193,8 +212,8 @@
 <xsl:variable name="quotes">"</xsl:variable>
 
 <xsl:template match="mods:extension/tag">
-  <span class="ubo-tag">
-    <a href="{$ServletsBaseURL}solr/select?q=status:confirmed+AND+tag:{encoder:encode(concat($quotes,text(),$quotes),'UTF-8')}">
+  <span class="mycore-tag">
+    <a class="badge badge-primary" href="{$ServletsBaseURL}solr/select?q=status:confirmed+AND+tag:{encoder:encode(concat($quotes,text(),$quotes),'UTF-8')}">
       <xsl:value-of select="text()" />
     </a>
   </span>
@@ -203,77 +222,81 @@
 <!-- ============ Dubletten suchen und anzeigen ============ -->
 
 <xsl:template name="listDuplicates">
-
-  <xsl:variable name="duplicatesURI">
-    <xsl:for-each select="mods:extension[dedup]">
-      <xsl:call-template name="buildFindDuplicatesURI" />
-    </xsl:for-each>
-  </xsl:variable>
-  
-  <xsl:variable name="myID" select="/mycoreobject/@ID" />
-  
-  <xsl:variable name="duplicates1" select="document($duplicatesURI)/response/result[@name='response']/doc" />
-  <xsl:variable name="duplicates2">
-    <xsl:for-each select="$duplicates1">
-      <xsl:sort select="str[@name='id']" data-type="number" order="descending" />
-      <xsl:variable name="duplicateID" select="str[@name='id']" />
-      <xsl:if test="not($duplicateID = $myID)">
-        <xsl:value-of select="str[@name='id']" />
-        <xsl:text> </xsl:text>
-      </xsl:if>
-    </xsl:for-each>
-  </xsl:variable>
-  <xsl:variable name="duplicates3" select="xalan:tokenize($duplicates2)" />
-
-  <xsl:variable name="numDuplicates" select="count($duplicates3)" />
-  <xsl:if test="$numDuplicates &gt; 0">
-    <div class="highlight1 duplicates">
-      <h3>
-        <xsl:text>Es gibt eventuell </xsl:text>
-        <xsl:choose>
-          <xsl:when test="$numDuplicates = 1">eine Dublette</xsl:when> 
-          <xsl:otherwise>
-            <xsl:value-of select="$numDuplicates" />
-            <xsl:text> Dubletten</xsl:text>
-          </xsl:otherwise>
-        </xsl:choose>
-        <xsl:text>:</xsl:text> 
-      </h3>
+  <div class="card">
+    <div class="card-body">
       
-      <a style="float:right" class="roundedButton">
-        <xsl:attribute name="href">
-          <xsl:text>MCRBasketServlet?type=bibentries&amp;action=add&amp;resolve=true</xsl:text>
-          <xsl:text>&amp;id=</xsl:text><xsl:value-of select="$myID" />
-          <xsl:text>&amp;uri=mcrobject:</xsl:text><xsl:value-of select="$myID" />
-          <xsl:for-each select="$duplicates3">
-            <xsl:text>&amp;id=</xsl:text><xsl:value-of select="." />
-            <xsl:text>&amp;uri=mcrobject:</xsl:text><xsl:value-of select="." />
-          </xsl:for-each>
-        </xsl:attribute>
-        <xsl:value-of select="i18n:translate('button.basketAdd')" />
-      </a>
+      <xsl:variable name="duplicatesURI">
+	<xsl:for-each select="mods:extension[dedup]">
+	  <xsl:call-template name="buildFindDuplicatesURI" />
+	</xsl:for-each>
+      </xsl:variable>
       
-      <ul>
-        <xsl:for-each select="$duplicates3">
-          <li>
-            <a href="DozBibEntryServlet?id={.}">
-              <xsl:text>Eintrag </xsl:text>
-              <xsl:value-of select="number(substring-after(.,'_mods_'))" />
-            </a>
-            <xsl:for-each select="document(concat('mcrobject:',.))/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
-              <div class="bibentry">
-                <xsl:apply-templates select="." mode="cite">
-                  <xsl:with-param name="mode">divs</xsl:with-param>
-                </xsl:apply-templates>
-              </div>
-              <xsl:call-template name="pubtype" />
-              <xsl:call-template name="label-year" />
+      <xsl:variable name="myID" select="/mycoreobject/@ID" />
+      
+      <xsl:variable name="duplicates1" select="document($duplicatesURI)/response/result[@name='response']/doc" />
+      <xsl:variable name="duplicates2">
+	<xsl:for-each select="$duplicates1">
+	  <xsl:sort select="str[@name='id']" data-type="number" order="descending" />
+	  <xsl:variable name="duplicateID" select="str[@name='id']" />
+	  <xsl:if test="not($duplicateID = $myID)">
+            <xsl:value-of select="str[@name='id']" />
+            <xsl:text> </xsl:text>
+	  </xsl:if>
+	</xsl:for-each>
+      </xsl:variable>
+      <xsl:variable name="duplicates3" select="xalan:tokenize($duplicates2)" />
+
+      <xsl:variable name="numDuplicates" select="count($duplicates3)" />
+      <xsl:if test="$numDuplicates &gt; 0">
+	<div class="duplicates">
+	  <h3>
+            <xsl:text>Es gibt eventuell </xsl:text>
+            <xsl:choose>
+              <xsl:when test="$numDuplicates = 1">eine Dublette</xsl:when> 
+              <xsl:otherwise>
+		<xsl:value-of select="$numDuplicates" />
+		<xsl:text> Dubletten</xsl:text>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>:</xsl:text> 
+	  </h3>
+	  
+	  <a class="btn btn-sm btn-primary float-right mb-1">
+            <xsl:attribute name="href">
+              <xsl:text>MCRBasketServlet?type=bibentries&amp;action=add&amp;resolve=true</xsl:text>
+              <xsl:text>&amp;id=</xsl:text><xsl:value-of select="$myID" />
+              <xsl:text>&amp;uri=mcrobject:</xsl:text><xsl:value-of select="$myID" />
+              <xsl:for-each select="$duplicates3">
+		<xsl:text>&amp;id=</xsl:text><xsl:value-of select="." />
+		<xsl:text>&amp;uri=mcrobject:</xsl:text><xsl:value-of select="." />
+              </xsl:for-each>
+            </xsl:attribute>
+            <xsl:value-of select="i18n:translate('button.basketAdd')" />
+	  </a>
+	  
+	  <ul class="list-group list-group-flush w-100">
+            <xsl:for-each select="$duplicates3">
+              <li class="list-group-item">
+		<a href="DozBibEntryServlet?id={.}">
+		  <xsl:text>Eintrag </xsl:text>
+		  <xsl:value-of select="number(substring-after(.,'_mods_'))" />
+		</a>
+		<xsl:for-each select="document(concat('mcrobject:',.))/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
+		  <div class="bibentry">
+                    <xsl:apply-templates select="." mode="cite">
+                      <xsl:with-param name="mode">divs</xsl:with-param>
+                    </xsl:apply-templates>
+		  </div>
+		  <xsl:call-template name="pubtype" />
+		  <xsl:call-template name="label-year" />
+		</xsl:for-each>
+              </li>
             </xsl:for-each>
-          </li>
-        </xsl:for-each>
-      </ul>
+	  </ul>
+	</div>
+      </xsl:if>
     </div>
-  </xsl:if>
+  </div>
 </xsl:template>
 
 <xsl:template name="steps.and.actions">
@@ -340,17 +363,17 @@
 <xsl:template name="ask.publications">
   <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
     <p>
-      Wenn Sie die Publikationen im Korb zusammenführen, 
+      Wenn Sie die Publikationen im Korb zusammenfÃ¼hren, 
       werden die bibliographischen Daten zu einem neuen Eintrag zusammengefasst 
-      und die ursprünglichen, alten Einträge gelöscht. 
-      Ergebnis wäre dieser Eintrag hier.
+      und die ursprÃ¼nglichen, alten EintrÃ¤ge gelÃ¶scht. 
+      Ergebnis wÃ¤re dieser Eintrag hier.
     </p>
     <p>
       <strong>      
-        Wollen Sie die Publikationen im Korb wirklich zusammenführen?
+        Wollen Sie die Publikationen im Korb wirklich zusammenfÃ¼hren?
       </strong>
     </p>
-    <input type="button" class="editorButton" name="merge" value="Zusammenführen" 
+    <input type="button" class="editorButton" name="merge" value="ZusammenfÃ¼hren" 
       onclick="self.location.href='BasketPubMerger?commit=true&amp;target=publications'" />
     <input type="button" class="editorButton" name="cancel" value="{i18n:translate('button.cancelNo')}" 
       onclick="self.location.href='MCRBasketServlet?type=bibentries&amp;action=show'" />
@@ -361,10 +384,10 @@
   <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
     <p>
       Wenn Sie die Publikationen im Korb zusammenhosten, 
-      werden die Überordnungen jeder dieser Publikationen extrahiert,
+      werden die Ãœberordnungen jeder dieser Publikationen extrahiert,
       deren bibliographische Daten zu einem neuen Eintrag zusammengefasst 
       und die Publikationen im Korb mit diesem neuen Eintrag verlinkt.  
-      Ergebnis wäre dieser Eintrag hier als gemeinsame Überordnung aller Publikationen im Korb.
+      Ergebnis wÃ¤re dieser Eintrag hier als gemeinsame Ãœberordnung aller Publikationen im Korb.
     </p>
     <p>
       <strong>      
@@ -381,8 +404,8 @@
 <xsl:template name="merged.publications">
   <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
     <p>
-      Alle Publikationen im Korb wurden zu diesem Eintrag zusammengeführt. 
-      Die anderen Einträge wurden gelöscht. Der Korb wurde geleert.
+      Alle Publikationen im Korb wurden zu diesem Eintrag zusammengefÃ¼hrt. 
+      Die anderen EintrÃ¤ge wurden gelÃ¶scht. Der Korb wurde geleert.
     </p>
   </div>
 </xsl:template>
@@ -390,8 +413,8 @@
 <xsl:template name="merged.hosts">
   <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
     <p>
-      Alle Publikationen im Korb wurden mit dieser Überordnung verknüpft. 
-      Andere evtl. bereits vorhandene Überordnungen wurden gelöscht.
+      Alle Publikationen im Korb wurden mit dieser Ãœberordnung verknÃ¼pft. 
+      Andere evtl. bereits vorhandene Ãœberordnungen wurden gelÃ¶scht.
     </p>
   </div>
 </xsl:template>
@@ -409,7 +432,7 @@
 <xsl:template name="altmetrics">
   <xsl:if test="mods:identifier[contains('doi urn isbn pubmed',@type)]">
     <script type='text/javascript' src='https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js' />
-    <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="left" data-hide-no-mentions="true" style="float:right; display:inline-block; margin:0 2ex 2ex 2ex;">
+    <div class="altmetric-embed float-right" data-badge-type="donut" data-badge-popover="left" data-hide-no-mentions="true">
       <xsl:choose>
         <xsl:when test="mods:identifier[@type='doi']">
           <xsl:attribute name="data-doi">

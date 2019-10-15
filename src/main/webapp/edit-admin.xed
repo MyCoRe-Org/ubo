@@ -3,54 +3,50 @@
 <webpage lastModified="$Date: 2016-02-01 15:05:21 +0100 (Mo, 01 Feb 2016) $" id="dozbib.edit.publication">
   <title xml:lang="de">Publikation bearbeiten</title>
  
-  <script type="text/javascript" src="external/jquery-tools-1.2.7/jquery.tools.min.js"></script>
   <script type="text/javascript" src="js/editor.validation.failed.tooltip.js"></script>
      
-  <article class="highlight0" id="form">
-  
-    <script type="text/javascript" src="external/jquery-ui-1.8.21.custom.min.js"></script>
-    <script type="text/javascript" src="external/chosen/chosen.jquery.min.js"></script>
-
-    <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form">
-  
-      <xed:source uri="xslStyle:mods-preprocessor:mcrobject:{$id}" />
-      <xed:source uri="xslStyle:mods2mycoreobject,mods-preprocessor:session:{$key}" />
-      
-      <xed:cancel url="servlets/DozBibEntryServlet?id={$id}" />
-      <xed:cancel url="newPublication.xed" />
+  <article class="card">
+    <div class="card-body">
+      <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
+	
+	<xed:source uri="xslStyle:mods-preprocessor:mcrobject:{$id}" />
+	<xed:source uri="xslStyle:mods2mycoreobject,mods-preprocessor:session:{$key}" />
+	
+	<xed:cancel url="servlets/DozBibEntryServlet?id={$id}" />
+	<xed:cancel url="newPublication.xed" />
         
-      <xed:post-processor xsl="mods-postprocessor.xsl" />    
-    
-      <xed:bind xpath="/mycoreobject">
-        <xed:include uri="webapp:import-editor.xed" ref="common.metafields" />
-        
-        <xed:choose>
-          <xed:when test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
-            <xed:include uri="webapp:edit-admin.xed" ref="editor" />
-          </xed:when>
-          <xed:otherwise>
-            <p>Sie sind nicht berechtigt, dieses Formular zu verwenden.</p>
-          </xed:otherwise>
-        </xed:choose>
-      </xed:bind>
+	<xed:post-processor xsl="mods-postprocessor.xsl" />    
+	
+	<xed:bind xpath="/mycoreobject">
+          <xed:include uri="webapp:import-editor.xed" ref="common.metafields" />
+          
+          <xed:choose>
+            <xed:when test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+              <xed:include uri="webapp:edit-admin.xed" ref="editor" />
+            </xed:when>
+            <xed:otherwise>
+              <p>Sie sind nicht berechtigt, dieses Formular zu verwenden.</p>
+            </xed:otherwise>
+          </xed:choose>
+	</xed:bind>
 
-      <xed:template id="editor">
-        <input type="hidden" name="mode" value="save" />
-        <xed:include uri="webapp:import-editor.xed" ref="validation" />
-        <fieldset>
-          <legend>
-            <xed:include uri="webapp:import-editor.xed" ref="legend.ID" />
-          </legend>
-          <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer/mods:mods">
-            <xed:include uri="webapp:import-editor.xed" ref="status" />    
-            <xed:include uri="webapp:import-editor.xed" ref="subject" />    
-            <xed:include uri="webapp:import-editor.xed" ref="origin" />    
-            <xed:include uri="webapp:import-editor.xed" ref="tags" />
-          </xed:bind>    
-        </fieldset>
-        <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer/mods:mods">
+	<xed:template id="editor">
+          <input type="hidden" name="mode" value="save" />
+          <xed:include uri="webapp:import-editor.xed" ref="validation" />
           <fieldset>
-            <legend>Publikation:</legend>
+            <legend>
+              <xed:include uri="webapp:import-editor.xed" ref="legend.ID" />
+            </legend>
+            <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer/mods:mods">
+              <xed:include uri="webapp:import-editor.xed" ref="status" />    
+              <xed:include uri="webapp:import-editor.xed" ref="subject" />    
+              <xed:include uri="webapp:import-editor.xed" ref="origin" />    
+              <xed:include uri="webapp:import-editor.xed" ref="tags" />
+            </xed:bind>    
+          </fieldset>
+          <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer/mods:mods">
+            <fieldset>
+              <legend>Publikation:</legend>
               <xed:include uri="webapp:import-editor.xed" ref="genre" />
               <xed:include uri="webapp:import-editor.xed" ref="oa" />    
               <xed:include uri="webapp:import-editor.xed" ref="title.complex" />
@@ -105,13 +101,10 @@
             <xed:include uri="webapp:import-editor.xed" ref="abstract" />    
           </fieldset>
         </xed:bind>
-  
         <xed:include uri="webapp:import-editor.xed" ref="fix.structure.parent" />
         <xed:include uri="webapp:import-editor.xed" ref="cleanup" />
         <xed:include uri="webapp:import-editor.xed" ref="cancel.submit" />
-        
-      </xed:template>
-    
+      </xed:template
     </xed:form>
   </article>
 </webpage>

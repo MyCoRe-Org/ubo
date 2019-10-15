@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.mycore</groupId>
     <artifactId>mycore-parent</artifactId>
-    <version>37-SNAPSHOT</version>
+    <version>40-SNAPSHOT</version>
     <relativePath />
   </parent>
 
@@ -45,7 +45,6 @@
     <MCR.AppName>ubo</MCR.AppName>
     <axis1.version>1.4</axis1.version>
     <citeproc.version>1.0.1</citeproc.version>
-    <cargo.container>jetty9x</cargo.container>
     <cargo.container.zipUrlInstaller.downloadDir>${settings.localRepository}/../cargo/containers</cargo.container.zipUrlInstaller.downloadDir>
     <cargo.debug.address>8295</cargo.debug.address>
     <cargo.debug.suspend>n</cargo.debug.suspend>
@@ -56,18 +55,21 @@
     <cargo.rmi.port>8290</cargo.rmi.port>
     <cargo.servlet.port>8080</cargo.servlet.port>
     <cargo.servlet.uriencoding>UTF-8</cargo.servlet.uriencoding>
+    <cargo.start.jvmargs />
     <cargo.tomcat.ajp.port>8292</cargo.tomcat.ajp.port>
-    <cargo.version>1.6.7</cargo.version>
-    <hibernate.version>5.2.14.Final</hibernate.version>
+    <cargo.version>1.7.2</cargo.version>
+    <hibernate.version>5.4.1.Final</hibernate.version>
     <httpcomponents.version>4.5.5</httpcomponents.version>
     <httpcore.version>4.4.9</httpcore.version>
-    <java.target.version>1.8</java.target.version>
-    <jetty.version>9.4.11.v20180605</jetty.version>
+    <java.target.version>11</java.target.version>
+    <jetty.version>9.4.15.v20190215</jetty.version>
     <log4j.version>2.11.0</log4j.version>
-    <mycore.version>2018.06.0.2-SNAPSHOT</mycore.version>
+    <mycore.version>2019.05-SNAPSHOT</mycore.version>
     <solr.data.dir>${solr.home}/ubo/data</solr.data.dir>
     <solr.home>${user.home}/AppData/Local/MyCoRe/${MCR.AppName}/data/solr</solr.home>
     <timestamp>${maven.build.timestamp}</timestamp>
+    <tomcat8.version>8.5.38</tomcat8.version>
+    <tomcat9.version>9.0.16</tomcat9.version>
   </properties>
 
   <build>
@@ -188,27 +190,29 @@
         <artifactId>cargo-maven2-plugin</artifactId>
         <version>${cargo.version}</version>
         <configuration>
-          <container>
-            <containerId>${cargo.container}</containerId>
-            <artifactInstaller>
-              <groupId>org.eclipse.jetty</groupId>
-              <artifactId>jetty-distribution</artifactId>
-              <version>${jetty.version}</version>
-            </artifactInstaller>
-          </container>
           <configuration>
             <properties>
               <cargo.servlet.port>${cargo.servlet.port}</cargo.servlet.port>
               <cargo.jvmargs>${cargo.jvmargs}</cargo.jvmargs>
-              <cargo.servlet.users>submitter:submitter123:submitter|editor:editor123:editor</cargo.servlet.users>
-              <xmlReplacements>
-                <xmlReplacement>
-                  <file>etc/jetty-logging.xml</file>
-                  <xpathExpression>/Configure</xpathExpression>
-                  <value>&lt;!-- disabled --&gt;</value>
-                </xmlReplacement>
-              </xmlReplacements>
             </properties>
+            <users>
+              <user>
+                <name>submitter</name>
+                <password>submitter123</password>
+                <roles>
+                  <role>submitter</role>
+                  <role>users</role>
+                </roles>
+              </user>
+              <user>
+                <name>editor</name>
+                <password>editor123</password>
+                <roles>
+                  <role>editor</role>
+                  <role>users</role>
+                </roles>
+              </user>
+            </users>
           </configuration>
           <deployables>
             <deployable>
@@ -322,6 +326,11 @@
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
       <version>2.6</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.xml.ws</groupId>
+      <artifactId>jaxws-api</artifactId>
+      <version>2.3.1</version>
     </dependency>
     <dependency>
       <groupId>jaxen</groupId>
@@ -442,6 +451,11 @@
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
+      <artifactId>mycore-sass</artifactId>
+      <version>${mycore.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
       <artifactId>mycore-orcid</artifactId>
       <version>${mycore.version}</version>
     </dependency>
@@ -464,16 +478,6 @@
       <groupId>org.mycore</groupId>
       <artifactId>mycore-xeditor</artifactId>
       <version>${mycore.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>bootstrap-glyphicons</artifactId>
-      <version>bdd2cbfba0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars.bower</groupId>
-      <artifactId>github-com-highcharts-highcharts</artifactId>
-      <version>4.2.5</version>
     </dependency>
     <dependency>
       <groupId>xalan</groupId>
@@ -591,6 +595,35 @@
       <groupId>org.citationstyles</groupId>
       <artifactId>locales</artifactId>
       <version>${citeproc.version}-SNAPSHOT</version>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>bootstrap</artifactId>
+      <version>4.1.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>jquery</artifactId>
+      <version>3.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars.npm</groupId>
+      <artifactId>chosen-js</artifactId>
+      <version>1.8.7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>jquery-ui</artifactId>
+      <version>1.12.1</version>
+    </dependency>
+    <dependency>
+        <groupId>org.webjars</groupId>
+        <artifactId>highcharts</artifactId>
+        <version>5.0.1</version>
+    </dependency>
+    <dependency>
+        <groupId>org.webjars</groupId>
+        <artifactId>font-awesome</artifactId>
+        <version>5.5.0</version>
     </dependency>
   </dependencies>
 
@@ -625,6 +658,123 @@
         -Dsolr.solr.home=${solr.home}
         -Dsolr.data.dir=${solr.data.dir}
         -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=${cargo.debug.suspend},address=${cargo.debug.address}</cargo.jvmargs>
+      </properties>
+    </profile>
+    <profile>
+      <id>jetty</id>
+      <activation>
+        <property>
+          <name>jetty</name>
+        </property>
+      </activation>
+      <properties>
+        <cargo.container>jetty9x</cargo.container>
+      </properties>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.codehaus.cargo</groupId>
+              <artifactId>cargo-maven2-plugin</artifactId>
+              <configuration>
+                <container>
+                  <containerId>${cargo.container}</containerId>
+                  <artifactInstaller>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-distribution</artifactId>
+                    <version>${jetty.version}</version>
+                  </artifactInstaller>
+                  <dependencies>
+                    <dependency>
+                      <groupId>com.sun.activation</groupId>
+                      <artifactId>javax.activation</artifactId>
+                    </dependency>
+                  </dependencies>
+                </container>
+                <configuration>
+                  <properties>
+                    <cargo.servlet.port>${cargo.servlet.port}</cargo.servlet.port>
+                    <cargo.runtime.args>-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.JavaUtilLog</cargo.runtime.args>
+                    <cargo.jetty.realm.name>Restricted</cargo.jetty.realm.name>
+                  </properties>
+                </configuration>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+    <profile>
+      <id>tomcat</id>
+      <activation>
+        <property>
+          <name>tomcat</name>
+        </property>
+      </activation>
+      <properties>
+        <cargo.container>tomcat${tomcat}x</cargo.container>
+      </properties>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.codehaus.cargo</groupId>
+              <artifactId>cargo-maven2-plugin</artifactId>
+              <configuration>
+                <container>
+                  <containerId>${cargo.container}</containerId>
+                  <artifactInstaller>
+                    <groupId>org.apache.tomcat</groupId>
+                    <artifactId>tomcat</artifactId>
+                    <version>${tomcat.version}</version>
+                    <type>tar.gz</type>
+                  </artifactInstaller>
+                  <dependencies>
+                    <dependency>
+                      <groupId>com.sun.activation</groupId>
+                      <artifactId>javax.activation</artifactId>
+                    </dependency>
+                  </dependencies>
+                </container>
+                <home>${project.build.directory}/catalina-base</home>
+                <configuration>
+                  <properties>
+                    <cargo.rmi.port>${cargo.rmi.port}</cargo.rmi.port>
+                    <cargo.servlet.port>${cargo.servlet.port}</cargo.servlet.port>
+                    <cargo.tomcat.ajp.port>${cargo.tomcat.ajp.port}</cargo.tomcat.ajp.port>
+                    <cargo.tomcat.uriencoding>UTF-8</cargo.tomcat.uriencoding>
+                    <!-- fixes IIIF identifier encoding issues -->
+                    <cargo.start.jvmargs>-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true ${cargo.start.jvmargs}</cargo.start.jvmargs>
+                  </properties>
+                </configuration>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+    <profile>
+      <id>tomcat8</id>
+      <activation>
+        <property>
+          <name>tomcat</name>
+          <value>8</value>
+        </property>
+      </activation>
+      <properties>
+        <tomcat.version>${tomcat8.version}</tomcat.version>
+      </properties>
+    </profile>
+    <profile>
+      <id>tomcat9</id>
+      <activation>
+        <property>
+          <name>tomcat</name>
+          <value>9</value>
+        </property>
+      </activation>
+      <properties>
+        <tomcat.version>${tomcat9.version}</tomcat.version>
       </properties>
     </profile>
   </profiles>

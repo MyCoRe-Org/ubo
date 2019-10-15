@@ -12,20 +12,22 @@
 
   <xsl:template match="/response">
     <xsl:if xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()"> 
-      <article class="highlight2">
-        <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_fields']/lst[@name='status']" />
-        <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_ranges']/lst[@name='modified']/lst[@name='counts']" />
-        <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_ranges']/lst[@name='created']/lst[@name='counts']" />
-        <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_fields']/lst[@name='importID']" />
+      <article class="card">
+	<div class="card-body">
+          <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_fields']/lst[@name='status']" />
+          <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_ranges']/lst[@name='modified']/lst[@name='counts']" />
+          <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_ranges']/lst[@name='created']/lst[@name='counts']" />
+          <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_fields']/lst[@name='importID']" />
+	</div>
       </article>
     </xsl:if>
   </xsl:template>
 
   <xsl:template match="lst[@name='facet_fields']/lst[@name='status']">
     <hgroup>
-      <h2>Publikationen nach Status:</h2>
+      <h3>Publikationen nach Status:</h3>
     </hgroup>
-    <ul style="list-style:none;">
+    <ul class="list-group list-group-flush">
       <xsl:for-each select="int">
         <xsl:call-template name="output.value">
           <xsl:with-param name="label" select="i18n:translate(concat('search.dozbib.status.',@name))"/>
@@ -40,16 +42,16 @@
 
   <xsl:template match="lst[@name='facet_fields']/lst[@name='importID']">
     <hgroup>
-      <h2>Zuletzt importierte Listen:</h2>
+      <h3>Zuletzt importierte Listen:</h3>
     </hgroup>
-    <ul style="list-style:none;">
+    <ul class="list-group list-group-flush">
       <xsl:for-each select="int">
         <xsl:sort select="@name"  order="descending" /> 
         <xsl:if test="position() &lt;= 20"> <!-- show only latest 20 imports -->
           <xsl:call-template name="output.value">
-            <xsl:with-param name="label" select="@name"/>
-            <xsl:with-param name="value" select="text()" />
-            <xsl:with-param name="query" select="concat('importID:',$quote,solr:escapeSearchValue(@name),$quote)" />
+	    <xsl:with-param name="label" select="@name"/>
+	    <xsl:with-param name="value" select="text()" />
+	    <xsl:with-param name="query" select="concat('importID:',$quote,solr:escapeSearchValue(@name),$quote)" />
           </xsl:call-template>
         </xsl:if>
       </xsl:for-each>
@@ -60,9 +62,9 @@
     <xsl:variable name="numDays" select="count(int)" />
     <xsl:variable name="dateField" select="../@name" /> <!-- created|modified -->
     <hgroup>
-      <h2><xsl:value-of select="i18n:translate(concat('facets.facet.',$dateField))" />:</h2>
+      <h3><xsl:value-of select="i18n:translate(concat('facets.facet.',$dateField))" />:</h3>
     </hgroup>
-    <ul style="list-style:none;">
+    <ul class="list-group list-group-flush"> 
       <xsl:call-template name="output.value">
         <xsl:with-param name="label">in den letzten 14 Tagen</xsl:with-param>
         <xsl:with-param name="value" select="sum(int[position() &gt; ($numDays - 14)])" />
@@ -91,12 +93,20 @@
     <xsl:param name="value" />
     <xsl:param name="query" />
     
-    <li>
+    <li class="list-group-item py-0 px-0 border-0">
       <a href="{$ServletsBaseURL}solr/select?q={$query}">
-        <span style="width:140px; display:inline-block; text-align:right; padding-right:1ex;">
-          <xsl:value-of select="$label"/>:
-        </span>
-        <xsl:value-of select="$value"/>
+	<table class="table table-borderless w-100 mb-0">
+	  <tbody>
+	    <tr>
+	      <td class="w-75 py-0 text-right"> 
+		<xsl:value-of select="$label"/>:
+	      </td>
+	      <td class="py-0" align="left">
+		<xsl:value-of select="$value"/>
+	      </td>
+	    </tr>
+	  </tbody>
+	</table>
       </a>
     </li>
   </xsl:template>

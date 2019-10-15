@@ -68,48 +68,63 @@
 
 <xsl:template match="lsfpidsearch">
   
-  <article class="highlight1">
-    <p>
-      <xsl:value-of select="i18n:translate('lsf.searchText.1')"/>
-      <xsl:if test="not(contains(@referrer,'list-wizard'))">
-        <xsl:value-of select="i18n:translate('lsf.searchText.2')"/>
-      </xsl:if>
-    </p>
+  <article class="card mb-2">
+    <div class="card-body bg-alternative">
+      <p>
+	<xsl:value-of select="i18n:translate('lsf.searchText.1')"/>
+	<xsl:if test="not(contains(@referrer,'list-wizard'))">
+          <xsl:value-of select="i18n:translate('lsf.searchText.2')"/>
+	</xsl:if>
+      </p>
+    </div>
   </article>
 
-  <form action="lsfpidsearch.html" method="post" role="form" class="ubo-form">
-    <input type="hidden" name="_xed_subselect_session" value="{@session}" />
-    <input type="hidden" name="_referrer" value="{@referrer}" />
-    <div style="margin-bottom:0.5ex;">
-      <label for="lastName">
-        <xsl:value-of select="i18n:translate('lsf.name')"/>
-      </label>
-      <input id="lastName" name="lastName" type="text" size="40" value="{@lastName}" />
+  <div class="card mb-2">
+    <div class="card-body">
+      <form action="lsfpidsearch.html" method="post" role="form">
+	<input type="hidden" name="_xed_subselect_session" value="{@session}" />
+	<input type="hidden" name="_referrer" value="{@referrer}" />
+	
+	<div class="form-group form-inline">
+	  <label for="lastName" class="mycore-form-label">
+            <xsl:value-of select="i18n:translate('lsf.name')"/>
+	  </label>
+	  <input id="lastName" name="lastName" type="text" size="40" value="{@lastName}" class="mycore-form-input"/>
+	</div>
+	
+	<div class="form-group form-inline">
+	  <label for="firstName" class="mycore-form-label">
+            <xsl:value-of select="i18n:translate('lsf.nameFirst')"/>
+	  </label>
+	  <input id="firstName" name="firstName" type="text" size="40" value="{@firstName}" class="mycore-form-input"/>
+	</div>
+	
+	<!-- Allow manual input of LSF PID for admins, in special cases or for testing purposes -->
+	<xsl:if xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()">
+	  <div class="form-group form-inline">
+            <label for="pid" class="mycore-form-label">
+	      LSF PID:
+	    </label>
+            <input id="pid" name="pid" type="text" size="6" class="form-control col-sm-2"/>
+	  </div>
+	</xsl:if>
+	<div class="cancel-submit form-group form-inline">
+	  <label class="mycore-form-label">
+	  </label>
+	  <input type="submit" class="btn btn-primary mr-2" name="search" value="{i18n:translate('button.search')}" />
+	  <input type="submit" class="btn btn-primary" name="cancel" value="{i18n:translate('button.cancel')}" />
+	</div>
+	<xsl:if test="results and not(contains(@referrer,'list-wizard'))">
+	  <div class="cancel-submit form-group form-inline">
+	    <label class="mycore-form-label">
+	    </label>
+            <input type="submit" class="btn btn-primary" name="notLSF" value="{i18n:translate('lsf.buttonFree')}" />
+	  </div>
+	</xsl:if>
+      </form>
     </div>
-    <div style="margin-bottom:0.5ex;">
-      <label for="firstName">
-        <xsl:value-of select="i18n:translate('lsf.nameFirst')"/>
-      </label>
-      <input id="firstName" name="firstName" type="text" size="40" value="{@firstName}" />
-    </div>
-    <!-- Allow manual input of LSF PID for admins, in special cases or for testing purposes -->
-    <xsl:if xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()">
-      <div style="margin-bottom:0.5ex;">
-        <label for="pid">LSF PID:</label>
-        <input id="pid" name="pid" type="text" size="6" />
-      </div>
-    </xsl:if>
-    <div class="cancel-submit">
-      <input type="submit" class="roundedButton" name="search" value="{i18n:translate('button.search')}" />
-      <input type="submit" class="roundedButton" style="margin-left:1ex;" name="cancel" value="{i18n:translate('button.cancel')}" />
-    </div>
-    <xsl:if test="results and not(contains(@referrer,'list-wizard'))">
-      <div class="cancel-submit">
-        <input type="submit" class="roundedButton" name="notLSF" value="{i18n:translate('lsf.buttonFree')}" />
-      </div>
-    </xsl:if>
-  </form>
-  
+  </div>
+
   <xsl:for-each select="results">
     <div class="section" id="sectionlast">
          
@@ -153,23 +168,25 @@
     </div>
     
     <xsl:if test="not(contains(/lsfpidsearch/@referrer,'list-wizard'))">
-      <article class="highlight1">
-        <p>
-          <strong>
-            <xsl:value-of select="i18n:translate('lsf.foundNotNow')"/>
-          </strong>
-        </p>
-        <ul>
-          <li>
-            <xsl:value-of select="i18n:translate('lsf.searchNew')"/>
-          </li>
-          <li>
-            <xsl:value-of select="i18n:translate('lsf.searchCancel')"/>
-          </li>
-          <li>
-            <xsl:value-of select="i18n:translate('lsf.nameFree')"/>
-          </li>
-        </ul>
+      <article class="card">
+	<div class="card-body">
+          <p>
+            <strong>
+              <xsl:value-of select="i18n:translate('lsf.foundNotNow')"/>
+            </strong>
+          </p>
+          <ul>
+            <li>
+              <xsl:value-of select="i18n:translate('lsf.searchNew')"/>
+            </li>
+            <li>
+              <xsl:value-of select="i18n:translate('lsf.searchCancel')"/>
+            </li>
+            <li>
+              <xsl:value-of select="i18n:translate('lsf.nameFree')"/>
+            </li>
+          </ul>
+	</div>
       </article>
     </xsl:if>
     

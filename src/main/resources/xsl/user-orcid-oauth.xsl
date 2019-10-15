@@ -29,7 +29,6 @@
       <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/style.css" />
       <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/legacy.css" />
       <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/duepublico.css?v={$UBO.Build.TimeStamp}" />
-      <link rel="stylesheet" href="{$WebApplicationBaseURL}webjars/bootstrap-glyphicons/bdd2cbfba0/css/bootstrap-glyphicons.css" />
       <title>
         <xsl:value-of select="i18n:translate('orcid.integration.popup.title')" />
       </title>
@@ -87,7 +86,7 @@
 
 <xsl:template name="orcidIntegrationConfirmed">
   <h3 style="margin-bottom: 0.5em;">
-    <span class="glyphicon glyphicon-check" aria-hidden="true" />
+    <span class="fas fa-check" aria-hidden="true" />
     <xsl:text> </xsl:text>
     <xsl:value-of select="i18n:translate('orcid.integration.confirmed.thanks')" />
     <xsl:text>, </xsl:text>

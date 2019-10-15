@@ -84,15 +84,15 @@
 
 <xsl:template name="exportLinks">
   <xsl:if test="$numFound &gt; 0">
-    <div id="buttons">
-      <a class="action" href="export?{$exportParams}&amp;XSL.Transformer=mods">MODS</a>
-      <a class="action" href="export?{$exportParams}&amp;XSL.Transformer=bibtex">BibTeX</a>
-      <a class="action" href="export?{$exportParams}&amp;XSL.Transformer=endnote">EndNote</a>
-      <a class="action" href="export?{$exportParams}&amp;XSL.Transformer=ris">RIS</a>
-      <a class="action" href="export?{$exportParams}&amp;XSL.Transformer=ieee-text">IEEE</a>
-      <a class="action" href="export?{$exportParams}&amp;XSL.Transformer=pdf">PDF</a>
-      <a class="action" href="export?{$exportParams}&amp;XSL.Transformer=html">HTML</a>
-      <a class="action" href="export?{$exportParams}&amp;fl=id,subject,oa,genre,host_genre,person_aut,person_edt,title,id_doi,id_scopus,id_pubmed,id_urn,id_duepublico,id_duepublico2,host_title,series,id_issn,id_isbn,shelfmark,year,volume,issue,pages,place,publisher&amp;wt=csv">CSV</a>
+    <div id="btn-group mb-3 flex-wrap">
+      <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=mods">MODS</a>
+      <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=bibtex">BibTeX</a>
+      <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=endnote">EndNote</a>
+      <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=ris">RIS</a>
+      <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=ieee-text">IEEE</a>
+      <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=pdf">PDF</a>
+      <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=html">HTML</a>
+      <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;fl=id,subject,oa,genre,host_genre,person_aut,person_edt,title,id_doi,id_scopus,id_pubmed,id_urn,id_duepublico,id_duepublico2,host_title,series,id_issn,id_isbn,shelfmark,year,volume,issue,pages,place,publisher&amp;wt=csv">CSV</a>
     </div>
   </xsl:if>
 </xsl:template>
@@ -111,7 +111,6 @@
   <html id="dozbib.search">
     <head>
       <xsl:call-template name="page.title" />
-      <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/grid12.css" />
       <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
     </head>
     <body>
@@ -135,18 +134,18 @@
   <xsl:call-template name="navigation" />
 
   <!-- Trefferliste -->
-  <div class="container_12" style="margin-top:1ex;">
+  <div>
     <xsl:if test="$numFound = 0">
       <p>
         <xsl:value-of select="i18n:translate('result.dozbib.publicationNo')" />
       </p>
     </xsl:if>
     <xsl:if test="$numFound &gt; 0">
-      <ol class="results">
+      <div class="results">
         <xsl:apply-templates select="doc">
           <xsl:with-param name="start" select="@start"/>
         </xsl:apply-templates>
-      </ol>
+      </div>
     </xsl:if>
   </div>
   <div class="clear"></div>
@@ -174,43 +173,53 @@
 
 <xsl:template name="navigation">
  <xsl:if test="$numFound &gt; 1">
-  <div class="resultsNavigation section">
+  <div class="resultsNavigation row">
 
-    <xsl:if test="basket:hasSpace()">
-      <span class="pageLink" style="float:left;">
-        <a href="{$ServletsBaseURL}Results2Basket?solr={encoder:encode($exportParams)}"><xsl:value-of select="i18n:translate('button.basketAdd')" /></a>
-      </span>
-    </xsl:if>
+    <div class="col-2">
+      <xsl:if test="basket:hasSpace()">
+        <span class="pageLink">
+          <a class="btn btn-sm btn-outline-primary" href="{$ServletsBaseURL}Results2Basket?solr={encoder:encode($exportParams)}"><xsl:value-of select="i18n:translate('button.basketAdd')" /></a>
+        </span>
+      </xsl:if>
+    </div>
 
-    <xsl:if test="$numFound &gt; $rows">
-      <xsl:call-template name="link2resultsPage">
-        <xsl:with-param name="condition" select="$start &gt; 0" />
-        <xsl:with-param name="start"     select="0" />
-        <xsl:with-param name="icon"      select="'fast-backward'" />
-      </xsl:call-template>
-      <xsl:call-template name="link2resultsPage">
-        <xsl:with-param name="condition" select="$start &gt; 0" />
-        <xsl:with-param name="start"     select="number($start)-number($rows)" />
-        <xsl:with-param name="icon"      select="'backward'" />
-      </xsl:call-template>
-      <xsl:call-template name="link2resultsPage">
-        <xsl:with-param name="text"      select="floor(number($start) div number($rows))+1" />
-      </xsl:call-template>
-      <xsl:call-template name="link2resultsPage">
-        <xsl:with-param name="condition" select="number($start)+number($rows) &lt; $numFound" />
-        <xsl:with-param name="start"     select="number($start)+number($rows)" />
-        <xsl:with-param name="icon"      select="'forward'" />
-      </xsl:call-template>
-      <xsl:call-template name="link2resultsPage">
-        <xsl:with-param name="condition" select="number($start)+number($rows) &lt; $numFound" />
-        <xsl:with-param name="start"     select="floor(number($numFound) div number($rows))*number($rows)" />
-        <xsl:with-param name="icon"      select="'fast-forward'" />
-      </xsl:call-template>
-    </xsl:if>
+    <div class="col-8 text-center align-self-center">
+      <nav>
+        <ul class="pagination justify-content-center pagination-sm mb-0">
+          <xsl:if test="$numFound &gt; $rows">
+            <xsl:call-template name="link2resultsPage">
+              <xsl:with-param name="condition" select="$start &gt; 0" />
+              <xsl:with-param name="start"     select="0" />
+              <xsl:with-param name="icon"      select="'fast-backward'" />
+            </xsl:call-template>
+            <xsl:call-template name="link2resultsPage">
+              <xsl:with-param name="condition" select="$start &gt; 0" />
+              <xsl:with-param name="start"     select="number($start)-number($rows)" />
+              <xsl:with-param name="icon"      select="'backward'" />
+            </xsl:call-template>
+            <xsl:call-template name="link2resultsPage">
+              <xsl:with-param name="text"      select="floor(number($start) div number($rows))+1" />
+            </xsl:call-template>
+            <xsl:call-template name="link2resultsPage">
+              <xsl:with-param name="condition" select="number($start)+number($rows) &lt; $numFound" />
+              <xsl:with-param name="start"     select="number($start)+number($rows)" />
+              <xsl:with-param name="icon"      select="'forward'" />
+            </xsl:call-template>
+            <xsl:call-template name="link2resultsPage">
+              <xsl:with-param name="condition" select="number($start)+number($rows) &lt; $numFound" />
+              <xsl:with-param name="start"     select="floor(number($numFound) div number($rows))*number($rows)" />
+              <xsl:with-param name="icon"      select="'fast-forward'" />
+            </xsl:call-template>
+          </xsl:if>
+        </ul>
+      </nav>
+    </div>
 
-      <span class="pageLink" style="float:right;">
-        <a href="statistics?{$exportParams}&amp;XSL.Style=statistics"><xsl:value-of select="i18n:translate('button.statistics')" /></a>
-      </span>
+   <div class="col-2 text-right">
+    <span class="pageLink">
+      <a class="btn btn-sm btn-outline-primary" href="statistics?{$exportParams}&amp;XSL.Style=statistics"><xsl:value-of select="i18n:translate('button.statistics')" /></a>
+    </span>
+   </div>
 
   </div>
  </xsl:if>
@@ -222,21 +231,30 @@
   <xsl:param name="icon" />
   <xsl:param name="text" />
   
-  <span class="pageLink">
-    <xsl:choose>
-      <xsl:when test="string-length($text) &gt; 0">
-        <xsl:value-of select="concat('&#160;',$text,'&#160;')" />
-      </xsl:when>
-      <xsl:when test="$condition">
-        <a href="{$resultsPageURL}{$start}">
-          <span class="glyphicon glyphicon-{$icon}" aria-hidden="true"></span>
+  <xsl:choose>
+    <xsl:when test="string-length($text) &gt; 0">
+      <li class="page-item disabled">
+        <a class="page-link" href="#">
+          <xsl:value-of select="concat('&#160;',$text,'&#160;')" />
         </a>
-      </xsl:when>
-      <xsl:otherwise>
-        <span class="glyphicon glyphicon-{$icon}" aria-hidden="true"></span>
-      </xsl:otherwise>
-    </xsl:choose>
-  </span>
+      </li>
+    </xsl:when>
+    <xsl:when test="$condition">
+      <li class="page-item">
+        <a class="page-link" href="{$resultsPageURL}{$start}">
+          <span class="fas fa-{$icon}" aria-hidden="true"></span>
+        </a>
+      </li>
+    </xsl:when>
+    <xsl:otherwise>
+      <li class="page-item disabled">
+        <a class="page-link" href="#">
+          <span class="fas fa-{$icon}" aria-hidden="true"></span>
+        </a>
+      </li>
+    </xsl:otherwise>
+  </xsl:choose>
+
 </xsl:template>
 
 <!-- ==================== Anzeige Treffer ==================== -->
@@ -245,30 +263,30 @@
   <xsl:param name="start" />
   <xsl:variable name="hitNo" select="$start + position()" />
   
-  <div class="grid_12">
-    <div class="hit">
+  <div class="result mt-2 mb-2">
+    <div class="hit card">
       <xsl:variable name="id" select="str[@name='id']" />
       <xsl:variable name="mycoreobject" select="document(concat('mcrobject:',$id))/mycoreobject" />
       <xsl:for-each select="$mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
-        <div class="labels">
+        <div class="labels card-header ">
           <xsl:call-template name="label-year" />
           <xsl:call-template name="pubtype" />
           <xsl:call-template name="label-oa" />
           <xsl:call-template name="orcid-status" />
         </div>
-        <div class="content bibentry">  
+        <div class="content bibentry card-body">
           <xsl:apply-templates select="." mode="cite"> 
             <xsl:with-param name="mode">divs</xsl:with-param> 
           </xsl:apply-templates>
         </div>
-        <div class="footer">
+        <div class="footer card-footer">
           <xsl:call-template name="bibentry.show.details" />
           <xsl:if test="basket:hasSpace() and not(basket:contains(string(ancestor::mycoreobject/@ID)))">
             <xsl:call-template name="bibentry.add.to.basket" />
           </xsl:if>
           <xsl:call-template name="bibentry.subselect.return" />
           <xsl:call-template name="orcid-publish" />
-          <span class="floatRight"># <xsl:value-of select="$hitNo"/></span>
+          <span class="float-right"># <xsl:value-of select="$hitNo"/></span>
         </div>
       </xsl:for-each>
     </div>
@@ -276,21 +294,21 @@
 </xsl:template>
 
 <xsl:template name="bibentry.add.to.basket">
-  <form action="{$ServletsBaseURL}MCRBasketServlet" method="get">
+  <form action="{$ServletsBaseURL}MCRBasketServlet" method="get" class="d-inline">
     <input type="hidden" name="action" value="add"/>
     <input type="hidden" name="type" value="bibentries"/>
     <input type="hidden" name="resolve" value="true"/>
     <input type="hidden" name="id" value="{ancestor::mycoreobject/@ID}"/>
     <input type="hidden" name="uri" value="mcrobject:{ancestor::mycoreobject/@ID}"/>
-    <input type="submit" class="roundedButton" value="{i18n:translate('button.basketAdd')}" />
+    <input type="submit" class="btn btn-sm btn-primary" value="{i18n:translate('button.basketAdd')}" />
   </form>
 </xsl:template>
 
 <xsl:template name="bibentry.show.details">
-  <form action="{$ServletsBaseURL}DozBibEntryServlet" method="get">
+  <form action="{$ServletsBaseURL}DozBibEntryServlet" method="get" class="d-inline">
     <input type="hidden" name="mode" value="show"/>
     <input type="hidden" name="id" value="{ancestor::mycoreobject/@ID}"/>
-    <input type="submit" class="roundedButton" value="{i18n:translate('result.dozbib.info')}" />
+    <input type="submit" class="btn btn-sm btn-primary" value="{i18n:translate('result.dozbib.info')}" />
   </form>
 </xsl:template>
 
@@ -301,12 +319,12 @@
       <input type="hidden" name="_xed_submit_return" value=""/>
       <input type="hidden" name="_xed_session" value="{substring-after($mask,'=')}"/>
       <input type="hidden" name="." value="{ancestor::mycoreobject/@ID}"/>
-      <input type="submit" class="roundedButton" value="{i18n:translate('ubo.relatedItem.host.selectAs')}" />
+      <input type="submit" class="btn btn-sm btn-primary" value="{i18n:translate('ubo.relatedItem.host.selectAs')}" />
     </form>
     <form action="{$ServletsBaseURL}XEditor" method="get">
       <input type="hidden" name="_xed_submit_return_cancel" value=""/>
       <input type="hidden" name="_xed_session" value="{substring-after($mask,'=')}"/>
-      <input type="submit" class="roundedButton" value="{i18n:translate('button.cancel')}" />
+      <input type="submit" class="btn btn-sm btn-primary" value="{i18n:translate('button.cancel')}" />
     </form>
   </xsl:if>
 </xsl:template>

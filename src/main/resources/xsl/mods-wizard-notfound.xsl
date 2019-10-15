@@ -47,21 +47,23 @@
 </xsl:template>
 
 <xsl:template match="mods:mods">
-  <article class="highlight2">
-    <hgroup>
-      <h2><xsl:value-of select="i18n:translate('ubo.newPublicationWizard.notFound')"/></h2>
-    </hgroup>
-    <p>
-      <xsl:value-of select="i18n:translate('ubo.newPublicationWizard.notFound.info')"/>
-    </p>
-    <p>
-      <xsl:apply-templates select="mods:identifier" />
-    </p>
-    <p>
-      <a class="roundedButton" href="{$WebApplicationBaseURL}newPublication.xed">
-        <xsl:value-of select="i18n:translate('ubo.newPublicationWizard.notFound.continue')"/>
-      </a>
-    </p>
+  <article class="card">
+    <div class="card-body">
+      <hgroup>
+	<h2><xsl:value-of select="i18n:translate('ubo.newPublicationWizard.notFound')"/></h2>
+      </hgroup>
+      <p>
+	<xsl:value-of select="i18n:translate('ubo.newPublicationWizard.notFound.info')"/>
+      </p>
+      <p>
+	<xsl:apply-templates select="mods:identifier" />
+      </p>
+      <p>
+	<a class="btn btn-sm btn-primary" href="{$WebApplicationBaseURL}newPublication.xed">
+          <xsl:value-of select="i18n:translate('ubo.newPublicationWizard.notFound.continue')"/>
+	</a>
+      </p>
+    </div>
   </article>
 </xsl:template>
 

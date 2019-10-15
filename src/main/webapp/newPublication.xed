@@ -4,217 +4,245 @@
   <title xml:lang="de">Publikation melden</title>
   <title xml:lang="en">Registering publication</title>
   
-  <article class="highlight2">
-    <xed:form class="ubo-form" role="form" xmlns:xed="http://www.mycore.de/xeditor">
-      <xed:bind xpath="/mods:mods">
-        <fieldset>
+  <article class="card mb-1">
+    <div class="card-body">
+      <xed:form role="form" xmlns:xed="http://www.mycore.de/xeditor">
+        <xed:bind xpath="/mods:mods">
+          <fieldset>
 
-          <legend><xed:output i18n="ubo.newPublicationWizard" /></legend>
+            <legend><xed:output i18n="ubo.newPublicationWizard" /></legend>
 
-          <xed:if test="$xed-validation-failed">
-            <div class="validation-failures">
-              <h3>
-                <xed:output i18n="form.validation.failed" />
-              </h3>
-              <ul>
-                <xed:display-validation-messages />
-              </ul>
-            </div>
-          </xed:if>
+            <xed:if test="$xed-validation-failed">
+              <div class="validation-failures">
+                <h3>
+                  <xed:output i18n="form.validation.failed" />
+                </h3>
+                <ul>
+                  <xed:display-validation-messages />
+                </ul>
+              </div>
+            </xed:if>
 
-          <div>
-            <p>
-              <xed:output i18n="ubo.newPublicationWizard.doi" />
-            </p>
-          </div>
-
-          <xed:bind xpath="mods:identifier">
             <div>
-              <xed:bind xpath="@type">
-                <label for="identifier">
-                  <select class="label" style="width:150px;">
-                    <option value="doi">DOI</option>
-                    <option value="pubmed">PubMed ID</option>
-                    <option value="scopus">Scopus ID</option>
-                    <option value="ieee">IEEE Article No.</option>
-                    <option value="arxiv">arXiv.org ID</option>
-                    <option value="isbn">ISBN</option>
-                    <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
-                      <option value="duepublico">DuEPublico 1 ID</option>
-                      <option value="duepublico2">DuEPublico 2 ID</option>
-                      <option value="evaluna">EVALuna Biblio ID</option>
-                      <option value="zdb">ZDB ID</option>
-                      <option value="ppn">GBV/SWB PPN</option>
-                      <option value="hbz">HBZ HT-Nummer</option>
-                      <option value="issn">ISSN</option>
-                    </xed:if>
-                  </select>:
-                </label>
-              </xed:bind>
-              <input id="identifier" class="{$xed-validation-marker}" style="width:400px;" />
+              <p>
+                <xed:output i18n="ubo.newPublicationWizard.doi" />
+              </p>
             </div>
-          </xed:bind>
-          <xed:validate xpath="//mods:identifier[@type='doi']" matches="10\.\d+.*" i18n="ubo.identifier.doi.validation" display="global" />
-          <xed:validate xpath="//mods:identifier[@type='issn']" matches="[0-9X]{4}\-[0-9X]{4}" i18n="ubo.identifier.issn.validation" display="global" />
-          <xed:validate xpath="//mods:identifier[@type='isbn']" matches="^((978|979)-?)?([\d -]{12}|\d{9})(\d|X)$" i18n="ubo.identifier.isbn.validation" display="global" />
-          <xed:validate xpath="//mods:identifier[@type='duepublico']" matches="\d+" display="global" />
-          <xed:validate xpath="//mods:identifier[@type='duepublico2']" matches="duepublico_mods_\d\d\d\d\d\d\d\d" display="global" />
 
-          <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
-            <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
-            <xed:validate xpath="//mods:location/mods:shelfLocator" matches="([ED]\d\d\/\d\d\s[A-Za-z]+\s\d+.*)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
-          </xed:if>
-          
-          <div>
-            <p>
-              <xed:output i18n="ubo.newPublicationWizard.titleAuthor" />
-            </p>
-          </div>
-
-          <xed:bind xpath="mods:titleInfo/mods:title">
-            <div>
-              <label for="title" style="vertical-align:bottom;"><xed:output i18n="ubo.title" />:</label>
-              <input id="title" class="{$xed-validation-marker}" style="width:400px;" placeholder="{i18n:ubo.newPublicationWizard.title.placeholder}" />
-            </div>
-          </xed:bind>
-
-          <xed:bind xpath="mods:name[@type='personal']">
-            <xed:bind xpath="mods:namePart[@type='family']">
-              <div>
-                <label for="author" style="vertical-align:bottom;"><xed:output i18n="ubo.role.author" />:</label>
-                <input id="author" class="{$xed-validation-marker}" style="width:400px;" placeholder="{i18n:ubo.newPublicationWizard.author.placeholder}" />
+            <xed:bind xpath="mods:identifier">
+              <div class="form-group form-inline">
+		<div class="mycore-form-label">
+                  <xed:bind xpath="@type">
+                    <select class="form-control w-100">
+                      <option value="doi">DOI</option>
+                      <option value="pubmed">PubMed ID</option>
+                      <option value="scopus">Scopus ID</option>
+                      <option value="ieee">IEEE Article No.</option>
+                      <option value="arxiv">arXiv.org ID</option>                      
+                      <option value="isbn">ISBN</option>
+                      <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+                        <option value="duepublico">DuEPublico ID</option>
+                        <option value="duepublico2">DuEPublico 2 ID</option>                        
+                        <option value="evaluna">EVALuna Biblio ID</option>
+                        <option value="zdb">ZDB ID</option>
+                        <option value="ppn">GBV/SWB PPN</option>
+                        <option value="hbz">HBZ HT-Nummer</option>
+                        <option value="issn">ISSN</option>
+                      </xed:if>
+                      </select>:
+                  </xed:bind>
+		</div>
+                <input id="identifier" class="{$xed-validation-marker} mycore-form-input"/>
               </div>
             </xed:bind>
-            <xed:bind xpath="mods:role[mods:roleTerm[@authority='marcrelator'][@type='code']='aut']" />
-          </xed:bind>
-          
-          <xed:validate test="(string-length(mods:identifier) &gt; 0) or (string-length(mods:location/mods:shelfLocator) &gt; 0) or ( (string-length(mods:titleInfo/mods:title) &gt; 0) and (string-length(mods:name/mods:namePart) &gt; 0) )" display="global" i18n="ubo.newPublicationWizard.required" />
 
-          <xed:cleanup-rule xpath="//mods:*" relevant-if="(string-length(normalize-space(text())) &gt; 0) or *" />
+            <xed:validate xpath="//mods:identifier[@type='doi']" matches="10\.\d+.*" i18n="ubo.identifier.doi.validation" display="global" />
+            <xed:validate xpath="//mods:identifier[@type='issn']" matches="[0-9X]{4}\-[0-9X]{4}" i18n="ubo.identifier.issn.validation" display="global" />
+            <xed:validate xpath="//mods:identifier[@type='isbn']" matches="^((978|979)-?)?([\d -]{12}|\d{9})(\d|X)$" i18n="ubo.identifier.isbn.validation" display="global" />
+            <xed:validate xpath="//mods:identifier[@type='duepublico']" matches="\d+" display="global" />
 
-          <div class="cancel-submit">
-            <button class="roundedButton" type="submit" xed:target="servlet" xed:href="NewPublicationWizard">
-              <xed:output i18n="button.next" />
-            </button>
-          </div>
+            <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+              <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
+              <xed:validate xpath="//mods:location/mods:shelfLocator" matches="([ED]\d\d\/\d\d\s[A-Za-z]+\s\d+.*)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
+            </xed:if>
 
-        </fieldset>
-      </xed:bind>
-    </xed:form>
+            <div>
+              <p>
+                <xed:output i18n="ubo.newPublicationWizard.titleAuthor" />
+              </p>
+            </div>
+
+            <xed:bind xpath="mods:titleInfo/mods:title">
+              <div class="form-group form-inline">
+                <label for="title" class="mycore-form-label">
+                  <xed:output i18n="ubo.title" />:
+                </label>
+                <input id="title" class="{$xed-validation-marker} mycore-form-input" placeholder="{i18n:ubo.newPublicationWizard.title.placeholder}" />
+              </div>
+            </xed:bind>
+
+            <xed:bind xpath="mods:name[@type='personal']">
+              <xed:bind xpath="mods:namePart[@type='family']">
+                <div class="form-group form-inline">
+                  <label for="author" class="mycore-form-label">
+                    <xed:output i18n="ubo.role.author" />:
+                  </label>
+                  <input id="author" class="{$xed-validation-marker} mycore-form-input" placeholder="{i18n:ubo.newPublicationWizard.author.placeholder}" />
+                </div>
+              </xed:bind>
+              <xed:bind xpath="mods:role[mods:roleTerm[@authority='marcrelator'][@type='code']='aut']" />
+            </xed:bind>
+
+            <xed:validate test="(string-length(mods:identifier) &gt; 0) or (string-length(mods:location/mods:shelfLocator) &gt; 0) or ( (string-length(mods:titleInfo/mods:title) &gt; 0) and (string-length(mods:name/mods:namePart) &gt; 0) )" display="global" i18n="ubo.newPublicationWizard.required" />
+
+            <xed:cleanup-rule xpath="//mods:*" relevant-if="(string-length(normalize-space(text())) &gt; 0) or *" />
+
+            <div class="form-group form-inline">
+              <label class="mycore-form-label">
+	      </label>
+              <div class="cancel-submit">
+                <button class="btn btn-primary" type="submit" xed:target="servlet" xed:href="NewPublicationWizard">
+                  <xed:output i18n="button.next" />
+                </button>
+              </div>
+            </div>
+
+          </fieldset>
+        </xed:bind>
+      </xed:form>
+    </div>
   </article>
   
-  <article class="highlight1" xml:lang="de">
-    <h2>Literaturlisten</h2>    
-    <p>
-      Sollten Sie über <strong>Literaturlisten</strong> verfügen, die Sie mit Hilfe von
-      Literaturverwaltungsprogrammen, wie z.B. 
-      <a href="https://www.uni-due.de/ub/abisz/refworks.shtml" target="_blank">RefWorks</a>, 
-      BibTeX oder <a href="https://www.uni-due.de/ub/abisz/refworks.shtml" target="_blank">Citavi</a> 
-      erstellt haben, können Sie diese Listen gerne bei uns abliefern. Die Daten werden dann von uns in
-      die Universitätsbibliographie importiert. <br />
-      Bitte schicken Sie eine
-      E-Mail an: <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a><br/><br />
-    </p>
-    <p>
-      Weitere <a target="_blank" href="https://www.uni-due.de/ub/abisz/literaturverwaltung.shtml">Informationen
-      zu Literaturverwaltungsprogrammen</a> finden Sie auf den Seiten der
-      Universitätsbibliothek.       
-    </p>             
+  <article class="card mb-1" xml:lang="de">
+    <div class="card-body bg-alternative">
+      <h2>Literaturlisten</h2>
+      <p>
+        Sollten Sie über <strong>Literaturlisten</strong> verfügen, die Sie mit Hilfe von
+        Literaturverwaltungsprogrammen, wie z.B.
+        <a href="https://www.uni-due.de/ub/abisz/refworks.shtml" target="_blank">RefWorks</a>,
+        BibTeX oder <a href="https://www.uni-due.de/ub/abisz/refworks.shtml" target="_blank">Citavi</a>
+        erstellt haben, können Sie diese Listen gerne bei uns abliefern. Die Daten werden dann von uns in
+        die Universitätsbibliographie importiert. <br />
+        Bitte schicken Sie eine
+        E-Mail an: <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a><br/><br />
+      </p>
+      <p>
+        Weitere <a target="_blank" href="https://www.uni-due.de/ub/abisz/literaturverwaltung.shtml">Informationen
+        zu Literaturverwaltungsprogrammen</a> finden Sie auf den Seiten der
+        Universitätsbibliothek.
+      </p>
+    </div>
   </article>
-  <article class="highlight1" xml:lang="en">
-    <h2>Lists of literature</h2>    
-    <p>
-      If you have <strong>lists of literature</strong> at your disposal that you have compiled with the aid 
-      of literature management programs such as 
-      <a href="https://www.uni-due.de/ub/en/erefworks.shtml" target="_blank">RefWorks</a>, BibTex, or 
-      <a href="https://www.uni-due.de/ub/en/ecitavi.shtml" target="_blank">Citavi</a>, you are welcome to 
-      submit these lists to us. We will then import the data into the university bibliography.<br />
-      Please send an e-mail to:
-      <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a><br/><br />     
-    </p>    
-    <p>
-      You will find further <a target="_blank" href="https://www.uni-due.de/ub/en/eliteraturverwaltung.shtml">information
-      about reference management software</a> on the pages of the university library.     
-    </p>           
+
+  <article class="card mb-1" xml:lang="en">
+    <div class="card-body bg-alternative">
+      <h2>Lists of literature</h2>
+      <p>
+        If you have <strong>lists of literature</strong> at your disposal that you have compiled with the aid
+        of literature management programs such as
+        <a href="https://www.uni-due.de/ub/en/erefworks.shtml" target="_blank">RefWorks</a>, BibTex, or
+        <a href="https://www.uni-due.de/ub/en/ecitavi.shtml" target="_blank">Citavi</a>, you are welcome to
+        submit these lists to us. We will then import the data into DuEPublico.<br />
+        Please send an e-mail to:
+        <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a><br/><br />
+      </p>
+      <p>
+        You will find further <a target="_blank" href="https://www.uni-due.de/ub/en/eliteraturverwaltung.shtml">information
+        about reference management software</a> on the pages of the university library.
+      </p>
+    </div>
   </article> 
     
-  <article class="highlight2" xml:lang="de">
-    <h2>Folgende Publikationen können erfasst werden</h2>
-    <ul>
-      <li>Monographien, Sammelwerke, Tagungsbände, Lexika</li>
-      <li>Aufsätze in Zeitschriften oder auf Publikationsservern</li>
-      <li>Beiträge in Sammelwerken (d.h. in Büchern mit Beiträgen mehrerer Autoren)</li>
-      <li>Beiträge in Kongressschriften / Tagungsbänden</li>
-      <li>Lexikoneinträge</li>
-      <li>Herausgebertätigkeiten für Sammelwerke, Zeitschriften und Serien</li>
-      <li>Vorträge</li>
-      <li>Interviews</li>
-      <li>Poster</li>
-      <li>Preprints</li>
-      <li>Vorworte, Nachworte</li>
-      <li>Wissenschaftliche Rezensionen</li>
-    </ul>    
-    <p><strong>Dissertationen und Habilitationsschriften werden von der Universitätsbibliothek
-    selbst erfasst.</strong></p>
+  <article class="card mb-1" xml:lang="de">
+    <div class="card-body">
+      <h2>Folgende Publikationen können erfasst werden</h2>
+      <ul>
+        <li>Monographien, Sammelwerke, Tagungsbände, Lexika</li>
+        <li>Aufsätze in Zeitschriften oder auf Publikationsservern</li>
+        <li>Beiträge in Sammelwerken (d.h. in Büchern mit Beiträgen mehrerer Autoren)</li>
+        <li>Beiträge in Kongressschriften / Tagungsbänden</li>
+        <li>Lexikoneinträge</li>
+        <li>Herausgebertätigkeiten für Sammelwerke, Zeitschriften und Serien</li>
+        <li>Vorträge</li>
+        <li>Interviews</li>
+        <li>Poster</li>
+        <li>Preprints</li>
+        <li>Vorworte, Nachworte</li>
+        <li>Wissenschaftliche Rezensionen</li>
+      </ul>
+      <p><strong>Dissertationen und Habilitationsschriften werden von der Universitätsbibliothek
+      selbst erfasst.</strong></p>
+    </div>
    </article>
-  <article class="highlight2" xml:lang="en">
-    <h2>The following publications can be registered</h2>
-    <ul>
-      <li>Monographs, collection, proceedings, lexica</li>
-      <li>Essays in periodicals or on publication servers</li>
-      <li>Contributions to collected editions (i.e. books incl. contributions of several authors)</li>
-      <li>Contributions to conference proceedings / publications</li>
-      <li>Encyclopedia entries</li>
-      <li>Editorial functions for collected editions, journals and serial publications</li>  
-      <li>Lectures</li>
-      <li>Interviews</li>
-      <li>Poster</li>       
-      <li>Preprints</li>
-      <li>Prefaces (forewords), Postfaces</li>
-      <li>Scientific reviews</li>
-    </ul>    
-    <p><strong>Dissertations and postdoctoral theses are registered by the university
-    library itself.</strong></p>    
+  <article class="card mb-1" xml:lang="en">
+    <div class="card-body">
+      <h2>The following publications can be registered</h2>
+      <ul>
+        <li>Monographs, collection, proceedings, lexica</li>
+        <li>Essays in periodicals or on publication servers</li>
+        <li>Contributions to collected editions (i.e. books incl. contributions of several authors)</li>
+        <li>Contributions to conference proceedings / publications</li>
+        <li>Encyclopedia entries</li>
+        <li>Editorial functions for collected editions, journals and serial publications</li>
+        <li>Lectures</li>
+        <li>Interviews</li>
+        <li>Poster</li>
+        <li>Preprints</li>
+        <li>Prefaces (forewords), Postfaces</li>
+        <li>Scientific reviews</li>
+      </ul>
+      <p><strong>Dissertations and postdoctoral theses are registered by the university
+      library itself.</strong></p>
+    </div>
   </article>  
   
-  <article class="highlight1" xml:lang="de">
-    <h2>Personengruppen, die Publikationen melden können bzw. sollten</h2>
- 	    <p>
- 	    Folgende Personengruppen sollten als Angehörige der Universität Duisburg-Essen 
- 	    ihre Publikationen der Universitätsbibliographie melden: <strong>HochschullehrerInnen, 
+  <article class="card mb-1" xml:lang="de">
+    <div class="card-body bg-alternative">
+      <h2>Personengruppen, die Publikationen melden können bzw. sollten</h2>
+      <p>
+        Folgende Personengruppen sollten als Angehörige der Universität Duisburg-Essen
+        ihre Publikationen der Universitätsbibliographie melden: <strong>HochschullehrerInnen,
  	    wissenschaftliche und künstlerische MitarbeiterInnen, PrivatdozentInnen, außerplanmäßige
  	    ProfessorInnen, HonorarprofessorInnen, GastdozentInnen sowie Lehrbeauftragte</strong>.
  	    Desweiteren können auch ehemalige Angehörige der Universität Duisburg-Essen, wie z.B. <strong>emeritierte
  	    Professorinnen und Professoren</strong> ihre Publikationen melden.
- 	    </p>
- 	    
- 	  </article>
- 	  <article class="highlight1" xml:lang="en">
-        <h2>Groups of persons which can -  or should - register their publications</h2>
- 	    <p>
- 	    The following groups of persons as members of Duisburg Essen University should
- 	    register their publications with the university bibliography:
- 	    <strong>university professors, scientific and artistic staff members,
- 	    privat lecturers, extraordinary professors, honorary professors, guest lecturers, as well as
- 	    assistant lecturers</strong>.
- 	    Furthermore, former members of the university of Duisburg-Essen, such as <strong>emeritus professors</strong>,
- 	    can register their publications.
- 	    </p> 	    
- 	  </article>
+      </p>
+    </div>
+  </article>
+
+  <article class="card mb-1" xml:lang="en">
+    <div class="card-body bg-alternative">
+      <h2>Groups of persons which can -  or should - register their publications</h2>
+      <p>
+        The following groups of persons as members of Duisburg Essen University should
+        register their publications with the university bibliography:
+        <strong>university professors, scientific and artistic staff members,
+        privat lecturers, extraordinary professors, honorary professors, guest lecturers, as well as
+        assistant lecturers</strong>.
+        Furthermore, former members of the university of Duisburg-Essen, such as <strong>emeritus professors</strong>,
+        can register their publications.
+      </p>
+    </div>
+  </article>
  	  
- 	  <article class="highlight2" xml:lang="de">
-        <h2>Zeitraum der Erfassung</h2>
- 	    <p>
- 	    Grundsätzlich können Sie <strong>alle</strong> Ihre Veröffentlichungen der Universitätsbibliographie melden 
- 	    und so Ihre <strong>gesamte persönliche Bibliographie</strong> erstellen und pflegen.
- 	    </p> 	      
- 	  </article>
- 	  <article class="highlight2" xml:lang="en">
-        <h2>Period of registration</h2>
- 	    <p>
- 	    Basically, you can register <strong>all</strong> your publications with the university
- 	    bibliography and thus establish and maintain your <strong>complete personal bibliography</strong>.
- 	    </p> 	    
- 	  </article>
+  <article class="card" xml:lang="de">
+    <div class="card-body">
+      <h2>Zeitraum der Erfassung</h2>
+      <p>
+        Grundsätzlich können Sie <strong>alle</strong> Ihre Veröffentlichungen der Universitätsbibliographie melden
+        und so Ihre <strong>gesamte persönliche Bibliographie</strong> erstellen und pflegen.
+      </p>
+    </div>
+  </article>
+
+  <article class="card" xml:lang="en">
+    <div class="card-body">
+      <h2>Period of registration</h2>
+      <p>
+        Basically, you can register <strong>all</strong> your publications with the university
+        bibliography and thus establish and maintain your <strong>complete personal bibliography</strong>.
+      </p>
+    </div>
+  </article>
     
 </webpage>

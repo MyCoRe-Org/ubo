@@ -3,29 +3,33 @@
 <webpage lastModified="$Date$" id="contact">
  <title xml:lang="de">Kontakt - Universitätsbibliographie</title>
  <title xml:lang="en">Contact - University Bibliography</title>
- 
- <article class="highlight1" xml:lang="de"><h3>Kontakt</h3>
-    <p>
-    Haben Sie Fragen zur Universitätsbibliographie oder benötigen Hilfe oder Beratung, melden Sie sich bei uns:     
-    </p>
-    <p>      
-    Kerstin Ponten<br/>
-    <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a><br/>
-    Tel.: 0201 / 183-3728 <br/>      
-    </p>
+
+  <article class="card" xml:lang="de">
+    <div class="card-body">
+      <h3>Kontakt</h3>
+      <p>
+          Haben Sie Fragen zur Universitätsbibliographie oder benötigen Hilfe oder Beratung, melden Sie sich bei uns:
+      </p>
+      <p>
+          Kerstin Ponten<br/>
+          <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a><br/>
+          Tel.: 0201 / 183-3728 <br/>
+      </p>
+    </div>
   </article>
 
-  <article class="highlight1" xml:lang="en">   
-    <h3>Contact</h3> 
-    <p>
-    If you have questions to the university library, or need advice or consultation, please contact us: 
-    </p>
-    <p>      
-    Kerstin Ponten<br/>
-    <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a><br/>
-    Phone: 0201 / 183-3728 <br/>      
-    </p>
+  <article class="card" xml:lang="en">
+      <div class="card-body">
+        <h3>Contact</h3>
+        <p>
+        If you have questions to the university library, or need advice or consultation, please contact us:
+        </p>
+        <p>
+        Kerstin Ponten<br/>
+        <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a><br/>
+        Phone: 0201 / 183-3728 <br/>
+        </p>
+      </div>
   </article>
-     
-    
+
 </webpage>

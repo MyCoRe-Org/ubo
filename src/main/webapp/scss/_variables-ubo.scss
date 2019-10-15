@@ -1,0 +1,24 @@
+$body-bg: #efe4bf !default;
+
+$pmud-color: Tomato !default;
+$pmud-color-hover: Tomato !default;
+
+/* add new custom colors */
+$theme-colors: (
+  alternative: $body-bg
+);
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+);
+
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1250px
+);
