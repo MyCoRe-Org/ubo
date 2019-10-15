@@ -86,15 +86,15 @@
       <label xml:lang="de" text="Zeitschrift" />
       <label xml:lang="en" text="journal" />
     </category>
-    <category ID="series">
-      <label xml:lang="x-hosts" text="standalone" />
-      <label xml:lang="de" text="Serie" />
-      <label xml:lang="en" text="series" />
-      <category ID="blog">
+    <category ID="blog">
       <label xml:lang="x-hosts" text="standalone" />
       <label xml:lang="de" text="Blog" />
       <label xml:lang="en" text="blog" />
     </category>
+    <category ID="series">
+      <label xml:lang="x-hosts" text="standalone" />
+      <label xml:lang="de" text="Serie" />
+      <label xml:lang="en" text="series" />      
     </category>
     <category ID="poster">
       <label xml:lang="en" text="Poster" />

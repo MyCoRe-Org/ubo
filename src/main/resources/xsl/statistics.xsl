@@ -92,8 +92,6 @@
     </section>
   </xsl:template>
   
-  <xsl:variable name="subjects" select="document('resource:fachreferate.xml')/fachreferate" />
-
   <xsl:template match="lst[@name='facet_fields']/lst[@name='subject']">
     <xsl:variable name="title" select="concat(i18n:translate('ubo.publications'),' / ',i18n:translate('facets.facet.subject'))" />
 
@@ -161,8 +159,46 @@
                   formatter: function() { return this.y; },
                 style: { font: 'normal 15px Verdana, sans-serif' }
               }
-            }]
-          });
+            }
+          },
+          title: { text: '<xsl:value-of select="$title" />' },
+          legend: { enabled: false },
+          xAxis: { categories: [
+            <xsl:for-each select="int">
+              <xsl:sort select="text()" data-type="number" order="descending" />
+              '<xsl:value-of select="document(concat('classification:editor:0:parents:fachreferate:',encoder:encode(current()/@name,'UTF-8')))/items/item/label[lang($CurrentLang)]" />'
+              <xsl:if test="position() != last()">, </xsl:if>
+            </xsl:for-each>
+            ],
+            labels: {
+              align: 'right',
+              style: { font: 'normal 13px Verdana, sans-serif' }
+            }
+          },
+          yAxis: {
+             title: { text: '<xsl:value-of select="$count" />' },
+             labels: { formatter: function() { return this.value; } },
+             endOnTick: false,          
+             max: <xsl:value-of select="floor(number(int[1]) * 1.05)" /> <!-- +5% -->          
+          },
+          tooltip: { formatter: function() { return '<b>' + this.x +'</b>: '+ this.y; } },
+          plotOptions: { series: { pointWidth: 15 } },
+          series: [{
+            name: '<xsl:value-of select="$title" />',
+            data: [
+              <xsl:for-each select="int">
+                <xsl:sort select="text()" data-type="number" order="descending" />
+                <xsl:value-of select="text()"/>
+                <xsl:if test="position() != last()">, </xsl:if>
+              </xsl:for-each>
+            ],
+            dataLabels: {
+              enabled: true,
+              align: 'right', 
+              formatter: function() { return this.y; },
+              style: { font: 'normal 15px Verdana, sans-serif' }
+            }
+          }]
         });
         </script>
       </div>

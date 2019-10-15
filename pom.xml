@@ -44,6 +44,7 @@
   <properties>
     <MCR.AppName>ubo</MCR.AppName>
     <axis1.version>1.4</axis1.version>
+    <citeproc.version>1.0.1</citeproc.version>
     <cargo.container.zipUrlInstaller.downloadDir>${settings.localRepository}/../cargo/containers</cargo.container.zipUrlInstaller.downloadDir>
     <cargo.debug.address>8295</cargo.debug.address>
     <cargo.debug.suspend>n</cargo.debug.suspend>
@@ -580,6 +581,20 @@
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>de.undercouch</groupId>
+      <artifactId>citeproc-java</artifactId>
+      <version>${citeproc.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.citationstyles</groupId>
+      <artifactId>styles</artifactId>
+      <version>${citeproc.version}-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.citationstyles</groupId>
+      <artifactId>locales</artifactId>
+      <version>${citeproc.version}-SNAPSHOT</version>
     <dependency>
       <groupId>org.webjars</groupId>
       <artifactId>bootstrap</artifactId>

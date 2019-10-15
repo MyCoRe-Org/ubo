@@ -12,18 +12,19 @@
   <xsl:output method="xml" encoding="UTF-8" indent="yes" xalan:indent-amount="2" />
   
   <xsl:template match="/responseWrapper">
+    <xsl:apply-templates />
+  </xsl:template>
+  
+  <xsl:template match="resultList[result]">
     <mods:mods>
       <xsl:apply-templates />
     </mods:mods>
   </xsl:template>
-  
-  <xsl:template match="resultList[result]">
-    <xsl:apply-templates />
-  </xsl:template>
 
   <xsl:template match="resultList">
-    <xsl:message>Warning: no data returned for <xsl:value-of select="../request/query" /></xsl:message>
-    <mods:genre>ignore</mods:genre>
+    <error>
+      <xsl:message>Warning: no data returned for <xsl:value-of select="../request/query" /></xsl:message>
+    </error>
   </xsl:template>
   
   <xsl:template match="version|hitCount|request|result/id|result/source|result/authorString" />

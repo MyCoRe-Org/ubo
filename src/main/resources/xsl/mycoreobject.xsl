@@ -79,21 +79,26 @@
 
 <xsl:template name="actions">
   <div id="buttons" class="btn-group mb-3 flex-wrap">
-    <xsl:if test="$permission.admin and (string-length($step) = 0) and not ($UBO.System.ReadOnly = 'true')">
-      <a class="action btn btn-sm btn-primary mb-1" href="{$WebApplicationBaseURL}edit-publication.xed?id={/mycoreobject/@ID}">
-        <xsl:value-of select="i18n:translate('button.edit')" />
-      </a>
-      <a class="action btn btn-sm btn-primary mb-1" href="{$WebApplicationBaseURL}edit-admin.xed?id={/mycoreobject/@ID}">Admin</a>
-      <xsl:if test="not(/mycoreobject/structure/children/child)">
-        <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.step=ask.delete">
-          <xsl:value-of select="i18n:translate('button.delete')" />
+    <xsl:if test="$permission.admin and not($UBO.System.ReadOnly = 'true')">
+      <xsl:if test="(string-length($step) = 0) or contains($step,'merged')">
+        <a class="action btn btn-sm btn-primary mb-1" href="{$WebApplicationBaseURL}edit-publication.xed?id={/mycoreobject/@ID}">
+          <xsl:value-of select="i18n:translate('button.edit')" />
         </a>
+        <a class="action btn btn-sm btn-primary mb-1" href="{$WebApplicationBaseURL}edit-admin.xed?id={/mycoreobject/@ID}">Admin</a>
+        <a class="action btn btn-sm btn-primary mb-1" href="{$WebApplicationBaseURL}edit-mods.xed?id={/mycoreobject/@ID}">MODS</a>
       </xsl:if>
-      <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host'][string-length(@xlink:href)=0]">
-        <!-- Button to extract mods:relatedItem[@type='host'] to a new separate entry -->
-        <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;mode=xhost">
-          <xsl:value-of select="i18n:translate('ubo.relatedItem.host.separate')" />
-        </a>
+      <xsl:if test="string-length($step) = 0">
+        <xsl:if test="not(/mycoreobject/structure/children/child)">
+          <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.step=ask.delete">
+            <xsl:value-of select="i18n:translate('button.delete')" />
+          </a>
+        </xsl:if>
+        <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host'][string-length(@xlink:href)=0]">
+          <!-- Button to extract mods:relatedItem[@type='host'] to a new separate entry -->
+          <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;mode=xhost">
+            <xsl:value-of select="i18n:translate('ubo.relatedItem.host.separate')" />
+          </a>
+        </xsl:if>
       </xsl:if>
     </xsl:if>
     <xsl:if xmlns:basket="xalan://unidue.ubo.basket.BasketUtils" test="basket:hasSpace() and not(basket:contains(string(/mycoreobject/@ID)))">
@@ -101,13 +106,12 @@
         <xsl:value-of select="i18n:translate('button.basketAdd')" />
       </a>
     </xsl:if>
-    <xsl:if test="string-length($step) = 0">
+    <xsl:if test="(string-length($step) = 0) and not($permission.admin)">
       <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.xml?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=mods">MODS</a>
-      <xsl:if test="not($permission.admin)">
-        <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.bib?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=bibtex">BibTeX</a>
-        <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.enl?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=endnote">EndNote</a>
-        <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.ris?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=ris">RIS</a>
-      </xsl:if>    
+      <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.bib?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=bibtex">BibTeX</a>
+      <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.enl?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=endnote">EndNote</a>
+      <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.ris?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=ris">RIS</a>
+      <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.txt?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=ieee-text">IEEE</a>
     </xsl:if>
   </div>
 </xsl:template>
@@ -359,17 +363,17 @@
 <xsl:template name="ask.publications">
   <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
     <p>
-      Wenn Sie die Publikationen im Korb zusammenführen, 
+      Wenn Sie die Publikationen im Korb zusammenfÃ¼hren, 
       werden die bibliographischen Daten zu einem neuen Eintrag zusammengefasst 
-      und die ursprünglichen, alten Einträge gelöscht. 
-      Ergebnis wäre dieser Eintrag hier.
+      und die ursprÃ¼nglichen, alten EintrÃ¤ge gelÃ¶scht. 
+      Ergebnis wÃ¤re dieser Eintrag hier.
     </p>
     <p>
       <strong>      
-        Wollen Sie die Publikationen im Korb wirklich zusammenführen?
+        Wollen Sie die Publikationen im Korb wirklich zusammenfÃ¼hren?
       </strong>
     </p>
-    <input type="button" class="editorButton" name="merge" value="Zusammenführen" 
+    <input type="button" class="editorButton" name="merge" value="ZusammenfÃ¼hren" 
       onclick="self.location.href='BasketPubMerger?commit=true&amp;target=publications'" />
     <input type="button" class="editorButton" name="cancel" value="{i18n:translate('button.cancelNo')}" 
       onclick="self.location.href='MCRBasketServlet?type=bibentries&amp;action=show'" />
@@ -380,10 +384,10 @@
   <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
     <p>
       Wenn Sie die Publikationen im Korb zusammenhosten, 
-      werden die Überordnungen jeder dieser Publikationen extrahiert,
+      werden die Ãœberordnungen jeder dieser Publikationen extrahiert,
       deren bibliographische Daten zu einem neuen Eintrag zusammengefasst 
       und die Publikationen im Korb mit diesem neuen Eintrag verlinkt.  
-      Ergebnis wäre dieser Eintrag hier als gemeinsame Überordnung aller Publikationen im Korb.
+      Ergebnis wÃ¤re dieser Eintrag hier als gemeinsame Ãœberordnung aller Publikationen im Korb.
     </p>
     <p>
       <strong>      
@@ -400,8 +404,8 @@
 <xsl:template name="merged.publications">
   <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
     <p>
-      Alle Publikationen im Korb wurden zu diesem Eintrag zusammengeführt. 
-      Die anderen Einträge wurden gelöscht. Der Korb wurde geleert.
+      Alle Publikationen im Korb wurden zu diesem Eintrag zusammengefÃ¼hrt. 
+      Die anderen EintrÃ¤ge wurden gelÃ¶scht. Der Korb wurde geleert.
     </p>
   </div>
 </xsl:template>
@@ -409,8 +413,8 @@
 <xsl:template name="merged.hosts">
   <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
     <p>
-      Alle Publikationen im Korb wurden mit dieser Überordnung verknüpft. 
-      Andere evtl. bereits vorhandene Überordnungen wurden gelöscht.
+      Alle Publikationen im Korb wurden mit dieser Ãœberordnung verknÃ¼pft. 
+      Andere evtl. bereits vorhandene Ãœberordnungen wurden gelÃ¶scht.
     </p>
   </div>
 </xsl:template>

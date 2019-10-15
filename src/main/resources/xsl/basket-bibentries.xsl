@@ -48,6 +48,7 @@
       <xsl:if xmlns:check="xalan://unidue.ubo.AccessControl" test="not(check:currentUserIsAdmin())">
         <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/export.endnote?basket=bibentries&amp;root=export&amp;transformer=endnote">EndNote</a>
         <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/export.ris?basket=bibentries&amp;root=export&amp;transformer=ris">RIS</a>
+        <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/export.txt?basket=bibentries&amp;root=export&amp;transformer=ieee-text">IEEE</a>
         <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/export.pdf?basket=bibentries&amp;root=export&amp;transformer=pdf">PDF</a>
         <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/export.html?basket=bibentries&amp;root=export&amp;transformer=html">HTML</a>
       </xsl:if>

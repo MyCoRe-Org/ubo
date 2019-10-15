@@ -7,13 +7,11 @@
 
   <article class="card">
     <div class="card-body">
-  
-      <p>
-        Über dieses Formular können Sie eine Literaturliste im
-        <a href="http://artis.imag.fr/~Xavier.Decoret/resources/xdkbibtex/bibtex_summary.html">BibTeX Format</a>,
-        alle Publikationen einer gegebenen ORCID oder eine CSV-Datei importieren.
-      </p>
-
+    <p>
+      Über dieses Formular können Sie eine Literaturliste im
+      <a href="http://artis.imag.fr/~Xavier.Decoret/resources/xdkbibtex/bibtex_summary.html">BibTeX Format</a>,
+      alle Publikationen einer gegebenen ORCID oder eine CSV-Datei importieren.
+    </p>
       <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
         <xed:bind xpath="/import">
 
@@ -35,7 +33,7 @@
               <div class="form-group form-inline">
                 <select class="{$xed-validation-marker} form-control col-sm-10">
                   <option value=""><xed:output i18n="ubo.subject" />: <xed:output i18n="search.select" /></option>
-                  <xed:include uri="xslStyle:fachref2options:resource:fachreferate.xml" />
+                  <xed:include uri="xslStyle:items2options:classification:editor:-1:children:fachreferate" />
                 </select>
                 <xed:controls />
               </div>

@@ -89,6 +89,7 @@
       <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=bibtex">BibTeX</a>
       <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=endnote">EndNote</a>
       <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=ris">RIS</a>
+      <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=ieee-text">IEEE</a>
       <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=pdf">PDF</a>
       <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=html">HTML</a>
       <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;fl=id,subject,oa,genre,host_genre,person_aut,person_edt,title,id_doi,id_scopus,id_pubmed,id_urn,id_duepublico,id_duepublico2,host_title,series,id_issn,id_isbn,shelfmark,year,volume,issue,pages,place,publisher&amp;wt=csv">CSV</a>

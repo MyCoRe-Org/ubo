@@ -43,8 +43,11 @@
 <xsl:template name="build.to">
   <xsl:for-each select="mods:classification[contains(@authorityURI,'fachreferate')]">
     <xsl:variable name="subject" select="substring-after(@valueURI,'#')" />
-    <xsl:for-each select="$subjects/item[@value=$subject]/email">
-      <to><xsl:copy-of select="text()" /></to>
+    <xsl:variable name="uri" select="concat('classification:metadata:0:parents:fachreferate:',$subject)" />
+    <xsl:for-each select="document($uri)//category[@ID=$subject]/label[@xml:lang='x-e-mail']">
+      <xsl:for-each select="xalan:tokenize(@text)">
+        <to><xsl:value-of select="." /></to>
+      </xsl:for-each>
     </xsl:for-each>
   </xsl:for-each>
 </xsl:template>
@@ -74,7 +77,10 @@ der folgende Eintrag ist per Selbsteingabe an die Universitätsbibliographie geme
 
   <xsl:for-each select="mods:classification[contains(@authorityURI,'fachreferate')]">
     <xsl:text>Fach: </xsl:text>
-    <xsl:value-of select="$subjects/item[@value=substring-after(current()/@valueURI,'#')]/@label" />
+    <xsl:call-template name="output.category">
+      <xsl:with-param name="classID" select="'fachreferate'" />
+      <xsl:with-param name="categID" select="substring-after(@valueURI,'#')" />
+    </xsl:call-template>
     <xsl:text>&#xa;</xsl:text>
   </xsl:for-each>
   <xsl:for-each select="mods:classification[contains(@authorityURI,'ORIGIN')]">
