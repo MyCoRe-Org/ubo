@@ -81,7 +81,7 @@
 
   <div class="card mb-2">
     <div class="card-body">
-      <form action="lsfpidsearch.html" method="post" role="form">
+      <form action="identitypicker.html" method="post" role="form">
 	<input type="hidden" name="_xed_subselect_session" value="{@session}" />
 	<input type="hidden" name="_referrer" value="{@referrer}" />
 	
@@ -215,7 +215,7 @@
       </xsl:if>
     </td>
     <td>
-      <xsl:apply-templates select="document(concat('lsf:pid=',id))/Person" />
+      <xsl:apply-templates select="document(concat('ires:detail:pid=',id))/Person" />
     </td>
   </tr>
 </xsl:template>

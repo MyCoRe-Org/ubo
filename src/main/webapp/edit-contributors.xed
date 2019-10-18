@@ -62,7 +62,7 @@
 		    </div>
                   </td>
                   <td>
-                    <button class="btn btn-sm btn-primary btn-block" type="submit" xed:target="subselect" xed:href="../lsfpidsearch.html?lastName={mods:namePart[@type='family']}&amp;firstName={mods:namePart[@type='given']}&amp;pid={mods:nameIdentifier[@type='lsf']}">
+                    <button class="btn btn-sm btn-primary btn-block" type="submit" xed:target="subselect" xed:href="../identitypicker.html?lastName={mods:namePart[@type='family']}&amp;firstName={mods:namePart[@type='given']}&amp;pid={mods:nameIdentifier[@type='lsf']}">
                       <xed:choose>
 			<xed:when test="string-length(mods:nameIdentifier[@type='lsf']) &gt; 0">
                           <xed:output value="mods:nameIdentifier[@type='lsf']" />

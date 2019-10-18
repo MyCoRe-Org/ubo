@@ -24,8 +24,9 @@ import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.xml.sax.SAXException;
+import unidue.ubo.picker.IdentityPickerService;
 
-public class LSFPIDSearch extends MCRServlet {
+public class LSFPIDSearch extends MCRServlet implements IdentityPickerService {
 
     private final static Logger LOGGER = LogManager.getLogger(LSFPIDSearch.class);
 
@@ -41,6 +42,15 @@ public class LSFPIDSearch extends MCRServlet {
             doNameWithoutLSF(req, res, session);
         } else
             doSearch(req, res, session);
+    }
+
+    @Override
+    public void handleRequest(MCRServletJob job) {
+        try {
+            doGetPost(job);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void doNameWithoutLSF(HttpServletRequest req, HttpServletResponse res, String session) throws IOException {
@@ -79,7 +89,8 @@ public class LSFPIDSearch extends MCRServlet {
 
         if (!lastName.isEmpty()) {
             LOGGER.info("UBO search LSF for person name " + lastName + ", " + firstName);
-            lsfpidsearch.addContent(LSFClient.instance().searchPerson(lastName, firstName));
+            // TODO!
+            //lsfpidsearch.addContent(LSFService.instance().searchPerson(lastName, firstName));
         }
 
         MCRServlet.getLayoutService().doLayout(req, res, new MCRJDOMContent(lsfpidsearch));

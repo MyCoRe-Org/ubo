@@ -90,7 +90,7 @@
                   </xed:when>
                   <xed:otherwise>
                     <div class="col-sm-4 col pl-0 justify-content-start">
-                      <button class="btn btn-sm btn-primary" type="submit" xed:target="subselect" xed:href="../lsfpidsearch.html">
+                      <button class="btn btn-sm btn-primary" type="submit" xed:target="subselect" xed:href="../identitypicker.html">
                         <xed:output i18n="listWizard.subselect" />
                       </button>
                     </div>

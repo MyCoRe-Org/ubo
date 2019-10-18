@@ -10,6 +10,7 @@
 package unidue.ubo.lsf;
 
 import java.io.StringReader;
+import java.net.URLDecoder;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
 import java.util.HashMap;
@@ -26,13 +27,10 @@ import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.mycore.common.MCRCache;
 import org.mycore.common.MCRException;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.mods.merger.MCRHyphenNormalizer;
 
-import unidue.ubo.lsf.SOAPSearch;
-import unidue.ubo.lsf.SOAPSearchServiceLocator;
+import unidue.ubo.picker.IdentityService;
 
 /**
  * Implements a Web Services client for HIS LSF.
@@ -41,13 +39,10 @@ import unidue.ubo.lsf.SOAPSearchServiceLocator;
  *
  * @author Frank L\u00fctzenkirchen
  */
-public class LSFClient {
+public class LSFService implements IdentityService {
 
     /** Encoding of XML Strings */
     protected final static String encoding = "ISO-8859-15";
-
-    /** The singleton instance */
-    protected static LSFClient singleton;
 
     /** The client instance of LSF SOAPSearch web service */
     protected SOAPSearch soapsearch;
@@ -56,17 +51,18 @@ public class LSFClient {
     protected DBInterface dbinterface;
 
     /** The Log4J Logger */
-    protected final static Logger LOGGER = LogManager.getLogger(LSFClient.class);
+    protected final static Logger LOGGER = LogManager.getLogger(LSFService.class);
 
-    protected MCRCache<String, Element> cache;
+    protected LSFServiceCache cache;
 
-    protected long maxAge;
+    private static final String PARAM_PID = "pid";
+    private static final String PARAM_FIRSTNAME = "firstname";
+    private static final String PARAM_LASTNAME = "lastName";
+    private static final String PARAM_ENCODING = "UTF-8";
 
-    private LSFClient() {
+    public LSFService() {
         try {
-            maxAge = MCRConfiguration.instance().getLong("UBO.LSFClient.Cache.MaxAge");
-            int capacity = MCRConfiguration.instance().getInt("UBO.LSFClient.Cache.Capacity");
-            cache = new MCRCache<String, Element>(capacity, "LSF Client");
+            cache = LSFServiceCache.instance();
 
             soapsearch = new SOAPSearchServiceLocator().getsoapsearch();
             dbinterface = new DBInterfaceServiceLocator().getdbinterface();
@@ -76,74 +72,90 @@ public class LSFClient {
         }
     }
 
-    /** Returns the LSF client instance */
-    public static synchronized LSFClient instance() {
-        if (singleton == null) {
-            singleton = new LSFClient();
-        }
-        return singleton;
-    }
-
     /**
+     * TODO: rewrite doc/check impl
      * Returns an XML element containing detailed data of the given person.
-     *
-     * @param pid the HIS LSF person ID
+     *pid
+     * @param attributes the HIS LSF person ID
      */
-    public Element getPersonDetails(String pid) {
-        long time = System.currentTimeMillis() - maxAge;
-        Element person = cache.getIfUpToDate(pid, time);
+    public Element getPersonDetails(Map<String, String> attributes) {
+        Element person = new Element("Person");
 
-        if (person == null) {
-            person = new Element("Person");
-            try {
-                String response = dbinterface.getData("PersonDetail", pid);
-                Element xml = new SAXBuilder().build(new StringReader(response)).getRootElement();
-                Element p = xml.getChild("Person");
-                if (p != null) {
-                    person = p;
-                    cache.put(pid, person);
+        if (attributes.containsKey(PARAM_PID)) {
+            String pid = attributes.get(PARAM_PID);
+
+            person = cache.getIfUpToDate(pid);
+
+            if (person == null) {
+                person = new Element("Person");
+                try {
+                    String response = dbinterface.getData("PersonDetail", pid);
+                    Element xml = new SAXBuilder().build(new StringReader(response)).getRootElement();
+                    Element p = xml.getChild("Person");
+                    if (p != null) {
+                        person = p;
+                        cache.put(pid, person);
+                    }
+                } catch (Exception ex) {
+                    LOGGER.error("Error while getting HIS LSF person details", ex);
                 }
-            } catch (Exception ex) {
-                LOGGER.error("Error while getting HIS LSF person details", ex);
             }
+        } else {
+            LOGGER.info("Could not get HIS LSF person details, no pid provided in attributes: {}", attributes);
         }
 
         return person.clone();
     }
 
     /**
+     * TODO: rewrite doc/check impl
      * Returns an XML element containing a list of all person data found in HIS LSF for the given name.
      * The method searches in the field personal.nachname.
      *
-     * @param lastName The last name (or part of it) of the person to search for.
-     * @param firstName The first name of the person to search for.
+     * @param attributes The last name (or part of it) of the person to search for.
+     * @param attributes The first name of the person to search for.
      */
-    public Element searchPerson(String lastName, String firstName) {
-        long time = System.currentTimeMillis() - maxAge;
-        Element results = cache.getIfUpToDate(lastName, time);
+    public Element searchPerson(Map<String, String> attributes) {
+        Element results = new Element("results");
+        String firstName = "";
+        String lastName = "";
 
-        if (results == null) {
-            results = new Element("results");
+        if (attributes.containsKey(PARAM_FIRSTNAME) && attributes.containsKey(PARAM_LASTNAME)) {
+            try {
+                lastName = URLDecoder.decode(attributes.get(PARAM_LASTNAME), PARAM_ENCODING);
+                firstName = URLDecoder.decode(attributes.get(PARAM_FIRSTNAME), PARAM_ENCODING);
 
-            Map<String, Element> found = new HashMap<String, Element>();
-            lookup(lastName, found);
+                results = cache.getIfUpToDate(lastName);
 
-            String variantName = lastName.replace("ue", "\u00fc").replace("oe", "\u00f6").replace("ae", "\u00e4")
-                    .replace("ss", "\u00df");
-            if (!variantName.equals(lastName)) {
-                lookup(variantName, found);
+                if (results == null) {
+                    results = new Element("results");
+
+                    Map<String, Element> found = new HashMap<String, Element>();
+                    lookup(lastName, found);
+
+                    String variantName = lastName.replace("ue", "\u00fc").replace("oe", "\u00f6").replace("ae", "\u00e4")
+                            .replace("ss", "\u00df");
+                    if (!variantName.equals(lastName)) {
+                        lookup(variantName, found);
+                    }
+
+                    variantName = Normalizer.normalize(lastName, Form.NFD).replaceAll("\\p{M}", "");
+                    if (!variantName.equals(lastName)) {
+                        lookup(variantName, found);
+                    }
+
+                    results.addContent(found.values());
+                    cache.put(lastName, results);
+
+                    LOGGER.info(
+                            "LSF search for person with name = '" + lastName + "': " + results.getContentSize() + " found.");
+                }
+            } catch (Exception ex) {
+                LOGGER.error("Error while searching HIS LSF for person name", ex);
             }
-
-            variantName = Normalizer.normalize(lastName, Form.NFD).replaceAll("\\p{M}", "");
-            if (!variantName.equals(lastName)) {
-                lookup(variantName, found);
-            }
-
-            results.addContent(found.values());
-            cache.put(lastName, results);
-
-            LOGGER.info(
-                    "LSF search for person with name = '" + lastName + "': " + results.getContentSize() + " found.");
+        } else {
+            LOGGER.info("Could not search for HIS LSF person details, missing {} and/or {} in attributes: {}",
+                    PARAM_FIRSTNAME, PARAM_LASTNAME, attributes);
         }
 
         results = results.clone();
@@ -256,10 +268,15 @@ public class LSFClient {
         XMLOutputter xout = new XMLOutputter();
         xout.setFormat(Format.getPrettyFormat().setEncoding(encoding));
 
-        Element results = LSFClient.instance().searchPerson("L\u00fctzenkirchen", "Frank");
+        Map<String, String> attributes = new HashMap<>();
+        attributes.put(PARAM_LASTNAME, "L\\u00fctzenkirchen");
+        attributes.put(PARAM_FIRSTNAME, "Frank");
+        attributes.put(PARAM_PID, "11775");
+
+        Element results = new LSFService().searchPerson(attributes);
         xout.output(results, System.out);
 
-        Element person = LSFClient.instance().getPersonDetails("11775");
+        Element person = new LSFService().getPersonDetails(attributes);
         xout.output(person, System.out);
     }
 }
