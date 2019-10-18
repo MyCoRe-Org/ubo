@@ -74,13 +74,13 @@
     <url-pattern> /servlets/BasketPubMerger </url-pattern>
   </servlet-mapping>
 
-  <servlet id="LSFPIDSearch">
-    <servlet-name>LSFPIDSearch</servlet-name>
-    <servlet-class>unidue.ubo.lsf.LSFPIDSearch</servlet-class>
+  <servlet id="IdentityPicker">
+    <servlet-name>IdentityPicker</servlet-name>
+    <servlet-class>unidue.ubo.picker.IdentityPicker</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>LSFPIDSearch</servlet-name>
-    <url-pattern> /lsfpidsearch.html </url-pattern>
+    <servlet-name>IdentityPicker</servlet-name>
+    <url-pattern> /identitypicker.html </url-pattern>
   </servlet-mapping>
 
   <servlet id="OAI">

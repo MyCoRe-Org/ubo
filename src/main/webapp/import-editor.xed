@@ -306,15 +306,15 @@
             </xed:bind>
           </xed:when>
           <xed:when test="string-length(mods:namePart[@type='family']) &gt; 0">
-            <xed:load-resource uri="lsf:lastName={xed:call-java('java.net.URLEncoder','encode',string(mods:namePart[@type='family']),'UTF-8')}&amp;firstname={xed:call-java('java.net.URLEncoder','encode',string(mods:namePart[@type='given']),'UTF-8')}" name="lsfResults" />
-            <xed:if test="count($lsfResults/person) &gt; 0">
-	      <xed:output value="concat('(',count($lsfResults/person),' in LSF)')" />
+            <xed:load-resource uri="ires:search:{xed:call-java('unidue.ubo.matcher.MCRUserMatcherUtils', 'getAttributesAsURLString', .)}" name="searchResults"/>
+            <xed:if test="count($searchResults/person) &gt; 0">
+	      <xed:output value="concat('(',count($searchResults/person),' in LSF)')" />
             </xed:if>
           </xed:when>
         </xed:choose>
       </span>
       <div class="ml-auto pb-1">
-        <button class="btn btn-sm btn-primary" type="submit" xed:target="subselect" xed:href="../lsfpidsearch.html?lastName={mods:namePart[@type='family']}&amp;firstName={mods:namePart[@type='given']}&amp;pid={mods:nameIdentifier[@type='lsf']}">
+        <button class="btn btn-sm btn-primary" type="submit" xed:target="subselect" xed:href="../identitypicker.html?lastName={mods:namePart[@type='family']}&amp;firstName={mods:namePart[@type='given']}&amp;pid={mods:nameIdentifier[@type='lsf']}">
           <xed:output i18n="search.select" />
         </button>
       </div>
