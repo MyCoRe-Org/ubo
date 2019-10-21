@@ -209,6 +209,38 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
     }
 
     /**
+     * TODO: doc
+     */
+    public Multimap<String, String> convertNameIdentifiersToLDAP(Map<String, String> attributes) {
+        Map<String, String> convertedAttributes = new HashMap<>();
+        Multimap<String, String> convertedNameIdentifiers = ArrayListMultimap.create();
+
+
+        for(Map.Entry<String, String> attributeEntry : attributes.entrySet()) {
+            // convert nameIdentifiers to "mycore style" (prefix with "id_")
+            String attributeName = "id_" + attributeEntry.getKey();
+            String attributeValue = attributeEntry.getValue();
+
+            // TODO: reduce/remove code dublication (see "convertUserAttributesToLDAP")
+            if(mycoreToLDAPIdentifiers.containsKey(attributeName)) {
+                // convert "explicit" identifiers to attributes
+                String ldapAttributeName = mycoreToLDAPIdentifiers.get(attributeName);
+                convertedNameIdentifiers.put(ldapAttributeName, attributeValue);
+            } else {
+                // if not "explicit", try via "labeledURI" mapping config
+                if(mycoreToLDAPLabeledURISchemas.containsKey(attributeName)) {
+                    String ldapAttributeName = "labeledURI";
+                    String ldapAttributeValue = mycoreToLDAPLabeledURISchemas.get(attributeName)
+                            .replace("%s", attributeValue);
+                    convertedNameIdentifiers.put(ldapAttributeName, ldapAttributeValue);
+                }
+            }
+        }
+
+        return convertedNameIdentifiers;
+    }
+
+    /**
      * Converts LDAP Attributes and their values into MCRUser attributes
      *
      * Example Attributes of an LDAPObject (LDAPUser) are:
@@ -224,7 +256,7 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
      * @param ldapUser the LDAPObject from which the attributes shall be converted
      * @return a MCRUser attribute map
      */
-    private Map<String, String> convertLDAPAttributesToMCRUserAttributes(LDAPObject ldapUser) {
+    public Map<String, String> convertLDAPAttributesToMCRUserAttributes(LDAPObject ldapUser) {
         Map<String, String> userAttributes = new HashMap<>();
         Multimap<String, String> attributes = ldapUser.getAttributes();
 
@@ -320,7 +352,7 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
         return regex;
     }
 
-    private List<LDAPObject> getLDAPUsersByGivenLDAPAttributes(Multimap ldapAttributes) {
+    public List<LDAPObject> getLDAPUsersByGivenLDAPAttributes(Multimap ldapAttributes) {
         DirContext ctx = null;
         List<LDAPObject> ldapUsers = new ArrayList<>();
 

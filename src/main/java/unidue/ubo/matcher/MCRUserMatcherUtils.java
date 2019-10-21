@@ -138,7 +138,9 @@ public class MCRUserMatcherUtils {
                 }
                 singleParameters.add(parameter.getKey() + '=' + encodedValue);
             }
-            parameters = String.join("&", singleParameters);
+            //String ampersand = escapeAmpersand ? "&amp;" : "&";
+            String ampersand = "&";
+            parameters = String.join(ampersand, singleParameters);
         }
         LOGGER.info("parameters: " + parameters);
         return parameters;
