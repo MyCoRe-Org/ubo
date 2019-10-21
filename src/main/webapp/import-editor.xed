@@ -314,7 +314,7 @@
         </xed:choose>
       </span>
       <div class="ml-auto pb-1">
-        <button class="btn btn-sm btn-primary" type="submit" xed:target="subselect" xed:href="../identitypicker.html?lastName={mods:namePart[@type='family']}&amp;firstName={mods:namePart[@type='given']}&amp;pid={mods:nameIdentifier[@type='lsf']}">
+        <button class="btn btn-sm btn-primary" type="submit" xed:target="subselect" xed:href="../identitypicker.html?{xed:call-java('unidue.ubo.matcher.MCRUserMatcherUtils', 'getAttributesAsURLString', .)}&amp;pid={mods:nameIdentifier[@type='lsf']}">
           <xed:output i18n="search.select" />
         </button>
       </div>
