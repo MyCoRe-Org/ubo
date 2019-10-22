@@ -106,5 +106,6 @@
         <xed:include uri="webapp:import-editor.xed" ref="cancel.submit" />
       </xed:template>
     </xed:form>
+   </div>
   </article>
 </webpage>
