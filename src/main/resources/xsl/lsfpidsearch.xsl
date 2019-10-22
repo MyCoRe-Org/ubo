@@ -20,7 +20,6 @@
         <xsl:value-of select="i18n:translate('lsf.search')" />
       </title>
       <script type="text/javascript" src="{$WebApplicationBaseURL}external/datatables-1.8.2/media/js/jquery.dataTables.min.js"><xsl:text> </xsl:text></script>
-      <script type="text/javascript" src="{$WebApplicationBaseURL}js/jQuery.dataTables.date.sort.js"><xsl:text> </xsl:text></script>
       <script type="text/javascript" src="{$WebApplicationBaseURL}external/jquery.jsonp.js"></script>
       <script type="text/javascript">
         jQuery(document).ready( function() {
@@ -98,7 +97,7 @@
 	  </label>
 	  <input id="firstName" name="firstName" type="text" size="40" value="{@firstName}" class="mycore-form-input"/>
 	</div>
-	
+
 	<!-- Allow manual input of LSF PID for admins, in special cases or for testing purposes -->
 	<xsl:if xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()">
 	  <div class="form-group form-inline">

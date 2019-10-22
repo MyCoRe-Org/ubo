@@ -210,11 +210,16 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
 
     /**
      * TODO: doc
+     * TODO: rename to "convertAttributesToLDAP"
      */
-    public Multimap<String, String> convertNameIdentifiersToLDAP(Map<String, String> attributes) {
+    public Multimap<String, String> convertNameIdentifiersToLDAP(Map<String, String> attributes, boolean onlyMapped) {
         Map<String, String> convertedAttributes = new HashMap<>();
         Multimap<String, String> convertedNameIdentifiers = ArrayListMultimap.create();
 
+        // allowed attributes used when onlyMapped = false, used for filtering out any non-ldap-attributes
+        List<String> allowedAttributes = new ArrayList<>();
+        allowedAttributes.add("cn");
+        allowedAttributes.add("sn");
 
         for(Map.Entry<String, String> attributeEntry : attributes.entrySet()) {
             // convert nameIdentifiers to "mycore style" (prefix with "id_")
@@ -226,13 +231,17 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
                 // convert "explicit" identifiers to attributes
                 String ldapAttributeName = mycoreToLDAPIdentifiers.get(attributeName);
                 convertedNameIdentifiers.put(ldapAttributeName, attributeValue);
-            } else {
+            } else if(mycoreToLDAPLabeledURISchemas.containsKey(attributeName)) {
                 // if not "explicit", try via "labeledURI" mapping config
-                if(mycoreToLDAPLabeledURISchemas.containsKey(attributeName)) {
-                    String ldapAttributeName = "labeledURI";
-                    String ldapAttributeValue = mycoreToLDAPLabeledURISchemas.get(attributeName)
-                            .replace("%s", attributeValue);
-                    convertedNameIdentifiers.put(ldapAttributeName, ldapAttributeValue);
+                String ldapAttributeName = "labeledURI";
+                String ldapAttributeValue = mycoreToLDAPLabeledURISchemas.get(attributeName)
+                        .replace("%s", attributeValue);
+                convertedNameIdentifiers.put(ldapAttributeName, ldapAttributeValue);
+            } else if(!onlyMapped) {
+                // if not converting only explicitly mapped identifiers to attributes
+                // still need to filter out any attributes that are not used in LDAP
+                if(allowedAttributes.contains(attributeEntry.getKey())) {
+                    convertedNameIdentifiers.put(attributeEntry.getKey(), attributeValue);
                 }
             }
         }

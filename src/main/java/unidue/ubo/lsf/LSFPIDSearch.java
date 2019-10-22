@@ -12,6 +12,8 @@ package unidue.ubo.lsf;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -89,8 +91,10 @@ public class LSFPIDSearch extends MCRServlet implements IdentityPickerService {
 
         if (!lastName.isEmpty()) {
             LOGGER.info("UBO search LSF for person name " + lastName + ", " + firstName);
-            // TODO!
-            //lsfpidsearch.addContent(LSFService.instance().searchPerson(lastName, firstName));
+            Map<String, String> paramMap = new HashMap<>();
+            paramMap.put("lastName", lastName);
+            paramMap.put("firstname", firstName);
+            lsfpidsearch.addContent(new LSFService().searchPerson(paramMap));
         }
 
         MCRServlet.getLayoutService().doLayout(req, res, new MCRJDOMContent(lsfpidsearch));
