@@ -104,7 +104,7 @@
         <xed:include uri="webapp:import-editor.xed" ref="fix.structure.parent" />
         <xed:include uri="webapp:import-editor.xed" ref="cleanup" />
         <xed:include uri="webapp:import-editor.xed" ref="cancel.submit" />
-      </xed:template
+      </xed:template>
     </xed:form>
   </article>
 </webpage>
