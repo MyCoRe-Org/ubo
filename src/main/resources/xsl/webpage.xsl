@@ -48,6 +48,25 @@
     </html>
   </xsl:template>
   
+  <!-- Required to launch WebCLI and classification editor -->
+  <xsl:template match="/site">
+    <html>
+      <head>
+        <title>
+          <xsl:value-of select="@title" />
+        </title>
+      </head>
+      <body>
+        <ul id="breadcrumb">
+          <li>
+            <xsl:value-of select="@title" />
+          </li>
+        </ul>
+        <xsl:apply-templates select="*" />
+      </body>
+    </html>
+  </xsl:template>
+
   <!-- article -->
 
   <xsl:template match="article[lang($CurrentLang) or (string-length(@xml:lang) = 0)]" priority="1">
