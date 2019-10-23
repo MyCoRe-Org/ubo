@@ -2080,3 +2080,15 @@ button.orcid-button:hover, button.orcid-button:active  {
 	color: #004C93;
 	text-decoration: none;
 }
+
+#classificationEditorWrapper {
+	width:740px !important;
+}
+
+div.jumbotron div h1 {
+	font-size: 180%;
+}
+
+div.text-center {
+	text-align:center;
+}

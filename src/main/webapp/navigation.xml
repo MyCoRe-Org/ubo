@@ -53,6 +53,14 @@
     <label xml:lang="de">Dubletten-Bericht</label>
     <label xml:lang="en">Duplicates report</label>
   </item>
+  <item id="webcli" ref="modules/webcli/launchpad.xml" role="admin">
+    <label xml:lang="de">WebCLI</label>
+    <label xml:lang="en">WebCLI</label>
+  </item>
+  <item id="webcli" ref="modules/classeditor/classificationEditor.xml" role="admin">
+    <label xml:lang="de">Klassifikationseditor</label>
+    <label xml:lang="en">Classification Editor</label>
+  </item>
   
   <item role="meta">
     <item ref="contact.xml">
