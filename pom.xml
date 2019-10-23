@@ -66,7 +66,7 @@
     <log4j.version>2.11.0</log4j.version>
     <mycore.version>2019.05-SNAPSHOT</mycore.version>
     <solr.data.dir>${solr.home}/ubo/data</solr.data.dir>
-    <solr.home>${user.home}/AppData/Local/MyCoRe/${MCR.AppName}/data/solr</solr.home>
+    <solr.home>${user.config.dir}/${MCR.AppName}/data/solr</solr.home>
     <timestamp>${maven.build.timestamp}</timestamp>
     <tomcat8.version>8.5.38</tomcat8.version>
     <tomcat9.version>9.0.16</tomcat9.version>
@@ -645,6 +645,17 @@
       <activation>
         <os>
           <family>Unix</family>
+        </os>
+      </activation>
+      <properties>
+        <user.config.dir>${user.home}/.mycore</user.config.dir>
+      </properties>
+    </profile>
+    <profile>
+      <id>mac</id>
+      <activation>
+        <os>
+          <family>Mac</family>
         </os>
       </activation>
       <properties>
