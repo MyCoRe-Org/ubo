@@ -59,7 +59,7 @@
     </xsl:template>
 
     <xsl:variable name="qm">'</xsl:variable>
-    <xsl:variable name="xpathLSF"    select="encoder:encode(concat('mods:nameIdentifier[@type=',$qm,'lsf',$qm,']'),'UTF-8')" />
+    <xsl:variable name="xpathID"    select="encoder:encode(concat('mods:nameIdentifier[@type=',$qm,'orcid',$qm,']'),'UTF-8')" />
     <xsl:variable name="xpathFamily" select="encoder:encode(concat('mods:namePart[@type=',$qm,'family',$qm,']'),'UTF-8')" />
     <xsl:variable name="xpathGiven"  select="encoder:encode(concat('mods:namePart[@type=',$qm,'given',$qm,']'),'UTF-8')" />
 
@@ -204,14 +204,16 @@
     </xsl:template>
 
     <xsl:template match="person">
+        <!-- TODO: use dynamic lead_id (configured in mycore.properties) NOT POSSIBLE IN XSLT 1.0 -->
+        <xsl:variable name="id" select="id_orcid"/>
         <tr>
             <td>
-                <a class="roundedButton" href="{$ServletsBaseURL}XEditor?_xed_submit_return=&amp;_xed_session={/ldappidsearch/@session}&amp;{$xpathLSF}={id}&amp;{$xpathFamily}={encoder:encode(lastName,'UTF-8')}&amp;{$xpathGiven}={encoder:encode(firstName,'UTF-8')}">
+                <a class="roundedButton" href="{$ServletsBaseURL}XEditor?_xed_submit_return=&amp;_xed_session={/ldappidsearch/@session}&amp;{$xpathID}={$id}&amp;{$xpathFamily}={encoder:encode(lastName,'UTF-8')}&amp;{$xpathGiven}={encoder:encode(firstName,'UTF-8')}">
                     <xsl:value-of select="i18n:translate('lsf.selectPerson')"/>
                 </a>
             </td>
             <td>
-                <a target="_blank" href="{$UBO.LSF.Link}{id}" onclick="return popup(this.href);">
+                <a target="_blank" href="{$UBO.LSF.Link}{$id}" onclick="return popup(this.href);">
                     <xsl:value-of select="lastName" />
                     <xsl:if test="firstName">
                         <xsl:text>, </xsl:text>
@@ -224,7 +226,7 @@
                 </xsl:if>
             </td>
             <td>
-                <xsl:apply-templates select="document(concat('ires:detail:pid=',id))/Person" />
+                <xsl:apply-templates select="document(concat('ires:detail:pid=',$id))/Person" />
             </td>
         </tr>
     </xsl:template>

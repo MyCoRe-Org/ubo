@@ -44,7 +44,7 @@ import java.util.List;
  * Example:
  * MCR.user2.matching.chain=unidue.ubo.matcher.MCRUserMatcherLDAP,unidue.ubo.matcher.MCRUserMatcherDummy
  *
- * MCR.user2.matching.lead_id
+ * MCR.user2.matching.lead_id TODO: anpassen...
  * Example:
  * MCR.user2.matching.lead_id=id_scopus
  *
@@ -123,26 +123,27 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     /**
      * Enriches the mods:name-element that corresponds to the given MCRUser with a mods:nameIdentifier-element if the
      * given MCRUser has an attribute with the name of the so called "lead_id" that is configured in the
-     * mycore.properties and given as parameter "leadIDName".
+     * mycore.properties and given as parameter "leadIDmods".
      * A new mods:nameIdentifier-element with type "lead_id" and its value will only be created if no other
      * mods:nameIdentifier-element with the same ID/type exists as a sub-element of the given modsNameElement.
 
      * @param modsNameElement the mods:name-element which will be enriched
-     * @param leadIDName the "lead_id" (as configured in the mycore.properties)
+     * @param leadIDmods the "lead_id" (as configured in the mycore.properties) in mods format (no prefix "id_")
      * @param mcrUser the MCRUser corresponding to the modsNameElement
      */
-    private void enrichModsNameElementByLeadID(Element modsNameElement, String leadIDName, MCRUser mcrUser) {
-        if(StringUtils.isNotEmpty(leadIDName) && mcrUser.getAttributes().containsKey(leadIDName)) {
-            String leadIDValue = mcrUser.getUserAttribute(leadIDName);
+    private void enrichModsNameElementByLeadID(Element modsNameElement, String leadIDmods, MCRUser mcrUser) {
+        String leadIDmycore = "id_" + leadIDmods;
+        if(StringUtils.isNotEmpty(leadIDmycore) && mcrUser.getAttributes().containsKey(leadIDmycore)) {
+            String leadIDValue = mcrUser.getUserAttribute(leadIDmycore);
             if(StringUtils.isNotEmpty(leadIDValue)) {
-                String leadIDModsName = leadIDName.replace("id_", "");
-                if(MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, leadIDModsName)) {
+                // TODO: the following line looks like it should start with a negation! If yes, it is a bug, change it!
+                if(MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, leadIDmods)) {
                     Element nameIdentifier = new Element("nameIdentifier", MCRUserMatcherUtils.MODS_NAMESPACE)
-                            .setAttribute("type", leadIDModsName)
+                            .setAttribute("type", leadIDmods)
                             .setText(leadIDValue);
                     modsNameElement.addContent(nameIdentifier);
                     LOGGER.info("Enriched publication for MCRUser: {}, with nameIdentifier of type: {} (lead_id) " +
-                            "and value: {}", mcrUser.getUserName(), leadIDModsName, leadIDValue);
+                            "and value: {}", mcrUser.getUserName(), leadIDmods, leadIDValue);
                 }
             }
         }
