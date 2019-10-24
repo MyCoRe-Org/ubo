@@ -32,7 +32,7 @@ public class MCRUserMatcherUtils {
 
     public static final Namespace MODS_NAMESPACE = Namespace.getNamespace("mods", "http://www.loc.gov/mods/v3");
 
-    private final static String UNVALIDATED_REALM = "ude"; // TODO: create specific realm for unvalidated users
+    public final static String UNVALIDATED_REALM = "ude"; // TODO: create specific realm for unvalidated users
 
     public static List<Element> getNameElements(MCRObject obj) {
         MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
