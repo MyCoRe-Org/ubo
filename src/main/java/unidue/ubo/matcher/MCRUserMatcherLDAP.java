@@ -31,6 +31,10 @@ import java.util.regex.Pattern;
  *
  * The following properties in the mycore.properties are used:
  *
+ * # LDAP attribute name used for login
+ * # MCR.user2.LDAP.Login.AttributeName=$ATTRIBUTE_NAME
+ * Example: MCR.user2.LDAP.Login.AttributeName=uid
+ *
  * # Mappings between MyCoRe identifiers and LDAP attributes (for labeledUri)
  * # MCR.user2.LDAP.Mapping.labeledURI.$IDENTIFIER_NAME.schema=...
  * Examples (scopus):
@@ -47,7 +51,7 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
 
     private final static Logger LOGGER = LogManager.getLogger(MCRUserMatcherLDAP.class);
 
-    private final static String UNVALIDATED_REALM = "ude"; // TODO: create specific realm for unvalidated users
+    private final static String CONFIG_LDAP_LOGIN_ATTRIBUTENAME = "MCR.user2.LDAP.Login.AttributeName";
 
     // all members regarding configuration of explicit mods/mycore nameIdentifier mapping
     private final static String CONFIG_EXPLICIT_NAMEIDENTIFIER_MAPPING = "MCR.user2.LDAP.Mapping.explicit";
@@ -144,9 +148,7 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
     @Override
     public MCRUser matchUser(MCRUser mcrUser) {
 
-        LDAPObject ldapUser = null;
         Multimap<String, String> ldapAttributes = convertUserAttributesToLDAP(mcrUser);
-
         List<LDAPObject> ldapUsers = getLDAPUsersByGivenLDAPAttributes(ldapAttributes);
 
         if(ldapUsers.size() == 0) {
@@ -155,16 +157,57 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
             // too many matches found (conflict)
             // TODO: return conflict message/MatchType/exception(?)
         } else if(ldapUsers.size() == 1) {
-            ldapUser = ldapUsers.get(0);
+            LDAPObject ldapUser = ldapUsers.get(0);
 
             // Gather and convert all LDAP identifiers/attributes to MCRUser Attributes and merge them
             // at this point, since we are not using MultiMap (Multi-Attributes) in MCRUsers, existing
             // identifiers/attributes might be overwritten by the LDAP-Variant
             Map<String, String> userAttributesFromLDAP = convertLDAPAttributesToMCRUserAttributes(ldapUser);
             mcrUser.getAttributes().putAll(userAttributesFromLDAP);
+
+            /*
+            As discussed, it is the responsibility of the concrete MCRUserMatcher implementation to set the
+            username of the matched/returned user, or more precisely, to enable the MCRUser to be able to login to the
+            corresponding identity management system (in this case LDAP).
+            Since currently (October 24th 2019), the LDAP and MyCoRe/UBO login is paired via the MCRUser username,
+            we have to set the username of the MCRUser to the value of the ldap attribute of the matched LDAP user
+            that is used for the login at the LDAP system.
+            */
+            // Because the username can not be changed once set, we have to create a new user at this point
+            String userName = getUserNameFromLDAPUser(ldapUser);
+            MCRUser newMcrUser =  new MCRUser(userName, MCRUserMatcherUtils.UNVALIDATED_REALM);
+            newMcrUser.setAttributes(mcrUser.getAttributes());
+            LOGGER.info("TEST: {}", mcrUser.getAttributes());
+            mcrUser = newMcrUser;
         }
 
         return mcrUser;
+    }
+
+    private String getUserNameFromLDAPUser(LDAPObject ldapUser) {
+        String userName = "";
+        MCRConfiguration config = MCRConfiguration.instance();
+        String ldapLoginAttributeName = config.getString(CONFIG_LDAP_LOGIN_ATTRIBUTENAME, "");
+        if(StringUtils.isEmpty(ldapLoginAttributeName)) {
+            throw new MCRConfigurationException("Property " + CONFIG_LDAP_LOGIN_ATTRIBUTENAME + " not set, can not find " +
+                    "suitable name for matched MCR/LDAP user.");
+        }
+        if(!ldapUser.getAttributes().containsKey(ldapLoginAttributeName)) {
+            throw new MCRConfigurationException("Attribute: " + ldapLoginAttributeName + "(configured with: " +
+                    CONFIG_LDAP_LOGIN_ATTRIBUTENAME + ") not found in matched LDAP user, " +
+                    "can not find suitable username.");
+        } else {
+            Collection<String> attributeValues = ldapUser.getAttributes().get(ldapLoginAttributeName);
+            if(attributeValues.size() == 1) {
+                userName = attributeValues.iterator().next();
+            } else {
+                throw new MCRConfigurationException("Attribute: " + ldapLoginAttributeName + "(configured with: " +
+                        CONFIG_LDAP_LOGIN_ATTRIBUTENAME + ") has 0 or more than 1 values in matched LDAP user, " +
+                        "can not find suitable username.");
+            }
+        }
+        LOGGER.info("Got userName: {} from LDAP attribute: {}", userName, ldapLoginAttributeName);
+        return userName;
     }
 
     /**

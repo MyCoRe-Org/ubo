@@ -110,6 +110,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
                         enrichedMCRUser.getUserName(),
                         new XMLOutputter(Format.getPrettyFormat()).outputString(modsNameElement),
                         enrichedMCRUser.getAttributes());
+                mcrUser = enrichedMCRUser;
             }
 
             MCRUser mcrUserFinal = localMatcher.matchUser(mcrUser);
@@ -136,8 +137,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
         if(StringUtils.isNotEmpty(leadIDmycore) && mcrUser.getAttributes().containsKey(leadIDmycore)) {
             String leadIDValue = mcrUser.getUserAttribute(leadIDmycore);
             if(StringUtils.isNotEmpty(leadIDValue)) {
-                // TODO: the following line looks like it should start with a negation! If yes, it is a bug, change it!
-                if(MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, leadIDmods)) {
+                if(!MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, leadIDmods)) {
                     Element nameIdentifier = new Element("nameIdentifier", MCRUserMatcherUtils.MODS_NAMESPACE)
                             .setAttribute("type", leadIDmods)
                             .setText(leadIDValue);
