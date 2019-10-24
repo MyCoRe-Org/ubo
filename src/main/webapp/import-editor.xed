@@ -298,17 +298,17 @@
       </span>
       <span> 
         <xed:choose>
-          <xed:when test="string-length(mods:nameIdentifier[@type='lsf']) &gt; 0">
-            <xed:bind xpath="mods:nameIdentifier[@type='lsf']">
+          <xed:when test="string-length(mods:nameIdentifier[@type=$MCR.user2.matching.lead_id]) &gt; 0">
+            <xed:bind xpath="mods:nameIdentifier[@type=$MCR.user2.matching.lead_id]">
 	      <a target="_blank" href="{$UBO.LSF.Link}{.}">
-                <xed:output value="concat('LSF: ',.)" />
+                <xed:output value="concat('&#160;', i18n:translate('editor.identity.picker.lead_id'), ' ', .)" />
 	      </a>
             </xed:bind>
           </xed:when>
           <xed:when test="string-length(mods:namePart[@type='family']) &gt; 0">
             <xed:load-resource uri="ires:search:{xed:call-java('unidue.ubo.matcher.MCRUserMatcherUtils', 'getAttributesAsURLString', .)}" name="searchResults"/>
             <xed:if test="count($searchResults/person) &gt; 0">
-	      <xed:output value="concat('(',count($searchResults/person),' in LSF)')" />
+	      <xed:output value="concat('&#160;(', count($searchResults/person), ' in ', i18n:translate('editor.identity.picker.name'), ')')" />
             </xed:if>
           </xed:when>
         </xed:choose>
