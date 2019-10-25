@@ -74,6 +74,9 @@
   <!-- Fields for each LSF person ID that is author or editor of this publication -->
   <field name="ae_lsf" type="id" indexed="true" stored="false" multiValued="true" />
 
+  <!-- Fields for each ORCID of a person that is author or editor of this publication -->
+  <field name="ae_orcid" type="id" indexed="true" stored="false" multiValued="true" />
+
   <!-- Fields for mods:identifier, e.g. <mods:identifier type="doi" /> ==> id_doi -->
   <dynamicField name="id_*"  type="id" indexed="true" stored="true" multiValued="true" />
   <dynamicField name="pub_id_*"  type="id" indexed="true" stored="true" multiValued="true" />
