@@ -283,23 +283,23 @@
           <xsl:apply-templates select="$role" />
           <xsl:text>:</xsl:text>
         </div>
-      </div>
-      <div class="col-9">
-        <xsl:for-each select="$list">
-          <span class="personalName">
-            <xsl:if test="mods:affiliation and check:currentUserIsAdmin()">
-              <xsl:attribute name="title">
-                <xsl:apply-templates select="mods:affiliation" mode="details" />
-              </xsl:attribute>
-            </xsl:if>
-            <xsl:apply-templates select="." />
-            <xsl:apply-templates select="mods:nameIdentifier[@type='orcid']" />
-            <xsl:apply-templates select="mods:nameIdentifier[not(@type='orcid')]" />
-            <xsl:if test="position() != last()">
-              <xsl:text>; </xsl:text>
-            </xsl:if>
-          </span>
-        </xsl:for-each>
+        <div class="col-9">
+          <xsl:for-each select="$list">
+            <span class="personalName">
+              <xsl:if test="mods:affiliation and check:currentUserIsAdmin()">
+                <xsl:attribute name="title">
+                  <xsl:apply-templates select="mods:affiliation" mode="details" />
+                </xsl:attribute>
+              </xsl:if>
+              <xsl:apply-templates select="." />
+              <xsl:apply-templates select="mods:nameIdentifier[@type='orcid']" />
+              <xsl:apply-templates select="mods:nameIdentifier[not(@type='orcid')]" />
+              <xsl:if test="position() != last()">
+                <xsl:text>; </xsl:text>
+              </xsl:if>
+            </span>
+          </xsl:for-each>
+        </div>
       </div>
     </xsl:if>
   </xsl:template>
