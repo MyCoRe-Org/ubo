@@ -86,3 +86,34 @@ button.xeditor-pmud.fas {
     color: $pmud-color-hover;
     font-size: 25px;
 }
+
+// style of the list when selecting identities
+// (personal publication list -> select person from LDAP/LSF..., importing publications...)
+.dataTables_wrapper table {
+	width: 100%;
+}
+
+table.jQDataTable thead th {
+	padding: 5px;
+	cursor: pointer;
+	cursor: hand;
+}
+
+table.jQDataTable td {
+	padding: 5px;
+	vertical-align: top;
+}
+
+table.jQDataTable tr:nth-child(even) td:first-child,
+table.jQDataTable tr:nth-child(odd) td:first-child {
+	border-left: 1px solid lightGrey;
+}
+
+table.jQDataTable tr:nth-child(even) td:last-child,
+table.jQDataTable tr:nth-child(odd) td:last-child {
+	border-right: 1px solid lightGrey;
+}
+
+table.jQDataTable tr:last-child > td {
+	border-bottom: 1px solid lightgray;
+}

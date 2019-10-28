@@ -208,7 +208,7 @@
         <xsl:variable name="id" select="id_orcid"/>
         <tr>
             <td>
-                <a class="roundedButton" href="{$ServletsBaseURL}XEditor?_xed_submit_return=&amp;_xed_session={/ldappidsearch/@session}&amp;{$xpathID}={$id}&amp;{$xpathFamily}={encoder:encode(lastName,'UTF-8')}&amp;{$xpathGiven}={encoder:encode(firstName,'UTF-8')}">
+                <a class="btn btn-primary btn-sm" href="{$ServletsBaseURL}XEditor?_xed_submit_return=&amp;_xed_session={/ldappidsearch/@session}&amp;{$xpathID}={$id}&amp;{$xpathFamily}={encoder:encode(lastName,'UTF-8')}&amp;{$xpathGiven}={encoder:encode(firstName,'UTF-8')}">
                     <xsl:value-of select="i18n:translate('lsf.selectPerson')"/>
                 </a>
             </td>
@@ -220,22 +220,12 @@
                         <xsl:value-of select="firstName" />
                     </xsl:if>
                 </a>
-                <xsl:if test="akadgrad">
-                    <xsl:text> </xsl:text>
-                    <xsl:value-of select="akadgrad" />
-                </xsl:if>
             </td>
             <td>
-                <xsl:apply-templates select="document(concat('ires:detail:pid=',$id))/Person" />
+                ORCID: <xsl:value-of select="$id"/>
+                <!--<xsl:apply-templates select="document(concat('ires:detail:pid=',$id))/Person" />-->
             </td>
         </tr>
-    </xsl:template>
-
-    <xsl:template match="Person">
-        <xsl:for-each select="Funktion/EinDtx[string-length(text()) &gt; 0]|Kontakt/FBZEDez[string-length(text()) &gt; 0]">
-            <xsl:value-of select="text()" />
-            <xsl:if test="position() != last()">; </xsl:if>
-        </xsl:for-each>
     </xsl:template>
 
 </xsl:stylesheet>
