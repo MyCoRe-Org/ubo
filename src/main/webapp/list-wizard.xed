@@ -71,6 +71,7 @@
           <xed:validate test="tag[string-length(.) &gt; 0] or mods:name[string-length(mods:nameIdentifier) &gt; 0]" display="global" i18n="listWizard.tagOrPIDRequired" />
 
           <fieldset class="form-group">
+
             <xed:repeat xpath="mods:name">
               <div class="form-group form-inline">
                 <label for="{xed:generate-id()}" class="mycore-form-label">
@@ -78,19 +79,19 @@
                   <xed:output i18n="ubo.role.author" /> / <xed:output i18n="ubo.role.editor" />:
                 </label>
                 <xed:choose>
-                  <xed:when test="string-length(mods:nameIdentifier[@type='lsf']) &gt; 0">
-                    <span id="{xed:generate-id()}"> 
+                  <xed:when test="string-length(mods:nameIdentifier[@type=$MCR.user2.matching.lead_id]) &gt; 0">
+                    <span id="{xed:generate-id()}">
                       <xed:output value="mods:namePart[@type='family']" /><xed:if test="mods:namePart[@type='given']"><xed:output value="concat(', ',mods:namePart[@type='given'])" /></xed:if>
                     </span>
                     <span>
-                      <xed:bind xpath="mods:nameIdentifier[@type='lsf']">
-                        <xed:output value="concat('(LSF ID: ',.,')')" />
+                      <xed:bind xpath="mods:nameIdentifier[@type=$MCR.user2.matching.lead_id]">
+                        <xed:output value="concat('&#160;(', i18n:translate('editor.identity.picker.lead_id'), ' ', . , ')')" />
                       </xed:bind>
                     </span>
                   </xed:when>
                   <xed:otherwise>
                     <div class="col-sm-4 col pl-0 justify-content-start">
-                      <button class="btn btn-sm btn-primary" type="submit" xed:target="subselect" xed:href="../lsfpidsearch.html">
+                      <button class="btn btn-sm btn-primary" type="submit" xed:target="subselect" xed:href="../identitypicker.html">
                         <xed:output i18n="listWizard.subselect" />
                       </button>
                     </div>

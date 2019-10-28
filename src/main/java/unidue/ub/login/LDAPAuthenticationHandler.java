@@ -1,18 +1,11 @@
 package unidue.ub.login;
 
-import java.util.Hashtable;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
-import javax.naming.AuthenticationException;
-import javax.naming.Context;
-import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
-import javax.naming.directory.Attribute;
-import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
-import javax.naming.directory.InitialDirContext;
-import javax.naming.directory.SearchControls;
-import javax.naming.directory.SearchResult;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,16 +13,13 @@ import org.mycore.common.config.MCRConfiguration;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUser2Constants;
 import org.mycore.user2.MCRUserManager;
+import unidue.ubo.ldap.LDAPAuthenticator;
+import unidue.ubo.ldap.LDAPObject;
+import unidue.ubo.ldap.LDAPSearcher;
 
 /**
  * Checks the given user ID and password combination against remote LDAP server
  * and returns the user if authentication is OK. Configuration is done via mycore.properties:
- *
- * # LDAP server
- * MCR.user2.LDAP.ProviderURL=ldaps://ldap2.uni-duisburg-essen.de
-
- * # Timeout when connecting to LDAP server
- * MCR.user2.LDAP.ReadTimeout=5000
  *
  * # Base DN, uid of user on actual login will be used!
  * # We do not use any "global" credentials, just the user's own uid and password to connect
@@ -55,21 +45,15 @@ import org.mycore.user2.MCRUserManager;
  */
 public class LDAPAuthenticationHandler extends AuthenticationHandler {
 
-    /** If this pattern is given in LDAP error message, login is invalid */
-    private static final String PATTERN_INVALID_CREDENTIALS = "error code 49";
-
     private static final Logger LOGGER = LogManager.getLogger();
 
     private static final String CONFIG_PREFIX = MCRUser2Constants.CONFIG_PREFIX + "LDAP.";
 
-    /** Base DN, uid of user on actual login will be used! */
-    private String baseDN;
-
     /** Filter for user ID */
     private String uidFilter;
 
-    /** LDAP configuration template */
-    private Hashtable<String, String> ldapEnvironment;
+    /** Base DN, uid of user on actual login will be used! */
+    private String baseDN;
 
     /** Mapping from LDAP attribute to real name of user */
     private String mapName;
@@ -80,22 +64,8 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
     public LDAPAuthenticationHandler() {
         MCRConfiguration config = MCRConfiguration.instance();
 
-        ldapEnvironment = new Hashtable<>();
-        ldapEnvironment.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-
-        String readTimeout = config.getString(CONFIG_PREFIX + "ReadTimeout", "10000");
-        ldapEnvironment.put("com.sun.jndi.ldap.read.timeout", readTimeout);
-
-        String providerURL = config.getString(CONFIG_PREFIX + "ProviderURL");
-        ldapEnvironment.put(Context.PROVIDER_URL, providerURL);
-        if (providerURL.startsWith("ldaps")) {
-            ldapEnvironment.put(Context.SECURITY_PROTOCOL, "ssl");
-        }
-
-        ldapEnvironment.put(Context.SECURITY_AUTHENTICATION, "simple");
-
-        baseDN = config.getString(CONFIG_PREFIX + "BaseDN");
         uidFilter = config.getString(CONFIG_PREFIX + "UIDFilter");
+        baseDN = config.getString(CONFIG_PREFIX + "BaseDN");
 
         mapName = config.getString(CONFIG_PREFIX + "Mapping.Name");
         mapEMail = config.getString(CONFIG_PREFIX + "Mapping.E-Mail");
@@ -105,7 +75,7 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
         DirContext ctx = null;
 
         try {
-            ctx = getDirContext(uid, pwd);
+            ctx = new LDAPAuthenticator().authenticate(uid, pwd);
             if (ctx == null) {
                 return null;
             }
@@ -120,7 +90,12 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
                 user = new MCRUser(uid, realmID);
                 MCRUserManager.createUser(user);
             }
-            setUserAttributes(ctx, user);
+            List<LDAPObject> ldapObjects = searchUserInLDAP(ctx, user);
+            if(ldapObjects.size() == 1) {
+                setUserAttributes(ctx, user, ldapObjects.get(0));
+            } else {
+                // TODO: what should happen if ldapObjects contains more than one LDAPObject, i.e. the search returned multiple users?
+            }
 
             return user;
         } finally {
@@ -134,55 +109,29 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private DirContext getDirContext(String uid, String credentials) throws NamingException {
-        try {
-            Hashtable<String, String> env = (Hashtable<String, String>) (ldapEnvironment.clone());
-            env.put(Context.SECURITY_PRINCIPAL, String.format(baseDN, uid));
-            env.put(Context.SECURITY_CREDENTIALS, credentials);
-            return new InitialDirContext(env);
-        } catch (AuthenticationException ex) {
-            if (ex.getMessage().contains(PATTERN_INVALID_CREDENTIALS)) {
-                LOGGER.debug("Could not authenticate LDAP user " + uid + ": " + ex.getMessage());
-                return null;
-            } else {
-                throw ex;
-            }
-        }
+    /**
+     * Searches the user in the LDAP-System and returns it's corresponding LDAPObject containing all attributes
+     */
+    private List<LDAPObject> searchUserInLDAP(DirContext ctx, MCRUser user) throws NamingException {
+        String uid = user.getUserName();
+        String principal = String.format(baseDN, uid);
+        String filter = String.format(Locale.ROOT, uidFilter, uid);
+
+        return new LDAPSearcher().search(ctx, principal, filter);
     }
 
     /**
      * Sets the MCRUser's name, e-mail and groups by mapping LDAP attributes.
      */
-    private void setUserAttributes(DirContext ctx, MCRUser user) throws NamingException {
+    private void setUserAttributes(DirContext ctx, MCRUser user, LDAPObject userLDAPObject) {
         addToGroup(user, CONFIG_PREFIX + "Mapping.Group.DefaultGroup");
 
-        SearchControls controls = new SearchControls();
-        controls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-
-        String uid = user.getUserName();
-        String principal = String.format(baseDN, uid);
-        String filter = String.format(Locale.ROOT, uidFilter, uid);
-
-        NamingEnumeration<SearchResult> results = ctx.search(principal, filter, controls);
-
-        while (results.hasMore()) {
-            SearchResult searchResult = results.next();
-            Attributes attributes = searchResult.getAttributes();
-
-            for (NamingEnumeration<String> attributeIDs = attributes.getIDs(); attributeIDs.hasMore();) {
-                String attributeID = attributeIDs.next();
-                Attribute attribute = attributes.get(attributeID);
-
-                for (NamingEnumeration<?> values = attribute.getAll(); values.hasMore();) {
-                    String attributeValue = values.next().toString();
-                    LOGGER.debug(attributeID + "=" + attributeValue);
-
-                    setUserRealName(user, attributeID, attributeValue);
-                    setUserEMail(user, attributeID, attributeValue);
-                    addToGroup(user, CONFIG_PREFIX + "Mapping.Group." + attributeID + "." + attributeValue);
-                }
-            }
+        for(Map.Entry<String, String> attributeEntry : userLDAPObject.getAttributes().entries()) {
+            String attributeID = attributeEntry.getKey();
+            String attributeValue = attributeEntry.getValue();
+            setUserRealName(user, attributeID, attributeValue);
+            setUserEMail(user, attributeID, attributeValue);
+            addToGroup(user, CONFIG_PREFIX + "Mapping.Group." + attributeID + "." + attributeValue);
         }
     }
 

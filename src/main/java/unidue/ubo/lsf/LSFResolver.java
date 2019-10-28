@@ -16,6 +16,8 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.xml.MCRURIResolver;
@@ -37,6 +39,8 @@ import org.mycore.common.xml.MCRURIResolver;
 
 public class LSFResolver implements URIResolver {
 
+    private final static Logger LOGGER = LogManager.getLogger(LSFResolver.class);
+
     private static final String PARAM_ENCODING = "UTF-8";
     private static final String PARAM_FIRSTNAME = "firstname";
     private static final String PARAM_LASTNAME = "lastName";
@@ -45,16 +49,16 @@ public class LSFResolver implements URIResolver {
     public Source resolve(String href, String base) throws TransformerException {
         String key = href.substring(href.indexOf(":") + 1);
         Hashtable<String, String> params = MCRURIResolver.getParameterMap(key);
-
+        LOGGER.info("PARAMS: " + params.toString());
         try {
             Element result = null;
             if (params.containsKey(PARAM_PID)) {
                 String pid = params.get(PARAM_PID);
-                result = LSFClient.instance().getPersonDetails(pid);
+                result = new LSFService().getPersonDetails(params);
             } else {
                 String lastName = URLDecoder.decode(params.get(PARAM_LASTNAME), PARAM_ENCODING);
                 String firstName = URLDecoder.decode(params.get(PARAM_FIRSTNAME), PARAM_ENCODING);
-                result = LSFClient.instance().searchPerson(lastName, firstName);
+                result = new LSFService().searchPerson(params);
             }
             return new JDOMSource(result);
         } catch (Exception ex) {

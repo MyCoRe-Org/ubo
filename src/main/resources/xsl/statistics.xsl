@@ -127,7 +127,7 @@
               xAxis: { categories: [
                 <xsl:for-each select="int">
                   <xsl:sort select="text()" data-type="number" order="descending" />
-                  '<xsl:value-of select="$subjects/item[@value=current()/@name]/@label"/>'
+                  '<xsl:value-of select="document(concat('classification:editor:0:parents:fachreferate:',encoder:encode(current()/@name,'UTF-8')))/items/item/label[lang($CurrentLang)]" />'
                   <xsl:if test="position() != last()">, </xsl:if>
                 </xsl:for-each>
                 ],

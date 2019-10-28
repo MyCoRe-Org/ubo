@@ -36,7 +36,9 @@
     <xsl:text>query=(</xsl:text>
     <xsl:if test="mods:name">
       <xsl:text>(</xsl:text>
-      <xsl:apply-templates select="mods:name" mode="query" />
+      <!-- TODO: use dynamic lead_id (configured in mycore.properties) NOT POSSIBLE IN XSLT 1.0 -->
+      <!-- <xsl:apply-templates select="mods:name" mode="query.lsf" /> -->
+      <xsl:apply-templates select="mods:name" mode="query.ldap" />
       <xsl:text>)</xsl:text>
     </xsl:if>
     <xsl:if test="tag and mods:name">
@@ -96,7 +98,12 @@
   <xsl:value-of select="concat('/results.',.,'?format=',.,'&amp;')" />
 </xsl:template>
 
-<xsl:template match="mods:name" mode="query">
+<xsl:template match="mods:name" mode="query.ldap">
+  <xsl:value-of select="concat('(ae_orcid+=+',mods:nameIdentifier[@type='orcid'],')')" />
+  <xsl:if test="following::mods:name">+or+</xsl:if>
+</xsl:template>
+
+<xsl:template match="mods:name" mode="query.lsf">
   <xsl:value-of select="concat('(ae_lsf+=+',mods:nameIdentifier[@type='lsf'],')')" />
   <xsl:if test="following::mods:name">+or+</xsl:if>
 </xsl:template>
