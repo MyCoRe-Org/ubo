@@ -209,6 +209,7 @@
     <xsl:if test="$allowed = 'true'">
 
       <xsl:choose>
+        
         <xsl:when test="count(./item/@ref) &gt; 0">
           <!-- print dropdown menu option -->
           <li class="nav-item dropdown {$class_active}">
@@ -223,7 +224,7 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <xsl:for-each select="./item">
-                <a class="dropdown-item" href="{@ref}">
+                <a class="dropdown-item" href="{$WebApplicationBaseURL}{@ref}">
                   <xsl:copy-of select="@target" />
                   <xsl:call-template name="output.label.for.lang" />
                 </a>
