@@ -44,7 +44,7 @@
   <properties>
     <MCR.AppName>ubo</MCR.AppName>
     <axis1.version>1.4</axis1.version>
-    <citeproc.version>1.0.1</citeproc.version>
+    <citeproc.version>1.0.1-SNAPSHOT</citeproc.version>
     <cargo.container>jetty9x</cargo.container>
     <cargo.container.zipUrlInstaller.downloadDir>${settings.localRepository}/../cargo/containers</cargo.container.zipUrlInstaller.downloadDir>
     <cargo.debug.address>8295</cargo.debug.address>
@@ -324,6 +324,12 @@
       <version>2.6</version>
     </dependency>
     <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.9</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>jaxen</groupId>
       <artifactId>jaxen</artifactId>
       <version>1.1.6</version>
@@ -581,6 +587,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.jbibtex</groupId>
+      <artifactId>jbibtex</artifactId>
+      <version>1.0.17</version>
+    </dependency>
+    <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-base</artifactId>
       <version>${mycore.version}</version>
@@ -590,17 +601,17 @@
     <dependency>
       <groupId>de.undercouch</groupId>
       <artifactId>citeproc-java</artifactId>
-      <version>${citeproc.version}</version>
+      <version>2.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.citationstyles</groupId>
       <artifactId>styles</artifactId>
-      <version>${citeproc.version}-SNAPSHOT</version>
+      <version>${citeproc.version}</version>
     </dependency>
     <dependency>
       <groupId>org.citationstyles</groupId>
       <artifactId>locales</artifactId>
-      <version>${citeproc.version}-SNAPSHOT</version>
+      <version>${citeproc.version}</version>
     </dependency>
   </dependencies>
 

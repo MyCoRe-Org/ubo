@@ -47,13 +47,6 @@ public class MCRBibTeXCSLTransformer extends MCRContentTransformer {
 
         Bibliography biblio = citationProcessor.makeBibliography();
         String result = biblio.makeString();
-
-        // Issue 53 with citeproc-java, may return "null", call twice
-        if (result.contains("null")) {
-            biblio = citationProcessor.makeBibliography();
-            result = biblio.makeString();
-        }
-
         citationProcessor.reset();
         dataProvider.reset();
 

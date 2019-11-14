@@ -48,6 +48,10 @@
             </div>
           </div>
         </fieldset>
+        
+        <xed:include uri="webapp:import-editor.xed" ref="fix.structure.parent" />
+        <xed:include uri="webapp:import-editor.xed" ref="cleanup" />
+        
       </xed:template>      
     
     </xed:form>
