@@ -84,7 +84,7 @@
 
 <xsl:template name="exportLinks">
   <xsl:if test="$numFound &gt; 0">
-    <div id="btn-group mb-3 flex-wrap">
+    <div class="btn-group mb-3 flex-wrap">
       <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=mods">MODS</a>
       <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=bibtex">BibTeX</a>
       <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=endnote">EndNote</a>
