@@ -599,19 +599,26 @@
     </div>
   </xsl:template>
 
-  <xsl:template match="mods:relatedItem[not(@type='host') and not(@type='series')]" mode="details">
+  <!-- mit @xlink:href -->
+  <xsl:template match="mods:relatedItem[not(@type='host') and not(@type='series')][@xlink:href]" mode="details">
     <div class="ubo_related_details">
       <div class="grid_3 label">
-        <xsl:choose>
-          <xsl:when test="@xlink:href">
-            <a href="{$ServletsBaseURL}DozBibEntryServlet?id={@xlink:href}">
-              <xsl:value-of select="i18n:translate(concat('ubo.relatedItem.',@type))" />
-            </a>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="i18n:translate(concat('ubo.relatedItem.',@type))" />
-          </xsl:otherwise>
-        </xsl:choose>
+        <a href="{$ServletsBaseURL}DozBibEntryServlet?id={@xlink:href}">
+          <xsl:value-of select="i18n:translate(concat('ubo.relatedItem.',@type))" />
+        </a>
+      </div>
+      <div class="grid_9">
+        <xsl:apply-templates select="document(concat('notnull:mcrobject:',@xlink:href))//mods:mods" mode="cite" />
+      </div>
+      <div class="clear" />
+    </div>
+  </xsl:template>
+
+  <!-- ohne @xlink:href -->
+  <xsl:template match="mods:relatedItem[not(@type='host') and not(@type='series')][not(@xlink:href)]" mode="details">
+    <div class="ubo_related_details">
+      <div class="grid_3 label">
+        <xsl:value-of select="i18n:translate(concat('ubo.relatedItem.',@type))" />
       </div>
       <div class="grid_9">
         <xsl:apply-templates select="." mode="cite" />

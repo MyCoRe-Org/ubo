@@ -106,5 +106,17 @@
       <label xml:lang="en" text="Interview" />
       <label xml:lang="de" text="Interview" />
     </category>
+    <category ID="researchpaper">
+      <label xml:lang="x-hosts" text="standalone" />
+      <label xml:lang="en" text="Research Paper" />
+      <label xml:lang="de" text="Forschungsbericht" />
+      <label xml:lang="x-marcgt" text="reporting" />
+    </category>
+    <category ID="workingpaper">
+      <label xml:lang="x-hosts" text="standalone" />
+      <label xml:lang="en" text="Working Paper" />
+      <label xml:lang="de" text="Working Paper" />
+      <label xml:lang="x-marcgt" text="book" />
+    </category>
   </categories>
 </mycoreclass>
