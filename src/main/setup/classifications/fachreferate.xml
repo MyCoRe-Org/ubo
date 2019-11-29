@@ -178,7 +178,7 @@
 		<category ID="wiwi">
 			<label xml:lang="de" text="Wirtschaftswissenschaften" />
 			<label xml:lang="en" text="Economics" />
-			<label xml:lang="x-e-mail" text="christina.klaere@uni-due.de hanno.brockmann@uni-due.de" />
+			<label xml:lang="x-e-mail" text="christina.klaere@uni-due.de" />
 		</category>
 	</categories>
 </mycoreclass>
