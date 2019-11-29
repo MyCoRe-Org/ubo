@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.mycore</groupId>
     <artifactId>mycore-parent</artifactId>
-    <version>41-SNAPSHOT</version>
+    <version>41</version>
     <relativePath />
   </parent>
 
@@ -64,7 +64,7 @@
     <java.target.version>11</java.target.version>
     <jetty.version>9.4.15.v20190215</jetty.version>
     <log4j.version>2.11.0</log4j.version>
-    <mycore.version>2019.08-SNAPSHOT</mycore.version>
+    <mycore.version>2020.02-SNAPSHOT</mycore.version>
     <solr.data.dir>${solr.home}/ubo/data</solr.data.dir>
     <solr.home>${user.config.dir}/${MCR.AppName}/data/solr</solr.home>
     <timestamp>${maven.build.timestamp}</timestamp>
