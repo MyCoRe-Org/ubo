@@ -251,7 +251,7 @@
         <label for="{xed:generate-id()}" class="col-sm-2 justify-content-sm-end pl-0 mr-3">
           *<xed:output i18n="ubo.role.author" />:
         </label>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+        <xed:include uri="webapp:import-editor.xed" ref="person" />
       </div>
     </xed:repeat>
   </xed:template>
@@ -321,22 +321,23 @@
     </div>
     <xed:controls />
     <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+      <xed:repeat xpath="mods:nameIdentifier[not(@type='lsf')]">
       <div class="form-group form-inline col-12 px-0 mb-2">
-	<label class="mycore-form-label">
+        <label class="mycore-form-label">
         </label>
-        <xed:repeat xpath="mods:nameIdentifier[not(@type='lsf')]">
-          <xed:bind xpath="@type">
-	    <select class="form-control col-sm-2">
-              <option value="orcid">ORCID</option>
-              <option value="researcherid">ResearcherID</option>
-              <option value="gnd">GND</option>
-              <option value="scopus">SCOPUS</option>
-	    </select>
-          </xed:bind>
-          <input type="text" class="{$xed-validation-marker} form-control col-sm-2" />
-          <xed:controls>insert remove</xed:controls>
-        </xed:repeat>
+
+            <xed:bind xpath="@type">
+              <select class="form-control col-sm-2">
+                <option value="orcid">ORCID</option>
+                <option value="researcherid">ResearcherID</option>
+                <option value="gnd">GND</option>
+                <option value="scopus">SCOPUS</option>
+              </select>
+            </xed:bind>
+            <input type="text" class="{$xed-validation-marker} form-control col-sm-2" />
+            <xed:controls>insert remove</xed:controls>
       </div>
+      </xed:repeat>
       <div class="form-group form-inline col-12 px-0">
 	<label class="mycore-form-label">
         </label>
