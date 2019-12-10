@@ -762,6 +762,7 @@
   </xed:template>
 
   <xed:template id="projectInformation">
+    <script src="{$WebApplicationBaseURL}js/project_autocomplete.js" />
     <xed:bind xpath="mods:extension[@displayLabel='project']">
       <xed:bind xpath="cerif:Project">
         <xed:bind xpath="cerif:Acronym">
@@ -769,7 +770,7 @@
             <label for="{xed:generate-id()}" class="mycore-form-label">
               <xed:output i18n="ubo.project.acronym" />:
             </label>
-            <input id="{xed:generate-id()}" type="text" class="mycore-form-input" />
+            <input id="project_acronym" type="text" class="mycore-form-input" />
           </div>
         </xed:bind>
         <xed:bind xpath="cerif:Title[@xml:lang='de']">
@@ -777,7 +778,7 @@
             <label for="{xed:generate-id()}" class="mycore-form-label">
               <xed:output i18n="ubo.project.title" />:
             </label>
-            <input id="{xed:generate-id()}" type="text" class="mycore-form-input" />
+            <input id="project_title" type="text" class="mycore-form-input" />
           </div>
 		</xed:bind>
       </xed:bind>
