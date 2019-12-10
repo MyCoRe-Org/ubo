@@ -7,7 +7,9 @@
      
   <article class="card">
     <div class="card-body">
-      <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
+      <xed:form xmlns:xed="http://www.mycore.de/xeditor"
+                xmlns:cerif="https://www.openaire.eu/cerif-profile/1.1/"
+                method="post" role="form">
 	
 	<xed:source uri="xslStyle:mods-preprocessor:mcrobject:{$id}" />
 	<xed:source uri="xslStyle:mods2mycoreobject,mods-preprocessor:session:{$key}" />
@@ -99,6 +101,10 @@
           <fieldset>
             <xed:include uri="webapp:import-editor.xed" ref="topics" />    
             <xed:include uri="webapp:import-editor.xed" ref="abstract" />    
+          </fieldset>
+          <fieldset>
+            <legend>Projektinformationen:</legend>
+            <xed:include uri="webapp:import-editor.xed" ref="projectInformation"/>
           </fieldset>
         </xed:bind>
         <xed:include uri="webapp:import-editor.xed" ref="fix.structure.parent" />
