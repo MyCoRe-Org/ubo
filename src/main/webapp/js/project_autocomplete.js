@@ -6,7 +6,7 @@ $(document).ready(function(){
     let id_project_title = 'project_title';
     let min_length = 0;
     let input_delay = 200;
-    let max_label_length = 70;
+    let max_label_length = 90;
 
     // derived settings
     let acronym_input = $('#' + id_project_acronym);

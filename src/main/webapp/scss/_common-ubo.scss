@@ -45,9 +45,16 @@ html, body {
 // actually used for input AND select AND textarea
 .mycore-form-input {
     @extend .form-control;
-    @extend .col-lg-4;
-    @extend .col-md-5;
-    @extend .col-sm-5;
+    @extend .col-lg-8;
+    @extend .col-md-7;
+    @extend .col-sm-7;
+}
+
+.mycore-form-input-double {
+    @extend .form-control;
+    @extend .col-lg-3;
+    @extend .col-md-3;
+    @extend .col-sm-3;
 }
 
 // shortcut-classes for lists
@@ -116,4 +123,11 @@ table.jQDataTable tr:nth-child(odd) td:last-child {
 
 table.jQDataTable tr:last-child > td {
 	border-bottom: 1px solid lightgray;
+}
+
+.btn-group-xs > .btn, .btn-xs {
+  padding: .25rem .4rem;
+  font-size: .675rem;
+  line-height: .5;
+  border-radius: .2rem;
 }
