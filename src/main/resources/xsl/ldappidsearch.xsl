@@ -166,7 +166,7 @@
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:attribute name="style">background-color:#800000; color:white; padding:1ex;</xsl:attribute>
-                        <p style="color: white;">
+                        <p>
                             <strong>
                                 <xsl:value-of select="i18n:translate('lsf.foundNot')"/>
                             </strong>
