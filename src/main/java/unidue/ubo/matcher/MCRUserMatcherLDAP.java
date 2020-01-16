@@ -263,6 +263,8 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
         List<String> allowedAttributes = new ArrayList<>();
         allowedAttributes.add("cn");
         allowedAttributes.add("sn");
+        allowedAttributes.add("givenName");
+        allowedAttributes.add("displayName");
 
         for(Map.Entry<String, String> attributeEntry : attributes.entrySet()) {
             // convert nameIdentifiers to "mycore style" (prefix with "id_")

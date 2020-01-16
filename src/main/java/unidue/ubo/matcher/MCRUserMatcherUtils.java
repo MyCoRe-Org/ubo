@@ -86,6 +86,7 @@ public class MCRUserMatcherUtils {
     }
 
     private static String getUserNameFromModsNameElement(Element modsNameElement) {
+        // TODO: THE FOLLOWING TODO(s) MIGHT ALREADY BE DEPRECATED (16.01.2020)
         // TODO: IMPORTANT -> creating the name this way, the connection between any matched user and the login of the
         // TODO: target API (for example LDAP) will not work. For LDAP, the MCRUsers username needs to be the same as
         // TODO: the uid (or cn) in LDAP
@@ -110,10 +111,8 @@ public class MCRUserMatcherUtils {
     }
 
     public static String getAttributesAsURLString(List<Element> modsNameElements) {
-        LOGGER.info("I GOT CALLED!");
         String parameters = "";
         for(Element modsNameElement : modsNameElements) {
-            LOGGER.info("I GOT CALLED!: " + modsNameElement);
             Map<String, String> parametersMap = getNameIdentifiers(modsNameElement);
 
             XPathFactory xFactory = XPathFactory.instance();
@@ -126,7 +125,10 @@ public class MCRUserMatcherUtils {
             Element familyNameElem = familyNameExpr.evaluateFirst(modsNameElement);
 
             parametersMap.put("lastName", familyNameElem.getText());
+            // the following is a compatibility preserving hack, the LSF-Search works with "firstname" WITHOUT CAMELCASE
             parametersMap.put("firstname", givenNameElem.getText());
+            // the LDAP-Search works WITH CAMELCASE so at this point we just provide both parameters
+            parametersMap.put("firstName", givenNameElem.getText());
 
             List<String> singleParameters = new ArrayList<>();
             for(Map.Entry<String, String> parameter : parametersMap.entrySet()) {
