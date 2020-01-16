@@ -98,8 +98,8 @@
   
   <xed:template id="origin">
     <xed:repeat xpath="mods:classification[@classID='ORIGIN']" max="10">
-      <div>
-        <label for="{xed:generate-id()}">
+      <div class="form-inline form-group">
+        <label class="mycore-form-label" for="{xed:generate-id()}">
           <xed:if test="$genre_intern = 'dissertation'">
             <xed:output value="'*'" />
             <xed:validate xpath="//mods:classification[@classID='ORIGIN']" required="true" i18n="condition.institution" display="global" />
@@ -185,7 +185,7 @@
           *<xed:output i18n="ubo.title" />:
         </label>
         <xed:bind xpath="@type">
-          <select class="mycore-form-input">
+          <select class="mycore-form-input-double">
             <option value=""><xed:output i18n="ubo.title.type.main" /></option>
             <option value="abbreviated"><xed:output i18n="ubo.title.type.abbreviated" /></option>
             <option value="translated"><xed:output i18n="ubo.title.type.translated" /></option>
@@ -195,7 +195,7 @@
         </xed:bind>
         <span class="mx-2"> in </span>
         <xed:bind xpath="@xml:lang">
-          <select class="mycore-form-input">
+          <select class="mycore-form-input-double">
             <option value=""><xed:output i18n="search.select" /></option>
             <xed:include uri="xslStyle:items2options:classification:editor:0:parents:rfc4646:de" />
             <xed:include uri="xslStyle:items2options:classification:editor:0:parents:rfc4646:en" />
@@ -251,7 +251,7 @@
         <label for="{xed:generate-id()}" class="col-sm-2 justify-content-sm-end pl-0 mr-3">
           *<xed:output i18n="ubo.role.author" />:
         </label>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+        <xed:include uri="webapp:import-editor.xed" ref="person" />
       </div>
     </xed:repeat>
   </xed:template>
@@ -290,7 +290,7 @@
   </xed:template>
 
   <xed:template id="person">
-    <div class="form-inline col-sm-4 border-bottom border-primary px-0 mb-2">
+    <div class="form-inline col-sm-6 border-bottom border-primary px-0 mb-2">
       <span id="{xed:generate-id()}" class="{$xed-validation-marker}">
         <xed:if test="string-length(mods:namePart[@type='family']) &gt; 0">
           <xed:output value="mods:namePart[@type='family']" /><xed:if test="mods:namePart[@type='given']"><xed:output value="concat(', ',mods:namePart[@type='given'])" /></xed:if>
@@ -314,29 +314,30 @@
         </xed:choose>
       </span>
       <div class="ml-auto pb-1">
-        <button class="btn btn-sm btn-primary" type="submit" xed:target="subselect" xed:href="../identitypicker.html?{xed:call-java('unidue.ubo.matcher.MCRUserMatcherUtils', 'getAttributesAsURLString', .)}&amp;pid={mods:nameIdentifier[@type='lsf']}">
+        <button class="btn btn-xs btn-primary mr-1" type="submit" xed:target="subselect" xed:href="../identitypicker.html?{xed:call-java('unidue.ubo.matcher.MCRUserMatcherUtils', 'getAttributesAsURLString', .)}&amp;pid={mods:nameIdentifier[@type='lsf']}">
           <xed:output i18n="search.select" />
         </button>
       </div>
     </div>
     <xed:controls />
     <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
-      <div class="form-group form-inline col-12 px-0 mb-2">
-	<label class="mycore-form-label">
+      <xed:repeat xpath="mods:nameIdentifier[not(@type='lsf')]">
+      <div class="form-group form-inline col-12 px-0 mb-2 mt-2">
+        <label class="mycore-form-label">
         </label>
-        <xed:repeat xpath="mods:nameIdentifier[not(@type='lsf')]">
-          <xed:bind xpath="@type">
-	    <select class="form-control col-sm-2">
-              <option value="orcid">ORCID</option>
-              <option value="researcherid">ResearcherID</option>
-              <option value="gnd">GND</option>
-              <option value="scopus">SCOPUS</option>
-	    </select>
-          </xed:bind>
-          <input type="text" class="{$xed-validation-marker} form-control col-sm-2" />
-          <xed:controls>insert remove</xed:controls>
-        </xed:repeat>
+
+            <xed:bind xpath="@type">
+              <select class="form-control col-sm-2">
+                <option value="orcid">ORCID</option>
+                <option value="researcherid">ResearcherID</option>
+                <option value="gnd">GND</option>
+                <option value="scopus">SCOPUS</option>
+              </select>
+            </xed:bind>
+            <input type="text" class="{$xed-validation-marker} form-control col-sm-4" />
+            <xed:controls>insert remove</xed:controls>
       </div>
+      </xed:repeat>
       <div class="form-group form-inline col-12 px-0">
 	<label class="mycore-form-label">
         </label>
@@ -600,7 +601,7 @@
         <label for="{xed:generate-id()}" class="mycore-form-label">
           <xed:output i18n="ubo.shelfmark" />:
         </label>
-        <input id="{xed:generate-id()}" class="{$xed-validation-marker} mycore-form-input" type="text" />
+        <input id="{xed:generate-id()}" class="{$xed-validation-marker} mycore-form-input-double" type="text" />
         <a class="ml-1" target="_blank" href="https://primo.ub.uni-due.de/">
           <xed:output i18n="ubo.shelfmark.search" />
         </a>
@@ -758,6 +759,30 @@
       </button>
       <!-- <button class="ml-2 btn btn-sm btn-primary" type="submit" xed:target="debug">Debug</button> -->
     </div>
+  </xed:template>
+
+  <xed:template id="projectInformation">
+    <script src="{$WebApplicationBaseURL}js/project_autocomplete.js" />
+    <xed:bind xpath="mods:extension[@displayLabel='project']">
+      <xed:bind xpath="cerif:Project">
+        <xed:bind xpath="cerif:Acronym">
+          <div class="form-group form-inline">
+            <label for="{xed:generate-id()}" class="mycore-form-label">
+              <xed:output i18n="ubo.project.acronym" />:
+            </label>
+            <input id="project_acronym" type="text" class="mycore-form-input" />
+          </div>
+        </xed:bind>
+        <xed:bind xpath="cerif:Title[@xml:lang='de']">
+          <div class="form-group form-inline">
+            <label for="{xed:generate-id()}" class="mycore-form-label">
+              <xed:output i18n="ubo.project.title" />:
+            </label>
+            <input id="project_title" type="text" class="mycore-form-input" />
+          </div>
+		</xed:bind>
+      </xed:bind>
+    </xed:bind>
   </xed:template>
 
 </xed:template>
