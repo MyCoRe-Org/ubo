@@ -23,16 +23,16 @@ import java.util.Map;
   *
   * # Mapping of the "last/firstName" Search/Pick-Form-Fields of the LDAP-IdentityPicker to LDAP-Attributes
   * # Examples:
-  * MCR.IdentityPicker.SearchFormMapping.lastName=sn
-  * MCR.IdentityPicker.SearchFormMapping.firstName=givenName
+  * MCR.IdentityPicker.LDAP.SearchFormMapping.lastName=sn
+  * MCR.IdentityPicker.LDAP.SearchFormMapping.firstName=givenName
   **/
 
 public class LDAPService implements IdentityService {
 
     private final static Logger LOGGER = LogManager.getLogger(LDAPService.class);
 
-    private final String CONFIG_NAMEPART_FIRST_FIELD_TO_LDAP = "MCR.IdentityPicker.SearchFormMapping.firstName";
-    private final String CONFIG_NAMEPART_LAST_FIELD_TO_LDAP = "MCR.IdentityPicker.SearchFormMapping.lastName";
+    private final String CONFIG_NAMEPART_FIRST_FIELD_TO_LDAP = "MCR.IdentityPicker.LDAP.SearchFormMapping.firstName";
+    private final String CONFIG_NAMEPART_LAST_FIELD_TO_LDAP = "MCR.IdentityPicker.LDAP.SearchFormMapping.lastName";
     private String firstName_to_ldap;
     private String lastName_to_ldap;
 
@@ -44,8 +44,8 @@ public class LDAPService implements IdentityService {
      * Reads the mappings between the "first/lastName" fields of the Search/Pick-Form and LDAP attributes
      *
      * Format:
-     * MCR.IdentityPicker.SearchFormMapping.lastName={LDAP_ATTRIBUTE}
-     * MCR.IdentityPicker.SearchFormMapping.firstName={LDAP_ATTRIBUTE}
+     * MCR.IdentityPicker.LDAP.SearchFormMapping.lastName={LDAP_ATTRIBUTE}
+     * MCR.IdentityPicker.LDAP.SearchFormMapping.firstName={LDAP_ATTRIBUTE}
      */
     private void parseNamepartFieldsToLDAPAttributeMappingConfig() {
         MCRConfiguration config = MCRConfiguration.instance();
