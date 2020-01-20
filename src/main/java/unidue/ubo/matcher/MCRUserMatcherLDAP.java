@@ -45,6 +45,12 @@ import java.util.regex.Pattern;
  * # Multiple mappings may be separated by ','
  * # For example: MCR.user2.LDAP.Mapping.explicit=id_orcid:eduPersonOrcid,id_his:eduPersonUniqueId
  *
+ * # Normalization of LDAP-Attribute-Values
+ * # Contrary to popular belief, the value of the ORCID-Attribute in LDAP (eduPersonOrcid) might contain the resolver
+ * # for example "https://orcid.org/1111-2222-3333-4444" instead of just "1111-2222-3333-4444".
+ * # The following configuration is used to normalize (and de-normalize) the LDAP "eduPersonOrcid"-Attributevalue
+ * MCR.IdentityPicker.LDAP.normalization.ORCID.resolver=https://orcid.org/
+ *
  * @author Pascal Rost
  */
 public class MCRUserMatcherLDAP implements MCRUserMatcher {
@@ -62,8 +68,15 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
     private final static String CONFIG_SCHEMA_PROPERTY = "schema";
     private Map<String, String> mycoreToLDAPLabeledURISchemas = new HashMap<>();
 
+    // all members regarding configuration of de-/normalization of LDAP-Attribute-Values
+    private final String ORCID_LDAP_ATTRIBUTE = "eduPersonOrcid";
+    private final String ORCID_MCR_ATTRIBUTE = "id_orcid";
+    private final String CONFIG_ORCID_NORMALIZATION_RESOLVER = "MCR.IdentityPicker.LDAP.normalization.ORCID.resolver";
+    private String orcid_resolver;
+
     public MCRUserMatcherLDAP() {
         loadLDAPMappingConfiguration();
+        orcid_resolver = MCRConfiguration.instance().getString(CONFIG_ORCID_NORMALIZATION_RESOLVER, "");
     }
 
     private void loadLDAPMappingConfiguration() {
@@ -106,7 +119,7 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
      *
      * Examples of LDAP labeledUri-attributes include:
      * labeledURI: https://www.scopus.com/authid/detail.uri?authorId=1234567890
-     * labeledURI: http://d-nb.info/gnd/135799082
+     * labeledURI: http://d-nb.info/gnd/123456789
      *
      * Format:
      * # MCR.user2.LDAP.Mapping.labeledURI.$IDENTIFIER_NAME.schema=...
@@ -214,14 +227,14 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
      * Converts MyCoRe MCRUser attributes from MyCoRe style to LDAP style.
      *
      * Example Attributes of MCRUser are (in a Map as key:value-pairs):
-     * id_orcid: 0000-0002-4433-1464
-     * id_scopus: 7202859778
-     * id_gnd: 135799082
+     * id_orcid: 0000-1111-2222-3333
+     * id_scopus: 1234567890
+     * id_gnd: 123456789
      *
      * Returned map as LDAP attributes of the form:
-     * key: eduPersonOrcid, value: 0000-0002-4433-1464
-     * key: labeledURI, value: https://www.scopus.com/authid/detail.uri?authorId=7202859778
-     * key: labeledURI, value: http://d-nb.info/gnd/135799082
+     * key: eduPersonOrcid, value: 0000-1111-2222-3333 OR value: https://orcid.org/0000-1111-2222-3333
+     * key: labeledURI, value: https://www.scopus.com/authid/detail.uri?authorId=1234567890
+     * key: labeledURI, value: http://d-nb.info/gnd/123456789
      *
      * @param mcrUser a MCRUser with attributes that represent nameIdentifiers in MyCoRe format/style
      * @return a Multimap where the Keys are LDAP attributes and the values are corresponding LDAP values
@@ -247,6 +260,9 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
                 }
             }
         }
+
+        convertedNameIdentifiers = deNormalizeLDAPAttributeValues(convertedNameIdentifiers);
+
         LOGGER.debug("Converted MCRUser attributes from {} to {}", mcrUser.getAttributes(), convertedNameIdentifiers);
         return convertedNameIdentifiers;
     }
@@ -291,6 +307,8 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
             }
         }
 
+        convertedNameIdentifiers = deNormalizeLDAPAttributeValues(convertedNameIdentifiers);
+
         return convertedNameIdentifiers;
     }
 
@@ -298,12 +316,12 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
      * Converts LDAP Attributes and their values into MCRUser attributes
      *
      * Example Attributes of an LDAPObject (LDAPUser) are:
-     * eduPersonOrcid: 0000-0002-4433-1464
+     * eduPersonOrcid: 0000-1111-2222-3333 OR https://orcid.org/0000-1111-2222-3333
      * labeledURI: https://www.scopus.com/authid/detail.uri?authorId=7202859778
      * labeledURI: http://d-nb.info/gnd/135799082
      *
      * Returned map as MCRUser attributes of the form:
-     * key: id_orcid, value: 0000-0002-4433-1464
+     * key: id_orcid, value: 0000-1111-2222-3333
      * key: id_scopus, value: 7202859778
      * key: id_gnd, value: 135799082
      *
@@ -318,7 +336,7 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
             String attributeName = ldapAttribute.getKey();
             Collection<String> attributeValues = ldapAttribute.getValue();
 
-            // 1. "simple" attributes (i.e. eduPersonOrcid: 0000-0002-4433-1464)
+            // 1. "simple" attributes (i.e. eduPersonOrcid: 0000-1111-2222-3333)
             if(mycoreToLDAPIdentifiers.inverse().containsKey(attributeName)) {
                 if(!attributeValues.isEmpty()) {
                     String nameIdentifier = mycoreToLDAPIdentifiers.inverse().get(attributeName);
@@ -336,13 +354,14 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
                 }
             }
         }
+        userAttributes = normalizeUserAttributeValues(userAttributes);
         return userAttributes;
     }
 
     /**
      * Parse a given LDAP 'labeledUri'-attribute into its parts, ID (actual identifier value), identifier name and
      * the labeledUri itself.
-     * Example of a labeledUri-attribute: https://www.scopus.com/authid/detail.uri?authorId=7202859778
+     * Example of a labeledUri-attribute: https://www.scopus.com/authid/detail.uri?authorId=1234567890
      * Uses configuration from mycore.properties to detect the identifier type of an labeledUri and to extract the
      * actual identifier with the help of a given schema (see loadLDAPMappingConfiguration)
      *
@@ -451,5 +470,78 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
             }
         }
         return String.format(searchFilterBaseTemplate, searchFilterInner);
+    }
+
+
+    /**
+     * De-Normalizes the LDAP-Attribute-Values of specific LDAP-Attributes.
+     *
+     * For example, an Attribute-Value-Pair of the form "eduPersonOrcid=1111-2222-3333-4444" will be changed to
+     * "eduPersonOrcid=https://orcid.org/1111-2222-3333-4444" as configured via
+     * "MCR.IdentityPicker.LDAP.normalization.ORCID.resolver".
+     *
+     * @param ldapAttributes a multimap of LDAP-Attributes and their values
+     * @return a de-normalized multimap with the same Attributes but de-normalized values
+     *
+     */
+    private Multimap<String, String> deNormalizeLDAPAttributeValues(Multimap<String, String> ldapAttributes) {
+        Multimap<String, String> deNormalizedLDAPAttributes = ArrayListMultimap.create();
+
+        LOGGER.info("LDAP-Attributes BEFORE de-normalization: {}", ldapAttributes);
+
+        for(Map.Entry<String, Collection<String>> ldapAttribute : ldapAttributes.asMap().entrySet()) {
+            String attributeName = ldapAttribute.getKey();
+            Collection<String> attributeValues = ldapAttribute.getValue();
+            if(attributeName.equals(ORCID_LDAP_ATTRIBUTE)) {
+                for(String attributeValue: attributeValues) {
+                    if(!attributeValue.contains(orcid_resolver)) {
+                        deNormalizedLDAPAttributes.put(attributeName, orcid_resolver + attributeValue);
+                    } else {
+                        deNormalizedLDAPAttributes.put(attributeName, attributeValue);
+                    }
+                }
+            } else {
+                for(String attributeValue: attributeValues) {
+                    deNormalizedLDAPAttributes.put(attributeName, attributeValue);
+                }
+            }
+        }
+
+        LOGGER.info("LDAP-Attributes AFTER de-normalization: {}", deNormalizedLDAPAttributes);
+
+        return deNormalizedLDAPAttributes;
+    }
+
+
+    /**
+     * Normalizes the MCRUser-Attribute-Values of specific Attributes.
+     *
+     * For example, an Attribute-Value-Pair of the form "id_orcid=https://orcid.org/1111-2222-3333-4444" will be
+     * changed to "id_orcid=1111-2222-3333-4444" as configured via
+     * "MCR.IdentityPicker.LDAP.normalization.ORCID.resolver".
+     *
+     * @param userAttributes a Map of MCRUser-Attributes and their values
+     * @return a Map with the same Attributes but normalized values
+     */
+    private Map<String, String> normalizeUserAttributeValues(Map<String, String> userAttributes) {
+        Map<String, String> normalizedUserAttributes = new HashMap<>();
+        LOGGER.info("userAttributes BEFORE normalization: {}", userAttributes);
+
+        for(Map.Entry<String, String> ldapAttribute : userAttributes.entrySet()) {
+            String attributeName = ldapAttribute.getKey();
+            String attributeValue = ldapAttribute.getValue();
+            if(attributeName.equals(ORCID_MCR_ATTRIBUTE)) {
+                if(attributeValue.contains(orcid_resolver)) {
+                    normalizedUserAttributes.put(attributeName,
+                            attributeValue.replace(orcid_resolver, ""));
+                } else {
+                    normalizedUserAttributes.put(attributeName, attributeValue);
+                }
+            } else {
+                normalizedUserAttributes.put(attributeName, attributeValue);
+            }
+        }
+        LOGGER.info("userAttributes AFTER normalization: {}", normalizedUserAttributes);
+        return normalizedUserAttributes;
     }
 }

@@ -14,19 +14,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
- /**
-  * With a configuration in mycore.properties, it is necessary to map two of the input fields of the search/pick-form,
-  * "lastName" and "firstName" (see ldappidsearch.xsl) to corresponding fields of the LDAP documents, for
-  * example "displayName" or "sn" or "givenName".
-  *
-  * The following properties in the mycore.properties are used:
-  *
-  * # Mapping of the "last/firstName" Search/Pick-Form-Fields of the LDAP-IdentityPicker to LDAP-Attributes
-  * # Examples:
-  * MCR.IdentityPicker.LDAP.SearchFormMapping.lastName=sn
-  * MCR.IdentityPicker.LDAP.SearchFormMapping.firstName=givenName
-  **/
-
+/**
+ * With a configuration in mycore.properties, it is necessary to map two of the input fields of the search/pick-form,
+ * "lastName" and "firstName" (see ldappidsearch.xsl) to corresponding fields of the LDAP documents, for
+ * example "displayName" or "sn" or "givenName".
+ *
+ * The following properties in the mycore.properties are used:
+ *
+ * # Mapping of the "last/firstName" Search/Pick-Form-Fields of the LDAP-IdentityPicker to LDAP-Attributes
+ * # Examples:
+ * MCR.IdentityPicker.LDAP.SearchFormMapping.lastName=sn
+ * MCR.IdentityPicker.LDAP.SearchFormMapping.firstName=givenName
+ */
 public class LDAPService implements IdentityService {
 
     private final static Logger LOGGER = LogManager.getLogger(LDAPService.class);
@@ -56,7 +55,6 @@ public class LDAPService implements IdentityService {
         LOGGER.info("Mapping input of lastName of search/pick-Form to search in LDAP Attribute: {}",
                 lastName_to_ldap);
     }
-
 
      /**
       * Takes a map of parameters that will be used for the search for documents (persons) in LDAP
@@ -89,7 +87,7 @@ public class LDAPService implements IdentityService {
         return null;
     }
 
-    @Override
+
     /**
      *
      * Format of returned XML:
@@ -104,6 +102,7 @@ public class LDAPService implements IdentityService {
      *    </person>
      * </results>
      */
+    @Override
     public Element searchPerson(Map<String, String> paramMap) {
         LOGGER.info("Starting LDAP person search with raw params: {}", paramMap);
         paramMap = applyNamepartMapping(paramMap);
@@ -122,8 +121,9 @@ public class LDAPService implements IdentityService {
             Map<String, String> mcrAttributes = userMatcher.convertLDAPAttributesToMCRUserAttributes(ldapUser);
             for(Map.Entry<String, String> mcrAttributeEntry : mcrAttributes.entrySet()) {
                 String mcrAttributeName = mcrAttributeEntry.getKey();
-                String attributeName = mcrAttributeName.startsWith("id_") ?
-                        mcrAttributeName.replace("id_", "") : mcrAttributeName;
+                // as convertLDAPAttributesToMCRUserAttributes returns the user attributes with a leading "id_"-substring
+                // but we dont want that in our results-xml, we have to remove it
+                mcrAttributeName.replace("id_", "");
                 String attributeValue = mcrAttributeEntry.getValue();
                 person.addContent(new Element(mcrAttributeName.toLowerCase()).setText(attributeValue.trim()));
             }
