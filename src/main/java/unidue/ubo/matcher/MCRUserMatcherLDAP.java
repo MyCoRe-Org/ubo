@@ -23,11 +23,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Given a MCRUser match against the users of a LDAP-Server, enriching the attributes of the MCRUser by any matched
@@ -533,7 +533,9 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
      */
     private SortedSet<MCRUserAttribute> normalizeUserAttributeValues(SortedSet<MCRUserAttribute> userAttributes) {
         SortedSet<MCRUserAttribute> normalizedUserAttributes = new TreeSet<>();
-        LOGGER.info("userAttributes BEFORE normalization: {}", userAttributes);
+        LOGGER.info("userAttributes BEFORE normalization: {}", userAttributes.stream().
+                map(atr -> atr.getName() + "=" +atr.getValue()).
+                collect(Collectors.joining(" | ")));
 
         for(MCRUserAttribute userAttribute : userAttributes) {
             String attributeName = userAttribute.getName();
@@ -549,7 +551,9 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
                 normalizedUserAttributes.add(new MCRUserAttribute(attributeName, attributeValue));
             }
         }
-        LOGGER.info("userAttributes AFTER normalization: {}", normalizedUserAttributes);
+        LOGGER.info("userAttributes AFTER normalization: {}", normalizedUserAttributes.stream().
+                map(atr -> atr.getName() + "=" +atr.getValue()).
+                collect(Collectors.joining(" | ")));
         return normalizedUserAttributes;
     }
 }

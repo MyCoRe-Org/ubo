@@ -12,6 +12,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.URIResolver;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Arrays;
 import java.util.Hashtable;
 
 public class IdentityResolver implements URIResolver {
@@ -31,6 +32,7 @@ public class IdentityResolver implements URIResolver {
     public Source resolve(String href, String base) {
         Element result = null;
         String[] splitHref = href.split(":");
+        //LOGGER.info("splitHref: {}", Arrays.toString(splitHref));
         boolean error = false;
         if (splitHref.length == 3) {
             String resolveType = splitHref[1];

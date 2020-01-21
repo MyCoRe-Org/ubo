@@ -126,12 +126,15 @@ public class MCRUserMatcherUtils {
                     Filters.element(), null, MODS_NAMESPACE);
             Element familyNameElem = familyNameExpr.evaluateFirst(modsNameElement);
 
-            parametersMap.put("lastName", familyNameElem.getText());
-            // the following is a compatibility preserving hack, the LSF-Search works with "firstname" WITHOUT CAMELCASE
-            parametersMap.put("firstname", givenNameElem.getText());
-            // the LDAP-Search works WITH CAMELCASE so at this point we just provide both parameters
-            parametersMap.put("firstName", givenNameElem.getText());
-
+            if(familyNameElem != null) {
+                parametersMap.put("lastName", familyNameElem.getText());
+            }
+            if(givenNameElem != null) {
+                // the following is a compatibility preserving hack, the LSF-Search works with "firstname" WITHOUT CAMELCASE
+                parametersMap.put("firstname", givenNameElem.getText());
+                // the LDAP-Search works WITH CAMELCASE so at this point we just provide both parameters
+                parametersMap.put("firstName", givenNameElem.getText());
+            }
             List<String> singleParameters = new ArrayList<>();
             for(Map.Entry<String, String> parameter : parametersMap.entrySet()) {
                 String encodedValue = null;
