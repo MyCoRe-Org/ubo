@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.user2.MCRUser;
+import org.mycore.user2.MCRUserAttribute;
 import unidue.ubo.ldap.LDAPAuthenticator;
 import unidue.ubo.ldap.LDAPObject;
 import unidue.ubo.ldap.LDAPParsedLabeledURI;
@@ -22,6 +23,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -175,8 +179,8 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
             // Gather and convert all LDAP identifiers/attributes to MCRUser Attributes and merge them
             // at this point, since we are not using MultiMap (Multi-Attributes) in MCRUsers, existing
             // identifiers/attributes might be overwritten by the LDAP-Variant
-            Map<String, String> userAttributesFromLDAP = convertLDAPAttributesToMCRUserAttributes(ldapUser);
-            mcrUser.getAttributes().putAll(userAttributesFromLDAP);
+            SortedSet<MCRUserAttribute> userAttributesFromLDAP = convertLDAPAttributesToMCRUserAttributes(ldapUser);
+            mcrUser.getAttributes().addAll(userAttributesFromLDAP);
 
             /*
             As discussed, it is the responsibility of the concrete MCRUserMatcher implementation to set the
@@ -242,9 +246,9 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
     private Multimap<String, String> convertUserAttributesToLDAP(MCRUser mcrUser) {
         Multimap<String, String> convertedNameIdentifiers = ArrayListMultimap.create();
 
-        for(Map.Entry<String, String> userAttributeEntry : mcrUser.getAttributes().entrySet()) {
-            String attributeName = userAttributeEntry.getKey();
-            String attributeValue = userAttributeEntry.getValue();
+        for(MCRUserAttribute userAttribute : mcrUser.getAttributes()) {
+            String attributeName = userAttribute.getName();
+            String attributeValue = userAttribute.getValue();
 
             if(mycoreToLDAPIdentifiers.containsKey(attributeName)) {
                 // convert "explicit" identifiers to attributes
@@ -328,8 +332,9 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
      * @param ldapUser the LDAPObject from which the attributes shall be converted
      * @return a MCRUser attribute map
      */
-    public Map<String, String> convertLDAPAttributesToMCRUserAttributes(LDAPObject ldapUser) {
-        Map<String, String> userAttributes = new HashMap<>();
+    public SortedSet<MCRUserAttribute> convertLDAPAttributesToMCRUserAttributes(LDAPObject ldapUser) {
+        //Map<String, String> userAttributes = new HashMap<>();
+        SortedSet<MCRUserAttribute> userAttributes = new TreeSet<>();
         Multimap<String, String> attributes = ldapUser.getAttributes();
 
         for(Map.Entry<String, Collection<String>> ldapAttribute : attributes.asMap().entrySet()) {
@@ -340,8 +345,9 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
             if(mycoreToLDAPIdentifiers.inverse().containsKey(attributeName)) {
                 if(!attributeValues.isEmpty()) {
                     String nameIdentifier = mycoreToLDAPIdentifiers.inverse().get(attributeName);
-                    // TODO: we have to use a Multimap on BOTH sides but for now we only take the first value
-                    userAttributes.put(nameIdentifier, (String)attributeValues.toArray()[0]);
+                    for(String attributeValue: attributeValues) {
+                        userAttributes.add(new MCRUserAttribute(nameIdentifier, attributeValue));
+                    }
                 }
             }
             // 2. labeledURI attributes (i.e. labeledURI: http://d-nb.info/gnd/135799082)
@@ -349,7 +355,9 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
                 for(String attributeValue : attributeValues) {
                     LDAPParsedLabeledURI parsedLabeledURI = parseLDAPLabeledURI(attributeValue);
                     if(parsedLabeledURI != null) {
-                        userAttributes.put(parsedLabeledURI.getIdentifierName(), parsedLabeledURI.getIdentifierValue());
+                        userAttributes.add(
+                                new MCRUserAttribute(parsedLabeledURI.getIdentifierName(),
+                                        parsedLabeledURI.getIdentifierValue()));
                     }
                 }
             }
@@ -523,22 +531,22 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
      * @param userAttributes a Map of MCRUser-Attributes and their values
      * @return a Map with the same Attributes but normalized values
      */
-    private Map<String, String> normalizeUserAttributeValues(Map<String, String> userAttributes) {
-        Map<String, String> normalizedUserAttributes = new HashMap<>();
+    private SortedSet<MCRUserAttribute> normalizeUserAttributeValues(SortedSet<MCRUserAttribute> userAttributes) {
+        SortedSet<MCRUserAttribute> normalizedUserAttributes = new TreeSet<>();
         LOGGER.info("userAttributes BEFORE normalization: {}", userAttributes);
 
-        for(Map.Entry<String, String> ldapAttribute : userAttributes.entrySet()) {
-            String attributeName = ldapAttribute.getKey();
-            String attributeValue = ldapAttribute.getValue();
+        for(MCRUserAttribute userAttribute : userAttributes) {
+            String attributeName = userAttribute.getName();
+            String attributeValue = userAttribute.getValue();
             if(attributeName.equals(ORCID_MCR_ATTRIBUTE)) {
                 if(attributeValue.contains(orcid_resolver)) {
-                    normalizedUserAttributes.put(attributeName,
-                            attributeValue.replace(orcid_resolver, ""));
+                    normalizedUserAttributes.add(new MCRUserAttribute(attributeName,
+                            attributeValue.replace(orcid_resolver, "")));
                 } else {
-                    normalizedUserAttributes.put(attributeName, attributeValue);
+                    normalizedUserAttributes.add(new MCRUserAttribute(attributeName, attributeValue));
                 }
             } else {
-                normalizedUserAttributes.put(attributeName, attributeValue);
+                normalizedUserAttributes.add(new MCRUserAttribute(attributeName, attributeValue));
             }
         }
         LOGGER.info("userAttributes AFTER normalization: {}", normalizedUserAttributes);

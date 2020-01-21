@@ -11,6 +11,7 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.orcid.user.MCRORCIDUser;
 import org.mycore.user2.MCRUser;
+import org.mycore.user2.MCRUserAttribute;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
 
 
 /**
@@ -61,13 +63,13 @@ public class MCRUserMatcherUtils {
      * @param nameIdentifiers the mods:nameIdentifiers that should be added, if they are not already present
      */
     public static void enrichUserWithGivenNameIdentifiers(MCRUser user, Map<String, String> nameIdentifiers) {
-        Map<String, String> userAttributes = user.getAttributes();
+        SortedSet<MCRUserAttribute> userAttributes = user.getAttributes();
         for(Map.Entry<String, String> nameIdentifier : nameIdentifiers.entrySet()) {
             String name = mapModsNameIdentifierTypeToMycore(nameIdentifier.getKey());
             String value = nameIdentifier.getValue();
-            if(!userAttributes.containsKey(name)) {
+            if(user.getUserAttribute(name) == null) {
                 LOGGER.debug("Enriching user: {} with attribute: {}, value: {}", user.getUserName(), name, value);
-                userAttributes.put(name, value);
+                userAttributes.add(new MCRUserAttribute(name, value));
             }
         }
         user.setAttributes(userAttributes);

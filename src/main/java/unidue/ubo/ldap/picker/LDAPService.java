@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.mycore.common.config.MCRConfiguration;
+import org.mycore.user2.MCRUserAttribute;
 import unidue.ubo.ldap.LDAPObject;
 import unidue.ubo.matcher.MCRUserMatcherLDAP;
 import unidue.ubo.picker.IdentityService;
@@ -13,6 +14,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
 
 /**
  * With a configuration in mycore.properties, it is necessary to map two of the input fields of the search/pick-form,
@@ -118,13 +120,13 @@ public class LDAPService implements IdentityService {
 
         for(LDAPObject ldapUser : ldapUsers) {
             Element person = new Element("person");
-            Map<String, String> mcrAttributes = userMatcher.convertLDAPAttributesToMCRUserAttributes(ldapUser);
-            for(Map.Entry<String, String> mcrAttributeEntry : mcrAttributes.entrySet()) {
-                String mcrAttributeName = mcrAttributeEntry.getKey();
+            SortedSet<MCRUserAttribute> mcrAttributes = userMatcher.convertLDAPAttributesToMCRUserAttributes(ldapUser);
+            for(MCRUserAttribute mcrAttribute : mcrAttributes) {
+                String mcrAttributeName = mcrAttribute.getName();
                 // as convertLDAPAttributesToMCRUserAttributes returns the user attributes with a leading "id_"-substring
                 // but we dont want that in our results-xml, we have to remove it
                 mcrAttributeName.replace("id_", "");
-                String attributeValue = mcrAttributeEntry.getValue();
+                String attributeValue = mcrAttribute.getValue();
                 person.addContent(new Element(mcrAttributeName.toLowerCase()).setText(attributeValue.trim()));
             }
             // when converting LDAP attributes to MCRUserAttributes, any non-configured attributes might get lost
