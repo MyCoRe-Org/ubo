@@ -10,6 +10,9 @@ import org.mycore.common.xml.MCRURIResolver;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.URIResolver;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.Arrays;
 import java.util.Hashtable;
 
 public class IdentityResolver implements URIResolver {
@@ -29,12 +32,22 @@ public class IdentityResolver implements URIResolver {
     public Source resolve(String href, String base) {
         Element result = null;
         String[] splitHref = href.split(":");
+        //LOGGER.info("splitHref: {}", Arrays.toString(splitHref));
         boolean error = false;
         if (splitHref.length == 3) {
             String resolveType = splitHref[1];
             String paramsString = splitHref[2];
             if(resolveType.equals(RESOLVE_TYPE_DETAIL) || resolveType.equals(RESOLVE_TYPE_SEARCH)) {
-                Hashtable<String, String> params = MCRURIResolver.getParameterMap(paramsString);
+
+                String decodedParamsString = "";
+                try {
+                    // decode for umlaute
+                    decodedParamsString = URLDecoder.decode(paramsString, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+                Hashtable<String, String> params = MCRURIResolver.getParameterMap(decodedParamsString);
                 String strategy = readIdentityStrategy();
                 String serviceClassName = strategy + "Service";
                 LOGGER.info("PARAMS: " + params.toString());

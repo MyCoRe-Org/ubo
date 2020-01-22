@@ -22,6 +22,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Servlet that handles requests when the LDAP strategy is configured in the mycore.properties:
+ * (MCR.IdentityPicker.strategy=unidue.ubo.ldap.picker.LDAP), requests get routed via "IdentityPicker.java" that
+ * is bound to the URL "identitypicker.html" (see web.xml).
+ *
+ * This servlet handles the "picking" via searching or by hand of authors of (new) publications.
+ *
+ * @author Pascal Rost
  * TODO: rename, remove "PID"...
  */
 public class LDAPPIDSearch extends MCRServlet implements IdentityPickerService {
@@ -60,11 +67,13 @@ public class LDAPPIDSearch extends MCRServlet implements IdentityPickerService {
         for(Map.Entry<String, String[]> paramEntry : req.getParameterMap().entrySet()) {
             String paramName = paramEntry.getKey();
             String paramValue = paramEntry.getValue().length > 0 ? paramEntry.getValue()[0] : "";
-            // only use parameter for search if any input was given
             if(StringUtils.isNotEmpty(paramValue)) {
                 flatParamMap.put(paramName, paramValue);
             }
         }
+
+        preserveAttributes(ldappidsearch, flatParamMap);
+
         ldappidsearch.addContent(new LDAPService().searchPerson(flatParamMap));
         MCRServlet.getLayoutService().doLayout(req, res, new MCRJDOMContent(ldappidsearch));
     }
@@ -84,36 +93,55 @@ public class LDAPPIDSearch extends MCRServlet implements IdentityPickerService {
         Element ldappidsearch = new Element("ldappidsearch");
         ldappidsearch.setAttribute("session", session);
         Map<String, String> attributes = getFlattenedParameters(req);
+
         LOGGER.info("SEARCHING with: {}", attributes);
         ldappidsearch.addContent(new LDAPService().searchPerson(attributes));
+
+        preserveAttributes(ldappidsearch, attributes);
+
         MCRServlet.getLayoutService().doLayout(req, res, new MCRJDOMContent(ldappidsearch));
+    }
+
+    /**
+     * Used to preserve all parameters that got send to this servlet to conduct a search as attributes in the
+     * resulting XML
+     * @param searchResultElement the XML-Element that will be send back to the LayoutService, transformed via XSLT
+     *                            and rendered on the client
+     * @param attributeMap a Map consisting of all parameters that shall be added to the searchResultElement
+     */
+    private void preserveAttributes(Element searchResultElement, Map<String, String> attributeMap) {
+        for(Map.Entry<String, String> attributeEntry: attributeMap.entrySet()) {
+            String attribute = attributeEntry.getKey();
+            String value = attributeEntry.getValue();
+            searchResultElement.setAttribute(attribute, value);
+        }
     }
 
     /**
      * TODO: doc
      */
     private Map<String, String> getFlattenedParameters(HttpServletRequest req) {
-        // fix problem of encoded URL... TODO: ask Frank if this can be fixed or not
-        // ask: "kann man innerhalb von XED das encoding ausschalten?" -> call-java{...}
         Map<String, String> flatParamMap = new HashMap<>();
         String decodedQueryString = "";
         try {
+            // decode twice for umlaute
             decodedQueryString = URLDecoder.decode(req.getQueryString(), "UTF-8");
+            decodedQueryString = URLDecoder.decode(decodedQueryString, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         LOGGER.info("queryString: {}", decodedQueryString);
         flatParamMap = MCRURIResolver.getParameterMap(decodedQueryString);
+
         return flatParamMap;
     }
 
     private void doNameWithoutLDAP(HttpServletRequest req, HttpServletResponse res, String session) throws IOException {
-        // TODO: ask what the purpose of this function is (original from LSFPIDSearch -> doNameWithoutLSF)
         StringBuffer url = new StringBuffer(getServletBaseURL());
         url.append("XEditor?_xed_submit_return=&_xed_session=").append(session);
         addParameter(url, req, "lastName", "mods:namePart[@type='family']");
         addParameter(url, req, "firstName", "mods:namePart[@type='given']");
-        addParameter(url, req, "pid", "mods:nameIdentifier[@type='lsf']");
+        addParameter(url, req, "orcid", "mods:nameIdentifier[@type='orcid']");
         res.sendRedirect(url.toString());
     }
 

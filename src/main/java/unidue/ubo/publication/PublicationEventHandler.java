@@ -134,7 +134,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
      */
     private void enrichModsNameElementByLeadID(Element modsNameElement, String leadIDmods, MCRUser mcrUser) {
         String leadIDmycore = "id_" + leadIDmods;
-        if(StringUtils.isNotEmpty(leadIDmycore) && mcrUser.getAttributes().containsKey(leadIDmycore)) {
+        if(StringUtils.isNotEmpty(mcrUser.getUserAttribute(leadIDmycore))) {
             String leadIDValue = mcrUser.getUserAttribute(leadIDmycore);
             if(StringUtils.isNotEmpty(leadIDValue)) {
                 if(!MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, leadIDmods)) {

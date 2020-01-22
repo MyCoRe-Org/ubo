@@ -3,6 +3,7 @@ package unidue.ubo.matcher;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.user2.MCRUser;
+import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.stream.Collectors;
 
 /**
@@ -35,17 +37,17 @@ public class MCRUserMatcherLocal implements MCRUserMatcher {
             LOGGER.debug("Found local matching user! Matched user: {} and attributes: {} with local user: {} and attributes: {}",
                     mcrUser.getUserName(), mcrUser.getAttributes(), matchingUser.getUserName(), matchingUser.getAttributes());
 
-            matchingUser.getAttributes().putAll(mcrUser.getAttributes());
+            matchingUser.getAttributes().addAll(mcrUser.getAttributes());
             mcrUser = matchingUser;
         }
         return mcrUser;
     }
 
-    private Set<MCRUser> getUsersForGivenAttributes(Map<String, String> attributes) {
+    private Set<MCRUser> getUsersForGivenAttributes(SortedSet<MCRUserAttribute> mcrAttributes) {
         Set<MCRUser> users = new HashSet<>();
-        for(Map.Entry<String, String> attributeEntry : attributes.entrySet()) {
-            String attributeName = attributeEntry.getKey();
-            String attributeValue = attributeEntry.getValue();
+        for(MCRUserAttribute mcrAttribute : mcrAttributes) {
+            String attributeName = mcrAttribute.getName();
+            String attributeValue = mcrAttribute.getValue();
             users.addAll(MCRUserManager.getUsers(attributeName, attributeValue).collect(Collectors.toList()));
         }
         return users;

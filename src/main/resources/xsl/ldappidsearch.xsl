@@ -87,25 +87,25 @@
                     <div class="form-group form-inline">
                         <label for="lastName" class="mycore-form-label">
                             <!-- TODO <xsl:value-of select="i18n:translate('lsf.name')"/> -->
-                            Surname ("sn"):
+                            Surname:
                         </label>
-                        <input id="lastName" name="sn" type="text" size="40" value="{@lastName}" class="mycore-form-input"/>
+                        <input id="lastName" name="lastName" type="text" size="40" value="{@lastName}" class="mycore-form-input"/>
                     </div>
 
                     <div class="form-group form-inline">
                         <label for="firstName" class="mycore-form-label">
                             <!-- TODO <xsl:value-of select="i18n:translate('lsf.nameFirst')"/> -->
-                            Firstname ("Common-Name" or "cn"):
+                            Firstname:
                         </label>
-                        <input id="firstName" name="cn" type="text" size="40" value="{@firstName}" class="mycore-form-input"/>
+                        <input id="firstName" name="firstName" type="text" size="40" value="{@firstName}" class="mycore-form-input"/>
                     </div>
 
                     <div class="form-group form-inline">
-                        <label for="firstName" class="mycore-form-label">
+                        <label for="orcid" class="mycore-form-label">
                             <!-- TODO <xsl:value-of select="i18n:translate('lsf.nameFirst')"/> -->
                             ORCID:
                         </label>
-                        <input id="ordic" name="orcid" type="text" size="40" value="" class="mycore-form-input"/>
+                        <input id="orcid" name="orcid" type="text" size="40" value="{@orcid}" class="mycore-form-input"/>
                     </div>
 
                     <!-- Allow manual input of LSF PID for admins, in special cases or for testing purposes -->
