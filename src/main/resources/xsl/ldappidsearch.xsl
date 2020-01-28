@@ -12,6 +12,7 @@
     <xsl:param name="WebApplicationBaseURL" />
     <xsl:param name="ServletsBaseURL" />
     <xsl:param name="UBO.LSF.Link" />
+    <xsl:param name="MCR.user2.matching.lead_id" select="'orcid'" />
 
     <xsl:template match="/">
         <html>
@@ -59,7 +60,7 @@
     </xsl:template>
 
     <xsl:variable name="qm">'</xsl:variable>
-    <xsl:variable name="xpathID"    select="encoder:encode(concat('mods:nameIdentifier[@type=',$qm,'orcid',$qm,']'),'UTF-8')" />
+    <xsl:variable name="xpathID"     select="encoder:encode(concat('mods:nameIdentifier[@type=',$qm,$MCR.user2.matching.lead_id,$qm,']'),'UTF-8')" />
     <xsl:variable name="xpathFamily" select="encoder:encode(concat('mods:namePart[@type=',$qm,'family',$qm,']'),'UTF-8')" />
     <xsl:variable name="xpathGiven"  select="encoder:encode(concat('mods:namePart[@type=',$qm,'given',$qm,']'),'UTF-8')" />
 
@@ -204,8 +205,7 @@
     </xsl:template>
 
     <xsl:template match="person">
-        <!-- TODO: use dynamic lead_id (configured in mycore.properties) NOT POSSIBLE IN XSLT 1.0 -->
-        <xsl:variable name="id" select="id_orcid"/>
+        <xsl:variable name="id" select="*[local-name()=concat('id_', $MCR.user2.matching.lead_id)]"/>
         <tr>
             <td>
                 <a class="btn btn-primary btn-sm" href="{$ServletsBaseURL}XEditor?_xed_submit_return=&amp;_xed_session={/ldappidsearch/@session}&amp;{$xpathID}={$id}&amp;{$xpathFamily}={encoder:encode(lastName,'UTF-8')}&amp;{$xpathGiven}={encoder:encode(firstName,'UTF-8')}">
@@ -222,7 +222,7 @@
                 </a>
             </td>
             <td>
-                ORCID: <xsl:value-of select="$id"/>
+                <xsl:value-of select="$MCR.user2.matching.lead_id"/>: <xsl:value-of select="$id"/>
                 <!--<xsl:apply-templates select="document(concat('ires:detail:pid=',$id))/Person" />-->
             </td>
         </tr>
