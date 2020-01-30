@@ -347,6 +347,14 @@
     </span>
   </xsl:template>
 
+  <xsl:param name="UBO.Jena.Author.Link" />
+
+  <xsl:template match="mods:nameIdentifier[@type='jena']">
+    <span class="nameIdentifier" title="Author Jena LDAP ID: {.}">
+      <a href="{$UBO.Jena.Author.Link}{.}">Jena</a>
+    </span>
+  </xsl:template>
+
   <xsl:template match="mods:nameIdentifier">
     <span class="nameIdentifier" title="{@type}: {.}">
       <xsl:value-of select="." />

@@ -332,6 +332,7 @@
                 <option value="researcherid">ResearcherID</option>
                 <option value="gnd">GND</option>
                 <option value="scopus">SCOPUS</option>
+                <option value="jena">Jena</option>
               </select>
             </xed:bind>
             <input type="text" class="{$xed-validation-marker} form-control col-sm-4" />
@@ -746,6 +747,7 @@
     <xed:cleanup-rule xpath="//mods:detail" relevant-if="mods:number|mods:caption|mods:title" />
     <xed:cleanup-rule xpath="//mods:relatedItem" relevant-if="mods:titleInfo|@xlink:href" />
     <xed:cleanup-rule xpath="/mycoreobject/@label" relevant-if="true()" /> <!-- MyCoRe expects label attribute, even empty one -->
+    <xed:cleanup-rule xpath="//mods:extension/cerif:Project" relevant-if="(string-length(cerif:Title) &gt; 0) or (cerif:Acronym)" />
   </xed:template>
 
   <xed:template id="cancel.submit">
