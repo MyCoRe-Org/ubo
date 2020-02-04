@@ -138,7 +138,7 @@ table.jQDataTable tr:last-child > td {
   padding: .25rem .4rem;
   font-size: .675rem;
   line-height: .5;
-  border-radius: .2rem;
+  border-radius: $border-radius;
 }
 
 .chosen-container-single .chosen-single {
