@@ -13,8 +13,8 @@ public class MCRUserMatcherDummy implements MCRUserMatcher {
     private final static Logger LOGGER = LogManager.getLogger(MCRUserMatcherDummy.class);
 
     @Override
-    public MCRUser matchUser(MCRUser mcrUser) {
+    public MCRUserMatcherDTO matchUser(MCRUserMatcherDTO matcherDTO) {
         LOGGER.debug("MCRUserMatcherDummy got called!");
-        return mcrUser;
+        return matcherDTO;
     }
 }

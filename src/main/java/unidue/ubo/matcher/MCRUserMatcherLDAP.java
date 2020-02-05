@@ -163,8 +163,9 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
     }
 
     @Override
-    public MCRUser matchUser(MCRUser mcrUser) {
+    public MCRUserMatcherDTO matchUser(MCRUserMatcherDTO matcherDTO) {
 
+        MCRUser mcrUser = matcherDTO.getMCRUser();
         Multimap<String, String> ldapAttributes = convertUserAttributesToLDAP(mcrUser);
         List<LDAPObject> ldapUsers = getLDAPUsersByGivenLDAPAttributes(ldapAttributes);
 
@@ -194,11 +195,11 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
             String userName = getUserNameFromLDAPUser(ldapUser);
             MCRUser newMcrUser =  new MCRUser(userName, MCRUserMatcherUtils.UNVALIDATED_REALM);
             newMcrUser.setAttributes(mcrUser.getAttributes());
-            LOGGER.info("TEST: {}", mcrUser.getAttributes());
-            mcrUser = newMcrUser;
+            matcherDTO.setMCRUser(newMcrUser);
+            matcherDTO.setMatchedOrEnriched(true);
         }
 
-        return mcrUser;
+        return matcherDTO;
     }
 
     private String getUserNameFromLDAPUser(LDAPObject ldapUser) {

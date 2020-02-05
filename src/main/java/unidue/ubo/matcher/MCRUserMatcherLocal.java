@@ -25,7 +25,9 @@ public class MCRUserMatcherLocal implements MCRUserMatcher {
     private final static Logger LOGGER = LogManager.getLogger(MCRUserMatcherLocal.class);
 
     @Override
-    public MCRUser matchUser(MCRUser mcrUser) {
+    public MCRUserMatcherDTO matchUser(MCRUserMatcherDTO matcherDTO) {
+
+        MCRUser mcrUser = matcherDTO.getMCRUser();
         List<MCRUser> matchingUsers = new ArrayList<>(getUsersForGivenAttributes(mcrUser.getAttributes()));
         if(matchingUsers.size() == 0) {
             // no match found, do nothing, return given user unchanged
@@ -34,13 +36,18 @@ public class MCRUserMatcherLocal implements MCRUserMatcher {
         } else if(matchingUsers.size() == 1) {
             MCRUser matchingUser = matchingUsers.get(0);
 
-            LOGGER.debug("Found local matching user! Matched user: {} and attributes: {} with local user: {} and attributes: {}",
-                    mcrUser.getUserName(), mcrUser.getAttributes(), matchingUser.getUserName(), matchingUser.getAttributes());
+            LOGGER.info("Found local matching user! Matched user: {} and attributes: {} with local user: {} and attributes: {}",
+                    mcrUser.getUserName(),
+                    mcrUser.getAttributes().stream().map(a -> a.getName() + "=" + a.getValue()).collect(Collectors.joining(" | ")),
+                    matchingUser.getUserName(),
+                    matchingUser.getAttributes().stream().map(a -> a.getName() + "=" + a.getValue()).collect(Collectors.joining(" | ")));
 
             matchingUser.getAttributes().addAll(mcrUser.getAttributes());
             mcrUser = matchingUser;
+            matcherDTO.setMCRUser(mcrUser);
+            matcherDTO.setMatchedOrEnriched(true);
         }
-        return mcrUser;
+        return matcherDTO;
     }
 
     private Set<MCRUser> getUsersForGivenAttributes(SortedSet<MCRUserAttribute> mcrAttributes) {
