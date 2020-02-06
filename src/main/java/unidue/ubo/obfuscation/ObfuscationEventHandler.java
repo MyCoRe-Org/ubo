@@ -108,7 +108,7 @@ public class ObfuscationEventHandler extends MCREventHandlerBase {
                     MCRUser target_user = users.get(0);
                     // add hashed id to user
                     Set<MCRUserAttribute> attributes = target_user.getAttributes();
-                    attributes.add(new MCRUserAttribute(obfuscation_replacement_id, hashed_id));
+                    attributes.add(new MCRUserAttribute("id_" + obfuscation_replacement_id, hashed_id));
                     // persist user changes
                     MCRUserManager.updateUser(target_user);
                 } else {
