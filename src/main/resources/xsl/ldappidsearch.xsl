@@ -222,7 +222,8 @@
                 </a>
             </td>
             <td>
-                <xsl:value-of select="$MCR.user2.matching.lead_id"/>: <xsl:value-of select="$id"/>
+                <xsl:value-of select="identity" />
+                <!-- <xsl:value-of select="$MCR.user2.matching.lead_id"/>: <xsl:value-of select="$id"/> -->
                 <!--<xsl:apply-templates select="document(concat('ires:detail:pid=',$id))/Person" />-->
             </td>
         </tr>

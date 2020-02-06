@@ -27,6 +27,12 @@ import java.util.SortedSet;
  * # Examples:
  * MCR.IdentityPicker.LDAP.SearchFormMapping.lastName=sn
  * MCR.IdentityPicker.LDAP.SearchFormMapping.firstName=givenName
+ *
+ * # Schema for creating an Identity String (to be shown in the result list of the LDAP-Identity-Picker)
+ * # Configured value will be interpreted as a single String where every variable inside of "{}" will be replaced
+ * # by the value of an LDAP-Attribute with the exact same name as the variable
+ * # Examples:
+ * MCR.IdentityPicker.LDAP.identitySchema={mail}; {eduPersonAffiliation}
  */
 public class LDAPService implements IdentityService {
 
@@ -34,11 +40,14 @@ public class LDAPService implements IdentityService {
 
     private final String CONFIG_NAMEPART_FIRST_FIELD_TO_LDAP = "MCR.IdentityPicker.LDAP.SearchFormMapping.firstName";
     private final String CONFIG_NAMEPART_LAST_FIELD_TO_LDAP = "MCR.IdentityPicker.LDAP.SearchFormMapping.lastName";
+    private final String CONFIG_IDENTITY_SCHEMA = "MCR.IdentityPicker.LDAP.identitySchema";
     private String firstName_to_ldap;
     private String lastName_to_ldap;
+    private String identity_schema;
 
     public LDAPService() {
         parseNamepartFieldsToLDAPAttributeMappingConfig();
+        parseIdentitySchemaConfig();
     }
 
     /**
@@ -56,6 +65,18 @@ public class LDAPService implements IdentityService {
                 firstName_to_ldap);
         LOGGER.info("Mapping input of lastName of search/pick-Form to search in LDAP Attribute: {}",
                 lastName_to_ldap);
+    }
+
+    /**
+     * Reads the configurable Schema for creating the Identity String (that will be shown in the result list of the LDAP
+     * -Identity-Picker page after a search)
+     * Format/Examples: see class doc
+     */
+    private void parseIdentitySchemaConfig() {
+        MCRConfiguration config = MCRConfiguration.instance();
+        identity_schema = config.getString(CONFIG_IDENTITY_SCHEMA, "");
+        LOGGER.info("Schema to create the information of users in the identity picker result list: {}",
+                identity_schema);
     }
 
      /**
@@ -97,10 +118,12 @@ public class LDAPService implements IdentityService {
      *    <person>
      *       <attribute1>some_value1</attribute1>
      *       <attribute2>some_value2</attribute2>
+     *       <identity>some configurable identity string (email, affiliation etc.)</identity>
      *    </person>
      *    <person>
      *       <attribute1>other_value1</attribute1>
      *       <attribute2>other_value2</attribute2>
+     *       <identity>some configurable identity string (email, affiliation etc.)</identity>
      *    </person>
      * </results>
      */
@@ -134,10 +157,22 @@ public class LDAPService implements IdentityService {
             addElementsFromLDAPUserAttributes("firstName", firstName_to_ldap, person, ldapUser);
             addElementsFromLDAPUserAttributes("lastName", lastName_to_ldap, person, ldapUser);
 
+            addIdentityElement(person, ldapUser);
+
             results.addContent(person);
         }
 
         return results;
+    }
+
+    private void addIdentityElement(Element parent, LDAPObject ldapUser) {
+        String identityString = identity_schema;
+        for(Map.Entry<String, String> attributeEntry : ldapUser.getAttributes().entries()) {
+            String attributeName = attributeEntry.getKey();
+            String attributeValue = attributeEntry.getValue();
+            identityString = identityString.replace("{" + attributeName + "}", attributeValue);
+        }
+        parent.addContent(new Element("identity").setText(identityString));
     }
 
     /**
