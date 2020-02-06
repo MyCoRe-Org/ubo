@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<fop>
+	<renderers>
+		<renderer mime="application/pdf">
+			<fonts>
+				<font kerning="yes"
+					embed-url="file:///usr/share/fonts/gnu-free/FreeSerif.ttf">
+					<font-triplet name="serif" style="normal"
+						weight="normal" />
+				</font>
+				<font kerning="yes"
+					embed-url="file:///usr/share/fonts/gnu-free/FreeSerifBold.ttf">
+					<font-triplet name="serif" style="normal"
+						weight="bold" />
+				</font>
+			</fonts>
+		</renderer>
+	</renderers>
+</fop> 
