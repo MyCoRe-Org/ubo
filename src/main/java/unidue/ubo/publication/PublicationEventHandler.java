@@ -13,12 +13,14 @@ import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserManager;
+import unidue.ubo.matcher.MCRUserMatcherDTO;
 import unidue.ubo.matcher.MCRUserMatcherUtils;
 import unidue.ubo.matcher.MCRUserMatcher;
 import unidue.ubo.matcher.MCRUserMatcherLocal;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -35,7 +37,9 @@ import java.util.List;
  * MCRUsers attributes are enriched with the new MCRUsers attributes. Otherwise, persist the new MCRUser in a special
  * realm
  *
- * 4. Extend the mods:name -> mods:nameIdentifier element of the publication with the configured "lead-ID" if it is
+ * 4. Persist all new MCRUsers ONLY if they where matched/enriched in 2.1. or in 3.
+ *
+ * 5. Extend the mods:name -> mods:nameIdentifier element of the publication with the configured "lead-ID" if it is
  * not present but available in the matched MCRUsers attributes.
  *
  * The following properties in the mycore.properties are used:
@@ -102,21 +106,29 @@ public class PublicationEventHandler extends MCREventHandlerBase {
 
         for(Element modsNameElement : modsNameElements) {
 
-            MCRUser mcrUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement);
+            MCRUserMatcherDTO matcherDTO = new MCRUserMatcherDTO(
+                    MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement));
 
-            for(MCRUserMatcher matcher : matchers) {
-                MCRUser enrichedMCRUser = matcher.matchUser(mcrUser);
-                LOGGER.debug("Current attributes for user: {} of mods:name: {}, attributes: {}",
-                        enrichedMCRUser.getUserName(),
-                        new XMLOutputter(Format.getPrettyFormat()).outputString(modsNameElement),
-                        enrichedMCRUser.getAttributes());
-                mcrUser = enrichedMCRUser;
+            for (MCRUserMatcher matcher : matchers) {
+                matcherDTO = matcher.matchUser(matcherDTO);
+                MCRUser mcrUser = matcherDTO.getMCRUser();
+                if (matcherDTO.wasMatchedOrEnriched()) {
+                    LOGGER.info("Found a match for user: {} of mods:name: {}, with attributes: {}, using " +
+                                    "matcher: {}",
+                            mcrUser.getUserName(),
+                            new XMLOutputter(Format.getPrettyFormat()).outputString(modsNameElement),
+                            mcrUser.getAttributes().stream().map(a -> a.getName() + "=" + a.getValue())
+                                    .collect(Collectors.joining(" | ")),
+                            matcher.getClass());
+                }
             }
 
-            MCRUser mcrUserFinal = localMatcher.matchUser(mcrUser);
-            MCRUserManager.updateUser(mcrUserFinal);
-
-            enrichModsNameElementByLeadID(modsNameElement, leadIDName, mcrUserFinal);
+            MCRUserMatcherDTO localMatcherDTO = localMatcher.matchUser(matcherDTO);
+            if (localMatcherDTO.wasMatchedOrEnriched()) {
+                MCRUser mcrUserFinal = localMatcherDTO.getMCRUser();
+                MCRUserManager.updateUser(mcrUserFinal);
+                enrichModsNameElementByLeadID(modsNameElement, leadIDName, mcrUserFinal);
+            }
         }
         LOGGER.debug("Final document: {}", new XMLOutputter(Format.getPrettyFormat()).outputString(obj.createXML()));
     }
