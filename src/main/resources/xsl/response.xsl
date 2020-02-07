@@ -85,14 +85,14 @@
 <xsl:template name="exportLinks">
   <xsl:if test="$numFound &gt; 0">
     <div class="btn-group mb-3 flex-wrap">
-      <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=mods">MODS</a>
-      <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=bibtex">BibTeX</a>
-      <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=endnote">EndNote</a>
-      <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=ris">RIS</a>
-      <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=ieee-text">IEEE</a>
-      <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=pdf">PDF</a>
-      <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=html">HTML</a>
-      <a class="action btn btn-sm btn-primary mb-1" href="export?{$exportParams}&amp;fl=id,subject,oa,genre,host_genre,person_aut,person_edt,title,id_doi,id_scopus,id_pubmed,id_urn,id_duepublico,id_duepublico2,host_title,series,id_issn,id_isbn,shelfmark,year,volume,issue,pages,place,publisher&amp;wt=csv">CSV</a>
+      <a class="action btn btn-sm btn-outline-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=mods">MODS</a>
+      <a class="action btn btn-sm btn-outline-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=bibtex">BibTeX</a>
+      <a class="action btn btn-sm btn-outline-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=endnote">EndNote</a>
+      <a class="action btn btn-sm btn-outline-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=ris">RIS</a>
+      <a class="action btn btn-sm btn-outline-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=ieee-text">IEEE</a>
+      <a class="action btn btn-sm btn-outline-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=pdf">PDF</a>
+      <a class="action btn btn-sm btn-outline-primary mb-1" href="export?{$exportParams}&amp;XSL.Transformer=html">HTML</a>
+      <a class="action btn btn-sm btn-outline-primary mb-1" href="export?{$exportParams}&amp;fl=id,subject,oa,genre,host_genre,person_aut,person_edt,title,id_doi,id_scopus,id_pubmed,id_urn,id_duepublico,id_duepublico2,host_title,series,id_issn,id_isbn,shelfmark,year,volume,issue,pages,place,publisher&amp;wt=csv">CSV</a>
     </div>
   </xsl:if>
 </xsl:template>
@@ -178,7 +178,7 @@
     <div class="col-2">
       <xsl:if test="basket:hasSpace()">
         <span class="pageLink">
-          <a class="btn btn-sm btn-outline-primary" href="{$ServletsBaseURL}Results2Basket?solr={encoder:encode($exportParams)}"><xsl:value-of select="i18n:translate('button.basketAdd')" /></a>
+          <a class="btn btn-sm btn-secondary" href="{$ServletsBaseURL}Results2Basket?solr={encoder:encode($exportParams)}"><xsl:value-of select="i18n:translate('button.basketAdd')" /></a>
         </span>
       </xsl:if>
     </div>
@@ -217,7 +217,7 @@
 
    <div class="col-2 text-right">
     <span class="pageLink">
-      <a class="btn btn-sm btn-outline-primary" href="statistics?{$exportParams}&amp;XSL.Style=statistics"><xsl:value-of select="i18n:translate('button.statistics')" /></a>
+      <a class="btn btn-sm btn-secondary" href="statistics?{$exportParams}&amp;XSL.Style=statistics"><xsl:value-of select="i18n:translate('button.statistics')" /></a>
     </span>
    </div>
 
@@ -300,7 +300,7 @@
     <input type="hidden" name="resolve" value="true"/>
     <input type="hidden" name="id" value="{ancestor::mycoreobject/@ID}"/>
     <input type="hidden" name="uri" value="mcrobject:{ancestor::mycoreobject/@ID}"/>
-    <input type="submit" class="btn btn-sm btn-primary" value="{i18n:translate('button.basketAdd')}" />
+    <input type="submit" class="btn btn-sm btn-outline-primary" value="{i18n:translate('button.basketAdd')}" />
   </form>
 </xsl:template>
 
@@ -308,7 +308,7 @@
   <form action="{$ServletsBaseURL}DozBibEntryServlet" method="get" class="d-inline">
     <input type="hidden" name="mode" value="show"/>
     <input type="hidden" name="id" value="{ancestor::mycoreobject/@ID}"/>
-    <input type="submit" class="btn btn-sm btn-primary" value="{i18n:translate('result.dozbib.info')}" />
+    <input type="submit" class="btn btn-sm btn-outline-primary" value="{i18n:translate('result.dozbib.info')}" />
   </form>
 </xsl:template>
 

@@ -81,37 +81,37 @@
   <div id="buttons" class="btn-group mb-3 flex-wrap">
     <xsl:if test="$permission.admin and not($UBO.System.ReadOnly = 'true')">
       <xsl:if test="(string-length($step) = 0) or contains($step,'merged')">
-        <a class="action btn btn-sm btn-primary mb-1" href="{$WebApplicationBaseURL}edit-publication.xed?id={/mycoreobject/@ID}">
+        <a class="action btn btn-sm btn-outline-primary mb-1" href="{$WebApplicationBaseURL}edit-publication.xed?id={/mycoreobject/@ID}">
           <xsl:value-of select="i18n:translate('button.edit')" />
         </a>
-        <a class="action btn btn-sm btn-primary mb-1" href="{$WebApplicationBaseURL}edit-admin.xed?id={/mycoreobject/@ID}">Admin</a>
-        <a class="action btn btn-sm btn-primary mb-1" href="{$WebApplicationBaseURL}edit-mods.xed?id={/mycoreobject/@ID}">MODS</a>
+        <a class="action btn btn-sm btn-outline-primary mb-1" href="{$WebApplicationBaseURL}edit-admin.xed?id={/mycoreobject/@ID}">Admin</a>
+        <a class="action btn btn-sm btn-outline-primary mb-1" href="{$WebApplicationBaseURL}edit-mods.xed?id={/mycoreobject/@ID}">MODS</a>
       </xsl:if>
       <xsl:if test="string-length($step) = 0">
         <xsl:if test="not(/mycoreobject/structure/children/child)">
-          <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.step=ask.delete">
+          <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.step=ask.delete">
             <xsl:value-of select="i18n:translate('button.delete')" />
           </a>
         </xsl:if>
         <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host'][string-length(@xlink:href)=0]">
           <!-- Button to extract mods:relatedItem[@type='host'] to a new separate entry -->
-          <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;mode=xhost">
+          <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;mode=xhost">
             <xsl:value-of select="i18n:translate('ubo.relatedItem.host.separate')" />
           </a>
         </xsl:if>
       </xsl:if>
     </xsl:if>
     <xsl:if xmlns:basket="xalan://unidue.ubo.basket.BasketUtils" test="basket:hasSpace() and not(basket:contains(string(/mycoreobject/@ID)))">
-      <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRBasketServlet?type=bibentries&amp;action=add&amp;resolve=true&amp;id={/mycoreobject/@ID}&amp;uri=mcrobject:{/mycoreobject/@ID}">
+      <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}MCRBasketServlet?type=bibentries&amp;action=add&amp;resolve=true&amp;id={/mycoreobject/@ID}&amp;uri=mcrobject:{/mycoreobject/@ID}">
         <xsl:value-of select="i18n:translate('button.basketAdd')" />
       </a>
     </xsl:if>
     <xsl:if test="(string-length($step) = 0) and not($permission.admin)">
-      <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.xml?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=mods">MODS</a>
-      <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.bib?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=bibtex">BibTeX</a>
-      <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.enl?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=endnote">EndNote</a>
-      <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.ris?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=ris">RIS</a>
-      <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.txt?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=ieee-text">IEEE</a>
+      <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.xml?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=mods">MODS</a>
+      <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.bib?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=bibtex">BibTeX</a>
+      <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.enl?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=endnote">EndNote</a>
+      <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.ris?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=ris">RIS</a>
+      <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.txt?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=ieee-text">IEEE</a>
     </xsl:if>
   </div>
 </xsl:template>

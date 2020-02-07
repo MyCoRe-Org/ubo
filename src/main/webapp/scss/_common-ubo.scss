@@ -1,6 +1,5 @@
 
-// necessary extensions/replacements/changes based on MyCoRe specific css-classes
-
+/*  necessary extensions/replacements/changes based on MyCoRe specific css-classes */
 html, body {
   height: 100%;
 }
@@ -10,72 +9,82 @@ html, body {
 }
 
 .validation-failures ul li {
-    color: red;
+  color: red;
 }
 
 .bg-card-body1 {
-    @extend .bg-light;
+  @extend .bg-light;
 }
 
 .bg-card-body2 {
-    @extend .bg-white;
+  @extend .bg-white;
+}
+
+/* change border position */
+.card-header {
+  border-bottom: 0px;
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+.card-footer {
+  border-top: 0px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
 }
 
 // facets (sidebar searchresults etc.)
 .mycore-facet-count:after {
-    content: " | ";
+  content: " | ";
 }
 
 .mycore-facet-exclude, .mycore-facet-remove {
-    @extend .mr-1;
-    color: red;
+  @extend .mr-1;
+  color: red;
 }
 
 
 // shortcut-classes for forms
 .mycore-form-label {
-    @extend .col-lg-2;
-    @extend .col-md-3;
-    @extend .col-sm-3;
-    @extend .justify-content-sm-end;
-    @extend .pl-0;
-    @extend .mr-3;
+  @extend .col-lg-2;
+  @extend .col-md-3;
+  @extend .col-sm-3;
+  @extend .justify-content-sm-end;
+  @extend .pl-0;
+  @extend .mr-3;
 }
 
 // actually used for input AND select AND textarea
 .mycore-form-input {
-    @extend .form-control;
-    @extend .col-lg-8;
-    @extend .col-md-7;
-    @extend .col-sm-7;
+  @extend .form-control;
+  @extend .col-lg-8;
+  @extend .col-md-7;
+  @extend .col-sm-7;
 }
 
 .mycore-form-input-double {
-    @extend .form-control;
-    @extend .col-lg-3;
-    @extend .col-md-3;
-    @extend .col-sm-3;
+  @extend .form-control;
+  @extend .col-lg-3;
+  @extend .col-md-3;
+  @extend .col-sm-3;
 }
 
 // shortcut-classes for lists
 .mycore-list-item {
-    @extend .list-group-item;
-    @extend .border-0;
-    @extend .py-0;
+  @extend .list-group-item;
+  @extend .border-0;
+  @extend .py-0;
 }
 
 // sidebar facets
 .mycore-slidetoggle {
-    @extend .text-primary;
-    text-decoration: underline;
-    cursor: pointer;
+  @extend .text-primary;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 img.orcid-icon {
-	width: 16px;
-	height: 16px;
-	vertical-align: middle;
-	margin: 0px 2px 0px 2px;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin: 0px 2px 0px 2px;
 }
 
 button.xeditor-pmud.fas {
@@ -85,49 +94,77 @@ button.xeditor-pmud.fas {
 }
 
 .xeditor-pmud {
-    color: $pmud-color;
-    font-size:25px;
+  color: $pmud-color;
+  font-size:25px;
 }
 
 .xeditor-pmud:hover {
-    color: $pmud-color-hover;
-    font-size: 25px;
+  color: $pmud-color-hover;
+  font-size: 25px;
 }
 
 // style of the list when selecting identities
 // (personal publication list -> select person from LDAP/LSF..., importing publications...)
 .dataTables_wrapper table {
-	width: 100%;
+  width: 100%;
 }
 
 table.jQDataTable thead th {
-	padding: 5px;
-	cursor: pointer;
-	cursor: hand;
+  padding: 5px;
+  cursor: pointer;
+  cursor: hand;
 }
 
 table.jQDataTable td {
-	padding: 5px;
-	vertical-align: top;
+  padding: 5px;
+  vertical-align: top;
 }
 
 table.jQDataTable tr:nth-child(even) td:first-child,
 table.jQDataTable tr:nth-child(odd) td:first-child {
-	border-left: 1px solid lightGrey;
+  border-left: 1px solid lightGrey;
 }
 
 table.jQDataTable tr:nth-child(even) td:last-child,
 table.jQDataTable tr:nth-child(odd) td:last-child {
-	border-right: 1px solid lightGrey;
+  border-right: 1px solid lightGrey;
 }
 
 table.jQDataTable tr:last-child > td {
-	border-bottom: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
 }
 
 .btn-group-xs > .btn, .btn-xs {
   padding: .25rem .4rem;
   font-size: .675rem;
   line-height: .5;
-  border-radius: .2rem;
+  border-radius: $border-radius;
+}
+
+.chosen-container-single .chosen-single {
+  height: 38px !important;
+  border-color: rgb(206, 212, 218) !important;
+  border: 1px solid #ced4da !important;
+  border-radius: .1rem !important;
+  background: none !important;
+  box-shadow: none !important;
+  color: #495057 !important;
+  font-size: 1rem !important;
+  font-family: "Roboto", Arial, sans-serif !important;
+  padding: 0.375rem 0.99rem !important;
+  letter-spacing: 0 !important;
+}
+
+.chosen-container-single .chosen-single div {
+  top: 7px !important;
+  right: -5px !important;
+}
+
+.chosen-container .chosen-drop {
+  border: 1px solid #ced4da !important;
+  font-family: "Roboto", Arial, sans-serif !important;
+  color: #495057 !important;
+  font-size: 1rem !important;
+  border-radius: .1rem !important;
+  box-shadow: none !important;
 }
