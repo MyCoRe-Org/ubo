@@ -313,7 +313,7 @@
   <xsl:param name="UBO.LSF.Link" />
   
   <xsl:template match="mods:nameIdentifier[@type='lsf']">
-    <span class="nameIdentifier" title="LSF ID: {.}">
+    <span class="nameIdentifier lsf" title="LSF ID: {.}">
       <a href="{$UBO.LSF.Link}{.}">LSF</a>
     </span>
   </xsl:template>
@@ -328,13 +328,13 @@
   </xsl:template>
 
   <xsl:template match="mods:nameIdentifier[@type='researcherid']">
-    <span class="nameIdentifier" title="ResearcherID: {.}">
+    <span class="nameIdentifier researcherid" title="ResearcherID: {.}">
       <a href="http://www.researcherid.com/rid/{.}">ResearcherID</a>
     </span>
   </xsl:template>
 
   <xsl:template match="mods:nameIdentifier[@type='gnd']">
-    <span class="nameIdentifier" title="GND: {.}">
+    <span class="nameIdentifier gnd" title="GND: {.}">
       <a href="http://d-nb.info/gnd/{.}">GND</a>
     </span>
   </xsl:template>
@@ -342,7 +342,7 @@
   <xsl:param name="UBO.Scopus.Author.Link" />
   
   <xsl:template match="mods:nameIdentifier[@type='scopus']">
-    <span class="nameIdentifier" title="SCOPUS Author ID: {.}">
+    <span class="nameIdentifier scopus" title="SCOPUS Author ID: {.}">
       <a href="{$UBO.Scopus.Author.Link}{.}">SCOPUS</a>
     </span>
   </xsl:template>
@@ -350,14 +350,14 @@
   <xsl:param name="UBO.Jena.Author.Link" />
 
   <xsl:template match="mods:nameIdentifier[@type='jena']">
-    <span class="nameIdentifier" title="Author Jena LDAP ID: {.}">
+    <span class="nameIdentifier jena" title="Author Jena LDAP ID: {.}">
       <a href="{$UBO.Jena.Author.Link}{.}">Jena</a>
     </span>
   </xsl:template>
 
   <xsl:template match="mods:nameIdentifier">
-    <span class="nameIdentifier" title="{@type}: {.}">
-      <xsl:value-of select="." />
+    <span class="nameIdentifier genericid" title="{@type}: {.}">
+      <a href="javascript:void(0)"><xsl:value-of select="@type" /></a>
     </span>
   </xsl:template>
 
