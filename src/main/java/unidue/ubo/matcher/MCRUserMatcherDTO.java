@@ -2,19 +2,19 @@ package unidue.ubo.matcher;
 
 import org.mycore.user2.MCRUser;
 
+/**
+ * Data Transfer Object for transferring MCRUser-Instances and a related Flag "matchedOrEnriched" between different
+ * parts of the MCRUserMatcher-Framework.
+ *
+ * @author Pascal Rost
+ */
 public class MCRUserMatcherDTO {
 
-    private boolean matchedOrEnriched = false;
+    private boolean matchedOrEnriched;
     private MCRUser mcrUser;
-
-    public MCRUserMatcherDTO(MCRUser mcrUser, boolean matchedOrEnriched) {
-        this.mcrUser = mcrUser;
-        this.matchedOrEnriched = matchedOrEnriched;
-    }
 
     public MCRUserMatcherDTO(MCRUser mcrUser) {
         this.mcrUser = mcrUser;
-        this.matchedOrEnriched = false;
     }
 
     public MCRUser getMCRUser() {
