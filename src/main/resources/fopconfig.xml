@@ -4,14 +4,19 @@
 		<renderer mime="application/pdf">
 			<fonts>
 				<font kerning="yes"
-					embed-url="file:///usr/share/fonts/gnu-free/FreeSerif.ttf">
+					embed-url="fonts/FreeSerif.ttf">
 					<font-triplet name="serif" style="normal"
 						weight="normal" />
 				</font>
 				<font kerning="yes"
-					embed-url="file:///usr/share/fonts/gnu-free/FreeSerifBold.ttf">
+					embed-url="fonts/FreeSerifBold.ttf">
 					<font-triplet name="serif" style="normal"
 						weight="bold" />
+				</font>
+				<font kerning="yes"
+					embed-url="fonts/FreeSerifItalic.ttf">
+					<font-triplet name="serif" style="italic"
+						weight="normal" />
 				</font>
 			</fonts>
 		</renderer>
