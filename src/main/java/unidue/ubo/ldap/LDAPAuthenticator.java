@@ -100,8 +100,10 @@ public class LDAPAuthenticator {
     private DirContext getDirContext(String uid, String credentials) throws NamingException {
         try {
             Hashtable<String, String> env = (Hashtable<String, String>) (ldapEnvironment.clone());
-            env.put(Context.SECURITY_PRINCIPAL, String.format(baseDN, uid));
-            env.put(Context.SECURITY_CREDENTIALS, credentials);
+            if(uid != null && !uid.isBlank() && credentials != null && !credentials.isBlank()) {
+                env.put(Context.SECURITY_PRINCIPAL, String.format(baseDN, uid));
+                env.put(Context.SECURITY_CREDENTIALS, credentials);
+            }
             return new InitialDirContext(env);
         } catch (AuthenticationException ex) {
             if (ex.getMessage().contains(PATTERN_INVALID_CREDENTIALS)) {
