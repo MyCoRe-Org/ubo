@@ -466,7 +466,7 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
      */
     private String createLDAPSearchFilter(Multimap<String, String> ldapAttributes) {
         // TODO: take into consideration the member-status of the (email?) of the LDAP-users
-        String searchFilterBaseTemplate = "(&(objectClass=eduPerson)(|%s))";
+        String searchFilterBaseTemplate = "(&" + MCRConfiguration.instance().getString("MCR.user2.LDAP.UIDFilter", "")  + "(|%s))";
         String searchFilterInnerTemplate = "(%s=%s)"; // attributeName=attributeValue
 
         String searchFilterInner = "";
