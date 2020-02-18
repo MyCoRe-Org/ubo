@@ -56,7 +56,7 @@ public class IdentityResolver implements URIResolver {
                 try {
                     IdentityService service = (IdentityService)Class.forName(serviceClassName).getDeclaredConstructor().newInstance();
                     if(resolveType.equals(RESOLVE_TYPE_SEARCH)) {
-                        result = service.searchPerson(params);
+                        result = service.searchPerson(params,false);
                     } else if(resolveType.equals(RESOLVE_TYPE_DETAIL)) {
                         result = service.getPersonDetails(params);
                     }

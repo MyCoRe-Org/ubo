@@ -10,4 +10,6 @@ public interface IdentityService {
     public Element getPersonDetails(Map<String, String> paramMap);
 
     public Element searchPerson(Map<String, String> paramMap);
+		
+    public Element searchPerson(Map<String, String> paramMap, boolean includeApproximateSearch);
 }

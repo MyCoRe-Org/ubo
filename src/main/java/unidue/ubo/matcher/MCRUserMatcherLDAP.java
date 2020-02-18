@@ -434,11 +434,11 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
         return regex;
     }
 
-    public List<LDAPObject> getLDAPUsersByGivenLDAPAttributes(Multimap ldapAttributes) {
+    public List<LDAPObject> getLDAPUsersByGivenLDAPAttributes(Multimap ldapAttributes, boolean similaritySearch) {
         DirContext ctx = null;
         List<LDAPObject> ldapUsers = new ArrayList<>();
 
-        String ldapSearchFilter = createLDAPSearchFilter(ldapAttributes);
+        String ldapSearchFilter = createLDAPSearchFilter(ldapAttributes,false);
         try {
             ctx = new LDAPAuthenticator().authenticate();
             ldapUsers = new LDAPSearcher().searchWithGlobalDN(ctx, ldapSearchFilter);
@@ -456,6 +456,10 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
         return ldapUsers;
     }
 
+    public List<LDAPObject> getLDAPUsersByGivenLDAPAttributes(Multimap ldapAttributes) {
+        return getLDAPUsersByGivenLDAPAttributes(ldapAttributes, false);
+    }
+
     /**
      * Creates a LDAP-searchfilter based on the given LDAP attributes of the form:
      * (&(objectClass=eduPerson)(|(%a1=%v1)(%a2=%v2)...(%aN=%vN))) where %a denotes the attribute name and %v the value.
@@ -464,10 +468,13 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
      * @param ldapAttributes a Multimap where the keys are the LDAP attribute names
      * @return A LDAP-searchfilter of the form (&(objectClass=eduPerson)(|(%a1=%v1)(%a2=%v2)...(%aN=%vN)))
      */
-    private String createLDAPSearchFilter(Multimap<String, String> ldapAttributes) {
+    private String createLDAPSearchFilter(Multimap<String, String> ldapAttributes, boolean similaritySearch) { /* added switch to allow for a similarity search (NOTE: takes much longer than a regular match, but might be helpful in some cases) */
         // TODO: take into consideration the member-status of the (email?) of the LDAP-users
-        String searchFilterBaseTemplate = "(&(objectClass=eduPerson)(|%s))";
+        String searchFilterBaseTemplate = "(&" + MCRConfiguration.instance().getString("MCR.user2.LDAP.UIDFilter", "")  + "(|%s))";
         String searchFilterInnerTemplate = "(%s=%s)"; // attributeName=attributeValue
+        if(similaritySearch) {
+            searchFilterInnerTemplate = "(%s~=%s)";
+        }
 
         String searchFilterInner = "";
         for(Map.Entry<String, Collection<String>> ldapAttribute : ldapAttributes.asMap().entrySet()) {
