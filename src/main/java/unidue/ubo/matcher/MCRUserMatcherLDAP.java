@@ -28,6 +28,10 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * Given a MCRUser match against the users of a LDAP-Server, enriching the attributes of the MCRUser by any matched
@@ -438,21 +442,66 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
         DirContext ctx = null;
         List<LDAPObject> ldapUsers = new ArrayList<>();
 
-        String ldapSearchFilter = createLDAPSearchFilter(ldapAttributes);
-        try {
-            ctx = new LDAPAuthenticator().authenticate();
-            ldapUsers = new LDAPSearcher().searchWithGlobalDN(ctx, ldapSearchFilter);
-        } catch (NamingException ex) {
-            LOGGER.error("Exception occurred: " +  ex);
-        } finally {
-            if (ctx != null) {
-                try {
-                    ctx.close();
-                } catch (NamingException ex) {
-                    LOGGER.warn("could not close context " + ex);
+        //String ldapSearchFilter = createLDAPSearchFilter(ldapAttributes,false);
+        String ldapSearchFilter = "";
+
+        /* Strip of dots of name, split on whitespace and update attributes */
+        Collection<String> lastNames = ldapAttributes.get("sn");
+        HashSet<String> lastN = new HashSet<String>();
+        for(String lastName : lastNames) {
+            try {
+                lastName = URLDecoder.decode(lastName, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            lastN.add(lastName);
+            lastN.addAll(Arrays.asList(lastName.replaceAll("\\.","").replaceAll("[\\+\\p{Z}]","\\+").split("\\+")));
+        }
+        ldapAttributes.removeAll("sn");
+        ldapAttributes.putAll("sn",lastN);
+
+        /* Strip of dots of name, split on whitespace and update attributes */
+        Collection<String> firstNames = ldapAttributes.get("givenName");
+        HashSet<String> firstN = new HashSet<String>();
+        for(String firstName : firstNames) {
+            try {
+                firstName = URLDecoder.decode(firstName, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            firstN.add(firstName);
+            firstN.addAll(Arrays.asList(firstName.replaceAll("\\.","").replaceAll("[\\+\\p{Z}]","\\+").split("\\+")));
+        }
+        ldapAttributes.removeAll("givenName");
+        ldapAttributes.putAll("givenName",firstN);
+
+        boolean oneMoreIteration = false;
+        do {
+            oneMoreIteration = false;
+            /* If orcid is known, try to find orcid in ldap. If no matching record is found, continue search without orcid */
+            if(ldapAttributes.containsKey("orcid")) {
+                ldapSearchFilter = "(&(objectClass=inetOrgPerson)(orcid=" + ldapAttributes.get("orcid").iterator().next() + "))";
+                ldapAttributes.removeAll("orcid");
+                oneMoreIteration = true;
+            } else {
+                ldapSearchFilter = createLDAPSearchFilter(ldapAttributes/*,similaritySearch*/);
+            }
+            LOGGER.info(ldapSearchFilter);
+            try {
+                ctx = new LDAPAuthenticator().authenticate();
+                ldapUsers = new LDAPSearcher().searchWithGlobalDN(ctx, ldapSearchFilter);
+            } catch (NamingException ex) {
+                LOGGER.error("Exception occurred: " +  ex);
+            } finally {
+                if (ctx != null) {
+                    try {
+                        ctx.close();
+                    } catch (NamingException ex) {
+                        LOGGER.warn("could not close context " + ex);
+                    }
                 }
             }
-        }
+        } while(ldapUsers.size() == 0 && oneMoreIteration);
         return ldapUsers;
     }
 
@@ -466,7 +515,7 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
      */
     private String createLDAPSearchFilter(Multimap<String, String> ldapAttributes) {
         // TODO: take into consideration the member-status of the (email?) of the LDAP-users
-        String searchFilterBaseTemplate = "(&(objectClass=eduPerson)(|%s))";
+        String searchFilterBaseTemplate = "(&(objectClass=eduPerson)%s)";
         String searchFilterInnerTemplate = "(%s=%s)"; // attributeName=attributeValue
 
         String searchFilterInner = "";
