@@ -28,6 +28,9 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.text.Normalizer;
 
 /**
  * Given a MCRUser match against the users of a LDAP-Server, enriching the attributes of the MCRUser by any matched
@@ -473,9 +476,27 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
         for(Map.Entry<String, Collection<String>> ldapAttribute : ldapAttributes.asMap().entrySet()) {
             String attributeName = ldapAttribute.getKey();
             Collection<String> attributeValues = ldapAttribute.getValue();
+            /* If more than one attributeValue exists to a given key, search for both seperately (opening phrase) */
+            if(attributeValues.size() > 1 || attributeName == "sn" || attributeName == "givenName") {
+                searchFilterInner += "(|";
+            }
             for(String attributeValue : attributeValues) {
+                try {
+                    attributeValue = URLDecoder.decode(attributeValue, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
                 String attributeFilter = String.format(searchFilterInnerTemplate, attributeName, attributeValue);
                 searchFilterInner += attributeFilter;
+                /* If name contains any accents, also search for the name with all accents removed */
+                if((attributeName == "sn" || attributeName == "givenName") && attributeValue != Normalizer.normalize(attributeValue, Normalizer.Form.NFD)) {
+                    attributeFilter = String.format(searchFilterInnerTemplate, attributeName, Normalizer.normalize(attributeValue, Normalizer.Form.NFD).replaceAll("\\p{M}",""));
+                    searchFilterInner += attributeFilter;
+                }
+            }
+            /* If more than one attributeValue exists to a given key, search for both seperately (closing phrase) */
+            if(attributeValues.size() > 1 || attributeName == "sn" || attributeName == "givenName" ) {
+                searchFilterInner += ")";
             }
         }
         return String.format(searchFilterBaseTemplate, searchFilterInner);
