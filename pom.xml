@@ -475,6 +475,11 @@
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
+      <artifactId>mycore-fo</artifactId>
+      <version>${mycore.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
       <artifactId>mycore-iview2</artifactId>
       <!-- actually not used, but dependency required because of persistence mapping missing otherwise -->
       <version>${mycore.version}</version>
