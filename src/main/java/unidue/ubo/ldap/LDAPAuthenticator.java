@@ -100,7 +100,7 @@ public class LDAPAuthenticator {
     private DirContext getDirContext(String uid, String credentials) throws NamingException {
         try {
             Hashtable<String, String> env = (Hashtable<String, String>) (ldapEnvironment.clone());
-            if(uid != null && !uid.isBlank() && credentials != null && !credentials.isBlank()) {
+            if (uid != null && !uid.isBlank() && credentials != null && !credentials.isBlank()) {
                 env.put(Context.SECURITY_PRINCIPAL, String.format(baseDN, uid));
                 env.put(Context.SECURITY_CREDENTIALS, credentials);
             }
