@@ -470,9 +470,9 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
      */
     private String createLDAPSearchFilter(Multimap<String, String> ldapAttributes, boolean similaritySearch) { /* added switch to allow for a similarity search (NOTE: takes much longer than a regular match, but might be helpful in some cases) */
         // TODO: take into consideration the member-status of the (email?) of the LDAP-users
-        String searchFilterBaseTemplate = "(&" + MCRConfiguration.instance().getString("MCR.user2.LDAP.UIDFilter", "")  + "(|%s))";
+        String searchFilterBaseTemplate = "(&(objectClass=eduPerson)(|%s))";
         String searchFilterInnerTemplate = "(%s=%s)"; // attributeName=attributeValue
-        if(similaritySearch) {
+        if (similaritySearch) {
             searchFilterInnerTemplate = "(%s~=%s)";
         }
 
