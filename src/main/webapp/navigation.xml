@@ -50,15 +50,6 @@
         <label xml:lang="en">from EVALuna Biblio</label>
       </item>
     </item>
-
-  </item>
-  <item id="webcli" ref="modules/webcli/launchpad.xml" role="admin">
-    <label xml:lang="de">WebCLI</label>
-    <label xml:lang="en">WebCLI</label>
-  </item>
-  <item id="webcli" ref="modules/classeditor/classificationEditor.xml" role="admin">
-    <label xml:lang="de">Klassifikationseditor</label>
-    <label xml:lang="en">Classification Editor</label>
   </item>
 
   <item menu="user">
@@ -66,13 +57,17 @@
       <label xml:lang="de">Mein Profil</label>
       <label xml:lang="en">My profile</label>
     </item>
+    <item id="dozbib.duplicates" ref="duplicates.xml" role="admin">
+      <label xml:lang="de">Dubletten-Bericht</label>
+      <label xml:lang="en">Duplicates report</label>
+    </item>
     <item id="classeditor" ref="modules/classeditor/classificationEditor.xml" role="admin">
       <label xml:lang="de">Klassifikationseditor</label>
       <label xml:lang="en">Classification editor</label>
     </item>
-    <item id="dozbib.duplicates" ref="duplicates.xml" role="admin">
-      <label xml:lang="de">Dubletten-Bericht</label>
-      <label xml:lang="en">Duplicates report</label>
+    <item id="webcli" ref="modules/webcli/launchpad.xml" role="admin">
+      <label xml:lang="de">WebCLI</label>
+      <label xml:lang="en">WebCLI</label>
     </item>
   </item>
 
