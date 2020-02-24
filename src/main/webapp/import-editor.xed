@@ -783,6 +783,25 @@
             <input id="project_title" type="text" class="mycore-form-input" />
           </div>
 		</xed:bind>
+
+        <xed:bind xpath="Identifier[@type='https://w3id.org/cerif/vocab/IdentifierTypes#Project-MM-ID']">
+          <input id="project_id" type="text" style="display: none;" />
+        </xed:bind>
+
+        <xed:bind xpath="Identifier[@type='https://w3id.org/cerif/vocab/IdentifierTypes#Finance-ID']">
+          <input id="funder" type="text" style="display: none;" />
+        </xed:bind>
+
+        <xed:bind xpath="As/Funding">
+          <xed:bind xpath="@id">
+            <input id="funding_number" type="text" style="display: none;" />
+          </xed:bind>
+          <xed:bind xpath="Type">
+            <input id="funding_type_value" type="text" style="display: none;"
+                   value="https://www.openaire.eu/cerif-profile/vocab/OpenAIRE_Funding_Types"/>
+          </xed:bind>
+        </xed:bind>
+
       </xed:bind>
     </xed:bind>
   </xed:template>

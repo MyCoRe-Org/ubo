@@ -4,6 +4,10 @@ $(document).ready(function(){
     let solr_url = 'solr/ubo_projects/select/';
     let id_project_acronym = 'project_acronym';
     let id_project_title = 'project_title';
+    let id_project = 'project_id';
+    let id_funder = 'funder';
+    let id_funding_number = 'funding_number';
+
     let min_length = 0;
     let input_delay = 200;
     let max_label_length = 90;
@@ -11,6 +15,9 @@ $(document).ready(function(){
     // derived settings
     let acronym_input = $('#' + id_project_acronym);
     let title_input = $('#' + id_project_title);
+    let project_id_input = $('#' + id_project);
+    let funder_input = $('#' + id_funder);
+    let funding_number_input = $('#' + id_funding_number);
 
     let call_solr = function(request, response) {
     	let search_string = request.term.toLowerCase();
@@ -28,8 +35,9 @@ $(document).ready(function(){
             let docs = data.response.docs;
             let sources = [];
             $.each(docs, function(i, doc) {
-                let source_label = (doc.acronym + ': ' + doc.projekttitel).substring(0, max_label_length) + '...';
-                sources.push({'label': source_label, 'projekttitel': doc.projekttitel, 'acronym': doc.acronym});
+                let source_label = (doc.acronym + ': ' + doc.project_title).substring(0, max_label_length) + '...';
+                sources.push({'label': source_label, 'project_title': doc.project_title, 'acronym': doc.acronym,
+                'project_id': doc.project_id, 'funder': doc.funder, 'funding_number': doc.funding_number});
             });
             response(sources);
         }
@@ -38,7 +46,10 @@ $(document).ready(function(){
 
     let select_project = function(event, ui) {
         acronym_input.val(ui.item.acronym);
-        title_input.val(ui.item.projekttitel);
+        title_input.val(ui.item.project_title);
+        project_id_input.val(ui.item.project_id);
+        funder_input.val(ui.item.funder);
+        funding_number_input.val(ui.item.funding_number);
         return false;
     }
 
