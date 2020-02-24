@@ -134,6 +134,25 @@
     </xsl:for-each>
   </xsl:template>
 
+  <!-- User-Dropdown-Navigation -->
+
+  <xsl:template name="layout.usernav">
+    <!-- Find the item that is the root of the navigation tree to display -->
+
+    <xsl:for-each select="$navigation.tree/item[@menu='user']/item">
+      <!-- ==== Prüfe ob aktueller Benutzer berechtigt ist, diesen Menüpunkt zu sehen ==== -->
+      <xsl:variable name="allowed">
+        <xsl:call-template name="check.allowed" />
+      </xsl:variable>
+
+      <xsl:if test="$allowed = 'true'">
+        <a href="{$WebApplicationBaseURL}{@ref}" class="dropdown-item">
+          <xsl:call-template name="output.label.for.lang" />
+        </a>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:template>
+
   <!-- Meta-Navigation -->
 
   <xsl:template name="layout.metanav">
