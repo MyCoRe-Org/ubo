@@ -126,6 +126,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
             MCRUserMatcherDTO localMatcherDTO = localMatcher.matchUser(matcherDTO);
             if (localMatcherDTO.wasMatchedOrEnriched()) {
                 MCRUser mcrUserFinal = localMatcherDTO.getMCRUser();
+                mcrUserFinal.assignRole("submitter");
                 MCRUserManager.updateUser(mcrUserFinal);
                 enrichModsNameElementByLeadID(modsNameElement, leadIDName, mcrUserFinal);
             }

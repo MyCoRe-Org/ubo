@@ -88,6 +88,7 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
             } else {
                 LOGGER.debug("User " + uid + " unknown in store, will create");
                 user = new MCRUser(uid, realmID);
+                user.assignRole("submitter");
                 MCRUserManager.createUser(user);
             }
             List<LDAPObject> ldapObjects = searchUserInLDAP(ctx, user);
