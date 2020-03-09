@@ -41,6 +41,9 @@ import unidue.ubo.ldap.LDAPSearcher;
  * # eduPersonScopedAffiliation may be faculty|staff|employee|student|alum|member|affiliate
  * MCR.user2.LDAP.Mapping.Group.eduPersonScopedAffiliation.staff@uni-duisburg-essen.de=submitter
  *
+ * # Default Role that is assigned to newly created users
+ * MCR.user2.IdentityManagement.UserCreation.DefaultRole=submitter
+ *
  * @author Frank L\u00FCtzenkirchen
  */
 public class LDAPAuthenticationHandler extends AuthenticationHandler {
@@ -48,6 +51,7 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private static final String CONFIG_PREFIX = MCRUser2Constants.CONFIG_PREFIX + "LDAP.";
+    private static final String CONFIG_ROLE = MCRUser2Constants.CONFIG_PREFIX + "IdentityManagement.UserCreation.DefaultRole";
 
     /** Filter for user ID */
     private String uidFilter;
@@ -61,6 +65,8 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
     /** Mapping from LDAP attribute to E-Mail address of user */
     private String mapEMail;
 
+    private String defaultRole;
+
     public LDAPAuthenticationHandler() {
         MCRConfiguration config = MCRConfiguration.instance();
 
@@ -69,6 +75,8 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
 
         mapName = config.getString(CONFIG_PREFIX + "Mapping.Name");
         mapEMail = config.getString(CONFIG_PREFIX + "Mapping.E-Mail");
+
+        defaultRole = config.getString(CONFIG_ROLE, "submitter");
     }
 
     public MCRUser authenticate(String uid, String pwd) throws Exception {
@@ -88,7 +96,7 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
             } else {
                 LOGGER.debug("User " + uid + " unknown in store, will create");
                 user = new MCRUser(uid, realmID);
-                user.assignRole("submitter");
+                user.assignRole(defaultRole);
                 MCRUserManager.createUser(user);
             }
             List<LDAPObject> ldapObjects = searchUserInLDAP(ctx, user);
