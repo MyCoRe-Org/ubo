@@ -44,6 +44,9 @@ import java.util.stream.Collectors;
  *
  * The following properties in the mycore.properties are used:
  *
+ * # Default Role that is assigned to newly created users
+ * MCR.user2.IdentityManagement.UserCreation.DefaultRole=submitter
+ *
  * MCR.user2.matching.chain (Multiple implementations separated by ",")
  * Example:
  * MCR.user2.matching.chain=unidue.ubo.matcher.MCRUserMatcherLDAP,unidue.ubo.matcher.MCRUserMatcherDummy
@@ -60,6 +63,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
 
     private final static String CONFIG_MATCHERS = "MCR.user2.matching.chain";
     private final static String CONFIG_LEAD_ID = "MCR.user2.matching.lead_id";
+    private final static String CONFIG_DEFAULT_ROLE = "MCR.user2.IdentityManagement.UserCreation.DefaultRole";
 
     private List<MCRUserMatcher> loadMatcherImplementationChain() {
         List<MCRUserMatcher> matchers = new ArrayList<>();
@@ -86,6 +90,11 @@ public class PublicationEventHandler extends MCREventHandlerBase {
         return config.getString(CONFIG_LEAD_ID, "");
     }
 
+    private String loadDefaultRoleConfig() {
+        MCRConfiguration config = MCRConfiguration.instance();
+        return config.getString(CONFIG_DEFAULT_ROLE, "submitter");
+    }
+
     @Override
     protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {
         // TODO: remove this, since this EventHandler should only work for "ObjectCreated" events!
@@ -94,6 +103,9 @@ public class PublicationEventHandler extends MCREventHandlerBase {
 
     @Override
     protected void handleObjectCreated(MCREvent evt, MCRObject obj) {
+        // get default role for new users
+        String defaultRole = loadDefaultRoleConfig();
+
         // get all mods:name from persons (authors etc.) of the publication
         List<Element> modsNameElements = MCRUserMatcherUtils.getNameElements(obj);
 
@@ -126,6 +138,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
             MCRUserMatcherDTO localMatcherDTO = localMatcher.matchUser(matcherDTO);
             if (localMatcherDTO.wasMatchedOrEnriched()) {
                 MCRUser mcrUserFinal = localMatcherDTO.getMCRUser();
+                mcrUserFinal.assignRole(defaultRole);
                 MCRUserManager.updateUser(mcrUserFinal);
                 enrichModsNameElementByLeadID(modsNameElement, leadIDName, mcrUserFinal);
             }
