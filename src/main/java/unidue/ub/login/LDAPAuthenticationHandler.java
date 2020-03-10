@@ -7,9 +7,11 @@ import java.util.Map;
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration;
+import org.mycore.user2.MCRRealmFactory;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUser2Constants;
 import org.mycore.user2.MCRUserManager;
@@ -44,6 +46,9 @@ import unidue.ubo.ldap.LDAPSearcher;
  * # Default Role that is assigned to newly created users
  * MCR.user2.IdentityManagement.UserCreation.DefaultRole=submitter
  *
+ * # Realm that newly created users get assigned to
+ * MCR.user2.IdentityManagement.UserCreation.LDAP.Realm=ldap
+ *
  * @author Frank L\u00FCtzenkirchen
  */
 public class LDAPAuthenticationHandler extends AuthenticationHandler {
@@ -52,6 +57,7 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
 
     private static final String CONFIG_PREFIX = MCRUser2Constants.CONFIG_PREFIX + "LDAP.";
     private static final String CONFIG_ROLE = MCRUser2Constants.CONFIG_PREFIX + "IdentityManagement.UserCreation.DefaultRole";
+    private static final String CONFIG_REALM = MCRUser2Constants.CONFIG_PREFIX + "IdentityManagement.UserCreation.LDAP.Realm";
 
     /** Filter for user ID */
     private String uidFilter;
@@ -66,6 +72,7 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
     private String mapEMail;
 
     private String defaultRole;
+    private String realm;
 
     public LDAPAuthenticationHandler() {
         MCRConfiguration config = MCRConfiguration.instance();
@@ -77,6 +84,7 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
         mapEMail = config.getString(CONFIG_PREFIX + "Mapping.E-Mail");
 
         defaultRole = config.getString(CONFIG_ROLE, "submitter");
+        realm = config.getString(CONFIG_REALM, MCRRealmFactory.getLocalRealm().getID());
     }
 
     public MCRUser authenticate(String uid, String pwd) throws Exception {
@@ -88,14 +96,15 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
                 return null;
             }
 
-            LOGGER.debug("Login of " + uid + " via LDAP was successful");
+            LOGGER.info("Login of " + uid + " via LDAP was successful");
 
-            MCRUser user = MCRUserManager.getUser(uid, realmID);
+            MCRUser user = MCRUserManager.getUser(uid, realm);
+
             if (user != null) {
                 LOGGER.debug("User " + uid + " already known in store");
             } else {
-                LOGGER.debug("User " + uid + " unknown in store, will create");
-                user = new MCRUser(uid, realmID);
+                LOGGER.debug("User " + uid + " unknown in store, will create with realm: " + realm);
+                user = new MCRUser(uid, realm);
                 user.assignRole(defaultRole);
                 MCRUserManager.createUser(user);
             }

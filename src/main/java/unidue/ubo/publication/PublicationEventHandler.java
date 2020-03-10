@@ -31,11 +31,11 @@ import java.util.stream.Collectors;
  * 2. Match all new MCRUsers against the configured chain of implementations of MCRUserMatcher
  *
  * 2.1 When a match is found, the MCRUserMatcher implementations shall enrich the MCRUsers attributes with the matched
- * Users attributes of the target system
+ * Users attributes of the target system, it is also the MCRUserMatcher implementations task to set the realm of the
+ * created user appropriately
  *
  * 3. At last, match the new MCRUser against the locally persisted MCRUsers. If a match is found, the already persisted
- * MCRUsers attributes are enriched with the new MCRUsers attributes. Otherwise, persist the new MCRUser in a special
- * realm
+ * MCRUsers attributes are enriched with the new MCRUsers attributes. Otherwise, persist the new MCRUser
  *
  * 4. Persist all new MCRUsers ONLY if they where matched/enriched in 2.1. or in 3.
  *
@@ -54,6 +54,8 @@ import java.util.stream.Collectors;
  * MCR.user2.matching.lead_id TODO: anpassen...
  * Example:
  * MCR.user2.matching.lead_id=id_scopus
+ *
+ *
  *
  * @author Pascal Rost
  */

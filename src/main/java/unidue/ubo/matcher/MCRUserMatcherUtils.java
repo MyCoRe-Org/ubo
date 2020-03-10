@@ -34,8 +34,6 @@ public class MCRUserMatcherUtils {
 
     public static final Namespace MODS_NAMESPACE = Namespace.getNamespace("mods", "http://www.loc.gov/mods/v3");
 
-    public final static String UNVALIDATED_REALM = "ude"; // TODO: create specific realm for unvalidated users
-
     public static List<Element> getNameElements(MCRObject obj) {
         MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
         return wrapper.getElements("mods:name[@type='personal']");
@@ -79,20 +77,22 @@ public class MCRUserMatcherUtils {
         return MCRORCIDUser.ATTR_ID_PREFIX + nameIdentifierType;
     }
 
+    /**
+     * Given a mods:name Element, create a new transient (not persisted) MCRUser where the mods:namePart and
+     * mods:nameIdentifier child-elements are used for the user name and attributes of the new MCRUser. Does not set a
+     * realm for the new MCRUser (the default one is the configured "local"-realm).
+     * @param modsNameElement the mods:name-Element (xml) from which a new transient MCRUser shall be created
+     * @return MCRUser, a transient MCRUser in the realm "local" (as configured)
+     */
     public static MCRUser createNewMCRUserFromModsNameElement(Element modsNameElement) {
         String userName = getUserNameFromModsNameElement(modsNameElement);
         Map<String, String> nameIdentifiers = MCRUserMatcherUtils.getNameIdentifiers(modsNameElement);
-        MCRUser mcrUser =  new MCRUser(userName, UNVALIDATED_REALM);
+        MCRUser mcrUser =  new MCRUser(userName);
         enrichUserWithGivenNameIdentifiers(mcrUser, nameIdentifiers);
         return mcrUser;
     }
 
     private static String getUserNameFromModsNameElement(Element modsNameElement) {
-        // TODO: THE FOLLOWING TODO(s) MIGHT ALREADY BE DEPRECATED (16.01.2020)
-        // TODO: IMPORTANT -> creating the name this way, the connection between any matched user and the login of the
-        // TODO: target API (for example LDAP) will not work. For LDAP, the MCRUsers username needs to be the same as
-        // TODO: the uid (or cn) in LDAP
-        // TODO: adapt the LDAP login to use a special MCRUser-Attribute (ldap_login...) instead of the username (?)
 
         XPathFactory xFactory = XPathFactory.instance();
 
