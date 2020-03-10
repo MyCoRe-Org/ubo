@@ -49,7 +49,7 @@ import unidue.ubo.ldap.LDAPSearcher;
  * # Realm that newly created users get assigned to
  * MCR.user2.IdentityManagement.UserCreation.LDAP.Realm=ldap
  *
- * @author Frank L\u00FCtzenkirchen
+ * @author Frank L\u00FCtzenkirchen, Pascal Rost
  */
 public class LDAPAuthenticationHandler extends AuthenticationHandler {
 

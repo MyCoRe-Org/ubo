@@ -11,6 +11,7 @@ import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.user2.MCRRealmFactory;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserManager;
 import unidue.ubo.matcher.MCRUserMatcherDTO;
@@ -42,10 +43,17 @@ import java.util.stream.Collectors;
  * 5. Extend the mods:name -> mods:nameIdentifier element of the publication with the configured "lead-ID" if it is
  * not present but available in the matched MCRUsers attributes.
  *
+ * 6. If no MCRUser was created because there was neither Match found nor attributes enriched (2.1. or 3.), check each
+ * person in the publication for affiliation. If an affiliation is found, create a new MCRUser in a special realm and
+ * persist it.
+ *
  * The following properties in the mycore.properties are used:
  *
  * # Default Role that is assigned to newly created users
  * MCR.user2.IdentityManagement.UserCreation.DefaultRole=submitter
+ *
+ * # Realm of unvalidated MCRUsers
+ * MCR.user2.IdentityManagement.UserCreation.Unvalidated.Realm=unvalidated
  *
  * MCR.user2.matching.chain (Multiple implementations separated by ",")
  * Example:
@@ -66,6 +74,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     private final static String CONFIG_MATCHERS = "MCR.user2.matching.chain";
     private final static String CONFIG_LEAD_ID = "MCR.user2.matching.lead_id";
     private final static String CONFIG_DEFAULT_ROLE = "MCR.user2.IdentityManagement.UserCreation.DefaultRole";
+    private final static String CONFIG_UNVALIDATED_REALM = "MCR.user2.IdentityManagement.UserCreation.Unvalidated.Realm";
 
     private List<MCRUserMatcher> loadMatcherImplementationChain() {
         List<MCRUserMatcher> matchers = new ArrayList<>();
@@ -97,6 +106,15 @@ public class PublicationEventHandler extends MCREventHandlerBase {
         return config.getString(CONFIG_DEFAULT_ROLE, "submitter");
     }
 
+    private String loadUnvalidatedRealmConfig() {
+        MCRConfiguration config = MCRConfiguration.instance();
+        String unvalidated_realm = config.getString(CONFIG_UNVALIDATED_REALM);
+        if(unvalidated_realm == null) {
+            throw new MCRConfigurationException("Property key " + CONFIG_UNVALIDATED_REALM + " is missing!");
+        }
+        return unvalidated_realm;
+    }
+
     @Override
     protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {
         // TODO: remove this, since this EventHandler should only work for "ObjectCreated" events!
@@ -107,6 +125,9 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     protected void handleObjectCreated(MCREvent evt, MCRObject obj) {
         // get default role for new users
         String defaultRole = loadDefaultRoleConfig();
+
+        // get realmID for unvalidated MCRUsers
+        final String UNVALIDATED_REALM = loadUnvalidatedRealmConfig();
 
         // get all mods:name from persons (authors etc.) of the publication
         List<Element> modsNameElements = MCRUserMatcherUtils.getNameElements(obj);
@@ -143,6 +164,15 @@ public class PublicationEventHandler extends MCREventHandlerBase {
                 mcrUserFinal.assignRole(defaultRole);
                 MCRUserManager.updateUser(mcrUserFinal);
                 enrichModsNameElementByLeadID(modsNameElement, leadIDName, mcrUserFinal);
+            } else {
+                if(MCRUserMatcherUtils.checkAffiliation(modsNameElement) &&
+                        (MCRUserMatcherUtils.getNameIdentifiers(modsNameElement).size() > 0)) {
+                    MCRUser affiliatedUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement, UNVALIDATED_REALM);
+                    affiliatedUser.assignRole(defaultRole);
+                    MCRUserManager.updateUser(affiliatedUser);
+                } else {
+                    // ignore Person, do NOT create a new MCRUser
+                }
             }
         }
         LOGGER.debug("Final document: {}", new XMLOutputter(Format.getPrettyFormat()).outputString(obj.createXML()));

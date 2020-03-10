@@ -5,11 +5,14 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.filter.Filters;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.orcid.user.MCRORCIDUser;
+import org.mycore.user2.MCRRealmFactory;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 
@@ -39,7 +42,7 @@ public class MCRUserMatcherUtils {
         return wrapper.getElements("mods:name[@type='personal']");
     }
 
-    private static Map<String, String> getNameIdentifiers(Element modsNameElement) {
+    public static Map<String, String> getNameIdentifiers(Element modsNameElement) {
         Map<String, String> nameIdentifiers = new HashMap<>(); // TODO: possible use of MultiMap for multiple attributes of the same type
         List<Element> identifiers = modsNameElement.getChildren("nameIdentifier", MODS_NAMESPACE);
         for(Element identifierElement : identifiers) {
@@ -85,9 +88,13 @@ public class MCRUserMatcherUtils {
      * @return MCRUser, a transient MCRUser in the realm "local" (as configured)
      */
     public static MCRUser createNewMCRUserFromModsNameElement(Element modsNameElement) {
+        return createNewMCRUserFromModsNameElement(modsNameElement, MCRRealmFactory.getLocalRealm().getID());
+    }
+
+    public static MCRUser createNewMCRUserFromModsNameElement(Element modsNameElement, String realmID) {
         String userName = getUserNameFromModsNameElement(modsNameElement);
         Map<String, String> nameIdentifiers = MCRUserMatcherUtils.getNameIdentifiers(modsNameElement);
-        MCRUser mcrUser =  new MCRUser(userName);
+        MCRUser mcrUser = new MCRUser(userName, realmID);
         enrichUserWithGivenNameIdentifiers(mcrUser, nameIdentifiers);
         return mcrUser;
     }
@@ -151,5 +158,26 @@ public class MCRUserMatcherUtils {
         }
         LOGGER.info("parameters: " + parameters);
         return parameters;
+    }
+
+    public static boolean checkAffiliation(Element modsNameElement) {
+        boolean affiliated = false;
+
+        LOGGER.debug("Checking affiliation of:");
+        LOGGER.debug(new XMLOutputter(Format.getPrettyFormat()).outputString(modsNameElement));
+
+        XPathFactory xFactory = XPathFactory.instance();
+        XPathExpression<Element> affiliationExpr = xFactory.compile("mods:affiliation",
+                Filters.element(), null, MODS_NAMESPACE);
+        Element affiliationElem = affiliationExpr.evaluateFirst(modsNameElement);
+        if(affiliationElem != null) {
+            String modsNameAffiliation = affiliationElem.getText();
+            // TODO: change this to use a non-static list of values to check for affiliation
+            if(modsNameAffiliation.equals("Uni Jena")) {
+                affiliated = true;
+            }
+        }
+        LOGGER.debug("Affiliated: {}", affiliated);
+        return affiliated;
     }
 }
