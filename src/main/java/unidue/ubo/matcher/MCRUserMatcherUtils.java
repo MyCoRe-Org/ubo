@@ -9,6 +9,7 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.orcid.user.MCRORCIDUser;
@@ -28,6 +29,11 @@ import java.util.SortedSet;
 /**
  * Utility class for everything related to matching users of publications in MODS-format with MCRUsers and other
  * applications/servers/APIs.
+ *
+ * The following properties in the mycore.properties are used:
+ *
+ * # Used to check the affiliation of publication authors
+ * MCR.user2.IdentityManagement.UserCreation.Affiliation=Uni Jena
  *
  * @author Pascal Rost
  */
@@ -161,6 +167,12 @@ public class MCRUserMatcherUtils {
     }
 
     public static boolean checkAffiliation(Element modsNameElement) {
+        MCRConfiguration config = MCRConfiguration.instance();
+        String affiliation = config.getString("MCR.user2.IdentityManagement.UserCreation.Affiliation");
+        if(affiliation == null) {
+            return false;
+        }
+
         boolean affiliated = false;
 
         LOGGER.debug("Checking affiliation of:");
@@ -173,7 +185,7 @@ public class MCRUserMatcherUtils {
         if(affiliationElem != null) {
             String modsNameAffiliation = affiliationElem.getText();
             // TODO: change this to use a non-static list of values to check for affiliation
-            if(modsNameAffiliation.equals("Uni Jena")) {
+            if(modsNameAffiliation.contains(affiliation)) {
                 affiliated = true;
             }
         }
