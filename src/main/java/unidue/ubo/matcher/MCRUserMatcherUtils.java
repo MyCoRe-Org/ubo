@@ -15,7 +15,9 @@ import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.orcid.user.MCRORCIDUser;
 import org.mycore.user2.MCRRealmFactory;
 import org.mycore.user2.MCRUser;
+import org.mycore.user2.MCRUser2Constants;
 import org.mycore.user2.MCRUserAttribute;
+import unidue.ubo.ldap.LDAPObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -35,6 +37,16 @@ import java.util.SortedSet;
  * # Used to check the affiliation of publication authors
  * MCR.user2.IdentityManagement.UserCreation.Affiliation=Uni Jena
  *
+ * # Mapping from LDAP attribute to real name of user
+ * MCR.user2.LDAP.Mapping.Name=cn
+ *
+ * # Mapping from LDAP attribute to E-Mail address of user
+ * MCR.user2.LDAP.Mapping.E-Mail=mail
+ *
+ * # Mapping of any attribute.value combination to group membership of user
+ * # eduPersonScopedAffiliation may be faculty|staff|employee|student|alum|member|affiliate
+ * MCR.user2.LDAP.Mapping.Group.eduPersonScopedAffiliation.staff@uni-duisburg-essen.de=submitter *
+ *
  * @author Pascal Rost
  */
 public class MCRUserMatcherUtils {
@@ -42,6 +54,8 @@ public class MCRUserMatcherUtils {
     private final static Logger LOGGER = LogManager.getLogger(MCRUserMatcherUtils.class);
 
     public static final Namespace MODS_NAMESPACE = Namespace.getNamespace("mods", "http://www.loc.gov/mods/v3");
+
+    private static final String CONFIG_PREFIX = MCRUser2Constants.CONFIG_PREFIX + "LDAP.";
 
     public static List<Element> getNameElements(MCRObject obj) {
         MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
@@ -190,5 +204,79 @@ public class MCRUserMatcherUtils {
         }
         LOGGER.debug("Affiliated: {}", affiliated);
         return affiliated;
+    }
+
+    /**
+     * Method to set the static MCRUser-Attributes (RealName and Email)
+     * @param mcrUser the MCRUser whose static Attributes should be set
+     * @param ldapUser the ldapUser whose Attributes are used to fill the static attributes of the MCRUser
+     */
+    public static void setStaticMCRUserAttributes(MCRUser mcrUser, LDAPObject ldapUser) {
+        for(Map.Entry<String, String> attributeEntry : ldapUser.getAttributes().entries()) {
+            String attributeID = attributeEntry.getKey();
+            String attributeValue = attributeEntry.getValue();
+            setUserRealName(mcrUser, attributeID, attributeValue);
+            setUserEMail(mcrUser, attributeID, attributeValue);
+        }
+    }
+
+    private static void setUserEMail(MCRUser user, String attributeID, String attributeValue) {
+        MCRConfiguration config = MCRConfiguration.instance();
+        String mapEMail = config.getString(CONFIG_PREFIX + "Mapping.E-Mail");
+        if (attributeID.equals(mapEMail) && (user.getEMailAddress() == null)) {
+            LOGGER.debug("User " + user.getUserName() + " e-mail = " + attributeValue);
+            user.setEMail(attributeValue);
+        }
+    }
+
+    private static void setUserRealName(MCRUser user, String attributeID, String attributeValue) {
+        MCRConfiguration config = MCRConfiguration.instance();
+        String mapName = config.getString(CONFIG_PREFIX + "Mapping.Name");
+        if (attributeID.equals(mapName) && (user.getRealName() == null)) {
+            attributeValue = formatName(attributeValue);
+            LOGGER.debug("User " + user.getUserName() + " name = " + attributeValue);
+            user.setRealName(attributeValue);
+        }
+    }
+
+    /** Formats a user name into "lastname, firstname" syntax. */
+    private static String formatName(String name) {
+        name = name.replaceAll("\\s+", " ").trim();
+        if (name.contains(",")) {
+            return name;
+        }
+        int pos = name.lastIndexOf(' ');
+        if (pos == -1) {
+            return name;
+        }
+        return name.substring(pos + 1, name.length()) + ", " + name.substring(0, pos);
+    }
+
+    /**
+     * Uses specific mycore.properties configuration to add a MCRUser dynamically to groups/roles
+     * Example:
+     * # Mapping of any attribute.value combination to group membership of user
+     * # eduPersonScopedAffiliation may be faculty|staff|employee|student|alum|member|affiliate
+     * MCR.user2.LDAP.Mapping.Group.eduPersonScopedAffiliation.staff@uni-duisburg-essen.de=submitter *
+     * @param mcrUser the MCRUser that shall be added to the configured groups/roles if the corresponding
+     *                LDAP-Attributes exist
+     * @param ldapUser the LDAPObject/User from which the LDAP-Attributes should be used to map against the configured
+     *                 groups/roles for the MCRUser
+     */
+    public static void addMCRUserToDynamicGroups(MCRUser mcrUser, LDAPObject ldapUser) {
+        for(Map.Entry<String, String> attributeEntry : ldapUser.getAttributes().entries()) {
+            String attributeID = attributeEntry.getKey();
+            String attributeValue = attributeEntry.getValue();
+            addToGroup(mcrUser, attributeID, attributeValue);
+        }
+    }
+
+    private static void addToGroup(MCRUser mcrUser, String attributeID, String attributeValue) {
+        String groupMapping = CONFIG_PREFIX + "Mapping.Group." + attributeID + "." + attributeValue;
+        String group = MCRConfiguration.instance().getString(groupMapping, null);
+        if ((group != null) && (!mcrUser.isUserInRole((group)))) {
+            LOGGER.info("Add user " + mcrUser.getUserName() + " to group " + group);
+            mcrUser.assignRole(group);
+        }
     }
 }

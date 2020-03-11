@@ -3,6 +3,7 @@ package unidue.ub.login;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.SortedSet;
 
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
@@ -14,10 +15,13 @@ import org.mycore.common.config.MCRConfiguration;
 import org.mycore.user2.MCRRealmFactory;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUser2Constants;
+import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
 import unidue.ubo.ldap.LDAPAuthenticator;
 import unidue.ubo.ldap.LDAPObject;
 import unidue.ubo.ldap.LDAPSearcher;
+import unidue.ubo.matcher.MCRUserMatcherLDAP;
+import unidue.ubo.matcher.MCRUserMatcherUtils;
 
 /**
  * Checks the given user ID and password combination against remote LDAP server
@@ -30,20 +34,7 @@ import unidue.ubo.ldap.LDAPSearcher;
  * # Filter for user ID
  * MCR.user2.LDAP.UIDFilter=(uid=%s)
  *
- * # Mapping from LDAP attribute to real name of user
- * MCR.user2.LDAP.Mapping.Name=cn
- *
- * # Mapping from LDAP attribute to E-Mail address of user
- * MCR.user2.LDAP.Mapping.E-Mail=mail
- *
- * # Default group membership (optional) for any successful login
- * MCR.user2.LDAP.Mapping.Group.DefaultGroup=submitter
- *
- * # Mapping of any attribute.value combination to group membership of user
- * # eduPersonScopedAffiliation may be faculty|staff|employee|student|alum|member|affiliate
- * MCR.user2.LDAP.Mapping.Group.eduPersonScopedAffiliation.staff@uni-duisburg-essen.de=submitter
- *
- * # Default Role that is assigned to newly created users
+ * # Default Role/Group that is assigned to newly created users
  * MCR.user2.IdentityManagement.UserCreation.DefaultRole=submitter
  *
  * # Realm that newly created users get assigned to
@@ -65,12 +56,6 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
     /** Base DN, uid of user on actual login will be used! */
     private String baseDN;
 
-    /** Mapping from LDAP attribute to real name of user */
-    private String mapName;
-
-    /** Mapping from LDAP attribute to E-Mail address of user */
-    private String mapEMail;
-
     private String defaultRole;
     private String realm;
 
@@ -79,9 +64,6 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
 
         uidFilter = config.getString(CONFIG_PREFIX + "UIDFilter");
         baseDN = config.getString(CONFIG_PREFIX + "BaseDN");
-
-        mapName = config.getString(CONFIG_PREFIX + "Mapping.Name");
-        mapEMail = config.getString(CONFIG_PREFIX + "Mapping.E-Mail");
 
         defaultRole = config.getString(CONFIG_ROLE, "submitter");
         realm = config.getString(CONFIG_REALM, MCRRealmFactory.getLocalRealm().getID());
@@ -101,18 +83,30 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
             MCRUser user = MCRUserManager.getUser(uid, realm);
 
             if (user != null) {
-                LOGGER.debug("User " + uid + " already known in store");
+                LOGGER.info("User " + uid + " already known in store");
             } else {
-                LOGGER.debug("User " + uid + " unknown in store, will create with realm: " + realm);
+                LOGGER.info("User " + uid + " unknown in store, will create with realm: " + realm);
                 user = new MCRUser(uid, realm);
                 user.assignRole(defaultRole);
+
+                // logic to make new MCRUser connected to LDAPUser if possible (matching is done by MCR/LDAP-Attributes)
+                List<LDAPObject> ldapObjects = searchUserInLDAP(ctx, user);
+                if(ldapObjects.size() == 1) {
+                    LDAPObject ldapUser = ldapObjects.get(0);
+
+                    MCRUserMatcherUtils.setStaticMCRUserAttributes(user, ldapUser);
+                    MCRUserMatcherUtils.addMCRUserToDynamicGroups(user, ldapUser);
+
+                    // convert LDAP-Attributes/Values into MCRUser Attributes and put them into new MCRUser
+                    MCRUserMatcherLDAP userMatcher = new MCRUserMatcherLDAP();
+                    SortedSet<MCRUserAttribute> userAttributesFromLDAP =
+                            userMatcher.convertLDAPAttributesToMCRUserAttributes(ldapUser);
+                    user.getAttributes().addAll(userAttributesFromLDAP);
+                } else {
+                    // TODO: what should happen if ldapObjects contains more than one LDAPObject, i.e. the search returned multiple users?
+                }
+
                 MCRUserManager.createUser(user);
-            }
-            List<LDAPObject> ldapObjects = searchUserInLDAP(ctx, user);
-            if(ldapObjects.size() == 1) {
-                setUserAttributes(ctx, user, ldapObjects.get(0));
-            } else {
-                // TODO: what should happen if ldapObjects contains more than one LDAPObject, i.e. the search returned multiple users?
             }
 
             return user;
@@ -136,56 +130,5 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
         String filter = String.format(Locale.ROOT, uidFilter, uid);
 
         return new LDAPSearcher().search(ctx, principal, filter);
-    }
-
-    /**
-     * Sets the MCRUser's name, e-mail and groups by mapping LDAP attributes.
-     */
-    private void setUserAttributes(DirContext ctx, MCRUser user, LDAPObject userLDAPObject) {
-        addToGroup(user, CONFIG_PREFIX + "Mapping.Group.DefaultGroup");
-
-        for(Map.Entry<String, String> attributeEntry : userLDAPObject.getAttributes().entries()) {
-            String attributeID = attributeEntry.getKey();
-            String attributeValue = attributeEntry.getValue();
-            setUserRealName(user, attributeID, attributeValue);
-            setUserEMail(user, attributeID, attributeValue);
-            addToGroup(user, CONFIG_PREFIX + "Mapping.Group." + attributeID + "." + attributeValue);
-        }
-    }
-
-    private void setUserEMail(MCRUser user, String attributeID, String attributeValue) {
-        if (attributeID.equals(mapEMail) && (user.getEMailAddress() == null)) {
-            LOGGER.debug("User " + user.getUserName() + " e-mail = " + attributeValue);
-            user.setEMail(attributeValue);
-        }
-    }
-
-    private void setUserRealName(MCRUser user, String attributeID, String attributeValue) {
-        if (attributeID.equals(mapName) && (user.getRealName() == null)) {
-            attributeValue = formatName(attributeValue);
-            LOGGER.debug("User " + user.getUserName() + " name = " + attributeValue);
-            user.setRealName(attributeValue);
-        }
-    }
-
-    private void addToGroup(MCRUser user, String groupMapping) {
-        String group = MCRConfiguration.instance().getString(groupMapping, null);
-        if ((group != null) && (!user.isUserInRole((group)))) {
-            LOGGER.info("Add user " + user.getUserName() + " to group " + group);
-            user.assignRole(group);
-        }
-    }
-
-    /** Formats a user name into "lastname, firstname" syntax. */
-    private static String formatName(String name) {
-        name = name.replaceAll("\\s+", " ").trim();
-        if (name.contains(",")) {
-            return name;
-        }
-        int pos = name.lastIndexOf(' ');
-        if (pos == -1) {
-            return name;
-        }
-        return name.substring(pos + 1, name.length()) + ", " + name.substring(0, pos);
     }
 }
