@@ -5,11 +5,15 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.filter.Filters;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.orcid.user.MCRORCIDUser;
+import org.mycore.user2.MCRRealmFactory;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 
@@ -26,6 +30,11 @@ import java.util.SortedSet;
  * Utility class for everything related to matching users of publications in MODS-format with MCRUsers and other
  * applications/servers/APIs.
  *
+ * The following properties in the mycore.properties are used:
+ *
+ * # Used to check the affiliation of publication authors
+ * MCR.user2.IdentityManagement.UserCreation.Affiliation=Uni Jena
+ *
  * @author Pascal Rost
  */
 public class MCRUserMatcherUtils {
@@ -34,14 +43,12 @@ public class MCRUserMatcherUtils {
 
     public static final Namespace MODS_NAMESPACE = Namespace.getNamespace("mods", "http://www.loc.gov/mods/v3");
 
-    public final static String UNVALIDATED_REALM = "ude"; // TODO: create specific realm for unvalidated users
-
     public static List<Element> getNameElements(MCRObject obj) {
         MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
         return wrapper.getElements("mods:name[@type='personal']");
     }
 
-    private static Map<String, String> getNameIdentifiers(Element modsNameElement) {
+    public static Map<String, String> getNameIdentifiers(Element modsNameElement) {
         Map<String, String> nameIdentifiers = new HashMap<>(); // TODO: possible use of MultiMap for multiple attributes of the same type
         List<Element> identifiers = modsNameElement.getChildren("nameIdentifier", MODS_NAMESPACE);
         for(Element identifierElement : identifiers) {
@@ -79,20 +86,26 @@ public class MCRUserMatcherUtils {
         return MCRORCIDUser.ATTR_ID_PREFIX + nameIdentifierType;
     }
 
+    /**
+     * Given a mods:name Element, create a new transient (not persisted) MCRUser where the mods:namePart and
+     * mods:nameIdentifier child-elements are used for the user name and attributes of the new MCRUser. Does not set a
+     * realm for the new MCRUser (the default one is the configured "local"-realm).
+     * @param modsNameElement the mods:name-Element (xml) from which a new transient MCRUser shall be created
+     * @return MCRUser, a transient MCRUser in the realm "local" (as configured)
+     */
     public static MCRUser createNewMCRUserFromModsNameElement(Element modsNameElement) {
+        return createNewMCRUserFromModsNameElement(modsNameElement, MCRRealmFactory.getLocalRealm().getID());
+    }
+
+    public static MCRUser createNewMCRUserFromModsNameElement(Element modsNameElement, String realmID) {
         String userName = getUserNameFromModsNameElement(modsNameElement);
         Map<String, String> nameIdentifiers = MCRUserMatcherUtils.getNameIdentifiers(modsNameElement);
-        MCRUser mcrUser =  new MCRUser(userName, UNVALIDATED_REALM);
+        MCRUser mcrUser = new MCRUser(userName, realmID);
         enrichUserWithGivenNameIdentifiers(mcrUser, nameIdentifiers);
         return mcrUser;
     }
 
     private static String getUserNameFromModsNameElement(Element modsNameElement) {
-        // TODO: THE FOLLOWING TODO(s) MIGHT ALREADY BE DEPRECATED (16.01.2020)
-        // TODO: IMPORTANT -> creating the name this way, the connection between any matched user and the login of the
-        // TODO: target API (for example LDAP) will not work. For LDAP, the MCRUsers username needs to be the same as
-        // TODO: the uid (or cn) in LDAP
-        // TODO: adapt the LDAP login to use a special MCRUser-Attribute (ldap_login...) instead of the username (?)
 
         XPathFactory xFactory = XPathFactory.instance();
 
@@ -151,5 +164,31 @@ public class MCRUserMatcherUtils {
         }
         LOGGER.info("parameters: " + parameters);
         return parameters;
+    }
+
+    public static boolean checkAffiliation(Element modsNameElement) {
+        MCRConfiguration config = MCRConfiguration.instance();
+        String affiliation = config.getString("MCR.user2.IdentityManagement.UserCreation.Affiliation");
+        if(affiliation == null) {
+            return false;
+        }
+
+        boolean affiliated = false;
+
+        LOGGER.debug("Checking affiliation of:");
+        LOGGER.debug(new XMLOutputter(Format.getPrettyFormat()).outputString(modsNameElement));
+
+        XPathFactory xFactory = XPathFactory.instance();
+        XPathExpression<Element> affiliationExpr = xFactory.compile("mods:affiliation",
+                Filters.element(), null, MODS_NAMESPACE);
+        Element affiliationElem = affiliationExpr.evaluateFirst(modsNameElement);
+        if(affiliationElem != null) {
+            String modsNameAffiliation = affiliationElem.getText();
+            if(modsNameAffiliation.contains(affiliation)) {
+                affiliated = true;
+            }
+        }
+        LOGGER.debug("Affiliated: {}", affiliated);
+        return affiliated;
     }
 }

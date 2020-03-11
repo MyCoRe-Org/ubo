@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.config.MCRConfigurationException;
+import org.mycore.user2.MCRRealmFactory;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 import unidue.ubo.ldap.LDAPAuthenticator;
@@ -55,6 +56,9 @@ import java.util.stream.Collectors;
  * # The following configuration is used to normalize (and de-normalize) the LDAP "eduPersonOrcid"-Attributevalue
  * MCR.IdentityPicker.LDAP.normalization.ORCID.resolver=https://orcid.org/
  *
+ * # Realm that newly created users get assigned to
+ * MCR.user2.IdentityManagement.UserCreation.LDAP.Realm=ldap
+ *
  * @author Pascal Rost
  */
 public class MCRUserMatcherLDAP implements MCRUserMatcher {
@@ -78,9 +82,13 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
     private final String CONFIG_ORCID_NORMALIZATION_RESOLVER = "MCR.IdentityPicker.LDAP.normalization.ORCID.resolver";
     private String orcid_resolver;
 
+    private final String CONFIG_REALM = "MCR.user2.IdentityManagement.UserCreation.LDAP.Realm";
+    private String realm;
+
     public MCRUserMatcherLDAP() {
         loadLDAPMappingConfiguration();
         orcid_resolver = MCRConfiguration.instance().getString(CONFIG_ORCID_NORMALIZATION_RESOLVER, "");
+        realm = MCRConfiguration.instance().getString(CONFIG_REALM, MCRRealmFactory.getLocalRealm().getID());
     }
 
     private void loadLDAPMappingConfiguration() {
@@ -193,7 +201,7 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
             */
             // Because the username can not be changed once set, we have to create a new user at this point
             String userName = getUserNameFromLDAPUser(ldapUser);
-            MCRUser newMcrUser =  new MCRUser(userName, MCRUserMatcherUtils.UNVALIDATED_REALM);
+            MCRUser newMcrUser = new MCRUser(userName, realm);
             newMcrUser.setAttributes(mcrUser.getAttributes());
             matcherDTO.setMCRUser(newMcrUser);
             matcherDTO.setMatchedOrEnriched(true);
