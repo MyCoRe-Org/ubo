@@ -184,7 +184,6 @@ public class MCRUserMatcherUtils {
         Element affiliationElem = affiliationExpr.evaluateFirst(modsNameElement);
         if(affiliationElem != null) {
             String modsNameAffiliation = affiliationElem.getText();
-            // TODO: change this to use a non-static list of values to check for affiliation
             if(modsNameAffiliation.contains(affiliation)) {
                 affiliated = true;
             }
