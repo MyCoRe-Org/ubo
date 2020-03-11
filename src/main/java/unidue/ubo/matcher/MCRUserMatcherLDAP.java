@@ -202,6 +202,7 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
             // Because the username can not be changed once set, we have to create a new user at this point
             String userName = getUserNameFromLDAPUser(ldapUser);
             MCRUser newMcrUser = new MCRUser(userName, realm);
+            MCRUserMatcherUtils.setStaticMCRUserAttributes(newMcrUser, ldapUser);
             newMcrUser.setAttributes(mcrUser.getAttributes());
             matcherDTO.setMCRUser(newMcrUser);
             matcherDTO.setMatchedOrEnriched(true);
