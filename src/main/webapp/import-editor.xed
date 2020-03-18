@@ -321,6 +321,8 @@
     </div>
     <xed:controls />
     <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+      <!-- TODO: decide how this shall be handled... -->
+      <!-- <xed:repeat xpath="mods:nameIdentifier[not(@type='lsf') and not(@type='connection')]"> -->
       <xed:repeat xpath="mods:nameIdentifier[not(@type='lsf')]">
       <div class="form-group form-inline col-12 px-0 mb-2 mt-2">
         <label class="mycore-form-label">
@@ -333,6 +335,8 @@
                 <option value="gnd">GND</option>
                 <option value="scopus">SCOPUS</option>
                 <option value="jena">Jena</option>
+                <!-- TODO: decide how this shall be handled... -->
+                <option value="connection">Internal MyCoRe Connection</option>
               </select>
             </xed:bind>
             <input type="text" class="{$xed-validation-marker} form-control col-sm-4" />
