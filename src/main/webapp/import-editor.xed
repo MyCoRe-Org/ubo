@@ -775,7 +775,7 @@
             <input id="project_acronym" type="text" class="mycore-form-input" />
           </div>
         </xed:bind>
-        <xed:bind xpath="cerif:Title[@xml:lang='de']">
+        <xed:bind xpath="cerif:Title">
           <div class="form-group form-inline">
             <label for="{xed:generate-id()}" class="mycore-form-label">
               <xed:output i18n="ubo.project.title" />:
@@ -789,12 +789,22 @@
         </xed:bind>
 
         <xed:bind xpath="cerif:Identifier[@type='https://w3id.org/cerif/vocab/IdentifierTypes#Finance-ID']">
-          <input id="funder" type="text" style="display: none;" />
+          <div class="form-group form-inline">
+            <label for="{xed:generate-id()}" class="mycore-form-label">
+              <xed:output i18n="ubo.project.funder" />:
+            </label>
+            <input id="funder" type="text" class="mycore-form-input" />
+          </div>
         </xed:bind>
 
         <xed:bind xpath="cerif:Funded/cerif:As/cerif:Funding">
           <xed:bind xpath="@id">
-            <input id="funding_number" type="text" style="display: none;" />
+            <div class="form-group form-inline">
+              <label for="{xed:generate-id()}" class="mycore-form-label">
+                <xed:output i18n="ubo.project.funding_number" />:
+              </label>
+              <input id="funding_number" type="text" class="mycore-form-input" />
+            </div>
           </xed:bind>
           <xed:bind xpath="cerif:Type">
             <input id="funding_type_value" type="text" style="display: none;"

@@ -56,4 +56,6 @@ $(document).ready(function(){
     // autocomplete settings and initialization
     acronym_input.autocomplete({delay: input_delay, minLength: min_length, source: call_solr, select: select_project});
     title_input.autocomplete({delay: input_delay, minLength: min_length, source: call_solr, select: select_project});
+    funder_input.autocomplete({delay: input_delay, minLength: min_length, source: call_solr, select: select_project});
+    funding_number_input.autocomplete({delay: input_delay, minLength: min_length, source: call_solr, select: select_project});
 });
