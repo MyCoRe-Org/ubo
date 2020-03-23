@@ -748,6 +748,7 @@
     <xed:cleanup-rule xpath="//mods:relatedItem" relevant-if="mods:titleInfo|@xlink:href" />
     <xed:cleanup-rule xpath="/mycoreobject/@label" relevant-if="true()" /> <!-- MyCoRe expects label attribute, even empty one -->
     <xed:cleanup-rule xpath="//mods:extension/cerif:Project" relevant-if="(string-length(cerif:Title) &gt; 0) or (cerif:Acronym)" />
+    <xed:cleanup-rule xpath="//mods:extension/temporary_search_input" relevant-if="false()"/>
   </xed:template>
 
   <xed:template id="cancel.submit">
@@ -765,6 +766,14 @@
 
   <xed:template id="projectInformation">
     <script src="{$WebApplicationBaseURL}js/project_autocomplete.js" />
+    <xed:bind xpath="mods:extension/temporary_search_input">
+      <div class="form-group form-inline">
+        <label for="{xed:generate-id()}" class="mycore-form-label">
+          <xed:output i18n="ubo.project.search" />:
+        </label>
+        <input id="project_search" type="text" class="mycore-form-input" />
+    </div>
+    </xed:bind>
     <xed:bind xpath="mods:extension[@displayLabel='project']">
       <xed:bind xpath="cerif:Project">
         <xed:bind xpath="cerif:Acronym">
@@ -772,7 +781,7 @@
             <label for="{xed:generate-id()}" class="mycore-form-label">
               <xed:output i18n="ubo.project.acronym" />:
             </label>
-            <input id="project_acronym" type="text" class="mycore-form-input" />
+            <input id="project_acronym" readonly="readonly" type="text" class="mycore-form-input" />
           </div>
         </xed:bind>
         <xed:bind xpath="cerif:Title">
@@ -780,7 +789,7 @@
             <label for="{xed:generate-id()}" class="mycore-form-label">
               <xed:output i18n="ubo.project.title" />:
             </label>
-            <input id="project_title" type="text" class="mycore-form-input" />
+            <input id="project_title" readonly="readonly" type="text" class="mycore-form-input" />
           </div>
 		</xed:bind>
 
@@ -793,7 +802,7 @@
             <label for="{xed:generate-id()}" class="mycore-form-label">
               <xed:output i18n="ubo.project.funder" />:
             </label>
-            <input id="funder" type="text" class="mycore-form-input" />
+            <input id="funder" type="text" readonly="readonly" class="mycore-form-input" />
           </div>
         </xed:bind>
 
@@ -803,7 +812,7 @@
               <label for="{xed:generate-id()}" class="mycore-form-label">
                 <xed:output i18n="ubo.project.funding_number" />:
               </label>
-              <input id="funding_number" type="text" class="mycore-form-input" />
+              <input id="funding_number" readonly="readonly" type="text" class="mycore-form-input" />
             </div>
           </xed:bind>
           <xed:bind xpath="cerif:Type">
