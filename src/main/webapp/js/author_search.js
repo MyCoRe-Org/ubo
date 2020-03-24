@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
     // config variables
-    let solr_url = '../solr/ubo/select/';
+    let solr_url = '../servlets/solr/select';
     let class_name = 'author-search';
     let id_connection = 'connection';
 
