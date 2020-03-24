@@ -781,7 +781,7 @@
             <label for="{xed:generate-id()}" class="mycore-form-label">
               <xed:output i18n="ubo.project.acronym" />:
             </label>
-            <input id="project_acronym" readonly="readonly" type="text" class="mycore-form-input" />
+            <input id="project_acronym" readonly="readonly" type="text" class="mycore-form-input readonly" />
           </div>
         </xed:bind>
         <xed:bind xpath="cerif:Title">
@@ -789,7 +789,7 @@
             <label for="{xed:generate-id()}" class="mycore-form-label">
               <xed:output i18n="ubo.project.title" />:
             </label>
-            <input id="project_title" readonly="readonly" type="text" class="mycore-form-input" />
+            <input id="project_title" readonly="readonly" type="text" class="mycore-form-input readonly" />
           </div>
 		</xed:bind>
 
@@ -802,7 +802,7 @@
             <label for="{xed:generate-id()}" class="mycore-form-label">
               <xed:output i18n="ubo.project.funder" />:
             </label>
-            <input id="funder" type="text" readonly="readonly" class="mycore-form-input" />
+            <input id="funder" type="text" readonly="readonly" class="mycore-form-input readonly" />
           </div>
         </xed:bind>
 
@@ -812,7 +812,7 @@
               <label for="{xed:generate-id()}" class="mycore-form-label">
                 <xed:output i18n="ubo.project.funding_number" />:
               </label>
-              <input id="funding_number" readonly="readonly" type="text" class="mycore-form-input" />
+              <input id="funding_number" readonly="readonly" type="text" class="mycore-form-input readonly" />
             </div>
           </xed:bind>
           <xed:bind xpath="cerif:Type">
