@@ -2,17 +2,19 @@ $(document).ready(function(){
 
     // config variables
     let solr_url = 'solr/ubo_projects/select/';
+    let id_project_search = 'project_search';
     let id_project_acronym = 'project_acronym';
     let id_project_title = 'project_title';
     let id_project = 'project_id';
     let id_funder = 'funder';
     let id_funding_number = 'funding_number';
 
-    let min_length = 0;
+    let min_length = 1;
     let input_delay = 200;
     let max_label_length = 90;
 
     // derived settings
+    let search_input = $('#' + id_project_search);
     let acronym_input = $('#' + id_project_acronym);
     let title_input = $('#' + id_project_title);
     let project_id_input = $('#' + id_project);
@@ -50,10 +52,10 @@ $(document).ready(function(){
         project_id_input.val(ui.item.project_id);
         funder_input.val(ui.item.funder);
         funding_number_input.val(ui.item.funding_number);
+        search_input.val('');
         return false;
     }
 
     // autocomplete settings and initialization
-    acronym_input.autocomplete({delay: input_delay, minLength: min_length, source: call_solr, select: select_project});
-    title_input.autocomplete({delay: input_delay, minLength: min_length, source: call_solr, select: select_project});
+    search_input.autocomplete({delay: input_delay, minLength: min_length, source: call_solr, select: select_project});
 });
