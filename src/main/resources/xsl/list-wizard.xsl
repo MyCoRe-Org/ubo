@@ -36,9 +36,9 @@
     <xsl:text>query=(</xsl:text>
     <xsl:if test="mods:name">
       <xsl:text>(</xsl:text>
-      <!-- TODO: use dynamic lead_id (configured in mycore.properties) NOT POSSIBLE IN XSLT 1.0 -->
       <!-- <xsl:apply-templates select="mods:name" mode="query.lsf" /> -->
-      <xsl:apply-templates select="mods:name" mode="query.ldap" />
+      <!-- <xsl:apply-templates select="mods:name" mode="query.ldap" /> -->
+      <xsl:apply-templates select="mods:name" mode="query.connection" />
       <xsl:text>)</xsl:text>
     </xsl:if>
     <xsl:if test="tag and mods:name">
@@ -103,6 +103,11 @@
   <xsl:if test="following::mods:name">+or+</xsl:if>
 </xsl:template>
 
+<xsl:template match="mods:name" mode="query.connection">
+  <xsl:value-of select="concat('(nid_connection+=+',mods:nameIdentifier[@type='connection'],')')" />
+  <xsl:if test="following::mods:name">+or+</xsl:if>
+</xsl:template>
+
 <xsl:template match="mods:name" mode="query.lsf">
   <xsl:value-of select="concat('(ae_lsf+=+',mods:nameIdentifier[@type='lsf'],')')" />
   <xsl:if test="following::mods:name">+or+</xsl:if>
@@ -131,11 +136,7 @@
     <xsl:value-of select="i18n:translate('listWizard.and')" />
     <xsl:text> </xsl:text>
   </xsl:if>
-  <a href="{$UBO.LSF.Link}{mods:nameIdentifier[@type='lsf']}">
-    <xsl:value-of select="mods:namePart[@type='family']" />
-    <xsl:text>, </xsl:text>
-    <xsl:value-of select="mods:namePart[@type='given']" />
-  </a>
+  <xsl:value-of select="mods:displayForm" />
 </xsl:template>
 
 <xsl:template match="tag" mode="display">

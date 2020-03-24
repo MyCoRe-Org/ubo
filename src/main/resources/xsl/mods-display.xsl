@@ -355,6 +355,10 @@
     </span>
   </xsl:template>
 
+  <xsl:template match="mods:nameIdentifier[@type='connection']">
+    <!-- do not display this as it is meant for internal procedures -->
+  </xsl:template>
+
   <xsl:template match="mods:nameIdentifier">
     <span class="nameIdentifier genericid" title="{@type}: {.}">
       <a href="javascript:void(0)"><xsl:value-of select="@type" /></a>

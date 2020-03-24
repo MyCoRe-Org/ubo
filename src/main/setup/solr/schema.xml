@@ -100,8 +100,8 @@
   <copyField source="id_*"       dest="all" />
 
   <!-- Special fields for indexing mods:name as nested child documents -->
-  <field name="name" type="string" indexed="true" stored="false" multiValued="false" /> 
-  <dynamicField name="name_id_*" type="id" indexed="true" stored="false" multiValued="true" />
+  <field name="name" type="name" indexed="true" stored="true" multiValued="false" />
+  <dynamicField name="name_id_*" type="id" indexed="true" stored="true" multiValued="true" />
 
   <!-- Ignore all other fields -->
   <dynamicField name="*" type="ignored" />

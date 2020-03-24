@@ -71,33 +71,20 @@
           <xed:validate test="tag[string-length(.) &gt; 0] or mods:name[string-length(mods:nameIdentifier) &gt; 0]" display="global" i18n="listWizard.tagOrPIDRequired" />
 
           <fieldset class="form-group">
-
+            <script src="{$WebApplicationBaseURL}js/author_search.js" />
             <xed:repeat xpath="mods:name">
               <div class="form-group form-inline">
                 <label for="{xed:generate-id()}" class="mycore-form-label">
                   <xed:if test="preceding::mods:name"><xed:output i18n="search.or" /></xed:if>
                   <xed:output i18n="ubo.role.author" /> / <xed:output i18n="ubo.role.editor" />:
                 </label>
-                <xed:choose>
-                  <xed:when test="string-length(mods:nameIdentifier[@type=$MCR.user2.matching.lead_id]) &gt; 0">
-                    <span id="{xed:generate-id()}">
-                      <xed:output value="mods:namePart[@type='family']" /><xed:if test="mods:namePart[@type='given']"><xed:output value="concat(', ',mods:namePart[@type='given'])" /></xed:if>
-                    </span>
-                    <span>
-                      <xed:bind xpath="mods:nameIdentifier[@type=$MCR.user2.matching.lead_id]">
-                        <xed:output value="concat('&#160;(', i18n:translate('editor.identity.picker.lead_id'), ' ', . , ')')" />
-                      </xed:bind>
-                    </span>
-                  </xed:when>
-                  <xed:otherwise>
-                    <div class="col-sm-4 col pl-0 justify-content-start">
-                      <button class="btn btn-sm btn-primary" type="submit" xed:target="subselect" xed:href="../identitypicker.html">
-                        <xed:output i18n="listWizard.subselect" />
-                      </button>
-                    </div>
-                  </xed:otherwise>
-                </xed:choose>
-                <xed:controls>append remove</xed:controls>
+                <xed:bind xpath="mods:displayForm">
+                  <input id="name" type="text" class="mycore-form-input author-search"/>
+                  <xed:controls>append remove</xed:controls>
+                </xed:bind>
+                <xed:bind xpath="mods:nameIdentifier[@type='connection']">
+                  <input id="connection" type="text" style="display: none;" />
+                </xed:bind>
               </div>
             </xed:repeat>
 

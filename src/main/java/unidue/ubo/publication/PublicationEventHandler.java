@@ -13,6 +13,7 @@ import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.user2.MCRRealmFactory;
 import org.mycore.user2.MCRUser;
+import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
 import unidue.ubo.matcher.MCRUserMatcherDTO;
 import unidue.ubo.matcher.MCRUserMatcherUtils;
@@ -20,7 +21,9 @@ import unidue.ubo.matcher.MCRUserMatcher;
 import unidue.ubo.matcher.MCRUserMatcherLocal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -63,7 +66,8 @@ import java.util.stream.Collectors;
  * Example:
  * MCR.user2.matching.lead_id=id_scopus
  *
- *
+ * # currently only "uuid" can be used, leave empty if no explicit connection should be inserted
+ * MCR.user2.matching.publication.connection.strategy=uuid
  *
  * @author Pascal Rost
  */
@@ -73,8 +77,11 @@ public class PublicationEventHandler extends MCREventHandlerBase {
 
     private final static String CONFIG_MATCHERS = "MCR.user2.matching.chain";
     private final static String CONFIG_LEAD_ID = "MCR.user2.matching.lead_id";
+    private final static String CONFIG_CONNECTION_STRATEGY = "MCR.user2.matching.publication.connection.strategy";
     private final static String CONFIG_DEFAULT_ROLE = "MCR.user2.IdentityManagement.UserCreation.DefaultRole";
     private final static String CONFIG_UNVALIDATED_REALM = "MCR.user2.IdentityManagement.UserCreation.Unvalidated.Realm";
+
+    private final static String CONNECTION_TYPE_NAME = "id_connection";
 
     private List<MCRUserMatcher> loadMatcherImplementationChain() {
         List<MCRUserMatcher> matchers = new ArrayList<>();
@@ -113,6 +120,14 @@ public class PublicationEventHandler extends MCREventHandlerBase {
             throw new MCRConfigurationException("Property key " + CONFIG_UNVALIDATED_REALM + " is missing!");
         }
         return unvalidated_realm;
+    }
+
+    /**
+     * Returns the configured connection strategy to "connect" publications to MCRUsers
+     * @return String, null if no connection strategy has been set
+     */
+    private String loadConnectionStrategyConfig() {
+        return MCRConfiguration.instance().getString(CONFIG_CONNECTION_STRATEGY);
     }
 
     @Override
@@ -164,12 +179,15 @@ public class PublicationEventHandler extends MCREventHandlerBase {
                 mcrUserFinal.assignRole(defaultRole);
                 MCRUserManager.updateUser(mcrUserFinal);
                 enrichModsNameElementByLeadID(modsNameElement, leadIDName, mcrUserFinal);
+                connectModsNameElementWithMCRUser(modsNameElement, mcrUserFinal);
             } else {
                 if(MCRUserMatcherUtils.checkAffiliation(modsNameElement) &&
                         (MCRUserMatcherUtils.getNameIdentifiers(modsNameElement).size() > 0)) {
                     MCRUser affiliatedUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement, UNVALIDATED_REALM);
                     affiliatedUser.assignRole(defaultRole);
                     MCRUserManager.updateUser(affiliatedUser);
+                    enrichModsNameElementByLeadID(modsNameElement, leadIDName, affiliatedUser);
+                    connectModsNameElementWithMCRUser(modsNameElement, affiliatedUser);
                 } else {
                     // ignore Person, do NOT create a new MCRUser
                 }
@@ -195,13 +213,44 @@ public class PublicationEventHandler extends MCREventHandlerBase {
             String leadIDValue = mcrUser.getUserAttribute(leadIDmycore);
             if(StringUtils.isNotEmpty(leadIDValue)) {
                 if(!MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, leadIDmods)) {
-                    Element nameIdentifier = new Element("nameIdentifier", MCRUserMatcherUtils.MODS_NAMESPACE)
-                            .setAttribute("type", leadIDmods)
-                            .setText(leadIDValue);
-                    modsNameElement.addContent(nameIdentifier);
                     LOGGER.info("Enriched publication for MCRUser: {}, with nameIdentifier of type: {} (lead_id) " +
                             "and value: {}", mcrUser.getUserName(), leadIDmods, leadIDValue);
+                    enrichModsNameElementByNameIdentifierElement(modsNameElement, leadIDmods, leadIDValue);
                 }
+            }
+        }
+    }
+
+    private void enrichModsNameElementByNameIdentifierElement(Element modsNameElement,
+                                                              String attributeType, String attributeValue) {
+        Element nameIdentifier = new Element("nameIdentifier", MCRUserMatcherUtils.MODS_NAMESPACE)
+                .setAttribute("type", attributeType)
+                .setText(attributeValue);
+        modsNameElement.addContent(nameIdentifier);
+    }
+
+    /**
+     *
+     * @param modsNameElement
+     * @param mcrUser
+     */
+    private void connectModsNameElementWithMCRUser(Element modsNameElement, MCRUser mcrUser) {
+        String connectionStrategy = loadConnectionStrategyConfig();
+        if(StringUtils.isNotEmpty(connectionStrategy) && connectionStrategy.equals("uuid")) {
+            // check if MCRUser already has a "connection" UUID
+            String uuid = mcrUser.getUserAttribute(CONNECTION_TYPE_NAME);
+            String modsTypeName = CONNECTION_TYPE_NAME.replace("id_", "");
+            if(uuid == null) {
+                // create new UUID and persist it for mcrUser
+                uuid = UUID.randomUUID().toString();
+                mcrUser.getAttributes().add(new MCRUserAttribute(CONNECTION_TYPE_NAME, uuid));
+                MCRUserManager.updateUser(mcrUser);
+            }
+            // if not already present, persist connection in mods:name - nameIdentifier-Element
+            if(!MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, modsTypeName)) {
+                LOGGER.info("Connecting publication with MCRUser: {}, via nameIdentifier of type: {} " +
+                        "and value: {}", mcrUser.getUserName(), modsTypeName, uuid);
+                enrichModsNameElementByNameIdentifierElement(modsNameElement, modsTypeName, uuid);
             }
         }
     }
