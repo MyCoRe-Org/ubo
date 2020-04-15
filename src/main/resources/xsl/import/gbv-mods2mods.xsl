@@ -17,11 +17,14 @@
   <xsl:template match="mods:name/@authority" />
   <xsl:template match="mods:name/@usage" />
   <xsl:template match="mods:role[mods:roleTerm/@type='text']" />
+  <xsl:template match="mods:originInfo[not(@eventTypeeventType='publication')]" />
   <xsl:template match="mods:typeOfResource" />
   <xsl:template match="mods:genre" />
   <xsl:template match="mods:place[mods:placeTerm[@type='code']]" />
   <xsl:template match="mods:physicalDescription" />
   <xsl:template match="mods:relatedItem/@displayLabel" />
+  <xsl:template match="mods:relatedItem[@type='otherFormat']" />
+  <xsl:template match="mods:relatedItem[not(@type)]" />
   <xsl:template match="mods:identifier[@type='local']" />
   <xsl:template match="mods:part[mods:text]" />
   <xsl:template match="mods:location" />
@@ -31,10 +34,10 @@
   <xsl:template match="mods:note/@language" />
   <xsl:template match="mods:subject/@authority" />
 
-  <xsl:template match="mods:name/@valueURI">
-    <xsl:if test="contains(.,'/gnd/')">
+  <xsl:template match="mods:nameIdentifier">
+    <xsl:if test="contains(.,'(DE-588)')">
       <mods:nameIdentifier type="gnd">
-        <xsl:value-of select="substring-after(.,'/gnd/')" />
+        <xsl:value-of select="substring-after(.,'(DE-588)')" />
       </mods:nameIdentifier>
     </xsl:if>
   </xsl:template>
