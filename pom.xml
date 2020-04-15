@@ -215,7 +215,7 @@
         <configuration>
           <solrMirrorURL>${solr-runner.solrMirrorURL}</solrMirrorURL>
           <solrVersionString>${solr-runner.solrVersionString}</solrVersionString>
-          <solrHomeTemplate>src/main/solr</solrHomeTemplate>
+          <solrHomeTemplate>${project.basedir}/src/main/setup/solr</solrHomeTemplate>
           <solrHome>${solr.home}</solrHome>
         </configuration>
       </plugin>
