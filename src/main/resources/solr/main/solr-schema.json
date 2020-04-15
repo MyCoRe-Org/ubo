@@ -57,18 +57,6 @@
 			"class": "solr.TextField",
 			"positionIncrementGap": "100",
 			"indexAnalyzer": {
-				"charFilters": [
-					{
-						"class": "solr.PatternReplaceCharFilterFactory",
-						"pattern": "[\\-\\.]",
-						"replacement": " "
-					},
-					{
-						"class": "solr.PatternReplaceCharFilterFactory",
-						"pattern": "\\s+(\\S)(\\S+)",
-						"replacement": " $1$2 $1"
-					}
-				],
 				"tokenizer": {
 					"class": "solr.StandardTokenizerFactory"
 				},
@@ -359,16 +347,6 @@
 		}
 	},
 	{
-		"add-field": {
-			"name": "link",
-			"type": "string",
-			"multiValued": true,
-			"indexed": true,
-			"required": false,
-			"stored": false
-		}
-	},
-	{
 		"replace-field": {
 			"name": "modified",
 			"type": "pdate",
@@ -381,10 +359,10 @@
 	{
 		"add-field": {
 			"name": "name",
-			"type": "string",
+			"type": "ubo_name",
 			"multiValued": false,
 			"indexed": true,
-			"stored": false
+			"stored": true
 		}
 	},
 	{
@@ -591,7 +569,7 @@
 			"type": "ubo_id",
 			"multiValued": true,
 			"indexed": true,
-			"stored": false
+			"stored": true
 		}
 	},
 	{
