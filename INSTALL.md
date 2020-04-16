@@ -42,9 +42,6 @@ vi ~/.mycore/ubo/mycore.properties
   MCR.Solr.Core.classification.Name=ubo_classifications
 
 
-# FIXME: as current workaround we need to copy jdbc driver also to target dir
-cp ~/.mycore/ubo/lib/h2-1.4.196.jar target/ubo-1.0-SNAPSHOT/WEB-INF/lib/
-
 # Create the superuser "administrator" 
 target/bin/ubo.sh init superuser
 
@@ -59,6 +56,9 @@ target/bin/ubo.sh update permission read for id restapi:/ with rulefile src/main
 # Load solr configuration
 target/bin/ubo.sh reload solr configuration main in core main
 
-# Run local web application on port 8080:
+# Run local web application on port 8080 with tomcat 9:
 mvn cargo:run -Dtomcat=9
+
+# or jetty:
+mvn cargo:run -Djetty
 ```
