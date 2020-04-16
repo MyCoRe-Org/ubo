@@ -13,14 +13,14 @@
   <artifactId>ubo</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
+
   <name>Universitätsbibliographie</name>
-  <description>Universitätsbibliographie der Universität Duisburg-Essen</description>
   <url>https://bibliographie.ub.uni-due.de/</url>
   <inceptionYear>1998</inceptionYear>
 
   <organization>
-    <name>Universitätsbibliothek Duisburg-Essen</name>
-    <url>https://www.uni-due.de/ub/</url>
+    <name>MyCoRe</name>
+    <url>https://www.mycore.de/</url>
   </organization>
 
   <licenses>
@@ -31,14 +31,14 @@
   </licenses>
 
   <issueManagement>
-    <system>Redmine</system>
-    <url>https://redmine.ub.uni-due.de/projects/dozbib/issues</url>
+    <system>JIRA</system>
+    <url>https://mycore.atlassian.net/browse/UBO</url>
   </issueManagement>
 
   <scm>
-    <connection>scm:svn:https://server.mycore.de/svn/ubo/trunk</connection>
-    <developerConnection>scm:svn:https://server.mycore.de/svn/ubo/trunk</developerConnection>
-    <url>http://www.mycore.de/viewvc/viewvc.cgi/ubo/trunk</url>
+    <connection>scm:git:https://github.com/MyCoRe-Org/ubo.git</connection>
+    <developerConnection>scm:git:https://github.com/MyCoRe-Org/ubo.git</developerConnection>
+    <url>https://github.com/MyCoRe-Org/ubo/tree/master</url>
   </scm>
 
   <properties>
@@ -50,7 +50,7 @@
     <cargo.deployable.default.artifactId>${project.artifactId}</cargo.deployable.default.artifactId>
     <cargo.deployable.default.context>/</cargo.deployable.default.context>
     <cargo.deployable.default.groupId>${project.groupId}</cargo.deployable.default.groupId>
-    <cargo.jvmargs>-DMCR.AppName=${MCR.AppName} -Dsolr.solr.home=${solr.home} -Dsolr.data.dir=${solr.data.dir} -Xms512m -Xmx2048m</cargo.jvmargs>
+    <cargo.jvmargs>-DMCR.AppName=${MCR.AppName} -Dsolr.solr.home=${solr.home} -Xms512m -Xmx2048m</cargo.jvmargs>
     <cargo.rmi.port>8290</cargo.rmi.port>
     <cargo.servlet.port>8080</cargo.servlet.port>
     <cargo.servlet.uriencoding>UTF-8</cargo.servlet.uriencoding>
@@ -62,14 +62,14 @@
     <httpcomponents.version>4.5.5</httpcomponents.version>
     <httpcore.version>4.4.9</httpcore.version>
     <java.target.version>11</java.target.version>
-    <jetty.version>9.4.15.v20190215</jetty.version>
-    <log4j.version>2.11.0</log4j.version>
+    <jetty.version>9.4.26.v20200117</jetty.version>
+    <log4j.version>2.12.1</log4j.version>
     <mycore.version>2020.02-SNAPSHOT</mycore.version>
-    <solr.data.dir>${solr.home}/ubo/data</solr.data.dir>
     <solr.home>${user.config.dir}/${MCR.AppName}/data/solr</solr.home>
+    <solr-runner.solrMirrorURL>http://mirror.23media.de/apache/lucene/solr/</solr-runner.solrMirrorURL>
+    <solr-runner.solrVersionString>7.7.2</solr-runner.solrVersionString>
     <timestamp>${maven.build.timestamp}</timestamp>
-    <tomcat8.version>8.5.38</tomcat8.version>
-    <tomcat9.version>9.0.16</tomcat9.version>
+    <tomcat.version>9.0.31</tomcat.version>
   </properties>
 
   <build>
@@ -195,34 +195,8 @@
               <cargo.servlet.port>${cargo.servlet.port}</cargo.servlet.port>
               <cargo.jvmargs>${cargo.jvmargs}</cargo.jvmargs>
             </properties>
-            <users>
-              <user>
-                <name>submitter</name>
-                <password>submitter123</password>
-                <roles>
-                  <role>submitter</role>
-                  <role>users</role>
-                </roles>
-              </user>
-              <user>
-                <name>editor</name>
-                <password>editor123</password>
-                <roles>
-                  <role>editor</role>
-                  <role>users</role>
-                </roles>
-              </user>
-            </users>
           </configuration>
           <deployables>
-            <deployable>
-              <groupId>org.mycore.solr</groupId>
-              <artifactId>solr</artifactId>
-              <type>war</type>
-              <properties>
-                <context>/solr</context>
-              </properties>
-            </deployable>
             <deployable>
               <groupId>${project.groupId}</groupId>
               <artifactId>${project.artifactId}</artifactId>
@@ -233,8 +207,20 @@
           </deployables>
         </configuration>
       </plugin>
-    </plugins>
+    
+      <plugin>
+        <groupId>org.mycore.plugins</groupId>
+        <artifactId>solr-runner-maven-plugin</artifactId>
+        <version>1.1</version>
+        <configuration>
+          <solrMirrorURL>${solr-runner.solrMirrorURL}</solrMirrorURL>
+          <solrVersionString>${solr-runner.solrVersionString}</solrVersionString>
+          <solrHomeTemplate>${project.basedir}/src/main/setup/solr</solrHomeTemplate>
+          <solrHome>${solr.home}</solrHome>
+        </configuration>
+      </plugin>
 
+    </plugins>
   </build>
 
   <repositories>
@@ -335,7 +321,7 @@
     <dependency>
       <groupId>de.undercouch</groupId>
       <artifactId>citeproc-java</artifactId>
-      <version>2.0.0-SNAPSHOT</version>
+      <version>2.0.0</version>
     </dependency>
     <dependency>
       <groupId>jakarta.xml.bind</groupId>
@@ -576,19 +562,6 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.mycore.solr</groupId>
-      <artifactId>solr</artifactId>
-      <version>4.10.4.1-SNAPSHOT</version>
-      <type>war</type>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.zaxxer</groupId>
-      <artifactId>HikariCP</artifactId>
-      <version>2.5.1</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
       <groupId>commons-discovery</groupId>
       <artifactId>commons-discovery</artifactId>
       <version>0.5</version>
@@ -601,33 +574,9 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>5.1.12</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.saxon</groupId>
-      <artifactId>Saxon-HE</artifactId>
-      <version>9.8.0-12</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-slf4j-impl</artifactId>
       <version>${log4j.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-hikaricp</artifactId>
-      <version>${hibernate.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <version>9.4-1206-jdbc42</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -635,12 +584,6 @@
       <artifactId>wsdl4j</artifactId>
       <version>1.6.3</version>
       <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>1.4.192</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -703,7 +646,6 @@
         <MCR.DataPrefix>dev</MCR.DataPrefix>
         <cargo.jvmargs>-DMCR.AppName=${MCR.AppName} 
         -Dsolr.solr.home=${solr.home}
-        -Dsolr.data.dir=${solr.data.dir}
         -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=${cargo.debug.suspend},address=${cargo.debug.address}</cargo.jvmargs>
       </properties>
     </profile>
@@ -800,30 +742,7 @@
         </pluginManagement>
       </build>
     </profile>
-    <profile>
-      <id>tomcat8</id>
-      <activation>
-        <property>
-          <name>tomcat</name>
-          <value>8</value>
-        </property>
-      </activation>
-      <properties>
-        <tomcat.version>${tomcat8.version}</tomcat.version>
-      </properties>
-    </profile>
-    <profile>
-      <id>tomcat9</id>
-      <activation>
-        <property>
-          <name>tomcat</name>
-          <value>9</value>
-        </property>
-      </activation>
-      <properties>
-        <tomcat.version>${tomcat9.version}</tomcat.version>
-      </properties>
-    </profile>
+
   </profiles>
 
   <developers>

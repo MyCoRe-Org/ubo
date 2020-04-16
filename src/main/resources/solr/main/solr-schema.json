@@ -1,0 +1,702 @@
+[
+	{
+		"add-field-type": {
+			"name": "ubo_id",
+			"class": "solr.TextField",
+			"analyzer": {
+				"tokenizer": {
+					"class": "solr.KeywordTokenizerFactory"
+				},
+				"filters": [
+					{
+						"class": "solr.PatternReplaceFilterFactory",
+						"pattern": "-",
+						"replace": "all",
+						"replacement": ""
+					},
+					{
+						"class": "solr.LowerCaseFilterFactory"
+					}
+				]
+			}
+		}
+	},
+	{
+		"add-field-type": {
+			"name": "ubo_journal",
+			"class": "solr.TextField",
+			"positionIncrementGap": "100",
+			"analyzer": {
+				"tokenizer": {
+					"class": "solr.StandardTokenizerFactory"
+				},
+				"filters": [
+					{
+						"class": "solr.GermanNormalizationFilterFactory"
+					},
+					{
+						"class": "solr.ICUNormalizer2FilterFactory",
+						"mode": "compose",
+						"name": "nfkc_cf"
+					},
+					{
+						"class": "solr.ICUFoldingFilterFactory"
+					},
+					{
+						"class": "solr.EdgeNGramFilterFactory",
+						"maxGramSize": "15",
+						"minGramSize": "3"
+					}
+				]
+			}
+		}
+	},
+	{
+		"add-field-type": {
+			"name": "ubo_name",
+			"class": "solr.TextField",
+			"positionIncrementGap": "100",
+			"indexAnalyzer": {
+				"tokenizer": {
+					"class": "solr.StandardTokenizerFactory"
+				},
+				"filters": [
+					{
+						"class": "solr.GermanNormalizationFilterFactory"
+					},
+					{
+						"class": "solr.ICUNormalizer2FilterFactory",
+						"mode": "compose",
+						"name": "nfkc_cf"
+					},
+					{
+						"class": "solr.ICUFoldingFilterFactory"
+					}
+				]
+			},
+			"queryAnalyzer": {
+				"tokenizer": {
+					"class": "solr.StandardTokenizerFactory"
+				},
+				"filters": [
+					{
+						"class": "solr.GermanNormalizationFilterFactory"
+					},
+					{
+						"class": "solr.ICUNormalizer2FilterFactory",
+						"mode": "compose",
+						"name": "nfkc_cf"
+					},
+					{
+						"class": "solr.ICUFoldingFilterFactory"
+					}
+				]
+			}
+		}
+	},
+	{
+		"add-field-type": {
+			"name": "ubo_shelfmark",
+			"class": "solr.TextField",
+			"analyzer": {
+				"tokenizer": {
+					"class": "solr.KeywordTokenizerFactory"
+				},
+				"filters": [
+					{
+						"class": "solr.LowerCaseFilterFactory"
+					},
+					{
+						"class": "solr.PatternReplaceFilterFactory",
+						"pattern": "\\s",
+						"replace": "all",
+						"replacement": ""
+					},
+					{
+						"class": "solr.PatternReplaceFilterFactory",
+						"pattern": "\\+[0-9]+",
+						"replace": "all",
+						"replacement": ""
+					}
+				]
+			}
+		}
+	},
+	{
+		"add-field-type": {
+			"name": "ubo_sort",
+			"class": "solr.TextField",
+			"sortMissingLast": true,
+			"analyzer": {
+				"tokenizer": {
+					"class": "solr.KeywordTokenizerFactory"
+				},
+				"filters": [
+					{
+						"class": "solr.GermanNormalizationFilterFactory"
+					},
+					{
+						"class": "solr.ICUNormalizer2FilterFactory",
+						"mode": "compose",
+						"name": "nfkc_cf"
+					},
+					{
+						"class": "solr.ICUFoldingFilterFactory"
+					},
+					{
+						"class": "solr.PatternReplaceFilterFactory",
+						"pattern": "([^A-Za-z0-9])",
+						"replace": "all",
+						"replacement": ""
+					}
+				]
+			}
+		}
+	},
+	{
+		"add-field-type": {
+			"name": "ubo_text",
+			"class": "solr.TextField",
+			"positionIncrementGap": "100",
+			"analyzer": {
+				"tokenizer": {
+					"class": "solr.StandardTokenizerFactory"
+				},
+				"filters": [
+					{
+						"class": "solr.GermanNormalizationFilterFactory"
+					},
+					{
+						"class": "solr.ICUNormalizer2FilterFactory",
+						"mode": "compose",
+						"name": "nfkc_cf"
+					},
+					{
+						"class": "solr.ICUFoldingFilterFactory"
+					},
+					{
+						"class": "solr.StopFilterFactory",
+						"format": "snowball",
+						"words": "lang/stopwords_de.txt",
+						"ignoreCase": "true"
+					},
+					{
+						"class": "solr.StopFilterFactory",
+						"format": "snowball",
+						"words": "lang/stopwords_en.txt",
+						"ignoreCase": "true"
+					},
+					{
+						"class": "solr.StopFilterFactory",
+						"format": "snowball",
+						"words": "lang/stopwords_fr.txt",
+						"ignoreCase": "true"
+					},
+					{
+						"class": "solr.GermanMinimalStemFilterFactory"
+					},
+					{
+						"class": "solr.EnglishMinimalStemFilterFactory"
+					}
+				]
+			}
+		}
+	},
+	{
+		"add-field": {
+			"name": "abstract",
+			"type": "ubo_text",
+			"multiValued": true,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"add-field": {
+			"name": "ae_lsf",
+			"type": "ubo_id",
+			"multiValued": true,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"add-field": {
+			"name": "all",
+			"type": "ubo_text",
+			"multiValued": true,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"add-field": {
+			"name": "conference",
+			"type": "ubo_text",
+			"multiValued": false,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"add-field": {
+			"name": "dedup",
+			"type": "ubo_id",
+			"multiValued": true,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"add-field": {
+			"name": "facet_host_title",
+			"type": "string",
+			"multiValued": true,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"add-field": {
+			"name": "facet_person",
+			"type": "string",
+			"multiValued": true,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"add-field": {
+			"name": "facet_publisher",
+			"type": "string",
+			"multiValued": true,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"add-field": {
+			"name": "genre",
+			"type": "ubo_id",
+			"multiValued": false,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "host_genre",
+			"type": "ubo_id",
+			"multiValued": false,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "host_title",
+			"type": "ubo_text",
+			"multiValued": true,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "host_year",
+			"type": "pint",
+			"multiValued": false,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "importID",
+			"type": "string",
+			"multiValued": false,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"add-field": {
+			"name": "issue",
+			"type": "ubo_text",
+			"multiValued": false,
+			"indexed": false,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "journal",
+			"type": "ubo_journal",
+			"multiValued": true,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"add-field": {
+			"name": "lang",
+			"type": "ubo_id",
+			"multiValued": true,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"replace-field": {
+			"name": "modified",
+			"type": "pdate",
+			"multiValued": false,
+			"indexed": true,
+			"required": false,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "name",
+			"type": "ubo_name",
+			"multiValued": false,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "note",
+			"type": "ubo_text",
+			"multiValued": true,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"add-field": {
+			"name": "oa",
+			"type": "ubo_id",
+			"multiValued": true,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "oa_exact",
+			"type": "ubo_id",
+			"multiValued": false,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "origin",
+			"type": "ubo_id",
+			"multiValued": true,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"add-field": {
+			"name": "pages",
+			"type": "ubo_text",
+			"multiValued": false,
+			"indexed": false,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "person",
+			"type": "ubo_name",
+			"multiValued": true,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "place",
+			"type": "ubo_text",
+			"multiValued": true,
+			"indexed": false,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "publisher",
+			"type": "ubo_text",
+			"multiValued": true,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "role_lsf",
+			"type": "ubo_id",
+			"multiValued": true,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"add-field": {
+			"name": "series",
+			"type": "ubo_text",
+			"multiValued": true,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "shelfmark",
+			"type": "ubo_shelfmark",
+			"multiValued": true,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "sortby_person",
+			"type": "ubo_sort",
+			"multiValued": false,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"add-field": {
+			"name": "sortby_title",
+			"type": "ubo_sort",
+			"multiValued": false,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"add-field": {
+			"name": "status",
+			"type": "ubo_id",
+			"multiValued": false,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"add-field": {
+			"name": "subject",
+			"type": "ubo_id",
+			"multiValued": true,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "tag",
+			"type": "ubo_id",
+			"multiValued": true,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"add-field": {
+			"name": "title",
+			"type": "ubo_text",
+			"multiValued": true,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "topic",
+			"type": "ubo_text",
+			"multiValued": true,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"add-field": {
+			"name": "volume",
+			"type": "ubo_text",
+			"multiValued": true,
+			"indexed": false,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "year",
+			"type": "pint",
+			"multiValued": false,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
+			"name": "year_diss",
+			"type": "pint",
+			"multiValued": false,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"add-dynamic-field": {
+			"name": "host_id_*",
+			"type": "ubo_id",
+			"multiValued": true,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-dynamic-field": {
+			"name": "name_id_*",
+			"type": "ubo_id",
+			"multiValued": true,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-dynamic-field": {
+			"name": "person_*",
+			"type": "ubo_name",
+			"multiValued": true,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-dynamic-field": {
+			"name": "pub_id_*",
+			"type": "ubo_id",
+			"multiValued": true,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-dynamic-field": {
+			"name": "nid_*",
+			"type": "ubo_id",
+			"multiValued": true,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-dynamic-field": {
+			"name": "id_*",
+			"type": "ubo_id",
+			"multiValued": true,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-copy-field": {
+			"source": "abstract",
+			"dest": "all"
+		}
+	},
+	{
+		"add-copy-field": {
+			"source": "conference",
+			"dest": "all"
+		}
+	},
+	{
+		"add-copy-field": {
+			"source": "host_title",
+			"dest": "all"
+		}
+	},
+	{
+		"add-copy-field": {
+			"source": "host_title",
+			"dest": "facet_host_title"
+		}
+	},
+	{
+		"add-copy-field": {
+			"source": "note",
+			"dest": "all"
+		}
+	},
+	{
+		"add-copy-field": {
+			"source": "publisher",
+			"dest": "facet_publisher"
+		}
+	},
+	{
+		"add-copy-field": {
+			"source": "series",
+			"dest": "all"
+		}
+	},
+	{
+		"add-copy-field": {
+			"source": "tag",
+			"dest": "all"
+		}
+	},
+	{
+		"add-copy-field": {
+			"source": "title",
+			"dest": "all"
+		}
+	},
+	{
+		"add-copy-field": {
+			"source": "topic",
+			"dest": "all"
+		}
+	},
+	{
+		"add-copy-field": {
+			"source": "year",
+			"dest": "all"
+		}
+	},
+	{
+		"add-copy-field": {
+			"source": "person_*",
+			"dest": "facet_person"
+		}
+	},
+	{
+		"add-copy-field": {
+			"source": "person_*",
+			"dest": "person"
+		}
+	},
+	{
+		"add-copy-field": {
+			"source": "person_*",
+			"dest": "all"
+		}
+	},
+	{
+		"add-copy-field": {
+			"source": "id_*",
+			"dest": "all"
+		}
+	}
+]
+
