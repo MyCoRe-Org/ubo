@@ -46,7 +46,7 @@ public class User2LSFHelper {
     public static void discoverLSFIDofUser(String userID) throws Exception {
         MCRUser user = MCRUserManager.getUser(userID);
         discoverLSFIDof(user);
-        System.out.println("LSF ID of user is now " + getLSFID(user));
+        LOGGER.info("LSF ID of user is now " + getLSFID(user));
     }
 
     @MCRCommand(
@@ -64,7 +64,7 @@ public class User2LSFHelper {
             return;
 
         String userName = user.getUserName();
-        LOGGER.info("user = " + userName);
+        LOGGER.debug("user = " + userName);
 
         String aid_uid = getAID(TYPE_UID, userName);
         LOGGER.info("aid = " + aid_uid);
@@ -121,7 +121,7 @@ public class User2LSFHelper {
 
         for (Element person : people) {
             String lsfID = person.getChildTextTrim("id");
-            LOGGER.info("checking LSF ID " + lsfID);
+            LOGGER.debug("checking LSF ID " + lsfID);
             String aid_lsf = getAID(TYPE_LSF, lsfID);
             LOGGER.info("AID for LSF ID " + lsfID + " = " + aid_lsf);
             if (aid_uid.equals(aid_lsf))
