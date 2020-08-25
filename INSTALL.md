@@ -26,7 +26,7 @@ vi ~/.mycore/ubo/resources/META-INF/persistence.xml
 <mapping-file>META-INF/mycore-iview2-mappings.xml</mapping-file>
 
 # Setup SOLR 4.10 as described here:
-http://www.mycore.de/documentation/getting_started/solr_4.html
+https://www.mycore.de/forrest/documentation/archiv/version2017/solr_4.html
 
 # Rename directory "collection1" to "ubo"
 cd ~/.mycore/ubo/data/solr
