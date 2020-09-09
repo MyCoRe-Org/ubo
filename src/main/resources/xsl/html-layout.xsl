@@ -15,7 +15,7 @@
   <xsl:variable name="jquery-ui.version" select="'1.12.1'" />
   <xsl:variable name="chosen.version" select="'1.8.7'" />
   <xsl:variable name="bootstrap.version" select="'4.4.1'" />
-  <xsl:variable name="font-awesome.version" select="'5.5.0'" />
+  <xsl:variable name="font-awesome.version" select="'5.13.0'" />
 
   <!-- ==================== IMPORTS ==================== -->
   <!-- additional stylesheets -->
@@ -162,9 +162,8 @@
 
   <xsl:template name="layout.inhalt">
     <section role="main" id="inhalt">
-    
       <xsl:choose>
-        <xsl:when test="$allowed.to.see.this.page = 'true'">
+        <xsl:when test="contains($allowed.to.see.this.page,'true')">
           <xsl:copy-of select="body/*[not(@id='sidebar')][not(@id='breadcrumb')]" />
         </xsl:when>
         <xsl:otherwise>
