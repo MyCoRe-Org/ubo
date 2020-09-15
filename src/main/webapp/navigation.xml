@@ -5,11 +5,6 @@
   <item id="home" />
   <item id="login" />
   <item id="dozbib" />
-  
-  <item id="profile" ref="servlets/MCRUserServlet?action=show" role="submitter">
-    <label xml:lang="de">Mein Profil</label>
-    <label xml:lang="en">My profile</label>
-  </item>
 
   <item menu="main">
     <item id="dozbib.search-simple" ref="search.xed">
@@ -53,9 +48,21 @@
   </item>
 
   <item menu="user">
-    <item id="profile" ref="servlets/MCRUserServlet?action=show" role="submitter">
+    <item id="user.password" ref="servlets/MCRUserServlet?action=changeMyPassword">
+      <label xml:lang="de">Passwort ändern</label>
+      <label xml:lang="en">Change password</label>
+    </item>
+    <item id="user.profile" ref="servlets/MCRUserServlet?action=show">
       <label xml:lang="de">Mein Profil</label>
       <label xml:lang="en">My profile</label>
+    </item>
+    <item id="user.admin" ref="servlets/MCRUserServlet" role="admin">
+      <label xml:lang="de">Nutzerverwaltung</label>
+      <label xml:lang="en">Admin Users</label>
+    </item>
+    <item id="user.new" ref="authorization/new-user.xed?action=save" role="admin">
+      <label xml:lang="de">Nutzer anlegen</label>
+      <label xml:lang="en">Create User</label>
     </item>
     <item id="dozbib.duplicates" ref="duplicates.xml" role="admin">
       <label xml:lang="de">Dubletten-Bericht</label>
