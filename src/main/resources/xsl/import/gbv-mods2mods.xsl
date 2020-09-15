@@ -17,7 +17,7 @@
   <xsl:template match="mods:name/@authority" />
   <xsl:template match="mods:name/@usage" />
   <xsl:template match="mods:role[mods:roleTerm/@type='text']" />
-  <xsl:template match="mods:originInfo[not(@eventTypeeventType='publication')]" />
+  <xsl:template match="mods:originInfo[not(@eventType='publication')]" />
   <xsl:template match="mods:typeOfResource" />
   <xsl:template match="mods:genre" />
   <xsl:template match="mods:place[mods:placeTerm[@type='code']]" />
