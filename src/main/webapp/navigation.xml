@@ -64,6 +64,10 @@
       <label xml:lang="de">Nutzer anlegen</label>
       <label xml:lang="en">Create User</label>
     </item>
+    <item id="acl.editor" ref="rsc/ACLE/start" role="admin">
+      <label xml:lang="de">ACL-Editor</label>
+      <label xml:lang="en">ACL Editor</label>
+    </item>
     <item id="dozbib.duplicates" ref="duplicates.xml" role="admin">
       <label xml:lang="de">Dubletten-Bericht</label>
       <label xml:lang="en">Duplicates report</label>
