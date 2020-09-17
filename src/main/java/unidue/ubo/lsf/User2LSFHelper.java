@@ -1,8 +1,10 @@
 package unidue.ubo.lsf;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.SortedSet;
 import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
@@ -13,7 +15,11 @@ import org.jdom2.util.IteratorIterable;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.user2.MCRUser;
+import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
+
+import static unidue.ubo.lsf.LSFService.PARAM_FIRSTNAME;
+import static unidue.ubo.lsf.LSFService.PARAM_LASTNAME;
 
 /**
  * Adds the LSF ID to existing MCRUSer, if not yet present.
@@ -111,7 +117,12 @@ public class User2LSFHelper {
         String[] nameParts = user.getRealName().split(",");
         String lastName = nameParts[0].trim();
         String firstName = nameParts[1].trim();
-        return LSFClient.instance().searchPerson(lastName, firstName);
+
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put(PARAM_FIRSTNAME, firstName);
+        parameters.put(PARAM_LASTNAME, lastName);
+
+        return new LSFService().searchPerson(parameters);
     }
 
     private static String findMatchingLSFID(Element xml, String aid_uid) {
@@ -131,12 +142,16 @@ public class User2LSFHelper {
     }
 
     private static void setLSFID(MCRUser user, String lsfID) {
-        Map<String, String> userAttributes = user.getAttributes();
+        SortedSet<MCRUserAttribute> userAttributes = user.getAttributes();
 
-        if ((lsfID == null) || lsfID.equals("null"))
-            userAttributes.remove(ATTR_ID_LSF);
-        else
-            userAttributes.put(ATTR_ID_LSF, lsfID);
+        if ((lsfID == null) || lsfID.equals("null")) {
+            userAttributes.stream()
+                    .filter((attr) -> attr.getName().equals(ATTR_ID_LSF))
+                    .findFirst()
+                    .ifPresent(userAttributes::remove);
+        } else {
+            userAttributes.add(new MCRUserAttribute(ATTR_ID_LSF, lsfID));
+        }
 
         user.setAttributes(userAttributes);
     }

@@ -56,8 +56,8 @@ public class LSFService implements IdentityService {
     protected LSFServiceCache cache;
 
     private static final String PARAM_PID = "pid";
-    private static final String PARAM_FIRSTNAME = "firstname";
-    private static final String PARAM_LASTNAME = "lastName";
+    static final String PARAM_FIRSTNAME = "firstname";
+    static final String PARAM_LASTNAME = "lastName";
     private static final String PARAM_ENCODING = "UTF-8";
 
     public LSFService() {
