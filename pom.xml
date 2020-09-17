@@ -648,7 +648,7 @@
       <id>dev</id>
       <properties>
         <MCR.DataPrefix>dev</MCR.DataPrefix>
-        <cargo.jvmargs>-DMCR.AppName=${MCR.AppName} 
+        <cargo.jvmargs>-DMCR.AppName=${MCR.AppName}
         -Dsolr.solr.home=${solr.home}
         -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=${cargo.debug.suspend},address=${cargo.debug.address}</cargo.jvmargs>
       </properties>
