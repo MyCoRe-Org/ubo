@@ -1,33 +1,38 @@
 package unidue.ubo.importer.scopus;
 
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ScopusUpdater {
 
-    private static final String QUERY_PATTERN = "AF-ID(%1$s) AND orig-load-date aft %2$tY%2$tm%2$td";
-
-    public static void update(String affiliationID, int daysOffset, int count)
+    public static void update(String affiliationIDs, int daysOffset, int count)
         throws Exception {
-        String queryString = buildQuery(affiliationID, daysOffset);
-        ScopusQuery query = new ScopusQuery(queryString, count);
-        ScopusImporter importer = new ScopusImporter();
+        String affiliationCondition = buildAffiliationCondition(affiliationIDs);
+        String dateCondition = buildDateCondition(daysOffset);
+        String queryString = affiliationCondition + " AND " + dateCondition;
 
+        ScopusQuery query = new ScopusQuery(queryString, count);
         List<String> scopusIDs = query.execute();
 
+        ScopusImporter importer = new ScopusImporter();
         for (String scopusID : scopusIDs) {
             importer.doImport(scopusID);
         }
         importer.sendNotification();
     }
 
-    private static String buildQuery(String affiliationID, int daysOffset)
-        throws UnsupportedEncodingException, MalformedURLException {
+    private static String buildAffiliationCondition(String affiliationIDs) {
+        return Arrays.stream(affiliationIDs.split(","))
+            .map(a -> String.format("AF-ID(%1s)", a.trim()))
+            .collect(Collectors.joining(" OR ", "(", ")"));
+    }
+
+    private static String buildDateCondition(int daysOffset) {
         GregorianCalendar day = new GregorianCalendar();
         day.add(Calendar.DATE, -daysOffset);
-        return String.format(QUERY_PATTERN, affiliationID, day);
+        return String.format("orig-load-date aft %1$tY%1$tm%1$td", day);
     }
 }

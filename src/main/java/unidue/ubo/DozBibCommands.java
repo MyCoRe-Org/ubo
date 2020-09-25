@@ -70,9 +70,9 @@ public class DozBibCommands extends MCRAbstractCommands {
         addCommand(new MCRCommand("ubo import mods collection from file {0}",
             "unidue.ubo.DozBibCommands.importMODSCollection String",
             "import mods:modsCollection from xml file {0}"));
-        addCommand(new MCRCommand("ubo update from scopus for affiliation ID {0} last {1} days max {2}",
+        addCommand(new MCRCommand("ubo update from scopus for affiliation IDs {0} last {1} days max {2}",
             "unidue.ubo.importer.scopus.ScopusUpdater.update String int int",
-            "Queries Scopus for new publications of affiliation ID {0} added within last {1} days," +
+            "Queries Scopus for new publications of comma-separated affiliation IDs {0} added within last {1} days," +
                 "retrieves max {2} publications and imports them if not already present"));
     }
 
