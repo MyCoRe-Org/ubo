@@ -71,6 +71,10 @@
       <label xml:lang="de">IMPRESSUM</label>
       <label xml:lang="en">IMPRINT</label>
     </item>
+    <item ref="accessibility.xml">
+      <label xml:lang="de">BARRIEREFREIHEIT</label>
+      <label xml:lang="en">ACCESSIBILITY</label>
+    </item>
   </item>
 
 </navigation>
