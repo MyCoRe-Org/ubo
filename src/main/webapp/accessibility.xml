@@ -3,7 +3,7 @@
 <webpage id="accessibility">
   <title xml:lang="de">Erklärung zur Barrierefreiheit</title>
   <title xml:lang="en">Accessibility declaration</title>
-  
+
   <section xml:lang="all" title="Erklärung zur Barrierefreiheit">
 
     <div class="row">
@@ -37,17 +37,17 @@
           dem Behindertengleichstellungsgesetz Nordrhein-Westfalen (BGG NRW) und der
           Barrierefreie-Informationstechnik-Verordnung Nordrhein-Westfalen (BITV NRW)
           teilweise konform.
-        </p>        
+        </p>
         <p>
-          <strong>Diese Website wird kurzfristig neu gestaltet und überarbeitet. 
+          <strong>Diese Website wird kurzfristig neu gestaltet und überarbeitet.
+          Dies beinhaltet ein neues Layout, das die Barrierefreiheit deutlich verbessern wird.
           Für die neue Website wird demnächst ein BITV-Test durchgeführt und das Testergebnis an dieser Stelle veröffentlicht.</strong>
         </p>
         <p>
           Diese Erklärung wurde am 28.09.2020 erstellt und zuletzt geprüft.
-          Die Einschätzung basiert auf einer Selbstbewertung.
         </p>
       </div>
-    </div>    
+    </div>
 
     <div class="row mt-4">
       <div class="col-md-12" lang="de">
