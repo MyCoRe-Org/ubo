@@ -3,7 +3,7 @@
 <webpage lastModified="$Date$" id="dozbib.new.publication">
   <title xml:lang="de">Publikation melden</title>
   <title xml:lang="en">Registering publication</title>
-  
+
   <article class="highlight2">
     <xed:form class="ubo-form" role="form" xmlns:xed="http://www.mycore.de/xeditor">
       <xed:bind xpath="/mods:mods">
@@ -62,9 +62,9 @@
 
           <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
             <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
-            <xed:validate xpath="//mods:location/mods:shelfLocator" matches="([ED]\d\d\/\d\d\s[A-Za-z]+\s\d+.*)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
+            <xed:validate xpath="//mods:location/mods:shelfLocator" matches="(\d\d\s[A-Za-z]+\s\d+.*)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
           </xed:if>
-          
+
           <div>
             <p>
               <xed:output i18n="ubo.newPublicationWizard.titleAuthor" />
@@ -87,7 +87,7 @@
             </xed:bind>
             <xed:bind xpath="mods:role[mods:roleTerm[@authority='marcrelator'][@type='code']='aut']" />
           </xed:bind>
-          
+
           <xed:validate test="(string-length(mods:identifier) &gt; 0) or (string-length(mods:location/mods:shelfLocator) &gt; 0) or ( (string-length(mods:titleInfo/mods:title) &gt; 0) and (string-length(mods:name/mods:namePart) &gt; 0) )" display="global" i18n="ubo.newPublicationWizard.required" />
 
           <xed:cleanup-rule xpath="//mods:*" relevant-if="(string-length(normalize-space(text())) &gt; 0) or *" />
@@ -102,14 +102,14 @@
       </xed:bind>
     </xed:form>
   </article>
-  
+
   <article class="highlight1" xml:lang="de">
-    <h2>Literaturlisten</h2>    
+    <h2>Literaturlisten</h2>
     <p>
       Sollten Sie über <strong>Literaturlisten</strong> verfügen, die Sie mit Hilfe von
-      Literaturverwaltungsprogrammen, wie z.B. 
-      <a href="https://www.uni-due.de/ub/abisz/refworks.shtml" target="_blank">RefWorks</a>, 
-      BibTeX oder <a href="https://www.uni-due.de/ub/abisz/refworks.shtml" target="_blank">Citavi</a> 
+      Literaturverwaltungsprogrammen, wie z.B.
+      <a href="https://www.uni-due.de/ub/abisz/refworks.shtml" target="_blank">RefWorks</a>,
+      BibTeX oder <a href="https://www.uni-due.de/ub/abisz/refworks.shtml" target="_blank">Citavi</a>
       erstellt haben, können Sie diese Listen gerne bei uns abliefern. Die Daten werden dann von uns in
       die Universitätsbibliographie importiert. <br />
       Bitte schicken Sie eine
@@ -118,26 +118,26 @@
     <p>
       Weitere <a target="_blank" href="https://www.uni-due.de/ub/abisz/literaturverwaltung.shtml">Informationen
       zu Literaturverwaltungsprogrammen</a> finden Sie auf den Seiten der
-      Universitätsbibliothek.       
-    </p>             
+      Universitätsbibliothek.
+    </p>
   </article>
   <article class="highlight1" xml:lang="en">
-    <h2>Lists of literature</h2>    
+    <h2>Lists of literature</h2>
     <p>
-      If you have <strong>lists of literature</strong> at your disposal that you have compiled with the aid 
-      of literature management programs such as 
-      <a href="https://www.uni-due.de/ub/en/erefworks.shtml" target="_blank">RefWorks</a>, BibTex, or 
-      <a href="https://www.uni-due.de/ub/en/ecitavi.shtml" target="_blank">Citavi</a>, you are welcome to 
+      If you have <strong>lists of literature</strong> at your disposal that you have compiled with the aid
+      of literature management programs such as
+      <a href="https://www.uni-due.de/ub/en/erefworks.shtml" target="_blank">RefWorks</a>, BibTex, or
+      <a href="https://www.uni-due.de/ub/en/ecitavi.shtml" target="_blank">Citavi</a>, you are welcome to
       submit these lists to us. We will then import the data into the university bibliography.<br />
       Please send an e-mail to:
-      <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a><br/><br />     
-    </p>    
+      <a href="mailto:universitaetsbibliographie@ub.uni-due.de">universitaetsbibliographie@ub.uni-due.de</a><br/><br />
+    </p>
     <p>
       You will find further <a target="_blank" href="https://www.uni-due.de/ub/en/eliteraturverwaltung.shtml">information
-      about reference management software</a> on the pages of the university library.     
-    </p>           
-  </article> 
-    
+      about reference management software</a> on the pages of the university library.
+    </p>
+  </article>
+
   <article class="highlight2" xml:lang="de">
     <h2>Folgende Publikationen können erfasst werden</h2>
     <ul>
@@ -153,7 +153,7 @@
       <li>Preprints</li>
       <li>Vorworte, Nachworte</li>
       <li>Wissenschaftliche Rezensionen</li>
-    </ul>    
+    </ul>
     <p><strong>Dissertationen und Habilitationsschriften werden von der Universitätsbibliothek
     selbst erfasst.</strong></p>
    </article>
@@ -165,29 +165,29 @@
       <li>Contributions to collected editions (i.e. books incl. contributions of several authors)</li>
       <li>Contributions to conference proceedings / publications</li>
       <li>Encyclopedia entries</li>
-      <li>Editorial functions for collected editions, journals and serial publications</li>  
+      <li>Editorial functions for collected editions, journals and serial publications</li>
       <li>Lectures</li>
       <li>Interviews</li>
-      <li>Poster</li>       
+      <li>Poster</li>
       <li>Preprints</li>
       <li>Prefaces (forewords), Postfaces</li>
       <li>Scientific reviews</li>
-    </ul>    
+    </ul>
     <p><strong>Dissertations and postdoctoral theses are registered by the university
-    library itself.</strong></p>    
-  </article>  
-  
+    library itself.</strong></p>
+  </article>
+
   <article class="highlight1" xml:lang="de">
     <h2>Personengruppen, die Publikationen melden können bzw. sollten</h2>
  	    <p>
- 	    Folgende Personengruppen sollten als Angehörige der Universität Duisburg-Essen 
- 	    ihre Publikationen der Universitätsbibliographie melden: <strong>HochschullehrerInnen, 
+ 	    Folgende Personengruppen sollten als Angehörige der Universität Duisburg-Essen
+ 	    ihre Publikationen der Universitätsbibliographie melden: <strong>HochschullehrerInnen,
  	    wissenschaftliche und künstlerische MitarbeiterInnen, PrivatdozentInnen, außerplanmäßige
  	    ProfessorInnen, HonorarprofessorInnen, GastdozentInnen sowie Lehrbeauftragte</strong>.
  	    Desweiteren können auch ehemalige Angehörige der Universität Duisburg-Essen, wie z.B. <strong>emeritierte
  	    Professorinnen und Professoren</strong> ihre Publikationen melden.
  	    </p>
- 	    
+
  	  </article>
  	  <article class="highlight1" xml:lang="en">
         <h2>Groups of persons which can -  or should - register their publications</h2>
@@ -199,22 +199,22 @@
  	    assistant lecturers</strong>.
  	    Furthermore, former members of the university of Duisburg-Essen, such as <strong>emeritus professors</strong>,
  	    can register their publications.
- 	    </p> 	    
+ 	    </p>
  	  </article>
- 	  
+
  	  <article class="highlight2" xml:lang="de">
         <h2>Zeitraum der Erfassung</h2>
  	    <p>
- 	    Grundsätzlich können Sie <strong>alle</strong> Ihre Veröffentlichungen der Universitätsbibliographie melden 
+ 	    Grundsätzlich können Sie <strong>alle</strong> Ihre Veröffentlichungen der Universitätsbibliographie melden
  	    und so Ihre <strong>gesamte persönliche Bibliographie</strong> erstellen und pflegen.
- 	    </p> 	      
+ 	    </p>
  	  </article>
  	  <article class="highlight2" xml:lang="en">
         <h2>Period of registration</h2>
  	    <p>
  	    Basically, you can register <strong>all</strong> your publications with the university
  	    bibliography and thus establish and maintain your <strong>complete personal bibliography</strong>.
- 	    </p> 	    
+ 	    </p>
  	  </article>
-    
+
 </webpage>

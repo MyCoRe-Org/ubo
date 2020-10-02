@@ -25,20 +25,20 @@
     <xed:validate xpath="//mods:identifier[@type='duepublico2']" matches="duepublico_mods_\d\d\d\d\d\d\d\d" display="global" />
     <xed:validate xpath="//mods:location/mods:url" matches="(f|ht)tp(s?)://[\w\d.]+\S*" i18n="ubo.link.validation" display="global" />
     <xed:validate xpath="//mods:location/mods:url" matches="^((?!doi.org/10).)*$" i18n="ubo.link.validation.not.doi" display="global" />
-    <xed:validate xpath="//mods:location/mods:shelfLocator" matches="([ED]\d\d\/\d\d\s[A-Za-z]+\s\d+.*)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
+    <xed:validate xpath="//mods:location/mods:shelfLocator" matches="(\d\d\s[A-Za-z]+\s\d+.*)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
     <xed:validate xpath="//mods:abstract/@xlink:href" matches="(f|ht)tp(s?)://[\w\d.]+\S*" i18n="ubo.link.validation" display="global" />
     <!-- year is required, except for journal and series: -->
     <xed:validate xpath="//mods:mods" test="descendant::mods:dateIssued[string-length(.) &gt; 0] or mods:genre='journal' or mods:genre='series'" i18n="ubo.date.issued.4.validation" display="global" />
     <xed:validate xpath="//mods:dateIssued" matches="[\d]{4}" i18n="ubo.date.issued.4.validation" display="global" />
   </xed:template>
-  
+
   <xed:template id="common.metafields">
     <xed:bind xpath="@ID" default="ubo_mods_00000000" />
     <xed:bind xpath="@label" default="ubo" />
     <xed:bind xpath="@xsi:noNamespaceSchemaLocation" default="datamodel-mods.xsd" />
     <xed:bind xpath="structure" />
   </xed:template>
-  
+
   <xed:template id="legend.ID">
     <xed:bind xpath="/mycoreobject/@ID" default="ubo_mods_00000000">
       <xed:choose>
@@ -47,7 +47,7 @@
       </xed:choose>
     </xed:bind>
   </xed:template>
-  
+
   <xed:template id="status">
     <xed:bind xpath="../../../../service/servflags[@class='MCRMetaLangText']/servflag[@type='status']">
       <xed:choose>
@@ -68,7 +68,7 @@
       </xed:choose>
     </xed:bind>
   </xed:template>
-  
+
   <xed:template id="tags">
     <div>
       <label for="{xed:generate-id()}">Tags:</label>
@@ -80,7 +80,7 @@
       </div>
     </div>
   </xed:template>
-  
+
   <xed:template id="subject">
     <xed:repeat xpath="mods:classification[@classID='fachreferate']" max="5">
       <div>
@@ -95,7 +95,7 @@
       </div>
     </xed:repeat>
   </xed:template>
-  
+
   <xed:template id="origin">
     <xed:repeat xpath="mods:classification[@classID='ORIGIN']" max="10">
       <div>
@@ -119,7 +119,7 @@
       jQuery(document).ready(function() { jQuery('select[class*="autocomplete"]').chosen({search_contains: true}); });
     </script>
   </xed:template>
-  
+
   <xed:template id="oa">
     <xed:bind xpath="mods:classification[@classID='oa']">
       <div>
@@ -144,7 +144,7 @@
       </div>
     </xed:bind>
   </xed:template>
-  
+
   <xed:template id="host">
     <xed:bind xpath="mods:genre[@type='intern']">
       <div>
@@ -253,19 +253,19 @@
         <label for="{xed:generate-id()}">
           *<xed:output i18n="ubo.role.author" />:
         </label>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+        <xed:include uri="webapp:import-editor.xed" ref="person" />
         <xed:controls />
       </div>
     </xed:repeat>
   </xed:template>
-  
+
   <xed:template id="editor">
     <xed:repeat xpath="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='edt']" max="99">
       <div>
         <label for="{xed:generate-id()}">
           <xed:output i18n="ubo.role.editor" />:
         </label>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+        <xed:include uri="webapp:import-editor.xed" ref="person" />
         <xed:controls />
       </div>
     </xed:repeat>
@@ -277,7 +277,7 @@
         <label for="{xed:generate-id()}">
           *<xed:output i18n="ubo.role.interviewee" />:
         </label>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+        <xed:include uri="webapp:import-editor.xed" ref="person" />
         <xed:controls />
       </div>
     </xed:repeat>
@@ -289,7 +289,7 @@
         <label for="{xed:generate-id()}">
           <xed:output i18n="ubo.role.honoree" />:
         </label>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+        <xed:include uri="webapp:import-editor.xed" ref="person" />
       </div>
     </xed:bind>
   </xed:template>
@@ -357,7 +357,7 @@
             </select>:
           </label>
         </xed:bind>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+        <xed:include uri="webapp:import-editor.xed" ref="person" />
         <xed:controls />
       </div>
     </xed:repeat>
@@ -373,7 +373,7 @@
             </select>:
           </label>
         </xed:bind>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+        <xed:include uri="webapp:import-editor.xed" ref="person" />
         <xed:controls />
       </div>
     </xed:repeat>
@@ -543,7 +543,7 @@
           <span style="display:inline-block; width:auto; margin-right:1ex;">:</span>
         </xed:bind>
         <input class="{$xed-validation-marker}" type="text" style="width:400px;" />
-        <xed:controls /> 
+        <xed:controls />
       </div>
     </xed:repeat>
   </xed:template>
@@ -573,7 +573,7 @@
           <span style="display:inline-block; width:auto; margin-right:1ex;">:</span>
         </xed:bind>
         <input class="{$xed-validation-marker}" type="text" style="width:400px;" />
-        <xed:controls /> 
+        <xed:controls />
       </div>
     </xed:repeat>
   </xed:template>
@@ -605,7 +605,7 @@
       </div>
     </xed:bind>
   </xed:template>
-  
+
   <xed:template id="topics">
     <xed:repeat xpath="mods:subject">
       <div>
@@ -619,7 +619,7 @@
       </div>
     </xed:repeat>
   </xed:template>
-  
+
   <xed:template id="languages">
     <xed:repeat xpath="mods:language">
       <div>
@@ -673,19 +673,19 @@
       </div>
     </xed:repeat>
   </xed:template>
-  
+
   <xed:template id="linked.relatedItem">
-    <xed:bind xpath="@xlink:href"> 
+    <xed:bind xpath="@xlink:href">
       <div>
         <label>in:</label>
         <div style="width:520px; margin:0; padding:0; display:inline-block;">
           <a href="{$ServletsBaseURL}DozBibEntryServlet?id={.}">
-            <xed:output i18n="result.dozbib.entry" /> <xed:output value="number(substring-after(.,'_mods_'))" /> 
+            <xed:output i18n="result.dozbib.entry" /> <xed:output value="number(substring-after(.,'_mods_'))" />
           </a>
           <br/>
           <xed:include uri="xslStyle:relatedItem-editor:mcrobject:{.}" />
           <button type="submit" class="roundedButton" name="_xed_submit_remove:/mycoreobject/descendant::mods:relatedItem/@xlink:href[.='{.}']|host">
-            <xed:output i18n="ubo.relatedItem.host.unlink" /> 
+            <xed:output i18n="ubo.relatedItem.host.unlink" />
           </button>
           <button class="roundedButton" type="submit" xed:target="subselect" xed:href="../search.xed?id_type=id&amp;genre={../mods:genre[@type='intern']}">
             <xed:output i18n="ubo.relatedItem.host.select" />
@@ -693,8 +693,8 @@
         </div>
       </div>
     </xed:bind>
-  </xed:template> 
-  
+  </xed:template>
+
   <xed:template id="relations">
     <fieldset>
       <legend>Verweise:</legend>
@@ -718,7 +718,7 @@
     </fieldset>
     <xed:validate xpath="//mods:relatedItem/@xlink:href" matches="ubo_mods_\d{8}" i18n="ubo.relatedItem.validation.href" display="global" />
   </xed:template>
-  
+
   <xed:template id="fix.structure.parent">
     <xed:bind xpath="structure/parents/parent">
       <xed:choose>
@@ -731,8 +731,8 @@
       </xed:choose>
     </xed:bind>
     <xed:cleanup-rule xpath="/mycoreobject/structure/parents" relevant-if="string-length(parent/@xlink:href) &gt; 0" />
-  </xed:template> 
-  
+  </xed:template>
+
   <xed:template id="cleanup">
     <xed:cleanup-rule xpath="//mods:*"
       relevant-if="(string-length(normalize-space(text())) &gt; 0) or * or (string-length(@xlink:href) &gt; 0) or (string-length(@valueURIxEditor) &gt; 0) or (string-length(@mcr:categId) &gt; 0)" />
