@@ -2,25 +2,24 @@
 
 <!-- ============================================== -->
 <!-- $Revision$ $Date$ -->
-<!-- ============================================== --> 
+<!-- ============================================== -->
 
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:ubo="xalan://unidue.ubo.DozBibEntryServlet"
   xmlns:mods="http://www.loc.gov/mods/v3"
-  xmlns:xlink="http://www.w3.org/1999/xlink" 
+  xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   xmlns:mcr="http://www.mycore.org/"
   xmlns:encoder="xalan://java.net.URLEncoder"
-  exclude-result-prefixes="xsl xalan ubo mods xlink i18n dc mcr encoder"  
+  exclude-result-prefixes="xsl xalan ubo mods xlink i18n dc mcr encoder"
 >
 
 <xsl:include href="mods-dc-meta.xsl" />
 <xsl:include href="mods-highwire.xsl" />
 <xsl:include href="mods-display.xsl" />
-<xsl:include href="mods-sherpa-romeo.xsl" />
 
 <xsl:param name="Referer" select="concat($ServletsBaseURL,'DozBibEntryServlet?id=',/mycoreobject/@ID)" />
 <xsl:param name="CurrentUserPID" />
@@ -33,7 +32,7 @@
 
 <!-- ============ Seitentitel ============ -->
 
-<xsl:template name="page.title"> 
+<xsl:template name="page.title">
  <title>
   <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
     <xsl:for-each select="mods:name[@type='personal'][1]">
@@ -138,7 +137,7 @@
 
 <xsl:template match="mycoreobject">
  <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
-  <xsl:call-template name="steps.and.actions" /> 
+  <xsl:call-template name="steps.and.actions" />
   <div class="section bibentry highlight2" style="padding:1ex;">
     <xsl:apply-templates select="." mode="cite">
       <xsl:with-param name="mode">divs</xsl:with-param>
@@ -169,7 +168,6 @@
       <xsl:apply-templates select="." mode="details_lines" />
     </div>
   </div>
-  <xsl:apply-templates select="." mode="romeo" />
   <xsl:if test="$permission.admin and mods:extension[dedup]">
     <xsl:call-template name="listDuplicates" />
   </xsl:if>
@@ -209,9 +207,9 @@
       <xsl:call-template name="buildFindDuplicatesURI" />
     </xsl:for-each>
   </xsl:variable>
-  
+
   <xsl:variable name="myID" select="/mycoreobject/@ID" />
-  
+
   <xsl:variable name="duplicates1" select="document($duplicatesURI)/response/result[@name='response']/doc" />
   <xsl:variable name="duplicates2">
     <xsl:for-each select="$duplicates1">
@@ -231,15 +229,15 @@
       <h3>
         <xsl:text>Es gibt eventuell </xsl:text>
         <xsl:choose>
-          <xsl:when test="$numDuplicates = 1">eine Dublette</xsl:when> 
+          <xsl:when test="$numDuplicates = 1">eine Dublette</xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="$numDuplicates" />
             <xsl:text> Dubletten</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
-        <xsl:text>:</xsl:text> 
+        <xsl:text>:</xsl:text>
       </h3>
-      
+
       <a style="float:right" class="roundedButton">
         <xsl:attribute name="href">
           <xsl:text>MCRBasketServlet?type=bibentries&amp;action=add&amp;resolve=true</xsl:text>
@@ -252,7 +250,7 @@
         </xsl:attribute>
         <xsl:value-of select="i18n:translate('button.basketAdd')" />
       </a>
-      
+
       <ul>
         <xsl:for-each select="$duplicates3">
           <li>
@@ -303,12 +301,12 @@
   <p>
     <xsl:value-of select="i18n:translate('result.dozbib.now')"/>
   </p>
-  
+
   <ul>
     <li>
       <xsl:value-of select="i18n:translate('result.dozbib.nowSaved')"/>
       <strong><xsl:value-of select="i18n:translate('result.dozbib.nowSavedStrong')"/></strong>
-    </li>              
+    </li>
     <li>
       <xsl:value-of select="i18n:translate('result.dozbib.nowCheck')"/>
     </li>
@@ -329,30 +327,30 @@
     <strong>
       <xsl:value-of select="i18n:translate('result.dozbib.delete')"/>
     </strong>
-  </p>  
+  </p>
 
-  <input type="button" class="editorButton" name="delete" value="{i18n:translate('button.deleteYes')}" 
+  <input type="button" class="editorButton" name="delete" value="{i18n:translate('button.deleteYes')}"
     onclick="self.location.href='{$ServletsBaseURL}DozBibEntryServlet?mode=delete&amp;id={/mycoreobject/@ID}'" />
-  <input type="button" class="editorButton" name="cancel" value="{i18n:translate('button.cancelNo')}" 
+  <input type="button" class="editorButton" name="cancel" value="{i18n:translate('button.cancelNo')}"
     onclick="self.location.href='{$Referer}'" />
 </xsl:template>
 
 <xsl:template name="ask.publications">
   <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
     <p>
-      Wenn Sie die Publikationen im Korb zusammenführen, 
-      werden die bibliographischen Daten zu einem neuen Eintrag zusammengefasst 
-      und die ursprünglichen, alten Einträge gelöscht. 
+      Wenn Sie die Publikationen im Korb zusammenführen,
+      werden die bibliographischen Daten zu einem neuen Eintrag zusammengefasst
+      und die ursprünglichen, alten Einträge gelöscht.
       Ergebnis wäre dieser Eintrag hier.
     </p>
     <p>
-      <strong>      
+      <strong>
         Wollen Sie die Publikationen im Korb wirklich zusammenführen?
       </strong>
     </p>
-    <input type="button" class="editorButton" name="merge" value="Zusammenführen" 
+    <input type="button" class="editorButton" name="merge" value="Zusammenführen"
       onclick="self.location.href='BasketPubMerger?commit=true&amp;target=publications'" />
-    <input type="button" class="editorButton" name="cancel" value="{i18n:translate('button.cancelNo')}" 
+    <input type="button" class="editorButton" name="cancel" value="{i18n:translate('button.cancelNo')}"
       onclick="self.location.href='MCRBasketServlet?type=bibentries&amp;action=show'" />
   </div>
 </xsl:template>
@@ -360,20 +358,20 @@
 <xsl:template name="ask.hosts">
   <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
     <p>
-      Wenn Sie die Publikationen im Korb zusammenhosten, 
+      Wenn Sie die Publikationen im Korb zusammenhosten,
       werden die Überordnungen jeder dieser Publikationen extrahiert,
-      deren bibliographische Daten zu einem neuen Eintrag zusammengefasst 
-      und die Publikationen im Korb mit diesem neuen Eintrag verlinkt.  
+      deren bibliographische Daten zu einem neuen Eintrag zusammengefasst
+      und die Publikationen im Korb mit diesem neuen Eintrag verlinkt.
       Ergebnis wäre dieser Eintrag hier als gemeinsame Überordnung aller Publikationen im Korb.
     </p>
     <p>
-      <strong>      
+      <strong>
         Wollen Sie die Publikationen im Korb wirklich zusammenhosten?
       </strong>
     </p>
-    <input type="button" class="editorButton" name="merge" value="Zusammenhosten" 
+    <input type="button" class="editorButton" name="merge" value="Zusammenhosten"
       onclick="self.location.href='BasketPubMerger?commit=true&amp;target=hosts'" />
-    <input type="button" class="editorButton" name="cancel" value="{i18n:translate('button.cancelNo')}" 
+    <input type="button" class="editorButton" name="cancel" value="{i18n:translate('button.cancelNo')}"
       onclick="self.location.href='MCRBasketServlet?type=bibentries&amp;action=show'" />
   </div>
 </xsl:template>
@@ -381,7 +379,7 @@
 <xsl:template name="merged.publications">
   <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
     <p>
-      Alle Publikationen im Korb wurden zu diesem Eintrag zusammengeführt. 
+      Alle Publikationen im Korb wurden zu diesem Eintrag zusammengeführt.
       Die anderen Einträge wurden gelöscht. Der Korb wurde geleert.
     </p>
   </div>
@@ -390,7 +388,7 @@
 <xsl:template name="merged.hosts">
   <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
     <p>
-      Alle Publikationen im Korb wurden mit dieser Überordnung verknüpft. 
+      Alle Publikationen im Korb wurden mit dieser Überordnung verknüpft.
       Andere evtl. bereits vorhandene Überordnungen wurden gelöscht.
     </p>
   </div>
@@ -398,12 +396,12 @@
 
 <xsl:template match="servflag[@type='status']">
  <xsl:if test="$permission.admin">
-  <p>  
-    <strong>    
-      <xsl:value-of select="i18n:translate(concat('result.dozbib.status.detailed.',.))" />      
-    </strong>    
+  <p>
+    <strong>
+      <xsl:value-of select="i18n:translate(concat('result.dozbib.status.detailed.',.))" />
+    </strong>
   </p>
- </xsl:if> 
+ </xsl:if>
 </xsl:template>
 
 <xsl:template name="altmetrics">
@@ -414,22 +412,22 @@
         <xsl:when test="mods:identifier[@type='doi']">
           <xsl:attribute name="data-doi">
             <xsl:value-of select="mods:identifier[@type='doi']" />
-          </xsl:attribute> 
+          </xsl:attribute>
         </xsl:when>
         <xsl:when test="mods:identifier[@type='urn']">
           <xsl:attribute name="data-uri">
             <xsl:value-of select="mods:identifier[@type='urn']" />
-          </xsl:attribute> 
+          </xsl:attribute>
         </xsl:when>
         <xsl:when test="mods:identifier[@type='isbn']">
           <xsl:attribute name="data-isbn">
             <xsl:value-of select="mods:identifier[@type='isbn']" />
-          </xsl:attribute> 
+          </xsl:attribute>
         </xsl:when>
         <xsl:when test="mods:identifier[@type='pubmed']">
           <xsl:attribute name="data-pmid">
             <xsl:value-of select="mods:identifier[@type='pubmed']" />
-          </xsl:attribute> 
+          </xsl:attribute>
         </xsl:when>
       </xsl:choose>
     </div>
