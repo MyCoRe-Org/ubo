@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xsl:stylesheet version="1.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  xmlns:xalan="http://xml.apache.org/xalan" 
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" 
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:encoder="xalan://java.net.URLEncoder"
   exclude-result-prefixes="xsl xalan i18n encoder">
 
@@ -27,7 +27,7 @@
 
   <xsl:template match="lst[@name='facet_fields']/lst[@name='year']">
     <xsl:variable name="title" select="concat(i18n:translate('ubo.publications'),' / ',i18n:translate('facets.facet.year'))" />
-    
+
     <section class="highlight2">
     <div id="chartYear" style="width:100%; height:350px;" />
 
@@ -65,8 +65,8 @@
            yAxis: {
              title: { text: '<xsl:value-of select="$count" />' },
              labels: { formatter: function() { return this.value; } },
-             endOnTick: false,          
-             max: <xsl:value-of select="floor(number(int[1]) * 1.05)" /> <!-- +5% -->          
+             endOnTick: false,
+             max: <xsl:value-of select="floor(number(int[1]) * 1.05)" /> <!-- +5% -->
            },
            plotOptions: {
               column: {
@@ -89,7 +89,7 @@
     </script>
     </section>
   </xsl:template>
-  
+
   <xsl:template match="lst[@name='facet_fields']/lst[@name='subject']">
     <xsl:variable name="title" select="concat(i18n:translate('ubo.publications'),' / ',i18n:translate('facets.facet.subject'))" />
 
@@ -137,8 +137,8 @@
           yAxis: {
              title: { text: '<xsl:value-of select="$count" />' },
              labels: { formatter: function() { return this.value; } },
-             endOnTick: false,          
-             max: <xsl:value-of select="floor(number(int[1]) * 1.05)" /> <!-- +5% -->          
+             endOnTick: false,
+             max: <xsl:value-of select="floor(number(int[1]) * 1.05)" /> <!-- +5% -->
           },
           tooltip: { formatter: function() { return '<b>' + this.x +'</b>: '+ this.y; } },
           plotOptions: { series: { pointWidth: 15 } },
@@ -153,7 +153,7 @@
             ],
             dataLabels: {
               enabled: true,
-              align: 'right', 
+              align: 'right',
               formatter: function() { return this.y; },
               style: { font: 'normal 15px Verdana, sans-serif' }
             }
@@ -171,13 +171,13 @@
 
     <section class="highlight2">
     <div id="chartGenre" style="width:100%; height:350px" />
-    
+
     <script type="text/javascript">
      jQuery(document).ready(function() {
        Highcharts.getOptions().plotOptions.pie.colors = ['#4572A7','#AA4643','#89A54E','#80699B','#3D96AE','#DB843D','#92A8CD','#A47D7C','#B5CA92'];
        new Highcharts.Chart({
          chart: {
-            renderTo: 'chartGenre',         
+            renderTo: 'chartGenre',
             plotBackgroundColor: null,
             plotBorderWidth: null,
             plotShadow: false,
@@ -243,14 +243,14 @@
 
     <section class="highlight2">
     <div id="chartOA" style="width:100%; height:350px" />
-    
-    <xsl:variable name="numOAdirect" select="int[@name='oa'] - sum(int[contains('green gold hybrid embargo',@name)])" /> 
+
+    <xsl:variable name="numOAdirect" select="int[@name='oa'] - sum(int[contains('green gold hybrid bronze embargo',@name)])" />
     <xsl:variable name="numOther" select="/response/result/@numFound - int[@name='oa']" />
 
     <script type="text/javascript">
      jQuery(document).ready(function() {
        Highcharts.getOptions().plotOptions.pie.colors = [
-         <xsl:if test="$numOther &gt; 0">'#5858FA',</xsl:if> 
+         <xsl:if test="$numOther &gt; 0">'#5858FA',</xsl:if>
          <xsl:for-each select="int[not(@name='oa') or ($numOAdirect &gt; 0)]">
            <xsl:sort data-type="number" order="descending" />
            <xsl:text>'</xsl:text>
@@ -261,7 +261,7 @@
        ];
        new Highcharts.Chart({
          chart: {
-            renderTo: 'chartOA',         
+            renderTo: 'chartOA',
             plotBackgroundColor: null,
             plotBorderWidth: null,
             plotShadow: false,
@@ -339,7 +339,7 @@
 
     <section class="highlight2">
     <div id="chartPerson" style="width:100%; height:{50 + count(int) * 30}px" />
-    
+
     <script type="text/javascript">
       jQuery(document).ready(function() {
         new Highcharts.Chart({
@@ -381,8 +381,8 @@
           yAxis: {
              title: { text: '<xsl:value-of select="$count" />' },
              labels: { formatter: function() { return this.value; } },
-             endOnTick: false,          
-             max: <xsl:value-of select="floor(number(int[1]) * 1.05)" /> <!-- +5% -->          
+             endOnTick: false,
+             max: <xsl:value-of select="floor(number(int[1]) * 1.05)" /> <!-- +5% -->
           },
           tooltip: { formatter: function() { return '<b>' + this.x +'</b>: '+ this.y; } },
           plotOptions: { series: { pointWidth: 15 } },
@@ -397,7 +397,7 @@
             ],
             dataLabels: {
               enabled: true,
-              align: 'right', 
+              align: 'right',
               formatter: function() { return this.y; },
               style: { font: 'normal 15px Verdana, sans-serif' }
             }
@@ -407,9 +407,9 @@
     </script>
     </section>
   </xsl:template>
-  
+
   <xsl:template match="lst[@name='facet_fields']/lst[@name='nid_lsf']">
-  
+
     <!-- The facet is a list of top LSF IDs matching the restricted query, e.g. status=confirmed, year > 2012 -->
     <!-- To find the corresponding names, build a pivot facet with LSF ID and name variants, use most frequent name  -->
     <xsl:variable name="uri">
@@ -424,14 +424,14 @@
     </xsl:variable>
     <xsl:variable name="response" select="document($uri)/response" />
     <xsl:variable name="lsf2name" select="$response/lst[@name='facet_counts']/lst[@name='facet_pivot']/arr[@name='name_id_lsf,name']" />
-  
+
     <xsl:variable name="q" select="encoder:encode(/response/lst[@name='responseHeader']/lst[@name='params']/str[@name='q'],'UTF-8')" />
 
     <xsl:variable name="title" select="concat(i18n:translate('ubo.publications'),' / ',i18n:translate('facets.facet.nid_lsf'))" />
 
     <section class="highlight2">
     <div id="chartLSF" style="width:100%; height:{50 + count(int) * 30}px" />
-    
+
     <script type="text/javascript">
       jQuery(document).ready(function() {
         new Highcharts.Chart({
@@ -475,8 +475,8 @@
           yAxis: {
              title: { text: '<xsl:value-of select="$count" />' },
              labels: { formatter: function() { return this.value; } },
-             endOnTick: false,          
-             max: <xsl:value-of select="floor(number(int[1]) * 1.05)" /> <!-- +5% -->          
+             endOnTick: false,
+             max: <xsl:value-of select="floor(number(int[1]) * 1.05)" /> <!-- +5% -->
           },
           tooltip: { formatter: function() { return '<b>' + this.x +'</b>: '+ this.y; } },
           plotOptions: { series: { pointWidth: 15 } },
@@ -491,7 +491,7 @@
             ],
             dataLabels: {
               enabled: true,
-              align: 'right', 
+              align: 'right',
               formatter: function() { return this.y; },
               style: { font: 'normal 15px Verdana, sans-serif' }
             }
@@ -500,12 +500,12 @@
       });
     </script>
     </section>
-  </xsl:template>  
+  </xsl:template>
 
   <xsl:template match="lst/arr[@name='name_id_type,name_id_type']">
     <xsl:variable name="base" select="." />
 
-    <table class="ubo-chart"> 
+    <table class="ubo-chart">
       <tr>
         <th>/</th>
         <xsl:for-each select="$base/lst">

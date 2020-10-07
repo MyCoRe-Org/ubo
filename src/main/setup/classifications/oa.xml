@@ -11,7 +11,7 @@
       <label xml:lang="x-color" text="#C8FE2E" />
       <category ID="green">
         <!-- Publikation ist in einer lizenzpflichtigen Zeitschrift erschienen, eine (evtl. andere) Version des Artikels wurde auf DuEPublico publiziert (Zweitveröffentlichung). -->
-        <label xml:lang="de" text="OA Grün" />  
+        <label xml:lang="de" text="OA Grün" />
         <label xml:lang="en" text="OA Green" />
         <label xml:lang="x-color" text="#00FF00" />
       </category>
@@ -23,13 +23,19 @@
       </category>
       <category ID="hybrid">
         <!-- Publikation ist in einer lizenzpflichtigen Zeitschrift erschienen, in der einzelne Artikel gegen Zahlung einer Publikationsgebühr Open Access erscheinen. -->
-        <label xml:lang="de" text="OA Hybrid" /> 
+        <label xml:lang="de" text="OA Hybrid" />
         <label xml:lang="en" text="OA Hybrid" />
         <label xml:lang="x-color" text="#FF8000" />
       </category>
+      <category ID="bronze">
+        <!-- Beim Verlag frei zugänglich, aber nicht unter einer OA Lizenz  -->
+        <label xml:lang="de" text="OA Bronze" />
+        <label xml:lang="en" text="OA Bronze" />
+        <label xml:lang="x-color" text="#BF8970" />
+      </category>
       <category ID="embargo">
         <!-- Publikation ist in einer lizenzpflichtigen Zeitschrift erschienen und nach nun bereits abgelaufener Embargofrist für alle frei zugänglich. -->
-        <label xml:lang="de" text="OA Embargo" /> 
+        <label xml:lang="de" text="OA Embargo" />
         <label xml:lang="en" text="OA Embargo" />
         <label xml:lang="x-color" text="#868A08" />
       </category>
