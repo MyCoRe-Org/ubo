@@ -74,6 +74,9 @@ public class DozBibCommands extends MCRAbstractCommands {
             "unidue.ubo.importer.scopus.ScopusUpdater.update String int int",
             "Queries Scopus for new publications of affiliation ID {0} added within last {1} days," +
                 "retrieves max {2} publications and imports them if not already present"));
+        addCommand(new MCRCommand("ubo initial import from scopus for affiliation IDs {0}",
+                "unidue.ubo.importer.scopus.ScopusInitialImporter.initialImport String",
+                "Queries all affiliation IDs and imports all documents {0} = comma separated list of afids"));
     }
 
     /** Exports all entries as MODS dump to a zipped xml file in the given directory */
