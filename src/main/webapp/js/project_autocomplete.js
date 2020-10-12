@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
     // config variables
-    let solr_url = 'solr/ubo_projects/select/';
+    let solr_url = 'servlets/solr/select';
     let id_project_search = 'project_search';
     let id_project_acronym = 'project_acronym';
     let id_project_title = 'project_title';
@@ -31,7 +31,8 @@ $(document).ready(function(){
            data: {
                q: solr_search_string,
                wt: 'json',
-               fl: '*'
+               fl: '*',
+               core: 'ubo_projects'
            },
            success: function(data) {
             let docs = data.response.docs;
