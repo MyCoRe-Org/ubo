@@ -92,7 +92,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
             for (int i = 0; i < matcherClasses.length; i++) {
                 String matcherClass = matcherClasses[i];
                 try {
-                    matchers.add((MCRUserMatcher) Class.forName(matcherClass).newInstance());
+                    matchers.add((MCRUserMatcher) Class.forName(matcherClass).getDeclaredConstructor().newInstance());
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw new MCRConfigurationException("Property key " + CONFIG_MATCHERS + " not valid.");
