@@ -2,10 +2,10 @@
 
 <!-- See https://unpaywall.org/data-format -->
 
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:xalan="http://xml.apache.org/xalan" 
-  xmlns:mods="http://www.loc.gov/mods/v3" 
+  xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:mods="http://www.loc.gov/mods/v3"
   exclude-result-prefixes="xsl xalan">
 
   <xsl:output method="xml" />
@@ -36,11 +36,11 @@
       </mods:relatedItem>
     </mods:mods>
   </xsl:template>
-  
+
   <xsl:template match="genre[.='book-chapter']">
     <mods:genre>chapter</mods:genre>
   </xsl:template>
-  
+
   <xsl:template match="genre[.='book-section']">
     <mods:genre>chapter</mods:genre>
   </xsl:template>
@@ -52,7 +52,7 @@
   <xsl:template match="genre[.='dissertation']">
     <mods:genre>dissertation</mods:genre>
   </xsl:template>
-  
+
   <xsl:template match="genre[.='book']">
     <mods:genre>book</mods:genre>
   </xsl:template>
@@ -68,7 +68,7 @@
   <xsl:template match="genre[.='book-chapter']" mode="host">
     <mods:genre>collection</mods:genre>
   </xsl:template>
-  
+
   <xsl:template match="genre[.='book-section']" mode="host">
     <mods:genre>collection</mods:genre>
   </xsl:template>
@@ -80,8 +80,8 @@
   <xsl:variable name="authorityOA">https://bibliographie.ub.uni-due.de/classifications/oa</xsl:variable>
 
   <xsl:template name="oa_publication">
-    <xsl:if test="(is_oa='true') and (journal_is_in_doaj='false') and (journal_is_oa='false')">
-      <mods:classification authorityURI="{$authorityOA}" valueURI="{$authorityOA}#oa" />
+    <xsl:if test="(is_oa='true')">
+      <mods:classification authorityURI="{$authorityOA}" valueURI="{$authorityOA}#{oa_status}" />
     </xsl:if>
   </xsl:template>
 
@@ -90,7 +90,7 @@
       <mods:classification authorityURI="{$authorityOA}" valueURI="{$authorityOA}#gold" />
     </xsl:if>
   </xsl:template>
-  
+
   <xsl:template match="url_for_pdf">
     <mods:location>
       <mods:url access="raw object">
@@ -98,13 +98,13 @@
       </mods:url>
     </mods:location>
   </xsl:template>
-  
+
   <xsl:template match="doi">
     <mods:identifier type="doi">
       <xsl:value-of select="text()" />
     </mods:identifier>
-  </xsl:template>  
-  
+  </xsl:template>
+
   <xsl:template match="title|journal_name">
     <mods:titleInfo>
       <mods:title>
@@ -112,7 +112,7 @@
       </mods:title>
     </mods:titleInfo>
   </xsl:template>
-  
+
   <xsl:template match="z_authors/entry[family][given]">
     <mods:name type="personal">
       <xsl:apply-templates select="family" />
@@ -122,11 +122,11 @@
       </mods:role>
     </mods:name>
   </xsl:template>
-  
+
   <xsl:template match="family|given">
     <mods:namePart type="{name()}">
       <xsl:value-of select="text()" />
-    </mods:namePart>  
+    </mods:namePart>
   </xsl:template>
 
   <xsl:template match="year">
@@ -134,13 +134,13 @@
       <xsl:value-of select="text()" />
     </mods:dateIssued>
   </xsl:template>
-  
+
   <xsl:template match="publisher">
     <mods:publisher>
       <xsl:value-of select="text()" />
     </mods:publisher>
   </xsl:template>
-  
+
   <xsl:template match="journal_issns">
     <xsl:for-each select="xalan:tokenize(text(),',')">
       <mods:identifier type="issn">

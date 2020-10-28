@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xsl:stylesheet version="1.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  xmlns:xalan="http://xml.apache.org/xalan" 
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" 
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:encoder="xalan://java.net.URLEncoder"
   exclude-result-prefixes="xsl xalan i18n encoder">
 
@@ -27,7 +27,7 @@
 
   <xsl:template match="lst[@name='facet_fields']/lst[@name='year']">
     <xsl:variable name="title" select="concat(i18n:translate('ubo.publications'),' / ',i18n:translate('facets.facet.year'))" />
-    
+
     <section class="card mb-3">
       <div class="card-body">
       <div id="chartYear" style="width:100%; height:350px;" />
@@ -91,7 +91,7 @@
       </div>
     </section>
   </xsl:template>
-  
+
   <xsl:template match="lst[@name='facet_fields']/lst[@name='subject']">
     <xsl:variable name="title" select="concat(i18n:translate('ubo.publications'),' / ',i18n:translate('facets.facet.subject'))" />
 
@@ -249,7 +249,7 @@
       <div class="card-body">
       <div id="chartOA" style="width:100%; height:350px" />
 
-      <xsl:variable name="numOAdirect" select="int[@name='oa'] - sum(int[contains('green gold hybrid embargo',@name)])" />
+      <xsl:variable name="numOAdirect" select="int[@name='oa'] - sum(int[contains('green gold hybrid embargo bronze',@name)])" />
       <xsl:variable name="numOther" select="/response/result/@numFound - int[@name='oa']" />
 
       <script type="text/javascript">
@@ -415,9 +415,9 @@
       </div>
     </section>
   </xsl:template>
-  
+
   <xsl:template match="lst[@name='facet_fields']/lst[@name='nid_lsf']">
-  
+
     <!-- The facet is a list of top LSF IDs matching the restricted query, e.g. status=confirmed, year > 2012 -->
     <!-- To find the corresponding names, build a pivot facet with LSF ID and name variants, use most frequent name  -->
     <xsl:variable name="uri">
@@ -432,7 +432,7 @@
     </xsl:variable>
     <xsl:variable name="response" select="document($uri)/response" />
     <xsl:variable name="lsf2name" select="$response/lst[@name='facet_counts']/lst[@name='facet_pivot']/arr[@name='name_id_lsf,name']" />
-  
+
     <xsl:variable name="q" select="encoder:encode(/response/lst[@name='responseHeader']/lst[@name='params']/str[@name='q'],'UTF-8')" />
 
     <xsl:variable name="title" select="concat(i18n:translate('ubo.publications'),' / ',i18n:translate('facets.facet.nid_lsf'))" />
@@ -510,7 +510,7 @@
       </script>
       </div>
     </section>
-  </xsl:template>  
+  </xsl:template>
 
   <xsl:template match="lst/arr[@name='name_id_type,name_id_type']">
     <xsl:variable name="base" select="." />

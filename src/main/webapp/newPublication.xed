@@ -3,7 +3,7 @@
 <webpage lastModified="$Date$" id="dozbib.new.publication">
   <title xml:lang="de">Publikation melden</title>
   <title xml:lang="en">Registering publication</title>
-  
+
   <article class="card mb-1">
     <div class="card-body">
       <xed:form role="form" xmlns:xed="http://www.mycore.de/xeditor">
@@ -38,11 +38,11 @@
                       <option value="pubmed">PubMed ID</option>
                       <option value="scopus">Scopus ID</option>
                       <option value="ieee">IEEE Article No.</option>
-                      <option value="arxiv">arXiv.org ID</option>                      
+                      <option value="arxiv">arXiv.org ID</option>
                       <option value="isbn">ISBN</option>
                       <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
                         <option value="duepublico">DuEPublico ID</option>
-                        <option value="duepublico2">DuEPublico 2 ID</option>                        
+                        <option value="duepublico2">DuEPublico 2 ID</option>
                         <option value="evaluna">EVALuna Biblio ID</option>
                         <option value="zdb">ZDB ID</option>
                         <option value="ppn">GBV/SWB PPN</option>
@@ -60,10 +60,11 @@
             <xed:validate xpath="//mods:identifier[@type='issn']" matches="[0-9X]{4}\-[0-9X]{4}" i18n="ubo.identifier.issn.validation" display="global" />
             <xed:validate xpath="//mods:identifier[@type='isbn']" matches="^((978|979)-?)?([\d -]{12}|\d{9})(\d|X)$" i18n="ubo.identifier.isbn.validation" display="global" />
             <xed:validate xpath="//mods:identifier[@type='duepublico']" matches="\d+" display="global" />
+          <xed:validate xpath="//mods:identifier[@type='duepublico2']" matches="duepublico_mods_\d\d\d\d\d\d\d\d" display="global" />
 
             <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
               <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
-              <xed:validate xpath="//mods:location/mods:shelfLocator" matches="([ED]\d\d\/\d\d\s[A-Za-z]+\s\d+.*)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
+              <xed:validate xpath="//mods:location/mods:shelfLocator" matches="(\d\d\/\d\d\s[A-Za-z]+\s\d+.*)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
             </xed:if>
 
             <div>
@@ -112,7 +113,7 @@
       </xed:form>
     </div>
   </article>
-  
+
   <article class="card mb-1" xml:lang="de">
     <div class="card-body bg-alternative">
       <h2>Literaturlisten</h2>
@@ -151,8 +152,8 @@
         about reference management software</a> on the pages of the university library.
       </p>
     </div>
-  </article> 
-    
+  </article>
+
   <article class="card mb-1" xml:lang="de">
     <div class="card-body">
       <h2>Folgende Publikationen können erfasst werden</h2>
@@ -194,8 +195,8 @@
       <p><strong>Dissertations and postdoctoral theses are registered by the university
       library itself.</strong></p>
     </div>
-  </article>  
-  
+  </article>
+
   <article class="card mb-1" xml:lang="de">
     <div class="card-body bg-alternative">
       <h2>Personengruppen, die Publikationen melden können bzw. sollten</h2>
@@ -224,7 +225,7 @@
       </p>
     </div>
   </article>
- 	  
+
   <article class="card" xml:lang="de">
     <div class="card-body">
       <h2>Zeitraum der Erfassung</h2>
@@ -244,5 +245,5 @@
       </p>
     </div>
   </article>
-    
+
 </webpage>

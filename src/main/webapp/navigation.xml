@@ -91,6 +91,10 @@
       <label xml:lang="de">Impressum</label>
       <label xml:lang="en">Imprint</label>
     </item>
+    <item ref="accessibility.xml">
+      <label xml:lang="de">BARRIEREFREIHEIT</label>
+      <label xml:lang="en">ACCESSIBILITY</label>
+    </item>
   </item>
 
 </navigation>

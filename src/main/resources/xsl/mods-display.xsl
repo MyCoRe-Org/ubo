@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<xsl:stylesheet version="1.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:cerif="https://www.openaire.eu/cerif-profile/1.1/"
   xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:check="xalan://unidue.ubo.AccessControl" 
-  xmlns:encoder="xalan://java.net.URLEncoder" 
-  xmlns:xlink="http://www.w3.org/1999/xlink" 
+  xmlns:check="xalan://unidue.ubo.AccessControl"
+  xmlns:encoder="xalan://java.net.URLEncoder"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:mcr="http://www.mycore.org/"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   exclude-result-prefixes="xsl xalan xlink i18n encoder mcr check cerif">
-  
+
   <xsl:include href="shelfmark-normalization.xsl" />
   <xsl:include href="output-category.xsl" />
-  
+
   <xsl:param name="step" />
   <xsl:param name="RequestURL" />
   <xsl:param name="WebApplicationBaseURL" />
@@ -27,21 +27,21 @@
     <xsl:text>https://primo.ub.uni-due.de/primo-explore/search?tab=localude&amp;search_scope=LocalUDE</xsl:text>
     <xsl:text>&amp;sortby=rank&amp;vid=UDE_NUI&amp;lang=de_DE&amp;mode=advanced&amp;offset=0&amp;query=</xsl:text>
   </xsl:variable>
-  
+
   <!-- ============ Ausgabe Publikationsart ============ -->
-  
+
   <xsl:template name="pubtype">
     <span class="label-info badge badge-secondary mr-1">
       <xsl:apply-templates select="mods:genre[@type='intern']" />
       <xsl:for-each select="mods:relatedItem[@type='host']/mods:genre[@type='intern']">
         <xsl:text> in </xsl:text>
         <xsl:apply-templates select="." />
-      </xsl:for-each> 
+      </xsl:for-each>
     </span>
   </xsl:template>
-  
+
   <!-- ============ Ausgabe Fach ============ -->
-  
+
   <xsl:template match="mods:mods/mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info">
     <span class="label-info badge badge-secondary mr-1">
       <xsl:call-template name="output.category">
@@ -50,9 +50,9 @@
       </xsl:call-template>
     </span>
   </xsl:template>
-  
+
   <!-- ========== Ausgabe Fakultät ========== -->
-  
+
   <xsl:template match="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info">
     <span class="label-info badge badge-secondary mr-1">
       <xsl:call-template name="output.category">
@@ -61,9 +61,9 @@
       </xsl:call-template>
     </span>
   </xsl:template>
-  
+
   <!-- ============ Ausgabe Open Access ============ -->
-  
+
   <xsl:template name="label-oa">
     <xsl:choose>
       <xsl:when test="mods:classification[contains(@authorityURI,'oa')]">
@@ -74,14 +74,14 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  
+
   <xsl:template match="mods:classification[contains(@authorityURI,'oa')]" mode="label-info">
     <xsl:variable name="category" select="$oa//category[@ID=substring-after(current()/@valueURI,'#')]" />
     <span class="label-info badge badge-inverse mr-1" style="background-color:{$category/label[lang('x-color')]/@text}">
       <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
     </span>
   </xsl:template>
-  
+
   <xsl:template match="mods:classification[contains(@authorityURI,'oa')]" mode="details">
     <div class="row">
       <div class="col-3">Open Access?</div>
@@ -91,9 +91,9 @@
       </div>
     </div>
   </xsl:template>
-  
+
   <!-- ========== Ausgabe Jahr ========== -->
-  
+
   <xsl:template name="label-year">
     <xsl:for-each select="descendant-or-self::mods:dateIssued[not(ancestor::mods:relatedItem[not(@type='host')])][1]">
       <span class="label-info badge badge-secondary mr-1">
@@ -101,19 +101,19 @@
       </span>
     </xsl:for-each>
   </xsl:template>
-  
+
   <!-- ========== ORCID status and publish button ========== -->
-  
+
   <xsl:template name="orcid-status">
     <div class="orcid-status" data-id="{ancestor::mycoreobject/@ID}" />
   </xsl:template>
-  
+
   <xsl:template name="orcid-publish">
     <div class="orcid-publish d-inline" data-id="{ancestor::mycoreobject/@ID}" />
   </xsl:template>
 
   <!-- ========== URI bauen, um Dubletten zu finden ========== -->
-  
+
   <xsl:template name="buildFindDuplicatesURI">
     <xsl:text>solr:fl=id&amp;rows=999&amp;q=(</xsl:text>
     <xsl:for-each select="dedup">
@@ -125,14 +125,14 @@
     </xsl:for-each>
     <xsl:text>)</xsl:text>
   </xsl:template>
-  
+
   <!-- ========== Zitierform ========== -->
   <xsl:template match="mods:mods|mods:relatedItem" mode="cite">
     <xsl:param name="mode">plain</xsl:param> <!-- plain: Als Fließtext formatieren, sonst mit <div>'s -->
 
     <xsl:apply-templates select="." mode="cite.title.name">
       <xsl:with-param name="mode" select="$mode" />
-    </xsl:apply-templates>    
+    </xsl:apply-templates>
     <xsl:if test="not(mods:genre='journal')">
       <xsl:call-template name="output.line">
         <xsl:with-param name="selected" select="mods:name[@type='conference']" />
@@ -148,7 +148,7 @@
           <xsl:with-param name="class" select="'origin'" />
         </xsl:call-template>
       </xsl:if>
-      <xsl:call-template name="output.line"> 
+      <xsl:call-template name="output.line">
         <xsl:with-param name="selected" select="mods:relatedItem[@type='series']" />
         <xsl:with-param name="before"> - </xsl:with-param>
         <xsl:with-param name="mode" select="$mode" />
@@ -165,8 +165,8 @@
 
   <!-- for typical publications: "Name: Title" -->
   <xsl:template match="mods:mods|mods:relatedItem" mode="cite.title.name">
-    <xsl:param name="mode">plain</xsl:param> 
-    
+    <xsl:param name="mode">plain</xsl:param>
+
     <xsl:call-template name="output.line">
       <xsl:with-param name="selected" select="mods:name[mods:role/mods:roleTerm][contains($creator.roles,mods:role/mods:roleTerm[@type='code'])]" />
       <xsl:with-param name="after" select="': '" />
@@ -188,8 +188,8 @@
 
   <!-- for collections: "Title / Name (Edt.)" -->
   <xsl:template match="mods:relatedItem[mods:name[mods:role/mods:roleTerm='edt']]" mode="cite.title.name">
-    <xsl:param name="mode">plain</xsl:param> 
-    
+    <xsl:param name="mode">plain</xsl:param>
+
     <xsl:call-template name="output.line">
       <xsl:with-param name="selected" select="mods:name[mods:role/mods:roleTerm][contains($creator.roles,mods:role/mods:roleTerm[@type='code'])]" />
       <xsl:with-param name="after" select="': '" />
@@ -250,7 +250,7 @@
       <xsl:text> </xsl:text>
     </xsl:if>
   </xsl:template>
-  
+
   <!-- ========== Überordnung (In:) ========== -->
   <xsl:template match="mods:relatedItem[@type='host']" mode="brief">
     <xsl:text>In: </xsl:text>
@@ -259,16 +259,16 @@
     <!-- journal article without volume: display year directly behind title, otherwise later behind volume number -->
     <xsl:if test="(mods:genre[@type='intern']='journal') and not(mods:part/mods:detail[@type='volume']/mods:number)">
       <xsl:for-each select="ancestor::mods:mods/descendant::mods:dateIssued[1]">
-        <xsl:value-of select="concat(' (',.,')')" /> 
+        <xsl:value-of select="concat(' (',.,')')" />
       </xsl:for-each>
     </xsl:if>
-    
+
     <xsl:if test="mods:part">
       <xsl:text>, </xsl:text>
     </xsl:if>
     <xsl:apply-templates select="mods:part" />
   </xsl:template>
-  
+
   <!-- ========== Zitierform: alle anderen ========== -->
   <xsl:template match="mods:*" mode="brief">
     <xsl:apply-templates select="." />
@@ -304,22 +304,22 @@
       </div>
     </xsl:if>
   </xsl:template>
-  
+
   <xsl:template match="mods:affiliation" mode="details" >
     <xsl:value-of select="text()" />
     <xsl:if test="position() != last()"> / </xsl:if>
   </xsl:template>
-  
+
   <xsl:param name="UBO.LSF.Link" />
-  
+
   <xsl:template match="mods:nameIdentifier[@type='lsf']">
     <span class="nameIdentifier lsf" title="LSF ID: {.}">
       <a href="{$UBO.LSF.Link}{.}">LSF</a>
     </span>
   </xsl:template>
-  
+
   <xsl:param name="MCR.ORCID.LinkURL" />
-  
+
   <xsl:template match="mods:nameIdentifier[@type='orcid']">
     <xsl:variable name="url" select="concat($MCR.ORCID.LinkURL,text())" />
     <a href="{$url}" title="ORCID iD: {text()}">
@@ -340,7 +340,7 @@
   </xsl:template>
 
   <xsl:param name="UBO.Scopus.Author.Link" />
-  
+
   <xsl:template match="mods:nameIdentifier[@type='scopus']">
     <span class="nameIdentifier scopus" title="SCOPUS Author ID: {.}">
       <a href="{$UBO.Scopus.Author.Link}{.}">SCOPUS</a>
@@ -391,7 +391,7 @@
       </div>
     </div>
   </xsl:template>
-  
+
    <!-- ========== Erster Titel der Überordnung/Serie in Detailansicht, Tabelle ========== -->
   <xsl:template match="mods:relatedItem/mods:titleInfo[1]" mode="details" priority="1">
     <div class="row">
@@ -424,7 +424,7 @@
       </div>
     </div>
   </xsl:template>
-  
+
   <!-- ========== Erscheinungsort ========== -->
   <xsl:template match="mods:place" mode="details">
     <div class="row">
@@ -487,7 +487,7 @@
       </div>
     </div>
   </xsl:template>
-  
+
   <!-- ========== Sendedatum ========== -->
   <xsl:template match="mods:dateIssued[(../../mods:genre='audio') or (../../mods:genre='video') or (../../mods:genre='broadcasting')]" mode="details">
     <div class="row">
@@ -511,7 +511,7 @@
       </div>
     </div>
   </xsl:template>
-  
+
   <!-- ========== Identifier mit Typ ========== -->
   <xsl:template match="mods:identifier" mode="details">
     <div class="row">
@@ -523,7 +523,7 @@
       </div>
     </div>
   </xsl:template>
-  
+
   <!-- ========== Link mit Typ ========== -->
   <xsl:template match="mods:location/mods:url" mode="details">
     <div class="row">
@@ -542,7 +542,7 @@
       </div>
     </div>
   </xsl:template>
-  
+
   <!-- ========== Genre ========== -->
   <xsl:template name="genres">
     <div class="row">
@@ -617,7 +617,7 @@
       </div>
     </div>
   </xsl:template>
-  
+
   <!-- ========== Verweise/Überordnung ========== -->
   <xsl:template match="mods:relatedItem[(@type='host') or (@type='series')]" mode="details">
     <div class="ubo_related_details border-top border-bottom border-dark my-1">
@@ -665,7 +665,7 @@
   </xsl:template>
 
   <!-- ========== details_lines ========== -->
-  
+
   <xsl:template match="mods:mods|mods:relatedItem" mode="details_lines">
     <xsl:apply-templates select="mods:titleInfo" mode="details" />
     <xsl:apply-templates select="mods:name[@type='conference']" mode="details" />
@@ -676,7 +676,7 @@
     <xsl:apply-templates select="mods:originInfo/mods:dateIssued" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'oa')]" mode="details" />
     <xsl:apply-templates select="mods:part" mode="details" />
-    <xsl:apply-templates select="mods:originInfo/mods:dateOther" mode="details" />    
+    <xsl:apply-templates select="mods:originInfo/mods:dateOther" mode="details" />
     <xsl:apply-templates select="mods:physicalDescription/mods:extent" mode="details" />
     <xsl:apply-templates select="mods:identifier" mode="details" />
     <xsl:apply-templates select="mods:location/mods:shelfLocator" mode="details" />
@@ -689,7 +689,7 @@
     <xsl:apply-templates select="mods:abstract/@xlink:href" mode="details" />
     <xsl:apply-templates select="mods:abstract[string-length(.) &gt; 0]" mode="details" />
   </xsl:template>
-  
+
   <!-- =========== Schlagworte =========== -->
   <xsl:template name="subject.topic">
     <xsl:if test="mods:subject/mods:topic">
@@ -711,8 +711,8 @@
       </div>
     </xsl:if>
   </xsl:template>
-  
-  <!-- =========== Link zum Abstract ========== --> 
+
+  <!-- =========== Link zum Abstract ========== -->
   <xsl:template match="mods:abstract/@xlink:href" mode="details">
     <div class="row">
       <div class="col-3">
@@ -738,14 +738,14 @@
       </p>
     </div>
   </xsl:template>
-  
+
   <xsl:param name="CurrentLang" />
   <xsl:param name="DefaultLang" />
 
   <!-- ========== Rollen, die als DC.Creator betrachtet werden ========== -->
 
   <xsl:variable name="creator.roles">cre aut tch pht prg</xsl:variable>
-  
+
   <!-- ========== Titel ========== -->
   <xsl:template match="mods:titleInfo">
     <xsl:apply-templates select="mods:nonSort" />
@@ -787,7 +787,7 @@
     <xsl:variable name="uri" select="concat('classification:metadata:0:children:marcrelator:',.)" />
     <xsl:apply-templates select="document($uri)/mycoreclass/categories/category[1]" />
   </xsl:template>
-  
+
   <xsl:template match="category">
     <xsl:choose>
       <xsl:when test="label[lang($CurrentLang)]">
@@ -800,19 +800,19 @@
         <xsl:value-of select="label[1]"/>
       </xsl:otherwise>
     </xsl:choose>
-  </xsl:template> 
-  
+  </xsl:template>
+
   <!-- ========== Personenname ========== -->
   <xsl:template match="mods:name[@type='personal']">
-    <xsl:apply-templates select="mods:namePart[@type='family']" />  
-    <xsl:apply-templates select="mods:namePart[@type='given']" />  
+    <xsl:apply-templates select="mods:namePart[@type='family']" />
+    <xsl:apply-templates select="mods:namePart[@type='given']" />
   </xsl:template>
-  
+
   <!-- ========== Nachname ============ -->
   <xsl:template match="mods:namePart[@type='family']">
     <xsl:value-of select="text()" />
   </xsl:template>
-  
+
   <!-- ========== Vorname ============ -->
   <xsl:template match="mods:namePart[@type='given']">
     <xsl:text>, </xsl:text>
@@ -841,9 +841,16 @@
     </a>
   </xsl:template>
 
+  <!-- ========== ZDB ID ========== -->
+  <xsl:template match="mods:identifier[@type='zdb']">
+    <a href="https://ld.zdb-services.de/resource/{.}" title="{i18n:translate('ubo.identifier.zdb')}">
+      <xsl:value-of select="." />
+    </a>
+  </xsl:template>
+
   <!-- ========== DOI ========== -->
   <xsl:param name="UBO.DOIResolver" />
-  
+
   <xsl:template match="mods:identifier[@type='doi']">
     <a href="{$UBO.DOIResolver}{text()}">
       <xsl:value-of select="text()" />
@@ -863,10 +870,10 @@
       <xsl:value-of select="text()" />
     </a>
   </xsl:template>
-  
+
   <!-- ========== PubMed ID ========== -->
   <xsl:param name="UBO.PubMed.Link" />
-  
+
   <xsl:template match="mods:identifier[@type='pubmed']">
     <a href="{$UBO.PubMed.Link}{text()}">
       <xsl:value-of select="text()" />
@@ -875,7 +882,7 @@
 
   <!-- ========== Scopus ID ========== -->
   <xsl:param name="UBO.Scopus.Link" />
-  
+
   <xsl:template match="mods:identifier[@type='scopus']">
     <a href="{$UBO.Scopus.Link}{text()}">
       <xsl:value-of select="text()" />
@@ -884,7 +891,7 @@
 
   <!-- ========== IEEE ID ========== -->
   <xsl:param name="UBO.IEEE.Link" />
-  
+
   <xsl:template match="mods:identifier[@type='ieee']">
     <a href="{$UBO.IEEE.Link}{text()}">
       <xsl:value-of select="text()" />
@@ -893,7 +900,7 @@
 
   <!-- ========== arXiv.org ID ========== -->
   <xsl:param name="UBO.arXiv.Link" />
-  
+
   <xsl:template match="mods:identifier[@type='arxiv']">
     <a href="{$UBO.arXiv.Link}{text()}">
       <xsl:value-of select="text()" />
@@ -902,7 +909,7 @@
 
   <!-- ========== Web of Science ID ========== -->
   <xsl:param name="UBO.WebOfScience.Link" />
-  
+
   <xsl:template match="mods:identifier[@type='isi']">
     <a href="{$UBO.WebOfScience.Link}{text()}">
       <xsl:value-of select="text()" />
@@ -910,7 +917,7 @@
   </xsl:template>
 
   <!-- ========== DuEPublico ID ========== -->
-  
+
   <xsl:template match="mods:identifier[@type='duepublico']">
     <a href="https://duepublico.uni-due.de/servlets/DocumentServlet?id={text()}">
       <xsl:value-of select="text()" />
@@ -934,7 +941,7 @@
       <xsl:value-of select="text()" />
     </a>
   </xsl:template>
-  
+
   <!-- ========== Notiz, Kommentar ========== -->
   <xsl:template match="mods:note">
     <xsl:value-of select="." />
@@ -969,17 +976,17 @@
       <xsl:value-of select="i18n:translate('ubo.edition.out')" />
     </xsl:if>
   </xsl:template>
-  
+
   <!-- ========== Erscheinungsort ========== -->
   <xsl:template match="mods:place">
     <xsl:value-of select="mods:placeTerm[@type='text']" />
   </xsl:template>
-  
+
   <!-- ========== Verlag ========== -->
   <xsl:template match="mods:publisher">
     <xsl:value-of select="text()" />
   </xsl:template>
-  
+
   <!-- ========== Erscheinungsjahr/datum ========== -->
   <xsl:template match="mods:dateIssued">
     <xsl:value-of select="text()" />
@@ -1002,12 +1009,12 @@
     <xsl:apply-templates select="mods:detail[@type='page']" />
     <xsl:apply-templates select="mods:extent[@unit='pages']" />
   </xsl:template>
-  
+
   <!-- ========== Band/Jahrgang ========== -->
   <xsl:template match="mods:detail[@type='volume']">
     <xsl:choose>
       <xsl:when test="../mods:detail[@type='issue']">
-        <xsl:value-of select="i18n:translate('ubo.details.volume.journal')" />  
+        <xsl:value-of select="i18n:translate('ubo.details.volume.journal')" />
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="i18n:translate('ubo.details.volume.series')" />
@@ -1018,16 +1025,16 @@
 
     <xsl:variable name="volume.number" select="mods:number" />
     <xsl:variable name="year.issued" select="ancestor::mods:mods/descendant::mods:dateIssued[1]" />
-    
+
     <xsl:if test="ancestor::mods:relatedItem/mods:genre[@type='intern']='journal'"> <!-- if it is a journal -->
       <xsl:if test="(string-length($year.issued) &gt; 0) and translate($year.issued,'0123456789','jjjjjjjjjj') = 'jjjj'"> <!-- and there is a year -->
         <xsl:if test="not($volume.number = $year.issued)"> <!-- and the year is not same as the volume number -->
           <xsl:text> (</xsl:text> <!-- then output "volume (year)" -->
-          <xsl:value-of select="$year.issued" /> 
+          <xsl:value-of select="$year.issued" />
           <xsl:text>)</xsl:text>
-        </xsl:if>  
+        </xsl:if>
       </xsl:if>
-    </xsl:if>  
+    </xsl:if>
   </xsl:template>
 
   <!-- ========== Heftnummer ========== -->
@@ -1037,7 +1044,7 @@
     <xsl:text> </xsl:text>
     <xsl:value-of select="mods:number" />
   </xsl:template>
-  
+
   <!-- ========== Einzelne Seite ========== -->
   <xsl:template match="mods:detail[@type='page']">
     <xsl:if test="../mods:detail[not(@type='page')]">
@@ -1055,7 +1062,7 @@
     </xsl:if>
     <xsl:apply-templates select="mods:start|mods:end|mods:list|mods:total" />
   </xsl:template>
-  
+
   <xsl:template match="mods:start[../mods:end]">
     <xsl:value-of select="i18n:translate('ubo.pages.abbreviated.multiple')" />
     <xsl:text> </xsl:text>
@@ -1067,10 +1074,10 @@
     <xsl:text> </xsl:text>
     <xsl:value-of select="text()" />
   </xsl:template>
-  
+
   <!-- Special case of a single page with start=end, only output start page -->
   <xsl:template match="mods:end[text() = ../mods:start/text()]" />
-  
+
   <xsl:template match="mods:end">
     <xsl:text> - </xsl:text>
     <xsl:value-of select="text()" />
@@ -1095,7 +1102,7 @@
     <xsl:text> Seiten</xsl:text>
   </xsl:template>
 
-  <!-- ========== Sprache eines Eintrages ========== -->  
+  <!-- ========== Sprache eines Eintrages ========== -->
   <xsl:template match="@xml:lang">
     <xsl:text> in </xsl:text>
     <xsl:value-of select="document(concat('language:',.))/language/label[@xml:lang=$CurrentLang]" />
@@ -1115,7 +1122,7 @@
       <xsl:value-of select="." />
     </a>
   </xsl:template>
-  
+
   <!-- ========== ( Serie ; Bandzählung ) ========== -->
   <xsl:template match="mods:relatedItem[@type='series']">
     <xsl:text>(</xsl:text>
