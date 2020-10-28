@@ -1,16 +1,17 @@
 package unidue.ubo.ldap;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mycore.common.config.MCRConfiguration;
-import org.mycore.user2.MCRUser2Constants;
+import java.util.Hashtable;
 
 import javax.naming.AuthenticationException;
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
-import java.util.Hashtable;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mycore.common.config.MCRConfiguration;
+import org.mycore.user2.MCRUser2Constants;
 
 /**
  * Manages the authentication and connection to a configured LDAP server.

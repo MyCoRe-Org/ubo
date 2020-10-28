@@ -1,5 +1,9 @@
 package unidue.ubo.obfuscation;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -15,11 +19,8 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
-import unidue.ubo.matcher.MCRUserMatcherUtils;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import unidue.ubo.matcher.MCRUserMatcherUtils;
 
 /**
  * EventHandler for obfuscation of nameIdentifiers

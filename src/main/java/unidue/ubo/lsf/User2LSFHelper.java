@@ -1,8 +1,10 @@
 package unidue.ubo.lsf;
 
+import static unidue.ubo.lsf.LSFService.PARAM_FIRSTNAME;
+import static unidue.ubo.lsf.LSFService.PARAM_LASTNAME;
+
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.SortedSet;
 import java.util.regex.Pattern;
@@ -17,9 +19,6 @@ import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
-
-import static unidue.ubo.lsf.LSFService.PARAM_FIRSTNAME;
-import static unidue.ubo.lsf.LSFService.PARAM_LASTNAME;
 
 /**
  * Adds the LSF ID to existing MCRUSer, if not yet present.

@@ -13,8 +13,6 @@ import org.jdom2.Element;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRStringContent;
 
-import unidue.ubo.importer.ImportJob;
-
 public class ListImportJob extends ImportJob {
 
     private String type;

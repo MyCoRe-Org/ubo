@@ -1,7 +1,8 @@
 package unidue.ubo.ldap;
 
-import com.google.common.collect.Multimap;
 import javax.naming.directory.SearchResult;
+
+import com.google.common.collect.Multimap;
 
 /**
  * Abstraction class of an LDAP entity.

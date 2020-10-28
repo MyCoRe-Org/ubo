@@ -1,5 +1,10 @@
 package unidue.ubo.publication;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,20 +16,14 @@ import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.user2.MCRRealmFactory;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
-import unidue.ubo.matcher.MCRUserMatcherDTO;
-import unidue.ubo.matcher.MCRUserMatcherUtils;
-import unidue.ubo.matcher.MCRUserMatcher;
-import unidue.ubo.matcher.MCRUserMatcherLocal;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import unidue.ubo.matcher.MCRUserMatcher;
+import unidue.ubo.matcher.MCRUserMatcherDTO;
+import unidue.ubo.matcher.MCRUserMatcherLocal;
+import unidue.ubo.matcher.MCRUserMatcherUtils;
 
 
 /**

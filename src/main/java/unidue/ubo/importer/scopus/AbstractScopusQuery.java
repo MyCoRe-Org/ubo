@@ -1,30 +1,18 @@
 package unidue.ubo.importer.scopus;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.config.MCRConfiguration2;
-import org.mycore.common.content.MCRURLContent;
 import org.xml.sax.SAXException;
 
 abstract class AbstractScopusQuery {
-
-    private static final Logger LOGGER = LogManager.getLogger();
-
-
 
     private static final Namespace NS_ATOM = Namespace.getNamespace("http://www.w3.org/2005/Atom");
 

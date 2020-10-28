@@ -1,20 +1,22 @@
 package unidue.ubo.ldap.picker;
 
-import com.google.common.collect.Multimap;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.jdom2.Element;
-import org.mycore.common.config.MCRConfiguration;
-import org.mycore.user2.MCRUserAttribute;
-import unidue.ubo.ldap.LDAPObject;
-import unidue.ubo.matcher.MCRUserMatcherLDAP;
-import unidue.ubo.picker.IdentityService;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jdom2.Element;
+import org.mycore.common.config.MCRConfiguration;
+import org.mycore.user2.MCRUserAttribute;
+
+import com.google.common.collect.Multimap;
+
+import unidue.ubo.ldap.LDAPObject;
+import unidue.ubo.matcher.MCRUserMatcherLDAP;
+import unidue.ubo.picker.IdentityService;
 
 /**
  * With a configuration in mycore.properties, it is necessary to map two of the input fields of the search/pick-form,

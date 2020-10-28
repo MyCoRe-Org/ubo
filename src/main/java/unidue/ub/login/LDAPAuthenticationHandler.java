@@ -2,13 +2,11 @@ package unidue.ub.login;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.SortedSet;
 
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration;
@@ -17,6 +15,7 @@ import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUser2Constants;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
+
 import unidue.ubo.ldap.LDAPAuthenticator;
 import unidue.ubo.ldap.LDAPObject;
 import unidue.ubo.ldap.LDAPSearcher;

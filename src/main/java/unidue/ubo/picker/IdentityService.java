@@ -1,9 +1,9 @@
 package unidue.ubo.picker;
 
 
-import org.jdom2.Element;
-
 import java.util.Map;
+
+import org.jdom2.Element;
 
 public interface IdentityService {
 

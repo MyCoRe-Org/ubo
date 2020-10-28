@@ -1,18 +1,18 @@
 package unidue.ubo.importer.scopus;
 
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.mycore.common.MCRException;
-import org.mycore.common.content.MCRURLContent;
-import org.xml.sax.SAXException;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.mycore.common.MCRException;
+import org.mycore.common.content.MCRURLContent;
+import org.xml.sax.SAXException;
 
 public class ScopusAffiliationQuery extends AbstractScopusQuery{
 

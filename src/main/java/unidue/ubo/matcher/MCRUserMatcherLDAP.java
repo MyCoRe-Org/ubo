@@ -1,24 +1,5 @@
 package unidue.ubo.matcher;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-import com.google.common.collect.Multimap;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mycore.common.config.MCRConfiguration;
-import org.mycore.common.config.MCRConfigurationException;
-import org.mycore.user2.MCRRealmFactory;
-import org.mycore.user2.MCRUser;
-import org.mycore.user2.MCRUserAttribute;
-import unidue.ubo.ldap.LDAPAuthenticator;
-import unidue.ubo.ldap.LDAPObject;
-import unidue.ubo.ldap.LDAPParsedLabeledURI;
-import unidue.ubo.ldap.LDAPSearcher;
-
-import javax.naming.NamingException;
-import javax.naming.directory.DirContext;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -29,6 +10,28 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import javax.naming.NamingException;
+import javax.naming.directory.DirContext;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfigurationException;
+import org.mycore.user2.MCRRealmFactory;
+import org.mycore.user2.MCRUser;
+import org.mycore.user2.MCRUserAttribute;
+
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Multimap;
+
+import unidue.ubo.ldap.LDAPAuthenticator;
+import unidue.ubo.ldap.LDAPObject;
+import unidue.ubo.ldap.LDAPParsedLabeledURI;
+import unidue.ubo.ldap.LDAPSearcher;
 
 /**
  * Given a MCRUser match against the users of a LDAP-Server, enriching the attributes of the MCRUser by any matched
