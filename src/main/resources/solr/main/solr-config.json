@@ -30,7 +30,7 @@
 	},
 	{
 		"add-requestHandler": {
-			"name": "/export-ubo",
+			"name": "/uboExport",
 			"class": "solr.SearchHandler",
 			"defaults": {
 				"echoParams": "explicit",
