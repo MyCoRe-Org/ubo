@@ -20,7 +20,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.jdom2.Element;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRContentTransformer;
@@ -34,9 +34,9 @@ public class CSV2XMLTransformer extends MCRContentTransformer {
         super.init(id);
 
         String configPrefix = "MCR.ContentTransformer." + id + ".";
-        char delimiter = MCRConfiguration.instance().getString(configPrefix + "DelimiterCharacter", ",").charAt(0);
-        char quote = MCRConfiguration.instance().getString(configPrefix + "QuoteCharacter", "\"").charAt(0);
-        char escape = MCRConfiguration.instance().getString(configPrefix + "EscapeCharacter", "\\").charAt(0);
+        char delimiter = MCRConfiguration2.getString(configPrefix + "DelimiterCharacter").orElse(",").charAt(0);
+        char quote = MCRConfiguration2.getString(configPrefix + "QuoteCharacter").orElse("\"").charAt(0);
+        char escape = MCRConfiguration2.getString(configPrefix + "EscapeCharacter").orElse("\\").charAt(0);
         format = buildCSVFormat(delimiter, quote, escape);
     }
 

@@ -26,7 +26,7 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.MCRStreamContent;
@@ -43,11 +43,10 @@ public class EvalunaConnection {
     private final static String API_PASSWORD;
 
     static {
-        MCRConfiguration config = MCRConfiguration.instance();
-        API_URL = config.getString("UBO.Evaluna.URL");
-        API_KEY = config.getString("UBO.Evaluna.APIKey");
-        API_USER = config.getString("UBO.Evaluna.UserName");
-        API_PASSWORD = config.getString("UBO.Evaluna.Password");
+        API_URL = MCRConfiguration2.getString("UBO.Evaluna.URL").get();
+        API_KEY = MCRConfiguration2.getString("UBO.Evaluna.APIKey").get();
+        API_USER = MCRConfiguration2.getString("UBO.Evaluna.UserName").get();
+        API_PASSWORD = MCRConfiguration2.getString("UBO.Evaluna.Password").get();
     }
 
     private List<Element> requests = new ArrayList<Element>();

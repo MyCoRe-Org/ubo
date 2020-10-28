@@ -22,7 +22,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRMailer;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
@@ -57,7 +57,7 @@ public class DozBibEntryServlet extends MCRServlet {
     }
 
     public static void sendReadOnlyError(HttpServletResponse res) throws IOException {
-        String msg = MCRConfiguration.instance().getString("UBO.System.ReadOnly.Message");
+        String msg = MCRConfiguration2.getString("UBO.System.ReadOnly.Message").get();
         res.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, msg);
         LOGGER.info("rejected editing because system is in read-only mode");
     }
@@ -129,7 +129,7 @@ public class DozBibEntryServlet extends MCRServlet {
 
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("WebApplicationBaseURL", MCRFrontendUtil.getBaseURL());
-        parameters.put("MCR.Mail.Address", MCRConfiguration.instance().getString("MCR.Mail.Address"));
+        parameters.put("MCR.Mail.Address", MCRConfiguration2.getString("MCR.Mail.Address").get());
         MCRMailer.sendMail(doc, "mycoreobject-e-mail", parameters);
     }
 

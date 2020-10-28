@@ -24,7 +24,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.parsers.bool.MCRAndCondition;
@@ -143,7 +143,7 @@ public class DozBibServlet extends MCRServlet {
 
     private String getDefaultOperator(String fieldName) {
         String key = "UBO.LegacySearch.DefaultOperator." + fieldName;
-        return MCRConfiguration.instance().getString(key, "=");
+        return MCRConfiguration2.getString(key).orElse("=");
     }
 
     private boolean isConditionParameter(String name) {
@@ -226,6 +226,6 @@ public class DozBibServlet extends MCRServlet {
 
     private String convertLegacyFieldName(String type, String nameOld) {
         String nameKey = "UBO.LegacySearch." + type + "." + nameOld;
-        return MCRConfiguration.instance().getString(nameKey, nameOld);
+        return MCRConfiguration2.getString(nameKey).orElse(nameOld);
     }
 }

@@ -2,6 +2,7 @@ package unidue.ubo.publication;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -11,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
@@ -85,10 +86,9 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     private List<MCRUserMatcher> loadMatcherImplementationChain() {
         List<MCRUserMatcher> matchers = new ArrayList<>();
 
-        MCRConfiguration config = MCRConfiguration.instance();
-        String matcherConfig = config.getString(CONFIG_MATCHERS, "");
-        if(StringUtils.isNotEmpty(matcherConfig)) {
-            String[] matcherClasses = matcherConfig.split(",");
+        Optional<String> matcherConfig = MCRConfiguration2.getString(CONFIG_MATCHERS);
+        if(matcherConfig.isPresent()) {
+            String[] matcherClasses = matcherConfig.get().split(",");
             for (int i = 0; i < matcherClasses.length; i++) {
                 String matcherClass = matcherClasses[i];
                 try {
@@ -103,22 +103,15 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     }
 
     private String loadLeadIDName() {
-        MCRConfiguration config = MCRConfiguration.instance();
-        return config.getString(CONFIG_LEAD_ID, "");
+        return MCRConfiguration2.getString(CONFIG_LEAD_ID).orElse("");
     }
 
     private String loadDefaultRoleConfig() {
-        MCRConfiguration config = MCRConfiguration.instance();
-        return config.getString(CONFIG_DEFAULT_ROLE, "submitter");
+        return MCRConfiguration2.getString(CONFIG_DEFAULT_ROLE).orElse("submitter");
     }
 
     private String loadUnvalidatedRealmConfig() {
-        MCRConfiguration config = MCRConfiguration.instance();
-        String unvalidated_realm = config.getString(CONFIG_UNVALIDATED_REALM);
-        if(unvalidated_realm == null) {
-            throw new MCRConfigurationException("Property key " + CONFIG_UNVALIDATED_REALM + " is missing!");
-        }
-        return unvalidated_realm;
+        return MCRConfiguration2.getString(CONFIG_UNVALIDATED_REALM).get();
     }
 
     /**
@@ -126,7 +119,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
      * @return String, null if no connection strategy has been set
      */
     private String loadConnectionStrategyConfig() {
-        return MCRConfiguration.instance().getString(CONFIG_CONNECTION_STRATEGY);
+        return MCRConfiguration2.getString(CONFIG_CONNECTION_STRATEGY).get();
     }
 
     @Override

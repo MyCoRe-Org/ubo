@@ -17,7 +17,7 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.orcid.user.MCRORCIDUser;
@@ -182,8 +182,7 @@ public class MCRUserMatcherUtils {
     }
 
     public static boolean checkAffiliation(Element modsNameElement) {
-        MCRConfiguration config = MCRConfiguration.instance();
-        String affiliation = config.getString("MCR.user2.IdentityManagement.UserCreation.Affiliation");
+        String affiliation = MCRConfiguration2.getString("MCR.user2.IdentityManagement.UserCreation.Affiliation").orElse(null);
         if(affiliation == null) {
             return false;
         }
@@ -222,8 +221,7 @@ public class MCRUserMatcherUtils {
     }
 
     private static void setUserEMail(MCRUser user, String attributeID, String attributeValue) {
-        MCRConfiguration config = MCRConfiguration.instance();
-        String mapEMail = config.getString(CONFIG_PREFIX + "Mapping.E-Mail");
+        String mapEMail = MCRConfiguration2.getString(CONFIG_PREFIX + "Mapping.E-Mail").get();
         if (attributeID.equals(mapEMail) && (user.getEMailAddress() == null)) {
             LOGGER.debug("User " + user.getUserName() + " e-mail = " + attributeValue);
             user.setEMail(attributeValue);
@@ -231,8 +229,7 @@ public class MCRUserMatcherUtils {
     }
 
     private static void setUserRealName(MCRUser user, String attributeID, String attributeValue) {
-        MCRConfiguration config = MCRConfiguration.instance();
-        String mapName = config.getString(CONFIG_PREFIX + "Mapping.Name");
+        String mapName = MCRConfiguration2.getString(CONFIG_PREFIX + "Mapping.Name").get();
         if (attributeID.equals(mapName) && (user.getRealName() == null)) {
             attributeValue = formatName(attributeValue);
             LOGGER.debug("User " + user.getUserName() + " name = " + attributeValue);
@@ -274,7 +271,7 @@ public class MCRUserMatcherUtils {
 
     private static void addToGroup(MCRUser mcrUser, String attributeID, String attributeValue) {
         String groupMapping = CONFIG_PREFIX + "Mapping.Group." + attributeID + "." + attributeValue;
-        String group = MCRConfiguration.instance().getString(groupMapping, null);
+        String group = MCRConfiguration2.getString(groupMapping).orElse(null);
         if ((group != null) && (!mcrUser.isUserInRole((group)))) {
             LOGGER.info("Add user " + mcrUser.getUserName() + " to group " + group);
             mcrUser.assignRole(group);

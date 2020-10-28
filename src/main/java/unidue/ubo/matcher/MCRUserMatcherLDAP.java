@@ -17,7 +17,7 @@ import javax.naming.directory.DirContext;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.user2.MCRRealmFactory;
 import org.mycore.user2.MCRUser;
@@ -90,8 +90,8 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
 
     public MCRUserMatcherLDAP() {
         loadLDAPMappingConfiguration();
-        orcid_resolver = MCRConfiguration.instance().getString(CONFIG_ORCID_NORMALIZATION_RESOLVER, "");
-        realm = MCRConfiguration.instance().getString(CONFIG_REALM, MCRRealmFactory.getLocalRealm().getID());
+        orcid_resolver = MCRConfiguration2.getString(CONFIG_ORCID_NORMALIZATION_RESOLVER).orElse("");
+        realm = MCRConfiguration2.getString(CONFIG_REALM).orElse(MCRRealmFactory.getLocalRealm().getID());
     }
 
     private void loadLDAPMappingConfiguration() {
@@ -109,8 +109,7 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
      * # For example: MCR.user2.LDAP.Mapping.explicit=id_orcid:eduPersonOrcid,id_his:eduPersonUniqueId
      */
     private void parseLDAPExplicitNameIdentifierConfig() {
-        MCRConfiguration config = MCRConfiguration.instance();
-        String explicitNameIdentifierConfig = config.getString(CONFIG_EXPLICIT_NAMEIDENTIFIER_MAPPING, "");
+        String explicitNameIdentifierConfig = MCRConfiguration2.getString(CONFIG_EXPLICIT_NAMEIDENTIFIER_MAPPING).orElse("");
         if(StringUtils.isNotEmpty(explicitNameIdentifierConfig)) {
             String[] splitConfigValueParts = explicitNameIdentifierConfig.split(",");
             for (int i = 0; i < splitConfigValueParts.length; i++) {
@@ -143,8 +142,7 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
      *
      */
     private void parseLDAPLabeledURINameIdentifierConfig() {
-        MCRConfiguration config = MCRConfiguration.instance();
-        Map<String, String> nameIdentifierConfigMap = config.getPropertiesMap(CONFIG_LABELEDURI_PROPERTY_KEY);
+        Map<String, String> nameIdentifierConfigMap = MCRConfiguration2.getSubPropertiesMap(CONFIG_LABELEDURI_PROPERTY_KEY);
 
         if(!nameIdentifierConfigMap.isEmpty()) {
             for (Map.Entry<String, String> nameIdentifierConfig : nameIdentifierConfigMap.entrySet()) {
@@ -216,8 +214,7 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
 
     private String getUserNameFromLDAPUser(LDAPObject ldapUser) {
         String userName = "";
-        MCRConfiguration config = MCRConfiguration.instance();
-        String ldapLoginAttributeName = config.getString(CONFIG_LDAP_LOGIN_ATTRIBUTENAME, "");
+        String ldapLoginAttributeName = MCRConfiguration2.getString(CONFIG_LDAP_LOGIN_ATTRIBUTENAME).orElse("");
         if(StringUtils.isEmpty(ldapLoginAttributeName)) {
             throw new MCRConfigurationException("Property " + CONFIG_LDAP_LOGIN_ATTRIBUTENAME + " not set, can not find " +
                     "suitable name for matched MCR/LDAP user.");

@@ -2,7 +2,7 @@ package unidue.ubo.picker;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 
@@ -14,7 +14,7 @@ public class IdentityPicker extends MCRServlet {
     private static final String STRATEGY_CONFIG_STRING = "MCR.IdentityPicker.strategy";
 
     private String readIdentityStrategy() {
-        return MCRConfiguration.instance().getString(STRATEGY_CONFIG_STRING);
+        return MCRConfiguration2.getString(STRATEGY_CONFIG_STRING).get();
     }
 
     public void doGetPost(MCRServletJob job) {

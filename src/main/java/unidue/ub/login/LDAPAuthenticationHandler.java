@@ -9,7 +9,7 @@ import javax.naming.directory.DirContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.user2.MCRRealmFactory;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUser2Constants;
@@ -59,13 +59,11 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
     private String realm;
 
     public LDAPAuthenticationHandler() {
-        MCRConfiguration config = MCRConfiguration.instance();
+        uidFilter = MCRConfiguration2.getString(CONFIG_PREFIX + "UIDFilter").get();
+        baseDN = MCRConfiguration2.getString(CONFIG_PREFIX + "BaseDN").get();
 
-        uidFilter = config.getString(CONFIG_PREFIX + "UIDFilter");
-        baseDN = config.getString(CONFIG_PREFIX + "BaseDN");
-
-        defaultRole = config.getString(CONFIG_ROLE, "submitter");
-        realm = config.getString(CONFIG_REALM, MCRRealmFactory.getLocalRealm().getID());
+        defaultRole = MCRConfiguration2.getString(CONFIG_ROLE).orElse("submitter");
+        realm = MCRConfiguration2.getString(CONFIG_REALM).orElse(MCRRealmFactory.getLocalRealm().getID());
     }
 
     public MCRUser authenticate(String uid, String pwd) throws Exception {

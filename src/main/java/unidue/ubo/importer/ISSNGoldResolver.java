@@ -26,7 +26,7 @@ import org.apache.commons.csv.CSVRecord;
 import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRConstants;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 
 /**
  * ISSN-Matching of Gold OA Journals (ISSN-GOLD-OA) 2.0
@@ -38,7 +38,7 @@ import org.mycore.common.config.MCRConfiguration;
 
 public class ISSNGoldResolver implements URIResolver {
 
-    private final static String CSV_FILE = MCRConfiguration.instance().getString("UBO.ISSNGold.File");
+    private final static String CSV_FILE = MCRConfiguration2.getString("UBO.ISSNGold.File").get();
 
     private final static String ENCODING = "UTF-8";
 

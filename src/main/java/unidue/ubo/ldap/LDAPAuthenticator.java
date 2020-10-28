@@ -10,7 +10,7 @@ import javax.naming.directory.InitialDirContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.user2.MCRUser2Constants;
 
 /**
@@ -56,15 +56,13 @@ public class LDAPAuthenticator {
     private Hashtable<String, String> ldapEnvironment;
 
     public LDAPAuthenticator() {
-        MCRConfiguration config = MCRConfiguration.instance();
-
         ldapEnvironment = new Hashtable<>();
         ldapEnvironment.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
 
-        String readTimeout = config.getString(CONFIG_PREFIX + "ReadTimeout", "10000");
+        String readTimeout = MCRConfiguration2.getString(CONFIG_PREFIX + "ReadTimeout").orElse("10000");
         ldapEnvironment.put("com.sun.jndi.ldap.read.timeout", readTimeout);
 
-        String providerURL = config.getString(CONFIG_PREFIX + "ProviderURL");
+        String providerURL = MCRConfiguration2.getString(CONFIG_PREFIX + "ProviderURL").get();
         ldapEnvironment.put(Context.PROVIDER_URL, providerURL);
         if (providerURL.startsWith("ldaps")) {
             ldapEnvironment.put(Context.SECURITY_PROTOCOL, "ssl");
@@ -72,11 +70,11 @@ public class LDAPAuthenticator {
 
         ldapEnvironment.put(Context.SECURITY_AUTHENTICATION, "simple");
 
-        baseDN = config.getString(CONFIG_PREFIX + "BaseDN");
+        baseDN = MCRConfiguration2.getString(CONFIG_PREFIX + "BaseDN").get();
 
-        globalUid = config.getString(CONFIG_PREFIX + "GlobalUser");
+        globalUid = MCRConfiguration2.getString(CONFIG_PREFIX + "GlobalUser").get();
 
-        globalPassword = config.getString(CONFIG_PREFIX + "GlobalPassword");
+        globalPassword = MCRConfiguration2.getString(CONFIG_PREFIX + "GlobalPassword").get();
     }
 
     /**

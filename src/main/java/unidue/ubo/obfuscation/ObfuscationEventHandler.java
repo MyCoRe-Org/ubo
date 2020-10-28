@@ -12,7 +12,7 @@ import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -62,9 +62,9 @@ public class ObfuscationEventHandler extends MCREventHandlerBase {
     private final static String CONFIG_REPLACEMENT = "MCR.publication.obfuscation.replacementIdentifierType";
     private final static String CONFIG_SALT = "MCR.publication.obfuscation.salt";
 
-    private final String obfuscation_target_id = MCRConfiguration.instance().getString(CONFIG_TARGET, "");
-    private final String obfuscation_replacement_id = MCRConfiguration.instance().getString(CONFIG_REPLACEMENT, "");
-    private final String obfuscation_salt = MCRConfiguration.instance().getString(CONFIG_SALT, "");
+    private final String obfuscation_target_id = MCRConfiguration2.getString(CONFIG_TARGET).orElse("");
+    private final String obfuscation_replacement_id = MCRConfiguration2.getString(CONFIG_REPLACEMENT).orElse("");
+    private final String obfuscation_salt = MCRConfiguration2.getString(CONFIG_SALT).orElse("");
 
     @Override
     protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {

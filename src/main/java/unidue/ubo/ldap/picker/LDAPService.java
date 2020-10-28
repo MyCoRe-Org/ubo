@@ -9,7 +9,7 @@ import java.util.SortedSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.user2.MCRUserAttribute;
 
 import com.google.common.collect.Multimap;
@@ -60,9 +60,8 @@ public class LDAPService implements IdentityService {
      * MCR.IdentityPicker.LDAP.SearchFormMapping.firstName={LDAP_ATTRIBUTE}
      */
     private void parseNamepartFieldsToLDAPAttributeMappingConfig() {
-        MCRConfiguration config = MCRConfiguration.instance();
-        firstName_to_ldap = config.getString(CONFIG_NAMEPART_FIRST_FIELD_TO_LDAP, "cn");
-        lastName_to_ldap = config.getString(CONFIG_NAMEPART_LAST_FIELD_TO_LDAP, "sn");
+        firstName_to_ldap = MCRConfiguration2.getString(CONFIG_NAMEPART_FIRST_FIELD_TO_LDAP).orElse("cn");
+        lastName_to_ldap = MCRConfiguration2.getString(CONFIG_NAMEPART_LAST_FIELD_TO_LDAP).orElse("sn");
         LOGGER.info("Mapping input of firstName of search/pick-Form to search in LDAP Attribute: {}",
                 firstName_to_ldap);
         LOGGER.info("Mapping input of lastName of search/pick-Form to search in LDAP Attribute: {}",
@@ -75,8 +74,7 @@ public class LDAPService implements IdentityService {
      * Format/Examples: see class doc
      */
     private void parseIdentitySchemaConfig() {
-        MCRConfiguration config = MCRConfiguration.instance();
-        identity_schema = config.getString(CONFIG_IDENTITY_SCHEMA, "");
+        identity_schema = MCRConfiguration2.getString(CONFIG_IDENTITY_SCHEMA).orElse("");
         LOGGER.info("Schema to create the information of users in the identity picker result list: {}",
                 identity_schema);
     }

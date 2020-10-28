@@ -11,9 +11,7 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -30,11 +28,8 @@ import com.google.common.collect.Multimap;
  */
 public class LDAPSearcher {
 
-    private static final Logger LOGGER = LogManager.getLogger();
-
     public List<LDAPObject> searchWithGlobalDN(DirContext ctx, String filter) throws NamingException {
-        MCRConfiguration config = MCRConfiguration.instance();
-        String globalDN = config.getString(LDAPAuthenticator.CONFIG_PREFIX + "GlobalDN");
+        String globalDN = MCRConfiguration2.getString(LDAPAuthenticator.CONFIG_PREFIX + "GlobalDN").get();
 
         return search(ctx, globalDN, filter);
     }

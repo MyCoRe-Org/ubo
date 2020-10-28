@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRUsageException;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.xml.MCRURIResolver;
 
 public class IdentityResolver implements URIResolver {
@@ -25,8 +25,7 @@ public class IdentityResolver implements URIResolver {
     private static final String RESOLVE_TYPE_DETAIL = "detail";
 
     private String readIdentityStrategy() {
-        MCRConfiguration config = MCRConfiguration.instance();
-        return config.getString(STRATEGY_CONFIG_STRING);
+        return MCRConfiguration2.getString(STRATEGY_CONFIG_STRING).get();
     }
 
     public Source resolve(String href, String base) {

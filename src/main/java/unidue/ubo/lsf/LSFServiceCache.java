@@ -2,7 +2,7 @@ package unidue.ubo.lsf;
 
 import org.jdom2.Element;
 import org.mycore.common.MCRCache;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 
 public class LSFServiceCache {
 
@@ -14,8 +14,8 @@ public class LSFServiceCache {
     protected MCRCache<String, Element> cache;
 
     private LSFServiceCache() {
-        maxAge = MCRConfiguration.instance().getLong("UBO.LSFClient.Cache.MaxAge");
-        int capacity = MCRConfiguration.instance().getInt("UBO.LSFClient.Cache.Capacity");
+        maxAge = MCRConfiguration2.getLong("UBO.LSFClient.Cache.MaxAge").get();
+        int capacity = MCRConfiguration2.getInt("UBO.LSFClient.Cache.Capacity").get();
         cache = new MCRCache<>(capacity, "LSF Client");
     }
 

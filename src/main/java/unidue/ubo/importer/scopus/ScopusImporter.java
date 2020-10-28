@@ -18,7 +18,7 @@ import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRMailer;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -48,18 +48,16 @@ class ScopusImporter {
     private List<MCRObject> importedObjects = new ArrayList<>();
 
     static {
-        MCRConfiguration config = MCRConfiguration.instance();
-
         String prefix = "UBO.Scopus.Importer.";
-        FIELD_TO_QUERY_ID = config.getString(prefix + "Field2QueryID");
-        IMPORT_URI = config.getString(prefix + "ImportURI");
-        PROJECT_ID = config.getString(prefix + "ProjectID");
-        STATUS = config.getString(prefix + "Status");
+        FIELD_TO_QUERY_ID = MCRConfiguration2.getString(prefix + "Field2QueryID").get();
+        IMPORT_URI = MCRConfiguration2.getString(prefix + "ImportURI").get();
+        PROJECT_ID = MCRConfiguration2.getString(prefix + "ProjectID").get();
+        STATUS = MCRConfiguration2.getString(prefix + "Status").get();
 
         prefix += "Mail.";
-        MAIL_TO = config.getString(prefix + "To");
-        MAIL_PARAM = config.getString(prefix + "Param");
-        MAIL_XSL = config.getString(prefix + "XSL");
+        MAIL_TO = MCRConfiguration2.getString(prefix + "To").get();
+        MAIL_PARAM = MCRConfiguration2.getString(prefix + "Param").get();
+        MAIL_XSL = MCRConfiguration2.getString(prefix + "XSL").get();
     }
 
     public MCRObject doImport(String scopusID) throws MCRPersistenceException, MCRAccessException {
