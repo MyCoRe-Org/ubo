@@ -24,8 +24,8 @@ cd ~/.mycore/ubo/lib
 wget https://repo1.maven.org/maven2/com/h2database/h2/1.4.200/h2-1.4.200.jar
 cd -
 
-# Setup SOLR 7.7 as described here:
-https://www.mycore.de/documentation/getting_started/gs_solr7/
+# Setup SOLR 8 as described here:
+https://www.mycore.de/documentation/getting_started/gs_solr8/
 https://www.mycore.de/documentation/search/search_solr_use/
 
 # or use solr runner plugin for development
@@ -41,8 +41,7 @@ vi ~/.mycore/ubo/mycore.properties
   MCR.Solr.Core.main.Name=ubo
   MCR.Solr.Core.classification.Name=ubo_classifications
 
-
-# Create the superuser "administrator" 
+# Create the superuser "administrator"
 target/bin/ubo.sh init superuser
 
 # Load classifications
@@ -59,6 +58,6 @@ target/bin/ubo.sh reload solr configuration main in core main
 # Run local web application on port 8080 with tomcat 9:
 mvn cargo:run -Dtomcat=9
 
-# or jetty:
+# or jetty: (does not work currently)
 mvn cargo:run -Djetty
 ```
