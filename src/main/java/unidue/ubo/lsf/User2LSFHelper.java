@@ -38,7 +38,7 @@ public class User2LSFHelper {
 
     private static final String TYPE_LSF = "LSF";
 
-    private static final String URL_PATTERN = "https://benutzerverwaltung.uni-due.de/aid/?request_type=%s&request_value=%s";
+    private static final String URL_PATTERN = "https://benutzerverwaltung.uni-duisburg-essen.de/aid/?request_type=%s&request_value=%s";
 
     private static final Pattern AID_PATTERN = Pattern.compile("AID:(\\d+)");
 
