@@ -32,7 +32,7 @@
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:part" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:originInfo" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:relatedItem[@type='series']/mods:titleInfo" mode="solrField" />
-    <xsl:apply-templates select="descendant::mods:name[@type='conference']" mode="solrField" />
+    <xsl:apply-templates select="descendant::mods:name[@type='conference'][not(ancestor::mods:relatedItem[@type='references'])]" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:dateIssued[1][translate(text(),'1234567890','YYYYYYYYYY')='YYYY']" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:originInfo/mods:dateIssued[1][translate(text(),'1234567890','YYYYYYYYYY')='YYYY']" mode="solrField.host" />
     <xsl:apply-templates select="descendant::mods:identifier[@type]" mode="solrField" />
