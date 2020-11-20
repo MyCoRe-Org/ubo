@@ -149,13 +149,13 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
                 String propertyKey = nameIdentifierConfig.getKey();
                 String propertyValue = nameIdentifierConfig.getValue();
                 String[] splitKey = propertyKey.split("\\.");
-                if (splitKey.length != 7) {
+                if (splitKey.length != 3) {
                     throw new MCRConfigurationException("Property key " + propertyKey + " not valid.");
                 }
                 // splitKey[5] is the identifier name in MyCoRe convention (id_scopus, id_orcid, id_gnd, ...)
                 // splitKey[6] must be "schema"
-                String identifierName = splitKey[5];
-                String configType = splitKey[6];
+                String identifierName = splitKey[1];
+                String configType = splitKey[2];
                 if (configType.equals(CONFIG_SCHEMA_PROPERTY)) {
                     if (!propertyValue.contains("%s")) {
                         throw new MCRConfigurationException("Schema " + propertyValue + " not valid (must contain '%s').");
