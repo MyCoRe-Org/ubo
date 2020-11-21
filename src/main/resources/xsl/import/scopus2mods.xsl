@@ -5,6 +5,8 @@
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:scopus="http://www.elsevier.com/xml/svapi/abstract/dtd" xmlns:ait="http://www.elsevier.com/xml/ani/ait" xmlns:ce="http://www.elsevier.com/xml/ani/common" xmlns:cto="http://www.elsevier.com/xml/cto/dtd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:prism="http://prismstandard.org/namespaces/basic/2.0/" xmlns:xocs="http://www.elsevier.com/xml/xocs/dtd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
+  <xsl:key name="subject-abbrev" match="scopus:subject-area" use="@abbrev"/>
+
   <xsl:output method="xml" encoding="UTF-8" indent="yes" xalan:indent-amount="2" />
 
   <xsl:template match="scopus:abstracts-retrieval-response">
@@ -25,6 +27,7 @@
       <xsl:apply-templates select="scopus:language[@xml:lang]" />
       <xsl:apply-templates select="item/bibrecord/head/abstracts/abstract" />
       <xsl:apply-templates select="scopus:coredata/scopus:openaccess" />
+      <xsl:apply-templates select="scopus:subject-areas" />
     </mods:mods>
   </xsl:template>
 
@@ -290,6 +293,48 @@
     <xsl:if test=".='1'">
       <mods:classification authorityURI="{$authorityOA}" valueURI="{$authorityOA}#oa" />
     </xsl:if>
+  </xsl:template>
+
+  <xsl:variable name="authorityFach">https://bibliographie.ub.uni-due.de/classifications/fachreferate</xsl:variable>
+
+  <xsl:template match="scopus:subject-areas">
+    <!-- to avoid duplicates, only use first occurence of each Subject Area Classifications -->
+    <xsl:for-each select="scopus:subject-area[generate-id() = generate-id(key('subject-abbrev',@abbrev)[1])]">
+      <xsl:variable name="subject">
+        <xsl:choose>
+          <!-- TODO: We need a correct mapping, this is only a first proof-of-concept version -->
+          <xsl:when test="starts-with(@code,'11')"><xsl:value-of select="'07'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'12')"><xsl:value-of select="'09'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'13')"><xsl:value-of select="'04'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'14')"><xsl:value-of select="'03'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'15')"><xsl:value-of select="'08'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'16')"><xsl:value-of select="'04'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'17')"><xsl:value-of select="'08'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'18')"><xsl:value-of select="'03'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'19')"><xsl:value-of select="'04'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'20')"><xsl:value-of select="'03'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'21')"><xsl:value-of select="'08'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'22')"><xsl:value-of select="'08'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'23')"><xsl:value-of select="'08'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'24')"><xsl:value-of select="'05'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'25')"><xsl:value-of select="'08'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'26')"><xsl:value-of select="'04'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'27')"><xsl:value-of select="'05'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'28')"><xsl:value-of select="'05'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'29')"><xsl:value-of select="'05'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'30')"><xsl:value-of select="'05'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'31')"><xsl:value-of select="'04'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'32')"><xsl:value-of select="'03'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'33')"><xsl:value-of select="'03'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'34')"><xsl:value-of select="'07'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'35')"><xsl:value-of select="'05'"/></xsl:when>
+          <xsl:when test="starts-with(@code,'36')"><xsl:value-of select="'05'"/></xsl:when>
+          <xsl:otherwise><xsl:value-of select="'01'"/></xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <mods:classification authorityURI="{$authorityFach}" valueURI="{$authorityFach}#{$subject}" />
+      <xsl:message><xsl:value-of select="concat('DEBUG - scopus2mods: mapped from ASJC scopus:subject-area ', @abbrev, '-', @code, ' to DESTATIS ', $subject, '.')"/></xsl:message>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="text()" />
