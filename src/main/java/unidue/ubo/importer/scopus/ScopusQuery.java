@@ -14,7 +14,7 @@ import org.xml.sax.SAXException;
 
 public class ScopusQuery extends AbstractScopusQuery{
 
-    private static final String QUERY_PATTERN = "/search/scopus?query=%1$s&apikey=%2$s&httpAccept=application/xml&count=%3$s";
+    private static final String QUERY_PATTERN = "/search/scopus?query=%1$s&apikey=%2$s&insttoken=%3$s&httpAccept=application/xml&count=%4$s";
 
     private  String query;
 
@@ -43,7 +43,7 @@ public class ScopusQuery extends AbstractScopusQuery{
 
     private URL buildQueryURL() throws MalformedURLException {
         String encodedQuery = URLEncoder.encode(getQuery(), StandardCharsets.UTF_8);
-        String queryString = String.format(QUERY_PATTERN, encodedQuery, API_KEY, getCount());
+        String queryString = String.format(QUERY_PATTERN, encodedQuery, API_KEY, INST_TOKEN, getCount());
         return new URL(API_URL + queryString);
     }
 
