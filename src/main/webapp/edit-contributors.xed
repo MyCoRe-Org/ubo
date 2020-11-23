@@ -47,6 +47,9 @@
                   <xed:output value="@num" />
 		</td>
 		<xed:bind xpath="mods:name[@type='personal']">
+            <xed:bind xpath="mods:affiliation">
+                <input type="hidden" />
+            </xed:bind>
             <td>
 		    <div class="form-inline">
                       <xed:bind xpath="mods:namePart[@type='family']">

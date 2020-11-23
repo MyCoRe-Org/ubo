@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.jdom2.Element;
 import org.mycore.common.MCRConstants;
+import org.mycore.common.config.MCRConfiguration2;
 
 /**
  * Represents a name entry of a modsName.
@@ -25,6 +26,7 @@ import org.mycore.common.MCRConstants;
  * @author Frank L\u00FCtzenkirchen
  */
 class NameEntry implements Comparable<NameEntry> {
+    private static final String LEAD_ID = MCRConfiguration2.getStringOrThrow("MCR.user2.matching.lead_id");
     /** The number of occurrences of this name */
     private int num = 1;
 
@@ -47,7 +49,7 @@ class NameEntry implements Comparable<NameEntry> {
     private void buildKey() {
         String lastName = getNameValue("namePart", "family");
         String firstName = getNameValue("namePart", "given");
-        String pid = getNameValue("nameIdentifier", "lsf");
+        String pid = getNameValue("nameIdentifier", LEAD_ID);
 
         StringBuffer sb = new StringBuffer(lastName);
         if ((firstName != null) && !firstName.isEmpty())
