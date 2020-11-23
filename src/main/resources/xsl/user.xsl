@@ -222,8 +222,8 @@
 </xsl:template>
 
 <xsl:template name="numPublicationsUBO">
-  <xsl:variable name="lsf_id" select="attributes/attribute[@name='id_lsf']/@value" />
-  <xsl:variable name="solr_query" select="concat('q=status:confirmed+nid_lsf:',$lsf_id)" />
+  <xsl:variable name="connection_id" select="attributes/attribute[@name='id_connection']/@value" />
+  <xsl:variable name="solr_query" select="concat('q=status:confirmed+name_id_connection:',$connection_id)" />
   
   <li>
     <xsl:value-of select="i18n:translate('user.profile.publications.ubo.intro')" />

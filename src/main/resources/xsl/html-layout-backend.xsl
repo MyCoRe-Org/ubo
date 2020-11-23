@@ -215,6 +215,15 @@
       <xsl:call-template name="check.allowed" />
     </xsl:variable>
 
+    <xsl:variable name="alwaysVisible">
+      <xsl:choose>
+        <xsl:when test="string-length(@alwaysVisible)&gt;0">
+          <xsl:value-of select="@alwaysVisible" />
+        </xsl:when>
+        <xsl:otherwise><xsl:text>false</xsl:text></xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
     <!-- add class="active for selected items" -->
     <xsl:variable name="class_active">
       <xsl:if test="@id and (@id = $PageID)">
@@ -225,7 +234,7 @@
       </xsl:if>
     </xsl:variable>
 
-    <xsl:if test="$allowed = 'true'">
+    <xsl:if test="$allowed = 'true' or $alwaysVisible = 'true'">
 
       <xsl:choose>
 
