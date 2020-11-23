@@ -323,20 +323,14 @@
     <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
       <!-- TODO: decide how this shall be handled... -->
       <!-- <xed:repeat xpath="mods:nameIdentifier[not(@type='lsf') and not(@type='connection')]"> -->
-      <xed:repeat xpath="mods:nameIdentifier[not(@type='lsf')]">
+      <xed:repeat xpath="mods:nameIdentifier[not(@type=$MCR.user2.matching.lead_id)]">
       <div class="form-group form-inline col-12 px-0 mb-2 mt-2">
         <label class="mycore-form-label">
         </label>
-
             <xed:bind xpath="@type">
               <select class="form-control col-sm-2">
-                <option value="orcid">ORCID</option>
-                <option value="researcherid">ResearcherID</option>
-                <option value="gnd">GND</option>
-                <option value="scopus">SCOPUS</option>
-                <option value="jena">Jena</option>
-                <!-- TODO: decide how this shall be handled... -->
-                <option value="connection">Internal MyCoRe Connection</option>
+                <option value=""><xed:output i18n="search.select" /></option>
+                <xed:include uri="xslStyle:items2options:classification:editor:-1:children:nameIdentifier" />
               </select>
             </xed:bind>
             <input type="text" class="{$xed-validation-marker} form-control col-sm-4" />

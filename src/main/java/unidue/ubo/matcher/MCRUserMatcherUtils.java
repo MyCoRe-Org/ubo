@@ -171,7 +171,9 @@ public class MCRUserMatcherUtils {
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
-                singleParameters.add(parameter.getKey() + '=' + encodedValue);
+                if(!parameter.getKey().isEmpty()){
+                    singleParameters.add(parameter.getKey() + '=' + encodedValue);
+                }
             }
             //String ampersand = escapeAmpersand ? "&amp;" : "&";
             String ampersand = "&";
