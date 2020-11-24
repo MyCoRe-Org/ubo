@@ -17,7 +17,7 @@ import org.xml.sax.SAXException;
 public class ScopusAffiliationQuery extends AbstractScopusQuery{
 
     private static final String AFFILIATION_QUERY_PATTERN = "/affiliation/affiliation_id/%1$s?&apikey=%2$s&insttoken=%3$s&count=%4$s&start=%5$s&view=DOCUMENTS";
-    private static final int MAX_COUNT = 200;
+    protected static final int MAX_COUNT = 200;
 
     public String getAffiliation() {
         return affiliation;
@@ -58,7 +58,7 @@ public class ScopusAffiliationQuery extends AbstractScopusQuery{
         setCount(MAX_COUNT);
     }
 
-    private URL buildAffiliationQuery() throws MalformedURLException {
+    protected URL buildAffiliationQuery() throws MalformedURLException {
         String queryString = String.format(AFFILIATION_QUERY_PATTERN, getAffiliation(), API_KEY, INST_TOKEN,getCount(), getStart());
         return new URL(API_URL + queryString);
     }
@@ -104,6 +104,7 @@ public class ScopusAffiliationQuery extends AbstractScopusQuery{
         } catch (JDOMException|IOException|SAXException e) {
             throw new MCRException("Error while Streaming all documents!");
         }
-
     }
+
+
 }
