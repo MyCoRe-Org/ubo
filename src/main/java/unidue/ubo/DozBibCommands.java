@@ -49,6 +49,9 @@ import org.mycore.frontend.cli.MCRCommand;
 import org.mycore.mods.MCRMODSCommands;
 import org.mycore.mods.MCRMODSWrapper;
 
+import static unidue.ubo.importer.scopus.ScopusInitialImporter.IMPORT_BATCH_COMMAND;
+import static unidue.ubo.importer.scopus.ScopusInitialImporter.IMPORT_SINGLE_COMMAND;
+
 public class DozBibCommands extends MCRAbstractCommands {
 
     private static final Logger LOGGER = LogManager.getLogger(DozBibCommands.class);
@@ -74,9 +77,12 @@ public class DozBibCommands extends MCRAbstractCommands {
             "unidue.ubo.importer.scopus.ScopusUpdater.update String int int",
             "Queries Scopus for new publications of comma-separated affiliation IDs {0} added within last {1} days," +
                 "retrieves max {2} publications and imports them if not already present"));
-        addCommand(new MCRCommand("ubo initial import from scopus for affiliation IDs {0}",
-                "unidue.ubo.importer.scopus.ScopusInitialImporter.initialImport String",
-                "Queries all affiliation IDs and imports all documents {0} = comma separated list of afids"));
+        addCommand(new MCRCommand(IMPORT_BATCH_COMMAND,
+                "unidue.ubo.importer.scopus.ScopusInitialImporter.initialImport String int",
+                "Queries all affiliation IDs and imports all documents {0} = afid {1} = start point should be 0"));
+        addCommand(new MCRCommand(IMPORT_SINGLE_COMMAND,
+                "unidue.ubo.importer.scopus.ScopusInitialImporter.doImport String",
+                "{0] = ID of object"));
     }
 
     /** Exports all entries as MODS dump to a zipped xml file in the given directory */
