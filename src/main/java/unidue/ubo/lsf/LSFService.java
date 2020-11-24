@@ -10,6 +10,7 @@
 package unidue.ubo.lsf;
 
 import java.io.StringReader;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
@@ -28,6 +29,7 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.common.MCRException;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.mods.merger.MCRHyphenNormalizer;
 
 import unidue.ubo.picker.IdentityService;
@@ -64,9 +66,14 @@ public class LSFService implements IdentityService {
         try {
             cache = LSFServiceCache.instance();
 
-            soapsearch = new SOAPSearchServiceLocator().getsoapsearch();
-            dbinterface = new DBInterfaceServiceLocator().getdbinterface();
-        } catch (ServiceException ex) {
+            String baseURL = MCRConfiguration2.getStringOrThrow("UBO.LSF.SOAP.BaseURL");
+
+            URL soapSearchEndpoint = new URL(baseURL + "/soapsearch");
+            soapsearch = new SOAPSearchServiceLocator().getsoapsearch(soapSearchEndpoint);
+
+            URL dbInterfaceEndpoint = new URL(baseURL + "/dbinterface");
+            dbinterface = new DBInterfaceServiceLocator().getdbinterface(dbInterfaceEndpoint);
+        } catch (Exception ex) {
             String msg = "Could not locate HIS LSF WebService";
             throw new MCRException(msg, ex);
         }
