@@ -228,7 +228,7 @@
     <xsl:if test="$allowed = 'true'">
 
       <xsl:choose>
-        
+
         <xsl:when test="count(./item/@ref) &gt; 0">
           <!-- print dropdown menu option -->
           <li class="nav-item dropdown {$class_active}">
@@ -253,12 +253,7 @@
         </xsl:when>
         <xsl:otherwise>
           <!-- print single menu option -->
-          <li class="nav-item {$class_active}">
-            <xsl:if test="@class != ''">
-              <xsl:attribute name="class">
-                <xsl:value-of select="concat('nav-item ', $class_active, ' ', @class)"/>
-              </xsl:attribute>
-            </xsl:if>
+          <li class="nav-item {$class_active} {@class}">
             <xsl:call-template name="output.item.label"/>
           </li>
         </xsl:otherwise>
