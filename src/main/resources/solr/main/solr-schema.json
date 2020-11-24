@@ -359,7 +359,7 @@
 	{
 		"add-field": {
 			"name": "name",
-			"type": "ubo_name",
+			"type": "string",
 			"multiValued": false,
 			"indexed": true,
 			"stored": true
