@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xsl:stylesheet version="1.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  xmlns:mods="http://www.loc.gov/mods/v3" 
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:solr="xalan://org.mycore.solr.MCRSolrUtils"
-  exclude-result-prefixes="xsl mods xalan i18n">
+  xmlns:encoder="xalan://java.net.URLEncoder"
+  exclude-result-prefixes="xsl mods xalan i18n encoder">
 
   <xsl:param name="ServletsBaseURL" />
 
   <xsl:template match="/response">
-    <xsl:if xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()"> 
+    <xsl:if xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()">
       <article class="card">
 	<div class="card-body">
           <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_fields']/lst[@name='status']" />
@@ -37,7 +38,7 @@
       </xsl:for-each>
     </ul>
   </xsl:template>
-  
+
   <xsl:variable name="quote">"</xsl:variable>
 
   <xsl:template match="lst[@name='facet_fields']/lst[@name='importID']">
@@ -46,12 +47,12 @@
     </hgroup>
     <ul class="list-group list-group-flush">
       <xsl:for-each select="int">
-        <xsl:sort select="@name"  order="descending" /> 
+        <xsl:sort select="@name"  order="descending" />
         <xsl:if test="position() &lt;= 20"> <!-- show only latest 20 imports -->
           <xsl:call-template name="output.value">
-	    <xsl:with-param name="label" select="@name"/>
-	    <xsl:with-param name="value" select="text()" />
-	    <xsl:with-param name="query" select="concat('importID:',$quote,solr:escapeSearchValue(@name),$quote)" />
+  	        <xsl:with-param name="label" select="@name"/>
+  	        <xsl:with-param name="value" select="text()" />
+  	        <xsl:with-param name="query" select="concat('importID:',$quote,solr:escapeSearchValue(@name),$quote)" />
           </xsl:call-template>
         </xsl:if>
       </xsl:for-each>
@@ -64,7 +65,7 @@
     <hgroup>
       <h3><xsl:value-of select="i18n:translate(concat('facets.facet.',$dateField))" />:</h3>
     </hgroup>
-    <ul class="list-group list-group-flush"> 
+    <ul class="list-group list-group-flush">
       <xsl:call-template name="output.value">
         <xsl:with-param name="label">in den letzten 14 Tagen</xsl:with-param>
         <xsl:with-param name="value" select="sum(int[position() &gt; ($numDays - 14)])" />
@@ -87,18 +88,18 @@
       </xsl:call-template>
     </ul>
   </xsl:template>
-  
+
   <xsl:template name="output.value">
     <xsl:param name="label" />
     <xsl:param name="value" />
     <xsl:param name="query" />
-    
+
     <li class="list-group-item py-0 px-0 border-0">
-      <a href="{$ServletsBaseURL}solr/select?q={$query}">
+      <a href="{$ServletsBaseURL}solr/select?q={encoder:encode($query,'UTF-8')}">
 	<table class="table table-borderless w-100 mb-0">
 	  <tbody>
 	    <tr>
-	      <td class="w-75 py-0 text-right"> 
+	      <td class="w-75 py-0 text-right">
 		<xsl:value-of select="$label"/>:
 	      </td>
 	      <td class="py-0" align="left">
