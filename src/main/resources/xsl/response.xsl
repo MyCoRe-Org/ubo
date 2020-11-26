@@ -2,8 +2,8 @@
 
 <!-- Displays a navigable result list of a SOLR search for bibliography entries -->
 
-<xsl:stylesheet 
-  version="1.0" 
+<xsl:stylesheet
+  version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
@@ -12,7 +12,7 @@
   xmlns:encoder="xalan://java.net.URLEncoder"
   xmlns:str="xalan://java.lang.String"
   xmlns:basket="xalan://unidue.ubo.basket.BasketUtils"
-  exclude-result-prefixes="xsl xalan i18n mods mcr encoder str basket" 
+  exclude-result-prefixes="xsl xalan i18n mods mcr encoder str basket"
 >
 
 <xsl:include href="mods-display.xsl" />
@@ -49,8 +49,8 @@
 
 <xsl:template name="page.title">
  <title>
-  <xsl:value-of select="i18n:translate('result.dozbib.results')" /> 
-  <xsl:text>: </xsl:text> 
+  <xsl:value-of select="i18n:translate('result.dozbib.results')" />
+  <xsl:text>: </xsl:text>
   <xsl:choose>
     <xsl:when test="$numFound > 1">
       <xsl:value-of select="$numFound" />
@@ -63,7 +63,7 @@
     <xsl:otherwise>
       <xsl:value-of select="i18n:translate('result.dozbib.publicationNo')"/>
     </xsl:otherwise>
-  </xsl:choose> 
+  </xsl:choose>
  </title>
 </xsl:template>
 
@@ -149,10 +149,10 @@
     </xsl:if>
   </div>
   <div class="clear"></div>
-  
+
   <!-- Seitennavigation unten -->
   <xsl:call-template name="navigation" />
-  
+
 </xsl:template>
 
 <!-- ==================== Anzeige Navigation in Trefferliste ==================== -->
@@ -164,7 +164,7 @@
     <xsl:for-each select="descendant-or-self::str"> <!-- may be an array: arr/str or ./str -->
       <xsl:value-of select="$name" />
       <xsl:text>=</xsl:text>
-      <xsl:value-of select="encoder:encode(text())" />
+      <xsl:value-of select="encoder:encode(text(),'UTF-8')" />
       <xsl:text>&amp;</xsl:text>
     </xsl:for-each>
   </xsl:for-each>
@@ -178,7 +178,7 @@
     <div class="col-2">
       <xsl:if test="basket:hasSpace()">
         <span class="pageLink">
-          <a class="btn btn-sm btn-secondary" href="{$ServletsBaseURL}Results2Basket?solr={encoder:encode($exportParams)}"><xsl:value-of select="i18n:translate('button.basketAdd')" /></a>
+          <a class="btn btn-sm btn-secondary" href="{$ServletsBaseURL}Results2Basket?solr={encoder:encode($exportParams,'UTF-8')}"><xsl:value-of select="i18n:translate('button.basketAdd')" /></a>
         </span>
       </xsl:if>
     </div>
@@ -230,7 +230,7 @@
   <xsl:param name="start" />
   <xsl:param name="icon" />
   <xsl:param name="text" />
-  
+
   <xsl:choose>
     <xsl:when test="string-length($text) &gt; 0">
       <li class="page-item disabled">
@@ -262,7 +262,7 @@
 <xsl:template match="doc">
   <xsl:param name="start" />
   <xsl:variable name="hitNo" select="$start + position()" />
-  
+
   <div class="result mt-2 mb-2">
     <div class="hit card">
       <xsl:variable name="id" select="str[@name='id']" />
@@ -275,8 +275,8 @@
           <xsl:call-template name="orcid-status" />
         </div>
         <div class="content bibentry card-body">
-          <xsl:apply-templates select="." mode="cite"> 
-            <xsl:with-param name="mode">divs</xsl:with-param> 
+          <xsl:apply-templates select="." mode="cite">
+            <xsl:with-param name="mode">divs</xsl:with-param>
           </xsl:apply-templates>
         </div>
         <div class="footer card-footer">
