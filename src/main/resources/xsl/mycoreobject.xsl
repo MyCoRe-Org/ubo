@@ -69,7 +69,7 @@
     <li>
       <xsl:value-of select="i18n:translate('result.dozbib.entry')" />
       <xsl:text> </xsl:text>
-      <xsl:value-of select="number(substring-after(/mycoreobject/@ID,'ubo_mods_'))" />
+      <xsl:value-of select="number(substring-after(/mycoreobject/@ID,'_mods_'))" />
     </li>
   </ul>
 </xsl:template>
