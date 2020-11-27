@@ -31,14 +31,14 @@
     <xed:validate xpath="//mods:mods" test="descendant::mods:dateIssued[string-length(.) &gt; 0] or mods:genre='journal' or mods:genre='series'" i18n="ubo.date.issued.4.validation" display="global" />
     <xed:validate xpath="//mods:dateIssued" matches="[\d]{4}" i18n="ubo.date.issued.4.validation" display="global" />
   </xed:template>
-  
+
   <xed:template id="common.metafields">
     <xed:bind xpath="@ID" default="ubo_mods_00000000" />
     <xed:bind xpath="@label" default="ubo" />
     <xed:bind xpath="@xsi:noNamespaceSchemaLocation" default="datamodel-mods.xsd" />
     <xed:bind xpath="structure" />
   </xed:template>
-  
+
   <xed:template id="legend.ID">
     <xed:bind xpath="/mycoreobject/@ID" default="ubo_mods_00000000">
       <xed:choose>
@@ -47,7 +47,7 @@
       </xed:choose>
     </xed:bind>
   </xed:template>
-  
+
   <xed:template id="status">
     <xed:bind xpath="../../../../service/servflags[@class='MCRMetaLangText']/servflag[@type='status']">
       <xed:choose>
@@ -68,7 +68,7 @@
       </xed:choose>
     </xed:bind>
   </xed:template>
-  
+
   <xed:template id="tags">
     <div class="form-inline form-group">
       <label for="{xed:generate-id()}" class="mycore-form-label">Tags:</label>
@@ -80,14 +80,14 @@
       </div>
     </div>
   </xed:template>
-  
+
   <xed:template id="subject">
     <xed:repeat xpath="mods:classification[@classID='fachreferate']" max="5">
       <div class="form-inline form-group">
         <label for="{xed:generate-id()}" class="mycore-form-label">
           *<xed:output i18n="ubo.subject" />:
         </label>
-        <select id="{xed:generate-id()}" class="{$xed-validation-marker} mycore-form-input"> 
+        <select id="{xed:generate-id()}" class="{$xed-validation-marker} mycore-form-input">
           <option value=""><xed:output i18n="search.select" /></option>
           <xed:include uri="xslStyle:items2options:classification:editor:-1:children:fachreferate" />
         </select>
@@ -95,7 +95,7 @@
       </div>
     </xed:repeat>
   </xed:template>
-  
+
   <xed:template id="origin">
     <xed:repeat xpath="mods:classification[@classID='ORIGIN']" max="10">
       <div class="form-inline form-group">
@@ -117,7 +117,7 @@
       $(document).ready(function() { $('select[class*="autocomplete"]').chosen({search_contains: true}); });
     </script>
   </xed:template>
-  
+
   <xed:template id="oa">
     <xed:bind xpath="mods:classification[@classID='oa']">
       <div class="form-group form-inline">
@@ -142,7 +142,7 @@
       </div>
     </xed:bind>
   </xed:template>
-  
+
   <xed:template id="host">
     <xed:bind xpath="mods:genre[@type='intern']">
       <div class="form-group form-inline">
@@ -255,14 +255,14 @@
       </div>
     </xed:repeat>
   </xed:template>
-  
+
   <xed:template id="editor">
     <xed:repeat xpath="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='edt']" max="99">
       <div class="form-group form-inline">
         <label for="{xed:generate-id()}" class="mycore-form-label">
           <xed:output i18n="ubo.role.editor" />:
         </label>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+        <xed:include uri="webapp:import-editor.xed" ref="person" />
       </div>
     </xed:repeat>
   </xed:template>
@@ -273,20 +273,20 @@
         <label for="{xed:generate-id()}" class="mycore-form-label">
           *<xed:output i18n="ubo.role.interviewee" />:
         </label>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+        <xed:include uri="webapp:import-editor.xed" ref="person" />
       </div>
     </xed:repeat>
   </xed:template>
 
   <xed:template id="honoree">
-    <xed:bind xpath="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='hnr']">
+    <xed:repeat xpath="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='hnr']" max="1">
       <div class="form-group form-inline">
         <label for="{xed:generate-id()}" class="mycore-form-label">
           <xed:output i18n="ubo.role.honoree" />:
         </label>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+        <xed:include uri="webapp:import-editor.xed" ref="person" />
       </div>
-    </xed:bind>
+    </xed:repeat>
   </xed:template>
 
   <xed:template id="person">
@@ -296,7 +296,7 @@
           <xed:output value="mods:namePart[@type='family']" /><xed:if test="mods:namePart[@type='given']"><xed:output value="concat(', ',mods:namePart[@type='given'])" /></xed:if>
         </xed:if>
       </span>
-      <span> 
+      <span>
         <xed:choose>
           <xed:when test="string-length(mods:nameIdentifier[@type=$MCR.user2.matching.lead_id]) &gt; 0">
             <xed:bind xpath="mods:nameIdentifier[@type=$MCR.user2.matching.lead_id]">
@@ -365,7 +365,7 @@
             <div class="ml-1">:</div>
 	  </label>
         </xed:bind>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+        <xed:include uri="webapp:import-editor.xed" ref="person" />
       </div>
     </xed:repeat>
   </xed:template>
@@ -382,7 +382,7 @@
 	    <div class="ml-1">:</div>
           </label>
         </xed:bind>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+        <xed:include uri="webapp:import-editor.xed" ref="person" />
       </div>
     </xed:repeat>
   </xed:template>
@@ -552,7 +552,7 @@
         </xed:bind>
 	</div>
         <input class="{$xed-validation-marker} form-control col-sm-4" type="text"/>
-        <xed:controls /> 
+        <xed:controls />
       </div>
     </xed:repeat>
   </xed:template>
@@ -581,7 +581,7 @@
           </xed:bind>
 	</div>
         <input class="{$xed-validation-marker} mycore-form-input" type="text"/>
-        <xed:controls /> 
+        <xed:controls />
       </div>
     </xed:repeat>
   </xed:template>
@@ -613,7 +613,7 @@
       </div>
     </xed:bind>
   </xed:template>
-  
+
   <xed:template id="topics">
     <xed:repeat xpath="mods:subject">
       <div class="form-inline form-group">
@@ -627,7 +627,7 @@
       </div>
     </xed:repeat>
   </xed:template>
-  
+
   <xed:template id="languages">
     <xed:repeat xpath="mods:language">
       <div class="form-inline form-group">
@@ -681,19 +681,19 @@
       </div>
     </xed:repeat>
   </xed:template>
-  
+
   <xed:template id="linked.relatedItem">
-    <xed:bind xpath="@xlink:href"> 
+    <xed:bind xpath="@xlink:href">
       <div class="form-group form-inline">
         <label class="mycore-form-label">in:</label>
         <div>
           <a href="{$ServletsBaseURL}DozBibEntryServlet?id={.}">
-            <xed:output i18n="result.dozbib.entry" /> <xed:output value="number(substring-after(.,'_mods_'))" /> 
+            <xed:output i18n="result.dozbib.entry" /> <xed:output value="number(substring-after(.,'_mods_'))" />
           </a>
           <br/>
           <xed:include uri="xslStyle:relatedItem-editor:mcrobject:{.}" />
           <button type="submit" class="btn btn-sm btn-primary" name="_xed_submit_remove:/mycoreobject/descendant::mods:relatedItem/@xlink:href[.='{.}']|host">
-            <xed:output i18n="ubo.relatedItem.host.unlink" /> 
+            <xed:output i18n="ubo.relatedItem.host.unlink" />
           </button>
           <button class="btn btn-sm btn-primary" type="submit" xed:target="subselect" xed:href="../search.xed?id_type=id&amp;genre={../mods:genre[@type='intern']}">
             <xed:output i18n="ubo.relatedItem.host.select" />
@@ -701,8 +701,8 @@
         </div>
       </div>
     </xed:bind>
-  </xed:template> 
-  
+  </xed:template>
+
   <xed:template id="relations">
     <fieldset>
       <legend>Verweise:</legend>
@@ -726,7 +726,7 @@
     </fieldset>
     <xed:validate xpath="//mods:relatedItem/@xlink:href" matches="ubo_mods_\d{8}" i18n="ubo.relatedItem.validation.href" display="global" />
   </xed:template>
-  
+
   <xed:template id="fix.structure.parent">
     <xed:bind xpath="structure/parents/parent">
       <xed:choose>
@@ -739,8 +739,8 @@
       </xed:choose>
     </xed:bind>
     <xed:cleanup-rule xpath="/mycoreobject/structure/parents" relevant-if="string-length(parent/@xlink:href) &gt; 0" />
-  </xed:template> 
-  
+  </xed:template>
+
   <xed:template id="cleanup">
     <xed:cleanup-rule xpath="//mods:*"
       relevant-if="(string-length(normalize-space(text())) &gt; 0) or * or (string-length(@xlink:href) &gt; 0) or (string-length(@valueURIxEditor) &gt; 0) or (string-length(@mcr:categId) &gt; 0)" />
