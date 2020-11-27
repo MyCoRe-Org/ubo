@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="nameIdentifier">
+  <label xml:lang="en" text="Namenskennungen" />
+  <label xml:lang="de" text="Name Identifier" />
+  <categories>
+    <category ID="scopus">
+      <label xml:lang="de" text="SCOPUS" />
+      <label xml:lang="en" text="SCOPUS" />
+    </category>
+    <category ID="gnd">
+      <label xml:lang="de" text="GND" />
+      <label xml:lang="en" text="GND" />
+    </category>
+    <category ID="researcherid">
+      <label xml:lang="de" text="ResearcherID" />
+      <label xml:lang="en" text="ResearcherID" />
+    </category>
+    <category ID="orcid">
+      <label xml:lang="de" text="ORCID" />
+      <label xml:lang="en" text="ORCID" />
+    </category>
+    <category ID="jena">
+      <label xml:lang="de" text="LDAP Kennung" />
+      <label xml:lang="en" text="LDAP Identifier" />
+    </category>
+    <category ID="connection">
+      <label xml:lang="de" text="Internal MyCoRe Connection" />
+      <label xml:lang="en" text="Internal MyCoRe Connection" />
+    </category>
+  </categories>
+</mycoreclass>

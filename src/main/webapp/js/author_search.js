@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
     // config variables
-    let solr_url = '../servlets/solr/select';
+    let solr_url = webApplicationBaseURL + '/servlets/solr/select';
     let class_name = 'author-search';
     let id_connection = 'connection';
 
@@ -21,7 +21,7 @@ $(document).ready(function(){
            dataType: 'jsonp',
            jsonp: 'json.wrf',
            data: {
-               q: solr_search_string,
+               q: "name_id_connection:* AND " + solr_search_string,
                wt: 'json',
                fl: '*',
                rows: 30,

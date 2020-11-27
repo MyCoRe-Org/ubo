@@ -27,4 +27,9 @@
     </login>
   </realm>
 
+  <realm id="unvalidated">
+    <label xml:lang="de">Für nicht verifizierte Nutzer</label>
+    <label xml:lang="en">For not verified Users:</label>
+  </realm>
+
 </realms>

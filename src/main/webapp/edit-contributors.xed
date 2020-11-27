@@ -47,7 +47,7 @@
                   <xed:output value="@num" />
 		</td>
 		<xed:bind xpath="mods:name[@type='personal']">
-                  <td>
+            <td>
 		    <div class="form-inline">
                       <xed:bind xpath="mods:namePart[@type='family']">
 			<input type="text" class="{$xed-validation-marker} form-control col-sm-7" />
@@ -58,14 +58,14 @@
                       </xed:bind>
                       <br/>
                       <xed:output value="../@key" />
-                      <xed:bind xpath="mods:nameIdentifier[@type='lsf']" />
+                      <xed:bind xpath="mods:nameIdentifier[@type=$MCR.user2.matching.lead_id]" />
 		    </div>
                   </td>
                   <td>
                     <button class="btn btn-sm btn-primary btn-block" type="submit" xed:target="subselect" xed:href="../identitypicker.html?lastName={mods:namePart[@type='family']}&amp;firstName={mods:namePart[@type='given']}&amp;pid={mods:nameIdentifier[@type='lsf']}">
                       <xed:choose>
-			<xed:when test="string-length(mods:nameIdentifier[@type='lsf']) &gt; 0">
-                          <xed:output value="mods:nameIdentifier[@type='lsf']" />
+			<xed:when test="string-length(mods:nameIdentifier[@type=$MCR.user2.matching.lead_id]) &gt; 0">
+                          <xed:output value="mods:nameIdentifier[@type=$MCR.user2.matching.lead_id]" />
 			</xed:when>
 			<xed:otherwise>- ? -</xed:otherwise>
                       </xed:choose>
