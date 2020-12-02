@@ -1,7 +1,9 @@
 package unidue.ubo.importer.scopus;
 
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,6 +20,8 @@ import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRMailer;
 import org.mycore.common.MCRPersistenceException;
+import org.mycore.common.MCRSession;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -26,6 +30,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.MCRSolrUtils;
+import org.mycore.user2.MCRUser;
 
 class ScopusImporter {
 
@@ -102,14 +107,20 @@ class ScopusImporter {
     private static boolean shouldIgnore(Element publication) {
         return !publication.getDescendants(new ElementFilter("genre", MCRConstants.MODS_NAMESPACE)).hasNext();
     }
+    private final static SimpleDateFormat ID_BUILDER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private MCRObject buildMCRObject(Element publicationXML) {
         MCRObject obj = new MCRObject(new Document(publicationXML));
         MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
         wrapper.setServiceFlag("status", STATUS);
+        wrapper.setServiceFlag("importID","SCOPUS-" + getImportID());
         MCRObjectID oid = MCRObjectID.getNextFreeId(PROJECT_ID, "mods");
         obj.setId(oid);
         return obj;
+    }
+
+    private String getImportID() {
+        return ID_BUILDER.format(new Date(MCRSessionMgr.getCurrentSession().getLoginTime()));
     }
 
     public void sendNotification() throws Exception {
