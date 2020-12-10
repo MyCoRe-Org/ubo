@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.mycore.app</groupId>
+    <artifactId>ubo</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>ubo-webapp</artifactId>
+  <packaging>war</packaging>
+  <name>Universitätsbibliographie - WAR Module</name>
+  <properties>
+    <cargo.container.zipUrlInstaller.downloadDir>${settings.localRepository}/../cargo/containers</cargo.container.zipUrlInstaller.downloadDir>
+    <cargo.debug.address>8295</cargo.debug.address>
+    <cargo.debug.suspend>n</cargo.debug.suspend>
+    <cargo.deployable.default.artifactId>${project.artifactId}</cargo.deployable.default.artifactId>
+    <cargo.deployable.default.context>/</cargo.deployable.default.context>
+    <cargo.deployable.default.groupId>${project.groupId}</cargo.deployable.default.groupId>
+    <cargo.jvmargs>-DMCR.AppName=${MCR.AppName} -Dsolr.solr.home=${solr.home} -Xms512m -Xmx2048m</cargo.jvmargs>
+    <cargo.rmi.port>8290</cargo.rmi.port>
+    <cargo.servlet.port>8080</cargo.servlet.port>
+    <cargo.servlet.uriencoding>UTF-8</cargo.servlet.uriencoding>
+    <cargo.start.jvmargs />
+    <cargo.tomcat.ajp.port>8292</cargo.tomcat.ajp.port>
+    <cargo.version>1.7.8</cargo.version>
+    <jetty.version>9.4.26.v20200117</jetty.version>
+    <solr-runner.solrMirrorURL>http://mirror.23media.de/apache/lucene/solr/</solr-runner.solrMirrorURL>
+    <solr-runner.solrVersionString>8.6.2</solr-runner.solrVersionString>
+    <solr.home>${user.config.dir}/${MCR.AppName}/data/solr</solr.home>
+    <tomcat.version>9.0.34</tomcat.version>
+  </properties>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.cargo</groupId>
+        <artifactId>cargo-maven2-plugin</artifactId>
+        <version>${cargo.version}</version>
+        <configuration>
+          <configuration>
+            <properties>
+              <cargo.servlet.port>${cargo.servlet.port}</cargo.servlet.port>
+              <cargo.jvmargs>${cargo.jvmargs}</cargo.jvmargs>
+            </properties>
+          </configuration>
+          <deployables>
+            <deployable>
+              <groupId>${project.groupId}</groupId>
+              <artifactId>${project.artifactId}</artifactId>
+              <properties>
+                <context>/</context>
+              </properties>
+            </deployable>
+          </deployables>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.mycore.plugins</groupId>
+        <artifactId>solr-runner-maven-plugin</artifactId>
+        <version>1.1</version>
+        <configuration>
+          <solrMirrorURL>${solr-runner.solrMirrorURL}</solrMirrorURL>
+          <solrVersionString>${solr-runner.solrVersionString}</solrVersionString>
+          <solrHomeTemplate>${project.basedir}/src/main/setup/solr</solrHomeTemplate>
+          <solrHome>${solr.home}</solrHome>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>org.mycore.app</groupId>
+      <artifactId>ubo-module</artifactId>
+      <version>${version}</version>
+    </dependency>
+  </dependencies>
+
+</project>

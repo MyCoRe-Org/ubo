@@ -60,4 +60,7 @@ mvn cargo:run -Dtomcat=9
 
 # or jetty: (does not work currently)
 mvn cargo:run -Djetty
+
+mvn clean && mvn install -am -pl ubo-webapp && mvn -Pdev -Dtomcat=9 org.codehaus.cargo:cargo-maven2-plugin:run -pl ubo-webapp -DskipTests
+
 ```

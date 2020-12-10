@@ -9,10 +9,10 @@
     <relativePath />
   </parent>
 
-  <groupId>unidue</groupId>
+  <groupId>org.mycore.app</groupId>
   <artifactId>ubo</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <packaging>pom</packaging>
 
   <name>Universitätsbibliographie</name>
   <url>https://bibliographie.ub.uni-due.de/</url>
@@ -44,31 +44,15 @@
   <properties>
     <MCR.AppName>ubo</MCR.AppName>
     <axis1.version>1.4</axis1.version>
-    <cargo.container.zipUrlInstaller.downloadDir>${settings.localRepository}/../cargo/containers</cargo.container.zipUrlInstaller.downloadDir>
-    <cargo.debug.address>8295</cargo.debug.address>
-    <cargo.debug.suspend>n</cargo.debug.suspend>
-    <cargo.deployable.default.artifactId>${project.artifactId}</cargo.deployable.default.artifactId>
-    <cargo.deployable.default.context>/</cargo.deployable.default.context>
-    <cargo.deployable.default.groupId>${project.groupId}</cargo.deployable.default.groupId>
-    <cargo.jvmargs>-DMCR.AppName=${MCR.AppName} -Dsolr.solr.home=${solr.home} -Xms512m -Xmx2048m</cargo.jvmargs>
-    <cargo.rmi.port>8290</cargo.rmi.port>
-    <cargo.servlet.port>8080</cargo.servlet.port>
-    <cargo.servlet.uriencoding>UTF-8</cargo.servlet.uriencoding>
-    <cargo.start.jvmargs />
-    <cargo.tomcat.ajp.port>8292</cargo.tomcat.ajp.port>
-    <cargo.version>1.7.8</cargo.version>
     <java.target.version>11</java.target.version>
-    <jetty.version>9.4.26.v20200117</jetty.version>
     <mycore.version>2020.06.1-SNAPSHOT</mycore.version>
-    <solr.home>${user.config.dir}/${MCR.AppName}/data/solr</solr.home>
-    <solr-runner.solrMirrorURL>http://mirror.23media.de/apache/lucene/solr/</solr-runner.solrMirrorURL>
-    <solr-runner.solrVersionString>8.6.2</solr-runner.solrVersionString>
+    <sortpom.sortDeps>scope,groupId,artifactId</sortpom.sortDeps>
+    <sortpom.sortFile>https://gist.githubusercontent.com/yagee-de/dfd3698c1b49173dbf251f74eb6a9297/raw/406460c088ff3cb6354e4ae6b40535e6f841607d/mycore_sort.xml</sortpom.sortFile>
+    <sortpom.sortProps>true</sortpom.sortProps>
     <timestamp>${maven.build.timestamp}</timestamp>
-    <tomcat.version>9.0.34</tomcat.version>
   </properties>
 
   <build>
-
     <pluginManagement>
       <plugins>
         <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
@@ -99,120 +83,6 @@
       </plugins>
     </pluginManagement>
     <plugins>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>axistools-maven-plugin</artifactId>
-        <version>${axis1.version}</version>
-        <configuration>
-          <packageSpace>unidue.ubo.lsf</packageSpace>
-          <subPackageByFileName>false</subPackageByFileName>
-          <testCases>false</testCases>
-          <serverSide>false</serverSide>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>wsdl2java</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>appassembler-maven-plugin</artifactId>
-        <configuration>
-          <programs>
-            <program>
-              <mainClass>org.mycore.frontend.cli.MCRCommandLineInterface</mainClass>
-              <id>ubo</id>
-            </program>
-          </programs>
-          <binFileExtensions>
-            <unix>.sh</unix>
-            <windows>.cmd</windows>
-          </binFileExtensions>
-          <assembleDirectory>${project.build.directory}</assembleDirectory>
-          <configurationDirectory>${project.build.finalName}/WEB-INF/classes</configurationDirectory>
-          <repositoryName>${project.build.finalName}/WEB-INF/lib</repositoryName>
-          <endorsedDir>bin</endorsedDir>
-          <extraJvmArguments>-Xms512m -Xmx1024m -DMCR.AppName=${MCR.AppName}</extraJvmArguments>
-          <repositoryLayout>flat</repositoryLayout>
-          <generateRepository>false</generateRepository>
-          <useWildcardClassPath>true</useWildcardClassPath>
-        </configuration>
-        <executions>
-          <execution>
-            <id>assemble</id>
-            <goals>
-              <goal>assemble</goal>
-            </goals>
-            <phase>prepare-package</phase>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-servlet-api</id>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <phase>prepare-package</phase>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>javax.servlet</groupId>
-                  <artifactId>javax.servlet-api</artifactId>
-                  <version>3.1.0</version>
-                  <type>jar</type>
-                  <overWrite>true</overWrite>
-                </artifactItem>
-              </artifactItems>
-              <outputDirectory>${project.build.directory}/bin/</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.codehaus.cargo</groupId>
-        <artifactId>cargo-maven2-plugin</artifactId>
-        <version>${cargo.version}</version>
-        <configuration>
-          <configuration>
-            <properties>
-              <cargo.servlet.port>${cargo.servlet.port}</cargo.servlet.port>
-              <cargo.jvmargs>${cargo.jvmargs}</cargo.jvmargs>
-            </properties>
-          </configuration>
-          <deployables>
-            <deployable>
-              <groupId>${project.groupId}</groupId>
-              <artifactId>${project.artifactId}</artifactId>
-              <properties>
-                <context>/</context>
-              </properties>
-            </deployable>
-          </deployables>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.mycore.plugins</groupId>
-        <artifactId>solr-runner-maven-plugin</artifactId>
-        <version>1.1</version>
-        <configuration>
-          <solrMirrorURL>${solr-runner.solrMirrorURL}</solrMirrorURL>
-          <solrVersionString>${solr-runner.solrVersionString}</solrVersionString>
-          <solrHomeTemplate>${project.basedir}/src/main/setup/solr</solrHomeTemplate>
-          <solrHome>${solr.home}</solrHome>
-        </configuration>
-      </plugin>
 
     </plugins>
   </build>
@@ -296,292 +166,10 @@
     </pluginRepository>
   </pluginRepositories>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.mycore</groupId>
-        <artifactId>mycore</artifactId>
-        <version>${mycore.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.10</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>de.undercouch</groupId>
-      <artifactId>citeproc-java</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>jakarta.xml.bind</groupId>
-      <artifactId>jakarta.xml.bind-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>javax.xml.ws</groupId>
-      <artifactId>jaxws-api</artifactId>
-      <version>2.3.1</version>
-    </dependency>
-    <dependency>
-      <groupId>jaxen</groupId>
-      <artifactId>jaxen</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>jdom</groupId>
-          <artifactId>jdom2</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>xom</groupId>
-          <artifactId>xom</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>xml-apis</groupId>
-          <artifactId>xml-apis</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.jtidy</groupId>
-      <artifactId>jtidy</artifactId>
-      <version>r938</version>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.saxon</groupId>
-      <artifactId>Saxon-HE</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.axis</groupId>
-      <artifactId>axis</artifactId>
-      <version>${axis1.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.axis</groupId>
-      <artifactId>axis-jaxrpc</artifactId>
-      <version>${axis1.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-csv</artifactId>
-      <version>1.5</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient-cache</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpcore</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-web</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.poi</groupId>
-      <artifactId>poi</artifactId>
-      <version>3.8</version>
-      <exclusions>
-        <exclusion>
-          <groupId>commons-codec</groupId>
-          <artifactId>commons-codec</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.solr</groupId>
-      <artifactId>solr-solrj</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.citationstyles</groupId>
-      <artifactId>locales</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.citationstyles</groupId>
-      <artifactId>styles</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jbibtex</groupId>
-      <artifactId>jbibtex</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jdom</groupId>
-      <artifactId>jdom2</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-base</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.logging.log4j</groupId>
-          <artifactId>log4j-slf4j-impl</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-classeditor</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-fo</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-iview2</artifactId>
-      <!-- actually not used, but dependency required because of persistence mapping missing otherwise -->
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-mods</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-oai</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-orcid</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-restapi</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-sass</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-solr</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-user2</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-acl-editor2</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-webcli</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-xeditor</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>bootstrap</artifactId>
-      <version>4.4.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>font-awesome</artifactId>
-      <version>5.13.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>highcharts</artifactId>
-      <version>5.0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>jquery</artifactId>
-      <version>3.3.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>jquery-ui</artifactId>
-      <version>1.12.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars.npm</groupId>
-      <artifactId>chosen-js</artifactId>
-      <version>1.8.7</version>
-    </dependency>
-    <dependency>
-      <groupId>xalan</groupId>
-      <artifactId>xalan</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>xml-apis</groupId>
-      <artifactId>xml-apis</artifactId>
-      <version>1.0.b2</version>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
-      <version>3.1.0</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>commons-discovery</groupId>
-      <artifactId>commons-discovery</artifactId>
-      <version>0.5</version>
-      <scope>runtime</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>commons-logging</groupId>
-          <artifactId>commons-logging</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-slf4j-impl</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>wsdl4j</groupId>
-      <artifactId>wsdl4j</artifactId>
-      <version>1.6.3</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-base</artifactId>
-      <type>test-jar</type>
-      <scope>test</scope>
+      <groupId>com.sun.activation</groupId>
+      <artifactId>jakarta.activation</artifactId>
     </dependency>
   </dependencies>
 
@@ -724,6 +312,18 @@
 
   </profiles>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.mycore</groupId>
+        <artifactId>mycore</artifactId>
+        <version>${mycore.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <developers>
     <developer>
       <id>mcrfluet</id>
@@ -773,5 +373,10 @@
       <timezone>+1</timezone>
     </developer>
   </developers>
+  <modules>
+    <module>ubo-module</module>
+    <module>ubo-webapp</module>
+    <module>ubo-cli</module>
+  </modules>
 
 </project>
