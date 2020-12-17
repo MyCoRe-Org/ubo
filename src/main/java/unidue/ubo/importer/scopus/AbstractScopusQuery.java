@@ -28,7 +28,7 @@ abstract class AbstractScopusQuery {
         String prefix = "UBO.Scopus.API.";
         API_KEY = MCRConfiguration2.getStringOrThrow(prefix + "Key");
         API_URL = MCRConfiguration2.getStringOrThrow(prefix + "URL");
-        INST_TOKEN = MCRConfiguration2.getStringOrThrow(prefix + "Insttoken");
+        INST_TOKEN = MCRConfiguration2.getString(prefix + "Insttoken").orElse("");
     }
 
 
