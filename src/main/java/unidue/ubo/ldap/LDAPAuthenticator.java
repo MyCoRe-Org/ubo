@@ -49,6 +49,9 @@ public class LDAPAuthenticator {
     /** user (uid) of global readonly user **/
     private String globalUid;
 
+    /** dn of global readonly user **/
+    private final String globalUDN;
+
     /** password of global readonly user **/
     private String globalPassword;
 
@@ -74,6 +77,8 @@ public class LDAPAuthenticator {
 
         globalUid = MCRConfiguration2.getString(CONFIG_PREFIX + "GlobalUser").get();
 
+        globalUDN = MCRConfiguration2.getString(CONFIG_PREFIX + "GlobalUserDN").orElse(baseDN);
+
         globalPassword = MCRConfiguration2.getString(CONFIG_PREFIX + "GlobalPassword").get();
     }
 
@@ -92,15 +97,20 @@ public class LDAPAuthenticator {
      * @return DirContext, the context of the connected LDAP-Directory
      */
     public DirContext authenticate() throws NamingException {
-        return getDirContext(globalUid, globalPassword);
+        return getDirContext(globalUid, globalPassword, globalUDN);
     }
 
     @SuppressWarnings("unchecked")
     private DirContext getDirContext(String uid, String credentials) throws NamingException {
+        return getDirContext(uid, credentials, baseDN);
+    }
+
+    @SuppressWarnings("unchecked")
+    private DirContext getDirContext(String uid, String credentials, String dn) throws NamingException {
         try {
             Hashtable<String, String> env = (Hashtable<String, String>) (ldapEnvironment.clone());
             if (uid != null && !uid.isBlank() && credentials != null && !credentials.isBlank()) {
-                env.put(Context.SECURITY_PRINCIPAL, String.format(baseDN, uid));
+                env.put(Context.SECURITY_PRINCIPAL, String.format(dn, uid));
                 env.put(Context.SECURITY_CREDENTIALS, credentials);
             }
             return new InitialDirContext(env);
