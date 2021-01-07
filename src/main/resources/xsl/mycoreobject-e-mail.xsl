@@ -30,7 +30,7 @@
 
 <xsl:template match="/mycoreobject">
   <email>
-    <from><xsl:value-of select="$MCR.Mail.Address" /></from>
+    <from><xsl:value-of select="$UBO.Mail.From" /></from>
     <to><xsl:value-of select="$MCR.Mail.Address" /></to>
     <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
       <xsl:call-template name="build.to" />
