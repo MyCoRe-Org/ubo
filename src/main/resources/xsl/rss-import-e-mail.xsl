@@ -2,10 +2,10 @@
 
 <!-- ============================================== -->
 <!-- $Revision: 34514 $ $Date: 2016-02-04 19:27:24 +0100 (Do, 04 Feb 2016) $ -->
-<!-- ============================================== --> 
+<!-- ============================================== -->
 
-<xsl:stylesheet 
-  version="1.0" 
+<xsl:stylesheet
+  version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:ubo="xalan://unidue.ubo.DozBibEntryServlet"
@@ -40,7 +40,9 @@
     <xsl:text>
 Liebe Kollegin, lieber Kollege,
 
-die folgenden Publikationen wurden aus </xsl:text><xsl:value-of select="@source" /><xsl:text> importiert:
+die folgenden </xsl:text>
+  <xsl:value-of select="count(mycoreobject)" /><xsl:text> Publikationen wurden aus </xsl:text>
+  <xsl:value-of select="@source" /><xsl:text> importiert:
 
 </xsl:text>
       <xsl:for-each select="mycoreobject">
@@ -50,11 +52,11 @@ die folgenden Publikationen wurden aus </xsl:text><xsl:value-of select="@source"
         <xsl:value-of select="@ID" />
         <xsl:text>&#xa;</xsl:text>
         <xsl:variable name="bibentry.html">
-          <xsl:apply-templates select="." mode="html-export" /> 
+          <xsl:apply-templates select="." mode="html-export" />
         </xsl:variable>
         <xsl:apply-templates select="xalan:nodeset($bibentry.html)" />
         <xsl:text>&#xa;</xsl:text>
-      </xsl:for-each> 
+      </xsl:for-each>
 <xsl:text>
 
 Mit freundlichen Grüßen
