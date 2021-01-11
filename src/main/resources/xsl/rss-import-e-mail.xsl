@@ -40,7 +40,9 @@
     <xsl:text>
 Liebe Kollegin, lieber Kollege,
 
-die folgenden Publikationen wurden aus </xsl:text><xsl:value-of select="@source" /><xsl:text> importiert:
+die folgenden </xsl:text>
+  <xsl:value-of select="count(mycoreobject)" /><xsl:text> Publikationen wurden aus </xsl:text>
+  <xsl:value-of select="@source" /><xsl:text> importiert:
 
 </xsl:text>
       <xsl:for-each select="mycoreobject">
