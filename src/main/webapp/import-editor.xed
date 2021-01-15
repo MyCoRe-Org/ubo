@@ -30,6 +30,10 @@
     <!-- year is required, except for journal and series: -->
     <xed:validate xpath="//mods:mods" test="descendant::mods:dateIssued[string-length(.) &gt; 0] or mods:genre='journal' or mods:genre='series'" i18n="ubo.date.issued.4.validation" display="global" />
     <xed:validate xpath="//mods:dateIssued" matches="[\d]{4}" i18n="ubo.date.issued.4.validation" display="global" />
+    
+    <script type="text/javascript">
+      $(document).ready(function() { $('select[class*="autocomplete"]').chosen({search_contains: true}); });
+    </script>
   </xed:template>
 
   <xed:template id="common.metafields">
@@ -87,7 +91,7 @@
         <label for="{xed:generate-id()}" class="mycore-form-label">
           *<xed:output i18n="ubo.subject" />:
         </label>
-        <select id="{xed:generate-id()}" class="{$xed-validation-marker} mycore-form-input">
+        <select id="{xed:generate-id()}" class="autocomplete {$xed-validation-marker} mycore-form-input">
           <option value=""><xed:output i18n="search.select" /></option>
           <xed:include uri="xslStyle:items2options:classification:editor:-1:children:fachreferate" />
         </select>
@@ -113,9 +117,6 @@
         <xed:controls />
       </div>
     </xed:repeat>
-    <script type="text/javascript">
-      $(document).ready(function() { $('select[class*="autocomplete"]').chosen({search_contains: true}); });
-    </script>
   </xed:template>
 
   <xed:template id="oa">
