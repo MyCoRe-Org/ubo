@@ -62,7 +62,7 @@
 
           <xed:validate xpath="/login/uid" required="true" display="global" i18n="login.required.user" />
           <xed:validate xpath="/login/pwd" required="true" display="global" i18n="login.required.password" />
-          <xed:validate xpath="/login" class="unidue.ub.login.CascadingLoginServlet" method="validateLogin" display="global" i18n="login.invalid" />
+          <xed:validate xpath="/login" class="org.mycore.ubo.login.CascadingLoginServlet" method="validateLogin" display="global" i18n="login.invalid" />
 
         </xed:bind>
       </xed:form>

@@ -9,7 +9,7 @@
   xmlns:mcr="http://www.mycore.org/"
   xmlns:encoder="xalan://java.net.URLEncoder"
   xmlns:str="xalan://java.lang.String"
-  xmlns:basket="xalan://unidue.ubo.basket.BasketUtils"
+  xmlns:basket="xalan://org.mycore.ubo.basket.BasketUtils"
   exclude-result-prefixes="xsl xalan i18n mods mcr encoder str basket" 
 >
 

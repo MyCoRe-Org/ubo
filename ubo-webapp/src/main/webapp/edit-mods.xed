@@ -16,7 +16,7 @@
         
       <xed:bind xpath="/mycoreobject">
         <xed:choose>
-          <xed:when test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+          <xed:when test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
             <xed:include uri="webapp:edit-mods.xed" ref="editor" />
           </xed:when>
           <xed:otherwise>

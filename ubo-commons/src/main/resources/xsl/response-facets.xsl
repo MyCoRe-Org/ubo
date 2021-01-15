@@ -91,7 +91,7 @@
   </article>
 </xsl:template>
 
-<xsl:variable name="permission.admin" xmlns:check="xalan://unidue.ubo.AccessControl" select="check:currentUserIsAdmin()" />
+<xsl:variable name="permission.admin" xmlns:check="xalan://org.mycore.ubo.AccessControl" select="check:currentUserIsAdmin()" />
 
 <!-- List a facet -->
 <xsl:template match="lst[@name='facet_fields']/lst[int]">

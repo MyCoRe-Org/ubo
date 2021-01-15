@@ -40,7 +40,7 @@
                       <option value="ieee">IEEE Article No.</option>
                       <option value="arxiv">arXiv.org ID</option>
                       <option value="isbn">ISBN</option>
-                      <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+                      <xed:if test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
                         <option value="duepublico">DuEPublico ID</option>
                         <option value="duepublico2">DuEPublico 2 ID</option>
                         <option value="evaluna">EVALuna Biblio ID</option>
@@ -62,7 +62,7 @@
             <xed:validate xpath="//mods:identifier[@type='duepublico']" matches="\d+" display="global" />
           <xed:validate xpath="//mods:identifier[@type='duepublico2']" matches="duepublico_mods_\d\d\d\d\d\d\d\d" display="global" />
 
-            <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+            <xed:if test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
               <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
               <xed:validate xpath="//mods:location/mods:shelfLocator" matches="(\d\d\/\d\d\s[A-Za-z]+\s\d+.*)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
             </xed:if>

@@ -8,7 +8,7 @@
   version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:ubo="xalan://unidue.ubo.DozBibEntryServlet"
+  xmlns:ubo="xalan://org.mycore.ubo.DozBibEntryServlet"
   xmlns:mods="http://www.loc.gov/mods/v3"
   exclude-result-prefixes="xsl xalan ubo mods"
 >

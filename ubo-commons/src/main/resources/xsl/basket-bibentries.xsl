@@ -35,7 +35,7 @@
       </a>
       <xsl:choose>
         <xsl:when test="$UBO.System.ReadOnly = 'true'" />
-        <xsl:when xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()">
+        <xsl:when xmlns:check="xalan://org.mycore.ubo.AccessControl" test="check:currentUserIsAdmin()">
           <a class="action btn btn-sm btn-primary mb-1" href="{$WebApplicationBaseURL}edit-contributors.xed">Personen zuordnen</a>
           <xsl:if test="count(/basket/entry) &gt; 1">
             <a class="action btn btn-sm btn-primary mb-1" href="BasketPubMerger?commit=false&amp;target=publications">Zusammenführen</a>
@@ -45,7 +45,7 @@
       </xsl:choose>
       <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/mods.xml?basket=bibentries&amp;root=export&amp;transformer=mods">MODS</a>
       <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/export.bibtex?basket=bibentries&amp;root=export&amp;transformer=bibtex">BibTeX</a>
-      <xsl:if xmlns:check="xalan://unidue.ubo.AccessControl" test="not(check:currentUserIsAdmin())">
+      <xsl:if xmlns:check="xalan://org.mycore.ubo.AccessControl" test="not(check:currentUserIsAdmin())">
         <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/export.endnote?basket=bibentries&amp;root=export&amp;transformer=endnote">EndNote</a>
         <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/export.ris?basket=bibentries&amp;root=export&amp;transformer=ris">RIS</a>
         <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/export.txt?basket=bibentries&amp;root=export&amp;transformer=ieee-text">IEEE</a>

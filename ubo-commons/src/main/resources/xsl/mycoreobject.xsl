@@ -7,7 +7,7 @@
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:ubo="xalan://unidue.ubo.DozBibEntryServlet"
+  xmlns:ubo="xalan://org.mycore.ubo.DozBibEntryServlet"
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
@@ -28,7 +28,7 @@
 
 <!-- ============ Bearbeitungsrechte ========== -->
 
-<xsl:variable name="permission.admin" xmlns:check="xalan://unidue.ubo.AccessControl" select="check:currentUserIsAdmin()" />
+<xsl:variable name="permission.admin" xmlns:check="xalan://org.mycore.ubo.AccessControl" select="check:currentUserIsAdmin()" />
 
 <!-- ============ Seitentitel ============ -->
 
@@ -100,7 +100,7 @@
         </xsl:if>
       </xsl:if>
     </xsl:if>
-    <xsl:if xmlns:basket="xalan://unidue.ubo.basket.BasketUtils" test="basket:hasSpace() and not(basket:contains(string(/mycoreobject/@ID)))">
+    <xsl:if xmlns:basket="xalan://org.mycore.ubo.basket.BasketUtils" test="basket:hasSpace() and not(basket:contains(string(/mycoreobject/@ID)))">
       <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}MCRBasketServlet?type=bibentries&amp;action=add&amp;resolve=true&amp;id={/mycoreobject/@ID}&amp;uri=mcrobject:{/mycoreobject/@ID}">
         <xsl:value-of select="i18n:translate('button.basketAdd')" />
       </a>
@@ -361,17 +361,17 @@
 <xsl:template name="ask.publications">
   <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
     <p>
-      Wenn Sie die Publikationen im Korb zusammenfÃ¼hren,
+      Wenn Sie die Publikationen im Korb zusammenführen,
       werden die bibliographischen Daten zu einem neuen Eintrag zusammengefasst
-      und die ursprÃ¼nglichen, alten EintrÃ¤ge gelÃ¶scht.
-      Ergebnis wÃ¤re dieser Eintrag hier.
+      und die ursprünglichen, alten Einträge gelöscht.
+      Ergebnis wäre dieser Eintrag hier.
     </p>
     <p>
       <strong>
-        Wollen Sie die Publikationen im Korb wirklich zusammenfÃ¼hren?
+        Wollen Sie die Publikationen im Korb wirklich zusammenführen?
       </strong>
     </p>
-    <input type="button" class="editorButton" name="merge" value="ZusammenfÃ¼hren"
+    <input type="button" class="editorButton" name="merge" value="Zusammenführen"
       onclick="self.location.href='BasketPubMerger?commit=true&amp;target=publications'" />
     <input type="button" class="editorButton" name="cancel" value="{i18n:translate('button.cancelNo')}"
       onclick="self.location.href='MCRBasketServlet?type=bibentries&amp;action=show'" />
@@ -382,10 +382,10 @@
   <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
     <p>
       Wenn Sie die Publikationen im Korb zusammenhosten,
-      werden die Ãœberordnungen jeder dieser Publikationen extrahiert,
+      werden die Überordnungen jeder dieser Publikationen extrahiert,
       deren bibliographische Daten zu einem neuen Eintrag zusammengefasst
       und die Publikationen im Korb mit diesem neuen Eintrag verlinkt.
-      Ergebnis wÃ¤re dieser Eintrag hier als gemeinsame Ãœberordnung aller Publikationen im Korb.
+      Ergebnis wäre dieser Eintrag hier als gemeinsame Überordnung aller Publikationen im Korb.
     </p>
     <p>
       <strong>
@@ -402,8 +402,8 @@
 <xsl:template name="merged.publications">
   <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
     <p>
-      Alle Publikationen im Korb wurden zu diesem Eintrag zusammengefÃ¼hrt.
-      Die anderen EintrÃ¤ge wurden gelÃ¶scht. Der Korb wurde geleert.
+      Alle Publikationen im Korb wurden zu diesem Eintrag zusammengeführt.
+      Die anderen Einträge wurden gelöscht. Der Korb wurde geleert.
     </p>
   </div>
 </xsl:template>
@@ -411,8 +411,8 @@
 <xsl:template name="merged.hosts">
   <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
     <p>
-      Alle Publikationen im Korb wurden mit dieser Ãœberordnung verknÃ¼pft.
-      Andere evtl. bereits vorhandene Ãœberordnungen wurden gelÃ¶scht.
+      Alle Publikationen im Korb wurden mit dieser Überordnung verknüpft.
+      Andere evtl. bereits vorhandene Überordnungen wurden gelöscht.
     </p>
   </div>
 </xsl:template>

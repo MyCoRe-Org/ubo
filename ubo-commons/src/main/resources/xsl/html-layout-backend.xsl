@@ -8,7 +8,7 @@
   exclude-result-prefixes="xsl xalan i18n encoder">
 
   <!-- last navigation id calculated from navigation.xml -->
-  <xsl:variable name="NavigationID" xmlns:lastPageID="xalan://unidue.ubo.LastPageID">
+  <xsl:variable name="NavigationID" xmlns:lastPageID="xalan://org.mycore.ubo.LastPageID">
     <xsl:choose>
       <xsl:when test="(string-length($PageID) &gt; 0) and ($navigation.tree/descendant-or-self::item[@id = $PageID])">
         <xsl:value-of select="lastPageID:setLastPageID($PageID)" />

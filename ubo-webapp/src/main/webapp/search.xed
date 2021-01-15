@@ -156,7 +156,7 @@
             <xed:include uri="webapp:import-search.xed" ref="year" />
             
             <xed:choose>
-              <xed:when test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+              <xed:when test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
                 <xed:bind xpath="condition6[@field='status'][@operator='=']/value">
                   <div class="form-group form-inline">
                     <label class="mycore-form-label">
@@ -215,7 +215,7 @@
                   </select>
                 </xed:bind>
                 <xed:bind xpath="@field" initially="oa">
-                  <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+                  <xed:if test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
                     <select class="mycore-form-input-double">
                       <option value="oa">mit Unterkategorien</option>
                       <option value="oa_exact">exakt zugeordnet</option>

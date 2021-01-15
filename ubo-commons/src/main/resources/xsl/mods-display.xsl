@@ -5,7 +5,7 @@
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:cerif="https://www.openaire.eu/cerif-profile/1.1/"
   xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:check="xalan://unidue.ubo.AccessControl"
+  xmlns:check="xalan://org.mycore.ubo.AccessControl"
   xmlns:encoder="xalan://java.net.URLEncoder"
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:mcr="http://www.mycore.org/"

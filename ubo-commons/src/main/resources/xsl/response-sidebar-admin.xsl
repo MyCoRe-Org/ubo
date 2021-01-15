@@ -12,7 +12,7 @@
   <xsl:param name="ServletsBaseURL" />
 
   <xsl:template match="/response">
-    <xsl:if xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()">
+    <xsl:if xmlns:check="xalan://org.mycore.ubo.AccessControl" test="check:currentUserIsAdmin()">
       <article class="card">
 	<div class="card-body">
           <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_fields']/lst[@name='status']" />

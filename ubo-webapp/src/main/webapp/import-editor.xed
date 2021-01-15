@@ -55,7 +55,7 @@
   <xed:template id="status">
     <xed:bind xpath="../../../../service/servflags[@class='MCRMetaLangText']/servflag[@type='status']">
       <xed:choose>
-        <xed:when test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+        <xed:when test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
           <xed:bind xpath="." default="confirmed" />
           <div class="form-inline form-group">
             <label for="{xed:generate-id()}" class="mycore-form-label">
@@ -307,7 +307,7 @@
             </xed:bind>
           </xed:when>
           <xed:when test="string-length(mods:namePart[@type='family']) &gt; 0">
-            <xed:load-resource uri="ires:search:{xed:call-java('unidue.ubo.matcher.MCRUserMatcherUtils', 'getAttributesAsURLString', .)}" name="searchResults"/>
+            <xed:load-resource uri="ires:search:{xed:call-java('org.mycore.ubo.matcher.MCRUserMatcherUtils', 'getAttributesAsURLString', .)}" name="searchResults"/>
             <xed:if test="count($searchResults/person) &gt; 0">
 	      <xed:output value="concat('&#160;(', count($searchResults/person), ' in ', i18n:translate('editor.identity.picker.name'), ')')" />
             </xed:if>
@@ -315,13 +315,13 @@
         </xed:choose>
       </span>
       <div class="ml-auto pb-1">
-        <button class="btn btn-xs btn-primary mr-1" type="submit" xed:target="subselect" xed:href="../identitypicker.html?{xed:call-java('unidue.ubo.matcher.MCRUserMatcherUtils', 'getAttributesAsURLString', .)}&amp;pid={mods:nameIdentifier[@type='lsf']}">
+        <button class="btn btn-xs btn-primary mr-1" type="submit" xed:target="subselect" xed:href="../identitypicker.html?{xed:call-java('org.mycore.ubo.matcher.MCRUserMatcherUtils', 'getAttributesAsURLString', .)}&amp;pid={mods:nameIdentifier[@type='lsf']}">
           <xed:output i18n="search.select" />
         </button>
       </div>
     </div>
     <xed:controls />
-    <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+    <xed:if test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
       <!-- TODO: decide how this shall be handled... -->
       <!-- <xed:repeat xpath="mods:nameIdentifier[not(@type='lsf') and not(@type='connection')]"> -->
       <xed:repeat xpath="mods:nameIdentifier[not(@type=$MCR.user2.matching.lead_id)]">

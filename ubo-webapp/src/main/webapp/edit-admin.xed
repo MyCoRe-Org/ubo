@@ -23,7 +23,7 @@
           <xed:include uri="webapp:import-editor.xed" ref="common.metafields" />
           
           <xed:choose>
-            <xed:when test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+            <xed:when test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
               <xed:include uri="webapp:edit-admin.xed" ref="editor" />
             </xed:when>
             <xed:otherwise>

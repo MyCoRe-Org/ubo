@@ -9,7 +9,7 @@
 
   <servlet id="DozBibServlet">
     <servlet-name>DozBibServlet</servlet-name>
-    <servlet-class>unidue.ubo.DozBibServlet</servlet-class>
+    <servlet-class>org.mycore.ubo.DozBibServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>DozBibServlet</servlet-name>
@@ -22,7 +22,7 @@
 
   <servlet id="NewPublicationWizard">
     <servlet-name>NewPublicationWizard</servlet-name>
-    <servlet-class>unidue.ubo.NewPublicationWizard</servlet-class>
+    <servlet-class>org.mycore.ubo.NewPublicationWizard</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>NewPublicationWizard</servlet-name>
@@ -31,7 +31,7 @@
 
   <servlet id="DozBibEntryServlet">
     <servlet-name>DozBibEntryServlet</servlet-name>
-    <servlet-class>unidue.ubo.DozBibEntryServlet</servlet-class>
+    <servlet-class>org.mycore.ubo.DozBibEntryServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>DozBibEntryServlet</servlet-name>
@@ -40,7 +40,7 @@
 
   <servlet id="DozBibImportServlet">
     <servlet-name>DozBibImportServlet</servlet-name>
-    <servlet-class>unidue.ubo.importer.DozBibImportServlet</servlet-class>
+    <servlet-class>org.mycore.ubo.importer.DozBibImportServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>DozBibImportServlet</servlet-name>
@@ -49,7 +49,7 @@
 
   <servlet id="Results2Basket">
     <servlet-name>Results2Basket</servlet-name>
-    <servlet-class>unidue.ubo.basket.Results2Basket</servlet-class>
+    <servlet-class>org.mycore.ubo.basket.Results2Basket</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>Results2Basket</servlet-name>
@@ -58,7 +58,7 @@
 
   <servlet id="BasketName2PIDEditor">
     <servlet-name>BasketName2PIDEditor</servlet-name>
-    <servlet-class>unidue.ubo.basket.BasketName2PIDEditor</servlet-class>
+    <servlet-class>org.mycore.ubo.basket.BasketName2PIDEditor</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>BasketName2PIDEditor</servlet-name>
@@ -67,7 +67,7 @@
 
   <servlet id="BasketPubMerger">
     <servlet-name>BasketPubMerger</servlet-name>
-    <servlet-class>unidue.ubo.basket.BasketPubMerger</servlet-class>
+    <servlet-class>org.mycore.ubo.basket.BasketPubMerger</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>BasketPubMerger</servlet-name>
@@ -76,7 +76,7 @@
 
   <servlet id="IdentityPicker">
     <servlet-name>IdentityPicker</servlet-name>
-    <servlet-class>unidue.ubo.picker.IdentityPicker</servlet-class>
+    <servlet-class>org.mycore.ubo.picker.IdentityPicker</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>IdentityPicker</servlet-name>
@@ -94,7 +94,7 @@
 
   <servlet>
     <servlet-name>CascadingLoginServlet</servlet-name>
-    <servlet-class>unidue.ub.login.CascadingLoginServlet</servlet-class>
+    <servlet-class>org.mycore.ubo.login.CascadingLoginServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>CascadingLoginServlet</servlet-name>

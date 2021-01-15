@@ -34,7 +34,7 @@
         <artifactId>axistools-maven-plugin</artifactId>
         <version>${axis1.version}</version>
         <configuration>
-          <packageSpace>unidue.ubo.lsf</packageSpace>
+          <packageSpace>org.mycore.ubo.lsf</packageSpace>
           <subPackageByFileName>false</subPackageByFileName>
           <testCases>false</testCases>
           <serverSide>false</serverSide>

@@ -110,7 +110,7 @@
                     </div>
 
                     <!-- Allow manual input of LSF PID for admins, in special cases or for testing purposes -->
-                    <xsl:if xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()">
+                    <xsl:if xmlns:check="xalan://org.mycore.ubo.AccessControl" test="check:currentUserIsAdmin()">
                         <div class="form-group form-inline">
                             <label for="pid" class="mycore-form-label">
                                 LSF PID:

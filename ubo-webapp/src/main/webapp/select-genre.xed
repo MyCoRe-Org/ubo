@@ -51,7 +51,7 @@
           </xed:bind>
 
           <xed:bind xpath="@form" default="edit-publication.xed">
-            <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+            <xed:if test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
 	      <div class="form-inline form-group">
 		<label for="form" class="mycore-form-label">
 		  Ziel-Formular:
