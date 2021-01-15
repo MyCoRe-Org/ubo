@@ -9,7 +9,7 @@
     <relativePath />
   </parent>
 
-  <groupId>org.mycore.app</groupId>
+  <groupId>org.mycore.ubo</groupId>
   <artifactId>ubo</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
@@ -374,7 +374,7 @@
     </developer>
   </developers>
   <modules>
-    <module>ubo-module</module>
+    <module>ubo-commons</module>
     <module>ubo-webapp</module>
     <module>ubo-cli</module>
   </modules>
