@@ -8,6 +8,7 @@ git clone https://github.com/MyCoRe-Org/ubo.git
 mvn install
 
 # Create configuration directory
+cd ubo-cli
 target/bin/ubo.sh create configuration directory
 
 # TODO: Build a database and edit persistence.xml
@@ -28,7 +29,7 @@ cd -
 https://www.mycore.de/documentation/getting_started/gs_solr8/
 https://www.mycore.de/documentation/search/search_solr_use/
 
-# or use solr runner plugin for development
+# or use solr runner plugin for development (in folder ubo-webapp)
  - install solr with the command: `mvn solr-runner:copyHome`
  - run solr with the command: `mvn solr-runner:start`
  - stop solr with the command: `mvn solr-runner:stop`
@@ -40,6 +41,9 @@ vi ~/.mycore/ubo/mycore.properties
   MCR.Solr.ServerURL=http://localhost:8983/
   MCR.Solr.Core.main.Name=ubo
   MCR.Solr.Core.classification.Name=ubo_classifications
+
+# change to cli
+cd ubo-cli
 
 # Create the superuser "administrator"
 target/bin/ubo.sh init superuser
