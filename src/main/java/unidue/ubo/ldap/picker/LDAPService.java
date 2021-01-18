@@ -128,7 +128,7 @@ public class LDAPService implements IdentityService {
      * </results>
      */
     @Override
-    public Element searchPerson(Map<String, String> paramMap) {
+    public Element searchPerson(Map<String, String> paramMap, boolean includeApproximateSearch) {
         LOGGER.info("Starting LDAP person search with raw params: {}", paramMap);
         paramMap = applyNamepartMapping(paramMap);
         LOGGER.info("LDAP person search params after namepart-mapping: {}", paramMap);
@@ -139,7 +139,12 @@ public class LDAPService implements IdentityService {
         Multimap<String, String> ldapAttributes = userMatcher.convertNameIdentifiersToLDAP(paramMap, false);
         LOGGER.info("attributes to search with: {}", ldapAttributes);
 
-        List<LDAPObject> ldapUsers = userMatcher.getLDAPUsersByGivenLDAPAttributes(ldapAttributes);
+        List<LDAPObject> ldapUsers = userMatcher.getLDAPUsersByGivenLDAPAttributes(ldapAttributes, false);
+
+        if(ldapUsers.size() == 0 && includeApproximateSearch) {
+            results.setAttribute("approximate","true");
+            ldapUsers = userMatcher.getLDAPUsersByGivenLDAPAttributes(ldapAttributes,true);
+        }
 
         for(LDAPObject ldapUser : ldapUsers) {
             Element person = new Element("person");
@@ -163,6 +168,10 @@ public class LDAPService implements IdentityService {
         }
 
         return results;
+    }
+
+    public Element searchPerson(Map<String, String> paramMap) {
+        return searchPerson(paramMap, false);
     }
 
     private void addIdentityElement(Element parent, LDAPObject ldapUser) {

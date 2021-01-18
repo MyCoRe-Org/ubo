@@ -122,7 +122,7 @@ public class LSFService implements IdentityService {
      * @param attributes The last name (or part of it) of the person to search for.
      * @param attributes The first name of the person to search for.
      */
-    public Element searchPerson(Map<String, String> attributes) {
+    public Element searchPerson(Map<String, String> attributes, boolean includeApproximateSearch) {
         Element results = new Element("results");
         String firstName = "";
         String lastName = "";
@@ -170,6 +170,10 @@ public class LSFService implements IdentityService {
         removeThoseWithNonMatchingFirstNames(firstName, results);
 
         return results;
+    }
+
+    public Element searchPerson(Map<String, String> attributes) {
+        return searchPerson(attributes, false);
     }
 
     private void lookup(String lastName, Map<String, Element> results) {
