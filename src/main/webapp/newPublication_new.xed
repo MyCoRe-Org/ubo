@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<webpage lastModified="$Date$" id="dozbib.new.publication">
+  <title xml:lang="de">Publikation melden</title>
+  <title xml:lang="en">Registering publication</title>
+  
+  <article class="highlight1" xml:lang="de">
+    <p>
+    Wir erfassen alle Publikationen, die Sie als <strong>UDE-Wissenschaftler*in</strong> in Ihrer Publikationsliste nachgewiesen haben möchten – z.B. auch Poster, Vorträge, Meeting Abstracts oder Patente. 
+	Sollte in unserer Sammlung ein Publikationstyp fehlen, den Sie benötigen, melden Sie sich einfach bei uns: 
+	<a href="mailto:universitaetsbibliographie@ub.uni-due.de"> <span style="display:inline-block; vertical-align:top;">universitaetsbibliographie@ub.uni-due.de</span> </a>       
+    </p>
+    <p>
+    Wir weisen vor allen Dingen die Publikationen von UDE-Angehörigen nach, die zum Zeitpunkt ihrer Tätigkeit an der UDE entstanden sind – 
+    aber auch die, die davor oder danach veröffentlicht wurden, wenn sie in der persönlichen Publikationsliste enthalten sein sollen. 
+    </p>
+  </article>
+
+  <article class="highlight2">
+    <xed:form class="ubo-form" role="form" xmlns:xed="http://www.mycore.de/xeditor">
+      <xed:bind xpath="/mods:mods">
+        <fieldset>
+
+          <legend><xed:output i18n="ubo.newPublicationWizard" /></legend>
+
+          <xed:if test="$xed-validation-failed">
+            <div class="validation-failures">
+              <h3>
+                <xed:output i18n="form.validation.failed" />
+              </h3>
+              <ul>
+                <xed:display-validation-messages />
+              </ul>
+            </div>
+          </xed:if>
+
+          <div>
+            <p>
+              <xed:output i18n="ubo.newPublicationWizard.doi" />
+            </p>
+          </div>
+
+          <xed:bind xpath="mods:identifier">
+            <div>
+              <xed:bind xpath="@type">
+                <label for="identifier">
+                  <select class="label" style="width:150px;">
+                    <option value="doi">DOI</option>
+                    <option value="pubmed">PubMed ID</option>
+                    <option value="scopus">Scopus ID</option>
+                    <option value="ieee">IEEE Article No.</option>
+                    <option value="arxiv">arXiv.org ID</option>
+                    <option value="isbn">ISBN</option>
+                    <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+                      <option value="duepublico">DuEPublico 1 ID</option>
+                      <option value="duepublico2">DuEPublico 2 ID</option>
+                      <option value="evaluna">EVALuna Biblio ID</option>
+                      <option value="zdb">ZDB ID</option>
+                      <option value="ppn">GBV/SWB PPN</option>
+                      <option value="hbz">HBZ HT-Nummer</option>
+                      <option value="issn">ISSN</option>
+                    </xed:if>
+                  </select>:
+                </label>
+              </xed:bind>
+              <input id="identifier" class="{$xed-validation-marker}" style="width:400px;" />
+            </div>
+          </xed:bind>
+          <xed:validate xpath="//mods:identifier[@type='doi']" matches="10\.\d+.*" i18n="ubo.identifier.doi.validation" display="global" />
+          <xed:validate xpath="//mods:identifier[@type='issn']" matches="[0-9X]{4}\-[0-9X]{4}" i18n="ubo.identifier.issn.validation" display="global" />
+          <xed:validate xpath="//mods:identifier[@type='isbn']" matches="^((978|979)-?)?([\d -]{12}|\d{9})(\d|X)$" i18n="ubo.identifier.isbn.validation" display="global" />
+          <xed:validate xpath="//mods:identifier[@type='duepublico']" matches="\d+" display="global" />
+          <xed:validate xpath="//mods:identifier[@type='duepublico2']" matches="duepublico_mods_\d\d\d\d\d\d\d\d" display="global" />
+
+          <xed:if test="xed:call-java('unidue.ubo.AccessControl','currentUserIsAdmin')">
+            <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
+            <xed:validate xpath="//mods:location/mods:shelfLocator" matches="(\d\d\s[A-Za-z]+\s\d+.*)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
+          </xed:if>
+
+          <div>
+            <p>
+              <xed:output i18n="ubo.newPublicationWizard.titleAuthor" />
+            </p>
+          </div>
+
+          <xed:bind xpath="mods:titleInfo/mods:title">
+            <div>
+              <label for="title" style="vertical-align:bottom;"><xed:output i18n="ubo.title" />:</label>
+              <input id="title" class="{$xed-validation-marker}" style="width:400px;" placeholder="{i18n:ubo.newPublicationWizard.title.placeholder}" />
+            </div>
+          </xed:bind>
+
+          <xed:bind xpath="mods:name[@type='personal']">
+            <xed:bind xpath="mods:namePart[@type='family']">
+              <div>
+                <label for="author" style="vertical-align:bottom;"><xed:output i18n="ubo.role.author" />:</label>
+                <input id="author" class="{$xed-validation-marker}" style="width:400px;" placeholder="{i18n:ubo.newPublicationWizard.author.placeholder}" />
+              </div>
+            </xed:bind>
+            <xed:bind xpath="mods:role[mods:roleTerm[@authority='marcrelator'][@type='code']='aut']" />
+          </xed:bind>
+
+          <xed:validate test="(string-length(mods:identifier) &gt; 0) or (string-length(mods:location/mods:shelfLocator) &gt; 0) or ( (string-length(mods:titleInfo/mods:title) &gt; 0) and (string-length(mods:name/mods:namePart) &gt; 0) )" display="global" i18n="ubo.newPublicationWizard.required" />
+
+          <xed:cleanup-rule xpath="//mods:*" relevant-if="(string-length(normalize-space(text())) &gt; 0) or *" />
+
+          <div class="cancel-submit">
+            <button class="roundedButton" type="submit" xed:target="servlet" xed:href="NewPublicationWizard">
+              <xed:output i18n="button.next" />
+            </button>
+          </div>
+
+        </fieldset>
+      </xed:bind>
+    </xed:form>
+  </article>
+
+  <article class="highlight1" xml:lang="de">
+    <h2>Literaturlisten</h2>
+    <p>
+     Sie können uns Literaturlisten in jedem beliebigen Format einfach per Mail zuschicken: 
+     <a href="mailto:universitaetsbibliographie@ub.uni-due.de"> <span style="display:inline-block; vertical-align:top;">universitaetsbibliographie@ub.uni-due.de</span> </a> <br/>
+	 Wir importieren für Sie Ihre Publikationen in die UBO und reichern die Daten mit Informationen z.B. zur Verfügbarkeit an.       
+    </p>   
+  </article>
+  
+</webpage>

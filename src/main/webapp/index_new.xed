@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<webpage lastModified="$Date$" id="dozbib">
+ <title xml:lang="de">Willkommen bei der Universitätsbibliographie der UDE</title>
+ <title xml:lang="en">Welcome to Bibliography of UDE</title>
+ 
+ <article class="highlight1" xml:lang="de">  
+   <h3>UniversitätsBibliographie Online (UBO) der UDE</h3>
+    <p>
+      Die UBO ist das zentrale Publikationsverzeichnis der Universität Duisburg-Essen: hier werden online sämtliche Publikationen aller Hochschulangehöriger verzeichnet. 
+    </p>    
+  </article>
+  
+  <article class="highlight2" xml:lang="de">
+   <h3>Publikationen melden</h3> 
+    <p>
+      Sie sind Angehöriger der UDE? <br/>
+      Helfen Sie uns bei der Vollständigkeit! <br/>
+      <a href="../newPublication.xed">Hier können Sie Ihre Publikation an die Universitätsbibliographie melden</a> <br/>
+      Oder schicken Sie uns Ihre Publikationsliste in einem beliebigen Format: 
+      <a href="mailto:universitaetsbibliographie@ub.uni-due.de">
+          <span style="display:inline-block; vertical-align:top;">universitaetsbibliographie@ub.uni-due.de</span>
+        </a>      
+    </p>
+  </article>
+  
+  <article class="highlight1" xml:lang="de">  
+   <h3>Publikationslisten</h3>
+    <p>
+     Wenn Ihre Publikationen in der UBO verzeichnet sind, können Sie Ihre Publikationsliste in Ihre eigene Website einbinden. 
+     Dabei sind Ihre Daten stets aktuell, sofern Sie uns neue Titel melden. <br/>
+	 <a href="../list-wizard.xed">Hier können Sie Ihre persönliche Publikationsliste erstellen und nachnutzen</a>.     
+    </p>    
+  </article>
+  
+  <article class="highlight2" xml:lang="de">
+   <h3>Zahlen</h3>     
+   	<ul>
+   	<li>Gesamtzahl der verzeichneten Publikationen: *** </li>
+	<li>Aktuelle Publikationen: *** </li>
+	<li>OA-Veröffentlichungen an der UDE: *** </li>
+	</ul>    
+  </article>
+  
+  <article class="highlight1" xml:lang="de">  
+   <h3>Informationen für Wissenschaftler*innen der UDE</h3>
+    <p>
+     Die Universitätsbibliographie verzeichnet sämtliche Publikationen, die Sie als Wissenschaftler*innen der UDE veröffentlichen – damit helfen wir, 
+     <strong>Ihre Forschung international sichtbar zu machen</strong>. Um das zu erreichen, sind wir für Sie da: 
+     <ul>  
+		<li>Wir importieren täglich Daten aus großen, fächerübergreifenden Datenbanken in die UBO</li>
+		<li>Wir prüfen Ihre gemeldeten Publikationen und ergänzen ggf. Informationen</li> 
+		<li>Wir reichern Ihre Publikationsdaten mit Identifiern wie DOI, PubMed-ID und Scopus-ID an</li>
+		<li>Wir sorgen für qualitativ hochwertige Metadaten</li>
+		<li>Wir unterstützen die Verknüpfung mit ORCID</li>
+		<li>Wir helfen Ihnen bei der Erstellung Ihrer persönlichen Publikationslisten</li>     
+	</ul>    
+    </p>    
+  </article>
+  
+  <article class="highlight2" xml:lang="de">
+   <h3>Kontakt</h3>     
+   	<p>
+   	Haben Sie Fragen zur Universitätsbibliographie oder benötigen Hilfe oder Beratung, melden Sie sich bei uns: <br/>
+	<br/>
+	Redaktionsteam der Universitätsbibliographie: <br/>
+	<a href="mailto:universitaetsbibliographie@ub.uni-due.de">
+          <span style="display:inline-block; vertical-align:top;">universitaetsbibliographie@ub.uni-due.de</span>
+        </a> <br/>
+	<br/>
+	Kerstin Ponten <br/>
+	<a href="mailto:kerstin.ponten@uni-due.de">
+          <span style="display:inline-block; vertical-align:top;">kerstin.ponten@uni-due.de</span>
+        </a> <br/>
+   	Tel.: 0201 / 183-3728
+   	</p>    
+  </article>
+
+</webpage>
