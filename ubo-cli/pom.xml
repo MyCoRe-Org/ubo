@@ -6,7 +6,7 @@
     <artifactId>ubo</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-
+  <packaging>pom</packaging>
   <artifactId>ubo-cli</artifactId>
   <name>Universitätsbibliographie - CLI Module</name>
   <build>
@@ -26,12 +26,11 @@
             <windows>.cmd</windows>
           </binFileExtensions>
           <assembleDirectory>${project.build.directory}</assembleDirectory>
-          <configurationDirectory>${project.build.finalName}/WEB-INF/classes</configurationDirectory>
-          <repositoryName>${project.build.finalName}/WEB-INF/lib</repositoryName>
+          <repositoryName>lib</repositoryName>
           <endorsedDir>bin</endorsedDir>
           <extraJvmArguments>-Xms512m -Xmx1024m -DMCR.AppName=${MCR.AppName}</extraJvmArguments>
           <repositoryLayout>flat</repositoryLayout>
-          <generateRepository>false</generateRepository>
+          <generateRepository>true</generateRepository>
           <useWildcardClassPath>true</useWildcardClassPath>
         </configuration>
         <executions>
@@ -40,7 +39,7 @@
             <goals>
               <goal>assemble</goal>
             </goals>
-            <phase>prepare-package</phase>
+            <phase>package</phase>
           </execution>
         </executions>
       </plugin>
@@ -49,7 +48,6 @@
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
           <execution>
-            <id>copy-servlet-api</id>
             <goals>
               <goal>copy</goal>
             </goals>
