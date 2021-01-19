@@ -70,7 +70,7 @@
   <dependencies>
     <dependency>
       <groupId>org.mycore.ubo</groupId>
-      <artifactId>ubo-commons</artifactId>
+      <artifactId>ubo-common</artifactId>
       <version>${version}</version>
     </dependency>
   </dependencies>

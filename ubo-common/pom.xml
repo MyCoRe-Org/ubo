@@ -7,9 +7,9 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>ubo-commons</artifactId>
+  <artifactId>ubo-common</artifactId>
   <packaging>jar</packaging>
-  <name>Universitätsbibliographie - Jar Module</name>
+  <name>Universitätsbibliographie - Common Jar Module</name>
   <build>
     <plugins>
       <plugin>

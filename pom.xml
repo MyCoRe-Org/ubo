@@ -374,7 +374,7 @@
     </developer>
   </developers>
   <modules>
-    <module>ubo-commons</module>
+    <module>ubo-common</module>
     <module>ubo-webapp</module>
     <module>ubo-cli</module>
   </modules>
