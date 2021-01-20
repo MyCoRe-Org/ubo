@@ -55,7 +55,7 @@
     <!--  navigation  -->
     <xsl:template name="breadcrumb">
         <ul id="breadcrumb">
-            <li>Suche in HIS LSF</li>
+            <li>Suche im LDAP</li>
         </ul>
     </xsl:template>
 
@@ -64,7 +64,7 @@
     <xsl:variable name="xpathFamily" select="encoder:encode(concat('mods:namePart[@type=',$qm,'family',$qm,']'),'UTF-8')" />
     <xsl:variable name="xpathGiven"  select="encoder:encode(concat('mods:namePart[@type=',$qm,'given',$qm,']'),'UTF-8')" />
 
-    <!--  Suche in HIS LSF  -->
+    <!--  Suche im LDAP  -->
 
     <xsl:template match="ldappidsearch">
 
@@ -110,10 +110,10 @@
                     </div>
 
                     <!-- Allow manual input of LSF PID for admins, in special cases or for testing purposes -->
-                    <xsl:if xmlns:check="xalan://org.mycore.ubo.AccessControl" test="check:currentUserIsAdmin()">
+                    <xsl:if xmlns:check="xalan://unidue.ubo.AccessControl" test="check:currentUserIsAdmin()">
                         <div class="form-group form-inline">
                             <label for="pid" class="mycore-form-label">
-                                LSF PID:
+                                Personen-ID:
                             </label>
                             <input id="pid" name="pid" type="text" size="6" class="form-control col-sm-2"/>
                         </div>
