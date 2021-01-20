@@ -71,7 +71,6 @@
     <dependency>
       <groupId>org.mycore.ubo</groupId>
       <artifactId>ubo-common</artifactId>
-      <version>${version}</version>
     </dependency>
   </dependencies>
 
