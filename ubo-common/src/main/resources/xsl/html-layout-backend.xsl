@@ -5,7 +5,8 @@
   xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:encoder="xalan://java.net.URLEncoder"
-  exclude-result-prefixes="xsl xalan i18n encoder">
+  xmlns:str="http://exslt.org/strings"
+  exclude-result-prefixes="xsl xalan i18n encoder str">
 
   <!-- last navigation id calculated from navigation.xml -->
   <xsl:variable name="NavigationID" xmlns:lastPageID="xalan://org.mycore.ubo.LastPageID">
@@ -69,9 +70,21 @@
   </xsl:variable>
 
   <xsl:template name="check.allowed">
-    <xsl:choose>
+    <xsl:choose xmlns:check="xalan://org.mycore.common.xml.MCRXMLFunctions">
       <xsl:when test="not(@role)">true</xsl:when>
-      <xsl:when xmlns:check="xalan://org.mycore.common.xml.MCRXMLFunctions" test="check:isCurrentUserInRole(@role)">true</xsl:when>
+      <xsl:when test="@role='not(guest)'">
+        <xsl:value-of select="string(not(check:isCurrentUserGuestUser()))" />
+      </xsl:when>
+      <xsl:when test="contains(@role,',')">
+        <xsl:variable name="tokens" select="str:tokenize(@role, ',')" />
+        <xsl:variable name="isRoles">
+          <xsl:for-each select="$tokens">
+            <xsl:value-of select="string(check:isCurrentUserInRole(text()))" />
+          </xsl:for-each>
+        </xsl:variable>
+        <xsl:value-of select="contains($isRoles, 'true')" />
+      </xsl:when>
+      <xsl:when test="check:isCurrentUserInRole(@role)">true</xsl:when>
       <xsl:otherwise>false</xsl:otherwise>
     </xsl:choose>
   </xsl:template>
