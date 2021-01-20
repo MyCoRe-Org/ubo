@@ -30,7 +30,6 @@
       <hgroup>
         <h3>
           <xsl:value-of select="i18n:translate(concat('facets.filters.',$hasActiveFilters))" />
-          <xsl:text>:</xsl:text>
         </h3>
       </hgroup>
       <xsl:if test="$hasActiveFilters">
@@ -108,7 +107,7 @@
   <article class="card mb-3">
     <div class="card-body">
       <hgroup>
-	<h3><xsl:value-of select="i18n:translate(concat('facets.facet.',str:replaceAll(str:new(@name),'facet_','')))" />:</h3>
+	<h3><xsl:value-of select="i18n:translate(concat('facets.facet.',str:replaceAll(str:new(@name),'facet_','')))" /></h3>
       </hgroup>
       <ul id="{generate-id(.)}" class="list-group">
         <xsl:choose>

@@ -15,7 +15,7 @@
     <article class="card">
       <div class="card-body">
         <h3>
-          <xsl:value-of select="i18n:translate('ubo.newest')" />:
+          <xsl:value-of select="i18n:translate('ubo.newest')" />
         </h3>
         <xsl:for-each select="result[@name='response']">
           <ul class="list-group">
