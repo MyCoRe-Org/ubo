@@ -5,6 +5,8 @@
   xmlns:mods="http://www.loc.gov/mods/v3"
   exclude-result-prefixes="xsl">
 
+  <xsl:param name="UBO.projectid.default" />
+
   <!-- default templates: just copy -->
   <xsl:template match="@*|node()|comment()">
     <xsl:copy>
@@ -19,7 +21,7 @@
   </xsl:template>
 
   <xsl:template match="mods:mods">
-    <mycoreobject ID="ubo_mods_00000000" label="ubo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-mods.xsd">
+    <mycoreobject ID="{$UBO.projectid.default}_mods_00000000" label="ubo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-mods.xsd">
       <structure />
       <metadata>
         <def.modsContainer class="MCRMetaXML">

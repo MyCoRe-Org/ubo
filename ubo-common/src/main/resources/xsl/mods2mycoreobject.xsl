@@ -7,8 +7,10 @@
 
   <xsl:include href="copynodes.xsl" />
 
+  <xsl:param name="UBO.projectid.default" />
+
   <xsl:template match="/">
-    <mycoreobject ID="ubo_mods_00000000" label="ubo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-mods.xsd">
+    <mycoreobject ID="{$UBO.projectid.default}_mods_00000000" label="{$UBO.projectid.default}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-mods.xsd">
       <structure />
       <metadata>
         <def.modsContainer class="MCRMetaXML">
