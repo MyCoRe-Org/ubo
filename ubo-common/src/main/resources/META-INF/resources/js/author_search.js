@@ -14,7 +14,7 @@ $(document).ready(function(){
     let connection_input = $('#' + id_connection);
 
     let call_solr = function(request, response) {
-    	let search_string = request.term.toLowerCase();
+    	let search_string = request.term;
         let solr_search_string = 'name:*' + search_string + '*';
         $.ajax({
            url: solr_url,
