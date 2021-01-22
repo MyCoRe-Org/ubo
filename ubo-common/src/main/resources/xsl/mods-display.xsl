@@ -20,6 +20,8 @@
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="ServletsBaseURL" />
   <xsl:param name="UBO.LSF.Link" />
+  <xsl:param name="UBO.JOP.Parameters" />
+  <xsl:param name="UBO.JOP.URL" />
   <xsl:param name="CurrentLang" />
 
   <!-- ============ Katalogsuche Basis-URLs ============ -->
@@ -831,10 +833,13 @@
     </a>
   </xsl:template>
 
+
+
+
   <!-- ========== ISSN ========== -->
   <xsl:template match="mods:identifier[@type='issn']">
-    <xsl:variable name="parameters" select="concat('genre=journal&amp;sid=bib:ughe&amp;pid=bibid%3DUGHE&amp;issn=',text())" />
-    <a href="https://www.uni-due.de/ub/ghbsys/jop?{$parameters}" title="{i18n:translate('ubo.jop')}">
+    <xsl:variable name="parameters" select="concat($UBO.JOP.Parameters,text())" />
+    <a href="{$UBO.JOP.URL}?{$parameters}" title="{i18n:translate('ubo.jop')}">
       <xsl:value-of select="text()" />
       <xsl:text> </xsl:text>
       <img style="float:none" src="https://services.dnb.de/fize-service/gvr/icon?{$parameters}" alt="{i18n:translate('ubo.jop')}" />
