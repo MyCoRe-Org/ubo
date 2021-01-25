@@ -8,9 +8,10 @@
   version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:str="http://exslt.org/strings"
   xmlns:ubo="xalan://org.mycore.ubo.DozBibEntryServlet"
   xmlns:mods="http://www.loc.gov/mods/v3"
-  exclude-result-prefixes="xsl xalan ubo mods"
+  exclude-result-prefixes="xsl xalan str ubo mods"
 >
 
 <xsl:output method="xml" />
@@ -27,11 +28,16 @@
 <xsl:param name="WebApplicationBaseURL" />
 <xsl:param name="ServletsBaseURL" />
 <xsl:param name="MCR.Mail.Address" />
+<xsl:param name="UBO.Mail.From" />
 
 <xsl:template match="/mycoreobject">
   <email>
     <from><xsl:value-of select="$UBO.Mail.From" /></from>
-    <to><xsl:value-of select="$MCR.Mail.Address" /></to>
+    <xsl:if test="string-length($MCR.Mail.Address) &gt; 0">
+      <xsl:for-each select="str:tokenize($MCR.Mail.Address,',')" >
+        <to> <xsl:value-of select="." /> </to>
+      </xsl:for-each>
+    </xsl:if>
     <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
       <xsl:call-template name="build.to" />
       <xsl:call-template name="build.subject" />
