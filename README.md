@@ -68,6 +68,7 @@ ubo-cli/target/bin/ubo.sh update permission create-users for id POOLPRIVILEGE wi
 ubo-cli/target/bin/ubo.sh update permission administrate-users for id POOLPRIVILEGE with rulefile src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
 ubo-cli/target/bin/ubo.sh update permission read for id default with rulefile src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
 ubo-cli/target/bin/ubo.sh update permission writedb for id default with rulefile src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
+ubo-cli/target/bin/ubo.sh update permission deletedb for id default with rulefile src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
 ubo-cli/target/bin/ubo.sh update permission read for id restapi:/ with rulefile src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
 ```
 
