@@ -63,9 +63,13 @@ ubo-cli/target/bin/ubo.sh update all classifications from directory src/main/set
 
 ## ACL
 ```
-ubo-cli/target/bin/ubo.sh update permission create-mods for id POOLPRIVILEGE with rulefile src/main/resources/acl-rule-always-allowed.xml described by always allowed
-ubo-cli/target/bin/ubo.sh update permission read for id default with rulefile src/main/resources/acl-rule-always-allowed.xml described by always allowed
-ubo-cli/target/bin/ubo.sh update permission read for id restapi:/ with rulefile src/main/resources/acl-rule-always-allowed.xml described by always allowed
+ubo-cli/target/bin/ubo.sh update permission create-mods for id POOLPRIVILEGE with rulefile src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
+ubo-cli/target/bin/ubo.sh update permission create-users for id POOLPRIVILEGE with rulefile src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
+ubo-cli/target/bin/ubo.sh update permission administrate-users for id POOLPRIVILEGE with rulefile src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
+ubo-cli/target/bin/ubo.sh update permission read for id default with rulefile src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
+ubo-cli/target/bin/ubo.sh update permission writedb for id default with rulefile src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
+ubo-cli/target/bin/ubo.sh update permission deletedb for id default with rulefile src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
+ubo-cli/target/bin/ubo.sh update permission read for id restapi:/ with rulefile src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
 ```
 
 ## MyCoRe-Solr-Configuration
@@ -84,6 +88,6 @@ mvn cargo:run -Djetty
 ```
 ## Rebuild & Run (root directory)
 ```
-mvn clean && mvn install -am -pl ubo-webapp && mvn -Pdev -Dtomcat=9 org.codehaus.cargo:cargo-maven2-plugin:run -pl ubo-webapp -DskipTests
+mvn clean && mvn install -am -pl ubo-webapp && mvn -Dtomcat=9 org.codehaus.cargo:cargo-maven2-plugin:run -pl ubo-webapp -DskipTests
 ```
 
