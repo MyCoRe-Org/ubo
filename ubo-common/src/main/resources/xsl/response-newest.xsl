@@ -33,7 +33,7 @@
           </ul>
           <xsl:variable name="year" select="doc[1]/int[@name='year']" />
           <p>
-          <a href="{$ServletsBaseURL}solr/select?q=status:confirmed+AND+year:%5B{$year - 1}+TO+{$year}%5B&amp;sort=year+desc,created+desc">
+          <a href="{$ServletsBaseURL}solr/select?q=status:confirmed+AND+year:%5B{$year - 1}+TO+*%5D&amp;sort=year+desc,created+desc">
               <xsl:value-of select="i18n:translate('ubo.more')" />...
             </a>
           </p>
