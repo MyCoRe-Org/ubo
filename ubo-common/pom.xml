@@ -242,6 +242,11 @@
       <artifactId>mycore-xeditor</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.mycore.pica2mods</groupId>
+      <artifactId>pica2mods-xslt</artifactId>
+      <version>1.3-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>org.webjars</groupId>
       <artifactId>bootstrap</artifactId>
     </dependency>
