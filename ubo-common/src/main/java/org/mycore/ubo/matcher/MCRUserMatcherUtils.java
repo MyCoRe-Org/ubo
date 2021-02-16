@@ -68,8 +68,10 @@ public class MCRUserMatcherUtils {
         List<Element> identifiers = modsNameElement.getChildren("nameIdentifier", MODS_NAMESPACE);
         for(Element identifierElement : identifiers) {
             String type = identifierElement.getAttributeValue("type");
-            String identifier = identifierElement.getText();
-            nameIdentifiers.put(type, identifier);
+            if(type!=null){
+                String identifier = identifierElement.getText();
+                nameIdentifiers.put(type, identifier);
+            }
         }
         LOGGER.debug("Found nameIdentifiers from XML: {}", nameIdentifiers);
         return nameIdentifiers;

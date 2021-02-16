@@ -324,7 +324,7 @@
     <xed:if test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
       <!-- TODO: decide how this shall be handled... -->
       <!-- <xed:repeat xpath="mods:nameIdentifier[not(@type='lsf') and not(@type='connection')]"> -->
-      <xed:repeat xpath="mods:nameIdentifier[not(@type=$MCR.user2.matching.lead_id)]">
+      <xed:repeat xpath="mods:nameIdentifier[@type][not(@type=$MCR.user2.matching.lead_id)]">
       <div class="form-group form-inline col-12 px-0 mb-2 mt-2">
         <label class="mycore-form-label">
         </label>
