@@ -49,7 +49,7 @@ vi ~/.mycore/ubo/mycore.properties
 ```
 MCR.Solr.ServerURL=http://localhost:8983/
 MCR.Solr.Core.main.Name=ubo
-MCR.Solr.Core.classification.Name=ubo_classifications
+MCR.Solr.Core.classification.Name=ubo-classifications
 ```
 ## Setup Superuser
 
