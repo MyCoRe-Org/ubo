@@ -3,11 +3,13 @@
 ## Setup
 
 ### Checkout source code from GitHub
+```
 git clone https://github.com/MyCoRe-Org/ubo.git
-
+```
 ### Build the web application
+```
 mvn install
-
+```
 ### Create configuration directory
 ```
 cd ubo-cli
@@ -27,29 +29,30 @@ vi ~/.mycore/ubo/resources/META-INF/persistence.xml
 ```
 
 - copy jdbc driver to ~/.mycore/ubo/lib, eg. for h2
+```
 cd ~/.mycore/ubo/lib
 wget https://repo1.maven.org/maven2/com/h2database/h2/1.4.200/h2-1.4.200.jar
 cd -
-
+```
 ## Solr 
 ### Setup SOLR 8 
 - described here:
 https://www.mycore.de/documentation/getting_started/gs_solr8/
 https://www.mycore.de/documentation/search/search_solr_use/
 
-### or use solr runner plugin for development (in directory ubo-webapp)
- - install solr with the command: `mvn solr-runner:copyHome`
- - run solr with the command: `mvn solr-runner:start`
- - stop solr with the command: `mvn solr-runner:stop`
- - update solr with the command: `mvn solr-runner:stop solr-runner:copyHome solr-runner:start`
+### or use solr runner plugin for development
+ - install solr with the command: `mvn solr-runner:copyHome -pl ubo-webapp`
+ - run solr with the command: `mvn solr-runner:start -pl ubo-webapp`
+ - stop solr with the command: `mvn solr-runner:stop -pl ubo-webapp`
+ - update solr with the command: `mvn solr-runner:stop solr-runner:copyHome solr-runner:start -pl ubo-webapp`
 
 ### Configure SOLR URL in mycore.properties
 vi ~/.mycore/ubo/mycore.properties
-
-  MCR.Solr.ServerURL=http://localhost:8983/
-  MCR.Solr.Core.main.Name=ubo
-  MCR.Solr.Core.classification.Name=ubo_classifications
-
+```
+MCR.Solr.ServerURL=http://localhost:8983/
+MCR.Solr.Core.main.Name=ubo
+MCR.Solr.Core.classification.Name=ubo_classifications
+```
 ## Setup Superuser
 
 - Create the superuser "administrator"
@@ -78,13 +81,13 @@ ubo-cli/target/bin/ubo.sh reload solr configuration main in core main
 ```
 
 ## Run 
-- local web application on port 8080 with tomcat 9 (in ubo-webapp directory):
+- local web application on port 8080 with tomcat 9:
 ```
-mvn cargo:run -Dtomcat=9
+mvn cargo:run -Dtomcat=9 -pl ubo-webapp
 ```
 - or jetty: (does not work currently)
 ```
-mvn cargo:run -Djetty
+mvn cargo:run -Djetty -pl ubo-webapp
 ```
 ## Rebuild & Run (root directory)
 ```
