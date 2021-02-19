@@ -59,18 +59,18 @@ ubo-cli/target/bin/ubo.sh init superuser
 ```
 ## Classifications
 ```
-ubo-cli/target/bin/ubo.sh update all classifications from directory src/main/setup/classifications
+ubo-cli/target/bin/ubo.sh update all classifications from directory ubo-cli/src/main/setup/classifications
 ```
 
 ## ACL
 ```
-ubo-cli/target/bin/ubo.sh update permission create-mods for id POOLPRIVILEGE with rulefile src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
-ubo-cli/target/bin/ubo.sh update permission create-users for id POOLPRIVILEGE with rulefile src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
-ubo-cli/target/bin/ubo.sh update permission administrate-users for id POOLPRIVILEGE with rulefile src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
-ubo-cli/target/bin/ubo.sh update permission read for id default with rulefile src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
-ubo-cli/target/bin/ubo.sh update permission writedb for id default with rulefile src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
-ubo-cli/target/bin/ubo.sh update permission deletedb for id default with rulefile src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
-ubo-cli/target/bin/ubo.sh update permission read for id restapi:/ with rulefile src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
+ubo-cli/target/bin/ubo.sh update permission create-mods for id POOLPRIVILEGE with rulefile ubo-cli/src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
+ubo-cli/target/bin/ubo.sh update permission create-users for id POOLPRIVILEGE with rulefile ubo-cli/src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
+ubo-cli/target/bin/ubo.sh update permission administrate-users for id POOLPRIVILEGE with rulefile ubo-cli/src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
+ubo-cli/target/bin/ubo.sh update permission read for id default with rulefile ubo-cli/src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
+ubo-cli/target/bin/ubo.sh update permission writedb for id default with rulefile ubo-cli/src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
+ubo-cli/target/bin/ubo.sh update permission deletedb for id default with rulefile ubo-cli/src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
+ubo-cli/target/bin/ubo.sh update permission read for id restapi:/ with rulefile ubo-cli/src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
 ```
 
 ## MyCoRe-Solr-Configuration
