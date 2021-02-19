@@ -12,8 +12,7 @@ mvn install
 ```
 ### Create configuration directory
 ```
-cd ubo-cli
-target/bin/ubo.sh create configuration directory
+ubo-cli/target/bin/ubo.sh create configuration directory
 ```
 
 - TODO: Build a database and edit persistence.xml
@@ -37,8 +36,8 @@ cd -
 ## Solr 
 ### Setup SOLR 8 
 - described here:
-https://www.mycore.de/documentation/getting_started/gs_solr8/
-https://www.mycore.de/documentation/search/search_solr_use/
+  - https://www.mycore.de/documentation/getting_started/gs_solr8/
+  - https://www.mycore.de/documentation/search/search_solr_use/
 
 ### or use solr runner plugin for development
  - install solr with the command: `mvn solr-runner:copyHome -pl ubo-webapp`
