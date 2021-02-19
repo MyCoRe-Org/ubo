@@ -22,7 +22,6 @@ create database ubo;
 grant all privileges on ubo.* to ubo@localhost identified by 'ubo';
 ```
 - setup your database and JDBC configuration in persistence.xml
-- remove viewer mapping entry <mapping-file>META-INF/mycore-viewer-mappings.xml</mapping-file>
 ```
 vi ~/.mycore/ubo/resources/META-INF/persistence.xml
 ```
