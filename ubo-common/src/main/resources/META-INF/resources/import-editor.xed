@@ -724,6 +724,8 @@
 
   <xed:template id="fix.structure.parent">
     <xed:bind xpath="structure/parents/parent">
+      <xed:bind xpath="@xlink:type" set="locator" />
+      <xed:bind xpath="@inherited" set="0" />
       <xed:choose>
         <xed:when test="../../../metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host'][@xlink:href]">
           <xed:bind xpath="@xlink:href" set="{../../../../metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host']/@xlink:href}" />
