@@ -7,16 +7,30 @@
   xmlns:encoder="xalan://java.net.URLEncoder"
   xmlns:orcid="xalan://org.mycore.orcid.user.MCRORCIDSession"
   xmlns:mods="http://www.loc.gov/mods/v3"
-  exclude-result-prefixes="xsl xalan i18n encoder orcid mods">
+  xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
+  xmlns:const="xalan://org.mycore.user2.MCRUser2Constants"
+  exclude-result-prefixes="xsl xalan i18n encoder orcid mods acl const">
 
 <xsl:param name="error" />
 <xsl:param name="url" />
+<xsl:param name="step" />
 
 <xsl:param name="WebApplicationBaseURL" />
 <xsl:param name="ServletsBaseURL" />
+<xsl:param name="CurrentUser" />
 <xsl:param name="UBO.LSF.Link" />
 <xsl:param name="UBO.Scopus.Author.Link" />
+<xsl:param name="UBO.ORCID.InfoURL" />
 <xsl:param name="MCR.ORCID.LinkURL" />
+<xsl:param name="MCR.ORCID.OAuth.ClientSecret" select="''"/>
+
+<xsl:variable name="uid">
+  <xsl:value-of select="/user/@name" />
+  <xsl:if test="not ( /user/@realm = 'local' )">
+    <xsl:text>@</xsl:text>
+    <xsl:value-of select="/user/@realm" />
+  </xsl:if>
+</xsl:variable>
 
 <xsl:template match="/">
   <html id="profile">
@@ -35,18 +49,25 @@
 
 <xsl:template match="user">
 
-  <article class="highlight2">
-    <table class="userProfile">
-      <xsl:apply-templates select="realName" />
-      <xsl:apply-templates select="eMail" />
-      <xsl:apply-templates select="@name" />
-      <xsl:apply-templates select="attributes/attribute[@name='id_lsf']" />
-      <xsl:apply-templates select="attributes/attribute[@name='id_orcid']" />
-      <xsl:apply-templates select="attributes/attribute[@name='id_scopus']" />
-    </table>
+  <article class="card mb-3" xml:lang="de">
+    <div class="card-body">
+      <div class="text-right mb-3">
+        <div id="buttons" class="btn-group">
+          <xsl:apply-templates select="." mode="actions" />
+        </div>
+      </div>
+      <table class="table">
+        <xsl:apply-templates select="realName" />
+        <xsl:apply-templates select="eMail" />
+        <xsl:apply-templates select="@name" />
+        <xsl:apply-templates select="attributes/attribute[starts-with(@name, 'id_')]" />
+      </table>
+    </div>
   </article>
 
-  <xsl:call-template name="orcid" />
+  <xsl:if test="string-length($MCR.ORCID.OAuth.ClientSecret) &gt; 0">
+    <xsl:call-template name="orcid" />
+  </xsl:if>
   <xsl:call-template name="publications" />
 
 </xsl:template>
@@ -86,7 +107,7 @@
   </tr>
 </xsl:template>
 
-<xsl:template match="attribute[@name='id_orcid']">
+<xsl:template name="id_orcid">
   <tr>
     <th scope="row">
       <xsl:value-of select="i18n:translate('user.profile.id.orcid')" />
@@ -102,55 +123,83 @@
   </tr>
 </xsl:template>
 
-<xsl:template match="attribute[@name='id_lsf']">
+<xsl:template name="id_lsf">
   <tr>
     <th scope="row">
       <xsl:value-of select="i18n:translate('user.profile.id.lsf')" />
       <xsl:text>:</xsl:text>
     </th>
     <td>
-      <a href="{$UBO.LSF.Link}{@value}" target="_blank">
+      <a href="{$UBO.LSF.Link}{@value}">
         <xsl:value-of select="@value" />
       </a>
     </td>
   </tr>
 </xsl:template>
 
-<xsl:template match="attribute[@name='id_scopus']">
+<xsl:template name="id_scopus">
   <tr>
     <th scope="row">
       <xsl:value-of select="i18n:translate('user.profile.id.scopus')" />
       <xsl:text>:</xsl:text>
     </th>
     <td>
-      <a href="{$UBO.Scopus.Author.Link}{@value}" target="_blank">
+      <a href="{$UBO.Scopus.Author.Link}{@value}">
         <xsl:value-of select="@value" />
       </a>
     </td>
   </tr>
 </xsl:template>
+  
+<xsl:template match="attribute[starts-with(@name, 'id_')]">
+  <xsl:choose>
+    <xsl:when test="@name='id_scopus'">
+      <xsl:call-template name="id_scopus" />
+    </xsl:when>
+    <xsl:when test="@name='id_orcid'">
+      <xsl:call-template name="id_orcid" />
+    </xsl:when>
+    <xsl:when test="@name='id_lsf'">
+      <xsl:call-template name="id_lsf" />
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:variable name="typeOfId" select="substring-after(@name, 'id_')" />
+      <tr>
+        <th scope="row">
+          <xsl:value-of select="i18n:translate(concat('user.profile.id.', $typeOfId))" />
+          <xsl:text>:</xsl:text>
+        </th>
+        <td>
+          <xsl:value-of select="@value" />
+        </td>
+      </tr>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
 
 <xsl:template name="orcid">
-  <article class="highlight1">
-    <xsl:choose>
-      <xsl:when test="attributes/attribute[@name='token_orcid']">
-        <xsl:call-template name="orcidIntegrationConfirmed" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="orcidIntegrationPending" />
-      </xsl:otherwise>
-    </xsl:choose>
-    <p>
-      <a href="https://www.uni-due.de/ub/publikationsdienste/orcid.php">
-        <xsl:value-of select="i18n:translate('orcid.integration.more')" />
-        <xsl:text>...</xsl:text>
-      </a>
-    </p>
+  <article class="card mb-3" xml:lang="de">
+    <div class="card-body">
+      <xsl:choose>
+        <xsl:when test="attributes/attribute[@name='token_orcid']">
+          <xsl:call-template name="orcidIntegrationConfirmed" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="orcidIntegrationPending" />
+        </xsl:otherwise>
+      </xsl:choose>
+      <p>
+        <a href="{$UBO.ORCID.InfoURL}">
+          <xsl:value-of select="i18n:translate('orcid.integration.more')" />
+          <xsl:text>...</xsl:text>
+        </a>
+      </p>
+    </div>
   </article>
 </xsl:template>
 
 <xsl:template name="orcidIntegrationConfirmed">
-  <h3 style="margin-bottom: 0.5em;">
+  <h3>
     <span class="fas fa-check" aria-hidden="true" />
     <xsl:text> </xsl:text>
     <xsl:value-of select="i18n:translate('orcid.integration.confirmed.headline')" />
@@ -158,7 +207,7 @@
   <p>
     <xsl:value-of select="i18n:translate('orcid.integration.confirmed.text')" />
   </p>
-  <ul style="margin-top:1ex;">
+  <ul class="mt-1">
     <li>
       <xsl:value-of select="i18n:translate('orcid.integration.import')" />
     </li>
@@ -169,8 +218,8 @@
 </xsl:template>
 
 <xsl:template name="orcidIntegrationPending">
-  <h3 style="margin-bottom: 0.5em;">
-    <span class="far fa-hand-point-right" aria-hidden="true" style="margin-right:1ex;" />
+  <h3>
+    <span class="far fa-hand-point-right mr-1" aria-hidden="true" />
     <xsl:text> </xsl:text>
     <xsl:value-of select="i18n:translate('orcid.integration.pending.headline')" />
   </h3>
@@ -199,7 +248,7 @@
   <p>
     <xsl:value-of select="i18n:translate('orcid.integration.pending.authorize')" />
   </p>
-  <ul style="margin-top:1ex;">
+  <ul class="mt-1">
     <li>
       <xsl:value-of select="i18n:translate('orcid.integration.import')" />
     </li>
@@ -210,14 +259,16 @@
 </xsl:template>
 
 <xsl:template name="publications">
-  <article class="highlight2">
-    <h3 style="margin-bottom: 0.5em;">
-      <xsl:value-of select="i18n:translate('user.profile.publications')" />
-    </h3>
-    <ul>
-      <xsl:call-template name="numPublicationsUBO" />
-      <xsl:apply-templates select="attributes[attribute[@name='token_orcid']]/attribute[@name='id_orcid']" mode="publications" />
-    </ul>
+  <article class="card mb-3" xml:lang="de">
+    <div class="card-body">
+      <h3>
+        <xsl:value-of select="i18n:translate('user.profile.publications')" />
+      </h3>
+      <ul>
+        <xsl:call-template name="numPublicationsUBO" />
+        <xsl:apply-templates select="attributes[attribute[@name='token_orcid']]/attribute[@name='id_orcid']" mode="publications" />
+      </ul>
+    </div>
   </article>
 </xsl:template>
 
@@ -266,5 +317,39 @@
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
+
+  <xsl:template match="user" mode="actions">
+    <xsl:variable name="isCurrentUser" select="$CurrentUser = $uid" />
+    <xsl:if test="(string-length($step) = 0) or ($step = 'changedPassword')">
+      <xsl:variable name="isUserAdmin" select="acl:checkPermission(const:getUserAdminPermission())" />
+      <xsl:choose>
+        <xsl:when test="$isUserAdmin">
+          <a class="btn btn-secondary" href="{$WebApplicationBaseURL}authorization/change-user.xed?action=save&amp;id={$uid}">
+            <xsl:value-of select="i18n:translate('component.user2.admin.changedata')" />
+          </a>
+        </xsl:when>
+        <!-- xsl:when test="not($isCurrentUser)">
+          <a class="btn btn-secondary" href="{$WebApplicationBaseURL}authorization/change-read-user.xed?action=save&amp;id={$uid}">
+            <xsl:value-of select="i18n:translate('component.user2.admin.changedata')" />
+          </a>
+        </xsl:when -->
+        <xsl:when test="$isCurrentUser and not(/user/@locked = 'true')">
+          <a class="btn btn-secondary" href="{$WebApplicationBaseURL}authorization/change-current-user.xed?action=saveCurrentUser">
+            <xsl:value-of select="i18n:translate('component.user2.admin.changedata')" />
+          </a>
+        </xsl:when>
+      </xsl:choose>
+      <xsl:if test="/user/@realm = 'local' and (not($isCurrentUser) or not(/user/@locked = 'true'))">
+        <a class="btn btn-primary" href="{$WebApplicationBaseURL}authorization/change-password.xed?action=password&amp;id={$uid}">
+          <xsl:value-of select="i18n:translate('component.user2.admin.changepw')" />
+        </a>
+      </xsl:if>
+      <xsl:if test="$isUserAdmin and not($isCurrentUser)">
+        <a class="btn btn-danger" href="{$ServletsBaseURL}MCRUserServlet?action=show&amp;id={$uid}&amp;XSL.step=confirmDelete">
+          <xsl:value-of select="i18n:translate('component.user2.admin.userDeleteYes')" />
+        </a>
+      </xsl:if>
+    </xsl:if>
+  </xsl:template>
 
 </xsl:stylesheet>
