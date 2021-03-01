@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xed:template xmlns:xed="http://www.mycore.de/xeditor" xmlns:mcruser="http://www.mycore.de/components/mcruser">
+    <xed:template id="editor4admins">
+        <xed:include ref="attributes" after="roles" />
+    </xed:template>
+</xed:template>
