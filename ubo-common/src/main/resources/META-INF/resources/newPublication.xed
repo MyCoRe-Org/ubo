@@ -33,7 +33,7 @@
               <div class="form-group form-inline">
 		<div class="mycore-form-label">
                   <xed:bind xpath="@type">
-                    <select class="form-control w-100">
+                    <select class="form-control custom-select">
                       <option value="doi">DOI</option>
                       <option value="pubmed">PubMed ID</option>
                       <option value="scopus">Scopus ID</option>

@@ -3,7 +3,7 @@
 <webpage lastModified="$Date: 2017-03-16 11:16:38 +0100 (Do, 16 Mär 2017) $" id="dozbib.new.publication">
   <title xml:lang="de">Publikationstyp wählen</title>
   <title xml:lang="en">Choose publication type</title>
-  
+
   <article class="card">
     <div class="card-body">
       <xed:form class="inline-form" role="form" xmlns:xed="http://www.mycore.de/xeditor">
@@ -34,7 +34,7 @@
               <label class="mycore-form-label" for="genre">
 		<xed:output i18n="ubo.genre" />:
 	      </label>
-              <select class="mycore-form-input" id="genre" size="1">
+              <select class="mycore-form-input custom-select" id="genre" size="1">
                 <xed:include uri="xslStyle:genre-filter,items2options:classification:editor:-1:children:ubogenre" />
               </select>
             </div>
@@ -43,7 +43,7 @@
           <xed:bind xpath="mods:relatedItem[@type='host']/mods:genre[@type='intern']">
             <div class="form-inline form-group">
               <label class="mycore-form-label" for="host"><xed:output i18n="ubo.newPublicationWizard.publishedIn" />:</label>
-              <select class="mycore-form-input" id="host" size="1">
+              <select class="mycore-form-input custom-select" id="host" size="1">
                 <option value=""><xed:output i18n="search.select" /></option>
                 <xed:include uri="xslStyle:host-filter,items2options:classification:editor:-1:children:ubogenre" />
               </select>
@@ -56,7 +56,7 @@
 		<label for="form" class="mycore-form-label">
 		  Ziel-Formular:
 		</label>
-		<select id="form" class="mycore-form-input">
+		<select id="form" class="mycore-form-input custom-select">
                   <option value="edit-publication.xed">Standard-Formular</option>
                   <option value="edit-admin.xed">Admin-Formular</option>
 		</select>
@@ -145,5 +145,5 @@
       </xed:form>
     </div>
   </article>
-    
+
 </webpage>

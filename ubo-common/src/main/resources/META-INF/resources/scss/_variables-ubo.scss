@@ -1,9 +1,11 @@
+$primary: #003b7a;
+
 $body-bg: #efe4bf !default;
 
 $border-radius: .2rem !default;
 
-$pmud-color: Tomato !default;
-$pmud-color-hover: Tomato !default;
+$pmud-color: $primary !default;
+$pmud-color-hover: white !default;
 
 /* add new custom colors */
 $theme-colors: (

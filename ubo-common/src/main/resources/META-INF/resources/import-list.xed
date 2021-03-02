@@ -31,7 +31,7 @@
 
             <xed:repeat xpath="subject" max="5">
               <div class="form-group form-inline">
-                <select class="{$xed-validation-marker} form-control col-sm-10">
+                <select class="{$xed-validation-marker} form-control col-sm-10 custom-select">
                   <option value=""><xed:output i18n="ubo.subject" />: <xed:output i18n="search.select" /></option>
                   <xed:include uri="xslStyle:items2options:classification:editor:-1:children:fachreferate" />
                 </select>
@@ -41,7 +41,7 @@
 
             <xed:bind xpath="origin">
               <div class="form-group form-inline">
-                <select class="autocomplete {$xed-validation-marker} form-control col-sm-10">
+                <select class="autocomplete {$xed-validation-marker} form-control col-sm-10 custom-select">
                   <option value=""><xed:output i18n="ubo.department" />:<xed:output i18n="search.select" /></option>
                   <xed:include uri="xslStyle:items2options:classification:editor:-1:children:ORIGIN" />
                 </select>
@@ -51,7 +51,7 @@
             <div class="col-sm-10 px-0">
               <div class="form-group form-inline">
                 <xed:bind xpath="@sourceType">
-                  <select class="form-control col mr-1">
+                  <select class="form-control col mr-1 custom-select">
                     <option value="BibTeX">BibTeX Quellcode</option>
                     <option value="ORCID">Publikationen aus dem ORCID Profil</option>
                     <option value="IAQ">Literaturliste im CSV-Format: IAQ</option>
@@ -61,7 +61,7 @@
                 </xed:bind>
 
                 <xed:bind xpath="@targetType">
-                  <select class="form-control col">
+                  <select class="form-control col custom-select">
                     <option value="preview-html">Vorschau (HTML)</option>
                     <option value="preview-mods-raw">Vorschau (MODS)</option>
                     <option value="import">direkt importieren</option>
