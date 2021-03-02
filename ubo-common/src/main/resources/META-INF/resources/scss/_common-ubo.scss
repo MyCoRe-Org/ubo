@@ -43,7 +43,7 @@ html, body {
 
 // shortcut-classes for forms
 .mycore-form-label {
-  @extend .col-lg-2;
+  @extend .col-lg-3;
   @extend .col-md-3;
   @extend .col-sm-3;
   @extend .justify-content-sm-end;
@@ -54,9 +54,9 @@ html, body {
 // actually used for input AND select AND textarea
 .mycore-form-input {
   @extend .form-control;
-  @extend .col-lg-8;
-  @extend .col-md-7;
-  @extend .col-sm-7;
+  @extend .col-lg-6;
+  @extend .col-md-6;
+  @extend .col-sm-6;
 }
 
 .mycore-form-input-double {
@@ -94,7 +94,10 @@ img.orcid-icon {
 button.xeditor-pmud.fas {
   cursor: pointer;
   border: none;
-  background: none;
+  background-color: $pmud-color-hover;
+  &:hover {
+    background-color: $pmud-color;
+  }
 }
 
 .xeditor-pmud {
@@ -104,7 +107,11 @@ button.xeditor-pmud.fas {
 
 .xeditor-pmud:hover {
   color: $pmud-color-hover;
+  background-color: $pmud-color;
   font-size: 25px;
+}
+.form-control.ubo-repeater-button-box:hover {
+  border: 1px solid $primary;
 }
 
 // style of the list when selecting identities
@@ -191,4 +198,45 @@ table.jQDataTable tr:last-child > td {
 
 .nameIdentifier:last-child {
   margin-right: 0rem;
+}
+
+// prevent line breaks on repeater sections
+.ubo-repeat-group {
+  //flex-wrap: nowrap;
+}
+.form-control {
+  &.ubo-repeater-button-box {
+    display: flex;
+  }
+}
+.ubo-repeater-button-box {
+  padding: 0;
+  margin-left: 0.5rem;
+  .xeditor-pmud {
+    font-size: 1.125rem;
+    &:hover {
+      font-size: 1.125rem;
+    }
+  }
+}
+
+.ubo-tags-group {
+  .ubo-repeater-button-box {
+    @extend .mb-1, .mr-1;
+    margin-left: 0;
+  }
+}
+.form-inline {
+  align-items: flex-start;
+  padding-top: 0.375rem;
+  label {
+    margin-top: 0.375rem;
+  }
+}
+.mycore-form-label {
+  text-align: right;
+}
+.mycore-form-input-group {
+  flex: 0 0 50%;
+  max-width: 50%;
 }

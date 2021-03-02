@@ -3,22 +3,22 @@
 <webpage lastModified="$Date: 2016-05-24 10:13:56 +0200 (Di, 24 Mai 2016) $" id="dozbib.import.evaluna">
   <title xml:lang="de">Publikation aus EVALuna Biblio Datenbank importieren</title>
   <title xml:lang="en">Import publication from EVALuna Biblio database</title>
-  
+
   <script type="text/javascript" src="external/jquery-tools-1.2.7/jquery.tools.min.js"></script>
   <script type="text/javascript" src="js/editor.validation.failed.tooltip.js"></script>
-     
+
   <article>
     <script type="text/javascript" src="external/jquery-ui-1.8.21.custom.min.js"></script>
     <script type="text/javascript" src="external/chosen/chosen.jquery.min.js"></script>
 
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form">
-    
+
       <xed:cleanup-rule xpath="//limit" relevant-if="string-length(text()) &gt; 0" />
-    
+
       <xed:bind xpath="/import">
         <xed:bind xpath="@sourceType" default="Evaluna" />
         <xed:bind xpath="@targetType" default="import" />
-        
+
         <xed:if test="$xed-validation-failed">
           <div class="validation-failures">
             <h3>
@@ -29,12 +29,12 @@
             </ul>
           </div>
         </xed:if>
-        
+
         <fieldset>
           <legend>Ziel-Institut/Klinik wählen:</legend>
-          
+
           <xed:bind xpath="subject" default="med" /> <!-- Fach ist fix "Medizin"  -->
-          
+
           <xed:bind xpath="origin">
             <div>
               <label for="{xed:generate-id()}">Institut / Klinik:</label>
@@ -49,23 +49,23 @@
           <script type="text/javascript">
             jQuery(document).ready(function() { jQuery('select[class*="autocomplete"]').chosen({search_contains: true}); });
           </script>
-          
+
         </fieldset>
 
-        <xed:bind xpath="request">        
+        <xed:bind xpath="request">
           <fieldset>
             <legend>Welche Publikationen sollen importiert werden?</legend>
-            
+
             <xed:bind xpath="limit[@type='institute']">
               <div>
                 <label for="{xed:generate-id()}">Institut / Klinik:</label>
-                <select id="{xed:generate-id()}">
+                <select id="{xed:generate-id()}" class="custom-select">
                   <option value=""><xed:output i18n="search.select" /></option>
                   <xed:include uri="cache:xslStyle:import/evaluna-institutions2select-options:evaluna:institutions" />
                 </select>
               </div>
             </xed:bind>
-            
+
             <xed:bind xpath="limit[@type='pubyear']">
               <div>
                 <label for="year">
@@ -75,7 +75,7 @@
                 <xed:validate matches="[\d]{4}" i18n="ubo.date.issued.4.validation" display="global" />
               </div>
             </xed:bind>
-  
+
             <xed:bind xpath="limit[@type='updated-since']">
               <div>
                 <label for="updated">Aktualisiert seit:</label>
@@ -84,7 +84,7 @@
                 <xed:validate matches="[\d]{4}-[\d]{2}-[\d]{2} [\d]{2}:[\d]{2}:[\d]{2}"  display="global">Aktualisierungsdatum bitte im Format 2016-11-01 12:00:00</xed:validate>
               </div>
             </xed:bind>
-  
+
             <xed:bind xpath="limit[@type='ids']">
               <div>
                 <label for="id">oder Evaluna Publikations-ID:</label>
@@ -92,20 +92,20 @@
                 <xed:validate matches="[\d]+"  display="global">Bitte nur Ziffern eingeben!</xed:validate>
               </div>
             </xed:bind>
-  
+
             <xed:validate test="limit[string-length(.) &gt; 0]" display="global">Mindestens eine Einschränkung (Institut, Jahr, Ännderungsdatum, ID) muss gegeben sein!</xed:validate>
-  
+
             <div class="cancel-submit">
               <button class="roundedButton" type="submit" xed:target="servlet" xed:href="DozBibImportServlet">
                 <xed:output i18n="button.submit" />
               </button>
             </div>
-            
+
           </fieldset>
         </xed:bind>
-        
+
       </xed:bind>
     </xed:form>
   </article>
-    
+
 </webpage>
