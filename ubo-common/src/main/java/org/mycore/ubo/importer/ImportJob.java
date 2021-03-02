@@ -26,6 +26,7 @@ import org.jdom2.JDOMException;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.transformer.MCRContentTransformer;
 import org.mycore.common.content.transformer.MCRContentTransformerFactory;
@@ -42,7 +43,9 @@ public abstract class ImportJob {
 
     private final static SimpleDateFormat ID_BUILDER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    private String id = ID_BUILDER.format(new Date());;
+    private String id = ID_BUILDER.format(new Date());
+
+    private static final String PROJECT_ID = MCRConfiguration2.getString("UBO.projectid.default").get();
 
     private List<Document> publications = new ArrayList<Document>();
 
@@ -79,7 +82,7 @@ public abstract class ImportJob {
     public void savePublications() throws MCRPersistenceException, MCRAccessException {
         for (Document publication : publications) {
             MCRObject obj = new MCRObject(publication);
-            MCRObjectID oid = MCRObjectID.getNextFreeId("ubo_mods");
+            MCRObjectID oid = MCRObjectID.getNextFreeId(PROJECT_ID + "_mods");
             obj.setId(oid);
             obj.getService().addFlag("importID", id);
             MCRMetadataManager.create(obj);

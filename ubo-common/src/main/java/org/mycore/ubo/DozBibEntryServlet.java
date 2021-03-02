@@ -38,6 +38,8 @@ public class DozBibEntryServlet extends MCRServlet {
 
     private final static Logger LOGGER = LogManager.getLogger(DozBibEntryServlet.class);
 
+    private static final String PROJECT_ID = MCRConfiguration2.getString("UBO.projectid.default").get();
+
     public void doGetPost(MCRServletJob job) throws Exception {
         HttpServletRequest req = job.getRequest();
         HttpServletResponse res = job.getResponse();
@@ -78,7 +80,7 @@ public class DozBibEntryServlet extends MCRServlet {
 
     private void redirectToCurrentPublicationID(HttpServletResponse res, String ID) throws IOException {
         int id = Integer.parseInt(ID);
-        MCRObjectID oid = MCRObjectID.getInstance(MCRObjectID.formatID("ubo_mods", id));
+        MCRObjectID oid = MCRObjectID.getInstance(MCRObjectID.formatID(PROJECT_ID + "_mods", id));
         String url = "DozBibEntryServlet?id=" + oid.toString();
         res.sendRedirect(url);
     }

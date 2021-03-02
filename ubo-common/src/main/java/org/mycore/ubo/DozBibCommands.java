@@ -34,6 +34,7 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.XMLReaders;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRXSLTransformer;
@@ -53,6 +54,8 @@ import org.mycore.mods.MCRMODSWrapper;
 public class DozBibCommands extends MCRAbstractCommands {
 
     private static final Logger LOGGER = LogManager.getLogger(DozBibCommands.class);
+
+    private static final String PROJECT_ID = MCRConfiguration2.getString("UBO.projectid.default").get();
 
     /** Commands for the MyCoRe Command Line Interface */
     public DozBibCommands() {
@@ -142,7 +145,7 @@ public class DozBibCommands extends MCRAbstractCommands {
             int id = IDs.next();
             LOGGER.info("Migrating <bibentry> " + id + " to <mycoreobject>...");
 
-            MCRObjectID oid = MCRObjectID.getInstance(MCRObjectID.formatID("ubo_mods", id));
+            MCRObjectID oid = MCRObjectID.getInstance(MCRObjectID.formatID(PROJECT_ID + "_mods", id));
             if (MCRMetadataManager.exists(oid)) {
                 LOGGER.info("object " + oid.toString() + " already exists, skipping...");
                 continue;
@@ -210,7 +213,7 @@ public class DozBibCommands extends MCRAbstractCommands {
             wrapper.setMODS(mods.clone());
             MCRObject obj = wrapper.getMCRObject();
 
-            obj.setId(MCRObjectID.getNextFreeId("ubo_mods"));
+            obj.setId(MCRObjectID.getNextFreeId(PROJECT_ID + "_mods"));
             MCRMetadataManager.create(obj);
         }
     }
