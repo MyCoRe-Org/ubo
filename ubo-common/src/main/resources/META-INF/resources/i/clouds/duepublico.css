@@ -40,7 +40,7 @@
 
 /* overwrites/additions to style.css */
 @media print {
-  a[href]:after { 
+  a[href]:after {
     content: "";
   }
 }
@@ -93,7 +93,7 @@ input, select, textarea {
 }
 
 #login {
-  margin-top:-22px; 
+  margin-top:-22px;
   margin-bottom:12px;
 }
 
@@ -212,7 +212,7 @@ table.editor td.editorValidationMessage,
   color: #FFEAC2;
   padding: 10px;
   text-align: center;
-  
+
 background: rgb(221,75,59); /* Old browsers */
   /* IE9 SVG, needs conditional override of 'filter' to 'none' */
   background:
@@ -252,20 +252,20 @@ td.editorPMUD input,
 .editorPanel input[type='text'],
 .editorPanel input[type='password'],
 .editorPanel input[role='textbox'] {
-    
+
   padding: 0.5em;
   border: 1px solid lightgray;
   width: 90%;
 }
 
-.editorPanel 
+.editorPanel
   input[type='text']:hover,
   input[type='password']:hover,
   input[role='textbox']:hover {
   border: 1px solid gray;
 }
 
-.editorPanel 
+.editorPanel
   input[type='text']:focus,
   input[type='password']:focus,
   input[role='textbox']:focus {
@@ -338,7 +338,7 @@ table.col3 > tbody > tr > td:last-child {
 .cbList {
   list-style: none;
   margin: 0 0 1em 0;
-  padding: 0; 
+  padding: 0;
 }
 
 .copyright-review-status {
@@ -347,7 +347,7 @@ table.col3 > tbody > tr > td:last-child {
   margin: 4px 0;
 }
 
-/*  JQuery DataTables TableTools  */ 
+/*  JQuery DataTables TableTools  */
 
 div.DTTT_container {
   float: right;
@@ -366,7 +366,7 @@ button.DTTT_button {
   *cursor: hand;
 }
 
-button.DTTT_button::-moz-focus-inner { 
+button.DTTT_button::-moz-focus-inner {
   border: none !important;
   padding: 0;
 }
@@ -464,13 +464,13 @@ button.DTTT_button_collection_hover {
   background-color: #3f3f3f;
   color: white;
   padding: 10px 30px;
-  
+
   opacity: 0.9;
-  
+
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
-  
+
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
   -moz-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
@@ -566,18 +566,18 @@ table.jQDataTable td {
 	vertical-align: top;
 }
 
-table.jQDataTable tr:nth-child(even) td, 
+table.jQDataTable tr:nth-child(even) td,
 table.jQDataTable tr:nth-child(odd) td {
   background: transparent;
   border: 0;
 }
 
-table.jQDataTable tr:nth-child(even) td:first-child, 
+table.jQDataTable tr:nth-child(even) td:first-child,
 table.jQDataTable tr:nth-child(odd) td:first-child {
 	border-left: 1px solid lightGrey;
 }
 
-table.jQDataTable tr:nth-child(even) td:last-child, 
+table.jQDataTable tr:nth-child(even) td:last-child,
 table.jQDataTable tr:nth-child(odd) td:last-child {
 	border-right: 1px solid lightGrey;
 }
@@ -694,7 +694,7 @@ table.libraryData td:last-child {
 }
 
 #buttons {
-  margin: 1.2em 0; 
+  margin: 1.2em 0;
 }
 
 #buttons .action {
@@ -704,13 +704,13 @@ table.libraryData td:last-child {
   display: inline-block;
   box-shadow: 0 1px 3px #333;
   cursor: pointer;
-  
+
   background-image: linear-gradient(top, rgb(0,114,156), rgb(1,70,139));
   background-image: -o-linear-gradient(top, rgb(0,114,156), rgb(1,70,139));
   background-image: -moz-linear-gradient(top, rgb(0,114,156), rgb(1,70,139) );
   background-image: -webkit-linear-gradient(top, rgb(0,114,156), rgb(1,70,139) );
   background-image: -ms-linear-gradient(top, rgb(0,114,156), rgb(1,70,139));
-  
+
   background-image: -webkit-gradient(
     linear,
     left bottom,
@@ -719,7 +719,7 @@ table.libraryData td:last-child {
     color-stop(0, rgb(1,70,139))
   );
   filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#ff00729c', EndColorStr='#ff01468b');
-  
+
   border: 1px solid rgba(6, 72, 118, 0.7);
   color: white;
 }
@@ -730,7 +730,7 @@ table.libraryData td:last-child {
   background-image: -moz-linear-gradient(top, rgb(255,247,219), rgb(239,228,191));
   background-image: -webkit-linear-gradient(top, rgb(255,247,219), rgb(239,228,191));
   background-image: -ms-linear-gradient(top, rgb(255,247,219), rgb(239,228,191));
-  
+
   background-image: -webkit-gradient(
     linear,
     left bottom,
@@ -739,7 +739,7 @@ table.libraryData td:last-child {
     color-stop(0.2, rgb(239,228,191))
   );
   filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#FFFFF7DB', EndColorStr='#FFEFE4BF');
-  
+
   border: 1px solid rgba(255, 247, 219, 0.7);
   color: #004C93;
   box-shadow: 0px 0px 8px #333;
@@ -825,7 +825,7 @@ img.float {
 }
 
 div#dropbox h2 {
-  
+
   position:absolute;
   bottom: 0.25em;
   right: 0.25em;
@@ -887,13 +887,13 @@ div.row {
   max-width: 85%;
   border-radius: 10px;
   -moz-border-radius: 10px;
-  
+
   background-image: linear-gradient(left, rgb(0,114,156), rgb(1,70,139));
   background-image: -o-linear-gradient(left, rgb(0,114,156), rgb(1,70,139));
   background-image: -moz-linear-gradient(left, rgb(0,114,156), rgb(1,70,139) );
   background-image: -webkit-linear-gradient(left, rgb(0,114,156), rgb(1,70,139) );
   background-image: -ms-linear-gradient(left, rgb(0,114,156), rgb(1,70,139));
-  
+
   background-image: -webkit-gradient(
     linear,
     left bottom,
@@ -916,7 +916,7 @@ div.row {
   box-shadow: 0 0 5px #ccc;
   background-image: -moz-linear-gradient(top, #EFE4BF, #D9CFAD);
   background-image: -webkit-gradient(linear, left top, left bottom, from(#EFE4BF), to(#D9CFAD) );
-  overflow: auto; 
+  overflow: auto;
 }
 
 .fileContainer {
@@ -1043,15 +1043,15 @@ div.row {
   padding: 0.4em 0.6em;
   margin-right: 0.5em;
   text-decoration: none;
-  
-  -webkit-box-shadow: 0 0 8px #999; 
+
+  -webkit-box-shadow: 0 0 8px #999;
   -moz-box-shadow: 0 0 8px #999;
   box-shadow: 0 0 8px #999;
 }
 
 .resultsNavigation .pageLink.current {
-  
-  -webkit-box-shadow: 0 0 8px #004C93; 
+
+  -webkit-box-shadow: 0 0 8px #004C93;
   -moz-box-shadow: 0 0 8px #004C93;
   box-shadow: 0 0 8px #004C93;
 }
@@ -1127,21 +1127,21 @@ div.outer-stats-container {
 }
 
 div.inner-stats-container {
-  
+
   border-radius: 6px 6px 6px 6px;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#F0F0FF'); /* for IE */
   background: -webkit-gradient(linear, left top, right top, from(#FFFFFF), to(#F0F0FF)); /* for webkit browsers */
-  background: -moz-linear-gradient(left,  #FFFFFF,  #F0F0FF); /* for firefox 3.6+ */ 
+  background: -moz-linear-gradient(left,  #FFFFFF,  #F0F0FF); /* for firefox 3.6+ */
 
 }
 
 div.inner-stats-container h3 {
   background-color: transparent;
-  
+
   /* Highcharts uses this settings for header */
   color: #000000;
   font-family: "Trebuchet MS", Verdana, sans-serif;
-  font-size: 16px; 
+  font-size: 16px;
 }
 
 div.inner-stats-container div.stats-table-container {
@@ -1394,7 +1394,7 @@ table.metadata caption {
 
 .rcAction,
 .rcAction:visited {
-  
+
   text-decoration: none;
   color: #888;
   border: 1px solid #AAA;
@@ -1557,13 +1557,13 @@ dl.ubo-export dd a {
 }
 
 ul.ubo-names {
-  margin:2ex 0 2ex 0; 
+  margin:2ex 0 2ex 0;
   padding:0;
-} 
+}
 
 ul.ubo-names li {
   display:inline-block;
-} 
+}
 
 ul.ubo-related {
   margin-top: 2ex;
@@ -1584,7 +1584,7 @@ pre.ubo-basket-comment {
 }
 
 .ubo-xed-line {
-  margin:0; 
+  margin:0;
   padding:0;
 }
 
@@ -1651,8 +1651,8 @@ textarea.has-error {
 	background-repeat: no-repeat;
 }
 
-div.bibentry div.title { 
-	font-weight: bold; 
+div.bibentry div.title {
+	font-weight: bold;
 }
 
 .ubo-form label {
@@ -1818,7 +1818,7 @@ button#orcid-oauth-button {
     border: 1px solid #d3d3d3;
     -moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
-	border-radius: 6px;    
+	border-radius: 6px;
     padding: .3em;
     background-color: #fff;
     box-shadow: 1px 1px 3px #999;
@@ -1843,7 +1843,7 @@ table.userProfile tr th {
 }
 
 .ubo_details .grid_3, .ubo_details .grid_9 {
-  margin-bottom:0.35ex;	
+  margin-bottom:0.35ex;
 }
 
 .xeditor-pmud {
