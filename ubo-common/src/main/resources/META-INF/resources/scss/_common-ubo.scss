@@ -75,6 +75,7 @@ html, body {
   @extend .list-group-item;
   @extend .border-0;
   @extend .py-0;
+  @extend .px-0;
 }
 
 // sidebar facets
@@ -239,4 +240,36 @@ table.jQDataTable tr:last-child > td {
 .mycore-form-input-group {
   flex: 0 0 50%;
   max-width: 50%;
+}
+
+.mycore-facet-count {
+	display: inline-block;
+	width: 60px;
+	height: 1.2em;
+	vertical-align: top;
+	margin: 0;
+	padding: 0;
+	text-align: right;
+}
+
+.mycore-facet-value {
+	display: inline-block;
+	width: 175px;
+	height: 1.5em;
+	vertical-align: top;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	position: relative;
+}
+
+.mycore-facet-value .scroll-on-hover {
+	position: absolute;
+	white-space: nowrap;
+	transform: translateX(0);
+	transition: 6s;
+}
+
+.mycore-facet-value:hover .scroll-on-hover {
+	transform: translateX(calc(175px - 100%));
 }
