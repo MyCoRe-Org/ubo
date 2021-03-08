@@ -53,7 +53,7 @@
     </span>
   </xsl:template>
 
-  <!-- ========== Ausgabe Fakultät ========== -->
+  <!-- ========== Ausgabe Fakultï¿½t ========== -->
 
   <xsl:template match="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info">
     <span class="label-info badge badge-secondary mr-1">
@@ -130,7 +130,7 @@
 
   <!-- ========== Zitierform ========== -->
   <xsl:template match="mods:mods|mods:relatedItem" mode="cite">
-    <xsl:param name="mode">plain</xsl:param> <!-- plain: Als Fließtext formatieren, sonst mit <div>'s -->
+    <xsl:param name="mode">plain</xsl:param> <!-- plain: Als Flieï¿½text formatieren, sonst mit <div>'s -->
 
     <xsl:apply-templates select="." mode="cite.title.name">
       <xsl:with-param name="mode" select="$mode" />
@@ -253,7 +253,7 @@
     </xsl:if>
   </xsl:template>
 
-  <!-- ========== Überordnung (In:) ========== -->
+  <!-- ========== ï¿½berordnung (In:) ========== -->
   <xsl:template match="mods:relatedItem[@type='host']" mode="brief">
     <xsl:text>In: </xsl:text>
     <xsl:apply-templates select="." mode="cite" />
@@ -394,7 +394,7 @@
     </div>
   </xsl:template>
 
-   <!-- ========== Erster Titel der Überordnung/Serie in Detailansicht, Tabelle ========== -->
+   <!-- ========== Erster Titel der ï¿½berordnung/Serie in Detailansicht, Tabelle ========== -->
   <xsl:template match="mods:relatedItem/mods:titleInfo[1]" mode="details" priority="1">
     <div class="row">
       <div class="col-3">
@@ -620,7 +620,7 @@
     </div>
   </xsl:template>
 
-  <!-- ========== Verweise/Überordnung ========== -->
+  <!-- ========== Verweise/ï¿½berordnung ========== -->
   <xsl:template match="mods:relatedItem[(@type='host') or (@type='series')]" mode="details">
     <div class="ubo_related_details border-top border-bottom border-dark my-1">
       <xsl:apply-templates select="." mode="details_lines" />
@@ -729,7 +729,7 @@
   </xsl:template>
 
   <xsl:template match="mods:abstract[string-length(.) &gt; 0]" mode="details">
-    <div>
+    <div class="ubo-content-block ubo-abstract">
       <h3>
         <xsl:value-of select="i18n:translate('ubo.abstract')" />
         <xsl:apply-templates select="@xml:lang" />
@@ -755,7 +755,7 @@
     <xsl:apply-templates select="mods:subTitle" />
   </xsl:template>
 
-  <!-- ========== Führende Artikel: Der, Die, Das ========== -->
+  <!-- ========== Fï¿½hrende Artikel: Der, Die, Das ========== -->
   <xsl:template match="mods:nonSort">
     <xsl:value-of select="text()" />
     <xsl:text> </xsl:text>
@@ -777,14 +777,14 @@
     <xsl:value-of select="text()" />
   </xsl:template>
 
-  <!-- ========== Typ des Titels: Haupttitel, abgekürzt, übersetzt, ... ========== -->
+  <!-- ========== Typ des Titels: Haupttitel, abgekï¿½rzt, ï¿½bersetzt, ... ========== -->
   <xsl:template match="mods:titleInfo/@type">
     <xsl:text> (</xsl:text>
     <xsl:value-of select="i18n:translate(concat('ubo.title.type.',.))" />
     <xsl:text>)</xsl:text>
   </xsl:template>
 
-  <!-- ========== Rolle einer Person oder Körperschaft ========== -->
+  <!-- ========== Rolle einer Person oder Kï¿½rperschaft ========== -->
   <xsl:template match="mods:roleTerm[@type='code' and @authority='marcrelator']">
     <xsl:variable name="uri" select="concat('classification:metadata:0:children:marcrelator:',.)" />
     <xsl:apply-templates select="document($uri)/mycoreclass/categories/category[1]" />
@@ -972,7 +972,7 @@
   <!-- ========== Auflage ========== -->
   <xsl:template match="mods:edition">
     <xsl:value-of select="text()" />
-    <!-- Wenn Auflage nicht "Aufl." oder "Ed." und nur Ziffern enthält (Auflagennummer), ergänze "Aufl." -->
+    <!-- Wenn Auflage nicht "Aufl." oder "Ed." und nur Ziffern enthï¿½lt (Auflagennummer), ergï¿½nze "Aufl." -->
     <xsl:if test="not(contains(translate(text(),'AaUuEeDd','@@@@@@@@'),'@')) and (string-length(translate(text(),'0123456789. ','')) = 0)">
       <xsl:if test="substring(.,string-length(.)) != '.'">
         <xsl:text>.</xsl:text>
@@ -1128,7 +1128,7 @@
     </a>
   </xsl:template>
 
-  <!-- ========== ( Serie ; Bandzählung ) ========== -->
+  <!-- ========== ( Serie ; Bandzï¿½hlung ) ========== -->
   <xsl:template match="mods:relatedItem[@type='series']">
     <xsl:text>(</xsl:text>
     <xsl:apply-templates select="mods:titleInfo[1]" />
