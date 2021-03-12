@@ -1,8 +1,10 @@
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:p="info:srw/schema/5/picaXML-v1.0"
+<?xml version="1.0"?>
+<xsl:stylesheet version="3.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+                xmlns:p="info:srw/schema/5/picaXML-v1.0"
                 xmlns:mods="http://www.loc.gov/mods/v3"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                version="3.0"
->
+                xmlns:xlink="http://www.w3.org/1999/xlink">
+    <xsl:mode on-no-match="shallow-copy"/>
 
     <xsl:import href="default/pica2mods-default-titleInfo.xsl"/>
     <xsl:import href="default/pica2mods-default-name.xsl"/>
