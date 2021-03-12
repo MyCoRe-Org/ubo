@@ -206,11 +206,6 @@
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
-      <artifactId>mycore-iview2</artifactId>
-      <!-- actually not used, but dependency required because of persistence mapping missing otherwise -->
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
       <artifactId>mycore-mods</artifactId>
     </dependency>
     <dependency>
