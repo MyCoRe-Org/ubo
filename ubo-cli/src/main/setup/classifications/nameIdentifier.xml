@@ -19,13 +19,5 @@
       <label xml:lang="de" text="ORCID" />
       <label xml:lang="en" text="ORCID" />
     </category>
-    <category ID="jena">
-      <label xml:lang="de" text="LDAP Kennung" />
-      <label xml:lang="en" text="LDAP Identifier" />
-    </category>
-    <category ID="connection">
-      <label xml:lang="de" text="Internal MyCoRe Connection" />
-      <label xml:lang="en" text="Internal MyCoRe Connection" />
-    </category>
   </categories>
 </mycoreclass>
