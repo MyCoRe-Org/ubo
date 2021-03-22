@@ -32,5 +32,7 @@ select objects with solr query ae_lsf:(51939 OR 60592 OR 51962) AND year:[2019 T
 execute for selected edit {x} at publication add origin 09.03
 select objects with solr query ae_lsf:(12700 OR 53322 OR 61208 OR 58465 OR 61540 OR 61595 OR 61733) AND year:[2020 TO *] -origin:09.03 in core main
 execute for selected edit {x} at publication add origin 09.03
+select objects with solr query ae_lsf:61771 AND year:[2021 TO *] -origin:09.03 in core main
+execute for selected edit {x} at publication add origin 09.03
 select objects with solr query ae_lsf:14547 AND year:[2008 TO 2019] -origin:09.03 in core main
 execute for selected edit {x} at publication add origin 09.03
