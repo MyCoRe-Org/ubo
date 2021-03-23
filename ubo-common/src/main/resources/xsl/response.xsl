@@ -3,20 +3,21 @@
 <!-- Displays a navigable result list of a SOLR search for bibliography entries -->
 
 <xsl:stylesheet
-  version="1.0"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  xmlns:mods="http://www.loc.gov/mods/v3"
-  xmlns:mcr="http://www.mycore.org/"
-  xmlns:encoder="xalan://java.net.URLEncoder"
-  xmlns:str="xalan://java.lang.String"
-  xmlns:basket="xalan://org.mycore.ubo.basket.BasketUtils"
-  exclude-result-prefixes="xsl xalan i18n mods mcr encoder str basket"
+        version="1.0"
+        xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+        xmlns:xalan="http://xml.apache.org/xalan"
+        xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+        xmlns:mods="http://www.loc.gov/mods/v3"
+        xmlns:mcr="http://www.mycore.org/"
+        xmlns:encoder="xalan://java.net.URLEncoder"
+        xmlns:str="xalan://java.lang.String"
+        xmlns:basket="xalan://org.mycore.ubo.basket.BasketUtils" xmlns:xsL="http://www.w3.org/1999/XSL/Transform"
+        exclude-result-prefixes="xsl xalan i18n mods mcr encoder str basket"
 >
 
 <xsl:include href="mods-display.xsl" />
 <xsl:include href="response-facets.xsl" />
+<xsl:include href="csl-export-gui.xsl" />
 
 <xsl:param name="RequestURL" />
 
@@ -84,16 +85,9 @@
 
 <xsl:template name="exportLinks">
   <xsl:if test="$numFound &gt; 0">
-    <div class="btn-group mb-3 flex-wrap">
-      <a class="action btn btn-sm btn-outline-primary mb-1" href="uboExport?{$exportParams}&amp;XSL.Transformer=mods">MODS</a>
-      <a class="action btn btn-sm btn-outline-primary mb-1" href="uboExport?{$exportParams}&amp;XSL.Transformer=bibtex">BibTeX</a>
-      <a class="action btn btn-sm btn-outline-primary mb-1" href="uboExport?{$exportParams}&amp;XSL.Transformer=endnote">EndNote</a>
-      <a class="action btn btn-sm btn-outline-primary mb-1" href="uboExport?{$exportParams}&amp;XSL.Transformer=ris">RIS</a>
-      <a class="action btn btn-sm btn-outline-primary mb-1" href="uboExport?{$exportParams}&amp;XSL.Transformer=ieee-text">IEEE</a>
-      <a class="action btn btn-sm btn-outline-primary mb-1" href="uboExport?{$exportParams}&amp;XSL.Transformer=pdf">PDF</a>
-      <a class="action btn btn-sm btn-outline-primary mb-1" href="uboExport?{$exportParams}&amp;XSL.Transformer=html">HTML</a>
-      <a class="action btn btn-sm btn-outline-primary mb-1" href="uboExport?{$exportParams}&amp;fl=id,subject,oa,genre,host_genre,person_aut,person_edt,title,id_doi,id_scopus,id_pubmed,id_urn,id_duepublico,id_duepublico2,host_title,series,id_issn,id_isbn,shelfmark,year,volume,issue,pages,place,publisher&amp;wt=csv">CSV</a>
-    </div>
+    <xsl:call-template name="exportGUI">
+      <xsl:with-param name="type" select="'response'" />
+    </xsl:call-template>
   </xsl:if>
 </xsl:template>
 

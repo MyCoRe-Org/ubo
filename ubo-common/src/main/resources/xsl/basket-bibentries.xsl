@@ -11,6 +11,8 @@
 >
 
 <xsl:include href="mods-display.xsl" />
+<xsl:include href="csl-export-gui.xsl" />
+
 
 <xsl:param name="UBO.System.ReadOnly" />
 
@@ -43,6 +45,7 @@
           </xsl:if>
         </xsl:when>
       </xsl:choose>
+      <!--
       <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/mods.xml?basket=bibentries&amp;root=export&amp;transformer=mods">MODS</a>
       <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/export.bibtex?basket=bibentries&amp;root=export&amp;transformer=bibtex">BibTeX</a>
       <xsl:if xmlns:check="xalan://org.mycore.ubo.AccessControl" test="not(check:currentUserIsAdmin())">
@@ -52,7 +55,11 @@
         <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/export.pdf?basket=bibentries&amp;root=export&amp;transformer=pdf">PDF</a>
         <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/export.html?basket=bibentries&amp;root=export&amp;transformer=html">HTML</a>
       </xsl:if>
+      -->
     </div>
+    <xsl:call-template name="exportGUI">
+      <xsl:with-param name="type" select="'basket'" />
+    </xsl:call-template>
   </xsl:for-each>
 </xsl:template>
 
