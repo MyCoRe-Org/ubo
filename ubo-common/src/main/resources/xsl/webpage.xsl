@@ -13,6 +13,7 @@
   <xsl:param name="DefaultLang" />
   
   <xsl:include href="copynodes.xsl" />
+  <xsl:include href="xslInclude:webpage" />
 
   <xsl:template match="/webpage">
     <xsl:variable name="title">
