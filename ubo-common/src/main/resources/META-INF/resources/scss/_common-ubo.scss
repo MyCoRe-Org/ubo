@@ -282,3 +282,110 @@ table.jQDataTable tr:last-child > td {
 .list-group-item .table {
   color: inherit;
 }
+
+/* =============================================================== */
+/* classification browser                                          */
+/* ================================================================*/
+
+/* icons */
+.cbList {
+  .fa {
+    margin-left: 10px;
+    font-size: 26px;
+    font-weight: bold;
+    vertical-align: middle;
+  }
+
+  .fa-plus-square-o {
+  }
+
+  .fa-square-o {
+    color: #ccc;
+  }
+
+  .fa-minus-square-o {
+  }
+}
+
+/* first level */
+ul.cbList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+
+  li {
+    margin: 1px 0px 0px 0px;
+    padding: 0px 0px 0px 10px;
+    background-color: #e5e5e5;
+    border-radius: 1px;
+    line-height: 36px;
+    color: #ddd;
+  }
+
+  li:first-child {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+
+  li:last-child {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  li:nth-child(odd) {
+    background-color: #eee;
+  }
+
+  li a {
+    text-decoration: none;
+  }
+
+  li a:first-child {
+    color: #aaa;
+  }
+
+
+  /* second+ level */
+  ul {
+    padding: 0 0 0 0px;
+  }
+
+  li li a {
+    color: $link_color;
+  }
+
+  li li {
+    margin: 1px 0 0 0;
+    padding: 0px 0 0px 22px;
+    background-color: #fcfcfc;
+    border-radius: 1px;
+    line-height: 32px;
+  }
+
+  li li:first-child {
+    margin: 10px 0 0 0;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+  }
+
+  li li:last-child {
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    margin-bottom: 0px;
+  }
+
+  li li:nth-child(odd) {
+    background-color: #f6f6f6;
+  }
+
+}
+
+ul span.cbNum {
+  padding: 0 8px 0 12px;
+  color: #999;
+}
+
+ul ul span.cbNum {
+  color: #999;
+}

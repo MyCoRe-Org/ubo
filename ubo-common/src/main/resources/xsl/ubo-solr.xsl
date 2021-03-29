@@ -14,6 +14,10 @@
     <xsl:apply-templates select="service/servflags/servflag[@type='status']" mode="solrField" />
     <xsl:apply-templates select="service/servflags/servflag[@type='importID']" mode="solrField" />
     <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" mode="solrField" />
+
+    <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
+      <xsl:apply-templates select="mods:*[@authority or @authorityURI]|mods:typeOfResource|mods:accessCondition"  mode="category" />
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="mods:mods" mode="solrField">
@@ -379,6 +383,19 @@
         </xsl:for-each>
       </field>
     </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template match="mods:*[@authority or @authorityURI]|mods:typeOfResource|mods:accessCondition" mode="category">
+    <xsl:variable name="uri" xmlns:mcrmods="xalan://org.mycore.mods.classification.MCRMODSClassificationSupport" select="mcrmods:getClassCategParentLink(.)" />
+    <xsl:if test="string-length($uri) &gt; 0">
+      <xsl:variable name="topField" select="not(ancestor::mods:relatedItem)" />
+      <xsl:variable name="classdoc" select="document($uri)" />
+      <xsl:variable name="classid" select="$classdoc/mycoreclass/@ID" />
+      <xsl:apply-templates select="$classdoc//category" mode="category">
+        <xsl:with-param name="classid" select="$classid" />
+        <xsl:with-param name="withTopField" select="$topField" />
+      </xsl:apply-templates>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="mods:originInfo" mode="solrField">
