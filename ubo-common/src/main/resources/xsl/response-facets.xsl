@@ -204,8 +204,8 @@
     <xsl:value-of select="$prefix" />
     <xsl:choose>
       <xsl:when test="$type='subject'">
-        <xsl:variable name="uri" select="concat('classification:editor:0:parents:fachreferate:',$value)" />
-        <xsl:value-of select="document($uri)/items/item/label[lang($CurrentLang)]" />
+        <xsl:variable name="url">classification:metadata:0:children:fachreferate:<xsl:value-of select="encoder:encode(current()/@name,'UTF-8')" /></xsl:variable>
+        <xsl:value-of select="document($url)/mycoreclass/categories/category[1]/label[@xml:lang=$CurrentLang]/@text" />
       </xsl:when>
       <xsl:when test="$type='oa'">
         <xsl:value-of select="$oa//category[@ID=$value]/label[lang($CurrentLang)]/@text" />

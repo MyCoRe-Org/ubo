@@ -20,7 +20,7 @@
       <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='genre'][int]" />
       <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='oa'][int]" />
       <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='facet_person'][int]" />
-      <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='nid_lsf'][int]" />
+      <xsl:apply-templates select="lst[@name='facet_fields']/lst[@name='nid_connection'][int]" />
       <xsl:apply-templates select="lst[@name='facet_pivot']/arr[@name='name_id_type,name_id_type']" />
     </xsl:for-each>
   </xsl:template>
@@ -127,7 +127,8 @@
               xAxis: { categories: [
                 <xsl:for-each select="int">
                   <xsl:sort select="text()" data-type="number" order="descending" />
-                  '<xsl:value-of select="document(concat('classification:editor:0:parents:fachreferate:',encoder:encode(current()/@name,'UTF-8')))/items/item/label[lang($CurrentLang)]" />'
+                  <xsl:variable name="url">classification:metadata:0:children:fachreferate:<xsl:value-of select="encoder:encode(current()/@name,'UTF-8')" /></xsl:variable>
+                  '<xsl:value-of select="document($url)/mycoreclass/categories/category[1]/label[@xml:lang=$CurrentLang]/@text" />'
                   <xsl:if test="position() != last()">, </xsl:if>
                 </xsl:for-each>
                 ],
@@ -416,36 +417,36 @@
     </section>
   </xsl:template>
 
-  <xsl:template match="lst[@name='facet_fields']/lst[@name='nid_lsf']">
+  <xsl:template match="lst[@name='facet_fields']/lst[@name='nid_connection']">
 
-    <!-- The facet is a list of top LSF IDs matching the restricted query, e.g. status=confirmed, year > 2012 -->
-    <!-- To find the corresponding names, build a pivot facet with LSF ID and name variants, use most frequent name  -->
+    <!-- The facet is a list of top connected Person IDs matching the restricted query, e.g. status=confirmed, year > 2012 -->
+    <!-- To find the corresponding names, build a pivot facet with Connection ID and name variants, use most frequent name  -->
     <xsl:variable name="uri">
        <xsl:text>solr:q=objectKind:name+AND+(</xsl:text>
        <xsl:for-each select="int">
-         <xsl:text>name_id_lsf:</xsl:text>
+         <xsl:text>name_id_connection:</xsl:text>
          <xsl:value-of select="@name" />
          <xsl:if test="position() != last()">+OR+</xsl:if>
        </xsl:for-each>
-       <xsl:text>)&amp;rows=0&amp;facet.pivot=name_id_lsf,name&amp;facet.limit=</xsl:text>
+       <xsl:text>)&amp;rows=0&amp;facet.pivot=name_id_connection,name&amp;facet.limit=</xsl:text>
        <xsl:value-of select="count(int)" />
     </xsl:variable>
     <xsl:variable name="response" select="document($uri)/response" />
-    <xsl:variable name="lsf2name" select="$response/lst[@name='facet_counts']/lst[@name='facet_pivot']/arr[@name='name_id_lsf,name']" />
+    <xsl:variable name="id2name" select="$response/lst[@name='facet_counts']/lst[@name='facet_pivot']/arr[@name='name_id_connection,name']" />
 
     <xsl:variable name="q" select="encoder:encode(/response/lst[@name='responseHeader']/lst[@name='params']/str[@name='q'],'UTF-8')" />
 
-    <xsl:variable name="title" select="concat(i18n:translate('ubo.publications'),' / ',i18n:translate('facets.facet.nid_lsf'))" />
+    <xsl:variable name="title" select="concat(i18n:translate('ubo.publications'),' / ',i18n:translate('facets.facet.nid_connection'))" />
 
     <section class="card">
       <div class="card-body">
-      <div id="chartLSF" style="width:100%; height:{50 + count(int) * 30}px" />
+      <div id="chartID" style="width:100%; height:{50 + count(int) * 30}px" />
 
       <script type="text/javascript">
         $(document).ready(function() {
           new Highcharts.Chart({
             chart: {
-              renderTo: 'chartLSF',
+              renderTo: 'chartID',
               type: 'bar',
               events: {
                 click: function(e) {
@@ -470,8 +471,8 @@
             xAxis: { categories: [
               <xsl:for-each select="int">
                 <xsl:sort select="text()" data-type="number" order="descending" />
-                <xsl:variable name="lsf_id" select="@name" />
-                <xsl:variable name="name"   select="$lsf2name/lst[str[@name='value']=$lsf_id]/arr/lst[1]/str[@name='value']" />
+                <xsl:variable name="connection_id" select="@name" />
+                <xsl:variable name="name"   select="$id2name/lst[str[@name='value']=$connection_id]/arr/lst[1]/str[@name='value']" />
                 "<xsl:value-of select="$name"/>"
                 <xsl:if test="position() != last()">, </xsl:if>
               </xsl:for-each>
