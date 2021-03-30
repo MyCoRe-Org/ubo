@@ -113,7 +113,7 @@
   <tr class="background2"><td>all</td><td>Text</td><td>Suche in allen Datenfeldern (mit Ausnahme von "tag", "place", "publisher", "volume", "issue", "edition", "extent", "pages" </td><td>=, contains, like, phrase</td></tr>
   <tr class="background1"><td>title</td><td>Text</td><td>Titel</td><td>=, contains, like, phrase</td></tr>
   <tr class="background2"><td>host_title</td><td>Text</td><td>Titel einer Überordnung</td><td>=, contains, like, phrase</td></tr>
-  <tr class="background1"><td>person</td><td>Name</td><td>Personenname (Autoren, Herausgeber oder andere), mit jeder Rolle kombinierbar (siehe häufigste Beispiele unten) vgl. <a href="rollen.xed">diese Liste</a> </td><td>=, contains, like</td></tr>
+  <tr class="background1"><td>person</td><td>Name</td><td>Personenname (Autoren, Herausgeber oder andere), mit jeder Rolle kombinierbar (siehe häufigste Beispiele unten) vgl. <a href="api/v2/classifications/marcrelator">diese Liste</a> </td><td>=, contains, like</td></tr>
   <tr class="background2"><td>person_aut</td><td>Name</td><td>Autor</td><td>=, contains, like</td></tr>
   <tr class="background1"><td>person_edt</td><td>Name</td><td>Herausgeber, Verlag</td><td>=, contains, like</td></tr>
   <tr class="background2"><td>person_ths</td><td>Name</td><td>Doktorvater, BetreuerIn bei Dissertationen (Akademische Betreuung)</td><td>=, contains, like</td></tr>  
