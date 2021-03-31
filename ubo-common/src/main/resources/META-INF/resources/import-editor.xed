@@ -92,7 +92,7 @@
           *<xed:output i18n="ubo.subject" />:
         </label>
         <select id="{xed:generate-id()}" class="autocomplete {$xed-validation-marker} mycore-form-input">
-          <option value=""><xed:output i18n="search.select" /></option>
+          <option value=""><xed:output i18n="search.select.autocomplete" /></option>
           <xed:include uri="xslStyle:items2options:classification:editor:-1:children:fachreferate" />
         </select>
         <xed:controls />
@@ -111,7 +111,7 @@
           <xed:output i18n="ubo.department" />:
         </label>
         <select id="{xed:generate-id()}" class="autocomplete {$xed-validation-marker} mycore-form-input">
-          <option value=""><xed:output i18n="search.select" /></option>
+          <option value=""><xed:output i18n="search.select.autocomplete" /></option>
           <xed:include uri="xslStyle:items2options:classification:editor:-1:children:ORIGIN" />
         </select>
         <xed:controls />
