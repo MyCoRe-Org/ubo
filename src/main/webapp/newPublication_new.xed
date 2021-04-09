@@ -3,16 +3,16 @@
 <webpage lastModified="$Date$" id="dozbib.new.publication">
   <title xml:lang="de">Publikation melden</title>
   <title xml:lang="en">Registering publication</title>
-  
+
   <article class="highlight1" xml:lang="de">
     <p>
-    Wir erfassen alle Publikationen, die Sie als <strong>UDE-Wissenschaftler*in</strong> in Ihrer Publikationsliste nachgewiesen haben möchten – z.B. auch Poster, Vorträge, Meeting Abstracts oder Patente. 
-	Sollte in unserer Sammlung ein Publikationstyp fehlen, den Sie benötigen, melden Sie sich einfach bei uns: 
-	<a href="mailto:universitaetsbibliographie@ub.uni-due.de"> <span style="display:inline-block; vertical-align:top;">universitaetsbibliographie@ub.uni-due.de</span> </a>       
+    Wir erfassen alle Publikationen, die Sie als <strong>UDE-Wissenschaftler*in</strong> in Ihrer Publikationsliste nachgewiesen haben möchten – z.B. auch Poster, Vorträge, Meeting Abstracts oder Patente.
+	Sollte in unserer Sammlung ein Publikationstyp fehlen, den Sie benötigen, melden Sie sich einfach bei uns:
+	<a href="mailto:universitaetsbibliographie@ub.uni-due.de"> <span style="display:inline-block; vertical-align:top;">universitaetsbibliographie@ub.uni-due.de</span> </a>
     </p>
     <p>
-    Wir weisen vor allen Dingen die Publikationen von UDE-Angehörigen nach, die zum Zeitpunkt ihrer Tätigkeit an der UDE entstanden sind – 
-    aber auch die, die davor oder danach veröffentlicht wurden, wenn sie in der persönlichen Publikationsliste enthalten sein sollen. 
+    Wir weisen vor allen Dingen die Publikationen von UDE-Angehörigen nach, die zum Zeitpunkt ihrer Tätigkeit an der UDE entstanden sind –
+    aber auch die, die davor oder danach veröffentlicht wurden, wenn sie in der persönlichen Publikationsliste enthalten sein sollen.
     </p>
   </article>
 
@@ -58,6 +58,7 @@
                       <option value="zdb">ZDB ID</option>
                       <option value="ppn">GBV/SWB PPN</option>
                       <option value="hbz">HBZ HT-Nummer</option>
+                      <option value="mms">Alma MMS ID</option>
                       <option value="issn">ISSN</option>
                     </xed:if>
                   </select>:
@@ -118,10 +119,10 @@
   <article class="highlight1" xml:lang="de">
     <h2>Literaturlisten</h2>
     <p>
-     Sie können uns Literaturlisten in jedem beliebigen Format einfach per Mail zuschicken: 
+     Sie können uns Literaturlisten in jedem beliebigen Format einfach per Mail zuschicken:
      <a href="mailto:universitaetsbibliographie@ub.uni-due.de"> <span style="display:inline-block; vertical-align:top;">universitaetsbibliographie@ub.uni-due.de</span> </a> <br/>
-	 Wir importieren für Sie Ihre Publikationen in die UBO und reichern die Daten mit Informationen z.B. zur Verfügbarkeit an.       
-    </p>   
+	 Wir importieren für Sie Ihre Publikationen in die UBO und reichern die Daten mit Informationen z.B. zur Verfügbarkeit an.
+    </p>
   </article>
-  
+
 </webpage>

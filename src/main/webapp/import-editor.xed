@@ -549,7 +549,7 @@
   </xed:template>
 
   <xed:template id="identifier">
-    <xed:repeat xpath="mods:identifier[contains('doi urn hdl pubmed ieee arxiv zdb ppn hbz scopus evaluna isi isbn issn duepublico duepublico2',@type)]">
+    <xed:repeat xpath="mods:identifier[contains('doi urn hdl pubmed ieee arxiv zdb ppn hbz mms scopus evaluna isi isbn issn duepublico duepublico2',@type)]">
       <div>
         <xed:bind xpath="@type" default="doi">
           <select class="label" style="margin-left:6px; width:167px;">
@@ -567,6 +567,7 @@
             <option value="evaluna">EVALuna ID</option>
             <option value="ppn">GBV PPN</option>
             <option value="hbz">HBZ HT-Nummer</option>
+            <option value="mms">Alma MMS ID</option>
             <option value="duepublico">DuEPublico 1 ID</option>
             <option value="duepublico2">DuEPublico 2 ID</option>
           </select>

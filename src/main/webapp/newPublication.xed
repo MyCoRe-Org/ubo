@@ -46,6 +46,7 @@
                       <option value="zdb">ZDB ID</option>
                       <option value="ppn">GBV/SWB PPN</option>
                       <option value="hbz">HBZ HT-Nummer</option>
+                      <option value="mms">Alma MMS ID</option>
                       <option value="issn">ISSN</option>
                     </xed:if>
                   </select>:
