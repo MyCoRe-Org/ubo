@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xsl:stylesheet version="1.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:xalan="http://xml.apache.org/xalan" 
-  xmlns:encoder="xalan://java.net.URLEncoder" 
+  xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:encoder="xalan://java.net.URLEncoder"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   exclude-result-prefixes="xsl mods xlink xalan encoder i18n"
 >
@@ -44,9 +44,9 @@
       <xsl:apply-templates select="." />
     </dc:title>
   </xsl:template>
-  
+
   <!-- DC.Creator -->
-  
+
   <xsl:template match="mods:name[mods:role/mods:roleTerm][contains($creator.roles,mods:role/mods:roleTerm[@type='code'])]" mode="dc" priority="1">
     <dc:creator>
       <xsl:apply-templates select="." />
@@ -54,7 +54,7 @@
   </xsl:template>
 
   <!-- DC.Contributor -->
-  
+
   <xsl:template match="mods:name[@type='personal']" mode="dc">
     <dc:contributor>
       <xsl:apply-templates select="." />
@@ -63,9 +63,9 @@
       <xsl:text>)</xsl:text>
     </dc:contributor>
   </xsl:template>
-  
+
   <!-- DC.Type -->
-  
+
   <xsl:template match="mods:genre[@type='intern']" mode="dc">
     <dc:type>
       <xsl:value-of select="." />
@@ -74,15 +74,15 @@
       <xsl:apply-templates select="." />
     </dc:type>
   </xsl:template>
-  
+
   <!-- DC.Date -->
-  
+
   <xsl:template match="mods:dateIssued[@encoding='w3cdtf']" mode="dc">
     <dc:date>
       <xsl:value-of select="text()" />
     </dc:date>
   </xsl:template>
-  
+
   <!-- DC.Publisher -->
 
   <xsl:template match="mods:name[mods:role/mods:roleTerm='pbl']" mode="dc">
@@ -113,7 +113,7 @@
     <xsl:text> </xsl:text>
     <xsl:value-of select="text()" />
   </xsl:template>
- 
+
   <xsl:template match="mods:location/mods:shelfLocator" mode="dc.host">
     <xsl:text>, Signatur: </xsl:text>
     <xsl:value-of select="text()" />
@@ -126,13 +126,13 @@
   </xsl:template>
 
   <!-- DC.Description -->
-  
+
   <xsl:template match="mods:note" mode="dc">
     <dc:description>
       <xsl:value-of select="text()" />
     </dc:description>
   </xsl:template>
-  
+
   <xsl:template match="mods:abstract" mode="dc">
     <xsl:if test="string-length(text()) &gt; 0">
       <dc:description>
@@ -142,7 +142,7 @@
     </xsl:if>
     <xsl:apply-templates select="@xlink:href" mode="dc" />
   </xsl:template>
-  
+
   <xsl:template match="mods:abstract/@xlink:href" mode="dc">
     <dc:description>
       <xsl:copy-of select="@xml:lang" />
@@ -165,9 +165,9 @@
       <xsl:value-of select="document(concat('language:',.))/language/@termCode" />
     </dc:language>
   </xsl:template>
-  
+
   <!-- DC.Identifier -->
-  
+
   <xsl:template match="mods:identifier[@type='urn']" mode="dc">
     <dc:identifier>
       <xsl:value-of select="text()" />
@@ -205,7 +205,7 @@
   </xsl:template>
 
   <xsl:param name="UBO.PubMed.Link" />
-  
+
   <xsl:template match="mods:identifier[@type='pubmed']" mode="dc">
     <dc:identifier>
       <xsl:value-of select="$UBO.PubMed.Link" />
@@ -214,7 +214,7 @@
   </xsl:template>
 
   <xsl:param name="UBO.Scopus.Link" />
-  
+
   <xsl:template match="mods:identifier[@type='scopus']" mode="dc">
     <dc:identifier>
       <xsl:value-of select="$UBO.Scopus.Link" />
@@ -229,7 +229,7 @@
       <xsl:value-of select="text()" />
     </dc:identifier>
   </xsl:template>
- 
+
   <xsl:template match="mods:identifier[@type='duepublico2']" mode="dc">
     <dc:publisher>Universitätsbibliothek Duisburg-Essen, Dokumenten- und Publikationsserver DuEPublico</dc:publisher>
     <dc:identifier>
@@ -241,7 +241,7 @@
   <xsl:template match="mods:identifier" mode="dc">
     <xsl:value-of select="text()" />
   </xsl:template>
- 
+
   <xsl:template match="mods:location/mods:shelfLocator" mode="dc">
     <dc:identifier>
       <xsl:text>Signatur: </xsl:text>
@@ -251,14 +251,14 @@
       <xsl:variable name="sig">
         <xsl:apply-templates select="." mode="normalize.shelfmark" />
       </xsl:variable>
-      <xsl:value-of select="concat($primo.search,'lsr11,contains,%22',encoder:encode(.),'%22')" />
+      <xsl:value-of select="concat($primo.search,'holding_call_number,exact,%22',encoder:encode(.),'%22')" />
     </dc:identifier>
   </xsl:template>
-  
+
   <xsl:template match="mods:location/mods:url" mode="dc">
     <dc:identifier>
       <xsl:value-of select="text()" />
     </dc:identifier>
   </xsl:template>
-  
+
 </xsl:stylesheet>
