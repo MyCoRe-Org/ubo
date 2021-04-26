@@ -31,8 +31,10 @@
     <xsl:value-of select="/user/@realm" />
   </xsl:if>
 </xsl:variable>
+  <xsl:variable name="owns" select="document(concat('user:getOwnedUsers:',$uid))/owns" />
 
-<xsl:template match="/">
+
+  <xsl:template match="/">
   <html id="profile">
     <head>
       <title>
@@ -56,6 +58,9 @@
           <xsl:apply-templates select="." mode="actions" />
         </div>
       </div>
+      <section id="steps">
+        <xsl:call-template name="steps" />
+      </section>
       <table class="table">
         <xsl:apply-templates select="realName" />
         <xsl:apply-templates select="eMail" />
@@ -71,6 +76,63 @@
   <xsl:call-template name="publications" />
 
 </xsl:template>
+
+  <xsl:template name="steps">
+    <xsl:if test="$step = 'confirmDelete'">
+      <div class="section alert alert-danger">
+        <p>
+          <strong>
+            <xsl:value-of select="i18n:translate('component.user2.admin.userDeleteRequest')" />
+          </strong>
+          <br />
+          <xsl:value-of select="i18n:translate('component.user2.admin.userDeleteExplain')" />
+          <br />
+          <xsl:if test="$owns/user">
+            <strong>
+              <xsl:value-of select="i18n:translate('component.user2.admin.userDeleteExplainRead1')" />
+              <xsl:value-of select="count($owns/user)" />
+              <xsl:value-of select="i18n:translate('component.user2.admin.userDeleteExplainRead2')" />
+            </strong>
+          </xsl:if>
+        </p>
+        <form class="pull-left" method="post" action="MCRUserServlet">
+          <input name="action" value="delete" type="hidden" />
+          <input name="id" value="{$uid}" type="hidden" />
+          <input name="XSL.step" value="deleted" type="hidden" />
+          <input value="{i18n:translate('component.user2.button.deleteYes')}" class="btn btn-danger" type="submit" />
+        </form>
+        <form method="get" action="MCRUserServlet">
+          <input name="action" value="show" type="hidden" />
+          <input name="id" value="{$uid}" type="hidden" />
+          <input value="{i18n:translate('component.user2.button.cancelNo')}" class="btn btn-primary" type="submit" />
+        </form>
+      </div>
+    </xsl:if>
+    <xsl:if test="$step = 'deleted'">
+      <div class="section alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+          <xsl:text disable-output-escaping="yes">&amp;times;</xsl:text>
+        </button>
+        <p>
+          <strong>
+            <xsl:value-of select="i18n:translate('component.user2.admin.userDeleteConfirm')" />
+          </strong>
+        </p>
+      </div>
+    </xsl:if>
+    <xsl:if test="$step = 'changedPassword'">
+      <div class="section alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+          <xsl:text disable-output-escaping="yes">&amp;times;</xsl:text>
+        </button>
+        <p>
+          <strong>
+            <xsl:value-of select="i18n:translate('component.user2.admin.passwordChangeConfirm')" />
+          </strong>
+        </p>
+      </div>
+    </xsl:if>
+  </xsl:template>
 
 <xsl:template match="realName">
   <tr>
