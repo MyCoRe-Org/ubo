@@ -389,3 +389,14 @@ ul span.cbNum {
 ul ul span.cbNum {
   color: #999;
 }
+
+.ubo_related_details {
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+  padding-top: .5rem;
+  padding-bottom: 0.5rem;
+  background-color: $table-hover-bg;
+}
+.ubo_related_details + .ubo_related_details {
+  margin-top: -.5rem;
+}
