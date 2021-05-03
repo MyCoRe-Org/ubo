@@ -1,0 +1,20 @@
+/* ubo-bootstrap.scss
+ * - main sass file
+ * - includes all needed resources in correct order
+ * - source of generic ubo-bootstrap.css
+ */
+
+// override bootstrap sass variables
+@import "ubo-variables";
+
+// current stable bootstrap version
+@import "../webjars/bootstrap/4.4.1/scss/bootstrap";
+
+// ubo specific settings
+@import "ubo-buttons";
+@import "ubo-cards";
+@import "ubo-classification-browser";
+@import "ubo-common";
+@import "ubo-facets";
+@import "ubo-forms";
+@import "ubo-tables";
