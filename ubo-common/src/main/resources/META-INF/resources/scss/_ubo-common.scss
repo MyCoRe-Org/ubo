@@ -1,0 +1,135 @@
+/*  _ubo-common.scss
+ *  - for very basic settings,
+ *    for helper classes and
+ *    for everything that will not fit into any other file
+ */
+
+// Extra large devices (large desktops)
+// set the defaults for all responsive levels here
+// no (xl) media query necessary (desktop first)
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  // TODO: improve code
+  // .has-error is outdated
+  // but can be replaced with .is-valid, .is-invalid
+  .has-error {
+    @extend .border-danger;
+  }
+
+  .validation-failures ul li {
+    color:  $danger;
+  }
+
+  .readonly {
+    background-color: $input-disabled-bg !important;
+  }
+
+  // shortcut-classes for lists
+  .mycore-list-item {
+    @extend .list-group-item;
+    @extend .border-0;
+    @extend .py-0;
+    @extend .px-0;
+  }
+
+  // sidebar facets
+  .mycore-slidetoggle {
+    @extend .text-primary;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  img.orcid-icon {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin: 0px 2px 0px 2px;
+  }
+
+  .chosen-container-single .chosen-single {
+    height: 38px !important;
+    border-color: rgb(206, 212, 218) !important;
+    border: 1px solid #ced4da !important;
+    border-radius: .1rem !important;
+    background: none !important;
+    box-shadow: none !important;
+    color: #495057 !important;
+    font-size: 1rem !important;
+    font-family: "Roboto", Arial, sans-serif !important;
+    padding: 0.375rem 0.99rem !important;
+    letter-spacing: 0 !important;
+  }
+
+  .chosen-container-single .chosen-single div {
+    top: 7px !important;
+    right: -5px !important;
+  }
+
+  .chosen-container .chosen-drop {
+    border: 1px solid #ced4da !important;
+    font-family: "Roboto", Arial, sans-serif !important;
+    color: #495057 !important;
+    font-size: 1rem !important;
+    border-radius: .1rem !important;
+    box-shadow: none !important;
+  }
+
+  .nameIdentifier {
+    @extend .badge, .badge-primary;
+    a {
+      color: white;
+      text-transform: capitalize;
+    }
+    vertical-align: top;
+    margin-right: 0.25rem;
+    background-color: #1d60bd;
+    border-radius: 0.2rem;
+  }
+
+  .nameIdentifier:first-child {
+    margin-left: 0.25rem;
+  }
+
+  .nameIdentifier:last-child {
+    margin-right: 0rem;
+  }
+
+  .ubo-content-block {
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .ubo_related_details {
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+    padding-top: .5rem;
+    padding-bottom: 0.5rem;
+    background-color: $table-hover-bg;
+  }
+  .ubo_related_details + .ubo_related_details {
+    margin-top: -.5rem;
+  }
+
+// Large devices (desktops) and below: <= 1200px
+@include media-breakpoint-down(lg) {
+// add/overwrite styles for responsive level lg and lower
+}
+
+// Medium devices (tablets) and below: <= 992px
+@include media-breakpoint-down(md) {
+// add/overwrite styles for responsive level md and lower
+}
+
+// Small devices (landscape phones) and below: <= 768px
+@include media-breakpoint-down(sm) {
+// add/overwrite styles for responsive level sm and lower
+}
+
+// Extra small devices (portrait phones): <= 576px
+@include media-breakpoint-down(xs) {
+// add/overwrite styles for responsive level xs
+}

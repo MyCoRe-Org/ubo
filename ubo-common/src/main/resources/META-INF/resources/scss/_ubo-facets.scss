@@ -1,0 +1,68 @@
+/*  _ubo-facets.scss
+ */
+
+// Extra large devices (large desktops)
+// set the defaults for all responsive levels here
+// no (xl) media query necessary (desktop first)
+
+  // facets (sidebar searchresults etc.)
+  .mycore-facet-count:after {
+    content: " | ";
+  }
+
+  .mycore-facet-exclude, .mycore-facet-remove {
+    @extend .mr-1;
+    color: red;
+  }
+
+  .mycore-facet-count {
+    display: inline-block;
+    width: 60px;
+    height: 1.2em;
+    vertical-align: top;
+    margin: 0;
+    padding: 0;
+    text-align: right;
+  }
+
+  .mycore-facet-value {
+    display: inline-block;
+    width: 175px;
+    height: 1.5em;
+    vertical-align: top;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+
+  .mycore-facet-value .scroll-on-hover {
+    position: absolute;
+    white-space: nowrap;
+    transform: translateX(0);
+    transition: 6s;
+  }
+
+  .mycore-facet-value:hover .scroll-on-hover {
+    transform: translateX(calc(175px - 100%));
+  }
+
+// Large devices (desktops) and below: <= 1200px
+@include media-breakpoint-down(lg) {
+// add/overwrite styles for responsive level lg and lower
+}
+
+// Medium devices (tablets) and below: <= 992px
+@include media-breakpoint-down(md) {
+// add/overwrite styles for responsive level md and lower
+}
+
+// Small devices (landscape phones) and below: <= 768px
+@include media-breakpoint-down(sm) {
+// add/overwrite styles for responsive level sm and lower
+}
+
+// Extra small devices (portrait phones): <= 576px
+@include media-breakpoint-down(xs) {
+// add/overwrite styles for responsive level xs
+}

@@ -1,0 +1,44 @@
+/* ubo-variables.scss
+ * - overwrites bootstrap variables
+ * - or defines common ubo variables
+ *
+ * !important
+ * - all variables has to be defined with !default
+ *   to allow overwriting without !important
+ *
+ * annotation:
+ * - all available variables are defined in
+ *   /bootstrap/scss/_variables.scss
+ *   or use this web app: https://bootstrap.build/app
+ */
+
+// bootstrap variables
+// overwrite or modify
+$primary: #003b7a !default;
+$body-bg: #efe4bf !default;
+
+$border-radius: .2rem !default;
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+) !default;
+
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1250px
+) !default;
+
+// modify theme colors
+$theme-colors: (
+  alternative: $body-bg
+) !default;
+
+// ubo variables
+$pmud-color:          $primary !default;
+$pmud-color-hover:  white !default;

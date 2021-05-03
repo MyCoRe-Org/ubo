@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  xmlns:encoder="xalan://java.net.URLEncoder" 
+  xmlns:encoder="xalan://java.net.URLEncoder"
   exclude-result-prefixes="xsl xalan i18n encoder">
 
   <xsl:output method="html" encoding="UTF-8" media-type="text/html" indent="yes" xalan:indent-amount="2" />
@@ -25,7 +25,7 @@
 
 
   <!-- ==================== HTML ==================== -->
-  
+
   <xsl:template match="/html">
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>
 
@@ -43,7 +43,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta http-equiv="x-ua-compatible" content="ie=edge" />
 
-      <link href="{$WebApplicationBaseURL}rsc/sass/scss/bootstrap-ubo.css" rel="stylesheet" />
+      <link href="{$WebApplicationBaseURL}rsc/sass/scss/ubo.css" rel="stylesheet" />
       <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/jquery/{$jquery.version}/jquery.min.js"></script>
       <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/bootstrap/{$bootstrap.version}/js/bootstrap.bundle.min.js"></script>
       <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/chosen-js/{$chosen.version}/chosen.jquery.min.js"></script>
@@ -57,7 +57,7 @@
       <link rel="apple-touch-icon-precomposed" href="https://www.uni-due.de/imperia/md/images/cms/l/apple-touch-icon-precomposed.png" />
       <link rel="shortcut icon" href="https://www.uni-due.de/imperia/md/images/cms/l/apple-touch-icon.png" />
       <link rel="shortcut icon" href="{$WebApplicationBaseURL}images/favicon.ico" />
-      
+
       <script type="text/javascript">var webApplicationBaseURL = '<xsl:value-of select="$WebApplicationBaseURL" />';</script>
       <script type="text/javascript">var currentLang = '<xsl:value-of select="$CurrentLang" />';</script>
       <script type="text/javascript" src="{$WebApplicationBaseURL}js/session-polling.js"></script>
@@ -286,7 +286,7 @@
 
   </xsl:template>
 
-  <!-- If current user has ORCID and we are his trusted party, display ORCID icon to indicate that -->  
+  <!-- If current user has ORCID and we are his trusted party, display ORCID icon to indicate that -->
   <xsl:param name="MCR.ORCID.LinkURL" />
 
   <xsl:template name="orcidUser">
@@ -294,7 +294,7 @@
     <xsl:variable name="orcidUser" select="orcidSession:getCurrentUser()" xmlns:orcidSession="xalan://org.mycore.orcid.user.MCRORCIDSession" />
     <xsl:variable name="userStatus" select="orcidUser:getStatus($orcidUser)" xmlns:orcidUser="xalan://org.mycore.orcid.user.MCRORCIDUser" />
     <xsl:variable name="trustedParty" select="userStatus:weAreTrustedParty($userStatus)" xmlns:userStatus="xalan://org.mycore.orcid.user.MCRUserStatus" />
-    
+
     <xsl:if test="$trustedParty = 'true'">
       <xsl:variable name="orcid" select="orcidUser:getORCID($orcidUser)" xmlns:orcidUser="xalan://org.mycore.orcid.user.MCRORCIDUser" />
       <a href="{$MCR.ORCID.LinkURL}{$orcid}">
@@ -306,7 +306,7 @@
   <!-- main navigation -->
 
   <xsl:template name="layout.mainnavigation">
-  
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light" role="navigation" id="hauptnavigation">
       <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -325,7 +325,7 @@
       <xsl:value-of select="head/title" disable-output-escaping="yes" />
     </h1>
   </xsl:template>
-  
+
   <!-- Footer -->
 
   <xsl:template name="layout.footer">
