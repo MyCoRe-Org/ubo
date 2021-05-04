@@ -349,11 +349,16 @@
     </span>
   </xsl:template>
 
-  <xsl:param name="UBO.Jena.Author.Link" />
+  <xsl:param name="UBO.Local.Author.Link" />
 
-  <xsl:template match="mods:nameIdentifier[@type='jena']">
-    <span class="nameIdentifier jena" title="Author Jena LDAP ID: {.}">
-      <a href="{$UBO.Jena.Author.Link}{.}">Jena</a>
+  <xsl:template match="mods:nameIdentifier[@type='local']">
+    <span class="nameIdentifier local" title="{i18n:translate('ubo.authorlink.local.title')}: {.}">
+      <xsl:choose>
+        <xsl:when test="string-length($UBO.Local.Author.Link) &gt; 0">
+          <a href="{$UBO.Local.Author.Link}{.}"><xsl:value-of select="i18n:translate('ubo.authorlink.local.text')" /></a>
+        </xsl:when>
+        <xsl:otherwise><xsl:value-of select="i18n:translate('ubo.authorlink.local.text')" /></xsl:otherwise>
+      </xsl:choose>
     </span>
   </xsl:template>
 
