@@ -19,26 +19,40 @@
 package org.mycore.ubo.resources;
 
 import com.google.gson.Gson;
-import de.undercouch.citeproc.CSL;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.xml.MCRURIResolver;
+import org.mycore.frontend.MCRFrontendUtil;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.Response;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-@Path("csl")
-public class UBOCSLResource {
 
+@Path("export")
+public class UBOExportResource {
 
     public static final Namespace CSL_NAMESPACE = Namespace.getNamespace("csl", "http://purl.org/net/xbiblio/csl");
+
+    private static String encode(String s) {
+        return URLEncoder.encode(s, StandardCharsets.UTF_8);
+    }
 
     @GET
     @Path("styles")
@@ -62,6 +76,55 @@ public class UBOCSLResource {
 
         String json = new Gson().toJson(result.toArray(), CSLEntry[].class);
         return Response.ok(json).build();
+    }
+
+    @GET
+    @Path("link/{format}/{pids:.+}")
+    public Response link(
+        @PathParam("format") String format,
+        @PathParam("pids") String pidSegment,
+        @QueryParam("sortField") String sortField,
+        @QueryParam("sortDirection") String sortDirection,
+        @QueryParam("year") int year,
+        @QueryParam("style") String style) throws URISyntaxException {
+
+        Set<String> pids = Stream.of(pidSegment.split(";")).collect(Collectors.toSet());
+
+        if (pids.size() == 0) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        if(sortField == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        if(sortDirection == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        if(year == -1) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        String nidConnectionValue = "(" + String.join(" OR ", pids) + ")";
+        String baseURL = MCRFrontendUtil.getBaseURL();
+
+        String solrQuery = "nid_connection:" + nidConnectionValue + " and year:>=" + year;
+        StringBuilder solrRequest = new StringBuilder()
+            .append(baseURL).append("servlets/solr/select")
+            .append("?q=").append(encode(solrQuery))
+            .append("&rows=9999&")
+            .append("&sort=").append(encode(sortField)).append(encode(" ")).append(encode(sortDirection));
+
+        if (style == null) {
+            solrRequest.append("&XSL.Transformer=").append(encode(format));
+        } else {
+            solrRequest.append("&XSL.Transformer=response-csl-").append(encode(format));
+            solrRequest.append("&XSL.style=").append(encode(style));
+        }
+
+        URI newLocation = new URI(solrRequest.toString());
+        return Response.temporaryRedirect(newLocation).build();
     }
 
     public static class CSLEntry {

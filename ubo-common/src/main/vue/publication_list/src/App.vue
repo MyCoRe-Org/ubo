@@ -202,7 +202,7 @@ export default class PublicationList extends Vue {
   }
 
   private async resolveStyles() {
-    let response = await fetch(this.getWebApplicationBaseURL() + "rsc/csl/styles");
+    let response = await fetch(this.getWebApplicationBaseURL() + "rsc/export/styles");
     let styles = await response.json();
     for (const style of styles) {
       this.styles.push(style);
@@ -283,23 +283,20 @@ export default class PublicationList extends Vue {
       return;
     }
 
+    let query = this.users.map(u => `${u.pid}`).join(";");
     if (exportModel.format == 'pdf' || exportModel.format == 'html') {
       if (exportModel.style.length == 0) {
         return;
       }
 
-      let query = this.users.map(u => `"${u.pid}"`).join(" OR ");
       this.result.link =
-          `${this.getWebApplicationBaseURL()}servlets/solr/select?q=nid_connection:(${query}) and (year:>=` +
-          `${this.exportM.year})&rows=99999&XSL.Transformer=response-csl-${exportModel.format}` +
-          `&sort=${exportModel.sortField} ${exportModel.asc ? "asc" : "desc"}&XSL.style=${exportModel.style}`;
+          `${this.getWebApplicationBaseURL()}rsc/export/link/${exportModel.format}/${query}?year=${this.exportM.year}&`+
+          `sortField=${exportModel.sortField}&sortDirection=${exportModel.asc ? "asc" : "desc"}&style=${exportModel.style}`;
       return;
     } else {
-      let query = this.users.map(u => `"${u.pid}"`).join(" OR ");
       this.result.link =
-          `${this.getWebApplicationBaseURL()}servlets/solr/select?q=nid_connection:(${query}) and (year:>=` +
-          `${this.exportM.year})&rows=99999&XSL.Transformer=${exportModel.format}` +
-          `&sort=${exportModel.sortField} ${exportModel.asc ? "asc" : "desc"}`;
+          `${this.getWebApplicationBaseURL()}rsc/export/link/${exportModel.format}/${query}?year=${this.exportM.year}&`+
+          `sortField=${exportModel.sortField}&sortDirection=${exportModel.asc ? "asc" : "desc"}`;
     }
   }
 
