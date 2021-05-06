@@ -1,11 +1,13 @@
 <template>
-  <div class="container">
+  <div>
     <link v-if="bootstrap" rel="stylesheet" :href="bootstrap">
     <link v-if="css" rel="stylesheet" :href="css">
     <section class="row">
       <div class="col-12">
+        <label for="personSearch">{{i18n["index.person"]}}</label>
         <div class="input-group">
-          <input class="form-control" type="text" v-model="search.text" v-on:keyup.enter="startSearch">
+          <input id="personSearch" class="form-control" type="text" v-model="search.text"
+                 v-on:keyup.enter="startSearch">
           <span class="input-group-btn">
             <button class="btn btn-secondary" v-on:click="startSearch">
               <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
@@ -51,6 +53,17 @@
              href="javascript:void(0)">
             {{ user.name }}
           </a>
+        </div>
+      </div>
+    </section>
+    <section class="row mt-2">
+      <div class="col-12">
+        <label for="yearIssued">{{i18n["search.dozbib.year.publication"]}}</label>
+        <input id="yearIssued" v-model="exportM.year" class="form-control"
+               v-bind:class="{ 'is-invalid' : isInvalidYear() }" v-on:change="yearChange"
+               type="number">
+        <div class="invalid-feedback">
+          {{i18n["search.dozbib.year.invalid"]}}
         </div>
       </div>
     </section>
@@ -146,16 +159,17 @@ export default class PublicationList extends Vue {
     format: "",
     style: "",
     sortField: "year",
-    asc: true
+    asc: true,
+    year: new Date().getFullYear(),
   };
 
   private result = {
     link: ""
   }
 
-  private styles: any[] = []
+  private styles: StyleDescription[] = []
 
-  private i18n: any = {
+  private i18n: { [key: string]: string | null; } = {
     "button.search": null,
     "error.occurred": null,
     "index.person.found.0": null,
@@ -170,14 +184,21 @@ export default class PublicationList extends Vue {
     "listWizard.code": null,
     "listWizard.format": null,
     "listWizard.citation": null,
-    "result.dozbib.results": null
+    "result.dozbib.results": null,
+    "search.dozbib.year.publication": null,
+    "search.dozbib.year.invalid": null,
+    "index.person": null
   };
 
   private users: User[] = [];
 
-  created() {
+  created(): void {
     this.resolveStyles();
     this.resolveiI18N();
+  }
+
+  private isInvalidYear() {
+    return isNaN(this.exportM.year) || this.exportM.year > new Date().getFullYear() || this.exportM.year < 0;
   }
 
   private async resolveStyles() {
@@ -234,17 +255,24 @@ export default class PublicationList extends Vue {
     this.createLink();
   }
 
-  private formatChange() {
+  private formatChange(): void {
     this.createLink();
   }
 
-  private sortChange() {
+  private sortChange(): void {
     this.createLink();
-    return;
+  }
+
+  private yearChange(): void {
+    this.createLink();
   }
 
   private createLink() {
     this.clearLink();
+
+    if (this.isInvalidYear()) {
+      return;
+    }
 
     if (this.users.length == 0) {
       return;
@@ -261,17 +289,16 @@ export default class PublicationList extends Vue {
       }
 
       let query = this.users.map(u => `"${u.pid}"`).join(" OR ");
-      let link =
-          `${this.getWebApplicationBaseURL()}servlets/solr/select?q=nid_connection:(${query})&rows=99999` +
-          `&XSL.Transformer=response-csl-${exportModel.format}` +
+      this.result.link =
+          `${this.getWebApplicationBaseURL()}servlets/solr/select?q=nid_connection:(${query}) and (year:>=` +
+          `${this.exportM.year})&rows=99999&XSL.Transformer=response-csl-${exportModel.format}` +
           `&sort=${exportModel.sortField} ${exportModel.asc ? "asc" : "desc"}&XSL.style=${exportModel.style}`;
-
-      this.result.link = link;
       return;
     } else {
       let query = this.users.map(u => `"${u.pid}"`).join(" OR ");
       this.result.link =
-          `${this.getWebApplicationBaseURL()}servlets/solr/select?q=nid_connection:(${query})&rows=99999&XSL.Transformer=${exportModel.format}` +
+          `${this.getWebApplicationBaseURL()}servlets/solr/select?q=nid_connection:(${query}) and (year:>=` +
+          `${this.exportM.year})&rows=99999&XSL.Transformer=${exportModel.format}` +
           `&sort=${exportModel.sortField} ${exportModel.asc ? "asc" : "desc"}`;
     }
   }
@@ -328,6 +355,12 @@ export interface ExportModel {
   style: string;
   sortField: string;
   asc: boolean;
+  year: number
+}
+
+export interface StyleDescription {
+  id: string,
+  title: string
 }
 
 export interface User {
