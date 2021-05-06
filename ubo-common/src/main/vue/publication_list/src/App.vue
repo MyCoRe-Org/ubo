@@ -70,7 +70,7 @@
     <section class="row mt-2">
       <div class="col-12">
         <label for="sortSelect">{{i18n["search.sort"]}}</label>
-        <select id="sortSelect" class="form-control" v-on:change="sortChange" v-model="exportM.sortField">
+        <select id="sortSelect" class="form-control custom-select" v-on:change="sortChange" v-model="exportM.sortField">
           <option v-bind:value="'year'">{{i18n["search.sort.year"]}}</option>
           <option v-bind:value="'sortby_person'">{{ i18n["search.sort.name"] }}</option>
           <option v-bind:value="'sortby_title'">{{ i18n["search.sort.title"] }}</option>
@@ -82,7 +82,7 @@
       </div>
       <div class="col-12 mt-2">
         <label for="formatSelect">{{ i18n["listWizard.format"] }}</label>
-        <select id="formatSelect" class="form-control" v-on:change="formatChange" v-model="exportM.format">
+        <select id="formatSelect" class="form-control custom-select" v-on:change="formatChange" v-model="exportM.format">
           <option v-bind:value="''">{{ i18n["search.select"] }}</option>
           <option v-bind:value="'pdf'">PDF</option>
           <option v-bind:value="'html'">HTML</option>
@@ -96,7 +96,7 @@
       </div>
       <div class="col-12" v-if="exportM.format==='html' || exportM.format==='pdf'">
         <label for="styleSelect">{{ i18n["listWizard.citation"] }}</label>
-        <select id="styleSelect" class="form-control" v-on:change="styleChange" v-model="exportM.style">
+        <select id="styleSelect" class="form-control custom-select" v-on:change="styleChange" v-model="exportM.style">
           <option v-bind:value="''">{{ i18n["search.select"] }}</option>
           <option v-for="style in styles" v-bind:key="style.id" v-bind:value="style.id">{{style.title}}</option>
         </select>
