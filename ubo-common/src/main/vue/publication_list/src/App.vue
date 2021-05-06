@@ -283,7 +283,7 @@ export default class PublicationList extends Vue {
       return;
     }
 
-    let query = this.users.map(u => `${u.pid}`).join(";");
+    let query = this.users.map(u => `${u.pid}`).join(",");
     if (exportModel.format == 'pdf' || exportModel.format == 'html') {
       if (exportModel.style.length == 0) {
         return;

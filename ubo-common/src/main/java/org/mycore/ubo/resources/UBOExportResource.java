@@ -88,7 +88,7 @@ public class UBOExportResource {
         @QueryParam("year") int year,
         @QueryParam("style") String style) throws URISyntaxException {
 
-        Set<String> pids = Stream.of(pidSegment.split(";")).collect(Collectors.toSet());
+        Set<String> pids = Stream.of(pidSegment.split(",")).collect(Collectors.toSet());
 
         if (pids.size() == 0) {
             return Response.status(Response.Status.BAD_REQUEST).build();
