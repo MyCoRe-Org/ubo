@@ -53,6 +53,25 @@
 	},
 	{
 		"add-field-type": {
+			"name": "ubo_string_ci",
+			"class": "solr.TextField",
+			"sortMissingLast": true,
+			"omitNorms": true,
+			"analyzer": {
+				"tokenizer": {
+					"class": "solr.KeywordTokenizerFactory"
+				},
+				"filters": [
+					{
+						"class": "solr.LowerCaseFilterFactory"
+					}
+				]
+			}
+
+		}
+	},
+	{
+		"add-field-type": {
 			"name": "ubo_name",
 			"class": "solr.TextField",
 			"positionIncrementGap": "100",
@@ -359,7 +378,7 @@
 	{
 		"add-field": {
 			"name": "name",
-			"type": "string",
+			"type": "ubo_string_ci",
 			"multiValued": false,
 			"indexed": true,
 			"stored": true
