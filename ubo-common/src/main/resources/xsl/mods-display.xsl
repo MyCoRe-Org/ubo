@@ -627,7 +627,7 @@
 
   <!-- ========== Verweise/�berordnung ========== -->
   <xsl:template match="mods:relatedItem[(@type='host') or (@type='series')]" mode="details">
-    <div class="ubo_related_details border-top border-bottom border-dark my-1">
+    <div class="ubo_related_details">
       <xsl:apply-templates select="." mode="details_lines" />
     </div>
   </xsl:template>
