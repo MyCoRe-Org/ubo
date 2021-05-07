@@ -70,6 +70,16 @@
       margin-left: 0;
     }
   }
+  
+  .ubo-pl-noresults, .ubo-input-error, .ubo-pl-results, .ubo-pl-userlist {
+    margin-left: 27%;
+    margin-top: -10px;
+    margin-bottom: 20px;
+  }
+
+  .ubo-input-invalid, .ubo-input-check {
+    margin-left: 27%;
+  }
 
 // Large devices (desktops) and below: <= 1200px
 @include media-breakpoint-down(lg) {
