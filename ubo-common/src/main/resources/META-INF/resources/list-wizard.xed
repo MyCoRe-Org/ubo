@@ -54,127 +54,25 @@
 
   <article class="card">
     <div class="card-body">
-      <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
-        <xed:bind xpath="/list-wizard">
+        <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
+            <script>
+                window.addEventListener('load', function() {
+                var ua = window.navigator.userAgent;
+                var msie = ua.indexOf("MSIE ") > 0 || ua.indexOf("Trident/") > 0;
 
-          <xed:if test="$xed-validation-failed">
-            <div class="validation-failures">
-              <h3>
-                <xed:output i18n="form.validation.failed" />
-              </h3>
-              <ul>
-                <xed:display-validation-messages />
-              </ul>
-            </div>
-          </xed:if>
-          <!-- at least one PID or tag must be given: -->
-          <xed:validate test="tag[string-length(.) &gt; 0] or mods:name[string-length(mods:nameIdentifier) &gt; 0]" display="global" i18n="listWizard.tagOrPIDRequired" />
+                if (msie){
+                    document.getElementById("iewarning").setAttribute("class", "bg-warning text-dark p-1");
+                }
+                });
+            </script>
+            <div class="d-none bg-warning text-dark p-1" id="iewarning"><xed:output i18n="listWizard.iewarning" /></div>
+            <script src="{$WebApplicationBaseURL}wc/publication-list/publication-list.min.js" />
+            <publication-list bootstrap="{$WebApplicationBaseURL}rsc/sass/scss/bootstrap-ubo.css"
+                              baseurl="{$WebApplicationBaseURL}"
+                              leadid="{$MCR.user2.matching.lead_id}"
+            ></publication-list>
 
-          <fieldset class="form-group">
-            <script src="{$WebApplicationBaseURL}js/author_search.js" />
-            <xed:repeat xpath="mods:name">
-              <div class="form-group form-inline">
-                <label for="{xed:generate-id()}" class="mycore-form-label">
-                  <xed:if test="preceding::mods:name"><xed:output i18n="search.or" /></xed:if>
-                  <xed:output i18n="ubo.role.author" /> / <xed:output i18n="ubo.role.editor" />:
-                </label>
-                <xed:bind xpath="mods:displayForm">
-                  <input id="name" type="text" class="mycore-form-input author-search"/>
-                  <xed:controls>append remove</xed:controls>
-                </xed:bind>
-                <xed:bind xpath="mods:nameIdentifier[@type='connection']">
-                  <input id="connection" type="text" style="display: none;" />
-                </xed:bind>
-              </div>
-            </xed:repeat>
-
-            <xed:repeat xpath="tag">
-              <div class="form-group form-inline">
-                <label for="{xed:generate-id()}" class="mycore-form-label">
-                  <xed:choose>
-                    <xed:when test="preceding::tag"><xed:output i18n="search.or" /></xed:when>
-                    <xed:otherwise><xed:output i18n="search.and" /></xed:otherwise>
-                  </xed:choose>
-                  <xed:output i18n="listWizard.tag" />:
-                </label>
-                <input id="{xed:generate-id()}" type="text" class="mycore-form-input"/>
-                <xed:controls>append remove</xed:controls>
-              </div>
-            </xed:repeat>
-
-            <xed:bind xpath="min-year">
-              <div class="form-group form-inline">
-                <label for="year" class="mycore-form-label">
-                  <xed:output i18n="search.and" />
-                  <xed:output i18n="search.dozbib.year.publication" />
-                  <span class="ml-1">&gt;=</span>
-                </label>
-                <input id="year" type="text" class="{$xed-validation-marker} mycore-form-input" placeholder="{i18n:edit.year.placeholder}" />
-                <xed:validate matches="[\d]{4}" display="global" i18n="condition.yearDoz" />
-              </div>
-            </xed:bind>
-
-            <div class="form-group form-inline">
-              <label class="mycore-form-label align-self-start">
-                <xed:output i18n="search.sort" />
-              </label>
-              <div class="col pl-0">
-                <xed:repeat xpath="sort-by/field" max="3">
-                  <div class="form-inline mb-lg-3">
-                    <div class="align-self-center mr-sm-2">
-                      <xed:output i18n="search.sort.by" />
-                    </div>
-                    <xed:bind xpath="@name">
-                      <select class="form-control mr-sm-3 mb-1 custom-select">
-                        <option value="year"         ><xed:output i18n="ubo.date.issued.4" /></option>
-                        <option value="sortby_person"><xed:output i18n="document.creators.one" /></option>
-                        <option value="sortby_title" ><xed:output i18n="document.title" /></option>
-                      </select>
-                    </xed:bind>
-                    <xed:bind xpath="@order">
-                      <select class="form-control mr-sm-3 custom-select">
-                        <option value="descending"><xed:output i18n="search.sort.desc" /></option>
-                        <option value="ascending" ><xed:output i18n="search.sort.asc" /></option>
-                      </select>
-                    </xed:bind>
-                    <xed:controls />
-                  </div>
-                </xed:repeat>
-              </div>
-            </div>
-
-            <xed:bind xpath="format">
-              <div class="form-group form-inline">
-                <label for="format" class="mycore-form-label">
-                  <xed:output i18n="listWizard.format" />:
-                </label>
-                <select id="format" class="mycore-form-input custom-select">
-                  <option value="pdf">PDF</option>
-                  <option value="html">HTML</option>
-                  <option value="mods">MODS XML</option>
-                  <option value="bibtex">BibTeX</option>
-                  <option value="endnote">Endnote</option>
-                  <option value="ris">RIS</option>
-                  <option value="ubo"><xed:output i18n="listWizard.format.ubo" /></option>
-                </select>
-              </div>
-            </xed:bind>
-
-            <div class="form-group form-inline">
-              <label class="mycore-form-label">
-	      </label>
-              <div class="cancel-submit">
-                <button class="btn btn-sm btn-primary" type="submit" xed:target="layout">
-                  <xed:output i18n="listWizard.submit" />
-                </button>
-              </div>
-            </div>
-          </fieldset>
-
-          <xed:cleanup-rule xpath="//mods:name" relevant-if="(mods:namePart|mods:displayForm) or (string-length(@valueURI) &gt; 0) or (string-length(@valueURIxEditor) &gt; 0)" />
-
-        </xed:bind>
-      </xed:form>
+        </xed:form>
     </div>
   </article>
 
