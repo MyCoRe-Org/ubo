@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="ubo-vue-publication-list ">
     <link v-if="bootstrap" rel="stylesheet" :href="bootstrap">
     <link v-if="css" rel="stylesheet" :href="css">
     <section class="row">
