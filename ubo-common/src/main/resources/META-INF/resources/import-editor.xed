@@ -281,11 +281,33 @@
     </xed:repeat>
   </xed:template>
 
+  <xed:template id="interviewer">
+    <xed:repeat xpath="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='ivr']" max="99">
+      <div class="form-group form-inline">
+        <label for="{xed:generate-id()}" class="mycore-form-label">
+          *<xed:output i18n="ubo.role.interviewer" />:
+        </label>
+        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+      </div>
+    </xed:repeat>
+  </xed:template>
+
   <xed:template id="honoree">
-    <xed:repeat xpath="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='hnr']" max="1">
+    <xed:repeat xpath="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='hnr']" max="99">
       <div class="form-group form-inline ubo-repeat-group">
         <label for="{xed:generate-id()}" class="mycore-form-label">
           <xed:output i18n="ubo.role.honoree" />:
+        </label>
+        <xed:include uri="webapp:import-editor.xed" ref="person" />
+      </div>
+    </xed:repeat>
+  </xed:template>
+
+  <xed:template id="inventor">
+    <xed:repeat xpath="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='inv']" max="99">
+      <div class="form-group form-inline ubo-repeat-group">
+        <label for="{xed:generate-id()}" class="mycore-form-label">
+          <xed:output i18n="ubo.role.inventor" />:
         </label>
         <xed:include uri="webapp:import-editor.xed" ref="person" />
       </div>
@@ -501,6 +523,17 @@
           <xed:output i18n="ubo.pages" />:
         </label>
         <input id="{xed:generate-id()}" type="text" class="mycore-form-input" placeholder="{i18n:ubo.pages.placeholder}" />
+      </div>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="article_number">
+    <xed:bind xpath="mods:part/mods:detail[@type='article_number']/mods:number">
+      <div class="form-inline form-group">
+        <label for="{xed:generate-id()}" class="mycore-form-label">
+          <xed:output i18n="ubo.article_number" />:
+        </label>
+        <input id="{xed:generate-id()}" type="text" class="mycore-form-input" placeholder="{i18n:ubo.article_number.placeholder}" />
       </div>
     </xed:bind>
   </xed:template>

@@ -53,7 +53,7 @@
     </span>
   </xsl:template>
 
-  <!-- ========== Ausgabe Fakult�t ========== -->
+  <!-- ========== Ausgabe Fakultät ========== -->
 
   <xsl:template match="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info">
     <span class="label-info badge badge-secondary mr-1">
@@ -130,7 +130,7 @@
 
   <!-- ========== Zitierform ========== -->
   <xsl:template match="mods:mods|mods:relatedItem" mode="cite">
-    <xsl:param name="mode">plain</xsl:param> <!-- plain: Als Flie�text formatieren, sonst mit <div>'s -->
+    <xsl:param name="mode">plain</xsl:param> <!-- plain: Als Fließtext formatieren, sonst mit <div>'s -->
 
     <xsl:apply-templates select="." mode="cite.title.name">
       <xsl:with-param name="mode" select="$mode" />
@@ -253,7 +253,7 @@
     </xsl:if>
   </xsl:template>
 
-  <!-- ========== �berordnung (In:) ========== -->
+  <!-- ========== Überordnung (In:) ========== -->
   <xsl:template match="mods:relatedItem[@type='host']" mode="brief">
     <xsl:text>In: </xsl:text>
     <xsl:apply-templates select="." mode="cite" />
@@ -399,7 +399,7 @@
     </div>
   </xsl:template>
 
-   <!-- ========== Erster Titel der �berordnung/Serie in Detailansicht, Tabelle ========== -->
+   <!-- ========== Erster Titel der Überordnung/Serie in Detailansicht, Tabelle ========== -->
   <xsl:template match="mods:relatedItem/mods:titleInfo[1]" mode="details" priority="1">
     <div class="row">
       <div class="col-3">
@@ -475,6 +475,7 @@
     <div class="row">
       <div class="col-3">
         <xsl:value-of select="i18n:translate('ubo.publisher.station')" />
+        <xsl:text>:</xsl:text>
       </div>
       <div class="col-9">
         <xsl:apply-templates select="." />
@@ -500,6 +501,7 @@
     <div class="row">
       <div class="col-3">
         <xsl:value-of select="i18n:translate('ubo.date.broadcasted')" />
+        <xsl:text>:</xsl:text>
       </div>
       <div class="col-9">
         <xsl:value-of select="text()" />
@@ -512,6 +514,7 @@
     <div class="row">
       <div class="col-3">
         <xsl:value-of select="i18n:translate('ubo.extent')" />
+        <xsl:text>:</xsl:text>
       </div>
       <div class="col-9">
         <xsl:value-of select="text()" />
@@ -523,7 +526,8 @@
   <xsl:template match="mods:identifier" mode="details">
     <div class="row">
       <div class="col-3">
-        <xsl:value-of select="i18n:translate(concat('ubo.identifier.',@type))" />:
+        <xsl:value-of select="i18n:translate(concat('ubo.identifier.',@type))" />
+        <xsl:text>:</xsl:text>
       </div>
       <div class="col-9">
         <xsl:apply-templates select="." />
@@ -543,6 +547,7 @@
             <xsl:value-of select="i18n:translate('ubo.link')" />
           </xsl:otherwise>
         </xsl:choose>
+        <xsl:text>:</xsl:text>
       </div>
       <div class="col-9">
         <xsl:apply-templates select="." />
@@ -554,7 +559,8 @@
   <xsl:template name="genres">
     <div class="row">
       <div class="col-3">
-        <xsl:value-of select="i18n:translate('ubo.genre')" />:
+        <xsl:value-of select="i18n:translate('ubo.genre')" />
+        <xsl:text>:</xsl:text>
       </div>
       <div class="col-9">
         <xsl:apply-templates select="mods:genre" mode="details" />
@@ -581,6 +587,7 @@
     <div class="row">
       <div class="col-3">
         <xsl:value-of select="i18n:translate('ubo.note')" />
+        <xsl:text>:</xsl:text>
       </div>
       <div class="col-9">
         <xsl:apply-templates select="." />
@@ -593,6 +600,7 @@
     <div class="row">
       <div class="col-3">
          <xsl:value-of select="i18n:translate('ubo.language')" />
+        <xsl:text>:</xsl:text>
       </div>
       <div class="col-9">
         <xsl:apply-templates select="mods:languageTerm" />
@@ -605,6 +613,7 @@
     <div class="row">
       <div class="col-3">
         <xsl:value-of select="i18n:translate('ubo.shelfmark')" />
+        <xsl:text>:</xsl:text>
       </div>
       <div class="col-9">
         <xsl:apply-templates select="." />
@@ -618,6 +627,7 @@
     <div class="row">
       <div class="col-3">
         <xsl:value-of select="i18n:translate('ubo.project.label')" />
+        <xsl:text>:</xsl:text>
       </div>
       <div class="col-9">
         <xsl:value-of select="concat($title, ' (', $acronym, ')')" />
@@ -625,7 +635,7 @@
     </div>
   </xsl:template>
 
-  <!-- ========== Verweise/�berordnung ========== -->
+  <!-- ========== Verweise/Überordnung ========== -->
   <xsl:template match="mods:relatedItem[(@type='host') or (@type='series')]" mode="details">
     <div class="ubo_related_details">
       <xsl:apply-templates select="." mode="details_lines" />
@@ -758,7 +768,7 @@
     <xsl:apply-templates select="mods:subTitle" />
   </xsl:template>
 
-  <!-- ========== F�hrende Artikel: Der, Die, Das ========== -->
+  <!-- ========== Führende Artikel: Der, Die, Das ========== -->
   <xsl:template match="mods:nonSort">
     <xsl:value-of select="text()" />
     <xsl:text> </xsl:text>
@@ -780,14 +790,14 @@
     <xsl:value-of select="text()" />
   </xsl:template>
 
-  <!-- ========== Typ des Titels: Haupttitel, abgek�rzt, �bersetzt, ... ========== -->
+  <!-- ========== Typ des Titels: Haupttitel, abgekürzt, übersetzt, ... ========== -->
   <xsl:template match="mods:titleInfo/@type">
     <xsl:text> (</xsl:text>
     <xsl:value-of select="i18n:translate(concat('ubo.title.type.',.))" />
     <xsl:text>)</xsl:text>
   </xsl:template>
 
-  <!-- ========== Rolle einer Person oder K�rperschaft ========== -->
+  <!-- ========== Rolle einer Person oder Körperschaft ========== -->
   <xsl:template match="mods:roleTerm[@type='code' and @authority='marcrelator']">
     <xsl:variable name="uri" select="concat('classification:metadata:0:children:marcrelator:',.)" />
     <xsl:apply-templates select="document($uri)/mycoreclass/categories/category[1]" />
@@ -975,7 +985,7 @@
   <!-- ========== Auflage ========== -->
   <xsl:template match="mods:edition">
     <xsl:value-of select="text()" />
-    <!-- Wenn Auflage nicht "Aufl." oder "Ed." und nur Ziffern enth�lt (Auflagennummer), erg�nze "Aufl." -->
+    <!-- Wenn Auflage nicht "Aufl." oder "Ed." und nur Ziffern enthält (Auflagennummer), ergänze "Aufl." -->
     <xsl:if test="not(contains(translate(text(),'AaUuEeDd','@@@@@@@@'),'@')) and (string-length(translate(text(),'0123456789. ','')) = 0)">
       <xsl:if test="substring(.,string-length(.)) != '.'">
         <xsl:text>.</xsl:text>
@@ -1016,6 +1026,7 @@
     <xsl:apply-templates select="mods:detail[@type='issue']" />
     <xsl:apply-templates select="mods:detail[@type='page']" />
     <xsl:apply-templates select="mods:extent[@unit='pages']" />
+    <xsl:apply-templates select="mods:detail[@type='article_number']" />
   </xsl:template>
 
   <!-- ========== Band/Jahrgang ========== -->
@@ -1110,6 +1121,16 @@
     <xsl:text> Seiten</xsl:text>
   </xsl:template>
 
+  <!-- ========== Artikelnummer ========== -->
+  <xsl:template match="mods:detail[@type='article_number']">
+    <xsl:if test="../mods:detail[not(@type='article_number')]">
+      <xsl:text>, </xsl:text>
+    </xsl:if>
+    <xsl:value-of select="i18n:translate('ubo.articlenumber')" />
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="mods:number" />
+  </xsl:template>
+
   <!-- ========== Sprache eines Eintrages ========== -->
   <xsl:template match="@xml:lang">
     <xsl:text> in </xsl:text>
@@ -1131,7 +1152,7 @@
     </a>
   </xsl:template>
 
-  <!-- ========== ( Serie ; Bandz�hlung ) ========== -->
+  <!-- ========== ( Serie ; Bandzählung ) ========== -->
   <xsl:template match="mods:relatedItem[@type='series']">
     <xsl:text>(</xsl:text>
     <xsl:apply-templates select="mods:titleInfo[1]" />
