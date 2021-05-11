@@ -132,4 +132,7 @@
 // Extra small devices (portrait phones): <= 576px
 @include media-breakpoint-down(xs) {
 // add/overwrite styles for responsive level xs
+  .navbar-expand .navbar-nav {
+    flex-direction: column; // vertical alignment for footer menu
+  }
 }

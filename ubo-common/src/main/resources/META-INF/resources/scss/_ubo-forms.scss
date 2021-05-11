@@ -70,14 +70,15 @@
       margin-left: 0;
     }
   }
-  
+
   .ubo-pl-noresults, .ubo-input-error, .ubo-pl-results, .ubo-pl-userlist {
     margin-left: 27%;
     margin-top: -10px;
     margin-bottom: 20px;
   }
 
-  .ubo-input-invalid, .ubo-input-check {
+  .ubo-input-invalid,
+  .ubo-input-check {
     margin-left: 27%;
   }
 
@@ -99,4 +100,14 @@
 // Extra small devices (portrait phones): <= 576px
 @include media-breakpoint-down(xs) {
 // add/overwrite styles for responsive level xs
+  .mycore-form-label {
+    text-align: left;  // label got own row and should be left then
+  }
+  .mycore-form-input {
+    width: 60%;  // prevent line break in forms
+  }
+  .ubo-input-invalid,
+  .ubo-input-check {
+    margin-left: 0;
+  }
 }
