@@ -82,18 +82,18 @@
     </item>
   </item>
 
-  <item role="meta">
-    <item ref="contact.xml">
+  <item menu="footer">
+    <item ref="contact.xml" id="contact">
       <label xml:lang="de">Kontakt</label>
       <label xml:lang="en">Contact</label>
     </item>
-    <item ref="impressum.xml">
+    <item ref="impressum.xml" id="impressum">
       <label xml:lang="de">Impressum</label>
       <label xml:lang="en">Imprint</label>
     </item>
-    <item ref="accessibility.xml">
-      <label xml:lang="de">BARRIEREFREIHEIT</label>
-      <label xml:lang="en">ACCESSIBILITY</label>
+    <item ref="accessibility.xml" id="accessibility">
+      <label xml:lang="de">Barrierefreiheit</label>
+      <label xml:lang="en">Accessibility</label>
     </item>
   </item>
 

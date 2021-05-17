@@ -169,7 +169,7 @@
   <!-- Meta-Navigation -->
 
   <xsl:template name="layout.metanav">
-    <xsl:variable name="metanavigation" select="$navigation.tree/item[@role='meta']/item"/>
+    <xsl:variable name="metanavigation" select="$navigation.tree/item[@menu='footer']/item"/>
     <nav class="navbar navbar navbar-expand">
       <ul class="navbar-nav">
         <!-- Find the item that is the root of the navigation tree to display -->
