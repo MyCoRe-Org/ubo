@@ -51,7 +51,7 @@ public class IdentityPicker extends MCRServlet {
         Map<String, String> parms = getFlattenedParameters(job.getRequest());
         Optional<String> lastName = Optional.ofNullable(parms.get("lastName"));
         Optional<String> firstName = Optional.ofNullable(parms.get("firstName"));
-        Optional<String> pid = Optional.ofNullable(job.getRequest().getParameter("pid"));
+        Optional<String> pid = Optional.ofNullable(parms.get(LEAD_ID));
 
         firstName.ifPresent(fn ->  authorSearch.setAttribute("firstname", fn));
         lastName.ifPresent(ln ->  authorSearch.setAttribute("lastname", ln));
