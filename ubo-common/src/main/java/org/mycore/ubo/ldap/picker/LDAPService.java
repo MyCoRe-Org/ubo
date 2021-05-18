@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.mycore.common.config.MCRConfiguration2;
+import org.mycore.ubo.picker.PersonSearchResult;
 import org.mycore.user2.MCRUserAttribute;
 
 import com.google.common.collect.Multimap;
@@ -17,6 +18,8 @@ import com.google.common.collect.Multimap;
 import org.mycore.ubo.ldap.LDAPObject;
 import org.mycore.ubo.matcher.MCRUserMatcherLDAP;
 import org.mycore.ubo.picker.IdentityService;
+
+import javax.naming.OperationNotSupportedException;
 
 /**
  * With a configuration in mycore.properties, it is necessary to map two of the input fields of the search/pick-form,
@@ -163,6 +166,11 @@ public class LDAPService implements IdentityService {
         }
 
         return results;
+    }
+
+    @Override
+    public PersonSearchResult searchPerson(String query) throws OperationNotSupportedException {
+        throw new OperationNotSupportedException("Query String from LDAP is currently not supported");
     }
 
     private void addIdentityElement(Element parent, LDAPObject ldapUser) {
