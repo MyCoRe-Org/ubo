@@ -85,7 +85,7 @@ public class UBOExportResource {
         @PathParam("pids") String pidSegment,
         @QueryParam("sortField") String sortField,
         @QueryParam("sortDirection") String sortDirection,
-        @QueryParam("year") int year,
+        @QueryParam("year") Integer year,
         @QueryParam("style") String style) throws URISyntaxException {
 
         Set<String> pids = Stream.of(pidSegment.split(",")).collect(Collectors.toSet());
@@ -102,14 +102,18 @@ public class UBOExportResource {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        if(year == -1) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
         String nidConnectionValue = "(" + String.join(" OR ", pids) + ")";
         String baseURL = MCRFrontendUtil.getBaseURL();
+        String yearPart;
 
-        String solrQuery = "nid_connection:" + nidConnectionValue + " and year:>=" + year;
+        if (year != null) {
+            yearPart = " and year:[" + year + " TO *]";
+
+        } else {
+            yearPart = "";
+        }
+
+        String solrQuery = "nid_connection:" + nidConnectionValue + yearPart;
         StringBuilder solrRequest = new StringBuilder()
             .append(baseURL).append("servlets/solr/select")
             .append("?q=").append(encode(solrQuery))

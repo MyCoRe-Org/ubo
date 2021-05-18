@@ -2,9 +2,10 @@
   <div class="ubo-vue-publication-list ">
     <link v-if="bootstrap" rel="stylesheet" :href="bootstrap">
     <link v-if="css" rel="stylesheet" :href="css">
+    <link v-if="fontawesome" rel="stylesheet" :href="fontawesome">
     <section>
       <div class="form-group form-inline">
-        <label class="mycore-form-label" for="personSearch">{{i18n["index.person"]}}</label>
+        <label class="mycore-form-label" for="personSearch">{{i18n["listWizard.search"]}}</label>
         <input id="personSearch" class="mycore-form-input" type="text" v-model="search.text"
                v-on:keyup.enter="startSearch">
         <span class="input-group-btn">
@@ -35,6 +36,7 @@
              :key="autocompleteUser.pid"
              v-on:click="addUser(autocompleteUser)"
              href="javascript:void(0)">
+            <i class="fas fa-plus-circle text-success"></i>
             {{ autocompleteUser.name }}
           </a>
         </div>
@@ -49,6 +51,7 @@
              :key="user.pid"
              v-on:click="removeUser(user)"
              href="javascript:void(0)">
+            <i class="fas fa-minus-circle text-danger"></i>
             {{ user.name }}
           </a>
         </div>
@@ -57,9 +60,14 @@
     <section>
       <div class="form-group form-inline">
         <label class="mycore-form-label" for="yearIssued">{{i18n["search.dozbib.year.publication"]}}</label>
-        <input id="yearIssued" v-model="exportM.year" class="mycore-form-input"
-               v-bind:class="{ 'is-invalid' : isInvalidYear() }" v-on:change="yearChange"
-               type="number">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">&ge;</span>
+          </div>
+          <input id="yearIssued" v-model="exportM.year" class="mycore-form-input"
+                 v-bind:class="{ 'is-invalid' : isInvalidYear() }" v-on:change="yearChange"
+                 type="number">
+        </div>
         <div class="ubo-input-invalid invalid-feedback">
           {{i18n["search.dozbib.year.invalid"]}}
         </div>
@@ -147,6 +155,12 @@ export default class PublicationList extends Vue {
    */
   @Prop() private leadid!: string;
 
+  /**
+   * The url to fontawesome
+   * @private
+   */
+  @Prop() private fontawesome!: string;
+
   private search: SearchModel = {
     text: "",
     searchResultUsers: [],
@@ -160,7 +174,7 @@ export default class PublicationList extends Vue {
     style: "",
     sortField: "year",
     asc: true,
-    year: new Date().getFullYear(),
+    year: "",
   };
 
   private result = {
@@ -187,7 +201,7 @@ export default class PublicationList extends Vue {
     "result.dozbib.results": null,
     "search.dozbib.year.publication": null,
     "search.dozbib.year.invalid": null,
-    "index.person": null
+    "listWizard.search": null
   };
 
   private users: User[] = [];
@@ -198,7 +212,11 @@ export default class PublicationList extends Vue {
   }
 
   private isInvalidYear() {
-    return isNaN(this.exportM.year) || this.exportM.year > new Date().getFullYear() || this.exportM.year < 0;
+    if(this.exportM.year==""){
+      return false;
+    }
+    let year = parseInt(this.exportM.year);
+    return isNaN(year) || year > new Date().getFullYear() || year < 0;
   }
 
   private async resolveStyles() {
@@ -237,7 +255,9 @@ export default class PublicationList extends Vue {
   }
 
   private resetSearch() {
-    this.search.searchResultUsers.length = 0;
+    while(this.search.searchResultUsers.pop()!=undefined){
+      // make it empty
+    }
     this.search.noresults = false;
   }
 
@@ -245,7 +265,7 @@ export default class PublicationList extends Vue {
     if (this.users.filter(u => u.pid == user.pid).length == 0) {
       this.users.push(user);
     }
-    this.resetSearch();
+    this.search.searchResultUsers.splice(this.search.searchResultUsers.indexOf(user), 1);
     this.createLink();
   }
 
@@ -283,6 +303,7 @@ export default class PublicationList extends Vue {
       return;
     }
 
+    const yearQuery = this.exportM.year==""?"":"year=" + this.exportM.year+"&";
     let query = this.users.map(u => `${u.pid}`).join(",");
     if (exportModel.format == 'pdf' || exportModel.format == 'html') {
       if (exportModel.style.length == 0) {
@@ -290,12 +311,12 @@ export default class PublicationList extends Vue {
       }
 
       this.result.link =
-          `${this.getWebApplicationBaseURL()}rsc/export/link/${exportModel.format}/${query}?year=${this.exportM.year}&`+
+          `${this.getWebApplicationBaseURL()}rsc/export/link/${exportModel.format}/${query}?${yearQuery}`+
           `sortField=${exportModel.sortField}&sortDirection=${exportModel.asc ? "asc" : "desc"}&style=${exportModel.style}`;
       return;
     } else {
       this.result.link =
-          `${this.getWebApplicationBaseURL()}rsc/export/link/${exportModel.format}/${query}?year=${this.exportM.year}&`+
+          `${this.getWebApplicationBaseURL()}rsc/export/link/${exportModel.format}/${query}?${yearQuery}`+
           `sortField=${exportModel.sortField}&sortDirection=${exportModel.asc ? "asc" : "desc"}`;
     }
   }
@@ -352,7 +373,7 @@ export interface ExportModel {
   style: string;
   sortField: string;
   asc: boolean;
-  year: number
+  year: string
 }
 
 export interface StyleDescription {

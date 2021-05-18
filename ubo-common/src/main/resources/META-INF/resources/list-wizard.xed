@@ -68,6 +68,7 @@
             <div class="d-none bg-warning text-dark p-1" id="iewarning"><xed:output i18n="listWizard.iewarning" /></div>
             <script src="{$WebApplicationBaseURL}wc/publication-list/publication-list.min.js" />
             <publication-list bootstrap="{$WebApplicationBaseURL}rsc/sass/scss/bootstrap-ubo.css"
+                              fontawesome="{$WebApplicationBaseURL}webjars/font-awesome/5.13.0/css/all.css"
                               baseurl="{$WebApplicationBaseURL}"
                               leadid="{$MCR.user2.matching.lead_id}"
             ></publication-list>
