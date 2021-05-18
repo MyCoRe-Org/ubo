@@ -29,7 +29,6 @@ import PersonSearchForm from './components/PersonSearchForm.vue';
 import PersonEditForm from './components/PersonEditForm.vue';
 import PersonSearchResult from "@/components/PersonSearchResult.vue";
 import {PersonResult, SearchResult} from "@/components/SearchResult";
-import {resolveiI18N} from "@/components/I18N";
 
 @Component({
   components: {
@@ -70,7 +69,7 @@ export default class App extends Vue {
 
   @Prop({
     default: ""
-  }) pidType!: string;
+  }) pidtype!: string;
 
   searchResults: SearchResult | null = null;
   searching = false;
@@ -115,7 +114,7 @@ export default class App extends Vue {
 
     const xpFam = "mods:namePart[@type='family']";
     const xpGiven = "mods:namePart[@type='given']";
-    const xpPid = "mods:nameIdentifier[@type='" + this.pidType + "']";
+    const xpPid = "mods:nameIdentifier[@type='" + this.pidtype + "']";
 
     const parms = [encodeURIComponent(xpFam) + "=" + encodeURIComponent(this.personModel.lastName),
       encodeURIComponent(xpGiven) + "=" + encodeURIComponent(this.personModel.firstName)]
