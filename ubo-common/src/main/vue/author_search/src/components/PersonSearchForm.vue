@@ -50,6 +50,7 @@ export default class PersonSearchForm extends Vue {
   @Prop({default: ""}) baseurl!: string;
 
   i18n = {
+    "person.search": null,
     "person.search.instruction2": null,
     "person.search.help2": null,
     "lsf.searchFor": null,

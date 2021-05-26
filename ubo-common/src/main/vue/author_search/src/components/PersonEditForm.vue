@@ -63,6 +63,7 @@ export default class PersonEditForm extends Vue {
   @Prop({default: ""}) baseurl!: string;
 
   i18n = {
+    "person.search.information": null,
     "person.search.invalid.firstName": null,
     "person.search.invalid.lastName": null,
     "person.search.instruction1": null,
