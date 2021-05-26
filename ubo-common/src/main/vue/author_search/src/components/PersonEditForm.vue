@@ -1,11 +1,11 @@
 <template>
   <article class="card mb-2">
     <div class="card-body">
-      <h2>Personangaben</h2>
+      <h2>{{ i18n["person.search.information"] }}</h2>
       <div>
         <p>
           {{ i18n["person.search.instruction1"] }}
-          <i v-on:click="hint=!hint" role="button" class="fas fa-question-circle ml-1 text-secondary"></i>
+          <i v-on:click="hint=!hint" role="button" class="fas fa-question ml-1 text-secondary"></i>
         </p>
         <div v-show="hint">
           <p class="border-secondary border-top border-bottom pt-2 pb-2">{{ i18n["person.search.help1"] }}</p>
@@ -37,9 +37,9 @@
         </div>
         <div class="form-group form-inline">
           <label class="mycore-form-label" for="pid">
-            {{ i18n["search.dozbib.pid"] }}
+            {{ i18n["search.dozbib.pid"] }}:
           </label>
-          <input class="form-control col-sm-2" size="6" type="text" v-model="person.pid" id="pid">
+          <input class="mycore-form-input" size="6" type="text" v-model="person.pid" id="pid">
         </div>
         <div class="cancel-submit form-group form-inline">
           <label class="mycore-form-label"></label>

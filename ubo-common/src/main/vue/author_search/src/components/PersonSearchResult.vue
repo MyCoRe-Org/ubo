@@ -41,7 +41,7 @@
           <tr v-for="person in searchresults.personList" :key="person.pid">
             <td class="align-top">
               <a href="#" class="roundedButton text-secondary" v-on:click.prevent="apply(person)">
-                <i class="fas fa-chevron-circle-left fa-2x mr-2"></i>
+                <i class="far fa-hand-point-left fa-2x mr-2" style="transform: rotate(20deg);"></i>
               </a>
             </td>
             <td class="align-top">

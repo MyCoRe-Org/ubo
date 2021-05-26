@@ -2,11 +2,11 @@
 
   <article class="card mb-2">
     <div class="card-body">
-      <h2>Suche</h2>
+      <h2>{{ i18n["person.search"] }}</h2>
       <div>
         <p>
           {{ i18n["person.search.instruction2"] }}
-          <i v-on:click="hint=!hint" role="button" class="fas fa-question-circle ml-1 text-secondary"></i>
+          <i v-on:click="hint=!hint" role="button" class="fas fa-question ml-1 text-secondary"></i>
         </p>
         <div v-show="hint">
           <p class="border-secondary border-top border-bottom pt-2 pb-2">
