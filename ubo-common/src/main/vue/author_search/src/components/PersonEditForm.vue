@@ -11,7 +11,7 @@
           <p class="border-secondary border-top border-bottom pt-2 pb-2">{{ i18n["person.search.help1"] }}</p>
         </div>
       </div>
-      <form role="form" v-on:submit.prevent="apply()">
+      <form class="ubo-vue-form" role="form" v-on:submit.prevent="apply()">
         <div class="form-group form-inline">
           <label class="mycore-form-label" for="firstName">
             {{ i18n["lsf.nameFirst"] }}

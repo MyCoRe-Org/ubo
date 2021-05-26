@@ -15,7 +15,7 @@
         </div>
       </div>
 
-      <form role="form" v-on:submit.prevent="search">
+      <form class="ubo-vue-form" role="form" v-on:submit.prevent="search">
         <input name="_xed_subselect_session" type="hidden">
         <div class="form-group form-inline">
           <label class="mycore-form-label" for="lastName">

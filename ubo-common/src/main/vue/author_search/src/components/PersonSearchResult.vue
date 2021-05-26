@@ -36,33 +36,17 @@
         <strong>{{ i18n["lsf.found"] }}</strong>
       </p>
       <div>
-        <table style="display: table;">
-          <thead>
-          <tr>
-            <th>
-
-            </th>
-            <th>
-              {{ i18n["ubo.search.name"] }}
-            </th>
-            <th>
-              {{ i18n["lsf.details"] }}
-            </th>
-            <th>
-            </th>
-          </tr>
-          </thead>
+        <table class="table table-sm">
           <tbody>
           <tr v-for="person in searchresults.personList" :key="person.pid">
             <td class="align-top">
               <a href="#" class="roundedButton text-secondary" v-on:click.prevent="apply(person)">
-                <i class="fas fa-chevron-circle-left mr-2"></i>
+                <i class="fas fa-chevron-circle-left fa-2x mr-2"></i>
               </a>
             </td>
             <td class="align-top">
               {{ person.displayName }}
-            </td>
-            <td class="align-top">
+              <br />
               <ul v-if="(person.affiliation && person.affiliation.length>0) || (person.info && person.info.length>0)">
                 <li v-for="aff in person.affiliation" :key="aff">
                   {{ aff }}
