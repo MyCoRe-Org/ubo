@@ -36,7 +36,7 @@
              :key="autocompleteUser.pid"
              v-on:click="addUser(autocompleteUser)"
              href="javascript:void(0)">
-            <i class="fas fa-plus-circle text-success"></i>
+            <i class="fas fa-plus-circle ubo-pl-adduser"></i>
             {{ autocompleteUser.name }}
           </a>
         </div>
@@ -51,7 +51,7 @@
              :key="user.pid"
              v-on:click="removeUser(user)"
              href="javascript:void(0)">
-            <i class="fas fa-minus-circle text-danger"></i>
+            <i class="fas fa-minus-circle ubo-pl-deluser"></i>
             {{ user.name }}
           </a>
         </div>

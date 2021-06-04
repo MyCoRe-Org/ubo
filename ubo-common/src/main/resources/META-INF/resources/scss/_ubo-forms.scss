@@ -76,6 +76,14 @@
     margin-top: -10px;
     margin-bottom: 20px;
   }
+  
+  .ubo-pl-deluser {
+    @extend .text-danger;
+  }
+
+  .ubo-pl-adduser {
+    @extend .text-success;
+  }
 
   .ubo-input-invalid,
   .ubo-input-check {
