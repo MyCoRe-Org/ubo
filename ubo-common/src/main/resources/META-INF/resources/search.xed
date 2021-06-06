@@ -28,7 +28,7 @@
               können Sie ein <strong>Suchfeld wiederholen</strong>!
             </xed:lang>
             <xed:lang xml:lang="en">
-              All search terms are connected with AND. By click on
+              All search terms are connected with AND. By clicking on
               <img class="roundedButton" style="width:12px; margin:0 1ex; 0 1ex;" src="{$WebApplicationBaseURL}images/pmud-plus.png" />
               you can <strong>repeat a  search field</strong>!
             </xed:lang>
