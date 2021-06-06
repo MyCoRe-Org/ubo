@@ -26,7 +26,7 @@
 
   <xsl:template match="lst[@name='facet_fields']/lst[@name='status']">
     <hgroup>
-      <h3>Publikationen nach Status:</h3>
+      <h3><xsl:value-of select="i18n:translate('response.sidebar.pubperstate')" />:</h3>
     </hgroup>
     <ul class="list-group list-group-flush">
       <xsl:for-each select="int">
@@ -43,7 +43,7 @@
 
   <xsl:template match="lst[@name='facet_fields']/lst[@name='importID']">
     <hgroup>
-      <h3>Zuletzt importierte Listen:</h3>
+      <h3><xsl:value-of select="i18n:translate('response.sidebar.lastimported')" />:</h3>
     </hgroup>
     <ul class="list-group list-group-flush">
       <xsl:for-each select="int">
@@ -67,22 +67,22 @@
     </hgroup>
     <ul class="list-group list-group-flush">
       <xsl:call-template name="output.value">
-        <xsl:with-param name="label">in den letzten 14 Tagen</xsl:with-param>
+        <xsl:with-param name="label"><xsl:value-of select="i18n:translate('response.sidebar.last14days')" /></xsl:with-param>
         <xsl:with-param name="value" select="sum(int[position() &gt; ($numDays - 14)])" />
         <xsl:with-param name="query" select="concat($dateField,':[NOW/DAY-13DAY TO NOW]')" />
       </xsl:call-template>
       <xsl:call-template name="output.value">
-        <xsl:with-param name="label">in den letzten 7 Tagen</xsl:with-param>
+        <xsl:with-param name="label"><xsl:value-of select="i18n:translate('response.sidebar.last7days')" /></xsl:with-param>
         <xsl:with-param name="value" select="sum(int[position() &gt; ($numDays - 7)])" />
         <xsl:with-param name="query" select="concat($dateField,':[NOW/DAY-6DAY TO NOW]')" />
       </xsl:call-template>
       <xsl:call-template name="output.value">
-        <xsl:with-param name="label">gestern oder heute</xsl:with-param>
+        <xsl:with-param name="label"><xsl:value-of select="i18n:translate('response.sidebar.yesterday')" /></xsl:with-param>
         <xsl:with-param name="value" select="sum(int[position() &gt; ($numDays - 2)])" />
         <xsl:with-param name="query" select="concat($dateField,':[NOW/DAY-1DAY TO NOW]')" />
       </xsl:call-template>
       <xsl:call-template name="output.value">
-        <xsl:with-param name="label">heute</xsl:with-param>
+        <xsl:with-param name="label"><xsl:value-of select="i18n:translate('response.sidebar.today')" /></xsl:with-param>
         <xsl:with-param name="value" select="sum(int[position() &gt; ($numDays - 1)])" />
         <xsl:with-param name="query" select="concat($dateField,':[NOW/DAY TO NOW]')" />
       </xsl:call-template>
