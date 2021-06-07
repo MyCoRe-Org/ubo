@@ -1,5 +1,5 @@
 <template>
-  <div class="ubo-vue-publication-list ">
+  <div class="ubo-vue-form">
     <link v-if="bootstrap" rel="stylesheet" :href="bootstrap">
     <link v-if="css" rel="stylesheet" :href="css">
     <link v-if="fontawesome" rel="stylesheet" :href="fontawesome">

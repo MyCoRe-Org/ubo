@@ -30,6 +30,9 @@ import org.jdom2.output.XMLOutputter;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.mods.merger.MCRHyphenNormalizer;
+import org.mycore.ubo.picker.PersonSearchResult;
+
+import javax.naming.OperationNotSupportedException;
 
 /**
  * Implements a Web Services client for HIS LSF.
@@ -167,6 +170,11 @@ public class LSFService implements IdentityService {
         removeThoseWithNonMatchingFirstNames(firstName, results);
 
         return results;
+    }
+
+    @Override
+    public PersonSearchResult searchPerson(String query) throws OperationNotSupportedException {
+        throw new OperationNotSupportedException("Query String from LSF is currently not supported");
     }
 
     private void lookup(String lastName, Map<String, Element> results) {

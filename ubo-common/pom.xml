@@ -87,6 +87,28 @@
               <workingDirectory>src/main/vue/publication_list/</workingDirectory>
             </configuration>
           </execution>
+          <execution>
+            <id>yarn-install-author_search</id>
+            <goals>
+              <goal>yarn</goal>
+            </goals>
+            <phase>process-resources</phase>
+            <configuration>
+              <arguments>install</arguments>
+              <workingDirectory>src/main/vue/author_search/</workingDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>yarn-build-author_search</id>
+            <goals>
+              <goal>yarn</goal>
+            </goals>
+            <phase>process-resources</phase>
+            <configuration>
+              <arguments>build</arguments>
+              <workingDirectory>src/main/vue/author_search/</workingDirectory>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
     </plugins>
