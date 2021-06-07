@@ -19,6 +19,8 @@
 package org.mycore.ubo.resources;
 
 import com.google.gson.Gson;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.mycore.common.config.MCRConfiguration2;
@@ -49,6 +51,8 @@ import java.util.stream.Stream;
 public class UBOExportResource {
 
     public static final Namespace CSL_NAMESPACE = Namespace.getNamespace("csl", "http://purl.org/net/xbiblio/csl");
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private static String encode(String s) {
         return URLEncoder.encode(s, StandardCharsets.UTF_8);
@@ -83,8 +87,8 @@ public class UBOExportResource {
     public Response link(
         @PathParam("format") String format,
         @PathParam("pids") String pidSegment,
-        @QueryParam("sortField") String sortField,
-        @QueryParam("sortDirection") String sortDirection,
+        @QueryParam("sortField") List<String> sortFields,
+        @QueryParam("sortDirection") List<String> sortDirections,
         @QueryParam("year") Integer year,
         @QueryParam("style") String style) throws URISyntaxException {
 
@@ -94,11 +98,7 @@ public class UBOExportResource {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        if(sortField == null) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
-        if(sortDirection == null) {
+        if (sortFields.size() != sortDirections.size()) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
@@ -117,8 +117,16 @@ public class UBOExportResource {
         StringBuilder solrRequest = new StringBuilder()
             .append(baseURL).append("servlets/solr/select")
             .append("?q=").append(encode(solrQuery))
-            .append("&rows=9999&")
-            .append("&sort=").append(encode(sortField)).append(encode(" ")).append(encode(sortDirection));
+            .append("&rows=9999&");
+
+        List<String> sorts = new ArrayList<>(sortFields.size());
+        for (int i = 0; i < sortFields.size(); i++) {
+            sorts.add(encode(sortFields.get(i) + " " + sortDirections.get(i)));
+        }
+        if (sorts.size() > 0) {
+            solrRequest.append("&sort=");
+            solrRequest.append(String.join(encode(", "), sorts));
+        }
 
         if (style == null) {
             solrRequest.append("&XSL.Transformer=").append(encode(format));
@@ -127,6 +135,7 @@ public class UBOExportResource {
             solrRequest.append("&XSL.style=").append(encode(style));
         }
 
+        LOGGER.info("Request is " + solrRequest);
         URI newLocation = new URI(solrRequest.toString());
         return Response.temporaryRedirect(newLocation).build();
     }

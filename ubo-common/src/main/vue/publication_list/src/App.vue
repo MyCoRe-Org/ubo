@@ -36,7 +36,7 @@
              :key="autocompleteUser.pid"
              v-on:click="addUser(autocompleteUser)"
              href="javascript:void(0)">
-            <i class="fas fa-plus-circle ubo-pl-adduser"></i>
+            <i class="fas fa-plus-circle text-success"></i>
             {{ autocompleteUser.name }}
           </a>
         </div>
@@ -51,7 +51,7 @@
              :key="user.pid"
              v-on:click="removeUser(user)"
              href="javascript:void(0)">
-            <i class="fas fa-minus-circle ubo-pl-deluser"></i>
+            <i class="fas fa-minus-circle text-danger"></i>
             {{ user.name }}
           </a>
         </div>
@@ -75,15 +75,41 @@
     </section>
     <section>
       <div class="form-group">
-        <label class="mycore-form-label" for="sortSelect">{{i18n["search.sort"]}}</label>
-        <select id="sortSelect" class="mycore-form-input custom-select" v-on:change="sortChange" v-model="exportM.sortField">
-          <option v-bind:value="'year'">{{i18n["search.sort.year"]}}</option>
-          <option v-bind:value="'sortby_person'">{{ i18n["search.sort.name"] }}</option>
-          <option v-bind:value="'sortby_title'">{{ i18n["search.sort.title"] }}</option>
-        </select>
-        <div class="ubo-input-check form-check">
-          <input class="form-check-input" v-on:change="sortChange" type="checkbox" id="ascSort" v-model="exportM.asc">
-          <label class="form-check-label" for="ascSort">{{i18n["search.sort.asc"]}}</label>
+        <label class="mycore-form-label">{{i18n["search.sort"]}}</label>
+        <div v-for="(sort,i) in exportM.sort" :key="sort.field" class="row">
+          <div class="offset-4 col-2">
+            <input class="form-check-input" :id="'ps_select_' + sort.field" v-on:change="sortChange" type="checkbox"
+                   v-model="sort.active">
+            <label class="form-check-label" :for="'ps_select_' + sort.field">{{i18n[sort.i18nKey]}}</label>
+          </div>
+          <div class="col-2">
+            <input class="form-check-input"
+                   :id="'ps_radio_asc_' + sort.field"
+                   v-on:change="sortChange"
+                   type="radio"
+                   v-model="sort.asc"
+                   v-bind:value="true">
+            <label class="form-check-label" :for="'ps_radio_asc_' + sort.field">{{i18n["search.sort.asc"]}}</label>
+          </div>
+          <div class="col-2">
+            <input class="form-check-input"
+                   :id="'ps_radio_desc_' + sort.field"
+                   v-on:change="sortChange"
+                   type="radio"
+                   v-model="sort.asc"
+                   v-bind:value="false">
+            <label class="form-check-label" :for="'ps_radio_desc_' + sort.field">{{i18n["search.sort.desc"]}}</label>
+          </div>
+          <div class="col-1 text-right">
+            <button v-if="i>0" v-on:click.prevent="moveSortUp(sort)" class="btn btn-secondary" tabindex="999">
+              ↑
+            </button>
+          </div>
+          <div class="col-1">
+            <button v-if="i<exportM.sort.length-1" v-on:click.prevent="moveSortDown(sort)" class="btn btn-secondary">
+              ↓
+            </button>
+          </div>
         </div>
       </div>
       <div class="form-group form-inline">
@@ -172,8 +198,11 @@ export default class PublicationList extends Vue {
   private exportM: ExportModel = {
     format: "",
     style: "",
-    sortField: "year",
-    asc: true,
+    sort: [
+      {active: true, field: "year", asc: true, i18nKey: "search.sort.year"},
+      {active: true, field: "sortby_person", asc: true, i18nKey: "search.sort.name"},
+      {active: true, field: "sortby_title", asc: true, i18nKey: "search.sort.title"}
+    ],
     year: "",
   };
 
@@ -194,6 +223,7 @@ export default class PublicationList extends Vue {
     "search.sort.name": null,
     "search.sort.title": null,
     "search.sort.asc": null,
+    "search.sort.desc": null,
     "listWizard.link": null,
     "listWizard.code": null,
     "listWizard.format": null,
@@ -311,20 +341,41 @@ export default class PublicationList extends Vue {
       }
 
       this.result.link =
-          `${this.getWebApplicationBaseURL()}rsc/export/link/${exportModel.format}/${query}?${yearQuery}`+
-          `sortField=${exportModel.sortField}&sortDirection=${exportModel.asc ? "asc" : "desc"}&style=${exportModel.style}`;
+          `${this.getWebApplicationBaseURL()}rsc/export/link/${exportModel.format}/${query}?${yearQuery}` +
+          `${this.getSortString()}style=${exportModel.style}`;
       return;
     } else {
       this.result.link =
-          `${this.getWebApplicationBaseURL()}rsc/export/link/${exportModel.format}/${query}?${yearQuery}`+
-          `sortField=${exportModel.sortField}&sortDirection=${exportModel.asc ? "asc" : "desc"}`;
+          `${this.getWebApplicationBaseURL()}rsc/export/link/${exportModel.format}/${query}?${yearQuery}` +
+          `${this.getSortString()}`;
     }
+  }
+
+
+  private getSortString(): string {
+    let filtered = this.exportM.sort
+        .filter((sort) => sort.active);
+    return filtered
+        .map((sort) => {
+          return `sortField=${sort.field}&sortDirection=${sort.asc ? "asc" : "desc"}`;
+        }).join("&") + (filtered.length > 0 ? "&" : "");
   }
 
   private styleChange() {
     this.clearLink();
     this.createLink();
     return;
+  }
+
+  private moveSortDown(field: SortField): void {
+    let number = this.exportM.sort.indexOf(field);
+    this.exportM.sort.splice(number, 1);
+    this.exportM.sort.splice(number + 1, 0, field);
+  }
+
+  private moveSortUp(field: SortField): void {
+    let number = this.exportM.sort.indexOf(field);
+    this.moveSortDown(this.exportM.sort[number - 1]);
   }
 
   private clearLink() {
@@ -368,11 +419,12 @@ export interface SearchModel {
   errored: boolean
 }
 
+export type SortField = { active: boolean, field: string, asc: boolean, i18nKey: string };
+
 export interface ExportModel {
   format: string;
   style: string;
-  sortField: string;
-  asc: boolean;
+  sort: SortField[];
   year: string
 }
 
