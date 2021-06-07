@@ -217,8 +217,8 @@
                 <xed:bind xpath="@field" initially="oa">
                   <xed:if test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
                     <select class="mycore-form-input-double custom-select">
-                      <option value="oa">mit Unterkategorien</option>
-                      <option value="oa_exact">exakt zugeordnet</option>
+                      <option value="oa"><xed:output i18n="search.select.oawithsubcategories" /></option>
+                      <option value="oa_exact"><xed:output i18n="search.select.oaexact" /></option>
                     </select>
                   </xed:if>
                 </xed:bind>
