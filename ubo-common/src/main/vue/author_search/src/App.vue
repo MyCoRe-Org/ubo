@@ -2,14 +2,14 @@
   <div id="app" class="row">
     <link v-if="bootstrap" v-bind:href="bootstrap" rel="stylesheet">
     <link v-if="fontawesome" v-bind:href="fontawesome" rel="stylesheet">
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-lg-6">
       <PersonEditForm :person="personModel"
                       v-on:submit="personSubmitted"
                       v-on:cancel="cancel"
                       :baseurl="baseurl"
       />
     </div>
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-lg-6">
       <PersonSearchForm v-on:search="search"
                         :baseurl="baseurl" />
       <PersonSearchResult :searchresults="searchResults"

@@ -40,7 +40,7 @@
           <tbody>
           <tr v-for="person in searchresults.personList" :key="person.pid">
             <td class="align-top">
-              <a title="{{ i18n["person.datatoform"] }}" href="#" class="roundedButton text-secondary" v-on:click.prevent="apply(person)">
+              <a :title="i18n['index.person.datatoform']" href="#" class="roundedButton text-secondary" v-on:click.prevent="apply(person)">
                 <i class="far fa-arrow-alt-circle-left fa-lg mr-2"></i>
               </a>
             </td>
@@ -57,7 +57,7 @@
               </ul>
             </td>
             <td class="align-top">
-              <button class="btn btn-secondary" v-on:click.prevent="submit(person)">
+              <button :title="i18n['index.person.datatoeditor']" class="btn btn-secondary" v-on:click.prevent="submit(person)">
                 {{ i18n['lsf.selectPerson']}}
               </button>
             </td>
@@ -84,6 +84,8 @@ export default class PersonSearchResult extends Vue {
   i18n = {
     "error.occurred": null,
     "index.person.found.0": null,
+    "index.person.datatoform": null,
+    "index.person.datatoeditor": null,
     "lsf.found": null,
     "lsf.selectPerson": null,
     "lsf.details": null,

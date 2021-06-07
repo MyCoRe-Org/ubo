@@ -43,7 +43,7 @@
         </div>
         <div class="cancel-submit form-group form-inline">
           <label class="mycore-form-label"></label>
-          <input :value="i18n['lsf.selectPerson']"  class="btn btn-secondary mr-2" type="submit">
+          <input :title="i18n['index.person.datatoeditor']" :value="i18n['lsf.selectPerson']"  class="btn btn-secondary mr-2" type="submit">
           <input :value="i18n['button.cancel']"  class="btn btn-primary" type="button"
                  v-on:click="$emit('cancel')">
         </div>
@@ -68,6 +68,7 @@ export default class PersonEditForm extends Vue {
     "person.search.invalid.lastName": null,
     "person.search.instruction1": null,
     "person.search.help1": null,
+    "index.person.datatoeditor": null,
     "lsf.name": null,
     "lsf.nameFirst": null,
     "search.dozbib.pid": null,
