@@ -8,6 +8,8 @@
   xmlns:str="http://exslt.org/strings"
   exclude-result-prefixes="xsl xalan i18n encoder str">
 
+  <xsl:include href="xslInclude:components" />
+
   <!-- last navigation id calculated from navigation.xml -->
   <xsl:variable name="NavigationID" xmlns:lastPageID="xalan://org.mycore.ubo.LastPageID">
     <xsl:choose>

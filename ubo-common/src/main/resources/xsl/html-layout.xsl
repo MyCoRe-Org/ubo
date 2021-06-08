@@ -32,6 +32,8 @@
     </xsl:text>
     <html lang="{$CurrentLang}">
       <xsl:apply-templates select="head" />
+      <!-- include Internet Explorer warning -->
+      <xsl:call-template name="msie-note" />
       <xsl:call-template name="layout.body" />
     </html>
   </xsl:template>
