@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xsl:stylesheet 
-  version="1.0" 
+<xsl:stylesheet
+  version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:encoder="xalan://java.net.URLEncoder"
   xmlns:str="xalan://java.lang.String"
-  exclude-result-prefixes="xsl xalan i18n encoder" 
+  exclude-result-prefixes="xsl xalan i18n encoder"
 >
 
 <xsl:param name="RequestURL" />
@@ -144,7 +144,7 @@
     <xsl:variable name="name" select="@name" />
     <xsl:for-each select="descendant-or-self::str"> <!-- may be an array: arr/str or ./str -->
       <xsl:choose>
-        <xsl:when test="$name='start'" /> 
+        <xsl:when test="$name='start'" />
         <xsl:otherwise>
           <xsl:value-of select="$name" />
           <xsl:text>=</xsl:text>
@@ -204,7 +204,7 @@
     <xsl:value-of select="$prefix" />
     <xsl:choose>
       <xsl:when test="$type='subject'">
-        <xsl:variable name="url">classification:metadata:0:children:fachreferate:<xsl:value-of select="encoder:encode(current()/@name,'UTF-8')" /></xsl:variable>
+        <xsl:variable name="url">classification:metadata:0:children:fachreferate:<xsl:value-of select="encoder:encode($value,'UTF-8')" /></xsl:variable>
         <xsl:value-of select="document($url)/mycoreclass/categories/category[1]/label[@xml:lang=$CurrentLang]/@text" />
       </xsl:when>
       <xsl:when test="$type='oa'">
@@ -220,7 +220,7 @@
         <xsl:value-of select="$value" />
       </xsl:otherwise>
     </xsl:choose>
-  </xsl:variable>  
+  </xsl:variable>
 
   <span>
     <xsl:if test="string-length($label) &gt; 20">
