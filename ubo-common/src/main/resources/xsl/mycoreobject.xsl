@@ -101,7 +101,7 @@
       </xsl:if>
     </xsl:if>
     <xsl:if xmlns:basket="xalan://org.mycore.ubo.basket.BasketUtils" test="basket:hasSpace() and not(basket:contains(string(/mycoreobject/@ID)))">
-      <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}MCRBasketServlet?type=bibentries&amp;action=add&amp;resolve=true&amp;id={/mycoreobject/@ID}&amp;uri=mcrobject:{/mycoreobject/@ID}">
+      <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}MCRBasketServlet?type=objects&amp;action=add&amp;resolve=true&amp;id={/mycoreobject/@ID}&amp;uri=mcrobject:{/mycoreobject/@ID}">
         <xsl:value-of select="i18n:translate('button.basketAdd')" />
       </a>
     </xsl:if>
@@ -260,7 +260,7 @@
 
 	  <a class="btn btn-sm btn-primary float-right mb-1">
             <xsl:attribute name="href">
-              <xsl:text>MCRBasketServlet?type=bibentries&amp;action=add&amp;resolve=true</xsl:text>
+              <xsl:text>MCRBasketServlet?type=objects&amp;action=add&amp;resolve=true</xsl:text>
               <xsl:text>&amp;id=</xsl:text><xsl:value-of select="$myID" />
               <xsl:text>&amp;uri=mcrobject:</xsl:text><xsl:value-of select="$myID" />
               <xsl:for-each select="$duplicates3">
@@ -373,7 +373,7 @@
     <input type="button" class="editorButton" name="merge" value="Zusammenführen"
       onclick="self.location.href='BasketPubMerger?commit=true&amp;target=publications'" />
     <input type="button" class="editorButton" name="cancel" value="{i18n:translate('button.cancelNo')}"
-      onclick="self.location.href='MCRBasketServlet?type=bibentries&amp;action=show'" />
+      onclick="self.location.href='MCRBasketServlet?type=objects&amp;action=show'" />
   </div>
 </xsl:template>
 
@@ -394,7 +394,7 @@
     <input type="button" class="editorButton" name="merge" value="Zusammenhosten"
       onclick="self.location.href='BasketPubMerger?commit=true&amp;target=hosts'" />
     <input type="button" class="editorButton" name="cancel" value="{i18n:translate('button.cancelNo')}"
-      onclick="self.location.href='MCRBasketServlet?type=bibentries&amp;action=show'" />
+      onclick="self.location.href='MCRBasketServlet?type=objects&amp;action=show'" />
   </div>
 </xsl:template>
 

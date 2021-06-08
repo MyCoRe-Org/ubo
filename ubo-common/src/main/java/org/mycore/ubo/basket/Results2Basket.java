@@ -53,7 +53,7 @@ public class Results2Basket extends MCRServlet {
             }
         }
 
-        res.sendRedirect(getServletBaseURL() + "MCRBasketServlet?action=show&type=bibentries");
+        res.sendRedirect(getServletBaseURL() + "MCRBasketServlet?action=show&type=objects");
     }
 
     private void addtoBasket(String oid) {

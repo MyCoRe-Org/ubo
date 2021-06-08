@@ -23,7 +23,7 @@
       
       <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
 	<xed:source uri="nameLister:foo" />
-	<xed:cancel url="servlets/MCRBasketServlet?action=show&amp;type=bibentries" />
+	<xed:cancel url="servlets/MCRBasketServlet?action=show&amp;type=objects" />
 
 	<div>
           <button class="btn btn-primary" type="submit" xed:target="servlet" xed:href="BasketName2PIDEditor">

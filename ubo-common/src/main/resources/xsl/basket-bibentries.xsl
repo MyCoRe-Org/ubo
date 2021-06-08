@@ -32,7 +32,7 @@
 <xsl:template name="actions">
   <xsl:for-each select="/basket[entry]">
     <div id="buttons" class="btn-group mb-3 flex-wrap">
-      <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRBasketServlet?type=bibentries&amp;action=clear">
+      <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRBasketServlet?type=objects&amp;action=clear">
         <xsl:value-of select="i18n:translate('button.clear')" />
       </a>
       <xsl:choose>
@@ -45,17 +45,6 @@
           </xsl:if>
         </xsl:when>
       </xsl:choose>
-      <!--
-      <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/mods.xml?basket=bibentries&amp;root=export&amp;transformer=mods">MODS</a>
-      <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/export.bibtex?basket=bibentries&amp;root=export&amp;transformer=bibtex">BibTeX</a>
-      <xsl:if xmlns:check="xalan://org.mycore.ubo.AccessControl" test="not(check:currentUserIsAdmin())">
-        <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/export.endnote?basket=bibentries&amp;root=export&amp;transformer=endnote">EndNote</a>
-        <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/export.ris?basket=bibentries&amp;root=export&amp;transformer=ris">RIS</a>
-        <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/export.txt?basket=bibentries&amp;root=export&amp;transformer=ieee-text">IEEE</a>
-        <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/export.pdf?basket=bibentries&amp;root=export&amp;transformer=pdf">PDF</a>
-        <a class="action btn btn-sm btn-primary mb-1" href="MCRExportServlet/export.html?basket=bibentries&amp;root=export&amp;transformer=html">HTML</a>
-      </xsl:if>
-      -->
     </div>
     <xsl:call-template name="exportGUI">
       <xsl:with-param name="type" select="'basket'" />

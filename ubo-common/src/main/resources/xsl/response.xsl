@@ -290,7 +290,7 @@
 <xsl:template name="bibentry.add.to.basket">
   <form action="{$ServletsBaseURL}MCRBasketServlet" method="get" class="d-inline">
     <input type="hidden" name="action" value="add"/>
-    <input type="hidden" name="type" value="bibentries"/>
+    <input type="hidden" name="type" value="objects"/>
     <input type="hidden" name="resolve" value="true"/>
     <input type="hidden" name="id" value="{ancestor::mycoreobject/@ID}"/>
     <input type="hidden" name="uri" value="mcrobject:{ancestor::mycoreobject/@ID}"/>

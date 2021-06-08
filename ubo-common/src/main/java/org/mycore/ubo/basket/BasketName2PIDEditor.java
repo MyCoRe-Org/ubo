@@ -60,7 +60,7 @@ public class BasketName2PIDEditor extends MCRServlet {
         changeNamesInBasket(doc, basket);
         saveChangedEntries(basket);
 
-        res.sendRedirect(getServletBaseURL() + "MCRBasketServlet?type=bibentries&action=show");
+        res.sendRedirect(getServletBaseURL() + "MCRBasketServlet?type=objects&action=show");
     }
 
     /**

@@ -19,7 +19,7 @@ import org.mycore.frontend.basket.MCRBasketManager;
  */
 public class BasketUtils {
 
-    private final static String basketID = "bibentries";
+    private final static String basketID = "objects";
 
     private final static int BASKET_LIMIT_NUMENTRIES = 500;
     
