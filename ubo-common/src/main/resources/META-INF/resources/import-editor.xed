@@ -287,7 +287,7 @@
         <label for="{xed:generate-id()}" class="mycore-form-label">
           *<xed:output i18n="ubo.role.interviewer" />:
         </label>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+        <xed:include uri="webapp:import-editor.xed" ref="person" />
       </div>
     </xed:repeat>
   </xed:template>
@@ -597,13 +597,15 @@
               <option value="issn">ISSN</option>
               <option value="pubmed">PubMed ID</option>
               <option value="ieee">IEEE ID</option>
+              <option value="arxiv">arXiv.org ID</option>
               <option value="zdb">ZDB ID</option>
               <option value="scopus">Scopus ID</option>
               <option value="isi">Web of Science ID</option>
               <option value="evaluna">EVALuna ID</option>
               <option value="ppn">GBV PPN</option>
               <option value="hbz">HBZ HT-Nummer</option>
-              <option value="duepublico">DuEPublico ID</option>
+              <option value="duepublico">DuEPublico 1 ID</option>
+              <option value="duepublico2">DuEPublico 2 ID</option>
           </select>:
           </xed:bind>
         </div>
