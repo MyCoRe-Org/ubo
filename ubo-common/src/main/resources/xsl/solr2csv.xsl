@@ -15,9 +15,6 @@
   <xsl:output method="text" omit-xml-declaration="yes" indent="no"/>
 
   <xsl:template match="/add">
-    <xsl:message>
-      <xsl:value-of select="replace('Dies &quot;ist&quot; ein ; test ; ',$regex, '\\$1')"/>
-    </xsl:message>
     <xsl:for-each select="$fields">
       <xsl:value-of select="$str_wrap"/>
       <xsl:value-of select="."/>
