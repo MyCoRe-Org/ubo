@@ -31,21 +31,21 @@
     </div>
   </article>
 
-  <xinclude uri="xslStyle:statistics:solr:q=status:confirmed+year:%5B1980+TO+*%5D&amp;rows=0&amp;facet.field=year" />
+  <xinclude uri="xslStyle:statistics:solr:q=status:confirmed+AND+year:%5B1980+TO+*%5D&amp;rows=0&amp;facet.field=year" />
   <xinclude uri="xslStyle:statistics:solr:q=status:confirmed&amp;rows=0&amp;facet.field=subject" />
   <xinclude uri="xslStyle:statistics:solr:q=status:confirmed&amp;rows=0&amp;facet.field=genre" />
   <xinclude uri="xslStyle:statistics:solr:q=status:confirmed&amp;rows=0&amp;facet.field=oa" />
 
   <article class="card mb-3" xml:lang="de">
     <div class="card-body">
-      <h3>Am häufigsten verzeichnete Personen (nur mit UDE LSF Zuordnung, Top 50, in Publikationen ab 2012):</h3>
-    <xinclude uri="xslStyle:statistics:solr:q=status:confirmed+year:%5B2012+TO+*%5D&amp;rows=0&amp;facet.field=nid_connection&amp;facet.limit=50" />
+      <h3>Am häufigsten verzeichnete Personen (nur mit UDE LSF Zuordnung, Top 50, in Publikationen ab 2015):</h3>
+    <xinclude uri="xslStyle:statistics:solr:q=status:confirmed+AND+year:%5B2015+TO+*%5D&amp;rows=0&amp;facet.field=nid_connection&amp;facet.limit=50" />
     </div>
   </article>
   <article class="card mb-3" xml:lang="en">
     <div class="card-body">
-      <h3>Most frequently listed staff (University members only that are linked to HIS LSF, top 50, in publications from 2012):</h3>
-    <xinclude uri="xslStyle:statistics:solr:q=status:confirmed+year:%5B2012+TO+*%5D&amp;rows=0&amp;facet.field=nid_connection&amp;facet.limit=50" />
+      <h3>Most frequently listed staff (University members only that are linked to HIS LSF, top 50, in publications from 2015):</h3>
+    <xinclude uri="xslStyle:statistics:solr:q=status:confirmed+AND+year:%5B2015+TO+*%5D&amp;rows=0&amp;facet.field=nid_connection&amp;facet.limit=50" />
     </div>
   </article>
 
