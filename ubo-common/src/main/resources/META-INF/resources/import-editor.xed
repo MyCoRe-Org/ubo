@@ -636,7 +636,7 @@
           <xed:output i18n="ubo.shelfmark" />:
         </label>
         <input id="{xed:generate-id()}" class="{$xed-validation-marker} mycore-form-input-double" type="text" />
-        <a class="ml-1 align-self-center" target="_blank" href="https://primo.ub.uni-due.de/">
+        <a class="ml-1 align-self-center" target="_blank" href="https://primo.uni-due.de/">
           <xed:output i18n="ubo.shelfmark.search" />
         </a>
       </div>

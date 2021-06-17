@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xsl:stylesheet version="1.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:xalan="http://xml.apache.org/xalan" 
-  xmlns:encoder="xalan://java.net.URLEncoder" 
+  xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:encoder="xalan://java.net.URLEncoder"
   xmlns:dcterms="http://purl.org/dc/terms/"
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   exclude-result-prefixes="xsl mods xlink xalan encoder"
@@ -28,7 +28,7 @@
     <xsl:apply-templates select="mods:abstract|mods:abstract/@xlink:href" mode="qdc" />
     <xsl:apply-templates select="mods:physicalDescription/mods:extent" mode="qdc" />
     <xsl:apply-templates select="mods:language/mods:languageTerm" mode="qdc" />
-  </xsl:template> 
+  </xsl:template>
 
   <!-- title -->
 
@@ -38,23 +38,23 @@
       <xsl:apply-templates select="." />
     </dcterms:alternative>
   </xsl:template>
-  
+
   <!-- date issued -->
-  
+
   <xsl:template match="mods:dateIssued[@encoding='w3cdtf']" mode="qdc">
     <dcterms:issued scheme="dcterms:W3CDTF">
       <xsl:value-of select="text()" />
     </dcterms:issued>
   </xsl:template>
-  
+
   <!-- date other -->
-  
+
   <xsl:template match="mods:dateOther[@encoding='w3cdtf'][@type='accepted']" mode="qdc">
     <dcterms:dateAccepted scheme="dcterms:W3CDTF">
       <xsl:value-of select="text()" />
     </dcterms:dateAccepted>
   </xsl:template>
-  
+
   <xsl:template match="mods:dateOther[@encoding='w3cdtf'][@type='submitted']" mode="qdc">
     <dcterms:dateSubmitted scheme="dcterms:W3CDTF">
       <xsl:value-of select="text()" />
@@ -80,7 +80,7 @@
   </xsl:template>
 
   <!-- abstract -->
-  
+
   <xsl:template match="mods:abstract[string-length(text()) &gt; 0]" mode="qdc">
     <dcterms:abstract>
       <xsl:copy-of select="@xml:lang" />
@@ -94,7 +94,7 @@
       <xsl:value-of select="." />
     </dcterms:abstract>
   </xsl:template>
-  
+
   <!-- extent -->
 
   <xsl:template match="mods:physicalDescription/mods:extent" mode="qdc">
@@ -112,7 +112,7 @@
   </xsl:template>
 
   <!-- identifier -->
-  
+
   <xsl:template match="mods:identifier[@type='urn']" mode="qdc">
     <dc:identifier scheme="dcterms:URI">
       <xsl:value-of select="text()" />
@@ -173,14 +173,14 @@
       <xsl:value-of select="text()" />
     </dc:identifier>
   </xsl:template>
- 
+
   <xsl:template match="mods:identifier[@type='duepublico2']" mode="qdc">
     <dc:identifier scheme="dcterms:URI">
       <xsl:text>https://duepublico2.uni-due.de/receive/</xsl:text>
       <xsl:value-of select="text()" />
     </dc:identifier>
   </xsl:template>
- 
+
   <xsl:template match="mods:identifier" mode="qdc">
     <dc:identifier>
       <xsl:value-of select="text()" />
@@ -192,7 +192,7 @@
       <xsl:variable name="sig">
         <xsl:apply-templates select="." mode="normalize.shelfmark" />
       </xsl:variable>
-      <xsl:value-of select="concat($primo.search,'lsr11,contains,%22',encoder:encode(.),'%22')" />
+      <xsl:value-of select="concat($primo.search,'holding_call_number,exact,%22',encoder:encode(.),'%22')" />
     </dc:identifier>
   </xsl:template>
 

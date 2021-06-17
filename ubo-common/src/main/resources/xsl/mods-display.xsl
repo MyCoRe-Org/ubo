@@ -26,8 +26,8 @@
 
   <!-- ============ Katalogsuche Basis-URLs ============ -->
   <xsl:variable name="primo.search">
-    <xsl:text>https://primo.ub.uni-due.de/primo-explore/search?tab=localude&amp;search_scope=LocalUDE</xsl:text>
-    <xsl:text>&amp;sortby=rank&amp;vid=UDE_NUI&amp;lang=de_DE&amp;mode=advanced&amp;offset=0&amp;query=</xsl:text>
+    <xsl:text>https://primo.uni-due.de/discovery/search?tab=Everything&amp;search_scope=MyInst_and_CI_custom</xsl:text>
+    <xsl:text>&amp;vid=49HBZ_UDE:UDE&amp;lang=de&amp;offset=0&amp;query=</xsl:text>
   </xsl:variable>
 
   <!-- ============ Ausgabe Publikationsart ============ -->
@@ -1015,7 +1015,7 @@
     <xsl:variable name="sig">
       <xsl:apply-templates select="." mode="normalize.shelfmark" />
     </xsl:variable>
-    <a href="{$primo.search}lsr11,contains,%22{$sig}%22">
+    <a href="{$primo.search}holding_call_number,exact,%22{$sig}%22">
       <xsl:value-of select="text()" />
     </a>
   </xsl:template>
