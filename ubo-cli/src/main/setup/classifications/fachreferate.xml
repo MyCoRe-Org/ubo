@@ -9,7 +9,7 @@
 		<category ID="sonst">
 			<label xml:lang="de" text="Allgemeines, Sonstiges" />
 			<label xml:lang="en" text="General, miscellaneous" />
-			<label xml:lang="x-e-mail" text="burkhard.gutleben@uni-due.de" />
+			<label xml:lang="x-e-mail" text="susanne.buettner@uni-due.de" />
 		</category>
 		<category ID="avslw">
 			<label xml:lang="de" text="Allgemeine u. vergleichende Sprach- und Literaturwissenschaften" />
@@ -59,7 +59,7 @@
 		<category ID="ger">
 			<label xml:lang="de" text="Germanistik" />
 			<label xml:lang="en" text="German Language and Literature Studies" />
-			<label xml:lang="x-e-mail" text="dorothee.graf@uni-due.de" />
+			<label xml:lang="x-e-mail" text="fachreferat-germanistik.ub@uni-due.de " />
 		</category>
 		<category ID="gesch">
 			<label xml:lang="de" text="Geschichte" />
@@ -108,7 +108,7 @@
 		<category ID="nieder">
 			<label xml:lang="de" text="Niederlandistik" />
 			<label xml:lang="en" text="Dutch Language and Culture" />
-			<label xml:lang="x-e-mail" text="burkhard.gutleben@uni-due.de" />
+			<label xml:lang="x-e-mail" text="fachreferat-germanistik.ub@uni-due.de" />
 		</category>
 		<category ID="oawi">
 			<label xml:lang="de" text="Ostasienwissenschaften" />
