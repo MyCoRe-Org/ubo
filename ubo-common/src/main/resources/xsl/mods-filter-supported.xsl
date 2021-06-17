@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:mods="http://www.loc.gov/mods/v3" 
-  exclude-result-prefixes="xsl"  
+  xmlns:mods="http://www.loc.gov/mods/v3"
+  exclude-result-prefixes="xsl"
 >
 
 <xsl:template name="copy-and-apply"> <!-- copy supported elements and attributes calling this template -->
-  <xsl:copy> 
+  <xsl:copy>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
@@ -33,7 +33,7 @@
   <xsl:call-template name="copy-and-apply" />
 </xsl:template>
 
-<xsl:template match="mods:classification/text()" /> 
+<xsl:template match="mods:classification/text()" />
 
 <xsl:template match="mods:name[@type='personal']|mods:name[@type='conference'][1]|mods:name/@type">
   <xsl:call-template name="copy-and-apply" />
@@ -75,7 +75,7 @@
   <xsl:call-template name="copy-and-apply" />
 </xsl:template>
 
-<xsl:template match="mods:identifier[contains('|isbn|issn|doi|urn|pubmed|ieee|arxiv|hdl|zdb|isi|evaluna|ppn|hbz|scopus|duepublico|duepublico2|',concat('|',@type,'|'))]|mods:identifier/@type">
+<xsl:template match="mods:identifier[contains('|isbn|issn|doi|urn|pubmed|ieee|arxiv|hdl|zdb|isi|evaluna|ppn|hbz|mms|scopus|duepublico|duepublico2|',concat('|',@type,'|'))]|mods:identifier/@type">
   <xsl:call-template name="copy-and-apply" />
 </xsl:template>
 
