@@ -24,6 +24,14 @@
   <xsl:param name="UBO.JOP.URL" />
   <xsl:param name="CurrentLang" />
 
+  <xsl:variable name="genres" select="document('classification:metadata:-1:children:ubogenre')/mycoreclass/categories" />
+  <xsl:variable name="oa"     select="document('classification:metadata:-1:children:oa')/mycoreclass/categories" />
+  <xsl:variable name="accessrights" select="document('notnull:classification:metadata:-1:children:accessrights')/mycoreclass/categories" />
+  <xsl:variable name="peerreviewed" select="document('notnull:classification:metadata:-1:children:peerreviewed')/mycoreclass/categories" />
+  <xsl:variable name="partner"      select="document('notnull:classification:metadata:-1:children:partner')/mycoreclass/categories" />
+  <xsl:variable name="category"     select="document('notnull:classification:metadata:-1:children:category')/mycoreclass/categories" />
+  <xsl:variable name="partOf"       select="document('notnull:classification:metadata:-1:children:partOf')/mycoreclass/categories" />
+
   <!-- ============ Katalogsuche Basis-URLs ============ -->
   <xsl:param name="UBO.Primo.Search.Link" />
   <!-- e.G. https://primo.uni-due.de/discovery/search?tab=Everything&search_scope=MyInst_and_CI_custom&vid=49HBZ_UDE:UDE
@@ -636,8 +644,6 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:variable name="genres" select="document('classification:metadata:-1:children:ubogenre')/mycoreclass/categories" />
-  <xsl:variable name="oa"     select="document('classification:metadata:-1:children:oa')/mycoreclass/categories" />
 
   <xsl:template match="mods:genre[@type='intern']">
     <xsl:value-of select="$genres//category[@ID=current()]/label[lang($CurrentLang)]/@text" />
