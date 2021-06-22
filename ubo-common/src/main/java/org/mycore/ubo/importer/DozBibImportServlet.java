@@ -10,6 +10,8 @@
 package org.mycore.ubo.importer;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -78,7 +80,7 @@ public class DozBibImportServlet extends MCRServlet {
             throws MCRAccessException, IOException {
         importJob.saveAndIndex();
         String queryString = importJob.getQueryString();
-        String url = "solr/select?q=" + queryString;
+        String url = "solr/select?q=" + URLEncoder.encode(queryString, StandardCharsets.UTF_8);
         res.sendRedirect(getServletBaseURL() + url);
     }
 }
