@@ -54,25 +54,22 @@
 
   <article class="card">
     <div class="card-body">
-        <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
-            <script>
-                window.addEventListener('load', function() {
-                var ua = window.navigator.userAgent;
-                var msie = ua.indexOf("MSIE ") > 0 || ua.indexOf("Trident/") > 0;
-
-                if (msie){
-                    document.getElementById("iewarning").setAttribute("class", "bg-warning text-dark p-1");
-                }
-                });
-            </script>
-            <div class="d-none bg-warning text-dark p-1" id="iewarning"><xed:output i18n="listWizard.iewarning" /></div>
-            <script src="{$WebApplicationBaseURL}wc/publication-list/publication-list.min.js" />
-            <publication-list bootstrap="{$WebApplicationBaseURL}rsc/sass/scss/bootstrap-ubo.css"
-                              fontawesome="{$WebApplicationBaseURL}webjars/font-awesome/5.13.0/css/all.css"
-                              baseurl="{$WebApplicationBaseURL}"
+        <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" style="z-index: 99">
+            <script src="{$WebApplicationBaseURL}vue/vue.min.js" />
+            <script src="{$WebApplicationBaseURL}vue/publication-list/publicationList.umd.min.js" />
+            <link href="{$WebApplicationBaseURL}vue/publication-list/publicationList.css" rel="stylesheet"/>
+            <div id="publicationList">
+            <pl baseurl="{$WebApplicationBaseURL}"
                               leadid="{$MCR.user2.matching.lead_id}"
-            ></publication-list>
-
+            ></pl>
+            </div>
+            <script>
+                new Vue({
+                components: {
+                pl: publicationList
+                }
+                }).$mount('#publicationList');
+            </script>
         </xed:form>
     </div>
   </article>
