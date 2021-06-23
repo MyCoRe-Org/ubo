@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.mycore.common.MCRConstants;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.common.events.MCREvent;
@@ -80,6 +81,8 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     private final static String CONFIG_CONNECTION_STRATEGY = "MCR.user2.matching.publication.connection.strategy";
     private final static String CONFIG_DEFAULT_ROLE = "MCR.user2.IdentityManagement.UserCreation.DefaultRole";
     private final static String CONFIG_UNVALIDATED_REALM = "MCR.user2.IdentityManagement.UserCreation.Unvalidated.Realm";
+
+    private final static String CONFIG_SKIP_LEAD_ID = "MCR.user2.matching.lead_id.skip";
 
     private final static String CONNECTION_TYPE_NAME = "id_connection";
 
@@ -184,6 +187,16 @@ public class PublicationEventHandler extends MCREventHandlerBase {
                     // ignore Person, do NOT create a new MCRUser
                 }
             }
+
+            MCRConfiguration2.getBoolean(CONFIG_SKIP_LEAD_ID)
+                .filter(Boolean::booleanValue)
+                .ifPresent(trueValue -> {
+                    List<Element> elementsToRemove = modsNameElement.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
+                            .stream()
+                            .filter(element -> element.getAttributeValue("type").equals(leadIDName))
+                            .collect(Collectors.toList());
+                    elementsToRemove.forEach(modsNameElement::removeContent);
+                });
         }
         LOGGER.debug("Final document: {}", new XMLOutputter(Format.getPrettyFormat()).outputString(obj.createXML()));
     }
