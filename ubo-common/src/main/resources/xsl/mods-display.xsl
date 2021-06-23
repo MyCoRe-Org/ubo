@@ -201,7 +201,7 @@
 
   <!-- ========== Zitierform ========== -->
   <xsl:template match="mods:mods|mods:relatedItem" mode="cite">
-    <xsl:param name="mode">plain</xsl:param> <!-- plain: Als Flieï¿½text formatieren, sonst mit <div>'s -->
+    <xsl:param name="mode">plain</xsl:param> <!-- plain: Als Fließtext formatieren, sonst mit <div>'s -->
 
     <xsl:apply-templates select="." mode="cite.title.name">
       <xsl:with-param name="mode" select="$mode" />
