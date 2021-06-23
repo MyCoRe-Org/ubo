@@ -12,7 +12,6 @@
 >
 
   <xsl:param name="ServletsBaseURL" />
-  <xsl:param name="UBO.Primo.Search.Link" />
 
   <xsl:template match="mods:mods" mode="dc">
     <xsl:apply-templates select="mods:titleInfo" mode="dc" />
