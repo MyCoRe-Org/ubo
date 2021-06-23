@@ -247,12 +247,14 @@
       <xsl:text>Signatur: </xsl:text>
       <xsl:value-of select="text()" />
     </dc:identifier>
-    <dc:identifier>
-      <xsl:variable name="sig">
-        <xsl:apply-templates select="." mode="normalize.shelfmark" />
-      </xsl:variable>
-       <xsl:value-of select="concat($primo.search,'holding_call_number,exact,%22',encoder:encode(.),'%22')" />
-    </dc:identifier>
+    <xsl:if test="$UBO.Primo.Search.Link and string-length($UBO.Primo.Search.Link) &gt; 0">
+      <dc:identifier>
+        <xsl:variable name="sig">
+          <xsl:apply-templates select="." mode="normalize.shelfmark" />
+        </xsl:variable>
+         <xsl:value-of select="concat($UBO.Primo.Search.Link,'holding_call_number,exact,%22',encoder:encode(.),'%22')" />
+      </dc:identifier>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="mods:location/mods:url" mode="dc">
