@@ -14,25 +14,36 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.mycore.ubo.picker.IdentityService;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.glassfish.jersey.uri.UriComponent;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRException;
+import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.mods.merger.MCRHyphenNormalizer;
 import org.mycore.ubo.picker.PersonSearchResult;
 
 import javax.naming.OperationNotSupportedException;
+import javax.ws.rs.core.MultivaluedMap;
 
 /**
  * Implements a Web Services client for HIS LSF.
@@ -58,8 +69,11 @@ public class LSFService implements IdentityService {
     protected LSFServiceCache cache;
 
     private static final String PARAM_PID = "pid";
+
     static final String PARAM_FIRSTNAME = "firstname";
+
     static final String PARAM_LASTNAME = "lastName";
+
     private static final String PARAM_ENCODING = "UTF-8";
 
     public LSFService() {
@@ -140,8 +154,9 @@ public class LSFService implements IdentityService {
                     Map<String, Element> found = new HashMap<String, Element>();
                     lookup(lastName, found);
 
-                    String variantName = lastName.replace("ue", "\u00fc").replace("oe", "\u00f6").replace("ae", "\u00e4")
-                            .replace("ss", "\u00df");
+                    String variantName = lastName.replace("ue", "\u00fc").replace("oe", "\u00f6")
+                        .replace("ae", "\u00e4")
+                        .replace("ss", "\u00df");
                     if (!variantName.equals(lastName)) {
                         lookup(variantName, found);
                     }
@@ -155,14 +170,15 @@ public class LSFService implements IdentityService {
                     cache.put(lastName, results);
 
                     LOGGER.info(
-                            "LSF search for person with name = '" + lastName + "': " + results.getContentSize() + " found.");
+                        "LSF search for person with name = '" + lastName + "': " + results.getContentSize()
+                            + " found.");
                 }
             } catch (Exception ex) {
                 LOGGER.error("Error while searching HIS LSF for person name", ex);
             }
         } else {
             LOGGER.info("Could not search for HIS LSF person details, missing {} and/or {} in attributes: {}",
-                    PARAM_FIRSTNAME, PARAM_LASTNAME, attributes);
+                PARAM_FIRSTNAME, PARAM_LASTNAME, attributes);
         }
 
         results = results.clone();
@@ -173,8 +189,108 @@ public class LSFService implements IdentityService {
     }
 
     @Override
-    public PersonSearchResult searchPerson(String query) throws OperationNotSupportedException {
-        throw new OperationNotSupportedException("Query String from LSF is currently not supported");
+    public PersonSearchResult searchPerson(String query) {
+        PersonSearchResult personSearchResult = new PersonSearchResult();
+        personSearchResult.personList = new ArrayList<PersonSearchResult.PersonResult>();
+        Set<String> retrievedIDs = new HashSet<String>();
+
+        query = query.replaceAll("[^\\p{L}\\,]", " ").trim();
+        String lastName = "";
+        String firstName = "";
+
+        if (query.contains(",")) {
+            lastName = query.split(",")[0].trim();
+            firstName = query.split(",")[1].trim();
+        } else if (query.contains(" ")) {
+            int pos = query.lastIndexOf(" ");
+            firstName = query.substring(0, pos).trim();
+            lastName = query.substring(pos + 1).trim();
+        } else {
+            lastName = query;
+        }
+
+        if (!lastName.isBlank()) {
+            lookup(firstName, lastName, personSearchResult.personList, retrievedIDs);
+
+            String variantName = lastName
+                .replace("ue", "\u00fc")
+                .replace("oe", "\u00f6")
+                .replace("ae", "\u00e4")
+                .replace("ss", "\u00df");
+            if (!variantName.equals(lastName)) {
+                lookup(firstName, variantName, personSearchResult.personList, retrievedIDs);
+            }
+
+            variantName = Normalizer.normalize(lastName, Form.NFD).replaceAll("\\p{M}", "");
+            if (!variantName.equals(lastName)) {
+                lookup(firstName, variantName, personSearchResult.personList, retrievedIDs);
+            }
+        }
+
+        personSearchResult.count = personSearchResult.personList.size();
+        return personSearchResult;
+    }
+
+    private void lookup(String firstName, String lastName, List<PersonSearchResult.PersonResult> results,
+        Set<String> retrievedIDs) {
+        String request = buildRequest(lastName);
+
+        try {
+            String response = soapsearch.search(request);
+            LOGGER.debug("Response: " + response);
+
+            Element xml = new SAXBuilder().build(new StringReader(response)).getRootElement();
+
+            Element list = xml.getChild("success").getChild("list");
+
+            for (Element object : list.getChildren("object")) {
+
+                PersonSearchResult.PersonResult personResult = new PersonSearchResult.PersonResult();
+
+                List<Element> attributes = object.getChildren("attribute");
+                for (Element attribute : attributes) {
+                    String value = attribute.getAttributeValue("value");
+                    if (value == null || value.isBlank()) {
+                        continue;
+                    }
+
+                    String name = attribute.getAttributeValue("name");
+                    if ("Nachname".equals(name))
+                        personResult.lastName = value;
+                    else if ("Vorname".equals(name))
+                        personResult.firstName = value;
+                    else if ("ID".equals(name))
+                        personResult.pid = value;
+                }
+
+                if (doesFirstNameMatch(firstName, personResult.firstName)
+                    && (personResult.pid != null)
+                    && !retrievedIDs.contains(personResult.pid)) {
+                    personResult.displayName = personResult.lastName + ( personResult.firstName == null ? "" : ", " + personResult.firstName );
+                    results.add(personResult);
+                    retrievedIDs.add(personResult.pid);
+                    personResult.affiliation = new ArrayList<String>();
+                    getAffiliation(personResult);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            LOGGER.warn(ex);
+        }
+    }
+
+    private void getAffiliation(PersonSearchResult.PersonResult pr) {
+        Map<String, String> attr = new HashMap<>();
+        attr.put(PARAM_PID, pr.pid);
+        Element person = new LSFService().getPersonDetails(attr);
+        XPathExpression<Element> expr = XPathFactory.instance().compile(
+            "Funktion/EinDtx[string-length(text()) > 0]|Kontakt/FBZEDez[string-length(text()) > 0]",
+            Filters.element());
+        for (Element text : expr.evaluate(person)) {
+            String affiliation = text.getTextTrim();
+            if (!pr.affiliation.contains(affiliation))
+                pr.affiliation.add(affiliation);
+        }
     }
 
     private void lookup(String lastName, Map<String, Element> results) {
@@ -211,6 +327,18 @@ public class LSFService implements IdentityService {
         } catch (Exception ex) {
             LOGGER.error("Error while searching HIS LSF for person name", ex);
         }
+    }
+
+    private boolean doesFirstNameMatch(String givenFirstName, String retrievedFirstName) {
+        if (givenFirstName.isBlank())
+            return true;
+        if ((retrievedFirstName == null) || retrievedFirstName.isBlank())
+            return true;
+
+        String[] givenFirstNameParts = getNormalizedNameParts(givenFirstName);
+        String[] retrievedFirstNameParts = getNormalizedNameParts(retrievedFirstName);
+
+        return matches(givenFirstNameParts, retrievedFirstNameParts);
     }
 
     private void removeThoseWithNonMatchingFirstNames(String firstName, Element results) {
