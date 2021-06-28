@@ -19,6 +19,7 @@
 package org.mycore.ubo.resources;
 
 import com.google.gson.Gson;
+import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRSystemUserInformation;
@@ -33,23 +34,21 @@ import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
-@Path("search/person")
+@Path(UBOPersonSearchResource.PATH)
 public class UBOPersonSearchResource {
 
     private static final String STRATEGY_CONFIG_STRING = "MCR.IdentityPicker.strategy";
 
     private static final String STRATEGY_CLASS_SUFFIX = "Service";
+    public static final String PATH = "search/person";
 
     @GET
     public Response search(@QueryParam("query") String searchQuery) {
-        MCRUserInformation userInformation = MCRSessionMgr.getCurrentSession().getUserInformation();
-
-        if(userInformation==null){
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-
-        if(MCRSystemUserInformation.getGuestInstance().equals(userInformation)){
-            return Response.status(Response.Status.FORBIDDEN).build();
+        String id = "webpage:/rsc/" + PATH;
+        if(MCRAccessManager.hasRule(id, "read")){
+            if(!MCRAccessManager.checkPermission(id, "read")){
+                return Response.status(Response.Status.FORBIDDEN).build();
+            }
         }
 
         String classPrefix = MCRConfiguration2.getStringOrThrow(STRATEGY_CONFIG_STRING);

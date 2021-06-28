@@ -37,14 +37,24 @@
         </div>
         <div class="form-group form-inline">
           <label class="mycore-form-label" for="pid">
-            {{ i18n["search.dozbib.pid"] }}:
+            {{ i18n["editor.identity.picker.lead_id"] }}:
           </label>
-          <input class="mycore-form-input" size="6" type="text" v-model="person.pid" id="pid">
+          <input class="mycore-form-input" size="6" type="text" :readonly="isadmin==='false'" v-model="person.pid"
+                 id="pid">
         </div>
         <div class="cancel-submit form-group form-inline">
           <label class="mycore-form-label"></label>
-          <input :title="i18n['index.person.datatoeditor']" :value="i18n['lsf.selectPerson']"  class="btn btn-secondary mr-2" type="submit">
-          <input :value="i18n['button.cancel']"  class="btn btn-primary" type="button"
+          <input :title="i18n['index.person.datatoeditor.try.search']"
+                 v-if="!searched&&person.pid.length===0"
+                 disabled
+                 :value="i18n['lsf.selectPerson']"
+                 class="btn btn-secondary mr-2" type="submit">
+          <input :title="i18n['index.person.datatoeditor']"
+                 v-if="searched||person.pid.trim().length>0"
+                 :value="i18n['lsf.selectPerson']"
+                 class="btn btn-secondary mr-2"
+                 type="submit">
+          <input :value="i18n['button.cancel']" class="btn btn-primary" type="button"
                  v-on:click="$emit('cancel')">
         </div>
       </form>
@@ -61,6 +71,8 @@ export default class PersonEditForm extends Vue {
 
   @Prop() person!: { firstName: string, lastName: string, pid: string };
   @Prop({default: ""}) baseurl!: string;
+  @Prop({default: "false"}) isadmin!: string;
+  @Prop({default: false}) searched!: boolean;
 
   i18n = {
     "person.search.information": null,
@@ -71,9 +83,10 @@ export default class PersonEditForm extends Vue {
     "index.person.datatoeditor": null,
     "lsf.name": null,
     "lsf.nameFirst": null,
-    "search.dozbib.pid": null,
+    "editor.identity.picker.lead_id": null,
     "button.cancel": null,
-    "lsf.selectPerson": null
+    "lsf.selectPerson": null,
+    "index.person.datatoeditor.try.search": null
   };
 
   firstNameInvalid = false;

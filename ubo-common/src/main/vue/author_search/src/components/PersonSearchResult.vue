@@ -23,10 +23,10 @@
         <span class="sr-only">Loading...</span>
       </div>
     </div>
-    <div v-if="error" class="d-flex justify-content-center p-3 text-warning">
+    <div v-if="error" class="card-body text-warning">
       <p>{{ i18n["error.occurred"] }}</p>
     </div>
-    <div v-else-if="searchresults!=null && searchresults.count===0">
+    <div v-else-if="searchresults!=null && searchresults.count===0" class="card-body">
       <p>
         <strong>{{ i18n["index.person.found.0"] }}</strong>
       </p>
@@ -39,11 +39,6 @@
         <table class="table table-sm">
           <tbody>
           <tr v-for="person in searchresults.personList" :key="person.pid">
-            <td class="align-top">
-              <a :title="i18n['index.person.datatoform']" href="#" class="roundedButton text-secondary" v-on:click.prevent="apply(person)">
-                <i class="far fa-arrow-alt-circle-left fa-lg mr-2"></i>
-              </a>
-            </td>
             <td class="align-top">
               {{ person.displayName }}
               <br />
@@ -60,6 +55,11 @@
               <button :title="i18n['index.person.datatoeditor']" class="btn btn-secondary" v-on:click.prevent="submit(person)">
                 {{ i18n['lsf.selectPerson']}}
               </button>
+            </td>
+            <td class="align-top">
+              <a :title="i18n['index.person.datatoform']" href="#" class="roundedButton text-secondary" v-on:click.prevent="apply(person)">
+                <i class="far fa-arrow-alt-circle-right fa-lg"></i>
+              </a>
             </td>
           </tr>
           </tbody>

@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRURIResolver;
@@ -31,6 +32,7 @@ public class IdentityPicker extends MCRServlet {
     private static final String LEAD_ID = MCRConfiguration2.getStringOrThrow("MCR.user2.matching.lead_id");
 
     public void doGetPost(MCRServletJob job) throws IOException, TransformerException, SAXException {
+        boolean isAdmin = MCRSessionMgr.getCurrentSession().getUserInformation().isUserInRole("admin");
         Document webpage = createWebpage("lsf.search");
 
         // add Script
@@ -46,6 +48,7 @@ public class IdentityPicker extends MCRServlet {
         authorSearch.setAttribute("bootstrap", baseURL+"rsc/sass/scss/bootstrap-ubo.min.css");
         authorSearch.setAttribute("fontawesome", baseURL+"webjars/font-awesome/5.13.0/css/all.css");
         authorSearch.setAttribute("sessionid", job.getRequest().getParameter("_xed_subselect_session"));
+        authorSearch.setAttribute("isadmin", String.valueOf(isAdmin));
 
         // get firstName lastName and pid
         Map<String, String> parms = getFlattenedParameters(job.getRequest());
