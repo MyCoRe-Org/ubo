@@ -76,7 +76,7 @@
     <section>
       <div class="form-group row">
         <label class="mycore-form-label">{{i18n["search.sort"]}}</label>
-        <transition-group name="plSort" tag="div" class="col-8 list-group list-group-flush">
+        <transition-group name="plSort" tag="div" class="col-8 mycore-list list-group list-group-flush">
           <div v-for="(sort,i) in exportM.sort" :key="sort.field" class="list-group-item d-flex align-items-center">
             <div class="col">
               <input class="form-check-input" :id="'ps_select_' + sort.field" v-on:change="sortChange" type="checkbox"
@@ -84,32 +84,23 @@
               <label class="form-check-label" :for="'ps_select_' + sort.field">{{i18n[sort.i18nKey]}}</label>
             </div>
             <div class="col">
-              <input class="form-check-input"
-                     :id="'ps_radio_asc_' + sort.field"
-                     v-on:change="sortChange"
-                     type="radio"
-                     v-model="sort.asc"
-                     v-bind:value="true">
-              <label class="form-check-label" :for="'ps_radio_asc_' + sort.field">{{i18n["search.sort.asc"]}}</label>
-            </div>
-            <div class="col">
-              <input class="form-check-input"
-                     :id="'ps_radio_desc_' + sort.field"
-                     v-on:change="sortChange"
-                     type="radio"
-                     v-model="sort.asc"
-                     v-bind:value="false">
-              <label class="form-check-label" :for="'ps_radio_desc_' + sort.field">{{i18n["search.sort.desc"]}}</label>
+              <select class="mycore-form-input custom-select"
+                      :id="'ps_radio_' + sort.field"
+                       v-on:change="sortChange"
+                       v-model="sort.asc">
+                <option v-bind:value="true">{{i18n["search.sort.asc"]}}</option>
+                <option v-bind:value="false">{{i18n["search.sort.desc"]}}</option>
+              </select>
             </div>
             <div class="col">
               <div class="btn-group">
-              <button v-bind:disabled="i<=0" v-on:click.prevent="moveSortUp(sort)" class="btn btn-secondary"
+              <button v-bind:disabled="i<=0" v-on:click.prevent="moveSortUp(sort)" class="btn btn-primary up"
                       tabindex="999">
-                ↑
+                <i class="fas fa-arrow-up"></i>
               </button>
               <button v-bind:disabled="!(i<exportM.sort.length-1)" v-on:click.prevent="moveSortDown(sort)"
-                      class="btn btn-secondary">
-                ↓
+                      class="btn btn-primary down">
+                <i class="fas fa-arrow-down"></i>
               </button>
               </div>
             </div>
@@ -205,8 +196,8 @@ export default class PublicationList extends Vue {
     style: "",
     sort: [
       {active: true, field: "year", asc: true, i18nKey: "search.sort.year"},
-      {active: true, field: "sortby_person", asc: true, i18nKey: "search.sort.name"},
-      {active: true, field: "sortby_title", asc: true, i18nKey: "search.sort.title"}
+      {active: false, field: "sortby_person", asc: true, i18nKey: "search.sort.name"},
+      {active: false, field: "sortby_title", asc: true, i18nKey: "search.sort.title"}
     ],
     year: "",
   };

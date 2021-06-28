@@ -28,12 +28,24 @@
     background-color: $input-disabled-bg !important;
   }
 
+  .card-body .list-group.mycore-list {
+    margin-top: 0px;
+  }
+
   // shortcut-classes for lists
   .mycore-list-item {
     @extend .list-group-item;
     @extend .border-0;
     @extend .py-0;
     @extend .px-0;
+  }
+  
+  .mycore-list > .list-group-item:first-child {
+    padding-top: 0px;
+  }
+
+  .mycore-list .mycore-form-input {
+    max-width: 100%;
   }
 
   // sidebar facets
