@@ -37,7 +37,7 @@
         </div>
         <div class="form-group form-inline">
           <label class="mycore-form-label" for="pid">
-            {{ i18n["search.dozbib.pid"] }}:
+            {{ i18n["editor.identity.picker.lead_id"] }}:
           </label>
           <input class="mycore-form-input" size="6" type="text" :readonly="isadmin==='false'" v-model="person.pid"
                  id="pid">
@@ -83,7 +83,7 @@ export default class PersonEditForm extends Vue {
     "index.person.datatoeditor": null,
     "lsf.name": null,
     "lsf.nameFirst": null,
-    "search.dozbib.pid": null,
+    "editor.identity.picker.lead_id": null,
     "button.cancel": null,
     "lsf.selectPerson": null,
     "index.person.datatoeditor.try.search": null

@@ -23,10 +23,10 @@
         <span class="sr-only">Loading...</span>
       </div>
     </div>
-    <div v-if="error" class="d-flex justify-content-center p-3 text-warning">
+    <div v-if="error" class="card-body text-warning">
       <p>{{ i18n["error.occurred"] }}</p>
     </div>
-    <div v-else-if="searchresults!=null && searchresults.count===0">
+    <div v-else-if="searchresults!=null && searchresults.count===0" class="card-body">
       <p>
         <strong>{{ i18n["index.person.found.0"] }}</strong>
       </p>
