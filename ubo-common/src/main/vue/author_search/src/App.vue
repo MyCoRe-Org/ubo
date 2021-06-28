@@ -3,21 +3,26 @@
     <link v-if="bootstrap" v-bind:href="bootstrap" rel="stylesheet">
     <link v-if="fontawesome" v-bind:href="fontawesome" rel="stylesheet">
     <div class="col-12 col-lg-6">
-      <PersonEditForm :person="personModel"
-                      v-on:submit="personSubmitted"
-                      v-on:cancel="cancel"
-                      :baseurl="baseurl"
-      />
-    </div>
-    <div class="col-12 col-lg-6">
       <PersonSearchForm v-on:search="search"
-                        :baseurl="baseurl" />
+                        :firstname="firstname"
+                        :lastname="lastname"
+                        :baseurl="baseurl"/>
       <PersonSearchResult :searchresults="searchResults"
                           :error="error"
                           :searching="searching"
                           :baseurl="baseurl"
                           v-on:person_submitted="personSubmitted"
                           v-on:person_applied="personApplied"
+      />
+    </div>
+    <div class="col-12 col-lg-6">
+      <PersonEditForm :person="personModel"
+                      :isadmin="isadmin"
+                      :searched="searched"
+                      v-on:submit="personSubmitted"
+                      v-on:cancel="cancel"
+                      :baseurl="baseurl"
+
       />
     </div>
   </div>
@@ -29,6 +34,7 @@ import PersonSearchForm from './components/PersonSearchForm.vue';
 import PersonEditForm from './components/PersonEditForm.vue';
 import PersonSearchResult from "@/components/PersonSearchResult.vue";
 import {PersonResult, SearchResult} from "@/components/SearchResult";
+import {resolveiI18N} from "@/components/I18N";
 
 @Component({
   components: {
@@ -71,20 +77,20 @@ export default class App extends Vue {
     default: ""
   }) pidtype!: string;
 
+  @Prop({
+    default: "false",
+  }) isadmin!: string;
+
+  private searched = false;
+
   searchResults: SearchResult | null = null;
   searching = false;
   error = false;
 
   personModel = {
-    firstName: "",
-    lastName: "",
-    pid: ""
-  }
-
-  mounted() {
-    this.personModel.pid = this.pid;
-    this.personModel.lastName = this.lastname;
-    this.personModel.firstName = this.firstname;
+    firstName: this.firstname,
+    lastName: this.lastname,
+    pid: this.pid
   }
 
   public search({term}: { term: string }) {
@@ -95,6 +101,7 @@ export default class App extends Vue {
   public async performSearch(query: string): Promise<SearchResult> {
     this.searching = true;
     this.error = false;
+    this.searched = true;
     try {
       let response = await fetch(this.baseurl + "rsc/search/person?query=" + encodeURIComponent(query));
       return await response.json();

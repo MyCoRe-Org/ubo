@@ -48,6 +48,8 @@ import {resolveiI18N} from "@/components/I18N";
 export default class PersonSearchForm extends Vue {
 
   @Prop({default: ""}) baseurl!: string;
+  @Prop({default: ""}) firstname!: string;
+  @Prop({default: ""}) lastname!: string;
 
   i18n = {
     "person.search": null,
@@ -66,6 +68,11 @@ export default class PersonSearchForm extends Vue {
 
   mounted() {
     resolveiI18N(this.baseurl, this.i18n);
+    this.searchModel.term = [this.firstname, this.lastname]
+        .filter(s => s !== undefined && s.trim().length > 0).join(" ");
+    if (this.searchModel.term.trim() !== "") {
+      this.$emit("search", {term: this.searchModel.term});
+    }
   }
 
   search() {

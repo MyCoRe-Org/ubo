@@ -40,11 +40,6 @@
           <tbody>
           <tr v-for="person in searchresults.personList" :key="person.pid">
             <td class="align-top">
-              <a :title="i18n['index.person.datatoform']" href="#" class="roundedButton text-secondary" v-on:click.prevent="apply(person)">
-                <i class="far fa-arrow-alt-circle-left fa-lg mr-2"></i>
-              </a>
-            </td>
-            <td class="align-top">
               {{ person.displayName }}
               <br />
               <ul v-if="(person.affiliation && person.affiliation.length>0) || (person.info && person.info.length>0)">
@@ -60,6 +55,11 @@
               <button :title="i18n['index.person.datatoeditor']" class="btn btn-secondary" v-on:click.prevent="submit(person)">
                 {{ i18n['lsf.selectPerson']}}
               </button>
+            </td>
+            <td class="align-top">
+              <a :title="i18n['index.person.datatoform']" href="#" class="roundedButton text-secondary" v-on:click.prevent="apply(person)">
+                <i class="far fa-arrow-alt-circle-right fa-lg"></i>
+              </a>
             </td>
           </tr>
           </tbody>
