@@ -9,7 +9,7 @@
         <input id="personSearch" class="mycore-form-input" type="text" v-model="search.text"
                v-on:keyup.enter="startSearch">
         <span class="input-group-btn">
-          <button class="btn btn-secondary" v-on:click="startSearch">
+          <button class="btn btn-secondary" v-on:click.prevent="startSearch">
             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                   v-if="search.searching"></span>
             {{ i18n["button.search"] }}
@@ -30,7 +30,7 @@
         </div>
       </div>
       <div class="ubo-pl-results">
-        <div class="list-group list-group-flush">
+        <transition-group name="results" tag="div" class="list-group list-group-flush">
           <a class="list-group-item list-group-item-action"
              v-for="autocompleteUser in search.searchResultUsers"
              :key="autocompleteUser.pid"
@@ -39,13 +39,13 @@
             <i class="fas fa-plus-circle ubo-pl-adduser"></i>
             {{ autocompleteUser.name }}
           </a>
-        </div>
+        </transition-group>
       </div>
     </section>
     <section v-if="users.length>0">
       <div class="ubo-pl-userlist">
         <b>{{ i18n["listWizard.users"] }}</b>
-        <div class="list-group list-group-flush">
+        <transition-group name="used" tag="div" class="list-group list-group-flush">
           <a class="list-group-item list-group-item-action"
              v-for="user in users"
              :key="user.pid"
@@ -54,7 +54,7 @@
             <i class="fas fa-minus-circle ubo-pl-deluser"></i>
             {{ user.name }}
           </a>
-        </div>
+        </transition-group>
       </div>
     </section>
     <section>
@@ -74,17 +74,38 @@
       </div>
     </section>
     <section>
-      <div class="form-group">
-        <label class="mycore-form-label" for="sortSelect">{{i18n["search.sort"]}}</label>
-        <select id="sortSelect" class="mycore-form-input custom-select" v-on:change="sortChange" v-model="exportM.sortField">
-          <option v-bind:value="'year'">{{i18n["search.sort.year"]}}</option>
-          <option v-bind:value="'sortby_person'">{{ i18n["search.sort.name"] }}</option>
-          <option v-bind:value="'sortby_title'">{{ i18n["search.sort.title"] }}</option>
-        </select>
-        <div class="ubo-input-check form-check">
-          <input class="form-check-input" v-on:change="sortChange" type="checkbox" id="ascSort" v-model="exportM.asc">
-          <label class="form-check-label" for="ascSort">{{i18n["search.sort.asc"]}}</label>
-        </div>
+      <div class="form-group row">
+        <label class="mycore-form-label">{{i18n["search.sort"]}}</label>
+        <transition-group name="plSort" tag="div" class="col-8 mycore-list list-group list-group-flush">
+          <div v-for="(sort,i) in exportM.sort" :key="sort.field" class="list-group-item d-flex align-items-center">
+            <div class="col">
+              <input class="form-check-input" :id="'ps_select_' + sort.field" v-on:change="sortChange" type="checkbox"
+                     v-model="sort.active">
+              <label class="form-check-label" :for="'ps_select_' + sort.field">{{i18n[sort.i18nKey]}}</label>
+            </div>
+            <div class="col">
+              <select class="mycore-form-input custom-select"
+                      :id="'ps_radio_' + sort.field"
+                       v-on:change="sortChange"
+                       v-model="sort.asc">
+                <option v-bind:value="true">{{i18n["search.sort.asc"]}}</option>
+                <option v-bind:value="false">{{i18n["search.sort.desc"]}}</option>
+              </select>
+            </div>
+            <div class="col">
+              <div class="btn-group">
+              <button v-bind:disabled="i<=0" v-on:click.prevent="moveSortUp(sort)" class="btn btn-primary up"
+                      tabindex="999">
+                <i class="fas fa-arrow-up"></i>
+              </button>
+              <button v-bind:disabled="!(i<exportM.sort.length-1)" v-on:click.prevent="moveSortDown(sort)"
+                      class="btn btn-primary down">
+                <i class="fas fa-arrow-down"></i>
+              </button>
+              </div>
+            </div>
+          </div>
+        </transition-group>
       </div>
       <div class="form-group form-inline">
         <label class="mycore-form-label" for="formatSelect">{{ i18n["listWizard.format"] }}</label>
@@ -127,6 +148,7 @@
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
+import 'whatwg-fetch'
 
 
 @Component
@@ -172,8 +194,11 @@ export default class PublicationList extends Vue {
   private exportM: ExportModel = {
     format: "",
     style: "",
-    sortField: "year",
-    asc: true,
+    sort: [
+      {active: true, field: "year", asc: true, i18nKey: "search.sort.year"},
+      {active: false, field: "sortby_person", asc: true, i18nKey: "search.sort.name"},
+      {active: false, field: "sortby_title", asc: true, i18nKey: "search.sort.title"}
+    ],
     year: "",
   };
 
@@ -194,6 +219,7 @@ export default class PublicationList extends Vue {
     "search.sort.name": null,
     "search.sort.title": null,
     "search.sort.asc": null,
+    "search.sort.desc": null,
     "listWizard.link": null,
     "listWizard.code": null,
     "listWizard.format": null,
@@ -311,20 +337,42 @@ export default class PublicationList extends Vue {
       }
 
       this.result.link =
-          `${this.getWebApplicationBaseURL()}rsc/export/link/${exportModel.format}/${query}?${yearQuery}`+
-          `sortField=${exportModel.sortField}&sortDirection=${exportModel.asc ? "asc" : "desc"}&style=${exportModel.style}`;
+          `${this.getWebApplicationBaseURL()}rsc/export/link/${exportModel.format}/${query}?${yearQuery}` +
+          `${this.getSortString()}style=${exportModel.style}`;
       return;
     } else {
       this.result.link =
-          `${this.getWebApplicationBaseURL()}rsc/export/link/${exportModel.format}/${query}?${yearQuery}`+
-          `sortField=${exportModel.sortField}&sortDirection=${exportModel.asc ? "asc" : "desc"}`;
+          `${this.getWebApplicationBaseURL()}rsc/export/link/${exportModel.format}/${query}?${yearQuery}` +
+          `${this.getSortString()}`;
     }
+  }
+
+  private getSortString(): string {
+    let filtered = this.exportM.sort
+        .filter((sort) => sort.active);
+    return filtered
+        .map((sort) => {
+          return `sortField=${sort.field}&sortDirection=${sort.asc ? "asc" : "desc"}`;
+        }).join("&") + (filtered.length > 0 ? "&" : "");
   }
 
   private styleChange() {
     this.clearLink();
     this.createLink();
     return;
+  }
+
+  private moveSortDown(field: SortField): void {
+    let number = this.exportM.sort.indexOf(field);
+    this.exportM.sort.splice(number, 1);
+    this.exportM.sort.splice(number + 1, 0, field);
+    this.sortChange();
+  }
+
+  private moveSortUp(field: SortField): void {
+    let number = this.exportM.sort.indexOf(field);
+    this.moveSortDown(this.exportM.sort[number - 1]);
+    this.sortChange();
   }
 
   private clearLink() {
@@ -357,7 +405,6 @@ export default class PublicationList extends Vue {
     return this.baseurl ;
   }
 
-
 }
 
 export interface SearchModel {
@@ -368,11 +415,12 @@ export interface SearchModel {
   errored: boolean
 }
 
+export type SortField = { active: boolean, field: string, asc: boolean, i18nKey: string };
+
 export interface ExportModel {
   format: string;
   style: string;
-  sortField: string;
-  asc: boolean;
+  sort: SortField[];
   year: string
 }
 
@@ -390,4 +438,14 @@ export interface User {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+.plSort-move {
+  transition: transform 0.5s;
+}
+
+.results-enter,.results-move, .results-leave, .used-enter, .used-move, .used-leave {
+  transition: all 1s;
+}
+
+
 </style>
