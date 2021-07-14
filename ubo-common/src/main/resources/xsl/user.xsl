@@ -23,6 +23,7 @@
 <xsl:param name="UBO.ORCID.InfoURL" />
 <xsl:param name="MCR.ORCID.LinkURL" />
 <xsl:param name="MCR.ORCID.OAuth.ClientSecret" select="''"/>
+<xsl:param name="MCR.ORCID.OAuth.Scopes" select="''" />
 
 <xsl:variable name="uid">
   <xsl:value-of select="/user/@name" />
@@ -269,14 +270,17 @@
   <p>
     <xsl:value-of select="i18n:translate('orcid.integration.confirmed.text')" />
   </p>
-  <ul class="mt-1">
-    <li>
-      <xsl:value-of select="i18n:translate('orcid.integration.import')" />
-    </li>
-    <li>
-      <xsl:value-of select="i18n:translate('orcid.integration.publish')" />
-    </li>
-  </ul>
+  <xsl:if test="string-length(normalize-space(i18n:translate('orcid.integration.import'))) &gt; 0 and
+                string-length(normalize-space(i18n:translate('orcid.integration.publish'))) &gt; 0">
+    <ul class="mt-1">
+      <li>
+        <xsl:value-of select="i18n:translate('orcid.integration.import')" />
+      </li>
+      <li>
+        <xsl:value-of select="i18n:translate('orcid.integration.publish')" />
+      </li>
+    </ul>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="orcidIntegrationPending">
@@ -310,14 +314,17 @@
   <p>
     <xsl:value-of select="i18n:translate('orcid.integration.pending.authorize')" />
   </p>
-  <ul class="mt-1">
-    <li>
-      <xsl:value-of select="i18n:translate('orcid.integration.import')" />
-    </li>
-    <li>
-      <xsl:value-of select="i18n:translate('orcid.integration.publish')" />
-    </li>
-  </ul>
+  <xsl:if test="string-length(normalize-space(i18n:translate('orcid.integration.import'))) &gt; 0 and
+                string-length(normalize-space(i18n:translate('orcid.integration.publish'))) &gt; 0">
+    <ul class="mt-1">
+      <li>
+        <xsl:value-of select="i18n:translate('orcid.integration.import')" />
+      </li>
+      <li>
+        <xsl:value-of select="i18n:translate('orcid.integration.publish')" />
+      </li>
+    </ul>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="publications">
