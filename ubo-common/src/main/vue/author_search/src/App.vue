@@ -34,7 +34,6 @@ import PersonSearchForm from './components/PersonSearchForm.vue';
 import PersonEditForm from './components/PersonEditForm.vue';
 import PersonSearchResult from "@/components/PersonSearchResult.vue";
 import {PersonResult, SearchResult} from "@/components/SearchResult";
-import {resolveiI18N} from "@/components/I18N";
 
 @Component({
   components: {
@@ -126,7 +125,7 @@ export default class App extends Vue {
     const parms = [encodeURIComponent(xpFam) + "=" + encodeURIComponent(this.personModel.lastName),
       encodeURIComponent(xpGiven) + "=" + encodeURIComponent(this.personModel.firstName)]
 
-    if (this.personModel.pid.length > 0) {
+    if (this.personModel.pid.length > 0 || this.pid != "") {
       parms.push(encodeURIComponent(xpPid) + "=" + encodeURIComponent(this.personModel.pid));
     }
     url += "&" + parms.join("&");
