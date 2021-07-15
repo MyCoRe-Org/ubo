@@ -252,7 +252,7 @@
 		"add-field": {
 			"name": "conference",
 			"type": "ubo_text",
-			"multiValued": false,
+			"multiValued": true,
 			"indexed": true,
 			"stored": false
 		}
