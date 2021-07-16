@@ -1,5 +1,7 @@
 package org.mycore.ubo.importer.scopus;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -7,6 +9,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ScopusUpdater {
+
+    public static void update(String strQuery) throws Exception {
+        String encodedQueryStr = strQuery;
+        AbstractScopusQuery query = new PaginatedScopusQuery(encodedQueryStr, 20, 0);
+        ScopusImporter importer = new ScopusImporter();
+
+        List<String> scopusIDs = query.resolveIDs();
+
+        for (String scopusID : scopusIDs) {
+            importer.doImport(scopusID);
+        }
+        importer.sendNotification();
+    }
 
     public static void update(String affiliationIDs, int daysOffset, int count)
         throws Exception {
