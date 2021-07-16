@@ -78,6 +78,9 @@ public class DozBibCommands extends MCRAbstractCommands {
             "org.mycore.ubo.importer.scopus.ScopusUpdater.update String int int",
             "Queries Scopus for new publications of comma-separated affiliation IDs {0} added within last {1} days," +
                 "retrieves max {2} publications and imports them if not already present"));
+        addCommand(new MCRCommand("ubo update from scopus for query {0}",
+                "org.mycore.ubo.importer.scopus.ScopusUpdater.update String",
+                "Queries Scopus and imports them if not already present"));
         addCommand(new MCRCommand(ScopusInitialImporter.IMPORT_BATCH_COMMAND,
                 "org.mycore.ubo.importer.scopus.ScopusInitialImporter.initialImport String int",
                 "Queries all affiliation IDs and imports all documents {0} = afid {1} = start point should be 0"));
