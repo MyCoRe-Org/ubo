@@ -61,6 +61,14 @@
     vertical-align: top;
     margin: 0px 2px 0px 2px;
   }
+  
+  .orcid-status {
+    display: inline;
+    .orcid-info > img.orcid-icon {
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+  }
 
   .chosen-container-single .chosen-single {
     height: 38px !important;

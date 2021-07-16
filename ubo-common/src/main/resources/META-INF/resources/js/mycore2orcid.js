@@ -55,7 +55,7 @@ function updateORCIDPublishButton(div, status) {
 	var id = jQuery(div).data('id');
 	jQuery(div).empty();
 	if (status.user.isORCIDUser && status.user.weAreTrustedParty && status.isUsersPublication) {
-		var html = "<button class='orcid-button'>" + orcidI18n[
+		var html = "<button class='orcid-button btn btn-sm btn-outline-primary'>" + orcidI18n[
 			(status.isInORCIDProfile ? 'orcid.publication.action.update' : 'orcid.publication.action.create')
 			] + "</button>";
 		jQuery(div).html(html);
