@@ -46,13 +46,19 @@ public class LDAPService implements IdentityService {
     private final String CONFIG_NAMEPART_FIRST_FIELD_TO_LDAP = "MCR.IdentityPicker.LDAP.SearchFormMapping.firstName";
     private final String CONFIG_NAMEPART_LAST_FIELD_TO_LDAP = "MCR.IdentityPicker.LDAP.SearchFormMapping.lastName";
     private final String CONFIG_IDENTITY_SCHEMA = "MCR.IdentityPicker.LDAP.identitySchema";
+
+    private final String CONFIG_LEAD_ID = "MCR.user2.matching.lead_id";
+
     private String firstName_to_ldap;
     private String lastName_to_ldap;
     private String identity_schema;
 
+    private String lead_id;
+
     public LDAPService() {
         parseNamepartFieldsToLDAPAttributeMappingConfig();
         parseIdentitySchemaConfig();
+        lead_id = MCRConfiguration2.getStringOrThrow(CONFIG_LEAD_ID);
     }
 
     /**
@@ -172,7 +178,7 @@ public class LDAPService implements IdentityService {
     public PersonSearchResult searchPerson(String query) throws OperationNotSupportedException {
         PersonSearchResult personSearchResult = new PersonSearchResult();
         personSearchResult.personList = new ArrayList<>();
-        String[] s = query.split(" ");
+        String[] s = query.split(" ", 2);
         HashMap<String, String> parms = new HashMap<>();
 
         parms.put(firstName_to_ldap, s[0]);
@@ -187,7 +193,10 @@ public class LDAPService implements IdentityService {
             PersonSearchResult.PersonResult pr = new PersonSearchResult.PersonResult();
             pr.firstName = person.getChildText("firstName");
             pr.lastName = person.getChildText("lastName");
-            pr.pid = person.getChildText("identity");
+            pr.displayName = pr.firstName + ((pr.lastName != null) ? " " + pr.lastName : "");
+            pr.pid = person.getChildText(lead_id);
+            pr.information = new ArrayList<>();
+            pr.information.add(person.getChildText("identity"));
             personSearchResult.personList.add(pr);
         });
 
