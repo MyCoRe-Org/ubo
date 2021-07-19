@@ -194,7 +194,7 @@ public class LDAPService implements IdentityService {
             pr.firstName = person.getChildText("firstName");
             pr.lastName = person.getChildText("lastName");
             pr.displayName = pr.firstName + ((pr.lastName != null) ? " " + pr.lastName : "");
-            pr.pid = person.getChildText(lead_id);
+            pr.pid = person.getChildText("id_" + lead_id);
             pr.information = new ArrayList<>();
             pr.information.add(person.getChildText("identity"));
             personSearchResult.personList.add(pr);

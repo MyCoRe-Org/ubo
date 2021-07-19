@@ -42,11 +42,11 @@
             <td class="align-top">
               {{ person.displayName }}
               <br />
-              <ul v-if="(person.affiliation && person.affiliation.length>0) || (person.info && person.info.length>0)">
+              <ul v-if="(person.affiliation && person.affiliation.length>0) || (person.information && person.information.length>0)">
                 <li v-for="aff in person.affiliation" :key="aff">
                   {{ aff }}
                 </li>
-                <li v-for="info in person.info" :key="info">
+                <li v-for="info in person.information" :key="info">
                   {{ info }}
                 </li>
               </ul>

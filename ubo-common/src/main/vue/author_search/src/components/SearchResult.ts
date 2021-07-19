@@ -50,5 +50,5 @@ export interface PersonResult {
     /**
      * [Optional]
      */
-    info?: string[];
+    information?: string[];
 }
