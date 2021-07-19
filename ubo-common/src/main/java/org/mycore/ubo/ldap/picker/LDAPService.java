@@ -6,20 +6,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 
+import javax.naming.OperationNotSupportedException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.mycore.common.config.MCRConfiguration2;
+import org.mycore.ubo.ldap.LDAPObject;
+import org.mycore.ubo.matcher.MCRUserMatcherLDAP;
+import org.mycore.ubo.picker.IdentityService;
 import org.mycore.ubo.picker.PersonSearchResult;
 import org.mycore.user2.MCRUserAttribute;
 
 import com.google.common.collect.Multimap;
-
-import org.mycore.ubo.ldap.LDAPObject;
-import org.mycore.ubo.matcher.MCRUserMatcherLDAP;
-import org.mycore.ubo.picker.IdentityService;
-
-import javax.naming.OperationNotSupportedException;
 
 /**
  * With a configuration in mycore.properties, it is necessary to map two of the input fields of the search/pick-form,
@@ -170,7 +169,27 @@ public class LDAPService implements IdentityService {
 
     @Override
     public PersonSearchResult searchPerson(String query) throws OperationNotSupportedException {
-        throw new OperationNotSupportedException("Query String from LDAP is currently not supported");
+        PersonSearchResult personSearchResult = new PersonSearchResult();
+        String[] s = query.split(" ");
+        HashMap<String, String> parms = new HashMap<>();
+
+        parms.put(firstName_to_ldap, s[0]);
+        if (s.length > 1) {
+            parms.put(lastName_to_ldap, s[1]);
+        }
+        Element result = this.searchPerson(parms);
+
+        List<Element> persons = result.getChildren("person");
+
+        persons.forEach(person-> {
+            PersonSearchResult.PersonResult pr = new PersonSearchResult.PersonResult();
+            pr.firstName = person.getChildText("firstName");
+            pr.lastName = person.getChildText("lastName");
+            pr.pid = person.getChildText("identity");
+            personSearchResult.personList.add(pr);
+        });
+
+        return personSearchResult;
     }
 
     private void addIdentityElement(Element parent, LDAPObject ldapUser) {
