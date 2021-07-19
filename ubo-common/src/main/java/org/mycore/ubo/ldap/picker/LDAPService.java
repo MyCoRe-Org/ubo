@@ -1,5 +1,6 @@
 package org.mycore.ubo.ldap.picker;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -170,6 +171,7 @@ public class LDAPService implements IdentityService {
     @Override
     public PersonSearchResult searchPerson(String query) throws OperationNotSupportedException {
         PersonSearchResult personSearchResult = new PersonSearchResult();
+        personSearchResult.personList = new ArrayList<>();
         String[] s = query.split(" ");
         HashMap<String, String> parms = new HashMap<>();
 
@@ -188,6 +190,8 @@ public class LDAPService implements IdentityService {
             pr.pid = person.getChildText("identity");
             personSearchResult.personList.add(pr);
         });
+
+        personSearchResult.count = personSearchResult.personList.size();
 
         return personSearchResult;
     }
