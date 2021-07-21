@@ -16,6 +16,7 @@
       </xsl:apply-templates>
       <xsl:apply-templates select="item/bibrecord/head/source[not((@type='b') and (../citation-info/citation-type/@code='bk'))]" />
       <xsl:apply-templates select="item/bibrecord/item-info/itemidlist" />
+      <xsl:apply-templates select="scopus:coredata/scopus:pubmed-id" />
       <xsl:apply-templates select="item/bibrecord/head[citation-info/citation-type/@code='bk']/source[@type='b']/isbn" />
       <mods:originInfo>
         <xsl:apply-templates select="item/bibrecord/head[citation-info/citation-type/@code='bk']/source[@type='b']/publisher/publishername" />
@@ -36,11 +37,11 @@
       </mods:title>
     </mods:titleInfo>
   </xsl:template>
-  
+
   <xsl:template match="inf"> <!-- subscript / inferior -->
     <xsl:value-of select="translate(text(),'-+=()aeox0123456789','₋₊₌₍₎ₐₑₒₓ₀₁₂₃₄₅₆₇₈₉')" />
   </xsl:template>
-  
+
   <xsl:template match="sup"> <!-- superscript / superior -->
     <xsl:value-of select="translate(text(),'-+=()ni0123456789','⁻⁺⁼⁽⁾ⁿⁱ⁰¹²³⁴⁵⁶⁷⁸⁹')" />
   </xsl:template>
@@ -63,7 +64,7 @@
       <xsl:apply-templates select="//author[@auid=current()/@auid][1]/ce:e-address[@type='email']" />
     </mods:name>
   </xsl:template>
-  
+
   <xsl:template match="ce:e-address[@type='email']">
     <mods:affiliation>
       <xsl:value-of select="." />
@@ -255,6 +256,12 @@
 
   <xsl:template match="isbn">
     <mods:identifier type="isbn">
+      <xsl:value-of select="text()" />
+    </mods:identifier>
+  </xsl:template>
+
+  <xsl:template match="scopus:pubmed-id">
+    <mods:identifier type="pubmed">
       <xsl:value-of select="text()" />
     </mods:identifier>
   </xsl:template>
