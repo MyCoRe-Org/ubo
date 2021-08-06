@@ -5,7 +5,8 @@
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  exclude-result-prefixes="mods xlink">
+  xmlns:str="http://exslt.org/strings"
+  exclude-result-prefixes="mods xlink str">
 
   <xsl:import href="xslImport:solr-document:ubo-solr.xsl" />
 
@@ -291,9 +292,13 @@
   </xsl:template>
 
   <xsl:template match="mods:subject" mode="solrField">
-    <field name="topic">
-      <xsl:value-of select="mods:topic" />
-    </field>
+    <xsl:for-each select="mods:topic">
+      <xsl:for-each select="str:tokenize(text(),',;')">
+        <field name="topic">
+          <xsl:value-of select="." />
+        </field>
+      </xsl:for-each>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="mods:note" mode="solrField">

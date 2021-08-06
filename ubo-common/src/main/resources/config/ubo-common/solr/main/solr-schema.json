@@ -277,6 +277,15 @@
 	},
 	{
 		"add-field": {
+			"name": "facet_topic",
+			"type": "string",
+			"multiValued": true,
+			"indexed": true,
+			"stored": false
+		}
+	},
+	{
+		"add-field": {
 			"name": "facet_person",
 			"type": "string",
 			"multiValued": true,
@@ -649,6 +658,12 @@
 		"add-copy-field": {
 			"source": "host_title",
 			"dest": "facet_host_title"
+		}
+	},
+	{
+		"add-copy-field": {
+			"source": "topic",
+			"dest": "facet_topic"
 		}
 	},
 	{
