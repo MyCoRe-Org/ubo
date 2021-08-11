@@ -135,7 +135,7 @@
     <mods:relatedItem type="host">
       <xsl:apply-templates select="@type" />
       <xsl:apply-templates select="sourcetitle|sourcetitle-abbrev" />
-      <xsl:apply-templates select="volisspag" />
+      <xsl:call-template name="part" />
       <xsl:apply-templates select="issn|isbn" />
       <mods:originInfo>
         <xsl:apply-templates select="publisher/publishername" />
@@ -201,15 +201,26 @@
     </mods:titleInfo>
   </xsl:template>
 
-  <xsl:template match="volisspag">
+  <xsl:template name="part">
     <mods:part>
-      <xsl:apply-templates select="voliss/@volume|voliss/@issue" />
-      <xsl:apply-templates select="pagerange" />
+      <xsl:for-each select="volisspag">
+        <xsl:apply-templates select="voliss/@volume|voliss/@issue" />
+        <xsl:apply-templates select="pagerange" />
+      </xsl:for-each>
+      <xsl:apply-templates select="article-number" />
     </mods:part>
   </xsl:template>
 
   <xsl:template match="voliss/@volume|voliss/@issue">
     <mods:detail type="{name()}">
+      <mods:number>
+        <xsl:value-of select="." />
+      </mods:number>
+    </mods:detail>
+  </xsl:template>
+
+  <xsl:template match="article-number">
+    <mods:detail type="article_number">
       <mods:number>
         <xsl:value-of select="." />
       </mods:number>
