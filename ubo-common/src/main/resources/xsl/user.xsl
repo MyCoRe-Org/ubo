@@ -268,16 +268,16 @@
     <xsl:value-of select="i18n:translate('orcid.integration.confirmed.headline')" />
   </h3>
   <p>
-    <xsl:value-of select="i18n:translate('orcid.integration.confirmed.text')" />
+    <xsl:value-of disable-output-escaping="yes" select="i18n:translate('orcid.integration.confirmed.text')" />
   </p>
   <xsl:if test="string-length(normalize-space(i18n:translate('orcid.integration.import'))) &gt; 0 and
                 string-length(normalize-space(i18n:translate('orcid.integration.publish'))) &gt; 0">
     <ul class="mt-1">
       <li>
-        <xsl:value-of select="i18n:translate('orcid.integration.import')" />
+        <xsl:value-of disable-output-escaping="yes" select="i18n:translate('orcid.integration.import')" />
       </li>
       <li>
-        <xsl:value-of select="i18n:translate('orcid.integration.publish')" />
+        <xsl:value-of disable-output-escaping="yes" select="i18n:translate('orcid.integration.publish')" />
       </li>
     </ul>
   </xsl:if>
@@ -290,7 +290,7 @@
     <xsl:value-of select="i18n:translate('orcid.integration.pending.headline')" />
   </h3>
   <p>
-    <xsl:value-of select="i18n:translate('orcid.integration.pending.intro')" />
+    <xsl:value-of disable-output-escaping="yes" select="i18n:translate('orcid.integration.pending.intro')" />
   </p>
   <script type="text/javascript">
     function orcidOAuth() {
@@ -312,16 +312,16 @@
     <xsl:value-of select="i18n:translate('orcid.oauth.link')" />
   </button>
   <p>
-    <xsl:value-of select="i18n:translate('orcid.integration.pending.authorize')" />
+    <xsl:value-of disable-output-escaping="yes" select="i18n:translate('orcid.integration.pending.authorize')" />
   </p>
   <xsl:if test="string-length(normalize-space(i18n:translate('orcid.integration.import'))) &gt; 0 and
                 string-length(normalize-space(i18n:translate('orcid.integration.publish'))) &gt; 0">
     <ul class="mt-1">
       <li>
-        <xsl:value-of select="i18n:translate('orcid.integration.import')" />
+        <xsl:value-of disable-output-escaping="yes" select="i18n:translate('orcid.integration.import')" />
       </li>
       <li>
-        <xsl:value-of select="i18n:translate('orcid.integration.publish')" />
+        <xsl:value-of disable-output-escaping="yes" select="i18n:translate('orcid.integration.publish')" />
       </li>
     </ul>
   </xsl:if>
@@ -361,7 +361,7 @@
 
 <xsl:template match="attribute[@name='id_orcid']" mode="publications">
   <li>
-    <xsl:value-of select="i18n:translate('user.profile.publications.orcid.intro')" />
+    <xsl:value-of disable-output-escaping="yes" select="i18n:translate('user.profile.publications.orcid.intro')" />
     <xsl:text> </xsl:text>
     <a href="{$MCR.ORCID.LinkURL}{@value}">
       <xsl:call-template name="numPublications">
