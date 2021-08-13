@@ -73,10 +73,10 @@
   <p style="background-color:red; color:yellow; padding:0 1ex 0 1ex;">
     <xsl:choose>
       <xsl:when test="$error='access_denied'">
-        <xsl:value-of select="i18n:translate('orcid.integration.rejected.denied')" />
+        <xsl:value-of disable-output-escaping="yes" select="i18n:translate('orcid.integration.rejected.denied')" />
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="i18n:translate('orcid.integration.rejected.error')" />
+        <xsl:value-of disable-output-escaping="yes" select="i18n:translate('orcid.integration.rejected.error')" />
         <xsl:text> :</xsl:text>
         <xsl:value-of select="$error" />
       </xsl:otherwise>
@@ -88,21 +88,21 @@
   <h3 style="margin-bottom: 0.5em;">
     <span class="fas fa-check" aria-hidden="true" />
     <xsl:text> </xsl:text>
-    <xsl:value-of select="i18n:translate('orcid.integration.confirmed.thanks')" />
+    <xsl:value-of disable-output-escaping="yes" select="i18n:translate('orcid.integration.confirmed.thanks')" />
     <xsl:text>, </xsl:text>
-    <xsl:value-of select="i18n:translate('orcid.integration.confirmed.headline')" />
+    <xsl:value-of disable-output-escaping="yes" select="i18n:translate('orcid.integration.confirmed.headline')" />
   </h3>
   <p>
-    <xsl:value-of select="i18n:translate('orcid.integration.confirmed.text')" />
+    <xsl:value-of disable-output-escaping="yes" select="i18n:translate('orcid.integration.confirmed.text')" />
   </p>
   <xsl:if test="string-length(normalize-space(i18n:translate('orcid.integration.import'))) &gt; 0 and
                 string-length(normalize-space(i18n:translate('orcid.integration.publish'))) &gt; 0">
     <ul style="margin-top:1ex;">
       <li>
-        <xsl:value-of select="i18n:translate('orcid.integration.import')" />
+        <xsl:value-of disable-output-escaping="yes" select="i18n:translate('orcid.integration.import')" />
       </li>
       <li>
-        <xsl:value-of select="i18n:translate('orcid.integration.publish')" />
+        <xsl:value-of disable-output-escaping="yes" select="i18n:translate('orcid.integration.publish')" />
       </li>
     </ul>
   </xsl:if>
