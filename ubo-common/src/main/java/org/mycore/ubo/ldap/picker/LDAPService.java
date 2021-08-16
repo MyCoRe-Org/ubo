@@ -1,25 +1,25 @@
 package org.mycore.ubo.ldap.picker;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 
+import javax.naming.OperationNotSupportedException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.mycore.common.config.MCRConfiguration2;
+import org.mycore.ubo.ldap.LDAPObject;
+import org.mycore.ubo.matcher.MCRUserMatcherLDAP;
+import org.mycore.ubo.picker.IdentityService;
 import org.mycore.ubo.picker.PersonSearchResult;
 import org.mycore.user2.MCRUserAttribute;
 
 import com.google.common.collect.Multimap;
-
-import org.mycore.ubo.ldap.LDAPObject;
-import org.mycore.ubo.matcher.MCRUserMatcherLDAP;
-import org.mycore.ubo.picker.IdentityService;
-
-import javax.naming.OperationNotSupportedException;
 
 /**
  * With a configuration in mycore.properties, it is necessary to map two of the input fields of the search/pick-form,
@@ -46,13 +46,19 @@ public class LDAPService implements IdentityService {
     private final String CONFIG_NAMEPART_FIRST_FIELD_TO_LDAP = "MCR.IdentityPicker.LDAP.SearchFormMapping.firstName";
     private final String CONFIG_NAMEPART_LAST_FIELD_TO_LDAP = "MCR.IdentityPicker.LDAP.SearchFormMapping.lastName";
     private final String CONFIG_IDENTITY_SCHEMA = "MCR.IdentityPicker.LDAP.identitySchema";
+
+    private final String CONFIG_LEAD_ID = "MCR.user2.matching.lead_id";
+
     private String firstName_to_ldap;
     private String lastName_to_ldap;
     private String identity_schema;
 
+    private String lead_id;
+
     public LDAPService() {
         parseNamepartFieldsToLDAPAttributeMappingConfig();
         parseIdentitySchemaConfig();
+        lead_id = MCRConfiguration2.getStringOrThrow(CONFIG_LEAD_ID);
     }
 
     /**
@@ -170,7 +176,33 @@ public class LDAPService implements IdentityService {
 
     @Override
     public PersonSearchResult searchPerson(String query) throws OperationNotSupportedException {
-        throw new OperationNotSupportedException("Query String from LDAP is currently not supported");
+        PersonSearchResult personSearchResult = new PersonSearchResult();
+        personSearchResult.personList = new ArrayList<>();
+        String[] s = query.split(" ", 2);
+        HashMap<String, String> parms = new HashMap<>();
+
+        parms.put(firstName_to_ldap, s[0]);
+        if (s.length > 1) {
+            parms.put(lastName_to_ldap, s[1]);
+        }
+        Element result = this.searchPerson(parms);
+
+        List<Element> persons = result.getChildren("person");
+
+        persons.forEach(person-> {
+            PersonSearchResult.PersonResult pr = new PersonSearchResult.PersonResult();
+            pr.firstName = person.getChildText("firstName");
+            pr.lastName = person.getChildText("lastName");
+            pr.displayName = pr.firstName + ((pr.lastName != null) ? " " + pr.lastName : "");
+            pr.pid = person.getChildText("id_" + lead_id);
+            pr.information = new ArrayList<>();
+            pr.information.add(person.getChildText("identity"));
+            personSearchResult.personList.add(pr);
+        });
+
+        personSearchResult.count = personSearchResult.personList.size();
+
+        return personSearchResult;
     }
 
     private void addIdentityElement(Element parent, LDAPObject ldapUser) {
