@@ -4,17 +4,24 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 exclude-result-prefixes="xsl">
 
+  <xsl:param name="UBO.Export.Fields" />
+  
   <xsl:variable name="fields"
-                select="('id','subject','oa','genre','host_genre','person_aut','person_edt','title','id_doi','id_scopus','id_pubmed','id_urn','id_duepublico','id_duepublico2','host_title','series','id_issn','id_isbn','shelfmark','year','volume','issue','pages','place','publisher')"/>
+                select="tokenize($UBO.Export.Fields, ',')" />
 
   <xsl:variable name="col_seperator" select="';'"/>
   <xsl:variable name="line_seperator" select="'&#xa;'"/>
   <xsl:variable name="str_wrap" select="'&quot;'"/>
   <xsl:variable name="regex" select="concat('([',$str_wrap,'])')"/>
 
-  <xsl:output method="text" omit-xml-declaration="yes" indent="no"/>
+  <xsl:output method="text" omit-xml-declaration="yes" indent="no" media-type="text/csv"/>
 
-  <xsl:template match="/add">
+  <xsl:template match="/response">
+    <xsl:apply-templates select="result"/>
+  </xsl:template>
+
+  <xsl:template match="/add|result">
+    <xsl:message>Match add or response</xsl:message>
     <xsl:for-each select="$fields">
       <xsl:value-of select="$str_wrap"/>
       <xsl:value-of select="."/>
@@ -35,7 +42,11 @@
     </xsl:for-each>
   </xsl:template>
 
-  <xsl:template match="field">
+  <xsl:template match="arr">
+    <xsl:apply-templates select="str"/>
+  </xsl:template>
+
+  <xsl:template match="field|str">
     <xsl:value-of select="replace(string(text()), $regex, '$1$1')"/>
     <xsl:if test="position()!=last()">
       <xsl:text>,</xsl:text>
