@@ -18,23 +18,6 @@
 
 package org.mycore.ubo.resources;
 
-import com.google.gson.Gson;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.jdom2.Element;
-import org.jdom2.Namespace;
-import org.mycore.common.config.MCRConfiguration2;
-import org.mycore.common.xml.MCRURIResolver;
-import org.mycore.frontend.MCRFrontendUtil;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.PathSegment;
-import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
@@ -45,6 +28,24 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jdom2.Element;
+import org.jdom2.Namespace;
+import org.mycore.common.config.MCRConfiguration2;
+import org.mycore.common.xml.MCRURIResolver;
+import org.mycore.frontend.MCRFrontendUtil;
+
+import com.google.gson.Gson;
 
 
 @Path("export")
@@ -133,6 +134,11 @@ public class UBOExportResource {
         } else {
             solrRequest.append("&XSL.Transformer=response-csl-").append(encode(format));
             solrRequest.append("&XSL.style=").append(encode(style));
+        }
+
+        if (format.equals("mods2csv2")) {
+            String s = MCRConfiguration2.getString("UBO.Export.Fields").get();
+            solrRequest.append("&fl=").append(s);
         }
 
         LOGGER.info("Request is " + solrRequest);

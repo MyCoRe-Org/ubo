@@ -118,7 +118,7 @@
           <option v-bind:value="'endnote'">Endnote</option>
           <option v-bind:value="'ris'">RIS</option>
           <option v-bind:value="'isi'">ISI</option>
-          <option v-bind:value="'mods2csv'">CSV</option>
+          <option v-bind:value="'mods2csv2'">CSV</option>
         </select>
       </div>
       <div class="form-group form-inline" v-if="exportM.format==='html' || exportM.format==='pdf'">
