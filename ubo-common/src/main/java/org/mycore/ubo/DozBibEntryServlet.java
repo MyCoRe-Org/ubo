@@ -144,16 +144,16 @@ public class DozBibEntryServlet extends MCRServlet {
         MCRObject obj = new MCRObject(doc);
 
         if (MCRXMLMetadataManager.instance().exists(oid)) {
-            try{
-                if (AccessControl.currentUserIsAdmin()) {
+            if (AccessControl.currentUserIsAdmin()) {
+                try {
                     MCRMetadataManager.update(obj);
                     LOGGER.info("UBO saved entry with ID " + oid);
                     res.sendRedirect(MCRServlet.getServletBaseURL() + "DozBibEntryServlet?id=" + id);
-                } else {
-                    res.sendError(HttpServletResponse.SC_FORBIDDEN);
+                } finally {
+                    MCRObjectIDLockTable.unlock(obj.getId());
                 }
-            } finally {
-                MCRObjectIDLockTable.unlock(obj.getId());
+            } else {
+                res.sendError(HttpServletResponse.SC_FORBIDDEN);
             }
         } else
         // New entry submitted
