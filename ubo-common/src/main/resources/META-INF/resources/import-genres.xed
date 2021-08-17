@@ -112,7 +112,8 @@
   <xed:template id="genre.interview">
     <xed:include uri="webapp:import-editor.xed" ref="title" />
     <xed:include uri="webapp:import-editor.xed" ref="author" />
-    <xed:include uri="webapp:import-editor.xed" ref="interviewee" />    
+    <xed:include uri="webapp:import-editor.xed" ref="interviewee" />
+    <xed:include uri="webapp:import-editor.xed" ref="year" />    
     <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
     <xed:include uri="webapp:import-editor.xed" ref="url" />
   </xed:template>
