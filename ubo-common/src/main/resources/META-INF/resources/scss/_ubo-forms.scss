@@ -5,6 +5,12 @@
 // set the defaults for all responsive levels here
 // no (xl) media query necessary (desktop first)
 
+// fix bootstrap custom-select for older browser
+// see https://caniuse.com/?search=appearance
+.custom-select {
+  -moz-appearance:none
+}
+
   // shortcut-classes for forms
   .mycore-form-label {
     @extend .col-lg-3;
