@@ -10,7 +10,7 @@
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form">
   
       <xed:source uri="xslStyle:mycoreobject-mods2text:mcrobject:{$id}" />
-      <xed:cancel url="servlets/DozBibEntryServlet?id={$id}" />
+      <xed:cancel url="servlets/MCRLockServlet?action=unlock&amp;id={$id}&amp;url=DozBibEntryServlet?id={$id}" />
       
       <xed:post-processor xsl="mycoreobject-text2mods.xsl" /> 
         

@@ -42,8 +42,8 @@
 	
 	<xed:source uri="xslStyle:mods-preprocessor:mcrobject:{$id}" />
 	<xed:source uri="xslStyle:mods2mycoreobject,mods-preprocessor:session:{$key}" />
-	
-	<xed:cancel url="servlets/DozBibEntryServlet?id={$id}" />
+
+    <xed:cancel url="servlets/MCRLockServlet?action=unlock&amp;id={$id}&amp;url=DozBibEntryServlet?id={$id}" />
 	<xed:cancel url="newPublication.xed" />
 	
 	<xed:post-processor xsl="mods-postprocessor.xsl" />    

@@ -32,6 +32,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
+import org.mycore.frontend.support.MCRObjectIDLockTable;
 import org.mycore.mods.MCRMODSWrapper;
 
 public class DozBibEntryServlet extends MCRServlet {
@@ -143,12 +144,16 @@ public class DozBibEntryServlet extends MCRServlet {
         MCRObject obj = new MCRObject(doc);
 
         if (MCRXMLMetadataManager.instance().exists(oid)) {
-            if (AccessControl.currentUserIsAdmin()) {
-                MCRMetadataManager.update(obj);
-                LOGGER.info("UBO saved entry with ID " + oid);
-                res.sendRedirect(MCRServlet.getServletBaseURL() + "DozBibEntryServlet?id=" + id);
-            } else {
-                res.sendError(HttpServletResponse.SC_FORBIDDEN);
+            try{
+                if (AccessControl.currentUserIsAdmin()) {
+                    MCRMetadataManager.update(obj);
+                    LOGGER.info("UBO saved entry with ID " + oid);
+                    res.sendRedirect(MCRServlet.getServletBaseURL() + "DozBibEntryServlet?id=" + id);
+                } else {
+                    res.sendError(HttpServletResponse.SC_FORBIDDEN);
+                }
+            } finally {
+                MCRObjectIDLockTable.unlock(obj.getId());
             }
         } else
         // New entry submitted
