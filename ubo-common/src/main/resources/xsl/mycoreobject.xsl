@@ -80,11 +80,16 @@
   <div id="buttons" class="btn-group mb-3 flex-wrap">
     <xsl:if test="$permission.admin and not($UBO.System.ReadOnly = 'true')">
       <xsl:if test="(string-length($step) = 0) or contains($step,'merged')">
-        <a class="action btn btn-sm btn-outline-primary mb-1" href="{$WebApplicationBaseURL}edit-publication.xed?id={/mycoreobject/@ID}">
-          <xsl:value-of select="i18n:translate('button.edit')" />
+        <a class="action btn btn-sm btn-outline-primary mb-1"
+           href="{$WebApplicationBaseURL}servlets/MCRLockServlet?url=../edit-publication.xed&amp;id={/mycoreobject/@ID}">
+          <xsl:value-of select="i18n:translate('button.edit')"/>
         </a>
-        <a class="action btn btn-sm btn-outline-primary mb-1" href="{$WebApplicationBaseURL}edit-admin.xed?id={/mycoreobject/@ID}">Admin</a>
-        <a class="action btn btn-sm btn-outline-primary mb-1" href="{$WebApplicationBaseURL}edit-mods.xed?id={/mycoreobject/@ID}">MODS</a>
+        <a class="action btn btn-sm btn-outline-primary mb-1"
+           href="{$WebApplicationBaseURL}servlets/MCRLockServlet?url=../edit-admin.xed&amp;id={/mycoreobject/@ID}">Admin
+        </a>
+        <a class="action btn btn-sm btn-outline-primary mb-1"
+           href="{$WebApplicationBaseURL}servlets/MCRLockServlet?url=../edit-mods.xed&amp;id={/mycoreobject/@ID}">MODS
+        </a>
       </xsl:if>
       <xsl:if test="string-length($step) = 0">
         <xsl:if test="not(/mycoreobject/structure/children/child)">
