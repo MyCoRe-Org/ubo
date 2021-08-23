@@ -26,7 +26,7 @@
 
 <!-- ============ Katalogsuche Basis-URLs ============ -->
   <xsl:param name="UBO.Primo.Search.Link" />
-  <!-- e.G. https://primo.uni-due.de/discovery/search?tab=Everything&search_scope=MyInst_and_CI_custom&vid=49HBZ_UDE:UDE&lang=de&offset=0&query= -->
+  <xsl:param name="UBO.ISBN.Search.Link" />
 
 
   <xsl:variable name="genres" select="document('classification:metadata:-1:children:ubogenre')/mycoreclass/categories" />
@@ -913,6 +913,11 @@
     <xsl:choose>
       <xsl:when test="$UBO.Primo.Search.Link and string-length($UBO.Primo.Search.Link) &gt;0">
         <a href="{$UBO.Primo.Search.Link}isbn,contains,{translate(text(),'-','')}">
+          <xsl:value-of select="text()"/>
+        </a>
+      </xsl:when>
+      <xsl:when test="$UBO.ISBN.Search.Link and string-length($UBO.ISBN.Search.Link) &gt;0">
+        <a href="{$UBO.ISBN.Search.Link}{text()}">
           <xsl:value-of select="text()"/>
         </a>
       </xsl:when>
