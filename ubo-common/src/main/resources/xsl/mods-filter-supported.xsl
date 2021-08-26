@@ -63,7 +63,7 @@
   <xsl:call-template name="copy-and-apply" />
 </xsl:template>
 
-<xsl:template match="mods:part[1]|mods:detail[@type='volume'][1]|mods:detail[@type='issue'][1]|mods:detail/@type|mods:number[1]">
+<xsl:template match="mods:part[1]|mods:detail[@type='volume'][1]|mods:detail[@type='issue'][1]|mods:detail[@type='article_number'][1]|mods:detail/@type|mods:number[1]">
   <xsl:call-template name="copy-and-apply" />
 </xsl:template>
 
