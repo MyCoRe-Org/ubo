@@ -177,6 +177,12 @@
                       </label>
                     </div>
                     <div class="form-check mr-2">
+                      <input type="checkbox" value="review" class="form-check-input"/>
+                      <label class="form-check-label">
+                        <strong><xed:output i18n="search.dozbib.status.review" /></strong>
+                      </label>
+                    </div>
+                    <div class="form-check mr-2">
                       <input type="checkbox" value="confirmed" class="form-check-input"/>
                       <label class="form-check-label">
                         <strong><xed:output i18n="search.dozbib.status.confirmed" /></strong>
