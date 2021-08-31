@@ -150,17 +150,7 @@
                 </select>
               </div>
               <script type="text/javascript">
-                $(document).ready(function() {
-                
-                  $('select[class*="autocomplete"]').chosen({search_contains: true}); 
-                
-                  $(document).popover({
-                    selector: "[data-toggle=popover]",
-                    container: "body",
-                    html: true,
-                    trigger: "focus"
-                  });
-                });
+                $(document).ready(function() { $('select[class*="autocomplete"]').chosen({search_contains: true}); });
               </script>
             </xed:bind>
 
