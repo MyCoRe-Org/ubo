@@ -54,6 +54,7 @@
                     <select class="form-control w-100 custom-select">
                       <option value="title"     ><xed:output i18n="search.title" /></option>
                       <option value="series"    ><xed:output i18n="search.dozbib.series" /></option>
+                      <option value="host_title"><xed:output i18n="ubo.search.journalTitle" /></option>
                       <option value="conference"><xed:output i18n="ubo.conference" /></option>
                       <option value="topic"     ><xed:output i18n="ubo.subject.topic" /></option>
                       <option value="note"      ><xed:output i18n="edit.comment" /></option>
