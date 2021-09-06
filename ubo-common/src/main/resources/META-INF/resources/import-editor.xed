@@ -32,7 +32,17 @@
     <xed:validate xpath="//mods:dateIssued" matches="[\d]{4}" i18n="ubo.date.issued.4.validation" display="global" />
 
     <script type="text/javascript">
-      $(document).ready(function() { $('select[class*="autocomplete"]').chosen({search_contains: true}); });
+      $(document).ready(function() {
+      
+        $('select[class*="autocomplete"]').chosen({search_contains: true}); 
+      
+        $(document).popover({
+          selector: "[data-toggle=popover]",
+          container: "body",
+          html: true,
+          trigger: "focus"
+        });
+      });
     </script>
   </xed:template>
 
@@ -64,6 +74,9 @@
             <select id="{xed:generate-id()}" class="mycore-form-input custom-select">
               <xed:include uri="xslStyle:items2options:resource:status.xml" />
             </select>
+            <a tabindex="0" class="btn btn-secondary info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:ubo.help.status}">
+              <i class="fas fa-info"></i>
+            </a>
           </div>
         </xed:when>
         <xed:otherwise>
@@ -114,6 +127,9 @@
           <option value=""><xed:output i18n="search.select.autocomplete" /></option>
           <xed:include uri="xslStyle:items2options:classification:editor:-1:children:ORIGIN" />
         </select>
+        <a tabindex="0" class="btn btn-secondary info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:ubo.help.department}">
+          <i class="fas fa-info"></i>
+        </a>
         <xed:controls />
       </div>
     </xed:repeat>
@@ -122,11 +138,14 @@
   <xed:template id="oa">
     <xed:bind xpath="mods:classification[@classID='oa']">
       <div class="form-group form-inline">
-        <label for="{xed:generate-id()}" class="mycore-form-label"><xed:output i18n="ubo.oa" /></label>
+        <label for="{xed:generate-id()}" class="mycore-form-label"><xed:output i18n="ubo.oa" />:</label>
         <select id="{xed:generate-id()}" class="mycore-form-input custom-select">
           <option value=""><xed:output i18n="search.select" /></option>
           <xed:include uri="xslStyle:items2options:classification:editor:-1:children:oa" />
         </select>
+        <a tabindex="0" class="btn btn-secondary info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:ubo.help.oa}">
+          <i class="fas fa-info"></i>
+        </a>
       </div>
     </xed:bind>
   </xed:template>
@@ -361,8 +380,9 @@
         </div>
       </xed:repeat>
       <div class="form-group form-inline col-12 px-0">
+        <label class="mycore-form-label">
+        </label>
         <xed:repeat xpath="mods:affiliation">
-          <label class="mycore-form-label"></label>
           <textarea class="mycore-form-input" placeholder="Institutionelle Zugehörigkeit" />
         </xed:repeat>
       </div>
@@ -373,7 +393,7 @@
     <xed:repeat xpath="mods:name[@type='personal']">
       <div class="form-group form-inline ubo-repeat-group">
         <xed:bind xpath="mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']" initially="aut">
-          <label class="mycore-form-label d-flex align-items-center">
+          <label class="mycore-form-label d-flex align-items-center mt-0">
             <div class="mr-1">*</div>
             <select class="form-control custom-select">
               <xed:include uri="xslStyle:items2options:webapp:rollen.xml" />
@@ -390,7 +410,7 @@
     <xed:repeat xpath="mods:name[@type='personal']">
       <div class="form-group form-inline ubo-repeat-group">
         <xed:bind xpath="mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']" initially="aut">
-          <label class="mycore-form-label d-flex align-items-center">
+          <label class="mycore-form-label d-flex align-items-center mt-0">
             <div class="mr-1">*</div>
             <select class="form-control custom-select">
               <xed:include uri="xslStyle:items2options:classification:editor:-1:children:marcrelator" />
@@ -505,7 +525,7 @@
   </xed:template>
 
   <xed:template id="comment">
-    <xed:bind xpath="mods:note">
+    <xed:bind xpath="mods:note[not(@type)]">
       <div class="form-group form-inline">
         <label for="{xed:generate-id()}" class="mycore-form-label">
           <xed:output i18n="ubo.comment" />:
