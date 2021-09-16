@@ -1152,7 +1152,7 @@
 
   <!-- ========== Einzelne Seite ========== -->
   <xsl:template match="mods:detail[@type='page']">
-    <xsl:if test="../mods:detail[not(@type='page')]">
+    <xsl:if test="../mods:detail[not(@type='page')] or ../mods:detail[not(@type='article_number')]">
       <xsl:text>, </xsl:text>
     </xsl:if>
     <xsl:value-of select="i18n:translate('ubo.pages.abbreviated.single')" />
@@ -1162,7 +1162,7 @@
 
   <!-- ========== Seiten von-bis ========== -->
   <xsl:template match="mods:part/mods:extent[@unit='pages']">
-    <xsl:if test="../mods:detail">
+    <xsl:if test="../mods:detail[not(@type='article_number')]">
       <xsl:text>, </xsl:text>
     </xsl:if>
     <xsl:apply-templates select="mods:start|mods:end|mods:list|mods:total" />
@@ -1209,7 +1209,7 @@
 
   <!-- ========== Artikelnummer ========== -->
   <xsl:template match="mods:detail[@type='article_number']">
-    <xsl:if test="../mods:detail[not(@type='article_number')]">
+    <xsl:if test="../mods:detail[not(@type='article_number')] or ../mods:extent[@unit='pages']">
       <xsl:text>, </xsl:text>
     </xsl:if>
     <xsl:value-of select="i18n:translate('ubo.articlenumber')" />
