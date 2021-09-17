@@ -21,7 +21,7 @@ ubo-cli/target/bin/ubo.sh create configuration directory
 create database ubo;
 grant all privileges on ubo.* to ubo@localhost identified by 'ubo';
 ```
-- setup your database and JDBC configuration in persistence.xml
+- setup your database and JDBC configuration in persistence.xml and **REMOVE** the line `<mapping-file>META-INF/mycore-iview2-mappings.xml</mapping-file>`
 ```
 vi ~/.mycore/ubo/resources/META-INF/persistence.xml
 ```
