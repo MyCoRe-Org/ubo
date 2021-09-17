@@ -46,11 +46,11 @@
     <axis1.version>1.4</axis1.version>
     <java.target.version>11</java.target.version>
     <mycore.version>2020.06.3-SNAPSHOT</mycore.version>
+    <node.version>v16.0.0</node.version>
     <sortpom.sortDeps>scope,groupId,artifactId</sortpom.sortDeps>
     <sortpom.sortFile>https://gist.githubusercontent.com/yagee-de/dfd3698c1b49173dbf251f74eb6a9297/raw/406460c088ff3cb6354e4ae6b40535e6f841607d/mycore_sort.xml</sortpom.sortFile>
     <sortpom.sortProps>true</sortpom.sortProps>
     <timestamp>${maven.build.timestamp}</timestamp>
-    <node.version>v16.0.0</node.version>
     <yarn.version>v1.22.10</yarn.version>
   </properties>
 
