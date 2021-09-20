@@ -348,7 +348,7 @@
   </xsl:template>
 
   <!-- ========== Personennamen gruppiert je Rolle ========== -->
-  <xsl:template match="mods:name[@type='personal']" mode="details">
+  <xsl:template match="mods:name[@type='personal' or @type='corporate']" mode="details">
     <xsl:variable name="role" select="mods:role/mods:roleTerm[@type='code']" />
     <xsl:variable name="list" select="../mods:name[mods:role/mods:roleTerm[@type='code']=$role]" />
     <xsl:if test="count($list[1]|.)=1">
@@ -754,6 +754,7 @@
     <xsl:apply-templates select="mods:titleInfo" mode="details" />
     <xsl:apply-templates select="mods:name[@type='conference']" mode="details" />
     <xsl:apply-templates select="mods:name[@type='personal']" mode="details" />
+    <xsl:apply-templates select="mods:name[@type='corporate']" mode="details" />
     <xsl:apply-templates select="mods:originInfo/mods:edition" mode="details" />
     <xsl:apply-templates select="mods:originInfo/mods:place" mode="details" />
     <xsl:apply-templates select="mods:originInfo/mods:publisher" mode="details" />
@@ -901,6 +902,11 @@
   <xsl:template match="mods:namePart[@type='given']">
     <xsl:text>, </xsl:text>
     <xsl:value-of select="text()" />
+  </xsl:template>
+
+  <!-- ========== Körperschaft ============ -->
+  <xsl:template match="mods:name[@type='corporate']">
+    <xsl:value-of select="mods:namePart" />
   </xsl:template>
 
   <!-- ========== Konferenz ============ -->
