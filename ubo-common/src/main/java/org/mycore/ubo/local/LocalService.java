@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.jdom2.Element;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.ubo.picker.IdentityService;
 import org.mycore.ubo.picker.PersonSearchResult;
 import org.mycore.user2.MCRUser;
@@ -19,6 +20,8 @@ public class LocalService implements IdentityService {
     private final String USER_FIRST_NAME_ATTR = "firstName";
 
     private final String USER_LAST_NAME_ATTR = "lastName";
+
+    private final String LEAD_ID = MCRConfiguration2.getStringOrThrow("MCR.user2.matching.lead_id");
 
     @Override
     public Element getPersonDetails(Map<String, String> paramMap) {
@@ -39,7 +42,7 @@ public class LocalService implements IdentityService {
 
         List<PersonSearchResult.PersonResult> personResults = matchingUsers.stream().map(user -> {
             PersonSearchResult.PersonResult personSearchResult = new PersonSearchResult.PersonResult();
-            personSearchResult.pid = user.getUserID();
+            personSearchResult.pid = user.getUserAttribute("id_" + LEAD_ID);
             personSearchResult.displayName = user.getRealName().length() > 0 ? user.getRealName() : user.getUserName();
 
             user.getAttributes().stream()
