@@ -67,7 +67,8 @@ public class LocalService implements IdentityService {
             }
 
             return personSearchResult;
-        }).collect(Collectors.toList());
+        }).filter(psr -> psr.pid != null && !psr.pid.isEmpty())
+          .collect(Collectors.toList());
 
         PersonSearchResult personSearchResult = new PersonSearchResult();
         personSearchResult.count = personResults.size();
