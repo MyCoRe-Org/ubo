@@ -227,7 +227,7 @@ public class LDAPService implements IdentityService {
         personSearchResult.personList.sort((o1, o2) -> {
             int bestForO1 = Math.min(ld.apply(query, nameBuilder1.apply(o1)), ld.apply(query, nameBuilder2.apply(o1)));
             int bestForO2 = Math.min(ld.apply(query, nameBuilder1.apply(o2)), ld.apply(query, nameBuilder2.apply(o2)));
-            return bestForO2 - bestForO1;
+            return bestForO1 - bestForO2;
         });
 
         return personSearchResult;
