@@ -188,11 +188,10 @@ public class LDAPService implements IdentityService {
         String[] s = query.split("[ ,]", 2);
         HashMap<String, String> parms = new HashMap<>();
 
-        parms.put(firstName_to_ldap, s[0]);
         parms.put(lastName_to_ldap, s[0]);
         if (s.length > 1) {
-            parms.put(firstName_to_ldap, s[1]);
             parms.put(lastName_to_ldap, s[1]);
+            parms.put(firstName_to_ldap, s[0]);
         }
 
 
