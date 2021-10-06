@@ -148,7 +148,7 @@ public class LDAPService implements IdentityService {
         Multimap<String, String> ldapAttributes = userMatcher.convertNameIdentifiersToLDAP(paramMap, false);
         LOGGER.info("attributes to search with: {}", ldapAttributes);
 
-        List<LDAPObject> ldapUsers = userMatcher.getLDAPUsersByGivenLDAPAttributes(ldapAttributes);
+        List<LDAPObject> ldapUsers = userMatcher.getLDAPUsersByGivenLDAPAttributes(ldapAttributes, userMatcher.SIMILAR_SEARCH_TEMPLATE);
 
         for(LDAPObject ldapUser : ldapUsers) {
             Element person = new Element("person");

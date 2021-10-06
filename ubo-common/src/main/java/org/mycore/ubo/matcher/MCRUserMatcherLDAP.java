@@ -1,5 +1,8 @@
 package org.mycore.ubo.matcher;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,6 +13,7 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
@@ -85,6 +89,8 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
     private final String CONFIG_ORCID_NORMALIZATION_RESOLVER = "MCR.IdentityPicker.LDAP.normalization.ORCID.resolver";
     private String orcid_resolver;
 
+    public final String SIMILAR_SEARCH_TEMPLATE = "(%s~=%s)";
+    public final String EXACT_SEARCH_TEMPLATE = "(%s=%s)";
     private final String CONFIG_REALM = "MCR.user2.IdentityManagement.UserCreation.LDAP.Realm";
     private String realm;
 
@@ -176,14 +182,14 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
 
         MCRUser mcrUser = matcherDTO.getMCRUser();
         Multimap<String, String> ldapAttributes = convertUserAttributesToLDAP(mcrUser);
-        List<LDAPObject> ldapUsers = getLDAPUsersByGivenLDAPAttributes(ldapAttributes);
+        List<LDAPObject> ldapUsers = getLDAPUsersByGivenLDAPAttributes(ldapAttributes, EXACT_SEARCH_TEMPLATE);
 
         if(ldapUsers.size() == 0) {
             // no match found, do nothing, return given user unchanged
         } else if(ldapUsers.size() > 1) {
             // too many matches found (conflict)
             // TODO: return conflict message/MatchType/exception(?)
-        } else if(ldapUsers.size() == 1) {
+        } else {
             LDAPObject ldapUser = ldapUsers.get(0);
 
             // Gather and convert all LDAP identifiers/attributes to MCRUser Attributes and merge them
@@ -443,11 +449,11 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
         return regex;
     }
 
-    public List<LDAPObject> getLDAPUsersByGivenLDAPAttributes(Multimap ldapAttributes) {
+    public List<LDAPObject> getLDAPUsersByGivenLDAPAttributes(Multimap ldapAttributes, String searchTemplate) {
         DirContext ctx = null;
         List<LDAPObject> ldapUsers = new ArrayList<>();
 
-        String ldapSearchFilter = createLDAPSearchFilter(ldapAttributes);
+        String ldapSearchFilter = createLDAPSearchFilter(ldapAttributes, searchTemplate);
         try {
             ctx = new LDAPAuthenticator().authenticate();
             ldapUsers = new LDAPSearcher().searchWithGlobalDN(ctx, ldapSearchFilter);
@@ -473,18 +479,34 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
      * @param ldapAttributes a Multimap where the keys are the LDAP attribute names
      * @return A LDAP-searchfilter of the form (&(objectClass=eduPerson)(|(%a1=%v1)(%a2=%v2)...(%aN=%vN)))
      */
-    private String createLDAPSearchFilter(Multimap<String, String> ldapAttributes) {
+    private String createLDAPSearchFilter(Multimap<String, String> ldapAttributes, String innerTemplate) {
         // TODO: take into consideration the member-status of the (email?) of the LDAP-users
         String searchFilterBaseTemplate = "(&(objectClass=eduPerson)(|%s))";
-        String searchFilterInnerTemplate = "(%s=%s)"; // attributeName=attributeValue
 
-        String searchFilterInner = "";
+        StringBuilder searchFilterInner = new StringBuilder();
         for(Map.Entry<String, Collection<String>> ldapAttribute : ldapAttributes.asMap().entrySet()) {
             String attributeName = ldapAttribute.getKey();
-            Collection<String> attributeValues = ldapAttribute.getValue();
-            for(String attributeValue : attributeValues) {
-                String attributeFilter = String.format(searchFilterInnerTemplate, attributeName, attributeValue);
-                searchFilterInner += attributeFilter;
+
+            Collection<String> values = ldapAttribute.getValue();
+            boolean extendedAttributes = "sn".equals(attributeName) || "givenName".equals(attributeName);
+
+            if (extendedAttributes) {
+                searchFilterInner.append("(|");
+            }
+
+            values.stream().map(f -> URLDecoder.decode(f, StandardCharsets.UTF_8))
+                .flatMap(value -> {
+                    ArrayList<String> forms = new ArrayList<>();
+                    forms.add(value);
+                    if (extendedAttributes) {
+                        forms.add(Normalizer.normalize(value, Normalizer.Form.NFD).replaceAll("\\p{M}", ""));
+                    }
+                    return forms.stream();
+                }).map(f -> String.format(innerTemplate, attributeName, f))
+                .forEach(searchFilterInner::append);
+
+            if (extendedAttributes) {
+                searchFilterInner.append(")");
             }
         }
         return String.format(searchFilterBaseTemplate, searchFilterInner);
