@@ -224,8 +224,23 @@ public class LDAPService implements IdentityService {
             o.firstName);
 
         personSearchResult.personList.sort((o1, o2) -> {
-            int bestForO1 = Math.min(ld.apply(query, nameBuilder1.apply(o1)), ld.apply(query, nameBuilder2.apply(o1)));
-            int bestForO2 = Math.min(ld.apply(query, nameBuilder1.apply(o2)), ld.apply(query, nameBuilder2.apply(o2)));
+            String o1Name1 = nameBuilder1.apply(o1);
+            String o1Name2 = nameBuilder2.apply(o1);
+            int bestForO1 = Math.min(ld.apply(query, o1Name1), ld.apply(query, o1Name2));
+
+            String o2Name1 = nameBuilder1.apply(o2);
+            String o2Name2 = nameBuilder2.apply(o2);
+            int bestForO2 = Math.min(ld.apply(query, o2Name1), ld.apply(query, o2Name2));
+
+            boolean o1StartsWith = query.startsWith(o1Name1) || query.startsWith(o1Name2);
+            boolean o2StartsWith = query.startsWith(o2Name1) || query.startsWith(o2Name2);
+
+            if(o1StartsWith && !o2StartsWith) {
+                return Integer.MIN_VALUE;
+            } else if(!o1StartsWith && o2StartsWith) {
+                return Integer.MAX_VALUE;
+            }
+
             return bestForO1 - bestForO2;
         });
 
