@@ -6,7 +6,12 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.SortedSet;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.naming.OperationNotSupportedException;
 
@@ -208,8 +213,22 @@ public class LDAPService implements IdentityService {
 
         personSearchResult.count = personSearchResult.personList.size();
 
+        // Sort results by best LevenshteinDistance from (fn + ln) or (ln + fn) to query
         LevenshteinDistance ld = new LevenshteinDistance(50);
-        personSearchResult.personList.sort((o1,o2) -> ld.apply(query, o2.displayName) - ld.apply(query, o1.displayName));
+        BiFunction<String, String, String> namePartCombiner = (n1, n2) -> Stream.of(n1, n2).filter(Objects::nonNull)
+            .collect(Collectors.joining(" "));
+
+        Function<PersonSearchResult.PersonResult, String> nameBuilder1 = (o) -> namePartCombiner.apply(o.firstName,
+            o.lastName);
+
+        Function<PersonSearchResult.PersonResult, String> nameBuilder2 = (o) -> namePartCombiner.apply(o.lastName,
+            o.firstName);
+
+        personSearchResult.personList.sort((o1, o2) -> {
+            int bestForO1 = Math.min(ld.apply(query, nameBuilder1.apply(o1)), ld.apply(query, nameBuilder2.apply(o1)));
+            int bestForO2 = Math.min(ld.apply(query, nameBuilder1.apply(o2)), ld.apply(query, nameBuilder2.apply(o2)));
+            return bestForO2 - bestForO1;
+        });
 
         return personSearchResult;
     }
