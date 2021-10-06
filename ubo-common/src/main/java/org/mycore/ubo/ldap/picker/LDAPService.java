@@ -236,9 +236,9 @@ public class LDAPService implements IdentityService {
             boolean o2StartsWith = query.startsWith(o2Name1) || query.startsWith(o2Name2);
 
             if(o1StartsWith && !o2StartsWith) {
-                return Integer.MIN_VALUE;
+                return -1000;
             } else if(!o1StartsWith && o2StartsWith) {
-                return Integer.MAX_VALUE;
+                return +1000;
             }
 
             return bestForO1 - bestForO2;
