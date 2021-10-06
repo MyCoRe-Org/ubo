@@ -178,7 +178,7 @@ public class LDAPService implements IdentityService {
     public PersonSearchResult searchPerson(String query) throws OperationNotSupportedException {
         PersonSearchResult personSearchResult = new PersonSearchResult();
         personSearchResult.personList = new ArrayList<>();
-        String[] s = query.split(" ", 2);
+        String[] s = query.split("[ ,]", 2);
         HashMap<String, String> parms = new HashMap<>();
 
         parms.put(firstName_to_ldap, s[0]);
