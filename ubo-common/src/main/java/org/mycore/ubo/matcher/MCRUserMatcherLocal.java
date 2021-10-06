@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
@@ -28,11 +29,7 @@ public class MCRUserMatcherLocal implements MCRUserMatcher {
 
         MCRUser mcrUser = matcherDTO.getMCRUser();
         List<MCRUser> matchingUsers = new ArrayList<>(getUsersForGivenAttributes(mcrUser.getAttributes()));
-        if(matchingUsers.size() == 0) {
-            // no match found, do nothing, return given user unchanged
-        } else if(matchingUsers.size() > 1) {
-            // TODO: return conflict message/MatchType/exception(?)
-        } else if(matchingUsers.size() == 1) {
+        if(matchingUsers.size() == 1) {
             MCRUser matchingUser = matchingUsers.get(0);
 
             LOGGER.info("Found local matching user! Matched user: {} and attributes: {} with local user: {} and attributes: {}",
@@ -41,7 +38,12 @@ public class MCRUserMatcherLocal implements MCRUserMatcher {
                     matchingUser.getUserName(),
                     matchingUser.getAttributes().stream().map(a -> a.getName() + "=" + a.getValue()).collect(Collectors.joining(" | ")));
 
-            matchingUser.getAttributes().addAll(mcrUser.getAttributes());
+            // only add not attributes which are not present
+            matchingUser.getAttributes()
+                    .addAll(mcrUser.getAttributes().stream()
+                            .filter(Predicate.not(matchingUser.getAttributes()::contains))
+                            .collect(Collectors.toUnmodifiableList()));
+
             mcrUser = matchingUser;
             matcherDTO.setMCRUser(mcrUser);
             matcherDTO.setMatchedOrEnriched(true);

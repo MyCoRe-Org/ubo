@@ -382,8 +382,10 @@ export default class PublicationList extends Vue {
   async searchSolrForPerson(name: string): Promise<User[]> {
     this.search.errored = false;
     this.search.searching = true;
+    const nameSearch = name.replace(/[, ]/g,"*");
+    const nameReversed = nameSearch.split('*').reverse().join("*");
     let response = await
-        fetch(`${this.getWebApplicationBaseURL()}servlets/solr/select?q=name_id_connection:* AND (name:*${name}* OR name_id_${this.leadid}:*${name}*)&group=true&group.field=name&fl=*&wt=json`);
+        fetch(`${this.getWebApplicationBaseURL()}servlets/solr/select?q=name_id_connection:* AND (name:*${nameSearch}* OR name:*${nameReversed}* OR name_id_${this.leadid}:*${nameSearch}*)&group=true&group.field=name&fl=*&wt=json`);
     if (response.ok) {
       let json = await response.json();
       this.search.searching = false;
