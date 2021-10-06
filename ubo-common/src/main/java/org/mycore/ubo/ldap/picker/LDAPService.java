@@ -2,6 +2,7 @@ package org.mycore.ubo.ldap.picker;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.SortedSet;
 
 import javax.naming.OperationNotSupportedException;
 
+import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
@@ -205,6 +207,9 @@ public class LDAPService implements IdentityService {
         });
 
         personSearchResult.count = personSearchResult.personList.size();
+
+        LevenshteinDistance ld = new LevenshteinDistance(50);
+        personSearchResult.personList.sort((o1,o2) -> ld.apply(query, o2.displayName) - ld.apply(query, o1.displayName));
 
         return personSearchResult;
     }
