@@ -232,8 +232,8 @@ public class LDAPService implements IdentityService {
             String o2Name2 = nameBuilder2.apply(o2);
             int bestForO2 = Math.min(ld.apply(query, o2Name1), ld.apply(query, o2Name2));
 
-            boolean o1StartsWith = query.startsWith(o1Name1) || query.startsWith(o1Name2);
-            boolean o2StartsWith = query.startsWith(o2Name1) || query.startsWith(o2Name2);
+            boolean o1StartsWith = o1Name1.startsWith(query) || o1Name2.startsWith(query);
+            boolean o2StartsWith = o2Name1.startsWith(query) || o2Name2.startsWith(query);
 
             if(o1StartsWith && !o2StartsWith) {
                 return -1000;
