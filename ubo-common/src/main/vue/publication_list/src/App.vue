@@ -132,14 +132,16 @@
     <section v-if="result.link.length>0">
       <div class="row">
         <div class="col-12">
-          <!-- when the format is html, we will show the link (which is a iframe) as code -->
-          <p v-if="exportM.format==='html'">{{ i18n["listWizard.code"] }}</p>
-          <code v-if="exportM.format==='html'">&lt;iframe scrolling=&quot;yes&quot; width=&quot;90%&quot; height=&quot;300&quot;
-            src=&quot;{{result.link}}&quot;/&gt;</code>
+          <div class="jumbotron">
+            <!-- when the format is html, we will show the link (which is a iframe) as code -->
+            <p class="text-primary" v-if="exportM.format==='html'">{{ i18n["listWizard.code"] }}</p>
+            <code v-if="exportM.format==='html'">&lt;iframe scrolling=&quot;yes&quot; width=&quot;90%&quot; height=&quot;300&quot;
+              src=&quot;{{result.link}}&quot;/&gt;</code>
 
-          <!-- when format is not html, we just show it as link -->
-          <p v-if="exportM.format!=='html'">{{ i18n["listWizard.link"] }}</p>
-          <a v-if="exportM.format!=='html'" :href="result.link">{{result.link}}</a>
+            <!-- when format is not html, we just show it as link -->
+            <p class="text-primary" v-if="exportM.format!=='html'">{{ i18n["listWizard.link"] }}</p>
+            <a v-if="exportM.format!=='html'" :href="result.link">{{result.link}}</a>
+          </div>
         </div>
       </div>
     </section>
