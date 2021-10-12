@@ -38,7 +38,18 @@
              href="javascript:void(0)">
             <i class="fas fa-plus-circle ubo-pl-adduser"></i>
             {{ autocompleteUser.name }}
-            <span class="badge badge-secondary" v-for="id in autocompleteUser.otherIds" :key="id">{{id}}</span>
+            <i v-if="Object.keys(autocompleteUser.otherIds).length>0" :id="'popover-results-' + autocompleteUser.pid"
+               class="fa fa-info-circle"></i>
+            <b-popover triggers="hover" :target="'popover-results-' + autocompleteUser.pid">
+              <div>
+                <dl>
+                  <template v-for="arr,type in autocompleteUser.otherIds">
+                    <dt :key="type">{{ i18n["index.person.id." + type] }}</dt>
+                    <dd :key="type">{{arr.join(", ")}}</dd>
+                  </template>
+                </dl>
+              </div>
+            </b-popover>
           </a>
         </transition-group>
       </div>
@@ -54,7 +65,18 @@
              href="javascript:void(0)">
             <i class="fas fa-minus-circle ubo-pl-deluser"></i>
             {{ user.name }}
-            <span class="badge badge-secondary" v-for="id in user.otherIds" :key="id">{{id}}</span>
+            <i v-if="Object.keys(user.otherIds).length>0" :id="'popover-list-' + user.pid"
+               class="fa fa-info-circle"></i>
+            <b-popover triggers="hover" :target="'popover-list-' + user.pid">
+              <div>
+                <dl>
+                  <template v-for="arr,type in user.otherIds">
+                    <dt :key="type">{{ i18n["index.person.id." + type] }}</dt>
+                    <dd :key="type">{{arr.join(", ")}}</dd>
+                  </template>
+                </dl>
+              </div>
+            </b-popover>
           </a>
         </transition-group>
       </div>
@@ -153,7 +175,9 @@
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
 import 'whatwg-fetch'
+import {BPopover} from 'bootstrap-vue'
 
+Vue.component('b-popover', BPopover)
 
 @Component
 export default class PublicationList extends Vue {
@@ -241,7 +265,8 @@ export default class PublicationList extends Vue {
     "result.dozbib.results": null,
     "search.dozbib.year.publication": null,
     "search.dozbib.year.invalid": null,
-    "listWizard.search": null
+    "listWizard.search": null,
+    "index.person.id.*": null,
   };
 
   private users: User[] = [];
@@ -272,9 +297,17 @@ export default class PublicationList extends Vue {
         .map(k => {
           let url = this.getWebApplicationBaseURL() + "rsc/locale/translate/" + k;
           fetch(url).then(result => {
-            result.text().then(translation => {
-              this.i18n[k] = translation;
-            });
+            if(k.endsWith("*")){
+              result.json().then(obj => {
+                Object.keys(obj).forEach(key => {
+                  this.i18n[key] = obj[key];
+                })
+              })
+            } else {
+              result.text().then(translation => {
+                this.i18n[k] = translation;
+              });
+            }
           })
         });
   }
@@ -409,20 +442,18 @@ export default class PublicationList extends Vue {
       let results = [];
       for (const {doclist} of json.grouped.name_id_connection.groups) {
         let doc = doclist.docs[0];
-        const result: User = {name: doc.name, pid: doc.name_id_connection[0], otherIds: []};
 
+        const otherIds: Identifier = {};
         for (const prop in doc) {
           if (prop.startsWith("name_id_") && doc[prop] != undefined && doc[prop].length > 0) {
             const idName = prop.substr("name_id_".length);
             if(this.personids.split(",").indexOf(idName) != -1){
-              const list: string[] = doc[prop];
-              for(const pid of list){
-                result.otherIds.push(pid);
-              }
+              otherIds[idName] = doc[prop];
             }
           }
         }
 
+        const result: User = {name: doc.name, pid: doc.name_id_connection[0], otherIds: otherIds};
         if (result.name && result.pid) {
           results.push(result);
         }
@@ -473,7 +504,11 @@ export interface StyleDescription {
 export interface User {
   name: string;
   pid: string;
-  otherIds: string[];
+  otherIds: Identifier;
+}
+
+export interface Identifier {
+  [key: string]: string[]
 }
 
 </script>
