@@ -30,6 +30,16 @@
 	},
 	{
 		"add-requestHandler": {
+			"name": "/select2",
+			"class": "solr.SearchHandler",
+			"defaults": {
+				"fl": "id",
+				"wt": "xml"
+			}
+		}
+	},
+	{
+		"add-requestHandler": {
 			"name": "/uboExport",
 			"class": "solr.SearchHandler",
 			"defaults": {

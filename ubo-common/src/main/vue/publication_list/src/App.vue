@@ -38,6 +38,7 @@
              href="javascript:void(0)">
             <i class="fas fa-plus-circle ubo-pl-adduser"></i>
             {{ autocompleteUser.name }}
+            <span class="badge badge-secondary" v-for="id in autocompleteUser.otherIds" :key="id">{{id}}</span>
           </a>
         </transition-group>
       </div>
@@ -53,6 +54,7 @@
              href="javascript:void(0)">
             <i class="fas fa-minus-circle ubo-pl-deluser"></i>
             {{ user.name }}
+            <span class="badge badge-secondary" v-for="id in user.otherIds" :key="id">{{id}}</span>
           </a>
         </transition-group>
       </div>
@@ -180,6 +182,16 @@ export default class PublicationList extends Vue {
   @Prop() private leadid!: string;
 
   /**
+   * Comma sperated list of roles which are considered "authors"
+   */
+  @Prop() private roles!: string;
+
+  /**
+   * Comma sperated list of ids which should be shown in the search results
+   */
+  @Prop() private personids!: string;
+
+  /**
    * The url to fontawesome
    * @private
    */
@@ -277,7 +289,8 @@ export default class PublicationList extends Vue {
       for (const foundUser of userArray) {
         this.search.searchResultUsers.push(foundUser);
       }
-    }).catch(() => {
+    }).catch((e) => {
+      console.error(e);
       this.search.errored = true;
     });
   }
@@ -386,16 +399,30 @@ export default class PublicationList extends Vue {
     this.search.searching = true;
     const nameSearch = name.replace(/[, ]/g,"*");
     const nameReversed = nameSearch.split('*').reverse().join("*");
+    let roleQuery = this.getRoleQuery();
     let response = await
-        fetch(`${this.getWebApplicationBaseURL()}servlets/solr/select?q=name_id_connection:* AND (name:*${nameSearch}* OR name:*${nameReversed}* OR name_id_${this.leadid}:*${nameSearch}*)&group=true&group.field=name&fl=*&wt=json`);
+        fetch(`${this.getWebApplicationBaseURL()}servlets/solr/select?q=name_id_connection:* AND (name:*${nameSearch}* name:*${nameReversed}* OR name_id_${this.leadid}:*${name}*)${roleQuery}&group=true&group.field=name_id_connection&fl=*&wt=json`);
     if (response.ok) {
       let json = await response.json();
       this.search.searching = false;
 
       let results = [];
-      for (const {doclist} of json.grouped.name.groups) {
+      for (const {doclist} of json.grouped.name_id_connection.groups) {
         let doc = doclist.docs[0];
-        const result = {name: doc.name, pid: doc.name_id_connection[0]};
+        const result: User = {name: doc.name, pid: doc.name_id_connection[0], otherIds: []};
+
+        for (const prop in doc) {
+          if (prop.startsWith("name_id_") && doc[prop] != undefined && doc[prop].length > 0) {
+            const idName = prop.substr("name_id_".length);
+            if(this.personids.split(",").indexOf(idName) != -1){
+              const list: string[] = doc[prop];
+              for(const pid of list){
+                result.otherIds.push(pid);
+              }
+            }
+          }
+        }
+
         if (result.name && result.pid) {
           results.push(result);
         }
@@ -405,8 +432,18 @@ export default class PublicationList extends Vue {
     throw new Error("Error while request person from solr: " + response.statusText);
   }
 
+  private getRoleQuery() {
+    console.log(this.roles);
+    if (this.roles != undefined && this.roles.trim().length > 0) {
+      return " AND (" + this.roles.split(",")
+          .map(role => `role:${role}`)
+          .join(" OR ") + ")";
+    }
+    return "";
+  }
+
   private getWebApplicationBaseURL() {
-    return this.baseurl ;
+    return this.baseurl;
   }
 
 }
@@ -436,6 +473,7 @@ export interface StyleDescription {
 export interface User {
   name: string;
   pid: string;
+  otherIds: string[];
 }
 
 </script>
