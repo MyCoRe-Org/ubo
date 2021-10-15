@@ -24,7 +24,7 @@
       </mods:originInfo>
       <xsl:apply-templates select="item/bibrecord/head/citation-info/author-keywords/author-keyword" />
       <xsl:apply-templates select="scopus:language[@xml:lang]" />
-      <xsl:apply-templates select="item/bibrecord/head/abstracts/abstract" />
+      <xsl:apply-templates select="item/bibrecord/head/abstracts/abstract[current()/scopus:coredata/scopus:openaccess='1']" />
       <xsl:apply-templates select="scopus:coredata/scopus:openaccess" />
     </mods:mods>
   </xsl:template>
