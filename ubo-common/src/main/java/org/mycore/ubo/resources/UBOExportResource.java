@@ -53,6 +53,11 @@ public class UBOExportResource {
 
     public static final Namespace CSL_NAMESPACE = Namespace.getNamespace("csl", "http://purl.org/net/xbiblio/csl");
 
+    private static final List<String> ROLES = MCRConfiguration2.getString("UBO.Search.PersonalList.Roles")
+        .stream()
+        .flatMap(MCRConfiguration2::splitValue)
+        .collect(Collectors.toList());
+
     private static final Logger LOGGER = LogManager.getLogger();
 
     private static String encode(String s) {
@@ -114,9 +119,13 @@ public class UBOExportResource {
             yearPart = "";
         }
 
-        String solrQuery = "nid_connection:" + nidConnectionValue + yearPart;
+        String roleQuery = !ROLES.isEmpty() ? " AND role:(" + ROLES.stream().collect(Collectors.joining(" OR ")) + ")" : "";
+
+        String solrQuery = "{!parent which=\"objectType:mods\"" + yearPart + "}name_id_connection:" + nidConnectionValue
+            + roleQuery
+            + "";
         StringBuilder solrRequest = new StringBuilder()
-            .append(baseURL).append("servlets/solr/select")
+            .append(baseURL).append("servlets/solr/select2")
             .append("?q=").append(encode(solrQuery))
             .append("&rows=9999&");
 
