@@ -7,7 +7,7 @@
       <div class="form-group form-inline">
         <label class="mycore-form-label" for="personSearch">{{i18n["listWizard.search"]}}</label>
         <input id="personSearch" class="mycore-form-input" type="text" v-model="search.text"
-               v-on:keyup.enter="startSearch">
+               v-on:keypress.enter.prevent="startSearch">
         <span class="input-group-btn">
           <button class="btn btn-secondary" v-on:click.prevent="startSearch">
             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
@@ -148,7 +148,7 @@
       <div class="form-group form-inline" v-if="exportM.format==='html' || exportM.format==='pdf'">
         <label class="mycore-form-label" for="styleSelect">{{ i18n["listWizard.citation"] }}</label>
         <select id="styleSelect" class="mycore-form-input custom-select" v-on:change="styleChange" v-model="exportM.style">
-          <option v-bind:value="''">{{ i18n["search.select"] }}</option>
+          <option v-bind:value="''"></option>
           <option v-for="style in styles" v-bind:key="style.id" v-bind:value="style.id">{{style.title}}</option>
         </select>
       </div>
@@ -313,6 +313,7 @@ export default class PublicationList extends Vue {
   }
 
   private startSearch(): void {
+    console.log("trigger");
     this.resetSearch();
     let currentPromise: Promise<User[]> = this.searchSolrForPerson(this.search.text);
     currentPromise.then(userArray => {
@@ -380,13 +381,9 @@ export default class PublicationList extends Vue {
     const yearQuery = this.exportM.year==""?"":"year=" + this.exportM.year+"&";
     let query = this.users.map(u => `${u.pid}`).join(",");
     if (exportModel.format == 'pdf' || exportModel.format == 'html') {
-      if (exportModel.style.length == 0) {
-        return;
-      }
-
       this.result.link =
           `${this.getWebApplicationBaseURL()}rsc/export/link/${exportModel.format}/${query}?${yearQuery}` +
-          `${this.getSortString()}style=${exportModel.style}`;
+          `${this.getSortString()}${exportModel.style.length == 0 ? '' : '&style=' + exportModel.style}`;
       return;
     } else {
       this.result.link =
@@ -401,7 +398,7 @@ export default class PublicationList extends Vue {
     return filtered
         .map((sort) => {
           return `sortField=${sort.field}&sortDirection=${sort.asc ? "asc" : "desc"}`;
-        }).join("&") + (filtered.length > 0 ? "&" : "");
+        }).join("&");
   }
 
   private styleChange() {
@@ -434,7 +431,7 @@ export default class PublicationList extends Vue {
     const nameReversed = nameSearch.split('*').reverse().join("*");
     let roleQuery = this.getRoleQuery();
     let response = await
-        fetch(`${this.getWebApplicationBaseURL()}servlets/solr/select?q=name_id_connection:* AND (name:*${nameSearch}* name:*${nameReversed}* OR name_id_${this.leadid}:*${name}*)${roleQuery}&group=true&group.field=name_id_connection&fl=*&wt=json`);
+        fetch(`${this.getWebApplicationBaseURL()}servlets/solr/select?q=name_id_connection:* AND (name:*${nameSearch}* OR name:*${nameReversed}* OR name_id_${this.leadid}:*${name}*)${roleQuery}&group=true&group.field=name_id_connection&fl=*&wt=json`);
     if (response.ok) {
       let json = await response.json();
       this.search.searching = false;
