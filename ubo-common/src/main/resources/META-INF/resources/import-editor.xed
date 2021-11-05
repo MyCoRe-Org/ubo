@@ -380,9 +380,9 @@
         </div>
       </xed:repeat>
       <div class="form-group form-inline col-12 px-0">
-        <label class="mycore-form-label">
-        </label>
         <xed:repeat xpath="mods:affiliation">
+          <label class="mycore-form-label">
+          </label>
           <textarea class="mycore-form-input" placeholder="Institutionelle Zugehörigkeit" />
         </xed:repeat>
       </div>
