@@ -38,6 +38,18 @@
              href="javascript:void(0)">
             <i class="fas fa-plus-circle ubo-pl-adduser"></i>
             {{ autocompleteUser.name }}
+            <i v-if="Object.keys(autocompleteUser.otherIds).length>0" :id="'popover-results-' + autocompleteUser.pid"
+               class="fa fa-info-circle"></i>
+            <b-popover triggers="hover" :target="'popover-results-' + autocompleteUser.pid">
+              <div>
+                <dl>
+                  <template v-for="arr,type in autocompleteUser.otherIds">
+                    <dt :key="type">{{ i18n["index.person.id." + type] }}</dt>
+                    <dd :key="type">{{arr.join(", ")}}</dd>
+                  </template>
+                </dl>
+              </div>
+            </b-popover>
           </a>
         </transition-group>
       </div>
@@ -53,6 +65,18 @@
              href="javascript:void(0)">
             <i class="fas fa-minus-circle ubo-pl-deluser"></i>
             {{ user.name }}
+            <i v-if="Object.keys(user.otherIds).length>0" :id="'popover-list-' + user.pid"
+               class="fa fa-info-circle"></i>
+            <b-popover triggers="hover" :target="'popover-list-' + user.pid">
+              <div>
+                <dl>
+                  <template v-for="arr,type in user.otherIds">
+                    <dt :key="type">{{ i18n["index.person.id." + type] }}</dt>
+                    <dd :key="type">{{arr.join(", ")}}</dd>
+                  </template>
+                </dl>
+              </div>
+            </b-popover>
           </a>
         </transition-group>
       </div>
@@ -132,14 +156,16 @@
     <section v-if="result.link.length>0">
       <div class="row">
         <div class="col-12">
-          <!-- when the format is html, we will show the link (which is a iframe) as code -->
-          <p v-if="exportM.format==='html'">{{ i18n["listWizard.code"] }}</p>
-          <code v-if="exportM.format==='html'">&lt;iframe scrolling=&quot;yes&quot; width=&quot;90%&quot; height=&quot;300&quot;
-            src=&quot;{{result.link}}&quot;/&gt;</code>
+          <div class="jumbotron">
+            <!-- when the format is html, we will show the link (which is a iframe) as code -->
+            <p class="text-primary" v-if="exportM.format==='html'">{{ i18n["listWizard.code"] }}</p>
+            <code v-if="exportM.format==='html'">&lt;iframe scrolling=&quot;yes&quot; width=&quot;90%&quot; height=&quot;300&quot;
+              src=&quot;{{result.link}}&quot;/&gt;</code>
 
-          <!-- when format is not html, we just show it as link -->
-          <p v-if="exportM.format!=='html'">{{ i18n["listWizard.link"] }}</p>
-          <a v-if="exportM.format!=='html'" :href="result.link">{{result.link}}</a>
+            <!-- when format is not html, we just show it as link -->
+            <p class="text-primary" v-if="exportM.format!=='html'">{{ i18n["listWizard.link"] }}</p>
+            <a v-if="exportM.format!=='html'" :href="result.link">{{result.link}}</a>
+          </div>
         </div>
       </div>
     </section>
@@ -149,7 +175,9 @@
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
 import 'whatwg-fetch'
+import {BPopover} from 'bootstrap-vue'
 
+Vue.component('b-popover', BPopover)
 
 @Component
 export default class PublicationList extends Vue {
@@ -176,6 +204,16 @@ export default class PublicationList extends Vue {
    * @private
    */
   @Prop() private leadid!: string;
+
+  /**
+   * Comma sperated list of roles which are considered "authors"
+   */
+  @Prop() private roles!: string;
+
+  /**
+   * Comma sperated list of ids which should be shown in the search results
+   */
+  @Prop() private personids!: string;
 
   /**
    * The url to fontawesome
@@ -227,7 +265,8 @@ export default class PublicationList extends Vue {
     "result.dozbib.results": null,
     "search.dozbib.year.publication": null,
     "search.dozbib.year.invalid": null,
-    "listWizard.search": null
+    "listWizard.search": null,
+    "index.person.id.*": null,
   };
 
   private users: User[] = [];
@@ -258,9 +297,17 @@ export default class PublicationList extends Vue {
         .map(k => {
           let url = this.getWebApplicationBaseURL() + "rsc/locale/translate/" + k;
           fetch(url).then(result => {
-            result.text().then(translation => {
-              this.i18n[k] = translation;
-            });
+            if(k.endsWith("*")){
+              result.json().then(obj => {
+                Object.keys(obj).forEach(key => {
+                  this.i18n[key] = obj[key];
+                })
+              })
+            } else {
+              result.text().then(translation => {
+                this.i18n[k] = translation;
+              });
+            }
           })
         });
   }
@@ -275,7 +322,8 @@ export default class PublicationList extends Vue {
       for (const foundUser of userArray) {
         this.search.searchResultUsers.push(foundUser);
       }
-    }).catch(() => {
+    }).catch((e) => {
+      console.error(e);
       this.search.errored = true;
     });
   }
@@ -382,16 +430,30 @@ export default class PublicationList extends Vue {
   async searchSolrForPerson(name: string): Promise<User[]> {
     this.search.errored = false;
     this.search.searching = true;
+    const nameSearch = name.replace(/[, ]/g,"*");
+    const nameReversed = nameSearch.split('*').reverse().join("*");
+    let roleQuery = this.getRoleQuery();
     let response = await
-        fetch(`${this.getWebApplicationBaseURL()}servlets/solr/select?q=name_id_connection:* AND (name:*${name}* OR name_id_${this.leadid}:*${name}*)&group=true&group.field=name&fl=*&wt=json`);
+        fetch(`${this.getWebApplicationBaseURL()}servlets/solr/select?q=name_id_connection:* AND (name:*${nameSearch}* name:*${nameReversed}* OR name_id_${this.leadid}:*${name}*)${roleQuery}&group=true&group.field=name_id_connection&fl=*&wt=json`);
     if (response.ok) {
       let json = await response.json();
       this.search.searching = false;
 
       let results = [];
-      for (const {doclist} of json.grouped.name.groups) {
+      for (const {doclist} of json.grouped.name_id_connection.groups) {
         let doc = doclist.docs[0];
-        const result = {name: doc.name, pid: doc.name_id_connection[0]};
+
+        const otherIds: Identifier = {};
+        for (const prop in doc) {
+          if (prop.startsWith("name_id_") && doc[prop] != undefined && doc[prop].length > 0) {
+            const idName = prop.substr("name_id_".length);
+            if(this.personids.split(",").indexOf(idName) != -1){
+              otherIds[idName] = doc[prop];
+            }
+          }
+        }
+
+        const result: User = {name: doc.name, pid: doc.name_id_connection[0], otherIds: otherIds};
         if (result.name && result.pid) {
           results.push(result);
         }
@@ -401,8 +463,18 @@ export default class PublicationList extends Vue {
     throw new Error("Error while request person from solr: " + response.statusText);
   }
 
+  private getRoleQuery() {
+    console.log(this.roles);
+    if (this.roles != undefined && this.roles.trim().length > 0) {
+      return " AND (" + this.roles.split(",")
+          .map(role => `role:${role}`)
+          .join(" OR ") + ")";
+    }
+    return "";
+  }
+
   private getWebApplicationBaseURL() {
-    return this.baseurl ;
+    return this.baseurl;
   }
 
 }
@@ -432,6 +504,11 @@ export interface StyleDescription {
 export interface User {
   name: string;
   pid: string;
+  otherIds: Identifier;
+}
+
+export interface Identifier {
+  [key: string]: string[]
 }
 
 </script>

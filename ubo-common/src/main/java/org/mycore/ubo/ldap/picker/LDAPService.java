@@ -2,13 +2,20 @@ package org.mycore.ubo.ldap.picker;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.SortedSet;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.naming.OperationNotSupportedException;
 
+import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
@@ -148,7 +155,7 @@ public class LDAPService implements IdentityService {
         Multimap<String, String> ldapAttributes = userMatcher.convertNameIdentifiersToLDAP(paramMap, false);
         LOGGER.info("attributes to search with: {}", ldapAttributes);
 
-        List<LDAPObject> ldapUsers = userMatcher.getLDAPUsersByGivenLDAPAttributes(ldapAttributes);
+        List<LDAPObject> ldapUsers = userMatcher.getLDAPUsersByGivenLDAPAttributes(ldapAttributes, userMatcher.SIMILAR_SEARCH_TEMPLATE);
 
         for(LDAPObject ldapUser : ldapUsers) {
             Element person = new Element("person");
@@ -178,13 +185,16 @@ public class LDAPService implements IdentityService {
     public PersonSearchResult searchPerson(String query) throws OperationNotSupportedException {
         PersonSearchResult personSearchResult = new PersonSearchResult();
         personSearchResult.personList = new ArrayList<>();
-        String[] s = query.split(" ", 2);
+        String[] s = query.split("[ ,]", 2);
         HashMap<String, String> parms = new HashMap<>();
 
-        parms.put(firstName_to_ldap, s[0]);
+        parms.put(lastName_to_ldap, s[0]);
         if (s.length > 1) {
             parms.put(lastName_to_ldap, s[1]);
+            parms.put(firstName_to_ldap, s[0]);
         }
+
+
         Element result = this.searchPerson(parms);
 
         List<Element> persons = result.getChildren("person");
@@ -201,6 +211,38 @@ public class LDAPService implements IdentityService {
         });
 
         personSearchResult.count = personSearchResult.personList.size();
+
+        // Sort results by best LevenshteinDistance from (fn + ln) or (ln + fn) to query
+        LevenshteinDistance ld = new LevenshteinDistance(50);
+        BiFunction<String, String, String> namePartCombiner = (n1, n2) -> Stream.of(n1, n2).filter(Objects::nonNull)
+            .collect(Collectors.joining(" "));
+
+        Function<PersonSearchResult.PersonResult, String> nameBuilder1 = (o) -> namePartCombiner.apply(o.firstName,
+            o.lastName);
+
+        Function<PersonSearchResult.PersonResult, String> nameBuilder2 = (o) -> namePartCombiner.apply(o.lastName,
+            o.firstName);
+
+        personSearchResult.personList.sort((o1, o2) -> {
+            String o1Name1 = nameBuilder1.apply(o1);
+            String o1Name2 = nameBuilder2.apply(o1);
+            int bestForO1 = Math.min(ld.apply(query, o1Name1), ld.apply(query, o1Name2));
+
+            String o2Name1 = nameBuilder1.apply(o2);
+            String o2Name2 = nameBuilder2.apply(o2);
+            int bestForO2 = Math.min(ld.apply(query, o2Name1), ld.apply(query, o2Name2));
+
+            boolean o1StartsWith = o1Name1.startsWith(query) || o1Name2.startsWith(query);
+            boolean o2StartsWith = o2Name1.startsWith(query) || o2Name2.startsWith(query);
+
+            if(o1StartsWith && !o2StartsWith) {
+                return -1000;
+            } else if(!o1StartsWith && o2StartsWith) {
+                return +1000;
+            }
+
+            return bestForO1 - bestForO2;
+        });
 
         return personSearchResult;
     }

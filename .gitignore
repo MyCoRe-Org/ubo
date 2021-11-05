@@ -6,3 +6,4 @@
 *.iml
 pom.xml.bak
 */target/
+.DS_Store

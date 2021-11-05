@@ -476,6 +476,15 @@
 	},
 	{
 		"add-field": {
+			"name": "role",
+			"type": "ubo_id",
+			"multiValued": true,
+			"indexed": true,
+			"stored": true
+		}
+	},
+	{
+		"add-field": {
 			"name": "series",
 			"type": "ubo_text",
 			"multiValued": true,

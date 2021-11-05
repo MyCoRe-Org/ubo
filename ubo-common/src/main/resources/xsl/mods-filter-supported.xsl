@@ -86,7 +86,7 @@
   </xsl:copy>
 </xsl:template>
 
-<xsl:template match="mods:note[1]">
+<xsl:template match="mods:note">
   <xsl:call-template name="copy-and-apply" />
 </xsl:template>
 
