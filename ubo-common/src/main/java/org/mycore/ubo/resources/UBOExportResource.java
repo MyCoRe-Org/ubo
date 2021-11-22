@@ -113,7 +113,7 @@ public class UBOExportResource {
         String yearPart;
 
         if (year != null) {
-            yearPart = " and year:[" + year + " TO *]";
+            yearPart = " AND year:[" + year + " TO *]";
 
         } else {
             yearPart = "";
