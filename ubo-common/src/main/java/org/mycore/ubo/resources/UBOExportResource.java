@@ -121,7 +121,7 @@ public class UBOExportResource {
 
         String roleQuery = !ROLES.isEmpty() ? " AND role:(" + ROLES.stream().collect(Collectors.joining(" OR ")) + ")" : "";
 
-        String solrQuery = "{!parent which=\"objectType:mods\"" + yearPart + "}name_id_connection:" + nidConnectionValue
+        String solrQuery = "{!parent which=\"objectType:mods" + yearPart + "\"}name_id_connection:" + nidConnectionValue
             + roleQuery
             + "";
         StringBuilder solrRequest = new StringBuilder()
