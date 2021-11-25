@@ -394,6 +394,11 @@
         </xsl:for-each>
       </field>
     </xsl:for-each>
+    <xsl:for-each select="mods:detail[@type='article_number']">
+      <field name="article_number">
+        <xsl:value-of select="mods:number" />
+      </field>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="mods:*[@authority or @authorityURI]|mods:typeOfResource|mods:accessCondition" mode="category">
