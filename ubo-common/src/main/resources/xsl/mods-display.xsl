@@ -597,8 +597,16 @@
   <xsl:template match="mods:identifier" mode="details">
     <div class="row">
       <div class="col-3">
-        <xsl:value-of select="i18n:translate(concat('ubo.identifier.',@type))" />
-        <xsl:text>:</xsl:text>
+        <xsl:choose>
+          <xsl:when test="contains(text(), 'uri.gbv.de/document')">
+            <xsl:value-of select="i18n:translate('ubo.identifier.ppn')" />
+            <xsl:text>:</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="i18n:translate(concat('ubo.identifier.',@type))" />
+            <xsl:text>:</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
       </div>
       <div class="col-9">
         <xsl:apply-templates select="." />
@@ -1034,6 +1042,23 @@
     <a href="https://duepublico2.uni-due.de/receive/{text()}">
       <xsl:value-of select="text()" />
     </a>
+  </xsl:template>
+
+  <!-- ========== URI / PPN ========== -->
+
+  <xsl:template match="mods:identifier[@type='uri']">
+    <xsl:choose>
+      <xsl:when test="contains(text(), 'uri.gbv.de/document')">
+        <a href="{text()}?format=redirect">
+          <xsl:value-of select="substring-after(text(), ':ppn:')" />
+        </a>
+      </xsl:when>
+      <xsl:otherwise>
+        <a href="{text()}">
+          <xsl:value-of select="text()" />
+        </a>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!-- ========== Andere Identifier ========== -->
