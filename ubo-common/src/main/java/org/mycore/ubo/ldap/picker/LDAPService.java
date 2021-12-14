@@ -205,7 +205,7 @@ public class LDAPService implements IdentityService {
 
         final boolean isAdministrator = Optional.ofNullable(MCRSessionMgr.getCurrentSession())
                 .map(MCRSession::getUserInformation)
-                .filter(user -> user.isUserInRole("administrator")).isPresent();
+                .filter(user -> user.isUserInRole("admin")).isPresent();
 
         persons.forEach(person-> {
             PersonSearchResult.PersonResult pr = new PersonSearchResult.PersonResult();
@@ -220,7 +220,7 @@ public class LDAPService implements IdentityService {
             }
 
             pr.information.add(person.getChildText("identity"));
-            LOGGER.info("Person: {}", new XMLOutputter().outputString(person));
+            //LOGGER.info("Person: {}", new XMLOutputter().outputString(person));
             personSearchResult.personList.add(pr);
         });
 
