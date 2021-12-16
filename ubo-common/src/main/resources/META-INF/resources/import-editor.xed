@@ -801,7 +801,7 @@
   </xed:template>
 
   <xed:template id="fix.structure.parent">
-    <xed:bind xpath="structure/parents/parent">
+    <xed:bind xpath="structure/parents[@class='MCRMetaLinkID']/parent">
       <xed:bind xpath="@xlink:type" set="locator" />
       <xed:bind xpath="@inherited" set="0" />
       <xed:choose>
