@@ -244,7 +244,7 @@
     </div>
     <div class="nav-item mr-2">
       <xsl:choose>
-        <xsl:when test="/webpage/@id='login'" />
+        <xsl:when test="/html/@id='login'" />
         <xsl:when test="$CurrentUser = $MCR.Users.Guestuser.UserName">
           <form action="{$WebApplicationBaseURL}{$UBO.Login.Path}" method="get">
             <input type="hidden" name="url" value="{$RequestURL}" />

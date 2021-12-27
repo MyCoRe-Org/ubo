@@ -1,4 +1,5 @@
 User-agent: *
+Disallow: /login.xed
 Disallow: /servlets/DozBibServlet
 Disallow: /servlets/MCRBasketServlet
 Disallow: /servlets/MCRLoginServlet
