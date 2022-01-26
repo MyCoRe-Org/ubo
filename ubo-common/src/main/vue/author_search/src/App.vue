@@ -2,28 +2,35 @@
   <div id="app" class="row">
     <link v-if="bootstrap" v-bind:href="bootstrap" rel="stylesheet">
     <link v-if="fontawesome" v-bind:href="fontawesome" rel="stylesheet">
-    <div class="col-12 col-lg-6">
-      <PersonSearchForm v-on:search="search"
-                        :firstname="firstname"
-                        :lastname="lastname"
-                        :baseurl="baseurl"/>
-      <PersonSearchResult :searchresults="searchResults"
-                          :error="error"
-                          :searching="searching"
-                          :baseurl="baseurl"
-                          v-on:person_submitted="personSubmitted"
-                          v-on:person_applied="personApplied"
-      />
-    </div>
-    <div class="col-12 col-lg-6">
-      <PersonEditForm :person="personModel"
-                      :isadmin="isadmin"
-                      :searched="searched"
-                      v-on:submit="personSubmitted"
-                      v-on:cancel="cancel"
-                      :baseurl="baseurl"
+    <template v-if="!formSend">
+      <div class="col-12 col-lg-6">
+        <PersonSearchForm v-on:search="search"
+                          :firstname="firstname"
+                          :lastname="lastname"
+                          :baseurl="baseurl"/>
+        <PersonSearchResult :searchresults="searchResults"
+                            :error="error"
+                            :searching="searching"
+                            :baseurl="baseurl"
+                            v-on:person_submitted="personSubmitted"
+                            v-on:person_applied="personApplied"
+        />
+      </div>
+      <div class="col-12 col-lg-6">
+        <PersonEditForm :person="personModel"
+                        :isadmin="isadmin"
+                        :searched="searched"
+                        v-on:submit="personSubmitted"
+                        v-on:cancel="cancel"
+                        :baseurl="baseurl"
 
-      />
+        />
+      </div>
+    </template>
+    <div v-else class="col-12 d-flex justify-content-center">
+      <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
     </div>
   </div>
 </template>
@@ -85,6 +92,7 @@ export default class App extends Vue {
   searchResults: SearchResult | null = null;
   searching = false;
   error = false;
+  formSend = false;
 
   personModel = {
     firstName: this.firstname,
@@ -130,7 +138,10 @@ export default class App extends Vue {
     }
     url += "&" + parms.join("&");
 
-    window.location.assign(url);
+    if (!this.formSend) {
+      window.location.assign(url);
+      this.formSend = true;
+    }
   }
 
   public cancel() {
