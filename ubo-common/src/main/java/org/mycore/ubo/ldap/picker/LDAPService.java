@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.SortedSet;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -19,6 +20,9 @@ import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
+import org.jdom2.output.XMLOutputter;
+import org.mycore.common.MCRSession;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.ubo.ldap.LDAPObject;
 import org.mycore.ubo.matcher.MCRUserMatcherLDAP;
@@ -199,6 +203,10 @@ public class LDAPService implements IdentityService {
 
         List<Element> persons = result.getChildren("person");
 
+        final boolean isAdministrator = Optional.ofNullable(MCRSessionMgr.getCurrentSession())
+                .map(MCRSession::getUserInformation)
+                .filter(user -> user.isUserInRole("admin")).isPresent();
+
         persons.forEach(person-> {
             PersonSearchResult.PersonResult pr = new PersonSearchResult.PersonResult();
             pr.firstName = person.getChildText("firstName");
@@ -206,7 +214,13 @@ public class LDAPService implements IdentityService {
             pr.displayName = pr.firstName + ((pr.lastName != null) ? " " + pr.lastName : "");
             pr.pid = person.getChildText("id_" + lead_id);
             pr.information = new ArrayList<>();
+
+            if(isAdministrator){
+                pr.information.add(person.getChildText("mail"));
+            }
+
             pr.information.add(person.getChildText("identity"));
+            //LOGGER.info("Person: {}", new XMLOutputter().outputString(person));
             personSearchResult.personList.add(pr);
         });
 
