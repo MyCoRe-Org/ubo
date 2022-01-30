@@ -3,7 +3,6 @@
 >
   <name>ubo-commons</name>
 
-
   <servlet id="DozBibServlet">
     <servlet-name>DozBibServlet</servlet-name>
     <servlet-class>org.mycore.ubo.DozBibServlet</servlet-class>
@@ -33,6 +32,15 @@
   <servlet-mapping>
     <servlet-name>DozBibEntryServlet</servlet-name>
     <url-pattern> /servlets/DozBibEntryServlet </url-pattern>
+  </servlet-mapping>
+
+  <servlet id="RelationEditorServlet">
+    <servlet-name>RelationEditorServlet</servlet-name>
+    <servlet-class>org.mycore.ubo.relations.RelationEditorServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RelationEditorServlet</servlet-name>
+    <url-pattern> /servlets/RelationEditorServlet </url-pattern>
   </servlet-mapping>
 
   <servlet id="DozBibImportServlet">
