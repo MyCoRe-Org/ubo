@@ -18,7 +18,6 @@ import java.util.Set;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.Namespace;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
@@ -31,13 +30,6 @@ import org.mycore.mods.merger.MCRHyphenNormalizer;
  * @author Frank L\u00FCtzenkirchen
  */
 public class DeDupCriteriaBuilder {
-
-    /** Holds the MODS namespace */
-    private static List<Namespace> NS = new ArrayList<Namespace>();
-
-    static {
-        NS.add(Namespace.getNamespace("mods", "http://www.loc.gov/mods/v3"));
-    }
 
     /**
      * Updates the deduplication criteria stored together with the MODS publication metadata
@@ -62,6 +54,10 @@ public class DeDupCriteriaBuilder {
         extension.removeChildren("dedup");
         for (DeDupCriterion criteria : buildFromMODS(mods)) {
             extension.addContent(criteria.toXML());
+        }
+
+        for (Element host : this.getNodes(mods, "mods:relatedItem[@type='host']")) {
+            updateDeDupCriteria(host);
         }
     }
 
@@ -95,7 +91,8 @@ public class DeDupCriteriaBuilder {
      * @param xPath the xPath expression selecting the nodes
      */
     private List<Element> getNodes(Element context, String xPath) {
-        XPathExpression<Element> xPathExpr = XPathFactory.instance().compile(xPath, Filters.element(), null, NS);
+        XPathExpression<Element> xPathExpr = XPathFactory.instance().compile(xPath, Filters.element(), null,
+            MCRConstants.getStandardNamespaces());
         return xPathExpr.evaluate(context);
     }
 
