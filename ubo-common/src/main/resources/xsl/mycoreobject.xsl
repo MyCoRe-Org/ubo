@@ -97,12 +97,9 @@
             <xsl:value-of select="i18n:translate('button.delete')" />
           </a>
         </xsl:if>
-        <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host'][string-length(@xlink:href)=0]">
-          <!-- Button to extract mods:relatedItem[@type='host'] to a new separate entry -->
-          <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;mode=xhost">
-            <xsl:value-of select="i18n:translate('ubo.relatedItem.host.separate')" />
-          </a>
-        </xsl:if>
+        <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.Style=structure">
+          Struktur
+        </a>
       </xsl:if>
     </xsl:if>
     <xsl:if xmlns:basket="xalan://org.mycore.ubo.basket.BasketUtils" test="basket:hasSpace() and not(basket:contains(string(/mycoreobject/@ID)))">

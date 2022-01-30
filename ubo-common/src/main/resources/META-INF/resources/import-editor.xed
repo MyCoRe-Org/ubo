@@ -763,13 +763,7 @@
             </a>
             <br/>
             <xed:include uri="xslStyle:relatedItem-editor:mcrobject:{.}" />
-            <button type="submit" class="btn btn-sm btn-primary" name="_xed_submit_remove:/mycoreobject/descendant::mods:relatedItem/@xlink:href[.='{.}']|host">
-              <xed:output i18n="ubo.relatedItem.host.unlink" />
-            </button>
           </xed:if>
-          <button class="btn btn-sm btn-primary" type="submit" xed:target="subselect" xed:href="../search.xed?id_type=id&amp;genre={../mods:genre[@type='intern']}">
-            <xed:output i18n="ubo.relatedItem.host.select" />
-          </button>
         </div>
       </div>
     </xed:bind>
