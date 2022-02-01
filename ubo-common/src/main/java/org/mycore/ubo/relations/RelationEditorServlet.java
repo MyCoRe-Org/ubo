@@ -11,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
-import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -55,7 +54,7 @@ public class RelationEditorServlet extends MCRServlet {
 
             if (!res.isCommitted()) {
                 String base = req.getParameter("base");
-                res.sendRedirect( "DozBibEntryServlet?id=" + base + "&XSL.Style=structure");
+                res.sendRedirect("DozBibEntryServlet?id=" + base + "&XSL.Style=structure");
             }
         }
     }
@@ -86,18 +85,20 @@ public class RelationEditorServlet extends MCRServlet {
 
     private void deleteEntry(HttpServletRequest req, HttpServletResponse res) throws Exception {
         MCRObjectID oid = getAndCheck(req, res, "id");
-        LOGGER.info("UBO delete entry " + oid);
-
-        MCRObject obj = MCRMetadataManager.retrieveMCRObject(oid);
-        deleteIfNoChildren(res, obj);
+        deleteIfNoChildren(res, oid);
     }
 
     // do not delete entries that have linked children, otherwise the children would be deleted too
-    private void deleteIfNoChildren(HttpServletResponse res, MCRObject obj)
-        throws IOException, MCRActiveLinkException, MCRAccessException {
+    private void deleteIfNoChildren(HttpServletResponse res, MCRObjectID oid)
+        throws Exception {
+        
+        LOGGER.info("UBO delete entry " + oid);
+        MCRObject obj = MCRMetadataManager.retrieveMCRObject(oid);
+
         if (!obj.getStructure().getChildren().isEmpty()) {
             res.sendError(HttpServletResponse.SC_CONFLICT, "entry has child(ren), wont delete");
         } else {
+            new ParentChildRelationChecker(oid, false).check();
             MCRMetadataManager.deleteMCRObject(obj.getId());
         }
     }
@@ -185,7 +186,7 @@ public class RelationEditorServlet extends MCRServlet {
             setParent(childID, intoID);
         }
 
-        deleteIfNoChildren(res, objFrom);
+        deleteIfNoChildren(res, fromID);
         new ParentChildRelationChecker(intoID, false).check();
     }
 }
