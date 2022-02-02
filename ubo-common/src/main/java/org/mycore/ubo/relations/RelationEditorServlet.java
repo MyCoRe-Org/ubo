@@ -48,8 +48,10 @@ public class RelationEditorServlet extends MCRServlet {
                 linkHost(req, res);
             } else if ("unlinkHost".equals(action)) {
                 unlinkHost(req, res);
-            } else if ("merge".equals(action)) {
-                merge(req, res);
+            } else if ("mergeMetadata".equals(action)) {
+                mergeMetadata(req, res);
+            } else if ("adoptChildren".equals(action)) {
+                adoptChildren(req, res);
             }
 
             if (!res.isCommitted()) {
@@ -163,10 +165,10 @@ public class RelationEditorServlet extends MCRServlet {
         new ParentChildRelationChecker(childID, false).check();
     }
 
-    private void merge(HttpServletRequest req, HttpServletResponse res) throws Exception {
+    private void mergeMetadata(HttpServletRequest req, HttpServletResponse res) throws Exception {
         MCRObjectID intoID = getAndCheck(req, res, "into");
         MCRObjectID fromID = getAndCheck(req, res, "from");
-        LOGGER.info("UBO merge " + fromID + " into " + intoID);
+        LOGGER.info("UBO merge metadata of " + fromID + " into " + intoID);
 
         MCRObject objInto = MCRMetadataManager.retrieveMCRObject(intoID);
         MCRObject objFrom = MCRMetadataManager.retrieveMCRObject(fromID);
@@ -177,6 +179,16 @@ public class RelationEditorServlet extends MCRServlet {
 
         MCRMetadataManager.update(objInto);
 
+        new ParentChildRelationChecker(intoID, false).check();
+    }
+
+    private void adoptChildren(HttpServletRequest req, HttpServletResponse res) throws Exception {
+        MCRObjectID intoID = getAndCheck(req, res, "into");
+        MCRObjectID fromID = getAndCheck(req, res, "from");
+        LOGGER.info("UBO adopt children of " + fromID + " into " + intoID);
+
+        MCRObject objFrom = MCRMetadataManager.retrieveMCRObject(fromID);
+
         List<MCRMetaLinkID> childrenToAdopt = objFrom.getStructure().getChildren();
         while (!childrenToAdopt.isEmpty()) {
             MCRMetaLinkID childLink = childrenToAdopt.get(0);
@@ -186,7 +198,7 @@ public class RelationEditorServlet extends MCRServlet {
             setParent(childID, intoID);
         }
 
-        deleteIfNoChildren(res, fromID);
         new ParentChildRelationChecker(intoID, false).check();
+        new ParentChildRelationChecker(fromID, false).check();
     }
 }

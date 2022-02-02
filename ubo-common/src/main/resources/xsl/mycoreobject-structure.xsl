@@ -218,16 +218,21 @@
   <xsl:template name="badges">
     <xsl:param name="role" />
 
-    <a class="label-info badge badge-primary mr-1" href="{$ServletsBaseURL}DozBibEntryServlet?id={@ID}">
-      <xsl:text>ID </xsl:text>
-      <xsl:value-of select="number(substring-after(@ID,'_mods_'))" />
-    </a>
+    <xsl:apply-templates select="@ID" mode="badge" />
     <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
       <xsl:call-template name="pubtype" />
     </xsl:for-each>
     <xsl:if test="$role='duplicate'">
       <span class="label-info badge badge-primary mr-1">Evtl. Dublette</span>
     </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="@ID" mode="badge">
+    <span class="label-info badge badge-light mr-1">
+      <a href="{$ServletsBaseURL}DozBibEntryServlet?id={.}">
+        <xsl:value-of select="concat('ID ',number(substring-after(.,'_mods_')))" />
+      </a>
+    </span>
   </xsl:template>
 
   <xsl:template match="mods:mods" mode="citation">
@@ -277,8 +282,8 @@
         <xsl:variable name="title" select="//mods:mods/mods:titleInfo[not(@type)][1]/mods:title" />
         <a role="button" class="btn btn-primary btn-sm mr-1"
           href='{$ServletsBaseURL}solr/select?q=(host_title:"{$title}"+AND+-link:{@ID})'>
-          <i class="fas fa-search" aria-hidden="true"></i>
-          <xsl:text> Waisen suchen</xsl:text>
+          <i class="fas fa-baby" aria-hidden="true"></i>
+          <xsl:text> Waisen finden</xsl:text>
         </a>
       </xsl:if>
 
@@ -290,7 +295,7 @@
           <xsl:with-param name="icon" select="'trash'" />
           <xsl:with-param name="button" select="'Löschen'" />
           <xsl:with-param name="title" select="'Diese Publikation löschen?'" />
-          <xsl:with-param name="params" select="concat('id=',@ID,'&amp;base=',$baseID)" />
+          <xsl:with-param name="params" select="concat('id=',@ID)" />
         </xsl:call-template>
         <xsl:call-template name="button-with-confirm-dialog">
           <xsl:with-param name="if" select="($role='duplicate') and not ($from='base')" />
@@ -298,7 +303,7 @@
           <xsl:with-param name="icon" select="'link'" />
           <xsl:with-param name="button" select="'Als Überordnung wählen'" />
           <xsl:with-param name="title" select="'Diese Publikation als neue Überordnung verknüpfen?'" />
-          <xsl:with-param name="params" select="concat('child=',$baseID,'&amp;parent=',@ID,'&amp;base=',$baseID)" />
+          <xsl:with-param name="params" select="concat('child=',$baseID,'&amp;parent=',@ID)" />
         </xsl:call-template>
         <xsl:call-template name="button-with-confirm-dialog">
           <xsl:with-param name="if" select="(($role='child') or ($role='base')) and (structure/parents/parent)" />
@@ -306,23 +311,31 @@
           <xsl:with-param name="icon" select="'unlink'" />
           <xsl:with-param name="button" select="'Verknüpfung lösen'" />
           <xsl:with-param name="title" select="'Verknüpfung mit der Überordnung lösen?'" />
-          <xsl:with-param name="params" select="concat('child=',@ID,'&amp;base=',$baseID)" />
+          <xsl:with-param name="params" select="concat('child=',@ID)" />
         </xsl:call-template>
         <xsl:call-template name="button-with-confirm-dialog">
           <xsl:with-param name="if" select="($role='base') and //mods:mods/mods:relatedItem[@type='host'][not(@xlink:href)]" />
           <xsl:with-param name="action" select="'extractHost'" />
-          <xsl:with-param name="icon" select="'link'" />
+          <xsl:with-param name="icon" select="'external-link-alt'" />
           <xsl:with-param name="button" select="'Überordnung herauslösen'" />
           <xsl:with-param name="title" select="'Überordnung als separaten Eintrag herauslösen und verlinken?'" />
-          <xsl:with-param name="params" select="concat('id=',@ID,'&amp;base=',$baseID)" />
+          <xsl:with-param name="params" select="concat('id=',@ID)" />
         </xsl:call-template>
         <xsl:call-template name="button-with-confirm-dialog">
           <xsl:with-param name="if" select="($role='duplicate') and (($from='parent') or ($from='base'))" />
-          <xsl:with-param name="action" select="'merge'" />
+          <xsl:with-param name="action" select="'mergeMetadata'" />
           <xsl:with-param name="icon" select="'copy'" />
-          <xsl:with-param name="button" select="'Zusammenführen'" />
-          <xsl:with-param name="title" select="'Dublette mit aktueller Überordnung zusammenführen?'" />
-          <xsl:with-param name="params" select="concat('from=',@ID,'&amp;into=',$duplicateOfID,'&amp;base=',$baseID)" />
+          <xsl:with-param name="button" select="'Daten zusammenführen'" />
+          <xsl:with-param name="title" select="'Titeldaten der Dublette mit aktueller Publikation zusammenführen?'" />
+          <xsl:with-param name="params" select="concat('from=',@ID,'&amp;into=',$duplicateOfID)" />
+        </xsl:call-template>
+        <xsl:call-template name="button-with-confirm-dialog">
+          <xsl:with-param name="if" select="($role='duplicate') and (($from='parent') or ($from='base')) and (structure/children/child)" />
+          <xsl:with-param name="action" select="'adoptChildren'" />
+          <xsl:with-param name="icon" select="'baby-carriage'" />
+          <xsl:with-param name="button" select="'Adoptieren'" />
+          <xsl:with-param name="title" select="'Mit dieser Überordnung verknüpfte Publikationen in aktuelle Überordnung verschieben?'" />
+          <xsl:with-param name="params" select="concat('from=',@ID,'&amp;into=',$duplicateOfID)" />
         </xsl:call-template>
       </xsl:if>
     </div>
@@ -354,22 +367,17 @@
               </button>
             </div>
             <div class="modal-body">
-              <span class="label-info badge badge-primary mr-1">
-                <xsl:text>ID </xsl:text>
-                <xsl:value-of select="number(substring-after(@ID,'_mods_'))" />
-              </span>
-              <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
-                <xsl:apply-templates select="." mode="cite">
-                  <xsl:with-param name="mode">divs</xsl:with-param>
-                </xsl:apply-templates>
-              </xsl:for-each>
+              <xsl:apply-templates select="@ID" mode="badge" />
+              <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" mode="cite">
+                <xsl:with-param name="mode">divs</xsl:with-param>
+              </xsl:apply-templates>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">
                 <i class="fa fa-times" aria-hidden="true" />
                 <xsl:text> Abbrechen</xsl:text>
               </button>
-              <a href="{$ServletsBaseURL}RelationEditorServlet?action={$action}&amp;{$params}" class="btn btn-primary"
+              <a href="{$ServletsBaseURL}RelationEditorServlet?action={$action}&amp;{$params}&amp;base={$baseID}" class="btn btn-primary"
                 role="button">
                 <i class="fa fa-{$icon}" aria-hidden="true" />
                 <xsl:text> </xsl:text>
