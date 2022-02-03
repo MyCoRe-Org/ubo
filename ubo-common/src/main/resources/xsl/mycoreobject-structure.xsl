@@ -328,7 +328,7 @@
           <xsl:with-param name="action" select="'adoptChildren'" />
           <xsl:with-param name="icon" select="'baby-carriage'" />
           <xsl:with-param name="button" select="'Adoptieren'" />
-          <xsl:with-param name="text" select="concat('Mit dieser Überordnung {from=',@ID,'} verknüpfte Publikationen in diese Überordnung {into=',$duplicateOfID,'} verschieben?')" />
+          <xsl:with-param name="text" select="concat(count(structure/children/child),' mit dieser Überordnung {from=',@ID,'} verknüpfte Publikation(en) in diese Überordnung {into=',$duplicateOfID,'} verschieben?')" />
         </xsl:call-template>
       </xsl:if>
     </div>
