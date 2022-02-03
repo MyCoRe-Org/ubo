@@ -52,6 +52,7 @@
         <div class="section">
           <xsl:apply-templates select="mycoreobject" />
         </div>
+        <xsl:call-template name="javascript" />
       </body>
     </html>
   </xsl:template>
@@ -78,10 +79,16 @@
       <xsl:with-param name="role">base</xsl:with-param>
     </xsl:apply-templates>
 
-    <xsl:apply-templates select="structure/children/child">
-      <xsl:sort select="number(substring-after(@xlink:href,'_mods_'))" data-type="number" order="descending" />
-    </xsl:apply-templates>
+    <xsl:apply-templates select="structure/children[child]" />
 
+  </xsl:template>
+  
+  <xsl:template match="structure/children">
+    <div class="pr-2 vh-100" style="overflow-y:scroll; overflow-x:hidden;">
+      <xsl:apply-templates select="child">
+        <xsl:sort select="number(substring-after(@xlink:href,'_mods_'))" data-type="number" order="descending" />
+      </xsl:apply-templates>
+    </div>
   </xsl:template>
 
   <xsl:template match="structure/parents/parent">
@@ -395,7 +402,7 @@
                   <i class="fa fa-times mr-1" aria-hidden="true" />
                   <xsl:text>Abbrechen</xsl:text>
                 </button>
-                <button type="submit" class="btn btn-primary">
+                <button type="button" class="btn btn-primary structure-action">
                   <i class="fa fa-{$icon} mr-1" aria-hidden="true" />
                   <xsl:value-of select="$button" />
                 </button>
@@ -407,5 +414,17 @@
       </div>
     </xsl:if>
   </xsl:template>
+  
+  <xsl:template name="javascript">
+    <script>
+      $(document).ready(function() {
+          $(".structure-action").click(function() {
+              $(this).prop("disabled", true);
+              $(this).html("&lt;i class='fa fa-spinner fa-spin'&gt;&lt;/i&gt; Moment bitte...");
+              $(this).parents("form").submit();
+          });
+      });
+    </script>
+  </xsl:template> 
 
 </xsl:stylesheet>
