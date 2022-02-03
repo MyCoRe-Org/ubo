@@ -167,13 +167,13 @@
       <xsl:call-template name="link-symbol" />
       <div>
         <xsl:attribute name="class">
-        <xsl:text>col-11 border rounded p-2</xsl:text>
-        <xsl:choose>
-          <xsl:when test="$role='base'"> bg-info text-white</xsl:when>
-          <xsl:when test="$role='duplicate'"> bg-warning text-white</xsl:when>
-          <xsl:otherwise> bg-white</xsl:otherwise>
-        </xsl:choose>
-      </xsl:attribute>
+          <xsl:text>col-11 border rounded p-2</xsl:text>
+          <xsl:choose>
+            <xsl:when test="$role='base'"> bg-info text-white</xsl:when>
+            <xsl:when test="$role='duplicate'"> bg-warning text-white</xsl:when>
+            <xsl:otherwise> bg-white</xsl:otherwise>
+          </xsl:choose>
+        </xsl:attribute>
 
         <xsl:call-template name="badges">
           <xsl:with-param name="role" select="$role" />
@@ -287,55 +287,48 @@
         </a>
       </xsl:if>
 
-      <xsl:if test="check:currentUserIsAdmin() and not($UBO.System.ReadOnly = 'true')"
-        xmlns:check="xalan://org.mycore.ubo.AccessControl">
+      <xsl:if test="check:currentUserIsAdmin() and not($UBO.System.ReadOnly = 'true')" xmlns:check="xalan://org.mycore.ubo.AccessControl">
         <xsl:call-template name="button-with-confirm-dialog">
           <xsl:with-param name="if" select="not(structure/children/child or (@ID=$baseID))" />
           <xsl:with-param name="action" select="'delete'" />
           <xsl:with-param name="icon" select="'trash'" />
           <xsl:with-param name="button" select="'Löschen'" />
-          <xsl:with-param name="title" select="'Diese Publikation löschen?'" />
-          <xsl:with-param name="params" select="concat('id=',@ID)" />
+          <xsl:with-param name="text" select="concat('Diese Publikation löschen? {id=',@ID,'}')" />
         </xsl:call-template>
         <xsl:call-template name="button-with-confirm-dialog">
           <xsl:with-param name="if" select="($role='duplicate') and not ($from='base')" />
           <xsl:with-param name="action" select="'linkHost'" />
           <xsl:with-param name="icon" select="'link'" />
           <xsl:with-param name="button" select="'Als Überordnung wählen'" />
-          <xsl:with-param name="title" select="'Diese Publikation als neue Überordnung verknüpfen?'" />
-          <xsl:with-param name="params" select="concat('child=',$baseID,'&amp;parent=',@ID)" />
+          <xsl:with-param name="text" select="concat('Diese Publikation {child=',$baseID,'} mit dieser Überordnung {parent=',@ID,'} neu verknüpfen?')" />
         </xsl:call-template>
         <xsl:call-template name="button-with-confirm-dialog">
           <xsl:with-param name="if" select="(($role='child') or ($role='base')) and (structure/parents/parent)" />
           <xsl:with-param name="action" select="'unlinkHost'" />
           <xsl:with-param name="icon" select="'unlink'" />
           <xsl:with-param name="button" select="'Verknüpfung lösen'" />
-          <xsl:with-param name="title" select="'Verknüpfung mit der Überordnung lösen?'" />
-          <xsl:with-param name="params" select="concat('child=',@ID)" />
+          <xsl:with-param name="text" select="concat('Verknüpfung dieser Publikation {child=',@ID,'} mit der Überordnung {parent=',structure/parents/parent/@xlink:href,'} lösen?')" />
         </xsl:call-template>
         <xsl:call-template name="button-with-confirm-dialog">
           <xsl:with-param name="if" select="($role='base') and //mods:mods/mods:relatedItem[@type='host'][not(@xlink:href)]" />
           <xsl:with-param name="action" select="'extractHost'" />
           <xsl:with-param name="icon" select="'external-link-alt'" />
           <xsl:with-param name="button" select="'Überordnung herauslösen'" />
-          <xsl:with-param name="title" select="'Überordnung als separaten Eintrag herauslösen und verlinken?'" />
-          <xsl:with-param name="params" select="concat('id=',@ID)" />
+          <xsl:with-param name="text" select="concat('Überordnung dieser Publikation {id=',@ID,'} als separaten Eintrag herauslösen und verknüpfen?')" />
         </xsl:call-template>
         <xsl:call-template name="button-with-confirm-dialog">
           <xsl:with-param name="if" select="($role='duplicate') and (($from='parent') or ($from='base'))" />
           <xsl:with-param name="action" select="'mergeMetadata'" />
           <xsl:with-param name="icon" select="'copy'" />
           <xsl:with-param name="button" select="'Daten zusammenführen'" />
-          <xsl:with-param name="title" select="'Titeldaten der Dublette mit aktueller Publikation zusammenführen?'" />
-          <xsl:with-param name="params" select="concat('from=',@ID,'&amp;into=',$duplicateOfID)" />
+          <xsl:with-param name="text" select="concat('Titeldaten dieser Dublette {from=',@ID,'} in dieser Publikation {into=',$duplicateOfID,'} zusammenführen?')" />
         </xsl:call-template>
         <xsl:call-template name="button-with-confirm-dialog">
           <xsl:with-param name="if" select="($role='duplicate') and (($from='parent') or ($from='base')) and (structure/children/child)" />
           <xsl:with-param name="action" select="'adoptChildren'" />
           <xsl:with-param name="icon" select="'baby-carriage'" />
           <xsl:with-param name="button" select="'Adoptieren'" />
-          <xsl:with-param name="title" select="'Mit dieser Überordnung verknüpfte Publikationen in aktuelle Überordnung verschieben?'" />
-          <xsl:with-param name="params" select="concat('from=',@ID,'&amp;into=',$duplicateOfID)" />
+          <xsl:with-param name="text" select="concat('Mit dieser Überordnung {from=',@ID,'} verknüpfte Publikationen in diese Überordnung {into=',$duplicateOfID,'} verschieben?')" />
         </xsl:call-template>
       </xsl:if>
     </div>
@@ -344,10 +337,9 @@
   <xsl:template name="button-with-confirm-dialog">
     <xsl:param name="if" />
     <xsl:param name="button" />
-    <xsl:param name="icon" select="'trash'" />
+    <xsl:param name="icon" />
     <xsl:param name="action" />
-    <xsl:param name="title" />
-    <xsl:param name="params" />
+    <xsl:param name="text" />
 
     <xsl:if test="$if">
       <a role="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#{$action}-{/mycoreobject/@ID}" href="#">
@@ -355,35 +347,61 @@
         <xsl:text> </xsl:text>
         <xsl:value-of select="$button" />
       </a>
-      <div class="modal fade" id="{$action}-{/mycoreobject/@ID}" tabindex="-1" role="dialog" aria-labelledby="{$title}" aria-hidden="true">
+      
+      <div class="modal fade" id="{$action}-{/mycoreobject/@ID}" tabindex="-1" role="dialog" aria-labelledby="{$text}" aria-hidden="true">
         <div class="modal-dialog" role="document">
-          <div class="modal-content bg-secondary">
+          <div class="modal-content bg-secondary text-white">
+          
             <div class="modal-header">
               <h5 class="modal-title">
-                <xsl:value-of select="$title" />
+                <xsl:value-of select="concat($button,' ?')" />
               </h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
                 <i class="fa fa-times" aria-hidden="true" />
               </button>
             </div>
-            <div class="modal-body">
-              <xsl:apply-templates select="@ID" mode="badge" />
-              <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" mode="cite">
-                <xsl:with-param name="mode">divs</xsl:with-param>
-              </xsl:apply-templates>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                <i class="fa fa-times" aria-hidden="true" />
-                <xsl:text> Abbrechen</xsl:text>
-              </button>
-              <a href="{$ServletsBaseURL}RelationEditorServlet?action={$action}&amp;{$params}&amp;base={$baseID}" class="btn btn-primary"
-                role="button">
-                <i class="fa fa-{$icon}" aria-hidden="true" />
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="$button" />
-              </a>
-            </div>
+            
+            <form action="{$ServletsBaseURL}RelationEditorServlet" method="get">
+              <input type="hidden" name="action" value="{$action}" />
+              <input type="hidden" name="base" value="{$baseID}" />
+
+              <div class="modal-body">
+                <xsl:for-each select="xalan:tokenize($text,'{}')">
+                  <div>
+                    <xsl:choose>
+                      <xsl:when test="contains(.,'=')">
+                        <xsl:attribute name="class">mt-1 ml-4</xsl:attribute>
+                        
+                        <xsl:variable name="name" select="substring-before(.,'=')" />
+                        <xsl:variable name="id" select="substring-after(.,'=')" />
+                        <input type="hidden" name="{$name}" value="{$id}" />
+                        
+                        <xsl:for-each select="document(concat('notnull:mcrobject:',$id))/mycoreobject">
+                          <xsl:apply-templates select="@ID" mode="badge" />
+                          <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" mode="citation" />
+                        </xsl:for-each>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:attribute name="class">mt-1</xsl:attribute>
+                        <xsl:value-of select="." />
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </div>
+                </xsl:for-each>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                  <i class="fa fa-times mr-1" aria-hidden="true" />
+                  <xsl:text>Abbrechen</xsl:text>
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  <i class="fa fa-{$icon} mr-1" aria-hidden="true" />
+                  <xsl:value-of select="$button" />
+                </button>
+              </div>
+              
+            </form>
           </div>
         </div>
       </div>
