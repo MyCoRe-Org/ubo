@@ -229,6 +229,11 @@
     <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
       <xsl:call-template name="pubtype" />
     </xsl:for-each>
+    <xsl:for-each select="service/servflags/servflag[@type='status']">
+      <span class="label-info badge badge-light mr-1">
+        <xsl:value-of select="i18n:translate(concat('search.dozbib.status.',text()))" />
+      </span>
+    </xsl:for-each>
     <xsl:if test="$role='duplicate'">
       <span class="label-info badge badge-primary mr-1">Evtl. Dublette</span>
     </xsl:if>
@@ -384,7 +389,9 @@
                         <input type="hidden" name="{$name}" value="{$id}" />
                         
                         <xsl:for-each select="document(concat('notnull:mcrobject:',$id))/mycoreobject">
-                          <xsl:apply-templates select="@ID" mode="badge" />
+                          <xsl:call-template name="badges">
+                            <xsl:with-param name="role" select="'current'" />
+                          </xsl:call-template>
                           <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" mode="citation" />
                         </xsl:for-each>
                       </xsl:when>
