@@ -147,20 +147,19 @@
     <xsl:variable name="myID" select="ancestor::mycoreobject/@ID" />
 
     <xsl:variable name="duplicatesURI">
+      <xsl:text>notnull:</xsl:text>
       <xsl:call-template name="buildFindDuplicatesURI" />
+      <xsl:value-of select="concat('+AND+-id:',$myID)" />
     </xsl:variable>
 
     <xsl:for-each select="document($duplicatesURI)/response/result[@name='response']/doc">
       <xsl:sort select="number(substring-after(str[@name='id'],'_mods_'))" data-type="number" order="descending" />
       
-      <xsl:variable name="duplicateID" select="str[@name='id']" />
-      <xsl:if test="not($duplicateID = $myID)">
-        <xsl:apply-templates select="document(concat('mcrobject:',str[@name='id']))/mycoreobject" mode="pub-info">
-          <xsl:with-param name="role">duplicate</xsl:with-param>
-          <xsl:with-param name="from" select="$from" />
-          <xsl:with-param name="duplicateOfID" select="$myID" />
-        </xsl:apply-templates>
-      </xsl:if>
+      <xsl:apply-templates select="document(concat('mcrobject:',str[@name='id']))/mycoreobject" mode="pub-info">
+        <xsl:with-param name="role">duplicate</xsl:with-param>
+        <xsl:with-param name="from" select="$from" />
+        <xsl:with-param name="duplicateOfID" select="$myID" />
+      </xsl:apply-templates>
     </xsl:for-each>
 
   </xsl:template>
