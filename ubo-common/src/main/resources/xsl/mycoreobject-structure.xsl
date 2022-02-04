@@ -293,7 +293,7 @@
       <xsl:if test="($baseID = @ID) and not(//mods:mods/mods:relatedItem[@type='host'])">
         <xsl:variable name="title" select="//mods:mods/mods:titleInfo[not(@type)][1]/mods:title" />
         <a role="button" class="btn btn-primary btn-sm mr-1"
-          href='{$ServletsBaseURL}solr/select?q=(host_title:"{$title}"+AND+-link:{@ID})'>
+          href='{$ServletsBaseURL}solr/select?q=(host_title:"{$title}"+AND+-link:*)'>
           <i class="fas fa-baby" aria-hidden="true"></i>
           <xsl:text> Waisen finden</xsl:text>
         </a>
