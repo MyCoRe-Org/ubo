@@ -39,10 +39,6 @@
         <xsl:when test="$UBO.System.ReadOnly = 'true'" />
         <xsl:when xmlns:check="xalan://org.mycore.ubo.AccessControl" test="check:currentUserIsAdmin()">
           <a class="action btn btn-sm btn-primary mb-1" href="{$WebApplicationBaseURL}edit-contributors.xed">Personen zuordnen</a>
-          <xsl:if test="count(/basket/entry) &gt; 1">
-            <a class="action btn btn-sm btn-primary mb-1" href="BasketPubMerger?commit=false&amp;target=publications">Zusammenführen</a>
-            <a class="action btn btn-sm btn-primary mb-1" href="BasketPubMerger?commit=false&amp;target=hosts">Zusammenhosten</a>
-          </xsl:if>
         </xsl:when>
       </xsl:choose>
     </div>

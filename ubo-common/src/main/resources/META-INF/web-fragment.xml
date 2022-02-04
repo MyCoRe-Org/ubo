@@ -70,15 +70,6 @@
     <url-pattern> /servlets/BasketName2PIDEditor </url-pattern>
   </servlet-mapping>
 
-  <servlet id="BasketPubMerger">
-    <servlet-name>BasketPubMerger</servlet-name>
-    <servlet-class>org.mycore.ubo.basket.BasketPubMerger</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>BasketPubMerger</servlet-name>
-    <url-pattern> /servlets/BasketPubMerger </url-pattern>
-  </servlet-mapping>
-
   <servlet id="IdentityPicker">
     <servlet-name>IdentityPicker</servlet-name>
     <servlet-class>org.mycore.ubo.picker.IdentityPicker</servlet-class>
