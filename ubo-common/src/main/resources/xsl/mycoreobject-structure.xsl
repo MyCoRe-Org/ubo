@@ -6,11 +6,12 @@
 
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:xalan="http://xml.apache.org/xalan" 
+  xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:encoder="xalan://java.net.URLEncoder" 
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:xlink="http://www.w3.org/1999/xlink" 
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  exclude-result-prefixes="xsl xalan mods xlink i18n">
+  exclude-result-prefixes="xsl xalan encoder mods xlink i18n">
 
   <xsl:include href="mods-display.xsl" />
 
@@ -81,18 +82,11 @@
       <xsl:with-param name="role">base</xsl:with-param>
     </xsl:apply-templates>
 
-    <xsl:apply-templates select="structure/children[child]" />
+    <xsl:apply-templates select="structure/children" />
+    <xsl:call-template name="showOrphans" />
 
   </xsl:template>
   
-  <xsl:template match="structure/children">
-    <div class="pr-2 vh-100" style="overflow-y:scroll; overflow-x:hidden;">
-      <xsl:apply-templates select="child">
-        <xsl:sort select="number(substring-after(@xlink:href,'_mods_'))" data-type="number" order="descending" />
-      </xsl:apply-templates>
-    </div>
-  </xsl:template>
-
   <xsl:template match="structure/parents/parent">
     <xsl:variable name="id" select="@xlink:href" />
 
@@ -112,6 +106,26 @@
         </xsl:call-template>
       </xsl:for-each>
     </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template match="structure/children" mode="badge">
+    <div>
+      <span class="badge badge-light">
+        <a href="solr/select?q=link:{ancestor::mycoreobject/@ID}&amp;sort=id+desc">
+          <xsl:value-of select="count(child)" />
+          <xsl:text> Publikation(en) verknüpft.</xsl:text>
+        </a>
+        <xsl:if test="(ancestor::mycoreobject/@ID=$baseID) and (count(child) &gt; $displayLimit)">
+          <xsl:value-of select="concat(' Es werden nur die ersten ',$displayLimit,' angezeigt.')" />
+        </xsl:if>
+      </span>
+    </div>
+  </xsl:template>
+
+  <xsl:template match="structure/children">
+    <xsl:apply-templates select="child">
+      <xsl:sort select="number(substring-after(@xlink:href,'_mods_'))" data-type="number" order="descending" />
+    </xsl:apply-templates>
   </xsl:template>
 
   <xsl:template match="structure/children/child">
@@ -154,12 +168,10 @@
     <xsl:variable name="duplicatesURI">
       <xsl:text>notnull:</xsl:text>
       <xsl:call-template name="buildFindDuplicatesURI" />
-      <xsl:value-of select="concat('+AND+-id:',$myID)" />
+      <xsl:value-of select="concat('+AND+-id:',$myID,'&amp;sort=id+desc')" />
     </xsl:variable>
 
     <xsl:for-each select="document($duplicatesURI)/response/result[@name='response']/doc">
-      <xsl:sort select="number(substring-after(str[@name='id'],'_mods_'))" data-type="number" order="descending" />
-      
       <xsl:apply-templates select="document(concat('mcrobject:',str[@name='id']))/mycoreobject" mode="pub-info">
         <xsl:with-param name="role">duplicate</xsl:with-param>
         <xsl:with-param name="from" select="$from" />
@@ -169,19 +181,71 @@
 
   </xsl:template>
 
+  <xsl:template name="countOrphans">
+    <xsl:if test="not(//mods:mods/mods:relatedItem[@type='host'])">
+
+      <xsl:variable name="solrURI">
+        <xsl:text>q=-link:*+AND+facet_host_title:"</xsl:text>
+        <xsl:value-of select="encoder:encode(//mods:mods/mods:titleInfo[not(@type)][1]/mods:title,'UTF-8')" />
+        <xsl:text>"</xsl:text>
+      </xsl:variable>
+  
+      <xsl:variable name="numOrphans" select="document(concat('notnull:solr:rows=0&amp;',$solrURI))/response/result[@name='response']/@numFound" />
+
+      <xsl:if test="$numOrphans &gt; 0">
+        <div class="mt-1">
+          <span class="badge badge-light">
+            <a href="solr/select?{$solrURI}&amp;sort=id+desc">
+              <xsl:value-of select="$numOrphans" />
+              <xsl:text> evtl. zu adoptierende Waise(n) gefunden.</xsl:text>
+            </a>
+            <xsl:if test="(@ID=$baseID) and ($numOrphans &gt; $displayLimit)">
+              <xsl:value-of select="concat(' Es werden nur die ersten ',$displayLimit,' angezeigt.')" />
+            </xsl:if>
+          </span>
+        </div>
+      </xsl:if>
+
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="showOrphans">
+    <xsl:if test="not(//mods:mods/mods:relatedItem[@type='host'])">
+
+      <xsl:variable name="solrURI">
+        <xsl:text>notnull:solr:fl=id&amp;rows=999&amp;sort:id+desc&amp;q=-link:*+AND+facet_host_title:"</xsl:text>
+        <xsl:value-of select="encoder:encode(//mods:mods/mods:titleInfo[not(@type)][1]/mods:title,'UTF-8')" />
+      </xsl:variable>
+  
+      <xsl:for-each select="document($solrURI)/response/result[@name='response']/doc">
+        <xsl:sort select="number(substring-after(str[@name='id'],'_mods_'))" data-type="number" order="descending" />
+        
+        <xsl:if test="position() &lt;= $displayLimit"> 
+          <xsl:apply-templates select="document(concat('mcrobject:',str[@name='id']))/mycoreobject" mode="pub-info">
+            <xsl:with-param name="role">orphan</xsl:with-param>
+          </xsl:apply-templates>
+        </xsl:if>
+      </xsl:for-each>
+
+    </xsl:if>
+  </xsl:template>
+
   <xsl:template match="mycoreobject" mode="pub-info">
     <xsl:param name="role" />
     <xsl:param name="from" />
     <xsl:param name="duplicateOfID" />
 
     <div class="row">
-      <xsl:call-template name="link-symbol" />
+      <xsl:call-template name="link-symbol">
+        <xsl:with-param name="role" select="$role" />
+      </xsl:call-template>
       <div>
         <xsl:attribute name="class">
           <xsl:text>col-11 border rounded p-2</xsl:text>
           <xsl:choose>
             <xsl:when test="$role='base'"> bg-info text-white</xsl:when>
             <xsl:when test="$role='duplicate'"> bg-warning text-white</xsl:when>
+            <xsl:when test="$role='orphan'"> bg-success text-white</xsl:when>
             <xsl:otherwise> bg-white</xsl:otherwise>
           </xsl:choose>
         </xsl:attribute>
@@ -196,9 +260,11 @@
         </xsl:call-template>
         <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" mode="citation" />
         <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" mode="details" />
-        <xsl:apply-templates select="structure/children" mode="badge" />
+        <xsl:apply-templates select="structure/children[child]" mode="badge" />
 
         <xsl:if test="$role='base'">
+          <xsl:call-template name="countOrphans" />
+
           <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host']/@xlink:href">
             <xsl:if test="not(/mycoreobject/structure/parents/parent/@xlink:href=.)">
               <xsl:call-template name="alert">
@@ -211,19 +277,29 @@
 
       </div>
     </div>
+
   </xsl:template>
 
   <xsl:template name="link-symbol">
-    <xsl:if test="structure/parents/parent">
-      <div class="col-1">
-        <i class="fas fa-retweet fa-4x m-1" />
-      </div>
-    </xsl:if>
-    <xsl:if test="metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host'][not(@xlink:href)]">
-      <div class="col-1">
-        <i class="fas fa-question fa-4x m-1" />
-      </div>
-    </xsl:if>
+    <xsl:param name="role" />
+
+    <xsl:choose>
+      <xsl:when test="$role = 'orphan'">
+        <div class="col-1">
+          <i class="fas fa-baby fa-4x m-1" />
+        </div>
+      </xsl:when>
+      <xsl:when test="structure/parents/parent">
+        <div class="col-1">
+          <i class="fas fa-retweet fa-4x m-1" />
+        </div>
+      </xsl:when>
+      <xsl:when test="metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host'][not(@xlink:href)]">
+        <div class="col-1">
+          <i class="fas fa-question fa-4x m-1" />
+        </div>
+      </xsl:when>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="badges">
@@ -265,18 +341,6 @@
     </div>
   </xsl:template>
 
-  <xsl:template match="structure/children" mode="badge">
-    <div class="badge badge-light">
-      <a href="solr/select?q=link:{/mycoreobject/@ID}&amp;sort=year+desc">
-        <xsl:value-of select="count(child)" />
-        <xsl:text> Publikation(en) verknüpft.</xsl:text>
-      </a>
-      <xsl:if test="count(child) &gt; $displayLimit">
-        <xsl:value-of select="concat(' Es werden nur die ersten ',$displayLimit,' angezeigt.')" />
-      </xsl:if>
-    </div>
-  </xsl:template>
-
   <xsl:template name="actions">
     <xsl:param name="role" />
     <xsl:param name="from" />
@@ -297,15 +361,6 @@
         </a>
       </xsl:if>
       
-      <xsl:if test="($baseID = @ID) and not(//mods:mods/mods:relatedItem[@type='host'])">
-        <xsl:variable name="title" select="//mods:mods/mods:titleInfo[not(@type)][1]/mods:title" />
-        <a role="button" class="btn btn-primary btn-sm mr-1"
-          href='{$ServletsBaseURL}solr/select?q=(host_title:"{$title}"+AND+-link:*)'>
-          <i class="fas fa-baby" aria-hidden="true"></i>
-          <xsl:text> Waisen finden</xsl:text>
-        </a>
-      </xsl:if>
-
       <xsl:if test="check:currentUserIsAdmin() and not($UBO.System.ReadOnly = 'true')" xmlns:check="xalan://org.mycore.ubo.AccessControl">
         <xsl:call-template name="button-with-confirm-dialog">
           <xsl:with-param name="if" select="not(structure/children/child or (@ID=$baseID))" />
@@ -347,7 +402,7 @@
           <xsl:with-param name="if" select="($role='duplicate') and (($from='parent') or ($from='base')) and (structure/children/child)" />
           <xsl:with-param name="action" select="'adoptChildren'" />
           <xsl:with-param name="icon" select="'baby-carriage'" />
-          <xsl:with-param name="button" select="'Adoptieren'" />
+          <xsl:with-param name="button" select="concat(count(structure/children/child),' adoptieren')" />
           <xsl:with-param name="text" select="concat(count(structure/children/child),' mit dieser Überordnung {from=',@ID,'} verknüpfte Publikation(en) in diese Überordnung {into=',$duplicateOfID,'} verschieben?')" />
         </xsl:call-template>
       </xsl:if>
