@@ -172,6 +172,9 @@
           <div class="col">
             <xsl:apply-templates select="/mycoreobject/service/servflags/servflag[@type='status']" />
             <xsl:apply-templates select="/mycoreobject/structure/children[child]" />
+            <xsl:if test="$permission.admin and mods:extension[dedup]">
+              <xsl:call-template name="linkToDuplicates" />
+            </xsl:if>
           </div>
         </div>
       </div>
@@ -188,24 +191,19 @@
       </div>
     </div>
 
-    <xsl:if test="$permission.admin and mods:extension[dedup]">
-      <xsl:call-template name="listDuplicates" />
-    </xsl:if>
   </xsl:for-each>
 </xsl:template>
 
 <xsl:template match="/mycoreobject/structure/children[child]">
-  <div class="labels">
-    <span class="badge badge-alternative mr-1">
-      <xsl:value-of select="i18n:translate('ubo.relatedItem.host.contains')"/>
-      <xsl:text>: </xsl:text>
-      <a href="solr/select?q=link:{/mycoreobject/@ID}&amp;sort=year+desc">
-        <xsl:value-of select="count(child)" />
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="i18n:translate('ubo.relatedItem.host.contains.publications')"/>
-      </a>
-    </span>
-  </div>
+  <span class="badge badge-alternative mr-1">
+    <xsl:value-of select="i18n:translate('ubo.relatedItem.host.contains')"/>
+    <xsl:text>: </xsl:text>
+    <a href="solr/select?q=link:{/mycoreobject/@ID}&amp;sort=year+desc">
+      <xsl:value-of select="count(child)" />
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="i18n:translate('ubo.relatedItem.host.contains.publications')"/>
+    </a>
+  </span>
 </xsl:template>
 
 <xsl:variable name="quotes">"</xsl:variable>
@@ -218,84 +216,36 @@
   </span>
 </xsl:template>
 
-<!-- ============ Dubletten suchen und anzeigen ============ -->
+<!-- ============ Dubletten suchen ============ -->
 
-<xsl:template name="listDuplicates">
-  <div class="card">
-    <div class="card-body">
+<xsl:template name="linkToDuplicates">
 
-      <xsl:variable name="duplicatesURI">
-	<xsl:for-each select="mods:extension[dedup]">
-	  <xsl:call-template name="buildFindDuplicatesURI" />
-	</xsl:for-each>
-      </xsl:variable>
+  <xsl:variable name="duplicatesURI">
+    <xsl:text>notnull:</xsl:text>
+    <xsl:for-each select="mods:extension[dedup][1]">
+      <xsl:call-template name="buildFindDuplicatesURI" />
+    </xsl:for-each>
+    <xsl:value-of select="concat('+AND+-id:',/mycoreobject/@ID)" />
+    <xsl:text></xsl:text>
+  </xsl:variable>
 
-      <xsl:variable name="myID" select="/mycoreobject/@ID" />
-
-      <xsl:variable name="duplicates1" select="document($duplicatesURI)/response/result[@name='response']/doc" />
-      <xsl:variable name="duplicates2">
-	<xsl:for-each select="$duplicates1">
-	  <xsl:sort select="str[@name='id']" data-type="number" order="descending" />
-	  <xsl:variable name="duplicateID" select="str[@name='id']" />
-	  <xsl:if test="not($duplicateID = $myID)">
-            <xsl:value-of select="str[@name='id']" />
-            <xsl:text> </xsl:text>
-	  </xsl:if>
-	</xsl:for-each>
-      </xsl:variable>
-      <xsl:variable name="duplicates3" select="xalan:tokenize($duplicates2)" />
-
-      <xsl:variable name="numDuplicates" select="count($duplicates3)" />
-      <xsl:if test="$numDuplicates &gt; 0">
-	<div class="duplicates">
-	  <h3>
-            <xsl:text>Es gibt eventuell </xsl:text>
-            <xsl:choose>
-              <xsl:when test="$numDuplicates = 1">eine Dublette</xsl:when>
-              <xsl:otherwise>
-		<xsl:value-of select="$numDuplicates" />
-		<xsl:text> Dubletten</xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>:</xsl:text>
-	  </h3>
-
-	  <a class="btn btn-sm btn-primary float-right mb-1">
-            <xsl:attribute name="href">
-              <xsl:text>MCRBasketServlet?type=objects&amp;action=add&amp;resolve=true</xsl:text>
-              <xsl:text>&amp;id=</xsl:text><xsl:value-of select="$myID" />
-              <xsl:text>&amp;uri=mcrobject:</xsl:text><xsl:value-of select="$myID" />
-              <xsl:for-each select="$duplicates3">
-		<xsl:text>&amp;id=</xsl:text><xsl:value-of select="." />
-		<xsl:text>&amp;uri=mcrobject:</xsl:text><xsl:value-of select="." />
-              </xsl:for-each>
-            </xsl:attribute>
-            <xsl:value-of select="i18n:translate('button.basketAdd')" />
-	  </a>
-
-	  <ul class="list-group list-group-flush w-100">
-            <xsl:for-each select="$duplicates3">
-              <li class="list-group-item">
-		<a href="DozBibEntryServlet?id={.}">
-		  <xsl:text>Eintrag </xsl:text>
-		  <xsl:value-of select="number(substring-after(.,'_mods_'))" />
-		</a>
-		<xsl:for-each select="document(concat('mcrobject:',.))/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
-		  <div class="bibentry">
-                    <xsl:apply-templates select="." mode="cite">
-                      <xsl:with-param name="mode">divs</xsl:with-param>
-                    </xsl:apply-templates>
-		  </div>
-		  <xsl:call-template name="pubtype" />
-		  <xsl:call-template name="label-year" />
-		</xsl:for-each>
-              </li>
-            </xsl:for-each>
-	  </ul>
-	</div>
-      </xsl:if>
-    </div>
-  </div>
+  <xsl:variable name="numDuplicates" select="count(document($duplicatesURI)/response/result[@name='response']/doc)" />
+  
+  <xsl:if test="$numDuplicates &gt; 0">
+    <span class="badge badge-alternative ml-1 mr-1">
+      <xsl:text>Es gibt eventuell </xsl:text>
+      <a href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.Style=structure">
+        <xsl:choose>
+          <xsl:when test="$numDuplicates = 1">eine Dublette</xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="concat($numDuplicates,' Dubletten')" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </a>
+      <xsl:text>.</xsl:text>
+    </span>
+  </xsl:if>
+  
 </xsl:template>
 
 <xsl:template name="steps.and.actions">
