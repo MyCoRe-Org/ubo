@@ -18,6 +18,8 @@
 
   <xsl:variable name="baseID" select="/mycoreobject/@ID" />
 
+  <xsl:variable name="displayLimit" select="number('10')" />
+
 <!-- ========== Navigation ========== -->
 
   <xsl:variable name="title">
@@ -114,11 +116,14 @@
 
   <xsl:template match="structure/children/child">
     <xsl:variable name="id" select="@xlink:href" />
+    <xsl:variable name="pos" select="position()" />
 
     <xsl:for-each select="document(concat('notnull:mcrobject:',$id))">
-      <xsl:apply-templates select="mycoreobject" mode="pub-info">
-        <xsl:with-param name="role">child</xsl:with-param>
-      </xsl:apply-templates>
+      <xsl:if test="$pos &lt;= $displayLimit"> 
+        <xsl:apply-templates select="mycoreobject" mode="pub-info">
+          <xsl:with-param name="role">child</xsl:with-param>
+        </xsl:apply-templates>
+      </xsl:if>
       <xsl:for-each select="*[not(name()='mycoreobject')]">
         <xsl:call-template name="alert">
           <xsl:with-param name="id" select="$id" />
@@ -255,17 +260,20 @@
   </xsl:template>
 
   <xsl:template match="mods:mods" mode="details">
-    <div class="collapse mt-2 border-top" id="details-{/mycoreobject/@ID}">
+    <div class="collapse mt-2 p-2 border-top bg-light text-dark" id="details-{/mycoreobject/@ID}">
       <xsl:apply-templates select="." mode="details_lines" />
     </div>
   </xsl:template>
 
   <xsl:template match="structure/children" mode="badge">
-    <div>
-      <a class="badge badge-info" href="solr/select?q=link:{/mycoreobject/@ID}&amp;sort=year+desc">
+    <div class="badge badge-light">
+      <a href="solr/select?q=link:{/mycoreobject/@ID}&amp;sort=year+desc">
         <xsl:value-of select="count(child)" />
-        <xsl:text> Publikation(en) verknüpft</xsl:text>
+        <xsl:text> Publikation(en) verknüpft.</xsl:text>
       </a>
+      <xsl:if test="count(child) &gt; $displayLimit">
+        <xsl:value-of select="concat(' Es werden nur die ersten ',$displayLimit,' angezeigt.')" />
+      </xsl:if>
     </div>
   </xsl:template>
 
