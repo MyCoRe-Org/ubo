@@ -320,6 +320,7 @@
           <xsl:with-param name="icon" select="'unlink'" />
           <xsl:with-param name="button" select="'Verknüpfung lösen'" />
           <xsl:with-param name="text" select="concat('Verknüpfung dieser Publikation {child=',@ID,'} mit der Überordnung {parent=',structure/parents/parent/@xlink:href,'} lösen?')" />
+          <xsl:with-param name="base" select="@ID" />
         </xsl:call-template>
         <xsl:call-template name="button-with-confirm-dialog">
           <xsl:with-param name="if" select="($role='base') and //mods:mods/mods:relatedItem[@type='host'][not(@xlink:href)]" />
@@ -352,6 +353,7 @@
     <xsl:param name="icon" />
     <xsl:param name="action" />
     <xsl:param name="text" />
+    <xsl:param name="base" select="$baseID" />
 
     <xsl:if test="$if">
       <a role="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#{$action}-{/mycoreobject/@ID}" href="#">
@@ -375,7 +377,7 @@
             
             <form action="{$ServletsBaseURL}RelationEditorServlet" method="get">
               <input type="hidden" name="action" value="{$action}" />
-              <input type="hidden" name="base" value="{$baseID}" />
+              <input type="hidden" name="base" value="{$base}" />
 
               <div class="modal-body">
                 <xsl:for-each select="xalan:tokenize($text,'{}')">
