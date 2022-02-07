@@ -398,6 +398,7 @@
           <xsl:with-param name="icon" select="'copy'" />
           <xsl:with-param name="button" select="'Daten zusammenführen'" />
           <xsl:with-param name="text" select="concat('Titeldaten dieser Dublette {from=',@ID,'} in dieser Publikation {into=',$duplicateOfID,'} zusammenführen?')" />
+          <xsl:with-param name="preview" select="true()" />
         </xsl:call-template>
         <xsl:call-template name="button-with-confirm-dialog">
           <xsl:with-param name="if" select="($role='duplicate') and (($from='parent') or ($from='base')) and (structure/children/child)" />
@@ -417,6 +418,7 @@
     <xsl:param name="action" />
     <xsl:param name="text" />
     <xsl:param name="base" select="$baseID" />
+    <xsl:param name="preview" select="false()" />
 
     <xsl:if test="$if">
       <a role="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#{$action}-{/mycoreobject/@ID}" href="#">
@@ -426,7 +428,7 @@
       </a>
       
       <div class="modal fade" id="{$action}-{/mycoreobject/@ID}" tabindex="-1" role="dialog" aria-labelledby="{$text}" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog" style="max-width:600px" role="document">
           <div class="modal-content bg-secondary text-white">
           
             <div class="modal-header">
@@ -438,7 +440,7 @@
               </button>
             </div>
             
-            <form action="{$ServletsBaseURL}RelationEditorServlet" method="get">
+            <form action="{$ServletsBaseURL}RelationEditorServlet" method="post">
               <input type="hidden" name="action" value="{$action}" />
               <input type="hidden" name="base" value="{$base}" />
 
@@ -474,7 +476,13 @@
                   <i class="fa fa-times mr-1" aria-hidden="true" />
                   <xsl:text>Abbrechen</xsl:text>
                 </button>
-                <button type="button" class="btn btn-primary structure-action">
+                <xsl:if test="$preview">
+                  <button type="submit" name="preview" value="true" class="btn btn-secondary">
+                    <i class="fa fa-{$icon} mr-1" aria-hidden="true" />
+                    <xsl:text>Vorschau</xsl:text>
+                  </button>
+                </xsl:if>
+                <button type="submit" class="btn btn-primary structure-action">
                   <i class="fa fa-{$icon} mr-1" aria-hidden="true" />
                   <xsl:value-of select="$button" />
                 </button>

@@ -11,6 +11,8 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
+import org.mycore.common.content.MCRContent;
+import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -177,9 +179,14 @@ public class RelationEditorServlet extends MCRServlet {
         Element modsToMergeFrom = new MCRMODSWrapper(objFrom).getMODS();
         MCRMergeTool.merge(modsToMergeInto, modsToMergeFrom);
 
-        MCRMetadataManager.update(objInto);
-
-        new ParentChildRelationChecker(intoID, false).check();
+        boolean preview = "true".equals(req.getParameter("preview"));
+        if (preview) {
+            MCRContent output = new MCRJDOMContent( objInto.createXML() );
+            getLayoutService().doLayout(req, res, output);
+        } else {
+            MCRMetadataManager.update(objInto);
+            new ParentChildRelationChecker(intoID, false).check();
+        }
     }
 
     private void adoptChildren(HttpServletRequest req, HttpServletResponse res) throws Exception {
