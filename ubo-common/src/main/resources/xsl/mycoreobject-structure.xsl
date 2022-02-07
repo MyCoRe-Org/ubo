@@ -215,6 +215,7 @@
       <xsl:variable name="solrURI">
         <xsl:text>notnull:solr:fl=id&amp;rows=999&amp;sort:id+desc&amp;q=-link:*+AND+facet_host_title:"</xsl:text>
         <xsl:value-of select="encoder:encode(//mods:mods/mods:titleInfo[not(@type)][1]/mods:title,'UTF-8')" />
+        <xsl:text>"</xsl:text>
       </xsl:variable>
   
       <xsl:for-each select="document($solrURI)/response/result[@name='response']/doc">
