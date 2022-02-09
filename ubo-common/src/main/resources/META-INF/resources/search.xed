@@ -115,6 +115,7 @@
                       <option value="id"            >UBO ID:</option>
                       <option value="id_pubmed"     >PubMed ID:</option>
                       <option value="id_scopus"     >Scopus ID:</option>
+                      <option value="id_isi"		>Web of Science ID:</option>                      
                       <option value="shelfmark"     >Signatur:</option>
                       <option value="tag"           >Tag:</option>
                     </select>
