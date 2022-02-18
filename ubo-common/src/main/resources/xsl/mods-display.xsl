@@ -387,9 +387,9 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="mods:affiliation" mode="details">
-    <xsl:value-of select="text()"/>
-    <xsl:if test="position() != last()">/</xsl:if>
+  <xsl:template match="mods:affiliation" mode="details" >
+    <xsl:value-of select="text()" />
+    <xsl:if test="position() != last()"> / </xsl:if>
   </xsl:template>
 
   <xsl:param name="UBO.LSF.Link"/>
@@ -399,7 +399,7 @@
     <xsl:variable name="userAttributeClassification"
                   select="document('classification:metadata:-1:children:user_attributes')"/>
     <xsl:variable name="popId" select="generate-id()"/>
-    <span class="fas fa-user personPopover ml-1" id="{$popId}" title="{i18n:translate('person.search.information')}">
+    <span class="fas fa-user ubo-person-popover ml-1" id="{$popId}" title="{i18n:translate('person.search.information')}">
     </span>
     <div id="{$popId}-content" class="d-none">
       <dl>

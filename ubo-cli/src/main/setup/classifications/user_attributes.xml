@@ -11,12 +11,12 @@
     <category ID="id_gnd">
       <label xml:lang="de" text="GND" />
       <label xml:lang="x-display" text="true" />
-      <label xml:lang="x-uri" text="http://d-nb.info/gnd/" />
+      <label xml:lang="x-uri" text="https://d-nb.info/gnd/" />
     </category>
     <category ID="id_orcid">
       <label xml:lang="de" text="ORCID" />
       <label xml:lang="x-display" text="true" />
-      <label xml:lang="x-uri" text="http://orcid.org/" />
+      <label xml:lang="x-uri" text="https://orcid.org/" />
     </category>
     <category ID="id_scopus">
       <label xml:lang="de" text="SCOPUS" />
