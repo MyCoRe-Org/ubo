@@ -111,7 +111,7 @@
   <xsl:template match="structure/children" mode="badge">
     <div>
       <span class="badge badge-light">
-        <a href="solr/select?q=link:{ancestor::mycoreobject/@ID}&amp;sort=id+desc">
+        <a href="solr/select?q=parent:{ancestor::mycoreobject/@ID}&amp;sort=id+desc">
           <xsl:value-of select="count(child)" />
           <xsl:text> Publikation(en) verknüpft.</xsl:text>
         </a>
@@ -185,7 +185,7 @@
     <xsl:if test="not(//mods:mods/mods:relatedItem[@type='host'])">
 
       <xsl:variable name="solrURI">
-        <xsl:text>q=-link:*+AND+facet_host_title:"</xsl:text>
+        <xsl:text>q=-parent:*+AND+facet_host_title:"</xsl:text>
         <xsl:value-of select="encoder:encode(//mods:mods/mods:titleInfo[not(@type)][1]/mods:title,'UTF-8')" />
         <xsl:text>"</xsl:text>
       </xsl:variable>
@@ -213,7 +213,7 @@
     <xsl:if test="not(//mods:mods/mods:relatedItem[@type='host'])">
 
       <xsl:variable name="solrURI">
-        <xsl:text>notnull:solr:fl=id&amp;rows=999&amp;sort:id+desc&amp;q=-link:*+AND+facet_host_title:"</xsl:text>
+        <xsl:text>notnull:solr:fl=id&amp;rows=999&amp;sort:id+desc&amp;q=-parent:*+AND+facet_host_title:"</xsl:text>
         <xsl:value-of select="encoder:encode(//mods:mods/mods:titleInfo[not(@type)][1]/mods:title,'UTF-8')" />
         <xsl:text>"</xsl:text>
       </xsl:variable>

@@ -12,6 +12,7 @@
 
   <xsl:template match="mycoreobject">
     <xsl:apply-templates select="." mode="baseFields" />
+    <xsl:apply-templates select="structure/parents/parent[@xlink:href]" mode="solrField" />
     <xsl:apply-templates select="service/servflags/servflag[@type='status']" mode="solrField" />
     <xsl:apply-templates select="service/servflags/servflag[@type='importID']" mode="solrField" />
     <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" mode="solrField" />
@@ -19,6 +20,12 @@
     <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
       <xsl:apply-templates select="mods:*[@authority or @authorityURI]|mods:typeOfResource|mods:accessCondition"  mode="category" />
     </xsl:for-each>
+  </xsl:template>
+  
+  <xsl:template match="structure/parents/parent" mode="solrField">
+    <field name="parent">
+      <xsl:value-of select="@xlink:href" />
+    </field>
   </xsl:template>
 
   <xsl:template match="mods:mods" mode="solrField">

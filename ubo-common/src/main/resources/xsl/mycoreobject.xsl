@@ -198,7 +198,7 @@
   <span class="badge badge-alternative mr-1">
     <xsl:value-of select="i18n:translate('ubo.relatedItem.host.contains')"/>
     <xsl:text>: </xsl:text>
-    <a href="solr/select?q=link:{/mycoreobject/@ID}&amp;sort=year+desc">
+    <a href="solr/select?q=parent:{/mycoreobject/@ID}&amp;sort=year+desc">
       <xsl:value-of select="count(child)" />
       <xsl:text> </xsl:text>
       <xsl:value-of select="i18n:translate('ubo.relatedItem.host.contains.publications')"/>
