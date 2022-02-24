@@ -3,7 +3,6 @@
 >
   <name>ubo-commons</name>
 
-
   <servlet id="DozBibServlet">
     <servlet-name>DozBibServlet</servlet-name>
     <servlet-class>org.mycore.ubo.DozBibServlet</servlet-class>
@@ -35,6 +34,15 @@
     <url-pattern> /servlets/DozBibEntryServlet </url-pattern>
   </servlet-mapping>
 
+  <servlet id="RelationEditorServlet">
+    <servlet-name>RelationEditorServlet</servlet-name>
+    <servlet-class>org.mycore.ubo.relations.RelationEditorServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RelationEditorServlet</servlet-name>
+    <url-pattern> /servlets/RelationEditorServlet </url-pattern>
+  </servlet-mapping>
+
   <servlet id="DozBibImportServlet">
     <servlet-name>DozBibImportServlet</servlet-name>
     <servlet-class>org.mycore.ubo.importer.DozBibImportServlet</servlet-class>
@@ -60,15 +68,6 @@
   <servlet-mapping>
     <servlet-name>BasketName2PIDEditor</servlet-name>
     <url-pattern> /servlets/BasketName2PIDEditor </url-pattern>
-  </servlet-mapping>
-
-  <servlet id="BasketPubMerger">
-    <servlet-name>BasketPubMerger</servlet-name>
-    <servlet-class>org.mycore.ubo.basket.BasketPubMerger</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>BasketPubMerger</servlet-name>
-    <url-pattern> /servlets/BasketPubMerger </url-pattern>
   </servlet-mapping>
 
   <servlet id="IdentityPicker">

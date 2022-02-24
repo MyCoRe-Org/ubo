@@ -13,12 +13,13 @@ import java.text.Normalizer;
 import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.Namespace;
+import org.jdom2.filter.ElementFilter;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
@@ -31,13 +32,6 @@ import org.mycore.mods.merger.MCRHyphenNormalizer;
  * @author Frank L\u00FCtzenkirchen
  */
 public class DeDupCriteriaBuilder {
-
-    /** Holds the MODS namespace */
-    private static List<Namespace> NS = new ArrayList<Namespace>();
-
-    static {
-        NS.add(Namespace.getNamespace("mods", "http://www.loc.gov/mods/v3"));
-    }
 
     /**
      * Updates the deduplication criteria stored together with the MODS publication metadata
@@ -52,16 +46,34 @@ public class DeDupCriteriaBuilder {
     }
 
     public void updateDeDupCriteria(Element mods) {
-        Element extension = mods.getChild("extension", MCRConstants.MODS_NAMESPACE);
+        // remove existion dedup keys
+        for (Element extension : mods.getChildren("extension", MCRConstants.MODS_NAMESPACE)) {
+            extension.removeChildren("dedup");
+        }
 
+        // get first or create a new extension element
+        Element extension = mods.getChild("extension", MCRConstants.MODS_NAMESPACE);
         if (extension == null) {
             extension = new Element("extension", MCRConstants.MODS_NAMESPACE);
             mods.addContent(extension);
         }
 
-        extension.removeChildren("dedup");
+        // add new dedup keys, if any
         for (DeDupCriterion criteria : buildFromMODS(mods)) {
             extension.addContent(criteria.toXML());
+        }
+
+        // remove all extension elements that are completely empty
+        for (Iterator<Element> children = mods.getChildren("extension", MCRConstants.MODS_NAMESPACE)
+            .iterator(); children.hasNext();) {
+            extension = children.next();
+            if (extension.getChildren().isEmpty())
+                children.remove();
+        }
+
+        // add dedup keys for the host, too
+        for (Element host : this.getNodes(mods, "mods:relatedItem[@type='host']")) {
+            updateDeDupCriteria(host);
         }
     }
 
@@ -95,7 +107,8 @@ public class DeDupCriteriaBuilder {
      * @param xPath the xPath expression selecting the nodes
      */
     private List<Element> getNodes(Element context, String xPath) {
-        XPathExpression<Element> xPathExpr = XPathFactory.instance().compile(xPath, Filters.element(), null, NS);
+        XPathExpression<Element> xPathExpr = XPathFactory.instance().compile(xPath, Filters.element(), null,
+            MCRConstants.getStandardNamespaces());
         return xPathExpr.evaluate(context);
     }
 

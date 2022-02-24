@@ -19,8 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
-import org.jdom2.Element;
-import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRMailer;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRJDOMContent;
@@ -41,6 +39,7 @@ public class DozBibEntryServlet extends MCRServlet {
 
     private static final String PROJECT_ID = MCRConfiguration2.getString("UBO.projectid.default").get();
 
+    @Override
     public void doGetPost(MCRServletJob job) throws Exception {
         HttpServletRequest req = job.getRequest();
         HttpServletResponse res = job.getResponse();
@@ -54,8 +53,6 @@ public class DozBibEntryServlet extends MCRServlet {
             deleteEntry(req, res);
         } else if ("save".equals(mode)) {
             saveEntry(req, res);
-        } else if ("xhost".equals(mode)) {
-            extractHostEntry(req, res);
         }
     }
 
@@ -122,7 +119,7 @@ public class DozBibEntryServlet extends MCRServlet {
         getLayoutService().doLayout(req, res, new MCRJDOMContent(xml));
     }
 
-    private boolean isValidID(String id) throws IOException {
+    public static boolean isValidID(String id) throws IOException {
         return id != null && MCRObjectID.isValid(id)
             && MCRXMLMetadataManager.instance().exists(MCRObjectID.getInstance(id));
     }
@@ -173,46 +170,5 @@ public class DozBibEntryServlet extends MCRServlet {
                     + "DozBibEntryServlet?XSL.step=confirm.submitted&id=" + oid.toString());
             }
         }
-    }
-
-    /** Extract mods:relatedItem[@type='host'] to a new separate entry and link it via xlink:href */
-    private void extractHostEntry(HttpServletRequest req, HttpServletResponse res) throws Exception {
-        if (!AccessControl.currentUserIsAdmin()) {
-            res.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
-        }
-
-        String ID = req.getParameter("id");
-        if (!isValidID(ID)) {
-            res.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
-
-        MCRObjectID childID = MCRObjectID.getInstance(ID);
-        MCRObject obj = MCRMetadataManager.retrieveMCRObject(childID);
-
-        Element mods = new MCRMODSWrapper(obj).getMODS();
-        for (Element relatedItem : mods.getChildren("relatedItem", MCRConstants.MODS_NAMESPACE)) {
-            String type = relatedItem.getAttributeValue("type");
-            if (!"host".equals(type)) {
-                continue;
-            }
-
-            String href = relatedItem.getAttributeValue("href", MCRConstants.XLINK_NAMESPACE);
-            if ((href != null) && !href.isEmpty()) {
-                continue;
-            }
-
-            LOGGER.info("UBO extract host in entry " + ID);
-
-            // Just add an empty dummy ID as xlink:href attribute, this triggers
-            // MCRExctractRelatedItemsEventHandler which will do the actual work afterwards
-            String nullID = MCRObjectID.formatID(childID.getBase(), 0);
-            relatedItem.setAttribute("href", nullID, MCRConstants.XLINK_NAMESPACE);
-            MCRMetadataManager.update(obj);
-            break;
-        }
-
-        res.sendRedirect(MCRServlet.getServletBaseURL() + "DozBibEntryServlet?id=" + childID);
     }
 }

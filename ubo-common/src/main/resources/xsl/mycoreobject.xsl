@@ -97,12 +97,9 @@
             <xsl:value-of select="i18n:translate('button.delete')" />
           </a>
         </xsl:if>
-        <xsl:if test="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host'][string-length(@xlink:href)=0]">
-          <!-- Button to extract mods:relatedItem[@type='host'] to a new separate entry -->
-          <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;mode=xhost">
-            <xsl:value-of select="i18n:translate('ubo.relatedItem.host.separate')" />
-          </a>
-        </xsl:if>
+        <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.Style=structure">
+          Struktur
+        </a>
       </xsl:if>
     </xsl:if>
     <xsl:if xmlns:basket="xalan://org.mycore.ubo.basket.BasketUtils" test="basket:hasSpace() and not(basket:contains(string(/mycoreobject/@ID)))">
@@ -175,6 +172,9 @@
           <div class="col">
             <xsl:apply-templates select="/mycoreobject/service/servflags/servflag[@type='status']" />
             <xsl:apply-templates select="/mycoreobject/structure/children[child]" />
+            <xsl:if test="$permission.admin and mods:extension[dedup]">
+              <xsl:call-template name="linkToDuplicates" />
+            </xsl:if>
           </div>
         </div>
       </div>
@@ -191,24 +191,19 @@
       </div>
     </div>
 
-    <xsl:if test="$permission.admin and mods:extension[dedup]">
-      <xsl:call-template name="listDuplicates" />
-    </xsl:if>
   </xsl:for-each>
 </xsl:template>
 
 <xsl:template match="/mycoreobject/structure/children[child]">
-  <div class="labels">
-    <span class="badge badge-alternative mr-1">
-      <xsl:value-of select="i18n:translate('ubo.relatedItem.host.contains')"/>
-      <xsl:text>: </xsl:text>
-      <a href="solr/select?q=link:{/mycoreobject/@ID}&amp;sort=year+desc">
-        <xsl:value-of select="count(child)" />
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="i18n:translate('ubo.relatedItem.host.contains.publications')"/>
-      </a>
-    </span>
-  </div>
+  <span class="badge badge-alternative mr-1">
+    <xsl:value-of select="i18n:translate('ubo.relatedItem.host.contains')"/>
+    <xsl:text>: </xsl:text>
+    <a href="solr/select?q=parent:{/mycoreobject/@ID}&amp;sort=year+desc">
+      <xsl:value-of select="count(child)" />
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="i18n:translate('ubo.relatedItem.host.contains.publications')"/>
+    </a>
+  </span>
 </xsl:template>
 
 <xsl:variable name="quotes">"</xsl:variable>
@@ -221,84 +216,35 @@
   </span>
 </xsl:template>
 
-<!-- ============ Dubletten suchen und anzeigen ============ -->
+<!-- ============ Dubletten suchen ============ -->
 
-<xsl:template name="listDuplicates">
-  <div class="card">
-    <div class="card-body">
+<xsl:template name="linkToDuplicates">
 
-      <xsl:variable name="duplicatesURI">
-	<xsl:for-each select="mods:extension[dedup]">
-	  <xsl:call-template name="buildFindDuplicatesURI" />
-	</xsl:for-each>
-      </xsl:variable>
+  <xsl:variable name="duplicatesURI">
+    <xsl:text>notnull:</xsl:text>
+    <xsl:for-each select="mods:extension[dedup][1]">
+      <xsl:call-template name="buildFindDuplicatesURI" />
+    </xsl:for-each>
+    <xsl:value-of select="concat('+AND+-id:',/mycoreobject/@ID)" />
+  </xsl:variable>
 
-      <xsl:variable name="myID" select="/mycoreobject/@ID" />
-
-      <xsl:variable name="duplicates1" select="document($duplicatesURI)/response/result[@name='response']/doc" />
-      <xsl:variable name="duplicates2">
-	<xsl:for-each select="$duplicates1">
-	  <xsl:sort select="str[@name='id']" data-type="number" order="descending" />
-	  <xsl:variable name="duplicateID" select="str[@name='id']" />
-	  <xsl:if test="not($duplicateID = $myID)">
-            <xsl:value-of select="str[@name='id']" />
-            <xsl:text> </xsl:text>
-	  </xsl:if>
-	</xsl:for-each>
-      </xsl:variable>
-      <xsl:variable name="duplicates3" select="xalan:tokenize($duplicates2)" />
-
-      <xsl:variable name="numDuplicates" select="count($duplicates3)" />
-      <xsl:if test="$numDuplicates &gt; 0">
-	<div class="duplicates">
-	  <h3>
-            <xsl:text>Es gibt eventuell </xsl:text>
-            <xsl:choose>
-              <xsl:when test="$numDuplicates = 1">eine Dublette</xsl:when>
-              <xsl:otherwise>
-		<xsl:value-of select="$numDuplicates" />
-		<xsl:text> Dubletten</xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>:</xsl:text>
-	  </h3>
-
-	  <a class="btn btn-sm btn-primary float-right mb-1">
-            <xsl:attribute name="href">
-              <xsl:text>MCRBasketServlet?type=objects&amp;action=add&amp;resolve=true</xsl:text>
-              <xsl:text>&amp;id=</xsl:text><xsl:value-of select="$myID" />
-              <xsl:text>&amp;uri=mcrobject:</xsl:text><xsl:value-of select="$myID" />
-              <xsl:for-each select="$duplicates3">
-		<xsl:text>&amp;id=</xsl:text><xsl:value-of select="." />
-		<xsl:text>&amp;uri=mcrobject:</xsl:text><xsl:value-of select="." />
-              </xsl:for-each>
-            </xsl:attribute>
-            <xsl:value-of select="i18n:translate('button.basketAdd')" />
-	  </a>
-
-	  <ul class="list-group list-group-flush w-100">
-            <xsl:for-each select="$duplicates3">
-              <li class="list-group-item">
-		<a href="DozBibEntryServlet?id={.}">
-		  <xsl:text>Eintrag </xsl:text>
-		  <xsl:value-of select="number(substring-after(.,'_mods_'))" />
-		</a>
-		<xsl:for-each select="document(concat('mcrobject:',.))/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
-		  <div class="bibentry">
-                    <xsl:apply-templates select="." mode="cite">
-                      <xsl:with-param name="mode">divs</xsl:with-param>
-                    </xsl:apply-templates>
-		  </div>
-		  <xsl:call-template name="pubtype" />
-		  <xsl:call-template name="label-year" />
-		</xsl:for-each>
-              </li>
-            </xsl:for-each>
-	  </ul>
-	</div>
-      </xsl:if>
-    </div>
-  </div>
+  <xsl:variable name="numDuplicates" select="count(document($duplicatesURI)/response/result[@name='response']/doc)" />
+  
+  <xsl:if test="$numDuplicates &gt; 0">
+    <span class="badge badge-alternative ml-1 mr-1">
+      <xsl:text>Es gibt eventuell </xsl:text>
+      <a href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.Style=structure">
+        <xsl:choose>
+          <xsl:when test="$numDuplicates = 1">eine Dublette</xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="concat($numDuplicates,' Dubletten')" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </a>
+      <xsl:text>.</xsl:text>
+    </span>
+  </xsl:if>
+  
 </xsl:template>
 
 <xsl:template name="steps.and.actions">
@@ -308,18 +254,6 @@
     </xsl:when>
     <xsl:when test="$step='confirm.submitted'">
       <xsl:call-template name="confirm.submitted" />
-    </xsl:when>
-    <xsl:when test="$step='ask.publications'">
-      <xsl:call-template name="ask.publications" />
-    </xsl:when>
-    <xsl:when test="$step='merged.publications'">
-      <xsl:call-template name="merged.publications" />
-    </xsl:when>
-    <xsl:when test="$step='ask.hosts'">
-      <xsl:call-template name="ask.hosts" />
-    </xsl:when>
-    <xsl:when test="$step='merged.hosts'">
-      <xsl:call-template name="merged.hosts" />
     </xsl:when>
   </xsl:choose>
 </xsl:template>
@@ -360,65 +294,6 @@
     onclick="self.location.href='{$ServletsBaseURL}DozBibEntryServlet?mode=delete&amp;id={/mycoreobject/@ID}'" />
   <input type="button" class="editorButton" name="cancel" value="{i18n:translate('button.cancelNo')}"
     onclick="self.location.href='{$Referer}'" />
-</xsl:template>
-
-<xsl:template name="ask.publications">
-  <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
-    <p>
-      Wenn Sie die Publikationen im Korb zusammenführen,
-      werden die bibliographischen Daten zu einem neuen Eintrag zusammengefasst
-      und die ursprünglichen, alten Einträge gelöscht.
-      Ergebnis wäre dieser Eintrag hier.
-    </p>
-    <p>
-      <strong>
-        Wollen Sie die Publikationen im Korb wirklich zusammenführen?
-      </strong>
-    </p>
-    <input type="button" class="editorButton" name="merge" value="Zusammenführen"
-      onclick="self.location.href='BasketPubMerger?commit=true&amp;target=publications'" />
-    <input type="button" class="editorButton" name="cancel" value="{i18n:translate('button.cancelNo')}"
-      onclick="self.location.href='MCRBasketServlet?type=objects&amp;action=show'" />
-  </div>
-</xsl:template>
-
-<xsl:template name="ask.hosts">
-  <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
-    <p>
-      Wenn Sie die Publikationen im Korb zusammenhosten,
-      werden die Überordnungen jeder dieser Publikationen extrahiert,
-      deren bibliographische Daten zu einem neuen Eintrag zusammengefasst
-      und die Publikationen im Korb mit diesem neuen Eintrag verlinkt.
-      Ergebnis wäre dieser Eintrag hier als gemeinsame Überordnung aller Publikationen im Korb.
-    </p>
-    <p>
-      <strong>
-        Wollen Sie die Publikationen im Korb wirklich zusammenhosten?
-      </strong>
-    </p>
-    <input type="button" class="editorButton" name="merge" value="Zusammenhosten"
-      onclick="self.location.href='BasketPubMerger?commit=true&amp;target=hosts'" />
-    <input type="button" class="editorButton" name="cancel" value="{i18n:translate('button.cancelNo')}"
-      onclick="self.location.href='MCRBasketServlet?type=objects&amp;action=show'" />
-  </div>
-</xsl:template>
-
-<xsl:template name="merged.publications">
-  <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
-    <p>
-      Alle Publikationen im Korb wurden zu diesem Eintrag zusammengeführt.
-      Die anderen Einträge wurden gelöscht. Der Korb wurde geleert.
-    </p>
-  </div>
-</xsl:template>
-
-<xsl:template name="merged.hosts">
-  <div style="border:1px solid yellow; padding:1ex; margin-bottom:1ex; color:yellow; background-color:red;">
-    <p>
-      Alle Publikationen im Korb wurden mit dieser Überordnung verknüpft.
-      Andere evtl. bereits vorhandene Überordnungen wurden gelöscht.
-    </p>
-  </div>
 </xsl:template>
 
 <xsl:template match="servflag[@type='status']">
