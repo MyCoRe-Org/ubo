@@ -78,6 +78,14 @@
     <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
     <xed:include uri="webapp:import-editor.xed" ref="url" />    
   </xed:template>
+  
+  <xed:template id="genre.review-article">
+    <xed:include uri="webapp:import-editor.xed" ref="title" />
+    <xed:include uri="webapp:import-editor.xed" ref="author" />          
+    <xed:include uri="webapp:import-editor.xed" ref="year" />    
+    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
+    <xed:include uri="webapp:import-editor.xed" ref="url" />    
+  </xed:template>
 
   <xed:template id="genre.entry">
     <xed:include uri="webapp:import-editor.xed" ref="title" />
