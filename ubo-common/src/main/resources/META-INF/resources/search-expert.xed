@@ -5,8 +5,7 @@
   <title xml:lang="en">University Bibliography Online: Expert search</title>
  
  <script type="text/javascript" src="/external/jquery-tools-1.2.7/jquery.tools.min.js"></script>
- <script type="text/javascript" src="/js/editor.validation.failed.tooltip.js"></script>
-  
+
  <article class="card">
    <div class="card-body">
      <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form"> 
