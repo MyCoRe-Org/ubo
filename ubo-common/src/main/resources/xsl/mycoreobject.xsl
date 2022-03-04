@@ -171,7 +171,7 @@
         <div class="row">
           <div class="col">
             <xsl:apply-templates select="/mycoreobject/service/servflags/servflag[@type='status']" />
-            <xsl:apply-templates select="/mycoreobject/structure/children[child]" />
+            <xsl:call-template name="printRelatedItem" />
             <xsl:if test="$permission.admin and mods:extension[dedup]">
               <xsl:call-template name="linkToDuplicates" />
             </xsl:if>
@@ -194,16 +194,26 @@
   </xsl:for-each>
 </xsl:template>
 
-<xsl:template match="/mycoreobject/structure/children[child]">
+<xsl:template name="printRelatedItem">
+
+  <xsl:variable name="linkURI">
+    <xsl:text>solr:fl=id&amp;rows=999&amp;</xsl:text>
+    <xsl:value-of select="concat('q=link:',/mycoreobject/@ID)" />
+  </xsl:variable>
+  <xsl:variable name="numlinks" select="count(document($linkURI)/response/result[@name='response']/doc)" />
+
+  <xsl:if test="$numlinks &gt; 0">
   <span class="badge badge-alternative mr-1">
-    <xsl:value-of select="i18n:translate('ubo.relatedItem.host.contains')"/>
+    <xsl:value-of select="i18n:translate('ubo.relatedItem.link')"/>
     <xsl:text>: </xsl:text>
-    <a href="solr/select?q=parent:{/mycoreobject/@ID}&amp;sort=year+desc">
-      <xsl:value-of select="count(child)" />
+    <a href="solr/select?q=link:{/mycoreobject/@ID}&amp;sort=year+desc">
+      <xsl:value-of select="$numlinks" />
       <xsl:text> </xsl:text>
       <xsl:value-of select="i18n:translate('ubo.relatedItem.host.contains.publications')"/>
     </a>
   </span>
+  </xsl:if>
+
 </xsl:template>
 
 <xsl:variable name="quotes">"</xsl:variable>
