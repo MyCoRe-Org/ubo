@@ -24,6 +24,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.mycore.access.MCRAccessException;
+import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.config.MCRConfiguration2;
@@ -33,21 +34,24 @@ import org.mycore.common.content.transformer.MCRContentTransformerFactory;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.mods.enrichment.MCREnricher;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.MCRSolrUtils;
 import org.xml.sax.SAXException;
 
 public abstract class ImportJob {
 
-    private final static Logger LOGGER = LogManager.getLogger(ImportJob.class);
+    private static final Logger LOGGER = LogManager.getLogger(ImportJob.class);
 
-    private final static SimpleDateFormat ID_BUILDER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    private String id = ID_BUILDER.format(new Date());
+    private static final SimpleDateFormat ID_BUILDER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final String PROJECT_ID = MCRConfiguration2.getString("UBO.projectid.default").get();
 
+    private static final String ENRICHER_CONFIG_ID = "import-list";
+
     private List<Document> publications = new ArrayList<Document>();
+
+    private String id = ID_BUILDER.format(new Date());
 
     public String getID() {
         return id;
@@ -70,6 +74,20 @@ public abstract class ImportJob {
         for (Element publication : collection.getChildren()) {
             publications.add(new Document(publication.clone()));
         }
+    }
+
+    public void enrich() {
+        for (Document publication : publications) {
+            MCREnricher enricher = new MCREnricher(ENRICHER_CONFIG_ID);
+            enricher.enrich(getContainedMODS(publication));
+        }
+    }
+
+    private Element getContainedMODS(Document publication) {
+        Element mcrobject = publication.getRootElement();
+        Element container = mcrobject.getChild("metadata").getChild("def.modsContainer").getChild("modsContainer");
+        Element mods = container.getChild("mods", MCRConstants.MODS_NAMESPACE);
+        return mods;
     }
 
     public void addFixedCategories(Element formInput) {
