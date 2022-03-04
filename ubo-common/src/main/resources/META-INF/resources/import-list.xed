@@ -5,11 +5,11 @@
 
   <article class="card">
     <div class="card-body">
-    <p>
-      Über dieses Formular können Sie eine Literaturliste im
-      <a href="http://artis.imag.fr/~Xavier.Decoret/resources/xdkbibtex/bibtex_summary.html">BibTeX Format</a>,
-      alle Publikationen einer gegebenen ORCID oder eine CSV-Datei importieren.
-    </p>
+      <p>
+        Über dieses Formular können Sie eine Literaturliste im
+        <a href="http://artis.imag.fr/~Xavier.Decoret/resources/xdkbibtex/bibtex_summary.html">BibTeX Format</a>,
+        alle Publikationen einer gegebenen ORCID oder eine CSV-Datei importieren.
+      </p>
       <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
         <xed:bind xpath="/import">
 
@@ -29,8 +29,11 @@
 
             <xed:repeat xpath="subject" max="5">
               <div class="form-group form-inline">
-                <select class="{$xed-validation-marker} form-control col-sm-10 custom-select">
-                  <option value=""><xed:output i18n="ubo.subject" />: <xed:output i18n="search.select" /></option>
+                <label for="subject" class="mycore-form-label">
+                  <xed:output i18n="ubo.subject" />:
+                </label>
+                <select class="{$xed-validation-marker} col-7 form-control custom-select">
+                  <option value=""><xed:output i18n="search.select" /></option>
                   <xed:include uri="xslStyle:items2options:classification:editor:-1:children:fachreferate" />
                 </select>
                 <xed:controls />
@@ -39,34 +42,47 @@
 
             <xed:bind xpath="origin">
               <div class="form-group form-inline">
-                <select class="autocomplete {$xed-validation-marker} form-control col-sm-10 custom-select">
-                  <option value=""><xed:output i18n="ubo.department" />:<xed:output i18n="search.select" /></option>
-                  <xed:include uri="xslStyle:items2options:classification:editor:-1:children:ORIGIN" />
+                <label for="{generate-id()}" class="mycore-form-label">
+                  <xed:output i18n="ubo.department" />:
+                </label>
+                <select id="{generate-id()}" class="autocomplete {$xed-validation-marker} col-7 form-control custom-select">
+                  <option value=""><xed:output i18n="search.select" /></option>
+                  <xed:include uri="xslStyle:items2options:classification:editor:-1:children:fachreferate" />
                 </select>
               </div>
             </xed:bind>
 
-            <div class="col-sm-10 px-0">
+            <xed:bind xpath="@sourceType">
               <div class="form-group form-inline">
-                <xed:bind xpath="@sourceType">
-                  <select class="form-control col mr-1 custom-select">
-                    <option value="BibTeX">BibTeX Quellcode</option>
-                    <option value="ORCID">Publikationen aus dem ORCID Profil</option>
-                    <option value="IAQ">Literaturliste im CSV-Format: IAQ</option>
-                    <option value="NST">Literaturliste im CSV-Format: Nanostrukturtechnik</option>
-                    <option value="Opto">Literaturliste im CSV-Format: Optoelektronik</option>
-                  </select>
-                </xed:bind>
-
-                <xed:bind xpath="@targetType">
-                  <select class="form-control col custom-select">
-                    <option value="preview-html">Vorschau (HTML)</option>
-                    <option value="preview-mods-raw">Vorschau (MODS)</option>
-                    <option value="import">direkt importieren</option>
-                  </select>
-                </xed:bind>
+                <label for="{generate-id()}" class="mycore-form-label">Quell-Format :</label>
+                <select id="{generate-id()}" class="form-control col-7 mr-1 custom-select">
+                  <option value="BibTeX">BibTeX Quellcode</option>
+                  <option value="ORCID">Publikationen aus dem ORCID Profil</option>
+                  <option value="IAQ">Literaturliste im CSV-Format: IAQ</option>
+                  <option value="NST">Literaturliste im CSV-Format: Nanostrukturtechnik</option>
+                  <option value="Opto">Literaturliste im CSV-Format: Optoelektronik</option>
+                </select>
               </div>
-            </div>
+            </xed:bind>
+
+            <xed:bind xpath="@targetType">
+              <div class="form-group form-inline">
+                <label for="{generate-id()}" class="mycore-form-label">Ausgabe-Format :</label>
+                <select id="{generate-id()}" class="form-control col custom-select">
+                  <option value="preview-html">Vorschau (HTML)</option>
+                  <option value="preview-mods-raw">Vorschau (MODS)</option>
+                  <option value="import">direkt importieren</option>
+                </select>
+              </div>
+            </xed:bind>
+
+            <xed:bind xpath="@enrich" initially="false">
+              <div class="form-group form-inline">
+                <label class="mycore-form-label">aus externen Datenquellen anreichern :</label>
+                <input type="radio" value="true"  class="form-control ml-2 mr-2" id="enrich-yes" /><label for="enrich-yes">Ja</label>
+                <input type="radio" value="false" class="form-control ml-4 mr-2" id="enrich-no"  /><label for="enrich-no" >Nein</label>
+              </div>
+            </xed:bind>
 
             <xed:bind xpath="source">
               <div class="form-group form-inline">

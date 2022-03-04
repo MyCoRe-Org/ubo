@@ -17,21 +17,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.TransformerException;
 
-import org.mycore.ubo.importer.evaluna.EvalunaImportJob;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
-import org.xml.sax.SAXException;
-
 import org.mycore.ubo.AccessControl;
 import org.mycore.ubo.DozBibEntryServlet;
+import org.mycore.ubo.importer.evaluna.EvalunaImportJob;
+import org.xml.sax.SAXException;
 
 @SuppressWarnings("serial")
 public class DozBibImportServlet extends MCRServlet {
 
+    @Override
     public void doGetPost(MCRServletJob job) throws Exception {
         HttpServletRequest req = job.getRequest();
         HttpServletResponse res = job.getResponse();
@@ -52,6 +52,11 @@ public class DozBibImportServlet extends MCRServlet {
         ImportJob importJob = buildImportJob(formInput);
         importJob.transform(formInput);
 
+        boolean enrich = "true".equals(formInput.getAttributeValue("enrich"));
+        if (enrich) {
+            importJob.enrich();
+        }
+
         String targetType = formInput.getAttributeValue("targetType");
         if (targetType.startsWith("preview")) {
             doPreview(req, res, importJob, targetType);
@@ -66,7 +71,7 @@ public class DozBibImportServlet extends MCRServlet {
     }
 
     private void doPreview(HttpServletRequest req, HttpServletResponse res, ImportJob importJob, String targetType)
-            throws IOException, TransformerException, SAXException {
+        throws IOException, TransformerException, SAXException {
         Element export = new Element("export");
         for (Document mcrObj : importJob.getPublications()) {
             export.addContent(mcrObj.getRootElement().detach());
@@ -77,7 +82,7 @@ public class DozBibImportServlet extends MCRServlet {
     }
 
     private void doImport(HttpServletRequest req, HttpServletResponse res, ImportJob importJob)
-            throws MCRAccessException, IOException {
+        throws MCRAccessException, IOException {
         importJob.saveAndIndex();
         String queryString = importJob.getQueryString();
         String url = "solr/select?q=" + URLEncoder.encode(queryString, StandardCharsets.UTF_8);
