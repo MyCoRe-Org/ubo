@@ -601,15 +601,6 @@
     }
   },
   {
-    "add-field": {
-      "name": "parent",
-      "type": "string",
-      "multiValued": false,
-      "indexed": true,
-      "stored": true
-    }
-  },
-  {
     "add-dynamic-field": {
       "name": "host_id_*",
       "type": "ubo_id",
