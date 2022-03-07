@@ -2,7 +2,7 @@
 
 <xsl:template match="*">
   <xsl:element name="{local-name()}">
-    <xsl:apply-templates />
+    <xsl:apply-templates select="@*|*|text()" />
   </xsl:element>
 </xsl:template>
 
