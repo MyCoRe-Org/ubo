@@ -269,34 +269,39 @@
 </xsl:template>
 
 <xsl:template name="confirm.submitted">
-  <p>
-    <xsl:value-of select="i18n:translate('result.dozbib.now')"/>
-  </p>
+  <div class="section card">
+    <div class="card-header">
+      <xsl:value-of select="i18n:translate('result.dozbib.now')"/>
+    </div>
+    <div class="card-body">
+      <ul>
+        <li>
+          <xsl:value-of select="i18n:translate('result.dozbib.nowSaved')"/>
+          <xsl:text> </xsl:text>
+          <strong><xsl:value-of select="i18n:translate('result.dozbib.nowSavedStrong')"/></strong>
+        </li>
+        <li>
+          <xsl:value-of select="i18n:translate('result.dozbib.nowCheck')"/>
+        </li>
+        <li>
+          <xsl:value-of select="i18n:translate('result.dozbib.nowAccess')"/>
+        </li>
+      </ul>
 
-  <ul>
-    <li>
-      <xsl:value-of select="i18n:translate('result.dozbib.nowSaved')"/>
-      <strong><xsl:value-of select="i18n:translate('result.dozbib.nowSavedStrong')"/></strong>
-    </li>
-    <li>
-      <xsl:value-of select="i18n:translate('result.dozbib.nowCheck')"/>
-    </li>
-    <li>
-      <xsl:value-of select="i18n:translate('result.dozbib.nowAccess')"/>
-    </li>
-  </ul>
+    <!-- if additional text exist -->
+    <xsl:if test="i18n:translate('result.dozbib.nowAdditional') != 'false'">
+      <p>
+        <xsl:value-of select="i18n:translate('result.dozbib.nowAdditional')" disable-output-escaping="yes" />
+      </p>
+    </xsl:if>
 
-<xsl:if test="string-length(i18n:translate('result.dozbib.nowAdditional')) &gt; 5">
-  <p>
-    <xsl:value-of select="i18n:translate('result.dozbib.nowAdditional')"/>
-  </p>
-</xsl:if>
-
-  <p>
-    <a href="{$WebApplicationBaseURL}newPublication.xed">
-      <xsl:value-of select="i18n:translate('result.dozbib.registerMore')"/>
-    </a>
-  </p>
+      <p>
+        <a href="{$WebApplicationBaseURL}newPublication.xed">
+          <xsl:value-of select="i18n:translate('result.dozbib.registerMore')"/>
+        </a>
+      </p>
+    </div>
+  </div>
 </xsl:template>
 
 <xsl:template name="ask.delete">
