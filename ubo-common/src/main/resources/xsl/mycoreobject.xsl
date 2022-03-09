@@ -286,6 +286,12 @@
     </li>
   </ul>
 
+<xsl:if test="string-length(i18n:translate('result.dozbib.nowAdditional')) &gt; 5">
+  <p>
+    <xsl:value-of select="i18n:translate('result.dozbib.nowAdditional')"/>
+  </p>
+</xsl:if>
+
   <p>
     <a href="{$WebApplicationBaseURL}newPublication.xed">
       <xsl:value-of select="i18n:translate('result.dozbib.registerMore')"/>
