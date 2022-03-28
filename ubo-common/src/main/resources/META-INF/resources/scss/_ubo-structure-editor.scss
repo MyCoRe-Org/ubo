@@ -1,0 +1,111 @@
+/*  _ubo-structure-editor.scss
+ */
+
+// Extra large devices (large desktops)
+// set the defaults for all responsive levels here
+// no (xl) media query necessary (desktop first)
+
+  .ubo-structure {
+    i {
+      margin: 0.25rem;
+    }
+    &__content {
+      color: $body-color;
+      background-color: $white;
+      border: 1px solid $gray-300;
+      border-radius: .25rem;
+      padding: 0.5rem;
+
+      &--info {
+        color: $white;
+        background-color: $info;
+      }
+      &--warning {
+        color: $white;
+        background-color: $warning;
+      }
+      &--success {
+        color: $white;
+        background-color: $success;
+      }
+
+      .title {
+        font-weight: bold;
+      }
+      .ubo-orphans {
+        margin-top: .25rem;
+      }
+      .ubo-badge-status {
+        margin-right: .25rem;
+      }
+      .ubo-badge-dublicate {
+        margin-right: .25rem;
+      }
+      .ubo-badge-id {
+        margin-right: .25rem;
+      }
+
+      .ubo-alert {
+        margin-left: 3rem;
+      }
+
+      .ubo-btn-details {
+        margin-right: .25rem;
+      }
+      .ubo-btn-structure {
+        margin-right: .25rem;
+      }
+
+      .ubo-details {
+        margin-top: .5rem;
+        padding: .5rem;
+        border-top: 1px solid $gray-300;
+        color: $gray-800;
+        background-color: $gray-100;
+      }
+      .ubo-actions {
+        margin-top: .25rem;
+        margin-right: .25rem;
+        margin-left: .25rem;
+        float: right;
+      }
+
+      .modal-dialog {
+        max-width:600px;
+      }
+      .modal-content {
+        background: $secondary;
+        color: $white;
+      }
+      .ubo-modal-body__box {
+        &--1 {
+          margin-top: .25rem;
+          margin-left: 1.5rem;
+        }
+        &--2 {
+          margin-top: .25rem;
+        }
+      }
+    }
+
+  }
+
+// Large devices (desktops) and below: <= 1200px
+@include media-breakpoint-down(lg) {
+// add/overwrite styles for responsive level lg and lower
+}
+
+// Medium devices (tablets) and below: <= 992px
+@include media-breakpoint-down(md) {
+// add/overwrite styles for responsive level md and lower
+}
+
+// Small devices (landscape phones) and below: <= 768px
+@include media-breakpoint-down(sm) {
+// add/overwrite styles for responsive level sm and lower
+}
+
+// Extra small devices (portrait phones): <= 576px
+@include media-breakpoint-down(xs) {
+// add/overwrite styles for responsive level xs
+}
