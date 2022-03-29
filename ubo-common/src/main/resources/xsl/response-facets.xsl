@@ -232,13 +232,13 @@
           <xsl:variable name="url">classification:metadata:0:children:fachreferate:<xsl:value-of
               select="encoder:encode($value,'UTF-8')"/>
           </xsl:variable>
-          <xsl:value-of select="document($url)/mycoreclass/categories/category[1]/label[@xml:lang='de']/@text"/>
+          <xsl:value-of select="document($url)/mycoreclass/categories/category[1]/label[@xml:lang=$DefaultLang]/@text"/>
         </xsl:when>
         <xsl:when test="$type='oa'">
-          <xsl:value-of select="$oa//category[@ID=$value]/label[lang('de')]/@text"/>
+          <xsl:value-of select="$oa//category[@ID=$value]/label[lang($DefaultLang)]/@text"/>
         </xsl:when>
         <xsl:when test="$type='genre'">
-          <xsl:value-of select="$genres//category[@ID=$value]/label[lang('de')]/@text"/>
+          <xsl:value-of select="$genres//category[@ID=$value]/label[lang($DefaultLang)]/@text"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="$value"/>
