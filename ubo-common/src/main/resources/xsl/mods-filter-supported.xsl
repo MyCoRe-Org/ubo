@@ -17,7 +17,7 @@
 
 <xsl:template match="mods:mods">
   <xsl:copy>
-    <xsl:apply-templates select="mods:genre|mods:titleInfo|mods:name|mods:classification|mods:originInfo|mods:dateIssued|mods:physicalDescription|mods:identifier|mods:relatedItem|mods:note|mods:extension|mods:location|mods:subject|mods:abstract|mods:language" />
+    <xsl:apply-templates select="mods:genre|mods:titleInfo|mods:typeOfResource|mods:name|mods:classification|mods:originInfo|mods:dateIssued|mods:physicalDescription|mods:identifier|mods:relatedItem|mods:note|mods:extension|mods:location|mods:subject|mods:abstract|mods:language" />
   </xsl:copy>
 </xsl:template>
 
@@ -75,7 +75,7 @@
   <xsl:call-template name="copy-and-apply" />
 </xsl:template>
 
-<xsl:template match="mods:identifier[contains('|isbn|issn|doi|urn|pubmed|ieee|arxiv|hdl|zdb|isi|evaluna|ppn|hbz|mms|scopus|duepublico|duepublico2|',concat('|',@type,'|'))]|mods:identifier/@type">
+<xsl:template match="mods:identifier[contains('|isbn|issn|doi|urn|pubmed|ieee|arxiv|hdl|zdb|isi|evaluna|hbz|mms|scopus|duepublico|duepublico2|dbt|uri|',concat('|',@type,'|'))]|mods:identifier/@type">
   <xsl:call-template name="copy-and-apply" />
 </xsl:template>
 
@@ -86,7 +86,12 @@
   </xsl:copy>
 </xsl:template>
 
+<xsl:template match="mods:typeOfResource">
+  <xsl:call-template name="copy-and-apply" />
+</xsl:template>
+
 <xsl:template match="mods:note">
+  <xsl:if test="not(@type) or contains('intern other', @type)"></xsl:if>
   <xsl:call-template name="copy-and-apply" />
 </xsl:template>
 
