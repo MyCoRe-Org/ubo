@@ -91,8 +91,9 @@
 </xsl:template>
 
 <xsl:template match="mods:note">
-  <xsl:if test="not(@type) or contains('intern other', @type)"></xsl:if>
-  <xsl:call-template name="copy-and-apply" />
+  <xsl:if test="not(@type) or contains('intern other', @type)">
+    <xsl:call-template name="copy-and-apply" />
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="mods:extension[tag|dedup][1]|mods:extension/tag|mods:extension/dedup">
