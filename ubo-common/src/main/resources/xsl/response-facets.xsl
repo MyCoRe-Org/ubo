@@ -196,37 +196,72 @@
 
 <!-- Output facet value: some must be translated to a label, e.g. subject, genre -->
 <xsl:template name="output.facet.value">
-  <xsl:param name="prefix" />
-  <xsl:param name="type"  />
-  <xsl:param name="value" />
+  <xsl:param name="prefix"/>
+  <xsl:param name="type"/>
+  <xsl:param name="value"/>
 
   <xsl:variable name="label">
-    <xsl:value-of select="$prefix" />
+    <xsl:value-of select="$prefix"/>
     <xsl:choose>
       <xsl:when test="$type='subject'">
-        <xsl:variable name="url">classification:metadata:0:children:fachreferate:<xsl:value-of select="encoder:encode($value,'UTF-8')" /></xsl:variable>
-        <xsl:value-of select="document($url)/mycoreclass/categories/category[1]/label[@xml:lang=$CurrentLang]/@text" />
+        <xsl:variable name="url">classification:metadata:0:children:fachreferate:<xsl:value-of
+            select="encoder:encode($value,'UTF-8')"/>
+        </xsl:variable>
+        <xsl:value-of select="document($url)/mycoreclass/categories/category[1]/label[@xml:lang=$CurrentLang]/@text"/>
       </xsl:when>
       <xsl:when test="$type='oa'">
-        <xsl:value-of select="$oa//category[@ID=$value]/label[lang($CurrentLang)]/@text" />
+        <xsl:value-of select="$oa//category[@ID=$value]/label[lang($CurrentLang)]/@text"/>
       </xsl:when>
       <xsl:when test="$type='genre'">
-        <xsl:value-of select="$genres//category[@ID=$value]/label[lang($CurrentLang)]/@text" />
+        <xsl:value-of select="$genres//category[@ID=$value]/label[lang($CurrentLang)]/@text"/>
       </xsl:when>
       <xsl:when test="$type='status'">
-        <xsl:value-of select="i18n:translate(concat('search.dozbib.status.',$value))" />
+        <xsl:value-of select="i18n:translate(concat('search.dozbib.status.',$value))"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="$value" />
+        <xsl:value-of select="$value"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
 
-  <span>
-    <xsl:if test="string-length($label) &gt; 20">
-       <xsl:attribute name="class">scroll-on-hover</xsl:attribute>
+  <xsl:variable name="fallback-label">
+    <xsl:if test="string-length($label) = 0">
+      <xsl:value-of select="$prefix"/>
+      <xsl:choose>
+        <xsl:when test="$type='subject'">
+          <xsl:variable name="url">classification:metadata:0:children:fachreferate:<xsl:value-of
+              select="encoder:encode($value,'UTF-8')"/>
+          </xsl:variable>
+          <xsl:value-of select="document($url)/mycoreclass/categories/category[1]/label[@xml:lang=$DefaultLang]/@text"/>
+        </xsl:when>
+        <xsl:when test="$type='oa'">
+          <xsl:value-of select="$oa//category[@ID=$value]/label[lang($DefaultLang)]/@text"/>
+        </xsl:when>
+        <xsl:when test="$type='genre'">
+          <xsl:value-of select="$genres//category[@ID=$value]/label[lang($DefaultLang)]/@text"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$value"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:if>
-    <xsl:value-of select="$label" />
+  </xsl:variable>
+
+  <span>
+    <xsl:choose>
+      <xsl:when test="string-length($label) ">
+        <xsl:if test="string-length($label) &gt; 20">
+          <xsl:attribute name="class">scroll-on-hover</xsl:attribute>
+        </xsl:if>
+        <xsl:value-of select="$label"/>
+      </xsl:when>
+      <xsl:when test="$label">
+        <xsl:if test="string-length($fallback-label) &gt; 20">
+          <xsl:attribute name="class">scroll-on-hover</xsl:attribute>
+        </xsl:if>
+        <xsl:value-of select="$fallback-label"/>
+      </xsl:when>
+    </xsl:choose>
   </span>
 </xsl:template>
 
