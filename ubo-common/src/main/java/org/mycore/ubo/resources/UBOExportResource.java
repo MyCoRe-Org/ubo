@@ -29,11 +29,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -113,21 +109,25 @@ public class UBOExportResource {
         String yearPart;
 
         if (year != null) {
-            yearPart = " AND year:[" + year + " TO *]";
-
+            yearPart = "+year:[" + year + " TO *] ";
         } else {
             yearPart = "";
         }
 
-        String roleQuery = !ROLES.isEmpty() ? " AND role:(" + ROLES.stream().collect(Collectors.joining(" OR ")) + ")" : "";
+        String childFilterQuery = "+name_id_connection:" + nidConnectionValue;
 
-        String solrQuery = "{!parent which=\"objectType:mods AND status:confirmed"+ yearPart + "\"}name_id_connection:" + nidConnectionValue
-            + roleQuery
-            + "";
+        if (!ROLES.isEmpty()) {
+            childFilterQuery += " +role:(" + String.join(" OR ", ROLES) + ")";
+        }
+
+        String solrQuery = "+status:confirmed " + yearPart
+            + "+{!parent which=\"objectType:mods\" filters=$childfq}objectKind:name";
+
         StringBuilder solrRequest = new StringBuilder()
             .append(baseURL).append("servlets/solr/select2")
             .append("?q=").append(encode(solrQuery))
-            .append("&rows=9999&");
+            .append("&childfq=").append(encode(childFilterQuery))
+            .append("&rows=9999");
 
         List<String> sorts = new ArrayList<>(sortFields.size());
         for (int i = 0; i < sortFields.size(); i++) {
