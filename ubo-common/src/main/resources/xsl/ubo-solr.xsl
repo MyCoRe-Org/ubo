@@ -351,7 +351,7 @@
       </field>
       <xsl:apply-templates select="mods:nameIdentifier" mode="child" />
       <xsl:for-each select="mods:role/mods:roleTerm[@authority='marcrelator' and @type='code']">
-        <xsl:if test="count(ancestor::*[local-name()='relatedItem'])=0">
+        <xsl:if test="not(ancestor::mods:relatedItem)">
           <field name="role">
             <xsl:value-of select="concat(text(),'.top')"/>
           </field>
