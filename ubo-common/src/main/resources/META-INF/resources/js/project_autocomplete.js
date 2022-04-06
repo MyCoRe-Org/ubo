@@ -32,7 +32,7 @@ $(document).ready(function(){
                q: solr_search_string,
                wt: 'json',
                fl: '*',
-               core: 'ubo_projects'
+               core: 'ubo-projects'
            },
            success: function(data) {
             let docs = data.response.docs;
