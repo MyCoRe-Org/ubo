@@ -307,11 +307,9 @@
 </xsl:template>
 
 <xsl:template name="bibentry.show.details">
-  <form action="{$ServletsBaseURL}DozBibEntryServlet" method="get" class="d-inline">
-    <input type="hidden" name="mode" value="show"/>
-    <input type="hidden" name="id" value="{ancestor::mycoreobject/@ID}"/>
-    <input type="submit" class="btn btn-sm btn-outline-primary" value="{i18n:translate('result.dozbib.info')}" />
-  </form>
+   <a class="btn btn-sm btn-outline-primary" href="{$ServletsBaseURL}DozBibEntryServlet?mode=show&amp;id={ancestor::mycoreobject/@ID}" target="_self">
+      <xsl:value-of select="i18n:translate('result.dozbib.info')"/>
+   </a>
 </xsl:template>
 
 <!-- Return from subselect to choose related item (host) in editor form -->
