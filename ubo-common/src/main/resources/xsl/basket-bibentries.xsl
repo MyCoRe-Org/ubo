@@ -11,6 +11,7 @@
 >
 
 <xsl:include href="mods-display.xsl" />
+<xsl:include href="coreFunctions.xsl" />
 <xsl:include href="csl-export-gui.xsl" />
 
 
