@@ -721,6 +721,38 @@
     </div>
   </xsl:template>
 
+  <xsl:template match="mods:subject/mods:cartographics" mode="details">
+    <xsl:if test="mods:scale">
+      <div class="row">
+        <div class="col-3">
+          <xsl:value-of select="i18n:translate('ubo.scale')"/>
+          <xsl:text>:</xsl:text>
+        </div>
+        <div class="col-9">
+          <xsl:value-of select="mods:scale"/>
+        </div>
+      </div>
+    </xsl:if>
+
+    <xsl:if test="mods:coordinates">
+      <div class="row">
+        <div class="col-3">
+          <xsl:value-of select="i18n:translate('ubo.coordinates')"/>
+          <xsl:text>:</xsl:text>
+        </div>
+        <div class="col-9">
+          <span title="{i18n:translate('ubo.coordinates.latitude')}">
+            <xsl:value-of select="concat(mods:coordinates[1], '°')"/>
+          </span>
+          <xsl:text>, </xsl:text>
+          <span title="{i18n:translate('ubo.coordinates.longitude')}">
+            <xsl:value-of select="concat(mods:coordinates[2], '°')"/>
+          </span>
+        </div>
+      </div>
+    </xsl:if>
+  </xsl:template>
+
   <!-- ========== Sprache der Publikation ========== -->
   <xsl:template match="mods:language" mode="details">
     <div class="row">
@@ -829,6 +861,7 @@
     <xsl:apply-templates select="mods:extension[@displayLabel='project']/cerif:Project" mode="details" />
     <xsl:apply-templates select="mods:location/mods:url" mode="details" />
     <xsl:apply-templates select="mods:note" mode="details" />
+    <xsl:apply-templates select="mods:subject/mods:cartographics" mode="details"/>
     <xsl:apply-templates select="mods:language" mode="details" />
     <xsl:apply-templates select="mods:relatedItem" mode="details" />
     <xsl:call-template name="subject.topic" />
