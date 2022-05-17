@@ -142,6 +142,10 @@
     cursor: pointer;
   }
 
+  .ubo-mandatory::before {
+    content: "* \00A0";
+  }
+
 // Large devices (desktops) and below: <= 1200px
 @include media-breakpoint-down(lg) {
 // add/overwrite styles for responsive level lg and lower
