@@ -865,6 +865,11 @@
     <xsl:apply-templates select="mods:language" mode="details" />
     <xsl:apply-templates select="mods:relatedItem" mode="details" />
     <xsl:call-template name="subject.topic" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'accessrights')]" mode="details" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'peerreviewed')]" mode="details" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'partner')]" mode="details" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'category')]" mode="details" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'partOf')]" mode="details" />
     <xsl:apply-templates select="mods:abstract/@xlink:href" mode="details" />
     <xsl:apply-templates select="mods:abstract[string-length(.) &gt; 0]" mode="details" />
   </xsl:template>
