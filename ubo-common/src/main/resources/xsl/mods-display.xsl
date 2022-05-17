@@ -1157,7 +1157,13 @@
 
   <!-- ========== Notiz, Kommentar ========== -->
   <xsl:template match="mods:note">
-    <xsl:value-of select="." />
+    <xsl:choose>
+      <xsl:when test="not(@type)"><xsl:value-of select="." /></xsl:when>
+      <xsl:when test="check:currentUserIsAdmin()">
+        <xsl:value-of select="." />
+        <xsl:value-of select="concat(' [', @type, ']')" />
+      </xsl:when>
+    </xsl:choose>
   </xsl:template>
 
   <!-- ========== Auflage, Ort : Verlag, Jahr ========== -->
