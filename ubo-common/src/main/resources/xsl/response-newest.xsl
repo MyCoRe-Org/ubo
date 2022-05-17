@@ -23,7 +23,7 @@
               <li class="list-group-item">
                 <xsl:variable name="id" select="str[@name='id']" />
                 <xsl:variable name="mycoreobject" select="document(concat('mcrobject:',$id))/mycoreobject" />
-                <div class="content bibentry">
+                <div class="content bibentry ubo-hover-pointer" title="{i18n:translate('button.show')}" onclick="location.assign('{$WebApplicationBaseURL}servlets/DozBibEntryServlet?mode=show&amp;id={$id}');">
                   <xsl:apply-templates select="$mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods" mode="cite">
                     <xsl:with-param name="mode">divs</xsl:with-param>
                   </xsl:apply-templates>
