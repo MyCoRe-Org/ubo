@@ -9,45 +9,53 @@
       <label xml:lang="x-hosts" text="journal blog standalone" />
       <label xml:lang="de" text="Artikel/Aufsatz" />
       <label xml:lang="en" text="article/chapter" />
+      <label xml:lang="x-color" text="#4572A7" />
       <category ID="abstract">
         <label xml:lang="de" text="Abstract" />
         <label xml:lang="en" text="abstract" />
         <label xml:lang="x-hosts" text="journal proceedings standalone" />
         <label xml:lang="x-marcgt" text="abstract_or_summary" /> 
+        <label xml:lang="x-color" text="#92A8CD" />
       </category>
       <category ID="chapter">
         <label xml:lang="de" text="Buchaufsatz/Kapitel" />
         <label xml:lang="en" text="book article/chapter" />
         <label xml:lang="x-hosts" text="collection proceedings festschrift" />
         <label xml:lang="x-marcgt" text="article" />
+        <label xml:lang="x-color" text="#AA4643" />
       </category>
       <category ID="preface">
         <label xml:lang="x-hosts" text="collection proceedings festschrift lexicon journal" />
         <label xml:lang="de" text="Vorwort / Nachwort" />
         <label xml:lang="en" text="Preface (foreword) / Postface" />
+        <label xml:lang="x-color" text="#B5CA92" />
       </category>
       <category ID="speech">
         <label xml:lang="x-hosts" text="standalone" />
         <label xml:lang="en" text="Lecture / Speech" />
         <label xml:lang="de" text="Vortrag" />
+        <label xml:lang="x-color" text="#3D96AE" />
       </category>
       <category ID="entry">
         <label xml:lang="en" text="Encyclopedia entry" />
         <label xml:lang="x-hosts" text="lexicon" />
         <label xml:lang="de" text="Lexikoneintrag" />
+        <label xml:lang="x-color" text="#4572A7" />
       </category>
        <category ID="review">
         <label xml:lang="en" text="Review/recension" />
         <label xml:lang="x-hosts" text="journal collection" />
         <label xml:lang="de" text="Rezension" />
         <label xml:lang="x-marcgt" text="review" />
-      </category>
+        <label xml:lang="x-color" text="#DB843D" />
+       </category>
       <category ID="review-article">
         <label xml:lang="en" text="Review" />
         <label xml:lang="x-hosts" text="journal" />
         <label xml:lang="de" text="Review" />
         <label xml:lang="x-marcgt" text="article" />
-    </category>
+        <label xml:lang="x-color" text="#B5CA92" />
+      </category>
     </category>
     <category ID="thesis">
       <label xml:lang="de" text="Hochschulschrift" />
@@ -58,6 +66,7 @@
         <label xml:lang="en" text="dissertation" />
         <label xml:lang="de" text="Dissertation" />
         <label xml:lang="x-legacy" text="doctoralThesis" />
+        <label xml:lang="x-color" text="#89A54E" />
       </category>
     </category>
     <category ID="collection">
@@ -65,64 +74,76 @@
       <label xml:lang="x-hosts" text="standalone" />
       <label xml:lang="en" text="collection" />
       <label xml:lang="x-marcgt" text="book" />
+      <label xml:lang="x-color" text="#89A54E" />
       <category ID="proceedings">
         <label xml:lang="x-hosts" text="standalone" />
         <label xml:lang="en" text="Proceedings" />
         <label xml:lang="de" text="Tagungsband" />
         <label xml:lang="x-marcgt" text="book" />
+        <label xml:lang="x-color" text="#DB843D" />
       </category>
       <category ID="festschrift">
         <label xml:lang="x-hosts" text="standalone" />
         <label xml:lang="en" text="Festschrift" />
         <label xml:lang="de" text="Festschrift" />
+        <label xml:lang="x-color" text="#A47D7C" />
       </category>
       <category ID="lexicon">
         <label xml:lang="x-hosts" text="standalone" />
         <label xml:lang="en" text="Lexicon" />
         <label xml:lang="de" text="Lexikon" />
+        <label xml:lang="x-color" text="#4572A7" />
       </category>
     </category>
     <category ID="book">
       <label xml:lang="x-hosts" text="standalone" />
       <label xml:lang="de" text="Buch" />
       <label xml:lang="en" text="book" />
+      <label xml:lang="x-color" text="#80699B" />
     </category>
     <category ID="journal">
       <label xml:lang="x-hosts" text="standalone" />
       <label xml:lang="de" text="Zeitschrift" />
       <label xml:lang="en" text="journal" />
+      <label xml:lang="x-color" text="#A47D7C" />
     </category>
     <category ID="blog">
       <label xml:lang="x-hosts" text="standalone" />
       <label xml:lang="de" text="Blog" />
       <label xml:lang="en" text="blog" />
+      <label xml:lang="x-color" text="#AA4643" />
     </category>
     <category ID="series">
       <label xml:lang="x-hosts" text="standalone" />
       <label xml:lang="de" text="Serie" />
-      <label xml:lang="en" text="series" />      
+      <label xml:lang="en" text="series" />
+      <label xml:lang="x-color" text="#B5CA92" />
     </category>
     <category ID="poster">
       <label xml:lang="en" text="Poster" />
       <label xml:lang="de" text="Poster" />
       <label xml:lang="x-hosts" text="proceedings standalone" />
+      <label xml:lang="x-color" text="#DB843D" />
     </category>
     <category ID="interview">
       <label xml:lang="x-hosts" text="journal standalone" />
       <label xml:lang="en" text="Interview" />
       <label xml:lang="de" text="Interview" />
+      <label xml:lang="x-color" text="#A47D7C" />
     </category>
     <category ID="researchpaper">
       <label xml:lang="x-hosts" text="standalone" />
       <label xml:lang="en" text="Research Paper" />
       <label xml:lang="de" text="Forschungsbericht" />
       <label xml:lang="x-marcgt" text="reporting" />
+      <label xml:lang="x-color" text="#AA4643" />
     </category>
     <category ID="workingpaper">
       <label xml:lang="x-hosts" text="standalone" />
       <label xml:lang="en" text="Working Paper" />
       <label xml:lang="de" text="Working Paper" />
       <label xml:lang="x-marcgt" text="book" />
+      <label xml:lang="x-color" text="#80699B" />
     </category>
   </categories>
 </mycoreclass>
