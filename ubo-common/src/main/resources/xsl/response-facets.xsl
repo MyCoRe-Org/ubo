@@ -215,6 +215,9 @@
       <xsl:when test="$type='genre'">
         <xsl:value-of select="$genres//category[@ID=$value]/label[lang($CurrentLang)]/@text"/>
       </xsl:when>
+      <xsl:when test="$type='origin'">
+        <xsl:value-of select="$origin//category[@ID=$value]/label[lang($CurrentLang)]/@text"/>
+      </xsl:when>
       <xsl:when test="$type='status'">
         <xsl:value-of select="i18n:translate(concat('search.dozbib.status.',$value))"/>
       </xsl:when>
