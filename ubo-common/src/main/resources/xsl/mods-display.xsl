@@ -32,6 +32,7 @@
 
 
   <xsl:variable name="genres" select="document('classification:metadata:-1:children:ubogenre')/mycoreclass/categories" />
+  <xsl:variable name="origin" select="document('classification:metadata:-1:children:ORIGIN')/mycoreclass/categories" />
   <xsl:variable name="oa"     select="document('classification:metadata:-1:children:oa')/mycoreclass/categories" />
   <xsl:variable name="accessrights"          select="document('notnull:classification:metadata:-1:children:accessrights')/mycoreclass/categories" />
   <xsl:variable name="peerreviewed"          select="document('notnull:classification:metadata:-1:children:peerreviewed')/mycoreclass/categories" />
