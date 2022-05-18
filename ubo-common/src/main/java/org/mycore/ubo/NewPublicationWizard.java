@@ -31,7 +31,8 @@ import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRConstants;
-import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.MCRSessionMgr; 
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRLayoutService;
 import org.mycore.common.xml.MCRURIResolver;
@@ -50,6 +51,7 @@ public class NewPublicationWizard extends MCRServlet {
     public final static Logger LOGGER = LogManager.getLogger(NewPublicationWizard.class);
 
     private final static String sessionKey = "ubo.submission";
+    private final static String FILTER_SUPPORTED = MCRConfiguration2.getStringOrThrow("UBO.SupportedMODSFilterName");
 
     public void doGetPost(MCRServletJob job) throws Exception {
         storeAnySubmittedMODS(job);
@@ -89,7 +91,7 @@ public class NewPublicationWizard extends MCRServlet {
         Element mods = getMODSfromSession();
         mods.removeChildren("titleInfo", MCRConstants.MODS_NAMESPACE);
         mods.removeChildren("name", MCRConstants.MODS_NAMESPACE);
-        mods = MCRURIResolver.instance().resolve("xslStyle:mods-filter-supported:enrich:import:session:" + sessionKey);
+        mods = MCRURIResolver.instance().resolve("xslStyle:" + FILTER_SUPPORTED + ":enrich:import:session:" + sessionKey);
         MCRSessionMgr.getCurrentSession().put(sessionKey, mods);
     }
 
