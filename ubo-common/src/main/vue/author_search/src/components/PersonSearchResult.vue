@@ -57,8 +57,13 @@
               </button>
             </td>
             <td class="align-top">
-              <a :title="i18n['index.person.datatoform']" href="#" class="roundedButton text-secondary" v-on:click.prevent="apply(person)">
+              <a :title="i18n['index.person.datatoform']" href="#" class="roundedButton text-secondary"
+                 v-on:click.prevent="apply(person)">
                 <i class="far fa-arrow-alt-circle-right fa-lg"></i>
+              </a>
+              <a :title="i18n['index.person.idtoform']" href="#" class="roundedButton text-secondary d-block"
+                 v-on:click.prevent="applyId(person)">
+                <i class="far fa-id-card fa-lg"></i>
               </a>
             </td>
           </tr>
@@ -86,6 +91,7 @@ export default class PersonSearchResult extends Vue {
     "index.person.found.0": null,
     "index.person.datatoform": null,
     "index.person.datatoeditor": null,
+    "index.person.idtoform": null,
     "lsf.found": null,
     "lsf.selectPerson": null,
     "lsf.details": null,
@@ -102,6 +108,10 @@ export default class PersonSearchResult extends Vue {
 
   apply(person: PersonResult) {
     this.$emit("person_applied", person);
+  }
+
+  applyId(person: PersonResult) {
+    this.$emit("id_applied", person.pid);
   }
 }
 </script>

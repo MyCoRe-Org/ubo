@@ -14,6 +14,7 @@
                             :baseurl="baseurl"
                             v-on:person_submitted="personSubmitted"
                             v-on:person_applied="personApplied"
+                            v-on:id_applied="idApplied"
         />
       </div>
       <div class="col-12 col-lg-6">
@@ -156,6 +157,10 @@ export default class App extends Vue {
       [this.personModel.firstName, this.personModel.lastName] = person.displayName.split(" ");
     }
     this.personModel.pid = person.pid;
+  }
+
+  public idApplied(pid: string) {
+    this.personModel.pid = pid;
   }
 }
 </script>
