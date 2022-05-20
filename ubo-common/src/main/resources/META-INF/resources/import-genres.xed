@@ -79,7 +79,7 @@
     <xed:include uri="webapp:import-editor.xed" ref="url" />    
   </xed:template>
   
-  <xed:template id="genre.review-article">
+  <xed:template id="genre.review_article">
     <xed:include uri="webapp:import-editor.xed" ref="title" />
     <xed:include uri="webapp:import-editor.xed" ref="author" />          
     <xed:include uri="webapp:import-editor.xed" ref="year" />    
