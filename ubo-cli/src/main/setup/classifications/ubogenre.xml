@@ -49,7 +49,7 @@
         <label xml:lang="x-marcgt" text="review" />
         <label xml:lang="x-color" text="#DB843D" />
        </category>
-      <category ID="review-article">
+      <category ID="review_article">
         <label xml:lang="en" text="Review" />
         <label xml:lang="x-hosts" text="journal" />
         <label xml:lang="de" text="Review" />
