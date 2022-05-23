@@ -24,6 +24,9 @@
         <xsl:when test="title[lang($DefaultLang)]">
           <xsl:value-of select="title[lang($DefaultLang)]" />
         </xsl:when>
+        <xsl:when test="title[@i18n]">
+          <xsl:value-of select="i18n:translate(title[1]/@i18n)" />
+        </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="title[1]" />
         </xsl:otherwise>
