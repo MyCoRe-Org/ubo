@@ -16,37 +16,37 @@
   <xsl:include href="xslInclude:webpage" />
 
   <xsl:template match="/webpage">
-    <xsl:variable name="title">
-      <xsl:choose>
-        <xsl:when test="title[lang($CurrentLang)]">
-          <xsl:value-of select="title[lang($CurrentLang)]" />
-        </xsl:when>
-        <xsl:when test="title[lang($DefaultLang)]">
-          <xsl:value-of select="title[lang($DefaultLang)]" />
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="title[1]" />
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-
     <html>
       <xsl:copy-of select="@id" />
       <xsl:copy-of select="@lastModified" />
       <head>
         <title>
-          <xsl:value-of select="$title" />
+          <xsl:apply-templates select="." mode="title" />
         </title>
       </head>
       <body>
         <ul id="breadcrumb">
           <li>
-            <xsl:value-of select="$title" />
+            <xsl:apply-templates select="." mode="title" />
           </li>
         </ul>
         <xsl:apply-templates select="*" />
       </body>
     </html>
+  </xsl:template>
+  
+  <xsl:template match="/webpage" mode="title">
+    <xsl:choose>
+      <xsl:when test="title[lang($CurrentLang)]">
+        <xsl:apply-templates select="title[lang($CurrentLang)]/node()" />
+      </xsl:when>
+      <xsl:when test="title[lang($DefaultLang)]">
+        <xsl:apply-templates select="title[lang($DefaultLang)]/node()" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="title[1]/node()" />
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   
   <!-- Required to launch WebCLI and classification editor -->

@@ -324,7 +324,7 @@
 
   <xsl:template name="layout.pageTitle">
     <h1 id="seitentitel">
-      <xsl:value-of select="head/title" disable-output-escaping="yes" />
+      <xsl:copy-of select="head/title/node()" />
     </h1>
   </xsl:template>
 
