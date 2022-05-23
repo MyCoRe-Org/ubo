@@ -35,6 +35,12 @@
     <mods:classification authorityURI="{$WebApplicationBaseURL}classifications/{@classID}" valueURI="{$WebApplicationBaseURL}classifications/{@classID}#{text()}" />
   </xsl:template>
 
+  <xsl:template match="mods:roleTerm[@classID]">
+    <mods:roleTerm type="text" authorityURI="{$WebApplicationBaseURL}classifications/{@classID}" valueURI="{$WebApplicationBaseURL}classifications/{@classID}#{text()}">
+      <xsl:value-of select="text()" />
+    </mods:roleTerm>
+  </xsl:template>
+
   <!-- In editor, all variants of page numbers are edited in a single text field -->
   <xsl:template match="mods:part/mods:extent[@unit='pages']" xmlns:pages="xalan://org.mycore.mods.MCRMODSPagesHelper">
     <xsl:copy-of select="pages:buildExtentPagesNodeSet(mods:list/text())" />
