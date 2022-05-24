@@ -423,6 +423,13 @@
           </label>
         </xed:bind>
         <xed:include uri="webapp:import-editor.xed" ref="person" />
+        <xed:bind xpath="mods:role/mods:roleTerm[@type='text'][@classID='author_roles']" >
+          <div class="form-group form-inline col-12 px-0">
+            <label class="mycore-form-label"></label>
+            <input type="checkbox" value="corresponding_author" />
+            <xed:output i18n="ubo.corresponding_author" />
+          </div>
+        </xed:bind>
       </div>
     </xed:repeat>
   </xed:template>

@@ -18,6 +18,12 @@
       <xsl:value-of select="substring-after(@valueURI,'#')" />
     </mods:classification>
   </xsl:template>
+  
+  <xsl:template match="mods:roleTerm[@valueURI]">
+    <mods:roleTerm type="text" classID="{substring-after(@authorityURI,'classifications/')}">
+      <xsl:value-of select="substring-after(@valueURI,'#')" />
+    </mods:roleTerm>
+  </xsl:template>
 
   <!-- In editor, volume number is always edited as if belonging to a series, not as partNumber currently -->
   <xsl:template match="mods:titleInfo[mods:partNumber][not(../mods:relatedItem[@type='series'])]">
