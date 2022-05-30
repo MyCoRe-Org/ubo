@@ -9,7 +9,7 @@
   
   <xsl:template match="xpf:*[@key]">
     <xsl:if test="(count(*) &gt; 0) or (string-length(text()) &gt; 0)">
-      <xsl:element name="{@key}">
+      <xsl:element name="{translate(@key,':','_')}">
         <xsl:apply-templates select="*|text()" />
       </xsl:element>
     </xsl:if>
