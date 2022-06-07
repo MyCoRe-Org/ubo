@@ -440,6 +440,15 @@
   },
   {
     "add-field": {
+      "name": "origin_exact",
+      "type": "ubo_id",
+      "multiValued": true,
+      "indexed": true,
+      "stored": false
+    }
+  },
+  {
+    "add-field": {
       "name": "pages",
       "type": "ubo_text",
       "multiValued": false,
@@ -542,6 +551,14 @@
       "name": "subject",
       "type": "ubo_id",
       "multiValued": true,
+      "indexed": true,
+      "stored": true
+    }
+  },{
+    "add-field": {
+      "name": "partOf",
+      "type": "ubo_id",
+      "multiValued": false,
       "indexed": true,
       "stored": true
     }

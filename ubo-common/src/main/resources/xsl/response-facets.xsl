@@ -215,7 +215,7 @@
       <xsl:when test="$type='genre'">
         <xsl:value-of select="$genres//category[@ID=$value]/label[lang($CurrentLang)]/@text"/>
       </xsl:when>
-      <xsl:when test="$type='origin'">
+      <xsl:when test="$type='origin_exact'">
         <xsl:value-of select="$origin//category[@ID=$value]/label[lang($CurrentLang)]/@text"/>
       </xsl:when>
       <xsl:when test="$type='status'">
