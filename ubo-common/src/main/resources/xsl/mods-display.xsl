@@ -73,7 +73,7 @@
   <!-- ========== Ausgabe Fakultät ========== -->
 
   <xsl:template match="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info">
-    <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('facets.facet.origin')}"
+    <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.department')}"
           onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc{$fq}&amp;q={encoder:encode(concat('+origin:', substring-after(@valueURI,'#')))}')">
       <xsl:call-template name="output.category">
         <xsl:with-param name="classID" select="'ORIGIN'" />
