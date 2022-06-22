@@ -23,7 +23,9 @@
   <xsl:param name="UBO.JOP.Parameters" />
   <xsl:param name="UBO.JOP.URL" />
   <xsl:param name="CurrentLang" />
-  <xsl:param name="UBO.Initially.Visible.Authors" select="15" />
+
+  <!-- Expect one more author to be displayed as the last author is always getting displayed -->
+  <xsl:param name="UBO.Initially.Visible.Authors" select="14" />
 
 <!-- ============ Katalogsuche Basis-URLs ============ -->
   <xsl:param name="UBO.Primo.Search.Link" />
@@ -384,9 +386,10 @@
             <span>
               <xsl:attribute name="class">
                 <xsl:choose>
-                  <xsl:when test="position() &lt;= $UBO.Initially.Visible.Authors">
+                  <xsl:when test="position() &lt;= $UBO.Initially.Visible.Authors or (position() = last())">
                     <xsl:value-of select="'personalName'" />
                   </xsl:when>
+
                   <xsl:otherwise>
                     <xsl:value-of select="'personalName d-none'" />
                   </xsl:otherwise>
@@ -399,7 +402,7 @@
                 </xsl:attribute>
               </xsl:if>
 
-              <xsl:if test="position() = ($UBO.Initially.Visible.Authors + 1)">
+              <xsl:if test="position() = ($UBO.Initially.Visible.Authors + 1) or (position() = last())">
                 <xsl:text>; </xsl:text>
               </xsl:if>
 
@@ -427,7 +430,7 @@
                 <a href="javascript:void(0)"
                    onclick=" $(this).remove(); $('.personalName.d-none').removeClass('d-none');">
                   <xsl:value-of
-                      select="i18n:translate('button.view.all.authors', count($list) - $UBO.Initially.Visible.Authors)" />
+                      select="i18n:translate('button.view.all.authors', count($list) - $UBO.Initially.Visible.Authors - 1)" />
                 </a>
               </div>
             </div>
