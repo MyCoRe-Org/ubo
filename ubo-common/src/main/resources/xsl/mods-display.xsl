@@ -376,6 +376,31 @@
     <xsl:variable name="role" select="mods:role/mods:roleTerm[@type='code']" />
     <xsl:variable name="list" select="../mods:name[mods:role/mods:roleTerm[@type='code']=$role]" />
     <xsl:if test="count($list[1]|.)=1">
+
+      <script type="text/javascript">
+        <![CDATA[
+          const ModsDisplayUtils = {
+            updateLabel: async function (target, i18n){
+              let response =  await fetch(webApplicationBaseURL + "rsc/locale/translate/" + i18n);
+              let text = await response.text();
+              $(target).text(text.replace("{0}", $(target).attr("data-hideable-count")));
+            },
+
+            expand: function (source) {
+              $('.personalName.d-none').removeClass('d-none').addClass('ubo-hideable');
+              $(source).attr("onclick", "ModsDisplayUtils.collapse(this)");
+              ModsDisplayUtils.updateLabel(source, "button.hide.authors");
+            },
+
+            collapse: function (source) {
+              $('.personalName.ubo-hideable').removeClass('ubo-hideable').addClass('d-none');
+              $(source).attr("onclick", "ModsDisplayUtils.expand(this)");
+              ModsDisplayUtils.updateLabel(source, "button.view.all.authors");
+            }
+          }
+        ]]>
+      </script>
+
       <div class="row">
         <div class="col-3">
           <xsl:apply-templates select="$role" />
@@ -427,10 +452,9 @@
           <xsl:if test="count($list) &gt; $UBO.Initially.Visible.Authors">
             <div class="row">
               <div class="col">
-                <a href="javascript:void(0)"
-                   onclick=" $(this).remove(); $('.personalName.d-none').removeClass('d-none');">
-                  <xsl:value-of
-                      select="i18n:translate('button.view.all.authors', count($list) - $UBO.Initially.Visible.Authors - 1)" />
+                <xsl:variable name="hideable-count" select="count($list) - $UBO.Initially.Visible.Authors - 1"/>
+                <a href="javascript:void(0)" onclick="ModsDisplayUtils.expand(this)" data-hideable-count="{$hideable-count}">
+                  <xsl:value-of select="i18n:translate('button.view.all.authors', $hideable-count)" />
                 </a>
               </div>
             </div>
