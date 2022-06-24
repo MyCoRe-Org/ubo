@@ -24,6 +24,9 @@
   <xsl:param name="UBO.JOP.URL" />
   <xsl:param name="CurrentLang" />
 
+  <!-- Expect one more author to be displayed as the last author is always getting displayed -->
+  <xsl:param name="UBO.Initially.Visible.Authors" select="14" />
+
 <!-- ============ Katalogsuche Basis-URLs ============ -->
   <xsl:param name="UBO.Primo.Search.Link" />
   <xsl:param name="UBO.ISBN.Search.Link" />
@@ -322,10 +325,19 @@
 
   <!-- ========== Personennamen als Liste ========== -->
   <xsl:template match="mods:name" mode="brief">
-    <xsl:apply-templates select="." />
-    <xsl:if test="position() != last()"> <!-- et al ? -->
-      <xsl:text>; </xsl:text>
-    </xsl:if>
+    <xsl:choose>
+      <xsl:when test="position() &lt;= $UBO.Initially.Visible.Authors">
+        <xsl:apply-templates select="." />
+
+        <xsl:if test="position() &lt;= $UBO.Initially.Visible.Authors and not(position() = last())">
+          <xsl:text>; </xsl:text>
+        </xsl:if>
+      </xsl:when>
+      <xsl:when test="position() = last() and position() &gt; $UBO.Initially.Visible.Authors">
+        <xsl:apply-templates select="." />
+        <xsl:text> et al</xsl:text>
+      </xsl:when>
+    </xsl:choose>
   </xsl:template>
 
   <!-- ========== Serie(n) ========== -->
@@ -364,6 +376,31 @@
     <xsl:variable name="role" select="mods:role/mods:roleTerm[@type='code']" />
     <xsl:variable name="list" select="../mods:name[mods:role/mods:roleTerm[@type='code']=$role]" />
     <xsl:if test="count($list[1]|.)=1">
+
+      <script type="text/javascript">
+        <![CDATA[
+          const ModsDisplayUtils = {
+            updateLabel: async function (target, i18n){
+              let response =  await fetch(webApplicationBaseURL + "rsc/locale/translate/" + i18n);
+              let text = await response.text();
+              $(target).text(text.replace("{0}", $(target).attr("data-hideable-count")));
+            },
+
+            expand: function (source) {
+              $('.personalName.d-none').removeClass('d-none').addClass('ubo-hideable');
+              $(source).attr("onclick", "ModsDisplayUtils.collapse(this)");
+              ModsDisplayUtils.updateLabel(source, "button.hide.authors");
+            },
+
+            collapse: function (source) {
+              $('.personalName.ubo-hideable').removeClass('ubo-hideable').addClass('d-none');
+              $(source).attr("onclick", "ModsDisplayUtils.expand(this)");
+              ModsDisplayUtils.updateLabel(source, "button.view.all.authors");
+            }
+          }
+        ]]>
+      </script>
+
       <div class="row">
         <div class="col-3">
           <xsl:apply-templates select="$role" />
@@ -371,27 +408,57 @@
         </div>
         <div class="col-9">
           <xsl:for-each select="$list">
-            <span class="personalName">
+            <span>
+              <xsl:attribute name="class">
+                <xsl:choose>
+                  <xsl:when test="position() &lt;= $UBO.Initially.Visible.Authors or (position() = last())">
+                    <xsl:value-of select="'personalName'" />
+                  </xsl:when>
+
+                  <xsl:otherwise>
+                    <xsl:value-of select="'personalName d-none'" />
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:attribute>
+
               <xsl:if test="mods:affiliation and check:currentUserIsAdmin()">
                 <xsl:attribute name="title">
-                  <xsl:apply-templates select="mods:affiliation" mode="details"/>
+                  <xsl:apply-templates select="mods:affiliation" mode="details" />
                 </xsl:attribute>
               </xsl:if>
-              <xsl:apply-templates select="."/>
+
+              <xsl:if test="position() = ($UBO.Initially.Visible.Authors + 1) or (position() = last())">
+                <xsl:text>; </xsl:text>
+              </xsl:if>
+
+              <xsl:apply-templates select="." />
+
               <xsl:choose>
                 <xsl:when test="count(mods:nameIdentifier[@type='connection']) &gt;0">
-                  <xsl:apply-templates select="mods:nameIdentifier[@type='connection']"/>
+                  <xsl:apply-templates select="mods:nameIdentifier[@type='connection']" />
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:apply-templates select="mods:nameIdentifier[@type='orcid']"/>
-                  <xsl:apply-templates select="mods:nameIdentifier[not(@type='orcid')]"/>
+                  <xsl:apply-templates select="mods:nameIdentifier[@type='orcid']" />
+                  <xsl:apply-templates select="mods:nameIdentifier[not(@type='orcid')]" />
                 </xsl:otherwise>
               </xsl:choose>
-              <xsl:if test="position() != last()">
+
+              <xsl:if test="position() != last() and not (position() = $UBO.Initially.Visible.Authors)">
                 <xsl:text>; </xsl:text>
               </xsl:if>
             </span>
           </xsl:for-each>
+
+          <xsl:if test="count($list) &gt; $UBO.Initially.Visible.Authors">
+            <div class="row">
+              <div class="col">
+                <xsl:variable name="hideable-count" select="count($list) - $UBO.Initially.Visible.Authors - 1"/>
+                <a href="javascript:void(0)" onclick="ModsDisplayUtils.expand(this)" data-hideable-count="{$hideable-count}">
+                  <xsl:value-of select="i18n:translate('button.view.all.authors', $hideable-count)" />
+                </a>
+              </div>
+            </div>
+          </xsl:if>
         </div>
       </div>
     </xsl:if>
