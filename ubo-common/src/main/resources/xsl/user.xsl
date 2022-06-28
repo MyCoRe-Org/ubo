@@ -32,8 +32,8 @@
     <xsl:value-of select="/user/@realm" />
   </xsl:if>
 </xsl:variable>
-  <xsl:variable name="owns" select="document(concat('user:getOwnedUsers:',$uid))/owns" />
-
+<xsl:variable name="owns" select="document(concat('user:getOwnedUsers:',$uid))/owns" />
+<xsl:variable name="isCurrentUser" select="$CurrentUser = $uid" />
 
   <xsl:template match="/">
   <html id="profile">
@@ -71,7 +71,7 @@
     </div>
   </article>
 
-  <xsl:if test="string-length($MCR.ORCID.OAuth.ClientSecret) &gt; 0">
+  <xsl:if test="string-length($MCR.ORCID.OAuth.ClientSecret) &gt; 0 and $isCurrentUser">
     <xsl:call-template name="orcid" />
   </xsl:if>
   <xsl:call-template name="publications" />
@@ -335,7 +335,9 @@
       </h3>
       <ul>
         <xsl:call-template name="numPublicationsUBO" />
-        <xsl:apply-templates select="attributes[attribute[@name='token_orcid']]/attribute[@name='id_orcid']" mode="publications" />
+        <xsl:if test="$isCurrentUser">
+          <xsl:apply-templates select="attributes[attribute[@name='token_orcid']]/attribute[@name='id_orcid']" mode="publications" />
+        </xsl:if>
       </ul>
     </div>
   </article>
@@ -361,8 +363,7 @@
 
 <xsl:template match="attribute[@name='id_orcid']" mode="publications">
   <li>
-    <xsl:value-of disable-output-escaping="yes" select="i18n:translate('user.profile.publications.orcid.intro')" />
-    <xsl:text> </xsl:text>
+    <xsl:value-of disable-output-escaping="yes" select="concat(i18n:translate('user.profile.publications.orcid.intro'), ' ')" />
     <a href="{$MCR.ORCID.LinkURL}{@value}">
       <xsl:call-template name="numPublications">
         <xsl:with-param name="num" select="orcid:getNumWorks()" /> 
@@ -388,7 +389,6 @@
 </xsl:template>
 
   <xsl:template match="user" mode="actions">
-    <xsl:variable name="isCurrentUser" select="$CurrentUser = $uid" />
     <xsl:if test="(string-length($step) = 0) or ($step = 'changedPassword')">
       <xsl:variable name="isUserAdmin" select="acl:checkPermission(const:getUserAdminPermission())" />
       <xsl:choose>
