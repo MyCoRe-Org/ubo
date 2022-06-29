@@ -414,7 +414,6 @@
                   <xsl:when test="position() &lt;= $UBO.Initially.Visible.Authors or (position() = last())">
                     <xsl:value-of select="'personalName'" />
                   </xsl:when>
-
                   <xsl:otherwise>
                     <xsl:value-of select="'personalName d-none'" />
                   </xsl:otherwise>
@@ -427,7 +426,7 @@
                 </xsl:attribute>
               </xsl:if>
 
-              <xsl:if test="position() = ($UBO.Initially.Visible.Authors + 1) or (position() = last())">
+              <xsl:if test="position() &gt; 1">
                 <xsl:text>; </xsl:text>
               </xsl:if>
 
@@ -442,10 +441,6 @@
                   <xsl:apply-templates select="mods:nameIdentifier[not(@type='orcid')]" />
                 </xsl:otherwise>
               </xsl:choose>
-
-              <xsl:if test="position() != last() and not (position() = $UBO.Initially.Visible.Authors)">
-                <xsl:text>; </xsl:text>
-              </xsl:if>
             </span>
           </xsl:for-each>
 
