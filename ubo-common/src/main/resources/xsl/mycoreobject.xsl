@@ -25,6 +25,7 @@
 <xsl:param name="CurrentUserPID" />
 <xsl:param name="step" />
 <xsl:param name="UBO.System.ReadOnly" />
+<xsl:param name="MCR.Mail.Address" />
 
 <!-- ============ Bearbeitungsrechte ========== -->
 
@@ -107,15 +108,43 @@
         <xsl:value-of select="i18n:translate('button.basketAdd')" />
       </a>
     </xsl:if>
+    <xsl:if test="$step='confirm.submitted'">
+      <a class="action btn btn-sm btn-outline-primary mb-1" href="{$WebApplicationBaseURL}servlets/DozBibEntryServlet?mode=show&amp;id={/mycoreobject/@ID}">
+        <xsl:value-of select="i18n:translate('button.preview')"/>
+      </a>
+    </xsl:if>
     <xsl:if test="(string-length($step) = 0) and not($permission.admin)">
       <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.xml?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=mods">MODS</a>
       <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.bib?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=bibtex">BibTeX</a>
       <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.enl?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=endnote">EndNote</a>
       <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.ris?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=ris">RIS</a>
     </xsl:if>
+    <!-- Feedback Button -->
+    <a class="action btn btn-sm btn-outline-primary mb-1">
+      <xsl:call-template name="feedback.href" >
+      Feedback
+    </a>
   </div>
 </xsl:template>
 
+  <xsl:template name="feedback.href">
+    <xsl:attribute name="href">
+      <xsl:variable name="title">
+        <xsl:call-template name="page.title" />
+      </xsl:variable>
+      <xsl:variable name="title.abbrev">
+        <xsl:choose>
+          <xsl:when test="string-length($title) &gt; 70">
+            <xsl:value-of select="concat(substring($title, 0, 65), '[...]')" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$title" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:value-of select="concat('mailto:', $MCR.Mail.Address, '?subject=[Feedback]: ', $title.abbrev, '&amp;body=', $title, '%0D%0AURL: ', encoder:encode($RequestURL))" />
+    </xsl:attribute>
+  </xsl:template>
 <!-- ============ Seite ============ -->
 
 <xsl:template match="/">
