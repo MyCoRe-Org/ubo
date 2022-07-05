@@ -121,7 +121,7 @@
     </xsl:if>
     <!-- Feedback Button -->
     <a class="action btn btn-sm btn-outline-primary mb-1">
-      <xsl:call-template name="feedback.href" >
+      <xsl:call-template name="feedback.href" />
       Feedback
     </a>
   </div>
