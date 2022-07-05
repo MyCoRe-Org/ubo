@@ -25,7 +25,7 @@
 <xsl:param name="CurrentUserPID" />
 <xsl:param name="step" />
 <xsl:param name="UBO.System.ReadOnly" />
-<xsl:param name="MCR.Mail.Address" />
+<xsl:param name="UBO.Mail.Feedback" />
 
 <!-- ============ Bearbeitungsrechte ========== -->
 
@@ -120,10 +120,12 @@
       <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}MCRExportServlet/{/mycoreobject/@ID}.ris?root=export&amp;uri=mcrobject:{/mycoreobject/@ID}&amp;transformer=ris">RIS</a>
     </xsl:if>
     <!-- Feedback Button -->
-    <a class="action btn btn-sm btn-outline-primary mb-1">
-      <xsl:call-template name="feedback.href" />
-      Feedback
-    </a>
+    <xsl:if test="$UBO.Mail.Feedback">
+      <a class="action btn btn-sm btn-outline-primary mb-1 ubo-btn-feedback">
+        <xsl:call-template name="feedback.href" />
+        Feedback
+      </a>
+    </xsl:if>
   </div>
 </xsl:template>
 
@@ -142,7 +144,7 @@
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
-      <xsl:value-of select="concat('mailto:', $MCR.Mail.Address, '?subject=[Feedback]: ', $title.abbrev, '&amp;body=', $title, '%0D%0AURL: ', encoder:encode($RequestURL))" />
+      <xsl:value-of select="concat('mailto:', $UBO.Mail.Feedback, '?subject=[Feedback]: ', $title.abbrev, '&amp;body=', $title, '%0D%0AURL: ', encoder:encode($RequestURL))" />
     </xsl:attribute>
   </xsl:template>
 <!-- ============ Seite ============ -->
