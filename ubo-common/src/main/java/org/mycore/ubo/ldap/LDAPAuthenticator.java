@@ -5,8 +5,8 @@ import java.util.Hashtable;
 import javax.naming.AuthenticationException;
 import javax.naming.Context;
 import javax.naming.NamingException;
-import javax.naming.directory.DirContext;
-import javax.naming.directory.InitialDirContext;
+import javax.naming.ldap.InitialLdapContext;
+import javax.naming.ldap.LdapContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -88,32 +88,33 @@ public class LDAPAuthenticator {
      * @param credentials The password of the user on the LDAP-Server
      * @return DirContext, the context of the connected LDAP-Directory
      */
-    public DirContext authenticate(String uid, String credentials) throws NamingException {
-        return getDirContext(uid, credentials);
+    public LdapContext authenticate(String uid, String credentials) throws NamingException {
+        return getLDAPContext(uid, credentials);
     }
 
     /**
      * Authenticate the User, using configured Global-Settings (GlobalUser, GlobalPassword)
      * @return DirContext, the context of the connected LDAP-Directory
      */
-    public DirContext authenticate() throws NamingException {
-        return getDirContext(globalUid, globalPassword, globalUDN);
+    public LdapContext authenticate() throws NamingException {
+        return getLDAPContext(globalUid, globalPassword, globalUDN);
     }
 
     @SuppressWarnings("unchecked")
-    private DirContext getDirContext(String uid, String credentials) throws NamingException {
-        return getDirContext(uid, credentials, baseDN);
+    private LdapContext getLDAPContext(String uid, String credentials) throws NamingException {
+        return getLDAPContext(uid, credentials, baseDN);
     }
 
     @SuppressWarnings("unchecked")
-    private DirContext getDirContext(String uid, String credentials, String dn) throws NamingException {
+    private LdapContext getLDAPContext(String uid, String credentials, String dn) throws NamingException {
         try {
             Hashtable<String, String> env = (Hashtable<String, String>) (ldapEnvironment.clone());
             if (uid != null && !uid.isBlank() && credentials != null && !credentials.isBlank()) {
                 env.put(Context.SECURITY_PRINCIPAL, String.format(dn, uid));
                 env.put(Context.SECURITY_CREDENTIALS, credentials);
             }
-            return new InitialDirContext(env);
+
+            return new InitialLdapContext(env, null);
         } catch (AuthenticationException ex) {
             if (ex.getMessage().contains(PATTERN_INVALID_CREDENTIALS)) {
                 LOGGER.info("Could not authenticate LDAP user " + uid + ": " + ex.getMessage());

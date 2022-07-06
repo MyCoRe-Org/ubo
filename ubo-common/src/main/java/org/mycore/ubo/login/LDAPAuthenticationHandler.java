@@ -5,22 +5,21 @@ import java.util.Locale;
 import java.util.SortedSet;
 
 import javax.naming.NamingException;
-import javax.naming.directory.DirContext;
+import javax.naming.ldap.LdapContext;
 
-import org.mycore.ubo.ldap.LDAPAuthenticator;
-import org.mycore.ubo.matcher.MCRUserMatcherLDAP;
-import org.mycore.ubo.matcher.MCRUserMatcherUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration2;
+import org.mycore.ubo.ldap.LDAPAuthenticator;
+import org.mycore.ubo.ldap.LDAPObject;
+import org.mycore.ubo.ldap.LDAPSearcher;
+import org.mycore.ubo.matcher.MCRUserMatcherLDAP;
+import org.mycore.ubo.matcher.MCRUserMatcherUtils;
 import org.mycore.user2.MCRRealmFactory;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUser2Constants;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
-
-import org.mycore.ubo.ldap.LDAPObject;
-import org.mycore.ubo.ldap.LDAPSearcher;
 
 /**
  * Checks the given user ID and password combination against remote LDAP server
@@ -46,7 +45,9 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private static final String CONFIG_PREFIX = MCRUser2Constants.CONFIG_PREFIX + "LDAP.";
+
     private static final String CONFIG_ROLE = MCRUser2Constants.CONFIG_PREFIX + "IdentityManagement.UserCreation.DefaultRole";
+
     private static final String CONFIG_REALM = MCRUser2Constants.CONFIG_PREFIX + "IdentityManagement.UserCreation.LDAP.Realm";
 
     /** Filter for user ID */
@@ -56,6 +57,7 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
     private String baseDN;
 
     private String defaultRole;
+
     private String realm;
 
     public LDAPAuthenticationHandler() {
@@ -67,7 +69,7 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
     }
 
     public MCRUser authenticate(String uid, String pwd) throws Exception {
-        DirContext ctx = null;
+        LdapContext ctx = null;
 
         try {
             ctx = new LDAPAuthenticator().authenticate(uid, pwd);
@@ -88,7 +90,7 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
 
                 // logic to make new MCRUser connected to LDAPUser if possible (matching is done by MCR/LDAP-Attributes)
                 List<LDAPObject> ldapObjects = searchUserInLDAP(ctx, user);
-                if(ldapObjects.size() == 1) {
+                if (ldapObjects.size() == 1) {
                     LDAPObject ldapUser = ldapObjects.get(0);
 
                     MCRUserMatcherUtils.setStaticMCRUserAttributes(user, ldapUser);
@@ -97,7 +99,7 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
                     // convert LDAP-Attributes/Values into MCRUser Attributes and put them into new MCRUser
                     MCRUserMatcherLDAP userMatcher = new MCRUserMatcherLDAP();
                     SortedSet<MCRUserAttribute> userAttributesFromLDAP =
-                            userMatcher.convertLDAPAttributesToMCRUserAttributes(ldapUser);
+                        userMatcher.convertLDAPAttributesToMCRUserAttributes(ldapUser);
                     user.getAttributes().addAll(userAttributesFromLDAP);
                 } else {
                     // TODO: what should happen if ldapObjects contains more than one LDAPObject, i.e. the search returned multiple users?
@@ -121,7 +123,7 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
     /**
      * Searches the user in the LDAP-System and returns it's corresponding LDAPObject containing all attributes
      */
-    private List<LDAPObject> searchUserInLDAP(DirContext ctx, MCRUser user) throws NamingException {
+    private List<LDAPObject> searchUserInLDAP(LdapContext ctx, MCRUser user) throws NamingException {
         String uid = user.getUserName();
         String principal = String.format(baseDN, uid);
         String filter = String.format(Locale.ROOT, uidFilter, uid);

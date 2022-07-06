@@ -13,29 +13,26 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.naming.NamingException;
-import javax.naming.directory.DirContext;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mycore.common.config.MCRConfiguration2;
-import org.mycore.common.config.MCRConfigurationException;
-import org.mycore.user2.MCRRealmFactory;
-import org.mycore.user2.MCRUser;
-import org.mycore.user2.MCRUserAttribute;
+import javax.naming.ldap.LdapContext;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Multimap;
-
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mycore.common.config.MCRConfiguration2;
+import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.ubo.ldap.LDAPAuthenticator;
 import org.mycore.ubo.ldap.LDAPObject;
 import org.mycore.ubo.ldap.LDAPParsedLabeledURI;
 import org.mycore.ubo.ldap.LDAPSearcher;
+import org.mycore.user2.MCRRealmFactory;
+import org.mycore.user2.MCRUser;
+import org.mycore.user2.MCRUserAttribute;
 
 /**
  * Given a MCRUser match against the users of a LDAP-Server, enriching the attributes of the MCRUser by any matched
@@ -76,22 +73,31 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
 
     // all members regarding configuration of explicit mods/mycore nameIdentifier mapping
     private final static String CONFIG_EXPLICIT_NAMEIDENTIFIER_MAPPING = "MCR.user2.LDAP.Mapping.explicit";
+
     private BiMap<String, String> mycoreToLDAPIdentifiers = HashBiMap.create();
 
     // all members regarding configuration of LDAP attribute "labeledURI" mapping
     private final static String CONFIG_LABELEDURI_PROPERTY_KEY = "MCR.user2.LDAP.Mapping.labeledURI";
+
     private final static String CONFIG_SCHEMA_PROPERTY = "schema";
+
     private Map<String, String> mycoreToLDAPLabeledURISchemas = new HashMap<>();
 
     // all members regarding configuration of de-/normalization of LDAP-Attribute-Values
     private final String ORCID_LDAP_ATTRIBUTE = "eduPersonOrcid";
+
     private final String ORCID_MCR_ATTRIBUTE = "id_orcid";
+
     private final String CONFIG_ORCID_NORMALIZATION_RESOLVER = "MCR.IdentityPicker.LDAP.normalization.ORCID.resolver";
+
     private String orcid_resolver;
 
     public final String SIMILAR_SEARCH_TEMPLATE = "(%s~=%s)";
+
     public final String EXACT_SEARCH_TEMPLATE = "(%s=%s)";
+
     private final String CONFIG_REALM = "MCR.user2.IdentityManagement.UserCreation.LDAP.Realm";
+
     private String realm;
 
     public MCRUserMatcherLDAP() {
@@ -115,13 +121,15 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
      * # For example: MCR.user2.LDAP.Mapping.explicit=id_orcid:eduPersonOrcid,id_his:eduPersonUniqueId
      */
     private void parseLDAPExplicitNameIdentifierConfig() {
-        String explicitNameIdentifierConfig = MCRConfiguration2.getString(CONFIG_EXPLICIT_NAMEIDENTIFIER_MAPPING).orElse("");
-        if(StringUtils.isNotEmpty(explicitNameIdentifierConfig)) {
+        String explicitNameIdentifierConfig = MCRConfiguration2.getString(CONFIG_EXPLICIT_NAMEIDENTIFIER_MAPPING)
+            .orElse("");
+        if (StringUtils.isNotEmpty(explicitNameIdentifierConfig)) {
             String[] splitConfigValueParts = explicitNameIdentifierConfig.split(",");
             for (int i = 0; i < splitConfigValueParts.length; i++) {
                 String[] splitConfigValue = splitConfigValueParts[i].split(":");
                 if (splitConfigValue.length != 2) {
-                    throw new MCRConfigurationException("Property key " + CONFIG_EXPLICIT_NAMEIDENTIFIER_MAPPING + " not valid.");
+                    throw new MCRConfigurationException(
+                        "Property key " + CONFIG_EXPLICIT_NAMEIDENTIFIER_MAPPING + " not valid.");
                 }
                 String mcrIdentifierName = splitConfigValue[0];
                 String ldapAttributeName = splitConfigValue[1];
@@ -148,9 +156,10 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
      *
      */
     private void parseLDAPLabeledURINameIdentifierConfig() {
-        Map<String, String> nameIdentifierConfigMap = MCRConfiguration2.getSubPropertiesMap(CONFIG_LABELEDURI_PROPERTY_KEY);
+        Map<String, String> nameIdentifierConfigMap = MCRConfiguration2.getSubPropertiesMap(
+            CONFIG_LABELEDURI_PROPERTY_KEY);
 
-        if(!nameIdentifierConfigMap.isEmpty()) {
+        if (!nameIdentifierConfigMap.isEmpty()) {
             for (Map.Entry<String, String> nameIdentifierConfig : nameIdentifierConfigMap.entrySet()) {
                 String propertyKey = nameIdentifierConfig.getKey();
                 String propertyValue = nameIdentifierConfig.getValue();
@@ -164,9 +173,11 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
                 String configType = splitKey[2];
                 if (configType.equals(CONFIG_SCHEMA_PROPERTY)) {
                     if (!propertyValue.contains("%s")) {
-                        throw new MCRConfigurationException("Schema " + propertyValue + " not valid (must contain '%s').");
-                    } else if(StringUtils.countMatches(propertyValue, "%s") != 1) {
-                        throw new MCRConfigurationException("Schema " + propertyValue + " not valid (must contain single '%s').");
+                        throw new MCRConfigurationException(
+                            "Schema " + propertyValue + " not valid (must contain '%s').");
+                    } else if (StringUtils.countMatches(propertyValue, "%s") != 1) {
+                        throw new MCRConfigurationException(
+                            "Schema " + propertyValue + " not valid (must contain single '%s').");
                     }
                     mycoreToLDAPLabeledURISchemas.put(identifierName, propertyValue);
                 } else {
@@ -184,9 +195,9 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
         Multimap<String, String> ldapAttributes = convertUserAttributesToLDAP(mcrUser);
         List<LDAPObject> ldapUsers = getLDAPUsersByGivenLDAPAttributes(ldapAttributes, EXACT_SEARCH_TEMPLATE);
 
-        if(ldapUsers.size() == 0) {
+        if (ldapUsers.size() == 0) {
             // no match found, do nothing, return given user unchanged
-        } else if(ldapUsers.size() > 1) {
+        } else if (ldapUsers.size() > 1) {
             // too many matches found (conflict)
             // TODO: return conflict message/MatchType/exception(?)
         } else {
@@ -221,22 +232,23 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
     private String getUserNameFromLDAPUser(LDAPObject ldapUser) {
         String userName = "";
         String ldapLoginAttributeName = MCRConfiguration2.getString(CONFIG_LDAP_LOGIN_ATTRIBUTENAME).orElse("");
-        if(StringUtils.isEmpty(ldapLoginAttributeName)) {
-            throw new MCRConfigurationException("Property " + CONFIG_LDAP_LOGIN_ATTRIBUTENAME + " not set, can not find " +
+        if (StringUtils.isEmpty(ldapLoginAttributeName)) {
+            throw new MCRConfigurationException(
+                "Property " + CONFIG_LDAP_LOGIN_ATTRIBUTENAME + " not set, can not find " +
                     "suitable name for matched MCR/LDAP user.");
         }
-        if(!ldapUser.getAttributes().containsKey(ldapLoginAttributeName)) {
+        if (!ldapUser.getAttributes().containsKey(ldapLoginAttributeName)) {
             throw new MCRConfigurationException("Attribute: " + ldapLoginAttributeName + "(configured with: " +
-                    CONFIG_LDAP_LOGIN_ATTRIBUTENAME + ") not found in matched LDAP user, " +
-                    "can not find suitable username.");
+                CONFIG_LDAP_LOGIN_ATTRIBUTENAME + ") not found in matched LDAP user, " +
+                "can not find suitable username.");
         } else {
             Collection<String> attributeValues = ldapUser.getAttributes().get(ldapLoginAttributeName);
-            if(attributeValues.size() == 1) {
+            if (attributeValues.size() == 1) {
                 userName = attributeValues.iterator().next();
             } else {
                 throw new MCRConfigurationException("Attribute: " + ldapLoginAttributeName + "(configured with: " +
-                        CONFIG_LDAP_LOGIN_ATTRIBUTENAME + ") has 0 or more than 1 values in matched LDAP user, " +
-                        "can not find suitable username.");
+                    CONFIG_LDAP_LOGIN_ATTRIBUTENAME + ") has 0 or more than 1 values in matched LDAP user, " +
+                    "can not find suitable username.");
             }
         }
         LOGGER.info("Got userName: {} from LDAP attribute: {}", userName, ldapLoginAttributeName);
@@ -262,20 +274,20 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
     private Multimap<String, String> convertUserAttributesToLDAP(MCRUser mcrUser) {
         Multimap<String, String> convertedNameIdentifiers = ArrayListMultimap.create();
 
-        for(MCRUserAttribute userAttribute : mcrUser.getAttributes()) {
+        for (MCRUserAttribute userAttribute : mcrUser.getAttributes()) {
             String attributeName = userAttribute.getName();
             String attributeValue = userAttribute.getValue();
 
-            if(mycoreToLDAPIdentifiers.containsKey(attributeName)) {
+            if (mycoreToLDAPIdentifiers.containsKey(attributeName)) {
                 // convert "explicit" identifiers to attributes
                 String ldapAttributeName = mycoreToLDAPIdentifiers.get(attributeName);
                 convertedNameIdentifiers.put(ldapAttributeName, attributeValue);
             } else {
                 // if not "explicit", try via "labeledURI" mapping config
-                if(mycoreToLDAPLabeledURISchemas.containsKey(attributeName)) {
+                if (mycoreToLDAPLabeledURISchemas.containsKey(attributeName)) {
                     String ldapAttributeName = "labeledURI";
                     String ldapAttributeValue = mycoreToLDAPLabeledURISchemas.get(attributeName)
-                            .replace("%s", attributeValue);
+                        .replace("%s", attributeValue);
                     convertedNameIdentifiers.put(ldapAttributeName, ldapAttributeValue);
                 }
             }
@@ -302,26 +314,26 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
         allowedAttributes.add("givenName");
         allowedAttributes.add("displayName");
 
-        for(Map.Entry<String, String> attributeEntry : attributes.entrySet()) {
+        for (Map.Entry<String, String> attributeEntry : attributes.entrySet()) {
             // convert nameIdentifiers to "mycore style" (prefix with "id_")
             String attributeName = "id_" + attributeEntry.getKey();
             String attributeValue = attributeEntry.getValue();
 
             // TODO: reduce/remove code dublication (see "convertUserAttributesToLDAP")
-            if(mycoreToLDAPIdentifiers.containsKey(attributeName)) {
+            if (mycoreToLDAPIdentifiers.containsKey(attributeName)) {
                 // convert "explicit" identifiers to attributes
                 String ldapAttributeName = mycoreToLDAPIdentifiers.get(attributeName);
                 convertedNameIdentifiers.put(ldapAttributeName, attributeValue);
-            } else if(mycoreToLDAPLabeledURISchemas.containsKey(attributeName)) {
+            } else if (mycoreToLDAPLabeledURISchemas.containsKey(attributeName)) {
                 // if not "explicit", try via "labeledURI" mapping config
                 String ldapAttributeName = "labeledURI";
                 String ldapAttributeValue = mycoreToLDAPLabeledURISchemas.get(attributeName)
-                        .replace("%s", attributeValue);
+                    .replace("%s", attributeValue);
                 convertedNameIdentifiers.put(ldapAttributeName, ldapAttributeValue);
-            } else if(!onlyMapped) {
+            } else if (!onlyMapped) {
                 // if not converting only explicitly mapped identifiers to attributes
                 // still need to filter out any attributes that are not used in LDAP
-                if(allowedAttributes.contains(attributeEntry.getKey())) {
+                if (allowedAttributes.contains(attributeEntry.getKey())) {
                     convertedNameIdentifiers.put(attributeEntry.getKey(), attributeValue);
                 }
             }
@@ -353,27 +365,27 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
         SortedSet<MCRUserAttribute> userAttributes = new TreeSet<>();
         Multimap<String, String> attributes = ldapUser.getAttributes();
 
-        for(Map.Entry<String, Collection<String>> ldapAttribute : attributes.asMap().entrySet()) {
+        for (Map.Entry<String, Collection<String>> ldapAttribute : attributes.asMap().entrySet()) {
             String attributeName = ldapAttribute.getKey();
             Collection<String> attributeValues = ldapAttribute.getValue();
 
             // 1. "simple" attributes (i.e. eduPersonOrcid: 0000-1111-2222-3333)
-            if(mycoreToLDAPIdentifiers.inverse().containsKey(attributeName)) {
-                if(!attributeValues.isEmpty()) {
+            if (mycoreToLDAPIdentifiers.inverse().containsKey(attributeName)) {
+                if (!attributeValues.isEmpty()) {
                     String nameIdentifier = mycoreToLDAPIdentifiers.inverse().get(attributeName);
-                    for(String attributeValue: attributeValues) {
+                    for (String attributeValue : attributeValues) {
                         userAttributes.add(new MCRUserAttribute(nameIdentifier, attributeValue));
                     }
                 }
             }
             // 2. labeledURI attributes (i.e. labeledURI: http://d-nb.info/gnd/135799082)
-            if(attributeName.equals("labeledURI")) {
-                for(String attributeValue : attributeValues) {
+            if (attributeName.equals("labeledURI")) {
+                for (String attributeValue : attributeValues) {
                     LDAPParsedLabeledURI parsedLabeledURI = parseLDAPLabeledURI(attributeValue);
-                    if(parsedLabeledURI != null) {
+                    if (parsedLabeledURI != null) {
                         userAttributes.add(
-                                new MCRUserAttribute(parsedLabeledURI.getIdentifierName(),
-                                        parsedLabeledURI.getIdentifierValue()));
+                            new MCRUserAttribute(parsedLabeledURI.getIdentifierName(),
+                                parsedLabeledURI.getIdentifierValue()));
                     }
                 }
             }
@@ -395,22 +407,22 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
     private LDAPParsedLabeledURI parseLDAPLabeledURI(String labeledUri) {
         LDAPParsedLabeledURI parsedLabeledURI = null;
 
-        for(Map.Entry<String, String> schemaEntry : mycoreToLDAPLabeledURISchemas.entrySet()) {
+        for (Map.Entry<String, String> schemaEntry : mycoreToLDAPLabeledURISchemas.entrySet()) {
             String attributeName = schemaEntry.getKey();
             String labeledUriSchema = schemaEntry.getValue();
             Pattern pattern = Pattern.compile(createRegexForSchema(labeledUriSchema));
             Matcher matcher = pattern.matcher(labeledUri);
-            if(matcher.find()) {
+            if (matcher.find()) {
                 String id = matcher.group(1); // .group(0) = whole string (labeledUri), .group(1) = capture group (id)
                 LOGGER.debug("Found ID: {} with attribute name: {} in labeledUri: {}", id, attributeName, labeledUri);
                 parsedLabeledURI = new LDAPParsedLabeledURI(labeledUri, attributeName, id);
                 break;
             }
         }
-        if(parsedLabeledURI == null) {
+        if (parsedLabeledURI == null) {
             LOGGER.info("Could not parse labeledUri: {}, " +
                     "see mycore.properties MCR.user2.LDAP.Mapping.labeledURI.$IDENTIFIER_NAME.schema configuration",
-                    labeledUri);
+                labeledUri);
         }
         return parsedLabeledURI;
     }
@@ -430,18 +442,18 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
         String regex = "";
 
         int position = schema.indexOf("%s");
-        int lastPosition = schema.length() -2; // indexOf with "%s" at last position is length() -2!
+        int lastPosition = schema.length() - 2; // indexOf with "%s" at last position is length() -2!
 
-        if(position == 0) {
+        if (position == 0) {
             regex = "(.+)" + Pattern.quote(schema.replace("%s", ""));
-        } else if((position > 0) && (position < lastPosition)) {
+        } else if ((position > 0) && (position < lastPosition)) {
             String[] splitSchema = schema.split("%s");
             // according to convention, the resulting split array has to have a length of 2 (since there should always
             // be only one "%s" in the schema)
-            if(splitSchema.length == 2) {
+            if (splitSchema.length == 2) {
                 regex = Pattern.quote(splitSchema[0]) + "(.+)" + Pattern.quote(splitSchema[1]);
             }
-        } else if(position == lastPosition) {
+        } else if (position == lastPosition) {
             regex = Pattern.quote(schema.replace("%s", "")) + "(.+)";
         }
 
@@ -450,7 +462,7 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
     }
 
     public List<LDAPObject> getLDAPUsersByGivenLDAPAttributes(Multimap ldapAttributes, String searchTemplate) {
-        DirContext ctx = null;
+        LdapContext ctx = null;
         List<LDAPObject> ldapUsers = new ArrayList<>();
 
         String ldapSearchFilter = createLDAPSearchFilter(ldapAttributes, searchTemplate);
@@ -458,7 +470,7 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
             ctx = new LDAPAuthenticator().authenticate();
             ldapUsers = new LDAPSearcher().searchWithGlobalDN(ctx, ldapSearchFilter);
         } catch (NamingException ex) {
-            LOGGER.error("Exception occurred: " +  ex);
+            LOGGER.error("Exception occurred: " + ex);
         } finally {
             if (ctx != null) {
                 try {
@@ -484,7 +496,7 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
         String searchFilterBaseTemplate = "(&(objectClass=eduPerson)(|%s))";
 
         StringBuilder searchFilterInner = new StringBuilder();
-        for(Map.Entry<String, Collection<String>> ldapAttribute : ldapAttributes.asMap().entrySet()) {
+        for (Map.Entry<String, Collection<String>> ldapAttribute : ldapAttributes.asMap().entrySet()) {
             String attributeName = ldapAttribute.getKey();
 
             Collection<String> values = ldapAttribute.getValue();
@@ -512,7 +524,6 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
         return String.format(searchFilterBaseTemplate, searchFilterInner);
     }
 
-
     /**
      * De-Normalizes the LDAP-Attribute-Values of specific LDAP-Attributes.
      *
@@ -527,31 +538,30 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
     private Multimap<String, String> deNormalizeLDAPAttributeValues(Multimap<String, String> ldapAttributes) {
         Multimap<String, String> deNormalizedLDAPAttributes = ArrayListMultimap.create();
 
-        LOGGER.info("LDAP-Attributes BEFORE de-normalization: {}", ldapAttributes);
+        LOGGER.debug("LDAP-Attributes BEFORE de-normalization: {}", ldapAttributes);
 
-        for(Map.Entry<String, Collection<String>> ldapAttribute : ldapAttributes.asMap().entrySet()) {
+        for (Map.Entry<String, Collection<String>> ldapAttribute : ldapAttributes.asMap().entrySet()) {
             String attributeName = ldapAttribute.getKey();
             Collection<String> attributeValues = ldapAttribute.getValue();
-            if(attributeName.equals(ORCID_LDAP_ATTRIBUTE)) {
-                for(String attributeValue: attributeValues) {
-                    if(!attributeValue.contains(orcid_resolver)) {
+            if (attributeName.equals(ORCID_LDAP_ATTRIBUTE)) {
+                for (String attributeValue : attributeValues) {
+                    if (!attributeValue.contains(orcid_resolver)) {
                         deNormalizedLDAPAttributes.put(attributeName, orcid_resolver + attributeValue);
                     } else {
                         deNormalizedLDAPAttributes.put(attributeName, attributeValue);
                     }
                 }
             } else {
-                for(String attributeValue: attributeValues) {
+                for (String attributeValue : attributeValues) {
                     deNormalizedLDAPAttributes.put(attributeName, attributeValue);
                 }
             }
         }
 
-        LOGGER.info("LDAP-Attributes AFTER de-normalization: {}", deNormalizedLDAPAttributes);
+        LOGGER.debug("LDAP-Attributes AFTER de-normalization: {}", deNormalizedLDAPAttributes);
 
         return deNormalizedLDAPAttributes;
     }
-
 
     /**
      * Normalizes the MCRUser-Attribute-Values of specific Attributes.
@@ -565,17 +575,17 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
      */
     private SortedSet<MCRUserAttribute> normalizeUserAttributeValues(SortedSet<MCRUserAttribute> userAttributes) {
         SortedSet<MCRUserAttribute> normalizedUserAttributes = new TreeSet<>();
-        LOGGER.info("userAttributes BEFORE normalization: {}", userAttributes.stream().
-                map(atr -> atr.getName() + "=" +atr.getValue()).
-                collect(Collectors.joining(" | ")));
+        LOGGER.debug("userAttributes BEFORE normalization: {}", userAttributes.stream().
+            map(atr -> atr.getName() + "=" + atr.getValue()).
+            collect(Collectors.joining(" | ")));
 
-        for(MCRUserAttribute userAttribute : userAttributes) {
+        for (MCRUserAttribute userAttribute : userAttributes) {
             String attributeName = userAttribute.getName();
             String attributeValue = userAttribute.getValue();
-            if(attributeName.equals(ORCID_MCR_ATTRIBUTE)) {
-                if(attributeValue.contains(orcid_resolver)) {
+            if (attributeName.equals(ORCID_MCR_ATTRIBUTE)) {
+                if (attributeValue.contains(orcid_resolver)) {
                     normalizedUserAttributes.add(new MCRUserAttribute(attributeName,
-                            attributeValue.replace(orcid_resolver, "")));
+                        attributeValue.replace(orcid_resolver, "")));
                 } else {
                     normalizedUserAttributes.add(new MCRUserAttribute(attributeName, attributeValue));
                 }
@@ -583,9 +593,8 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
                 normalizedUserAttributes.add(new MCRUserAttribute(attributeName, attributeValue));
             }
         }
-        LOGGER.info("userAttributes AFTER normalization: {}", normalizedUserAttributes.stream().
-                map(atr -> atr.getName() + "=" +atr.getValue()).
-                collect(Collectors.joining(" | ")));
+        LOGGER.debug("userAttributes AFTER normalization: {}", normalizedUserAttributes.stream().
+            map(atr -> atr.getName() + "=" + atr.getValue()).collect(Collectors.joining(" | ")));
         return normalizedUserAttributes;
     }
 }
