@@ -782,15 +782,17 @@
 
   <!-- ========== Notiz, Kommentar ========== -->
   <xsl:template match="mods:note" mode="details">
-    <div class="row">
-      <div class="col-3">
-        <xsl:value-of select="i18n:translate('ubo.note')" />
-        <xsl:text>:</xsl:text>
+    <xsl:if test="not(@type) or (@type and check:currentUserIsAdmin())">
+      <div class="row">
+        <div class="col-3">
+          <xsl:value-of select="i18n:translate('ubo.note')" />
+          <xsl:text>:</xsl:text>
+        </div>
+        <div class="col-9">
+          <xsl:apply-templates select="." />
+        </div>
       </div>
-      <div class="col-9">
-        <xsl:apply-templates select="." />
-      </div>
-    </div>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="mods:subject/mods:cartographics" mode="details">
@@ -1235,7 +1237,9 @@
   <!-- ========== Notiz, Kommentar ========== -->
   <xsl:template match="mods:note">
     <xsl:choose>
-      <xsl:when test="not(@type)"><xsl:value-of select="." /></xsl:when>
+      <xsl:when test="not(@type)">
+        <xsl:value-of select="." />
+      </xsl:when>
       <xsl:when test="check:currentUserIsAdmin()">
         <xsl:value-of select="." />
         <xsl:value-of select="concat(' [', @type, ']')" />
