@@ -342,9 +342,9 @@
     </strong>
   </p>
 
-  <input type="button" class="editorButton" name="delete" value="{i18n:translate('button.deleteYes')}"
+  <input type="button" class="action btn btn-sm btn-outline-danger" name="delete" value="{i18n:translate('button.deleteYes')}"
     onclick="self.location.href='{$ServletsBaseURL}DozBibEntryServlet?mode=delete&amp;id={/mycoreobject/@ID}'" />
-  <input type="button" class="editorButton" name="cancel" value="{i18n:translate('button.cancelNo')}"
+  <input type="button" class="action btn btn-sm btn-outline-primary" name="cancel" value="{i18n:translate('button.cancelNo')}"
     onclick="self.location.href='{$Referer}'" />
 </xsl:template>
 
