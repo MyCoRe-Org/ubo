@@ -42,6 +42,7 @@
   <xsl:variable name="partner"               select="document('notnull:classification:metadata:-1:children:partner')/mycoreclass/categories" />
   <xsl:variable name="publication_category"  select="document('notnull:classification:metadata:-1:children:category')/mycoreclass/categories" />
   <xsl:variable name="partOf"                select="document('notnull:classification:metadata:-1:children:partOf')/mycoreclass/categories" />
+  <xsl:variable name="mediaType"             select="document('notnull:classification:metadata:-1:children:mediaType')/mycoreclass/categories" />
 
   <xsl:variable name="fq">
     <xsl:if test="not(check:currentUserIsAdmin())">
@@ -174,6 +175,20 @@
       <div class="col-3"><xsl:value-of select="i18n:translate('ubo.partOf')" /><xsl:text>:</xsl:text></div>
       <div class="col-9">
         <xsl:variable name="category" select="$partOf//category[@ID=substring-after(current()/@valueURI,'#')]" />
+        <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
+      </div>
+    </div>
+  </xsl:template>
+
+  <!-- ========== Ausgabe Datenträgertyp ========== -->
+
+  <xsl:template match="mods:classification[contains(@authorityURI,'mediaType')]" mode="details">
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="concat(i18n:translate('ubo.mediaType'), ':')" />
+      </div>
+      <div class="col-9">
+        <xsl:variable name="category" select="$mediaType//category[@ID=substring-after(current()/@valueURI,'#')]" />
         <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
       </div>
     </div>
@@ -919,6 +934,7 @@
     <xsl:apply-templates select="mods:language" mode="details" />
     <xsl:apply-templates select="mods:relatedItem" mode="details" />
     <xsl:call-template name="subject.topic" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'mediaType')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'accessrights')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'peerreviewed')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'partner')]" mode="details" />
