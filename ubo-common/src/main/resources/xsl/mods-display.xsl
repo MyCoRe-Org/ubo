@@ -377,10 +377,6 @@
     <xsl:variable name="list" select="../mods:name[mods:role/mods:roleTerm[@type='code']=$role]" />
     <xsl:if test="count($list[1]|.)=1">
 
-      <xsl:if test="position() = 1">
-        <script type="text/javascript" src="{$WebApplicationBaseURL}js/ModsDisplayUtils.js"/>
-      </xsl:if>
-
       <div class="row">
         <div class="col-3">
           <xsl:apply-templates select="$role" />
