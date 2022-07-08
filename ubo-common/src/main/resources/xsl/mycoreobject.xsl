@@ -167,6 +167,8 @@
 <!-- ============ Rechte Seite: Inhalte ============ -->
 
 <xsl:template match="mycoreobject">
+  <script type="text/javascript" src="{$WebApplicationBaseURL}js/ModsDisplayUtils.js"/>
+
   <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
     <xsl:call-template name="steps.and.actions" />
     <div class="section bibentry card">
