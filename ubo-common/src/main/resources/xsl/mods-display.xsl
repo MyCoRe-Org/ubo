@@ -43,6 +43,7 @@
   <xsl:variable name="publication_category"  select="document('notnull:classification:metadata:-1:children:category')/mycoreclass/categories" />
   <xsl:variable name="partOf"                select="document('notnull:classification:metadata:-1:children:partOf')/mycoreclass/categories" />
   <xsl:variable name="mediaType"             select="document('notnull:classification:metadata:-1:children:mediaType')/mycoreclass/categories" />
+  <xsl:variable name="typeOfResource"        select="document('notnull:classification:metadata:-1:children:typeOfResource')/mycoreclass/categories" />
 
   <xsl:variable name="fq">
     <xsl:if test="not(check:currentUserIsAdmin())">
@@ -189,6 +190,19 @@
       </div>
       <div class="col-9">
         <xsl:variable name="category" select="$mediaType//category[@ID=substring-after(current()/@valueURI,'#')]" />
+        <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
+      </div>
+    </div>
+  </xsl:template>
+
+  <!-- ========== Ausgabe Ressourcentyp ========== -->
+  <xsl:template match="mods:typeOfResource" mode="details">
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="concat(i18n:translate('ubo.typeOfResource'), ':')" />
+      </div>
+      <div class="col-9">
+        <xsl:variable name="category" select="$typeOfResource//category[@ID = current()/text()]" />
         <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
       </div>
     </div>
@@ -935,6 +949,7 @@
     <xsl:apply-templates select="mods:relatedItem" mode="details" />
     <xsl:call-template name="subject.topic" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'mediaType')]" mode="details" />
+    <xsl:apply-templates select="mods:typeOfResource" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'accessrights')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'peerreviewed')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'partner')]" mode="details" />
