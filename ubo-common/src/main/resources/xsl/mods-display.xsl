@@ -378,7 +378,7 @@
     <xsl:if test="count($list[1]|.)=1">
 
       <xsl:if test="position() = 1">
-        <script type="text/javascript" src="{$WebApplicationBaseURL}/js/ModsDisplayUtils.js"/>
+        <script type="text/javascript" src="{$WebApplicationBaseURL}js/ModsDisplayUtils.js"/>
       </xsl:if>
 
       <div class="row">
