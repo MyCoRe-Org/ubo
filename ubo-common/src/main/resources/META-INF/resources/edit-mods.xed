@@ -42,9 +42,9 @@
             </xed:bind>
 
             <div style="margin-top:2ex;">
-              <button class="roundedButton" type="submit" xed:target="cancel">Abbrechen</button>
-              <button class="roundedButton" type="submit" xed:target="layout">Vorschau</button>
-              <button class="roundedButton" type="submit" xed:target="servlet" xed:href="DozBibEntryServlet">Speichern</button>
+              <button class="action btn btn-sm btn-outline-primary mb-1" type="submit" xed:target="cancel">Abbrechen</button>
+              <button class="action btn btn-sm btn-outline-primary mb-1" type="submit" xed:target="layout">Vorschau</button>
+              <button class="action btn btn-sm btn-outline-primary mb-1" type="submit" xed:target="servlet" xed:href="DozBibEntryServlet">Speichern</button>
             </div>
           </div>
         </fieldset>
