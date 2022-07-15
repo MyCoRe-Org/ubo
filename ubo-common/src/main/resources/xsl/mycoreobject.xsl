@@ -362,7 +362,7 @@
 
 <xsl:template name="altmetrics">
   <xsl:if test="mods:identifier[contains('doi urn isbn pubmed',@type)]">
-    <script type='text/javascript' src='https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js' />
+    <script type='text/javascript' src='{$WebApplicationBaseURL}js/altmetrics.js' />
     <div class="altmetric-embed float-right" data-badge-type="donut" data-badge-popover="left" data-hide-no-mentions="true">
       <xsl:choose>
         <xsl:when test="mods:identifier[@type='doi']">

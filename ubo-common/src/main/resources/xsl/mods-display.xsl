@@ -1102,7 +1102,7 @@
     <a href="{$UBO.JOP.URL}?{$parameters}" title="{i18n:translate('ubo.jop')}">
       <xsl:value-of select="text()" />
       <xsl:text> </xsl:text>
-      <img style="float:none" data-src="https://services.dnb.de/fize-service/gvr/icon?{$parameters}" alt="{i18n:translate('ubo.jop')}" />
+      <img style="float:none" loading="lazy" data-src="https://services.dnb.de/fize-service/gvr/icon?{$parameters}" alt="{i18n:translate('ubo.jop')}" />
     </a>
   </xsl:template>
 
