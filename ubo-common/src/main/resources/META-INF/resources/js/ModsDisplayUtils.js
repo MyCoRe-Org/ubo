@@ -17,3 +17,9 @@ const ModsDisplayUtils = {
     ModsDisplayUtils.updateLabel(source, "button.view.all.authors");
   }
 }
+
+$(document).ready(function () {
+  $("img[data-src]").each(function () {
+    $(this).attr("src", $(this).attr("data-src"));
+  })
+});
