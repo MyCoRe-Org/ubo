@@ -539,8 +539,21 @@
   </xsl:template>
 
   <xsl:template match="mods:nameIdentifier">
-    <span class="nameIdentifier genericid" title="{@type}: {.}">
-      <a href="javascript:void(0)"><xsl:value-of select="@type" /></a>
+    <xsl:variable name="badge.label">
+      <xsl:choose>
+        <xsl:when test="i18n:exists(concat('badge.nameIdentifier.', @type))">
+          <xsl:value-of select="i18n:translate(concat('badge.nameIdentifier.', @type))"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="@type"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <span class="nameIdentifier genericid" title="{@type}: '{.}'">
+      <a href="javascript:void(0)">
+        <xsl:value-of select="$badge.label" />
+      </a>
     </span>
   </xsl:template>
 
