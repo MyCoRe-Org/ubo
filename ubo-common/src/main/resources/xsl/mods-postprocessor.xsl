@@ -12,6 +12,7 @@
   <xsl:include href="copynodes.xsl" />
 
   <xsl:param name="WebApplicationBaseURL" />
+  <xsl:param name="MCR.PICA2MODS.DATABASE" select="'gvk'" />
 
   <!-- Transform URLs containing DOI to identifier field of type DOI -->
   <xsl:template match="mods:mods">
@@ -66,5 +67,21 @@
       </xsl:for-each>
     </xsl:copy>
   </xsl:template>
-  
+
+  <xsl:template match="mods:identifier[@type='ppn']">
+    <xsl:variable name="database">
+      <xsl:choose>
+        <xsl:when test="@transliteration and string-length(@transliteration) &gt; 0">
+          <xsl:value-of select="@transliteration" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$MCR.PICA2MODS.DATABASE" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <mods:identifier type="uri">
+      <xsl:value-of select="concat('http://uri.gbv.de/document/', $database, ':ppn:',text())" />
+    </mods:identifier>
+  </xsl:template>
+
 </xsl:stylesheet>

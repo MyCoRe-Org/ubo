@@ -11,6 +11,8 @@
 
   <xsl:include href="copynodes.xsl" />
 
+  <xsl:param name="MCR.PICA2MODS.DATABASE" select="'gvk'" />
+
   <!-- In editor, categories are coded as <mods:classification classID="CLASSIFICATION">CATEGORYID</mods:classification> -->
   <!-- In persistent store, authorityURI and valueURI attributes instead are used-->
   <xsl:template match="mods:classification[@valueURI]">
@@ -76,6 +78,27 @@
 
   <xsl:template match="mods:list">
     <xsl:value-of select="text()" />
+  </xsl:template>
+
+  <xsl:template match="mods:identifier[@type='uri' and (contains(text(),'PPN') or contains(text(),'ppn'))]">
+    <xsl:if test="not(../mods:identifier[@type='ppn'])">
+      <mods:identifier type="ppn">
+        <xsl:attribute name="transliteration">
+          <xsl:choose>
+            <xsl:when test="contains(., ':ppn:')">
+              <xsl:value-of select="substring-after(substring-before(., ':ppn:'),'http://uri.gbv.de/document/')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$MCR.PICA2MODS.DATABASE"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:attribute>
+        <xsl:choose>
+          <xsl:when test="contains(., 'PPN=')"><xsl:value-of select="substring-after(., 'PPN=')" /></xsl:when>
+          <xsl:otherwise><xsl:value-of select="substring-after(., ':ppn:')"/></xsl:otherwise>
+        </xsl:choose>
+      </mods:identifier>
+    </xsl:if>
   </xsl:template>
 
 </xsl:stylesheet>

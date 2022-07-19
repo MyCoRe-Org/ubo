@@ -286,6 +286,11 @@
     <field name="pub_id_{@type}">
       <xsl:value-of select="text()" />
     </field>
+    <xsl:if test="@type='uri' and contains(text(), 'uri.gbv.de/document') and contains(text(), ':ppn:')">
+      <field name="id_ppn">
+        <xsl:value-of select="substring-after(text(), ':ppn:')" />
+      </field>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="mods:relatedItem[(@type='host') or (@type='series')]/mods:identifier[@type]" mode="solrField">
