@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <xsl:stylesheet version="1.0"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:mods="http://www.loc.gov/mods/v3"
-  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:str="http://exslt.org/strings"
-  exclude-result-prefixes="mods xlink str">
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:mods="http://www.loc.gov/mods/v3"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:str="http://exslt.org/strings"
+                exclude-result-prefixes="mods xlink str">
 
   <xsl:import href="xslImport:solr-document:ubo-solr.xsl" />
 
@@ -40,7 +39,6 @@
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:genre[@type='intern']" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="solrField" />
-    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'partOf')]" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:titleInfo[not(@type)]" mode="solrField.host" />
     <xsl:apply-templates select="mods:relatedItem[@type='host'][mods:genre='journal']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:part" mode="solrField" />
@@ -59,6 +57,7 @@
     <xsl:apply-templates select="mods:extension/dedup" mode="solrField" />
     <xsl:call-template name="sortby_person" />
     <xsl:call-template name="oa" />
+    <xsl:call-template name="partOf" />
   </xsl:template>
 
   <xsl:template name="sortby_person">
@@ -259,6 +258,19 @@
     <field name="subject">
       <xsl:value-of select="substring-after(@valueURI,'#')" />
     </field>
+  </xsl:template>
+
+  <xsl:template name="partOf">
+    <xsl:choose>
+      <xsl:when test="mods:classification[contains(@authorityURI,'partOf')]">
+        <xsl:apply-templates select="mods:classification[contains(@authorityURI,'partOf')]" mode="solrField" />
+      </xsl:when>
+      <xsl:otherwise>
+        <field name="partOf">
+          <xsl:value-of select="'unknown'" />
+        </field>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="mods:classification[contains(@authorityURI,'partOf')]" mode="solrField">

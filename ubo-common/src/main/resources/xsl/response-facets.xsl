@@ -221,6 +221,9 @@
       <xsl:when test="$type='status'">
         <xsl:value-of select="i18n:translate(concat('search.dozbib.status.',$value))"/>
       </xsl:when>
+      <xsl:when test="$type='partOf'">
+        <xsl:value-of select="i18n:translate(concat('search.dozbib.partOf.', $value))"/>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$value"/>
       </xsl:otherwise>
