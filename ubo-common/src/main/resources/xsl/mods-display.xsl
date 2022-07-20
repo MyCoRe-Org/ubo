@@ -10,7 +10,8 @@
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:mcr="http://www.mycore.org/"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  exclude-result-prefixes="xsl xalan xlink i18n encoder mcr check cerif">
+  xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
+  exclude-result-prefixes="xsl xalan xlink i18n encoder mcr mcrxsl check cerif">
 
   <xsl:include href="shelfmark-normalization.xsl" />
   <xsl:include href="output-category.xsl" />
@@ -22,7 +23,6 @@
   <xsl:param name="UBO.LSF.Link" />
   <xsl:param name="UBO.JOP.Parameters" />
   <xsl:param name="UBO.JOP.URL" />
-  <xsl:param name="CurrentLang" />
 
   <!-- Expect one more author to be displayed as the last author is always getting displayed -->
   <xsl:param name="UBO.Initially.Visible.Authors" select="14" />
@@ -30,13 +30,11 @@
 <!-- ============ Katalogsuche Basis-URLs ============ -->
   <xsl:param name="UBO.Primo.Search.Link" />
   <xsl:param name="UBO.ISBN.Search.Link" />
-
   <xsl:param name="MCR.ORCID.LinkURL"/>
 
-
-  <xsl:variable name="genres" select="document('classification:metadata:-1:children:ubogenre')/mycoreclass/categories" />
-  <xsl:variable name="origin" select="document('classification:metadata:-1:children:ORIGIN')/mycoreclass/categories" />
-  <xsl:variable name="oa"     select="document('classification:metadata:-1:children:oa')/mycoreclass/categories" />
+  <xsl:variable name="genres"                select="document('classification:metadata:-1:children:ubogenre')/mycoreclass/categories" />
+  <xsl:variable name="origin"                select="document('classification:metadata:-1:children:ORIGIN')/mycoreclass/categories" />
+  <xsl:variable name="oa"                    select="document('classification:metadata:-1:children:oa')/mycoreclass/categories" />
   <xsl:variable name="accessrights"          select="document('notnull:classification:metadata:-1:children:accessrights')/mycoreclass/categories" />
   <xsl:variable name="peerreviewed"          select="document('notnull:classification:metadata:-1:children:peerreviewed')/mycoreclass/categories" />
   <xsl:variable name="partner"               select="document('notnull:classification:metadata:-1:children:partner')/mycoreclass/categories" />
@@ -175,6 +173,57 @@
       <div class="col-9">
         <xsl:variable name="category" select="$partOf//category[@ID=substring-after(current()/@valueURI,'#')]" />
         <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
+      </div>
+    </div>
+  </xsl:template>
+
+  <!-- ========== Ausgabe Datenträgertyp ========== -->
+
+  <xsl:template match="mods:classification[contains(@authorityURI,'mediaType')]" mode="details">
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="concat(i18n:translate('ubo.mediaType'), ':')" />
+      </div>
+      <div class="col-9">
+        <xsl:value-of select="mcrxsl:getDisplayName('mediaType', substring-after(current()/@valueURI,'#'))"/>
+      </div>
+    </div>
+  </xsl:template>
+
+  <!-- ========== Ausgabe Zweitveröffentlichung ========== -->
+
+  <xsl:template match="mods:classification[contains(@authorityURI,'republication')]" mode="details">
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="concat(i18n:translate('ubo.republication'), ':')" />
+      </div>
+      <div class="col-9">
+        <xsl:value-of select="mcrxsl:getDisplayName('republication', substring-after(current()/@valueURI,'#'))"/>
+      </div>
+    </div>
+  </xsl:template>
+
+  <!-- ========== Ausgabe Lizenz ========== -->
+
+  <xsl:template match="mods:accessCondition[@classID='licenses']" mode="details">
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="concat(i18n:translate('ubo.licenses'), ':')" />
+      </div>
+      <div class="col-9">
+        <xsl:value-of select="mcrxsl:getDisplayName('licenses', current()/text())"/>
+      </div>
+    </div>
+  </xsl:template>
+
+  <!-- ========== Ausgabe Ressourcentyp ========== -->
+  <xsl:template match="mods:typeOfResource" mode="details">
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="concat(i18n:translate('ubo.typeOfResource'), ':')" />
+      </div>
+      <div class="col-9">
+        <xsl:value-of select="mcrxsl:getDisplayName('typeOfResource', current()/text())"/>
       </div>
     </div>
   </xsl:template>
@@ -928,6 +977,10 @@
     <xsl:apply-templates select="mods:language" mode="details" />
     <xsl:apply-templates select="mods:relatedItem" mode="details" />
     <xsl:call-template name="subject.topic" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'mediaType')]" mode="details" />
+    <xsl:apply-templates select="mods:typeOfResource" mode="details" />
+    <xsl:apply-templates select="mods:accessCondition[@classID]" mode="details" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'republication')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'accessrights')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'peerreviewed')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'partner')]" mode="details" />
