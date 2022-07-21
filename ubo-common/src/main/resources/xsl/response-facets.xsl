@@ -7,8 +7,8 @@
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:encoder="xalan://java.net.URLEncoder"
   xmlns:str="xalan://java.lang.String"
-  exclude-result-prefixes="xsl xalan i18n encoder"
->
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+  exclude-result-prefixes="xsl xalan i18n encoder mcrxml str">
 
 <xsl:param name="RequestURL" />
 <xsl:param name="ServletsBaseURL" />
@@ -223,6 +223,9 @@
       </xsl:when>
       <xsl:when test="$type='partOf'">
         <xsl:value-of select="i18n:translate(concat('search.dozbib.partOf.', $value))"/>
+      </xsl:when>
+      <xsl:when test="$type='project'">
+        <xsl:value-of select="mcrxml:getDisplayName('project', $value)"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$value"/>
