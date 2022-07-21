@@ -1088,6 +1088,11 @@
     <xsl:apply-templates select="document($uri)/mycoreclass/categories/category[1]" />
   </xsl:template>
 
+  <xsl:template match="mods:roleTerm[@type='code' and @authority='marcrelator_corporation']">
+    <xsl:variable name="uri" select="concat('classification:metadata:0:children:marcrelator_corporation:',.)" />
+    <xsl:apply-templates select="document($uri)/mycoreclass/categories/category[1]" />
+  </xsl:template>
+
   <xsl:template match="category">
     <xsl:choose>
       <xsl:when test="label[lang($CurrentLang)]">
