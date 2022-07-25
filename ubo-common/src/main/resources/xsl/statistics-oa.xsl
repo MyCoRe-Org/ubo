@@ -19,6 +19,10 @@
   <xsl:variable name="facets" select="/response/lst[@name='facets']/lst[@name='year']" />
 
   <xsl:template match="/">
+    <xsl:apply-templates select="." mode="oa-statistics"/>
+  </xsl:template>
+
+  <xsl:template match="/" mode="oa-statistics">
     <xsl:for-each select="$facets">
       <section class="card mb-3">
         <div class="card-body">
