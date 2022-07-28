@@ -32,8 +32,10 @@
                 <label for="subject" class="mycore-form-label">
                   <xed:output i18n="ubo.subject" />:
                 </label>
-                <select class="{$xed-validation-marker} col-7 form-control custom-select">
-                  <option value=""><xed:output i18n="search.select" /></option>
+                <select class="autocomplete {$xed-validation-marker} col-7 form-control custom-select">
+                  <option value="">
+                    <xed:output i18n="search.select" />
+                  </option>
                   <xed:include uri="xslStyle:items2options:classification:editor:-1:children:fachreferate" />
                 </select>
                 <xed:controls />
