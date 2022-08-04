@@ -1253,6 +1253,12 @@
     </a>
   </xsl:template>
 
+  <xsl:template match="mods:identifier[@type='oclc']">
+    <a href="https://www.worldcat.org/oclc/{text()}">
+      <xsl:value-of select="text()" />
+    </a>
+  </xsl:template>
+
   <!-- ========== URI / PPN ========== -->
 
   <xsl:template match="mods:identifier[@type='uri']">
