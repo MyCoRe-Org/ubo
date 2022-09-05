@@ -654,7 +654,7 @@
   <xsl:template match="mods:edition" mode="details">
     <div class="row">
       <div class="col-3">
-        <xsl:value-of select="i18n:translate('ubo.edition')" />
+        <xsl:value-of select="concat(i18n:translate('ubo.edition'), ':')" />
       </div>
       <div class="col-9">
         <xsl:apply-templates select="." />
@@ -917,7 +917,7 @@
     <div class="ubo_related_details">
       <div class="row">
         <div class="col-3 label">
-          <xsl:value-of select="i18n:translate(concat('ubo.relatedItem.',@type))" />
+          <xsl:value-of select="concat(i18n:translate(concat('ubo.relatedItem.',@type)), ':')" />
         </div>
         <div class="col-9">
           <a href="{$ServletsBaseURL}DozBibEntryServlet?id={@xlink:href}">
