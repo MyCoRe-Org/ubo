@@ -80,15 +80,25 @@
   <xsl:variable name="authorityOA">https://bibliographie.ub.uni-due.de/classifications/oa</xsl:variable>
 
   <xsl:template name="oa_publication">
-    <xsl:if test="(is_oa='true')">
-      <mods:classification authorityURI="{$authorityOA}" valueURI="{$authorityOA}#{oa_status}" />
-    </xsl:if>
+    <xsl:choose>
+      <xsl:when test="(is_oa='true')">
+        <mods:classification authorityURI="{$authorityOA}" valueURI="{$authorityOA}#{oa_status}" />
+      </xsl:when>
+      <xsl:otherwise>
+        <mods:classification authorityURI="{$authorityOA}" valueURI="{$authorityOA}#{oa_status}" />
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="oa_journal">
-    <xsl:if test="(is_oa='true') and ((journal_is_in_doaj='true') or (journal_is_oa='true'))">
-      <mods:classification authorityURI="{$authorityOA}" valueURI="{$authorityOA}#gold" />
-    </xsl:if>
+    <xsl:choose>
+      <xsl:when test="(is_oa='true') and ((journal_is_in_doaj='true') or (journal_is_oa='true'))">
+        <mods:classification authorityURI="{$authorityOA}" valueURI="{$authorityOA}#gold" />
+      </xsl:when>
+      <xsl:otherwise>
+        <mods:classification authorityURI="{$authorityOA}" valueURI="{$authorityOA}#{oa_status}" />
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="url_for_pdf">
