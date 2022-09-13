@@ -6,7 +6,7 @@
 
   <categories>
     <category ID="article">
-      <label xml:lang="x-hosts" text="journal blog standalone" />
+      <label xml:lang="x-hosts" text="journal blog newspaper standalone" />
       <label xml:lang="de" text="Artikel/Aufsatz" />
       <label xml:lang="en" text="article/chapter" />
       <label xml:lang="x-color" text="#4572A7" />
@@ -68,6 +68,12 @@
         <label xml:lang="x-legacy" text="doctoralThesis" />
         <label xml:lang="x-color" text="#89A54E" />
       </category>
+      <category ID="habilitation">
+        <label xml:lang="x-hosts" text="standalone" />
+        <label xml:lang="x-marcgt" text="thesis" />
+        <label xml:lang="en" text="Habilitation" />
+        <label xml:lang="de" text="Habilitation" />               
+      </category>      
     </category>
     <category ID="collection">
       <label xml:lang="de" text="Sammelwerk" />
@@ -94,6 +100,12 @@
         <label xml:lang="de" text="Lexikon" />
         <label xml:lang="x-color" text="#4572A7" />
       </category>
+      <category ID="special_issue">
+        <label xml:lang="x-hosts" text="standalone" />       
+        <label xml:lang="x-marcgt" text="book" />
+        <label xml:lang="de" text="Sonderheft" />
+        <label xml:lang="en" text="Special Issue" />
+      </category>
     </category>
     <category ID="book">
       <label xml:lang="x-hosts" text="standalone" />
@@ -113,6 +125,12 @@
       <label xml:lang="en" text="blog" />
       <label xml:lang="x-color" text="#AA4643" />
     </category>
+    <category ID="newspaper">
+      <label xml:lang="x-hosts" text="standalone" />
+      <label xml:lang="de" text="Zeitung" />
+      <label xml:lang="en" text="Newspaper" />
+      <label xml:lang="x-marcgt" text="newspaper" />
+    </category>
     <category ID="series">
       <label xml:lang="x-hosts" text="standalone" />
       <label xml:lang="de" text="Serie" />
@@ -126,7 +144,7 @@
       <label xml:lang="x-color" text="#DB843D" />
     </category>
     <category ID="interview">
-      <label xml:lang="x-hosts" text="journal standalone" />
+      <label xml:lang="x-hosts" text="journal newspaper standalone" />
       <label xml:lang="en" text="Interview" />
       <label xml:lang="de" text="Interview" />
       <label xml:lang="x-color" text="#A47D7C" />
@@ -135,7 +153,7 @@
       <label xml:lang="x-hosts" text="standalone" />
       <label xml:lang="en" text="Research Paper" />
       <label xml:lang="de" text="Forschungsbericht" />
-      <label xml:lang="x-marcgt" text="reporting" />
+      <label xml:lang="x-marcgt" text="technical_report" />
       <label xml:lang="x-color" text="#AA4643" />
     </category>
     <category ID="workingpaper">
@@ -145,5 +163,22 @@
       <label xml:lang="x-marcgt" text="book" />
       <label xml:lang="x-color" text="#80699B" />
     </category>
+    <category ID="report">
+      <label xml:lang="x-hosts" text="standalone" />
+      <label xml:lang="de" text="Report" />
+      <label xml:lang="en" text="Report" />
+      <label xml:lang="x-marcgt" text="technical_report" />
+    </category>
+    <category ID="oer">
+      <label xml:lang="x-hosts" text="standalone" />
+      <label xml:lang="de" text=" OER - Lehrmaterial" />
+      <label xml:lang="en" text=" OER - Teaching material" />
+      <label xml:lang="x-marcgt" text="book" />      
+    </category>
+    <category ID="research_data">
+      <label xml:lang="x-hosts" text="standalone" />
+      <label xml:lang="de" text="Forschungsdaten" />
+      <label xml:lang="en" text="research data" />
+  </category>
   </categories>
 </mycoreclass>
