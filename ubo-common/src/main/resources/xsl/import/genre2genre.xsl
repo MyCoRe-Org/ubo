@@ -66,7 +66,7 @@
       <xsl:when test="$genre='dissertation'">dissertation</xsl:when>
       <xsl:when test="$genre='working paper'">workingpaper</xsl:when>
       <xsl:when test="$genre='review'">review_article</xsl:when>
-      <xsl:when test="$genre='report'">article</xsl:when>
+      <xsl:when test="$genre='report'">report</xsl:when>
       <xsl:when test="$genre='short survey'">article</xsl:when>
       <xsl:when test="$genre='book chapter'">chapter</xsl:when>
       <xsl:when test="$genre='book-chapter'">chapter</xsl:when>
@@ -96,7 +96,7 @@
       <xsl:when test="$genre='published erratum'">article</xsl:when>
       <xsl:when test="$genre='randomized controlled trial'">article</xsl:when> 
       <xsl:when test="$genre='study characteristics'">article</xsl:when>
-      <xsl:when test="$genre='technical report'">article</xsl:when>
+      <xsl:when test="$genre='technical report'">report</xsl:when>
       <xsl:when test="$genre='conference'">chapter</xsl:when>
       <xsl:when test="$genre='incollection'">chapter</xsl:when>
       <xsl:when test="$genre='inproceedings'">chapter</xsl:when>
@@ -108,6 +108,7 @@
       <xsl:when test="$genre='techreport'">book</xsl:when>
       <xsl:when test="$genre='misc'">book</xsl:when>
       <xsl:when test="$genre='unpublished'">book</xsl:when>
+      <xsl:when test="$genre='dataset'">research_data</xsl:when>
       <xsl:when test="$genre='other'">book</xsl:when>
     </xsl:choose>
     <xsl:text> </xsl:text>
