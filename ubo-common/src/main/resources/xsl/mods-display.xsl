@@ -1061,7 +1061,7 @@
 
   <!-- ========== Haupttitel ========== -->
   <xsl:template match="mods:title">
-    <xsl:value-of select="text()" />
+    <xsl:value-of select="text()" disable-output-escaping="yes" />
   </xsl:template>
 
   <!-- ========== Untertitel ========== -->
@@ -1072,7 +1072,7 @@
       <xsl:text> :</xsl:text>
     </xsl:if>
     <xsl:text> </xsl:text>
-    <xsl:value-of select="text()" />
+    <xsl:value-of select="text()" disable-output-escaping="yes"/>
   </xsl:template>
 
   <!-- ========== Typ des Titels: Haupttitel, abgekürzt, übersetzt, ... ========== -->
