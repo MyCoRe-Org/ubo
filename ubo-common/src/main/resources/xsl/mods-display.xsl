@@ -1084,16 +1084,18 @@
 
   <!-- ========== Rolle einer Person oder Körperschaft ========== -->
   <xsl:template match="mods:roleTerm[@type='code' and @authority='marcrelator']">
-    <xsl:choose>
-      <xsl:when test="../.././@type[. = 'corporate'] and mcrxsl:isCategoryID('marcrelator_corporation', .)">
-        <xsl:variable name="uri" select="concat('classification:metadata:0:children:marcrelator_corporation:', .)" />
-        <xsl:apply-templates select="document($uri)/mycoreclass/categories/category[1]" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:variable name="uri" select="concat('classification:metadata:0:children:marcrelator:', .)" />
-        <xsl:apply-templates select="document($uri)/mycoreclass/categories/category[1]" />
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:variable name="uri">
+      <xsl:choose>
+        <xsl:when test="../.././@type[. = 'corporate'] and mcrxsl:isCategoryID('marcrelator_corporation', .)">
+          <xsl:value-of select="concat('classification:metadata:0:children:marcrelator_corporation:', .)" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat('classification:metadata:0:children:marcrelator:', .)" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:apply-templates select="document($uri)/mycoreclass/categories/category[1]" />
   </xsl:template>
 
   <xsl:template match="category">
