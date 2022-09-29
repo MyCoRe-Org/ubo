@@ -1034,7 +1034,7 @@
         <xsl:text>:</xsl:text>
       </h3>
       <p>
-        <xsl:value-of select="text()" />
+        <xsl:value-of select="text()" disable-output-escaping="yes"/>
       </p>
     </div>
   </xsl:template>
