@@ -24,6 +24,7 @@ class CategoryAdder {
     public CategoryAdder(Element parameters) {
         buildClassificationElement(parameters, "subject", "fachreferate");
         buildClassificationElement(parameters, "origin", "ORIGIN");
+        buildClassificationElement(parameters, "project", "project");
     }
 
     private void buildClassificationElement(Element parameters, String parameterName, String classificationID) {
