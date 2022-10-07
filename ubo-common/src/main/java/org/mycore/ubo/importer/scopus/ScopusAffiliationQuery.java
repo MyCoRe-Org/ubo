@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -59,7 +60,8 @@ public class ScopusAffiliationQuery extends AbstractScopusQuery{
     }
 
     protected URL buildAffiliationQuery() throws MalformedURLException {
-        String queryString = String.format(AFFILIATION_QUERY_PATTERN, getAffiliation(), API_KEY, INST_TOKEN,getCount(), getStart());
+        String queryString = String.format(Locale.ROOT, AFFILIATION_QUERY_PATTERN, getAffiliation(), API_KEY,
+            INST_TOKEN, getCount(), getStart());
         return new URL(API_URL + queryString);
     }
 

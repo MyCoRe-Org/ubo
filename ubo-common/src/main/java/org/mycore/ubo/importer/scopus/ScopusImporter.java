@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -99,7 +100,7 @@ class ScopusImporter {
     }
 
     private Element retrieveAndConvertPublication(String externalID) {
-        String uri = MessageFormat.format(IMPORT_URI, externalID);
+        String uri = new MessageFormat(IMPORT_URI, Locale.ROOT).format(externalID);
         return MCRURIResolver.instance().resolve(uri);
     }
 
@@ -107,7 +108,8 @@ class ScopusImporter {
     private static boolean shouldIgnore(Element publication) {
         return !publication.getDescendants(new ElementFilter("genre", MCRConstants.MODS_NAMESPACE)).hasNext();
     }
-    private final static SimpleDateFormat ID_BUILDER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    private final static SimpleDateFormat ID_BUILDER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT);
 
     private MCRObject buildMCRObject(Element publicationXML) {
         MCRObject obj = new MCRObject(new Document(publicationXML));

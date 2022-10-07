@@ -25,6 +25,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -60,7 +61,8 @@ public class PaginatedScopusQuery extends ScopusQuery {
 
     private URL buildQueryURL(int start) throws MalformedURLException {
         String encodedQuery = URLEncoder.encode(getQuery(), StandardCharsets.UTF_8);
-        String queryString = String.format(QUERY_PATTERN, encodedQuery, API_KEY, INST_TOKEN, getCount(), start);
+        String queryString
+            = String.format(Locale.ROOT, QUERY_PATTERN, encodedQuery, API_KEY, INST_TOKEN, getCount(), start);
         return new URL(API_URL + queryString);
     }
 

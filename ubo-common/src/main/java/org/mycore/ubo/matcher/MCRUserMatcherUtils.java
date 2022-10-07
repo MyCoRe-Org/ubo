@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.SortedSet;
 
@@ -136,7 +137,7 @@ public class MCRUserMatcherUtils {
         String userName = "";
 
         if((givenNameElem != null) && (familyNameElem != null)) {
-            userName = (givenNameElem.getText() + "_" + familyNameElem.getText()).toLowerCase();
+            userName = (givenNameElem.getText() + "_" + familyNameElem.getText()).toLowerCase(Locale.ROOT);
         }
 
         return userName;

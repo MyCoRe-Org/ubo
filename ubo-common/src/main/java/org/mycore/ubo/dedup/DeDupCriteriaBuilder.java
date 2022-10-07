@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.jdom2.Document;
@@ -194,7 +195,7 @@ public class DeDupCriteriaBuilder {
      * Accents, umlauts, case are normalized. Punctuation and non-alphabetic/non-digit characters are removed.
      */
     public static String normalizeText(String text) {
-        text = text.toLowerCase();
+        text = text.toLowerCase(Locale.ROOT);
         text = new MCRHyphenNormalizer().normalize(text).replace("-", " ");
         text = Normalizer.normalize(text, Form.NFD).replaceAll("\\p{M}", ""); // canonical decomposition, then remove accents
         text = text.replace("ue", "u").replace("oe", "o").replace("ae", "a").replace("ß", "s").replace("ss", "s");

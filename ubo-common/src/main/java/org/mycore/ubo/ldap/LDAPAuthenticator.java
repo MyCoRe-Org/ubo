@@ -1,6 +1,7 @@
 package org.mycore.ubo.ldap;
 
 import java.util.Hashtable;
+import java.util.Locale;
 
 import javax.naming.AuthenticationException;
 import javax.naming.Context;
@@ -110,7 +111,7 @@ public class LDAPAuthenticator {
         try {
             Hashtable<String, String> env = (Hashtable<String, String>) (ldapEnvironment.clone());
             if (uid != null && !uid.isBlank() && credentials != null && !credentials.isBlank()) {
-                env.put(Context.SECURITY_PRINCIPAL, String.format(dn, uid));
+                env.put(Context.SECURITY_PRINCIPAL, String.format(Locale.ROOT, dn, uid));
                 env.put(Context.SECURITY_CREDENTIALS, credentials);
             }
 

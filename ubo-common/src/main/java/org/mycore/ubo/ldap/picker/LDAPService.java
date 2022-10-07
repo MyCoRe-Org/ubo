@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -170,7 +171,8 @@ public class LDAPService implements IdentityService {
                 // but we dont want that in our results-xml, we have to remove it
                 mcrAttributeName.replace("id_", "");
                 String attributeValue = mcrAttribute.getValue();
-                person.addContent(new Element(mcrAttributeName.toLowerCase()).setText(attributeValue.trim()));
+                person
+                    .addContent(new Element(mcrAttributeName.toLowerCase(Locale.ROOT)).setText(attributeValue.trim()));
             }
             // when converting LDAP attributes to MCRUserAttributes, any non-configured attributes might get lost
             // at this point we want to make sure, that the first- and lastname get delivered

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -91,7 +92,7 @@ public class DozBibCommands extends MCRAbstractCommands {
 
     /** Exports all entries as MODS dump to a zipped xml file in the given directory */
     public static void exportMODS(String dir) throws Exception {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.ROOT);
         Date now = new Date();
         String date = df.format(now);
         String fileName = "export-" + date + ".zip";
@@ -197,18 +198,19 @@ public class DozBibCommands extends MCRAbstractCommands {
     public static void importMODSCollection(String fileName) throws Exception {
         File file = new File(fileName);
         if (!file.isFile()) {
-            throw new MCRException(MessageFormat.format("File {0} is not a file.", file.getAbsolutePath()));
+            throw new MCRException(String.format(Locale.ROOT, "File %s is not a file.", file.getAbsolutePath()));
         }
         SAXBuilder s = new SAXBuilder(XMLReaders.NONVALIDATING, null, null);
         Document doc = s.build(file);
         MCRXMLHelper.validate(doc, MCRMODSCommands.MODS_V3_XSD_URI);
         Element root = doc.getRootElement();
         if (!root.getNamespace().equals(MCRConstants.MODS_NAMESPACE)) {
-            throw new MCRException(MessageFormat.format("File {0} is not a MODS document.", file.getAbsolutePath()));
+            throw new MCRException(
+                String.format(Locale.ROOT, "File %s is not a MODS document.", file.getAbsolutePath()));
         }
         if (!root.getName().equals("modsCollection")) {
             throw new MCRException(
-                MessageFormat.format("File {0} does not contain a mods:modsCollection.", file.getAbsolutePath()));
+                String.format(Locale.ROOT, "File %s does not contain a mods:modsCollection.", file.getAbsolutePath()));
         }
         for (Element mods : root.getChildren("mods", MCRConstants.MODS_NAMESPACE)) {
             MCRMODSWrapper wrapper = new MCRMODSWrapper();

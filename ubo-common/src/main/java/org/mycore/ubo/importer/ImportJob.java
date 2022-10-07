@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
@@ -43,7 +44,7 @@ public abstract class ImportJob {
 
     private static final Logger LOGGER = LogManager.getLogger(ImportJob.class);
 
-    private static final SimpleDateFormat ID_BUILDER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat ID_BUILDER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT);
 
     private static final String PROJECT_ID = MCRConfiguration2.getString("UBO.projectid.default").get();
 

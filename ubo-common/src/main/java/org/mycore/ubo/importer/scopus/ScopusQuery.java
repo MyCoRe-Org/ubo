@@ -6,6 +6,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Locale;
 
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
@@ -43,7 +44,7 @@ public class ScopusQuery extends AbstractScopusQuery{
 
     private URL buildQueryURL() throws MalformedURLException {
         String encodedQuery = URLEncoder.encode(getQuery(), StandardCharsets.UTF_8);
-        String queryString = String.format(QUERY_PATTERN, encodedQuery, API_KEY, INST_TOKEN, getCount());
+        String queryString = String.format(Locale.ROOT, QUERY_PATTERN, encodedQuery, API_KEY, INST_TOKEN, getCount());
         return new URL(API_URL + queryString);
     }
 

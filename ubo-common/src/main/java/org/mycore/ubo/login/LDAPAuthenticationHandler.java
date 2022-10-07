@@ -125,7 +125,7 @@ public class LDAPAuthenticationHandler extends AuthenticationHandler {
      */
     private List<LDAPObject> searchUserInLDAP(LdapContext ctx, MCRUser user) throws NamingException {
         String uid = user.getUserName();
-        String principal = String.format(baseDN, uid);
+        String principal = String.format(Locale.ROOT, baseDN, uid);
         String filter = String.format(Locale.ROOT, uidFilter, uid);
 
         return new LDAPSearcher().search(ctx, principal, filter);

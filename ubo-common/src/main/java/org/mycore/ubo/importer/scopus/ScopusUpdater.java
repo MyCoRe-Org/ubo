@@ -2,10 +2,16 @@ package org.mycore.ubo.importer.scopus;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.MonthDay;
+import java.time.temporal.TemporalAmount;
+import java.time.temporal.TemporalUnit;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 public class ScopusUpdater {
@@ -42,13 +48,13 @@ public class ScopusUpdater {
 
     private static String buildAffiliationCondition(String affiliationIDs) {
         return Arrays.stream(affiliationIDs.split(","))
-            .map(a -> String.format("AF-ID(%1s)", a.trim()))
+            .map(a -> String.format(Locale.ROOT, "AF-ID(%1s)", a.trim()))
             .collect(Collectors.joining(" OR ", "(", ")"));
     }
 
     private static String buildDateCondition(int daysOffset) {
-        GregorianCalendar day = new GregorianCalendar();
+        GregorianCalendar day = new GregorianCalendar(TimeZone.getDefault(), Locale.ROOT);
         day.add(Calendar.DATE, -daysOffset);
-        return String.format("orig-load-date aft %1$tY%1$tm%1$td", day);
+        return String.format(Locale.ROOT, "orig-load-date aft %1$tY%1$tm%1$td", day);
     }
 }

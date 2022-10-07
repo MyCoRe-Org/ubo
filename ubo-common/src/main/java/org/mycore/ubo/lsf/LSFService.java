@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -313,7 +314,7 @@ public class LSFService implements IdentityService {
                         continue;
                     }
 
-                    person.addContent(new Element(name.toLowerCase()).setText(value.trim()));
+                    person.addContent(new Element(name.toLowerCase(Locale.ROOT)).setText(value.trim()));
                 }
 
                 if (person.getContentSize() > 0) {
@@ -370,7 +371,7 @@ public class LSFService implements IdentityService {
     }
 
     private String[] getNormalizedNameParts(String text) {
-        text = text.toLowerCase();
+        text = text.toLowerCase(Locale.ROOT);
         text = new MCRHyphenNormalizer().normalize(text).replace("-", " ");
         text = Normalizer.normalize(text, Form.NFD).replaceAll("\\p{M}", ""); // canonical decomposition, then remove accents
         text = text.replace("ue", "u").replace("oe", "o").replace("ae", "a").replace("ß", "s").replace("ss", "s");

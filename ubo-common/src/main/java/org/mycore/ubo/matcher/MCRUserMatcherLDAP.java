@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -514,14 +515,14 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
                         forms.add(Normalizer.normalize(value, Normalizer.Form.NFD).replaceAll("\\p{M}", ""));
                     }
                     return forms.stream();
-                }).map(f -> String.format(innerTemplate, attributeName, f))
+                }).map(f -> String.format(Locale.ROOT, innerTemplate, attributeName, f))
                 .forEach(searchFilterInner::append);
 
             if (extendedAttributes) {
                 searchFilterInner.append(")");
             }
         }
-        return String.format(searchFilterBaseTemplate, searchFilterInner);
+        return String.format(Locale.ROOT, searchFilterBaseTemplate, searchFilterInner);
     }
 
     /**
