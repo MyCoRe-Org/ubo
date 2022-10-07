@@ -726,6 +726,20 @@
     </div>
   </xsl:template>
 
+  <!-- ========== Jahr der Erstanmeldung ========== -->
+  <xsl:template match="mods:originInfo[@eventType='application']/mods:dateIssued" mode="details">
+    <div class="row">
+      <div class="col-3">
+        <xsl:value-of select="i18n:translate('ubo.patent.application')" />
+        <xsl:text>:</xsl:text>
+      </div>
+      <div class="col-9">
+        <xsl:value-of select="text()" />
+      </div>
+    </div>
+  </xsl:template>
+
+
   <!-- ========== Sendedatum ========== -->
   <xsl:template match="mods:dateIssued[(../../mods:genre='audio') or (../../mods:genre='video') or (../../mods:genre='broadcasting')]" mode="details">
     <div class="row">
