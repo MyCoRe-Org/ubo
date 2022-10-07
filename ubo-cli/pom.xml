@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.mycore.ubo</groupId>
     <artifactId>ubo</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>prod-SNAPSHOT</version>
   </parent>
   <artifactId>ubo-cli</artifactId>
   <packaging>pom</packaging>
