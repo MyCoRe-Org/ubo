@@ -71,6 +71,12 @@
             </execution>
           </executions>
         </plugin>
+        <plugin>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <configuration>
+            <doclint>all,-missing</doclint>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>

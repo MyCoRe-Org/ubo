@@ -31,7 +31,7 @@ import org.mycore.frontend.basket.MCRBasketEntry;
  * contributors of all bibliography entries currently in the basket.
  * The xml returned is taken in edit-contributors.xml to
  * edit the names and PID assignment of contributors in the basket.
- * It maps URIs of scheme nameLister:<anyDummyValue>.
+ * It maps URIs of scheme nameLister:&lt;anyDummyValue&gt;.
  * 
  * @author Frank L\u00FCtzenkirchen
  */

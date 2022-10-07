@@ -27,7 +27,7 @@ import org.mycore.common.xml.MCRURIResolver;
  * 
  * lsf:pid=4711
  *   returns the metadata of person 4711
- * lsf:lastName=Meier&firstName=E
+ * lsf:lastName=Meier&amp;firstName=E
  *   returns a list of matching person entries 
  *   
  * To use this resolver add property:

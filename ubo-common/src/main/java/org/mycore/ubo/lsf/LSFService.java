@@ -133,8 +133,7 @@ public class LSFService implements IdentityService {
      * Returns an XML element containing a list of all person data found in HIS LSF for the given name.
      * The method searches in the field personal.nachname.
      *
-     * @param attributes The last name (or part of it) of the person to search for.
-     * @param attributes The first name of the person to search for.
+     * @param attributes The last name (or part of it) of the person to search for. The first name of the person to search for.
      */
     public Element searchPerson(Map<String, String> attributes) {
         Element results = new Element("results");

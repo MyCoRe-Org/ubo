@@ -134,18 +134,18 @@ public class LDAPService implements IdentityService {
     /**
      *
      * Format of returned XML:
-     * <results>
-     *    <person>
-     *       <attribute1>some_value1</attribute1>
-     *       <attribute2>some_value2</attribute2>
-     *       <identity>some configurable identity string (email, affiliation etc.)</identity>
-     *    </person>
-     *    <person>
-     *       <attribute1>other_value1</attribute1>
-     *       <attribute2>other_value2</attribute2>
-     *       <identity>some configurable identity string (email, affiliation etc.)</identity>
-     *    </person>
-     * </results>
+     * &lt;results&gt;
+     *    &lt;person&gt;
+     *       &lt;attribute1&gt;some_value1&lt;/attribute1&gt;
+     *       &lt;attribute2&gt;some_value2&lt;/attribute2&gt;
+     *       &lt;identity&gt;some configurable identity string (email, affiliation etc.)&lt;/identity&gt;
+     *    &lt;/person&gt;
+     *    &lt;person&gt;
+     *       &lt;attribute1&gt;other_value1&lt;/attribute1&gt;
+     *       &lt;attribute2&gt;other_value2&lt;/attribute2&gt;
+     *       &lt;identity&gt;some configurable identity string (email, affiliation etc.)&lt;/identity&gt;
+     *    &lt;/person&gt;
+     * &lt;/results&gt;
      */
     @Override
     public Element searchPerson(Map<String, String> paramMap) {

@@ -45,7 +45,7 @@ import org.mycore.ubo.matcher.MCRUserMatcherUtils;
  *
  * 4. Persist all new MCRUsers ONLY if they where matched/enriched in 2.1. or in 3.
  *
- * 5. Extend the mods:name -> mods:nameIdentifier element of the publication with the configured "lead-ID" if it is
+ * 5. Extend the mods:name -&gt; mods:nameIdentifier element of the publication with the configured "lead-ID" if it is
  * not present but available in the matched MCRUsers attributes.
  *
  * 6. If no MCRUser was created because there was neither Match found nor attributes enriched (2.1. or 3.), check each
