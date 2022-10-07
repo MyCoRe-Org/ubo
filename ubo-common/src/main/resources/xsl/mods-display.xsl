@@ -279,7 +279,7 @@
       </xsl:call-template>
       <xsl:if test="not(mods:relatedItem[@type='host'])">
         <xsl:call-template name="output.line">
-          <xsl:with-param name="selected" select="mods:originInfo" />
+          <xsl:with-param name="selected" select="mods:originInfo[not(@eventType) or @eventType='publication']" />
           <xsl:with-param name="before"> - </xsl:with-param>
           <xsl:with-param name="mode" select="$mode" />
           <xsl:with-param name="class" select="'origin'" />
