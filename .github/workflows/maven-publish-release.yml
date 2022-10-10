@@ -4,10 +4,8 @@
 name: Maven "Snapshot" Release
 
 on:
-  push:
-    branches:
-      - 'main'
-      - 'dev'
+  release:
+    types: [created]
 
 jobs:
   build:
