@@ -24,8 +24,10 @@ jobs:
           server-id: ossrh # Value of the distributionManagement/repository/id field of the pom.xml
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
+      - name: Change Versions
+        run: mvn versions:set -DnewVersion=${{ github.ref_name }}-SNAPSHOT
       - name: Publish to OSSRH with Apache Maven
-        run: mvn release:perform
+        run: mvn --batch-mode deploy
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
