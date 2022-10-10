@@ -58,20 +58,6 @@
     <pluginManagement>
       <plugins>
         <plugin>
-          <!-- prevent this plugin from running because it doesnt work with github -->
-          <groupId>org.sonatype.plugins</groupId>
-          <artifactId>nexus-staging-maven-plugin</artifactId>
-          <inherited>false</inherited>
-          <executions>
-            <execution>
-              <goals>
-                <goal>deploy</goal>
-              </goals>
-              <phase>none</phase>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
           <artifactId>maven-javadoc-plugin</artifactId>
           <configuration>
             <doclint>all,-missing</doclint>
@@ -125,19 +111,6 @@
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </pluginRepository>
   </pluginRepositories>
-
-  <distributionManagement>
-    <repository>
-      <id>github</id>
-      <name>GitHub OWNER Apache Maven Packages</name>
-      <url>https://maven.pkg.github.com/MyCoRe-Org/ubo</url>
-    </repository>
-    <snapshotRepository>
-      <id>github</id>
-      <name>GitHub OWNER Apache Maven Packages</name>
-      <url>https://maven.pkg.github.com/MyCoRe-Org/ubo</url>
-    </snapshotRepository>
-  </distributionManagement>
 
   <dependencies>
     <dependency>
