@@ -55,7 +55,17 @@
 
   <xsl:template match="nameIdentifier[@nameIdentifierScheme='ORCID']">
     <mods:nameIdentifier type="orcid">
-      <xsl:value-of select="text()" />
+      <xsl:choose>
+        <xsl:when test="contains(text(),'orcid.org/')"> 
+          <!-- value seems to be URL, strip server name part -->
+          <xsl:value-of select="substring-after(text(),'orcid.org/')" />
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- plain ORCID iD -->
+          <xsl:value-of select="text()" />
+        </xsl:otherwise>
+      </xsl:choose>
+      
     </mods:nameIdentifier>
   </xsl:template>
   
