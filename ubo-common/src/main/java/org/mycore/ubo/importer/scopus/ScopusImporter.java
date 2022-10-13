@@ -21,7 +21,6 @@ import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRMailer;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.xml.MCRURIResolver;
@@ -31,7 +30,6 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.MCRSolrUtils;
-import org.mycore.user2.MCRUser;
 
 class ScopusImporter {
 
@@ -100,7 +98,7 @@ class ScopusImporter {
     }
 
     private Element retrieveAndConvertPublication(String externalID) {
-        String uri = new MessageFormat(IMPORT_URI, Locale.ROOT).format(externalID);
+        String uri = new MessageFormat(IMPORT_URI, Locale.ROOT).format(new Object[] { externalID });
         return MCRURIResolver.instance().resolve(uri);
     }
 
