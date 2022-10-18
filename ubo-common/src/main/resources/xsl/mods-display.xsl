@@ -231,12 +231,25 @@
   <!-- ========== Ausgabe Jahr ========== -->
 
   <xsl:template name="label-year">
-    <xsl:for-each select="descendant-or-self::mods:dateIssued[not(ancestor::mods:relatedItem[not(@type='host')])][1]">
-      <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.search.year')}"
-            onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+year:', text()))}')">
-        <xsl:value-of select="text()" />
-      </span>
-    </xsl:for-each>
+    <xsl:choose>
+      <xsl:when test="descendant-or-self::mods:dateIssued[not(ancestor::mods:relatedItem[@type='host'])][1]">
+        <xsl:for-each select="descendant-or-self::mods:dateIssued[not(ancestor::mods:relatedItem[@type='host'])][1]">
+          <xsl:apply-templates select="." mode="label-year-badge"/>
+        </xsl:for-each>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:for-each select="descendant-or-self::mods:dateIssued[not(ancestor::mods:relatedItem[not(@type='host')])][1]">
+          <xsl:apply-templates select="." mode="label-year-badge"/>
+        </xsl:for-each>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="mods:dateIssued" mode="label-year-badge">
+    <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.search.year')}"
+          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+year:', text()))}')">
+      <xsl:value-of select="text()" />
+    </span>
   </xsl:template>
 
   <!-- ========== ORCID status and publish button ========== -->
@@ -1406,7 +1419,7 @@
     <xsl:value-of select="mods:number" />
 
     <xsl:variable name="volume.number" select="mods:number" />
-    <xsl:variable name="year.issued" select="ancestor::mods:mods/descendant::mods:dateIssued[1]" />
+    <xsl:variable name="year.issued" select="//mods:dateIssued[not(ancestor::mods:relatedItem[@type='host'])][1]" />
 
     <xsl:if test="ancestor::mods:relatedItem/mods:genre[@type='intern']='journal'"> <!-- if it is a journal -->
       <xsl:if test="(string-length($year.issued) &gt; 0) and translate($year.issued,'0123456789','jjjjjjjjjj') = 'jjjj'"> <!-- and there is a year -->
