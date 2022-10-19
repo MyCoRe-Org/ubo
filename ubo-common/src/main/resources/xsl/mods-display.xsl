@@ -238,7 +238,7 @@
         </xsl:for-each>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:for-each select="descendant-or-self::mods:dateIssued[not(ancestor::mods:relatedItem[not(@type='host')])][1]">
+        <xsl:for-each select="descendant-or-self::mods:dateIssued[(ancestor::mods:relatedItem[(@type='host')])][1]">
           <xsl:apply-templates select="." mode="label-year-badge"/>
         </xsl:for-each>
       </xsl:otherwise>
