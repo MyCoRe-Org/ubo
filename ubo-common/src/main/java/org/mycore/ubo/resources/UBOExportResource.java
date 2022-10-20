@@ -95,7 +95,8 @@ public class UBOExportResource {
         @PathParam("pids") String pidSegment,
         @QueryParam("sortField") List<String> sortFields,
         @QueryParam("sortDirection") List<String> sortDirections,
-        @QueryParam("year") String year,
+        @QueryParam("year") Integer year,
+        @QueryParam("yearNew") String yearNew,
         @QueryParam("style") String style,
         @QueryParam("partOf") Boolean partOf) throws URISyntaxException {
 
@@ -114,9 +115,13 @@ public class UBOExportResource {
         String yearPart;
 
         if (year != null) {
-            yearPart = "+year:" + year + " ";
+            yearPart = "+year:[" + year + " TO *] ";
         } else {
             yearPart = "";
+        }
+
+        if(yearNew != null) {
+            yearPart = "+year:" + yearNew + " ";
         }
 
         String partOfPart = "";

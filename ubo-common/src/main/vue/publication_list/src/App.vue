@@ -441,9 +441,9 @@ export default class PublicationList extends Vue {
     if(this.exportM.yearPeriod){
       const yearFromQ = yearFrom=='' ? '*' : yearFrom;
       const yearToQ = yearTo=='' ? '*' : yearTo;
-      yearQuery = "year=%5B" + yearFromQ +"%20TO%20"+ yearToQ +"%5D&";
+      yearQuery = "yearNew=%5B" + yearFromQ +"%20TO%20"+ yearToQ +"%5D&";
     } else {
-      yearQuery = this.exportM.year==""?"":"year=" + this.exportM.year+"&";
+      yearQuery = this.exportM.year==""?"":"yearNew=" + this.exportM.year+"&";
     }
     let query = this.users.map(u => `${u.pid}`).join(",");
     let partOf = this.isPartOfEnabled() ? `partOf=${exportModel.partOf}&` : ``;
