@@ -61,6 +61,7 @@
             <div id="publicationList">
             <pl baseurl="{$WebApplicationBaseURL}"
                               leadid="{$MCR.user2.matching.lead_id}" roles="{$UBO.Search.PersonalList.Roles}"
+                partofenabled="{$UBO.Editor.PartOf.Enabled}"
                 personids="{$UBO.Search.PersonalList.Ids}"
             ></pl>
             </div>
