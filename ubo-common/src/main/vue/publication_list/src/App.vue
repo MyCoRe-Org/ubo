@@ -84,16 +84,36 @@
     <section>
       <div class="form-group form-inline">
         <label class="mycore-form-label" for="yearIssued">{{i18n["search.dozbib.year.publication"]}}</label>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">&ge;</span>
+        <div class="form-check mt-2 text-align-left">
+          <input id="dateRangeLabel" v-model="exportM.yearPeriod" class="form-check-input" type="checkbox" v-on:change="yearChange">
+          <label class="form-check-label" for="dateRangeLabel">{{ i18n["search.dozbib.year.period"] }}</label>
+        </div>
+        <div class="col-8">
+          <input v-if="!exportM.yearPeriod" id="yearIssued" v-model="exportM.year" class="mycore-form-input"
+                 type="number" v-bind:class="{ 'is-invalid' : isInvalidYear(exportM.year) }"
+                 v-on:change="yearChange">
+          <div v-else class="input-group yearRange">
+            <input id="searchDate" v-model="exportM.yearFrom" class="form-control" placeholder="" type="number"
+                   v-bind:class="{ 'is-invalid' : isInvalidYear(exportM.yearFrom, exportM.yearTo) }"
+                   v-on:change="yearChange">
+            <span class="input-group-text">-</span>
+            <input id="searchDate" v-model="exportM.yearTo" class="form-control" placeholder="" type="number"
+                   v-bind:class="{ 'is-invalid' : isInvalidYear(exportM.yearFrom, exportM.yearTo) }"
+                   v-on:change="yearChange">
           </div>
-          <input id="yearIssued" v-model="exportM.year" class="mycore-form-input"
-                 v-bind:class="{ 'is-invalid' : isInvalidYear() }" v-on:change="yearChange"
-                 type="number">
         </div>
         <div class="ubo-input-invalid invalid-feedback">
           {{i18n["search.dozbib.year.invalid"]}}
+        </div>
+      </div>
+    </section>
+    <section v-if="isPartOfEnabled()">
+      <div class="form-group form-linline">
+        <div class="input-group">
+          <label class="mycore-form-label" for="partOf">{{i18n["ubo.partOf"]}}</label>
+          <input id="partOf" v-model="exportM.partOf"
+                 type="checkbox"
+                 v-on:change="partOfChange">
         </div>
       </div>
     </section>
@@ -221,6 +241,8 @@ export default class PublicationList extends Vue {
    */
   @Prop() private fontawesome!: string;
 
+  @Prop() private partofenabled!:string;
+
   private search: SearchModel = {
     text: "",
     searchResultUsers: [],
@@ -238,6 +260,10 @@ export default class PublicationList extends Vue {
       {active: false, field: "sortby_title", asc: true, i18nKey: "search.sort.title"}
     ],
     year: "",
+    partOf: false,
+    yearPeriod: false,
+    yearFrom: "",
+    yearTo: ""
   };
 
   private result = {
@@ -267,6 +293,8 @@ export default class PublicationList extends Vue {
     "search.dozbib.year.invalid": null,
     "listWizard.search": null,
     "index.person.id.*": null,
+    "ubo.partOf": null,
+    "search.dozbib.year.period": null
   };
 
   private users: User[] = [];
@@ -276,12 +304,30 @@ export default class PublicationList extends Vue {
     this.resolveiI18N();
   }
 
-  private isInvalidYear() {
-    if(this.exportM.year==""){
-      return false;
+  private isPartOfEnabled() {
+    return typeof this.partofenabled == "string" && this.partofenabled.toLowerCase()==="true"
+  }
+
+  private isInvalidYear(yearStr: string, yearStr2?: string) {
+    if (yearStr2) {
+      if (this.isInvalidYear(yearStr)) {
+        return true;
+      }
+      if (this.isInvalidYear(yearStr2)) {
+        return true;
+      }
+
+      let yearF = yearStr == "" ? 0 : parseInt(yearStr);
+      let yearT = yearStr2 == "" ? new Date().getFullYear() : parseInt(yearStr2);
+
+      return yearF > yearT;
+    } else {
+      if (yearStr == "") {
+        return false;
+      }
+      let year = parseInt(yearStr);
+      return isNaN(year) || year > new Date().getFullYear() || year < 0;
     }
-    let year = parseInt(this.exportM.year);
-    return isNaN(year) || year > new Date().getFullYear() || year < 0;
   }
 
   private async resolveStyles() {
@@ -362,12 +408,25 @@ export default class PublicationList extends Vue {
     this.createLink();
   }
 
+  private partOfChange(): void {
+    this.createLink();
+  }
+
   private createLink() {
     this.clearLink();
 
-    if (this.isInvalidYear()) {
-      return;
+    const yearTo = this.exportM.yearTo;
+    const yearFrom = this.exportM.yearFrom;
+    if(this.exportM.yearPeriod) {
+      if(this.isInvalidYear(yearFrom, yearTo)){
+        return;
+      }
+    } else {
+      if (this.isInvalidYear(this.exportM.year)) {
+        return;
+      }
     }
+
 
     if (this.users.length == 0) {
       return;
@@ -378,16 +437,25 @@ export default class PublicationList extends Vue {
       return;
     }
 
-    const yearQuery = this.exportM.year==""?"":"year=" + this.exportM.year+"&";
+    let yearQuery;
+    if(this.exportM.yearPeriod){
+      const yearFromQ = yearFrom=='' ? '*' : yearFrom;
+      const yearToQ = yearTo=='' ? '*' : yearTo;
+      yearQuery = "yearNew=%5B" + yearFromQ +"%20TO%20"+ yearToQ +"%5D&";
+    } else {
+      yearQuery = this.exportM.year==""?"":"yearNew=" + this.exportM.year+"&";
+    }
     let query = this.users.map(u => `${u.pid}`).join(",");
+    let partOf = this.isPartOfEnabled() ? `partOf=${exportModel.partOf}&` : ``;
+
     if (exportModel.format == 'pdf' || exportModel.format == 'html') {
       this.result.link =
-          `${this.getWebApplicationBaseURL()}rsc/export/link/${exportModel.format}/${query}?${yearQuery}` +
+          `${this.getWebApplicationBaseURL()}rsc/export/link/${exportModel.format}/${query}?${yearQuery}${partOf}` +
           `${this.getSortString()}${exportModel.style.length == 0 ? '' : '&style=' + exportModel.style}`;
       return;
     } else {
       this.result.link =
-          `${this.getWebApplicationBaseURL()}rsc/export/link/${exportModel.format}/${query}?${yearQuery}` +
+          `${this.getWebApplicationBaseURL()}rsc/export/link/${exportModel.format}/${query}?${yearQuery}${partOf}` +
           `${this.getSortString()}`;
     }
   }
@@ -490,7 +558,11 @@ export interface ExportModel {
   format: string;
   style: string;
   sort: SortField[];
-  year: string
+  year: string,
+  partOf: boolean
+  yearPeriod: false,
+  yearFrom: string,
+  yearTo: string
 }
 
 export interface StyleDescription {
@@ -521,5 +593,8 @@ export interface Identifier {
   transition: all 1s;
 }
 
+.yearRange {
+  width: 60%;
+}
 
 </style>

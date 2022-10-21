@@ -38,8 +38,11 @@
               <xed:include uri="webapp:import-editor.xed" ref="legend.ID" />
             </legend>
             <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer/mods:mods">
-              <xed:include uri="webapp:import-editor.xed" ref="status" />    
-              <xed:include uri="webapp:import-editor.xed" ref="subject" />    
+              <xed:include uri="webapp:import-editor.xed" ref="status" />
+                <xed:if test="$UBO.Editor.PartOf.Enabled">
+                    <xed:include uri="webapp:import-editor.xed"  ref="partOf" />
+                </xed:if>
+                <xed:include uri="webapp:import-editor.xed" ref="subject" />
               <xed:include uri="webapp:import-editor.xed" ref="origin" />    
               <xed:include uri="webapp:import-editor.xed" ref="tags" />
             </xed:bind>    
