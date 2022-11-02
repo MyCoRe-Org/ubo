@@ -89,7 +89,7 @@
         <div class="col-8 form-check mycore-list list-group list-group-flush">
           <div class="list-group-item d-flex align-items-center">
             <div class="col-4">
-              <input id="dateRangeLabel" v-model="exportM.yearPeriod" class="form-check-input" type="checkbox" v-on:change="yearChange"></input>
+              <input id="dateRangeLabel" v-model="exportM.yearPeriod" class="form-check-input" type="checkbox" v-on:change="yearChange">
               <label class="form-check-label" for="dateRangeLabel">{{ i18n["search.dozbib.year.period"] }}</label>
             </div>
             <div class="col-8">
