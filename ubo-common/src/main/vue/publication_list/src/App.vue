@@ -99,17 +99,20 @@
                 v-model="exportM.year"
                 class="mycore-form-input"
                 type="number"
+                min="1900"
+                max="2099"
+                step="1"
                 v-bind:class="{ 'is-invalid' : isInvalidYear(exportM.year) }"
                 v-on:change="yearChange">
               <div v-else class="input-group yearRange">
                 <input id="searchDate" v-model="exportM.yearFrom"
-                  class="form-control" placeholder="" type="number"
+                  class="form-control" placeholder="" type="number" min="1900" max="2099" step="1"
                   v-bind:class="{ 'is-invalid' : isInvalidYear(exportM.yearFrom, exportM.yearTo) }"
                   v-on:change="yearChange">
                   <div class="input-group-between">
                     <div class="input-group-text">-</div>
                   </div>
-                <input id="searchDate" v-model="exportM.yearTo" class="form-control" placeholder="" type="number"
+                <input id="searchDate" v-model="exportM.yearTo" class="form-control" placeholder="" type="number" min="1900" max="2099" step="1"
                    v-bind:class="{ 'is-invalid' : isInvalidYear(exportM.yearFrom, exportM.yearTo) }"
                    v-on:change="yearChange">
               </div>
