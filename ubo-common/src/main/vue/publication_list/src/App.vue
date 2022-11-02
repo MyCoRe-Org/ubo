@@ -82,24 +82,41 @@
       </div>
     </section>
     <section>
-      <div class="form-group form-inline">
-        <label class="mycore-form-label" for="yearIssued">{{i18n["search.dozbib.year.publication"]}}</label>
-        <div class="form-check mt-2 text-align-left">
-          <input id="dateRangeLabel" v-model="exportM.yearPeriod" class="form-check-input" type="checkbox" v-on:change="yearChange">
-          <label class="form-check-label" for="dateRangeLabel">{{ i18n["search.dozbib.year.period"] }}</label>
-        </div>
-        <div class="col-8">
-          <input v-if="!exportM.yearPeriod" id="yearIssued" v-model="exportM.year" class="mycore-form-input"
-                 type="number" v-bind:class="{ 'is-invalid' : isInvalidYear(exportM.year) }"
-                 v-on:change="yearChange">
-          <div v-else class="input-group yearRange">
-            <input id="searchDate" v-model="exportM.yearFrom" class="form-control" placeholder="" type="number"
+      <div class="form-group row">
+        <label class="mycore-form-label" for="yearIssued">
+          {{i18n["search.dozbib.year.publication"]}}
+        </label>
+        <div class="col-8 form-check mycore-list list-group list-group-flush">
+          <div class="list-group-item d-flex align-items-center">
+            <div class="col-4">
+              <input id="dateRangeLabel" v-model="exportM.yearPeriod" class="form-check-input" type="checkbox" v-on:change="yearChange"></input>
+              <label class="form-check-label" for="dateRangeLabel">{{ i18n["search.dozbib.year.period"] }}</label>
+            </div>
+            <div class="col-8">
+              <input
+                v-if="!exportM.yearPeriod"
+                id="yearIssued"
+                v-model="exportM.year"
+                class="mycore-form-input"
+                type="number"
+                min="1900"
+                max="2099"
+                step="1"
+                v-bind:class="{ 'is-invalid' : isInvalidYear(exportM.year) }"
+                v-on:change="yearChange">
+              <div v-else class="input-group yearRange">
+                <input id="searchDate" v-model="exportM.yearFrom"
+                  class="form-control" placeholder="" type="number" min="1900" max="2099" step="1"
+                  v-bind:class="{ 'is-invalid' : isInvalidYear(exportM.yearFrom, exportM.yearTo) }"
+                  v-on:change="yearChange">
+                  <div class="input-group-between">
+                    <div class="input-group-text">-</div>
+                  </div>
+                <input id="searchDate" v-model="exportM.yearTo" class="form-control" placeholder="" type="number" min="1900" max="2099" step="1"
                    v-bind:class="{ 'is-invalid' : isInvalidYear(exportM.yearFrom, exportM.yearTo) }"
                    v-on:change="yearChange">
-            <span class="input-group-text">-</span>
-            <input id="searchDate" v-model="exportM.yearTo" class="form-control" placeholder="" type="number"
-                   v-bind:class="{ 'is-invalid' : isInvalidYear(exportM.yearFrom, exportM.yearTo) }"
-                   v-on:change="yearChange">
+              </div>
+            </div>
           </div>
         </div>
         <div class="ubo-input-invalid invalid-feedback">

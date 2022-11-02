@@ -83,7 +83,7 @@
     margin-top: -10px;
     margin-bottom: 20px;
   }
-  
+
   .ubo-pl-deluser {
     @extend .text-danger;
   }
@@ -108,6 +108,14 @@
 
   .ubo-vue-form .form-group > .is-invalid.mycore-form-input {
     border-right: 1px solid #dc3545 !important;
+  }
+
+  .input-group-between {
+    margin-right: -$input-border-width;
+    margin-left: -$input-border-width;
+    .input-group-text {
+      border-radius: 0;
+    }
   }
 
 // Large devices (desktops) and below: <= 1200px
