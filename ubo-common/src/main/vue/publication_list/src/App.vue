@@ -125,9 +125,9 @@
       </div>
     </section>
     <section v-if="isPartOfEnabled()">
-      <div class="form-group form-linline">
-        <div class="input-group">
-          <label class="mycore-form-label" for="partOf">{{i18n["ubo.partOf"]}}</label>
+      <div class="form-group row form-linline">
+        <label class="mycore-form-label" for="partOf">{{i18n["ubo.partOf"]}}</label>
+        <div class="input-group col-8">
           <input id="partOf" v-model="exportM.partOf"
                  type="checkbox"
                  v-on:change="partOfChange">
