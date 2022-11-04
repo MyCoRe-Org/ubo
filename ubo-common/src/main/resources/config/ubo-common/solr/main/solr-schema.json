@@ -413,6 +413,15 @@
   },
   {
     "add-field": {
+      "name": "note.intern",
+      "type": "ubo_text",
+      "multiValued": true,
+      "indexed": true,
+      "stored": false
+    }
+  },
+  {
+    "add-field": {
       "name": "oa",
       "type": "ubo_id",
       "multiValued": true,

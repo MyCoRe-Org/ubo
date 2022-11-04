@@ -20,7 +20,7 @@
       <xsl:apply-templates select="mods:*[@authority or @authorityURI]|mods:typeOfResource|mods:accessCondition"  mode="category" />
     </xsl:for-each>
   </xsl:template>
-  
+
   <xsl:template match="structure/parents/parent" mode="solrField">
     <field name="parent">
       <xsl:value-of select="@xlink:href" />
@@ -52,6 +52,7 @@
     <xsl:apply-templates select="descendant::mods:shelfLocator" mode="solrField" />
     <xsl:apply-templates select="mods:subject" mode="solrField" />
     <xsl:apply-templates select="mods:note" mode="solrField" />
+    <xsl:apply-templates select="mods:note[@type = 'intern']" mode="solrField" />
     <xsl:apply-templates select="mods:abstract" mode="solrField" />
     <xsl:apply-templates select="mods:language/mods:languageTerm[@type='code']" mode="solrField" />
     <xsl:apply-templates select="mods:extension/tag" mode="solrField" />
@@ -341,6 +342,12 @@
         </field>
       </xsl:for-each>
     </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template match="mods:note[@type = 'intern']" mode="solrField">
+    <field name="note.intern">
+      <xsl:value-of select="text()" />
+    </field>
   </xsl:template>
 
   <xsl:template match="mods:note" mode="solrField">
