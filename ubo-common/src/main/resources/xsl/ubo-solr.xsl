@@ -52,7 +52,6 @@
     <xsl:apply-templates select="descendant::mods:shelfLocator" mode="solrField" />
     <xsl:apply-templates select="mods:subject" mode="solrField" />
     <xsl:apply-templates select="mods:note" mode="solrField" />
-    <xsl:apply-templates select="mods:note[@type = 'intern']" mode="solrField" />
     <xsl:apply-templates select="mods:abstract" mode="solrField" />
     <xsl:apply-templates select="mods:language/mods:languageTerm[@type='code']" mode="solrField" />
     <xsl:apply-templates select="mods:extension/tag" mode="solrField" />
@@ -344,13 +343,13 @@
     </xsl:for-each>
   </xsl:template>
 
-  <xsl:template match="mods:note[@type = 'intern']" mode="solrField">
-    <field name="note.intern">
-      <xsl:value-of select="text()" />
-    </field>
-  </xsl:template>
-
   <xsl:template match="mods:note" mode="solrField">
+    <xsl:if test="@type = 'intern'">
+      <field name="note.intern">
+        <xsl:value-of select="text()" />
+      </field>
+    </xsl:if>
+
     <field name="note">
       <xsl:value-of select="text()" />
     </field>
