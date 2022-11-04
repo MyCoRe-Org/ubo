@@ -157,6 +157,7 @@
   </xed:template>
 
   <xed:template id="partOf">
+   <xed:if test="'true'=$UBO.Editor.PartOf.Enabled">
     <xed:bind xpath="mods:classification[@classID='partOf']">
       <div class="form-group form-inline">
         <label for="{xed:generate-id()}" class="mycore-form-label">
@@ -175,7 +176,7 @@
     </xed:bind>
     <!-- partOf is required, except for journal and series: -->
     <xed:validate xpath="//mods:mods/mods:classification[@classID='partOf']" test="string-length(.) &gt; 0 or ../mods:genre='journal' or ../mods:genre='series' or ../mods:genre='blog' or ../mods:genre='newspaper'" i18n="ubo.partOf.validation" display="global" />
-
+   </xed:if>
   </xed:template>
 
   <xed:template id="genre">
