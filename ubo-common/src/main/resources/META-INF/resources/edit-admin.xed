@@ -38,8 +38,9 @@
               <xed:include uri="webapp:import-editor.xed" ref="legend.ID" />
             </legend>
             <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer/mods:mods">
-              <xed:include uri="webapp:import-editor.xed" ref="status" />    
-              <xed:include uri="webapp:import-editor.xed" ref="subject" />    
+              <xed:include uri="webapp:import-editor.xed" ref="status" />
+              <xed:include uri="webapp:import-editor.xed" ref="partOf" />
+              <xed:include uri="webapp:import-editor.xed" ref="subject" />
               <xed:include uri="webapp:import-editor.xed" ref="origin" />    
               <xed:include uri="webapp:import-editor.xed" ref="tags" />
             </xed:bind>    
@@ -51,6 +52,7 @@
               <xed:include uri="webapp:import-editor.xed" ref="oa" />    
               <xed:include uri="webapp:import-editor.xed" ref="title.complex" />
               <xed:include uri="webapp:import-editor.xed" ref="person.role" />
+              <xed:include uri="webapp:import-editor.xed" ref="corporate.role" />
               <xed:include uri="webapp:import-editor.xed" ref="conference" />
               <xed:include uri="webapp:import-editor.xed" ref="place" />
               <xed:include uri="webapp:import-editor.xed" ref="year" />
@@ -82,6 +84,7 @@
                   <xed:include uri="webapp:import-editor.xed" ref="title.complex" />
                   <xed:include uri="webapp:import-editor.xed" ref="conference" />
                   <xed:include uri="webapp:import-editor.xed" ref="person.role" />
+                  <xed:include uri="webapp:import-editor.xed" ref="corporate.role" />
                   <xed:include uri="webapp:import-editor.xed" ref="volume" />
                   <xed:include uri="webapp:import-editor.xed" ref="issue" />
                   <xed:include uri="webapp:import-editor.xed" ref="place" />

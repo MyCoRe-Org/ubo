@@ -24,7 +24,6 @@
   </xsl:text>
   <html lang="{$CurrentLang}">
     <head>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans|Droid+Sans+Mono" type="text/css" />
       <link rel="stylesheet" href="{$WebApplicationBaseURL}external/jquery-ui-theme/jquery-ui-1.8.21.custom.css" />
       <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/style.css" />
       <link rel="stylesheet" href="{$WebApplicationBaseURL}i/clouds/legacy.css" />

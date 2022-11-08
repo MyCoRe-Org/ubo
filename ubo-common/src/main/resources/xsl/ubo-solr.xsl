@@ -20,7 +20,7 @@
       <xsl:apply-templates select="mods:*[@authority or @authorityURI]|mods:typeOfResource|mods:accessCondition"  mode="category" />
     </xsl:for-each>
   </xsl:template>
-  
+
   <xsl:template match="structure/parents/parent" mode="solrField">
     <field name="parent">
       <xsl:value-of select="@xlink:href" />
@@ -344,6 +344,12 @@
   </xsl:template>
 
   <xsl:template match="mods:note" mode="solrField">
+    <xsl:if test="@type = 'intern'">
+      <field name="note.intern">
+        <xsl:value-of select="text()" />
+      </field>
+    </xsl:if>
+
     <field name="note">
       <xsl:value-of select="text()" />
     </field>

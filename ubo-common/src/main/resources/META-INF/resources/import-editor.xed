@@ -156,6 +156,29 @@
     </xed:bind>
   </xed:template>
 
+  <xed:template id="partOf">
+   <xed:if test="'true'=$UBO.Editor.PartOf.Enabled">
+    <xed:bind xpath="mods:classification[@classID='partOf']">
+      <div class="form-group form-inline">
+        <label for="{xed:generate-id()}" class="mycore-form-label">
+          <xed:if test="$genre_intern != 'journal' and $genre_intern != 'series' and $genre_intern !='blog' and $genre_intern != 'newspaper'">
+            <xed:output value="'*'" />
+          </xed:if>
+          <xed:output i18n="ubo.partOf" />:</label>
+        <select id="{xed:generate-id()}" class="{$xed-validation-marker} mycore-form-input">
+          <option value=""><xed:output i18n="search.select" /></option>
+          <xed:include uri="xslStyle:items2options:classification:editor:-1:children:partOf" />
+        </select>
+        <a tabindex="0" class="btn btn-secondary info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:ubo.help.partOf}">
+          <i class="fas fa-info"></i>
+        </a>
+      </div>
+    </xed:bind>
+    <!-- partOf is required, except for journal and series: -->
+    <xed:validate xpath="//mods:mods/mods:classification[@classID='partOf']" test="string-length(.) &gt; 0 or ../mods:genre='journal' or ../mods:genre='series' or ../mods:genre='blog' or ../mods:genre='newspaper'" i18n="ubo.partOf.validation" display="global" />
+   </xed:if>
+  </xed:template>
+
   <xed:template id="genre">
     <xed:bind xpath="mods:genre[@type='intern']">
       <div class="form-group form-inline">

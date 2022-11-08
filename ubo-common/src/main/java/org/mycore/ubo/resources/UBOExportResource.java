@@ -29,7 +29,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -92,7 +96,9 @@ public class UBOExportResource {
         @QueryParam("sortField") List<String> sortFields,
         @QueryParam("sortDirection") List<String> sortDirections,
         @QueryParam("year") Integer year,
-        @QueryParam("style") String style) throws URISyntaxException {
+        @QueryParam("yearNew") String yearNew,
+        @QueryParam("style") String style,
+        @QueryParam("partOf") Boolean partOf) throws URISyntaxException {
 
         Set<String> pids = Stream.of(pidSegment.split(",")).collect(Collectors.toSet());
 
@@ -114,13 +120,22 @@ public class UBOExportResource {
             yearPart = "";
         }
 
+        if(yearNew != null) {
+            yearPart = "+year:" + yearNew + " ";
+        }
+
+        String partOfPart = "";
+        if (MCRConfiguration2.getBoolean("UBO.Editor.PartOf.Enabled").orElse(false) && partOf) {
+            partOfPart = "+partOf:true ";
+        }
+
         String childFilterQuery = "+name_id_connection:" + nidConnectionValue;
 
         if (!ROLES.isEmpty()) {
             childFilterQuery += " +role:(" + String.join(" OR ", ROLES) + ")";
         }
 
-        String solrQuery = "+status:confirmed " + yearPart
+        String solrQuery = "+status:confirmed " + yearPart + partOfPart
             + "+{!parent which=\"objectType:mods\" filters=$childfq}objectKind:name";
 
         StringBuilder solrRequest = new StringBuilder()
