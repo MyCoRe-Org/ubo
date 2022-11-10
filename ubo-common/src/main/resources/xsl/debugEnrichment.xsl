@@ -10,8 +10,8 @@
     <html id="debugEnrichment">
       <head>
         <title>Enrichment Resolver Debugger</title>
-        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css" />
-        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js" />
+        <link rel="stylesheet" href="{$WebApplicationBaseURL}webjars/highlightjs/11.5.0/styles/default.min.css" />
+        <script src="{$WebApplicationBaseURL}webjars/highlightjs/11.5.0/highlight.min.js" />
         <script src="{$WebApplicationBaseURL}js/ModsDisplayUtils.js" />
       </head>
       <body>
