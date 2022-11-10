@@ -12,6 +12,14 @@ import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.ubo.AccessControl;
 
+/**
+ * Backend of enrichmentDebugger.xed:
+ * Takes mods:mods and selected enrichment resolver configuration.
+ * Returns enrichment resolver debugging output to be rendered by debugEnrichment.xsl
+ * 
+ * @author Frank Lützenkirchen
+ **/
+@SuppressWarnings("serial")
 public class EnrichmentDebuggerServlet extends MCRServlet {
 
     public void doGetPost(MCRServletJob job) throws Exception {

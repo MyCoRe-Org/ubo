@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- 
+  Frontend of enrichment debugger:  
+  Form to select enrichment resolver configuration and input mods:mods.
+  Sends input to EnrichmentDebuggerServlet to run and display debug output.
+ -->
+
 <webpage id="ubo.enrichmentDebugger">
   <title xml:lang="de">Enrichment Resolver Debugger</title>
 
