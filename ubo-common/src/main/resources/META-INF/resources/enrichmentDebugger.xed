@@ -24,47 +24,39 @@
             <legend>Zu verwendende Enrichment Resolver Konfiguration:</legend>
             
             <!-- Currently hard-coded, will be read as source URI in the future -->
-            <xed:bind set="import"        xpath="enricher[@sources='DuEPublico1 DuEPublico2 EVALuna (Scopus CrossRef PubMed IEEE DataCite arXiv) Unpaywall (LOBID GBV Alma) ZDB JOP']" />
-            <xed:bind set="import-list"   xpath="enricher[@sources='(Scopus CrossRef PubMed IEEE DataCite arXiv) Unpaywall (LOBID GBV Alma) ZDB JOP']" />
-            <xed:bind set="scopus-import" xpath="enricher[@sources='Unpaywall (LOBID GBV Alma) ZDB JOP']" />
-
-            <!--
-              One would normally choose a model like <enricher id="import">Scopus CrossRef PubMed ...</enricher> 
-              But we want to choose the ID via radio button & list the enrichers via xed:repeat.
-              Therefore, to circumvent XEditor restrictions (which is that '..' and other xpaths do not work on Attributes),
-              I choose this model: <enricher sources="Scopus CrossRef PubMed ...">import</enricher>
-             -->
+            <xed:bind xpath="enricher[@id='import']"        set="DuEPublico1 DuEPublico2 EVALuna (Scopus CrossRef PubMed IEEE DataCite arXiv) Unpaywall (LOBID GBV Alma) ZDB JOP" />
+            <xed:bind xpath="enricher[@id='import-list']"   set="(Scopus CrossRef PubMed IEEE DataCite arXiv) Unpaywall (LOBID GBV Alma) ZDB JOP" />
+            <xed:bind xpath="enricher[@id='scopus-import']" set="Unpaywall (LOBID GBV Alma) ZDB JOP" />
+            <xed:bind xpath="enricher[@id='custom']" />
 
             <xed:repeat xpath="enricher">
               <div class="form-group form-inline">
-                <xed:bind xpath="." name="id"> <!-- Workaround: xed:repeat does not support @name -->
-                  <label class="mycore-form-label">
-                    <xed:output />
-                    <xed:bind xpath="../@enricherID">
-                      <input type="radio" value="{$id}" class="ml-2" style="transform:scale(1.5);" />
-                    </xed:bind>
-                  </label>
-                  <xed:bind xpath="@sources">
-                    <input type="text" class="mycore-form-input" style="flex: 0 0 70%; max-width: 70%;" disabled="disabled" />
+                <label class="mycore-form-label">
+                  <xed:output value="@id" />
+                  
+                  <!-- Workaround to choose the ID via radio buttons: -->
+                  <!-- 1. Remember the current enricher/@id in a variable -->
+                  <!-- 2. Bind to a common parent's attribute so all radio buttons get same name -->
+                  <xed:bind xpath="@id" name="id" />
+                  <xed:bind xpath="../@enricherID">
+                    <input type="radio" value="{$id}" class="ml-2" style="transform:scale(1.5);" />
                   </xed:bind>
-                </xed:bind>
+                  
+                </label>
+                <xed:choose>
+                  <xed:when test="@id='custom'">
+                    <input type="text" class="mycore-form-input {$xed-validation-marker}" style="flex: 0 0 70%; max-width: 70%;" />
+                  </xed:when>
+                  <xed:otherwise>
+                    <input type="text" class="mycore-form-input" style="flex: 0 0 70%; max-width: 70%;" disabled="disabled" />
+                  </xed:otherwise>
+                </xed:choose>
+                
               </div>
             </xed:repeat>
             
-            <xed:bind xpath="customDataSources">
-              <div class="form-group form-inline">
-                <label class="mycore-form-label">
-                  <span>... oder frei definiert</span>
-                  <xed:bind xpath="../@enricherID">
-                    <input type="radio" value="custom" class="ml-2" style="transform:scale(1.5);" />
-                  </xed:bind>
-                </label>
-                <input type="text" class="mycore-form-input {$xed-validation-marker}" style="flex: 0 0 70%; max-width: 70%;" />
-              </div>
-            </xed:bind>
-            
             <xed:validate xpath="/enrichmentDebugger/@enricherID" required="true" display="global">Bitte eine Enrichment Resolver Konfiguration wählen</xed:validate>
-            <xed:validate xpath="/enrichmentDebugger/customDataSources" relevant-if="/enrichmentDebugger/@enricherID='custom'" required="true" display="global">Bitte IDs der Datenquellen eingeben</xed:validate>
+            <xed:validate xpath="/enrichmentDebugger/enricher[@id='custom']" relevant-if="/enrichmentDebugger/@enricherID='custom'" required="true" display="global">Bitte IDs der Datenquellen eingeben</xed:validate>
             
           </fieldset>
           <fieldset>
