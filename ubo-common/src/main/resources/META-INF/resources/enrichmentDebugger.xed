@@ -100,8 +100,6 @@
                 </div>
               </xed:bind>
               
-              <xed:validate xpath="//mods:location/mods:shelfLocator" matches="(\d\d\s[A-Za-z]+\s\d+.*)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
-              
             </xed:bind>
 
           </fieldset>
