@@ -9,16 +9,9 @@
 
         <xed:bind xpath="enrichmentDebugger">
         
-          <xed:if test="$xed-validation-failed">
-            <div class="validation-failures">
-              <h3>
-                <xed:output i18n="form.validation.failed" />
-              </h3>
-              <ul>
-                <xed:display-validation-messages />
-              </ul>
-            </div>
-          </xed:if>
+          <xed:include uri="webapp:import-editor.xed" ref="displayValidationMessages" />
+   
+          <xed:bind xpath="@enricherID" default="custom" />
 
           <fieldset>
             <legend>Zu verwendende Enrichment Resolver Konfiguration:</legend>
@@ -92,11 +85,7 @@
                 </div>
               </xed:bind>
               
-              <xed:validate xpath="//mods:identifier[@type='doi']" matches="10\.\d+.*" i18n="ubo.identifier.doi.validation" display="global" />
-              <xed:validate xpath="//mods:identifier[@type='urn']" matches="urn:nbn:[a-z]{2}:\S*" i18n="ubo.identifier.urn.validation" display="global" />
-              <xed:validate xpath="//mods:identifier[@type='issn']" matches="[0-9X]{4}\-[0-9X]{4}" i18n="ubo.identifier.issn.validation" display="global" />
-              <xed:validate xpath="//mods:identifier[@type='isbn']" matches="^((978|979)-?)?([\d -]{12}|\d{9})(\d|X)$" i18n="ubo.identifier.isbn.validation" display="global" />
-              <xed:validate xpath="//mods:identifier[@type='duepublico2']" matches="duepublico_mods_\d\d\d\d\d\d\d\d" display="global" />
+              <xed:include uri="webapp:import-editor.xed" ref="validationRules4Identifiers" />
               
               <xed:bind xpath="mods:location/mods:shelfLocator">
                 <div class="form-group form-inline">

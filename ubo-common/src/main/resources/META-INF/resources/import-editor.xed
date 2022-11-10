@@ -3,29 +3,17 @@
 <xed:template xmlns:xed="http://www.mycore.de/xeditor">
 
   <xed:template id="validation">
-    <xed:if test="$xed-validation-failed">
-      <div class="validation-failures">
-        <h3>
-          <xed:output i18n="form.validation.failed" />
-        </h3>
-        <ul>
-          <xed:display-validation-messages />
-        </ul>
-      </div>
-    </xed:if>
+    <xed:include uri="webapp:import-editor.xed" ref="displayValidationMessages" />
+   
     <xed:validate xpath="//mods:classification[@classID='fachreferate']" required="true" i18n="condition.subject" display="global" />
     <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:titleInfo/mods:title" required="true" i18n="ubo.title.validation" display="global" />
     <xed:validate xpath="//mods:mods[not(mods:genre='journal' or mods:genre='newspaper') and string-length(mods:name[@type='corporate']/mods:namePart/text())=0]/mods:name[@type='personal'][1]" test="string-length(mods:namePart[@type='family']) &gt; 0" i18n="ubo.role.author.validation" display="global" />
     <xed:validate xpath="//mods:nameIdentifier[@type='orcid']" matches="\d{4}\-\d{4}\-\d{4}\-\d{3}[0-9X]" i18n="ubo.nameIdentifier.orcid.validation" display="global" />
-    <xed:validate xpath="//mods:identifier[@type='doi']" matches="10\.\d+.*" i18n="ubo.identifier.doi.validation" display="global" />
-    <xed:validate xpath="//mods:identifier[@type='urn']" matches="urn:nbn:[a-z]{2}:\S*" i18n="ubo.identifier.urn.validation" display="global" />
-    <xed:validate xpath="//mods:identifier[@type='issn']" matches="[0-9X]{4}\-[0-9X]{4}" i18n="ubo.identifier.issn.validation" display="global" />
-    <xed:validate xpath="//mods:identifier[@type='isbn']" matches="^((978|979)-?)?([\d -]{12}|\d{9})(\d|X)$" i18n="ubo.identifier.isbn.validation" display="global" />
-    <xed:validate xpath="//mods:identifier[@type='duepublico']" matches="\d+" display="global" />
-    <xed:validate xpath="//mods:identifier[@type='duepublico2']" matches="duepublico_mods_\d\d\d\d\d\d\d\d" display="global" />
+
+    <xed:include uri="webapp:import-editor.xed" ref="validationRules4Identifiers" />
+
     <xed:validate xpath="//mods:location/mods:url" matches="(f|ht)tp(s?)://[\w\d.]+\S*" i18n="ubo.link.validation" display="global" />
     <xed:validate xpath="//mods:location/mods:url" matches="^((?!doi.org/10).)*$" i18n="ubo.link.validation.not.doi" display="global" />
-    <xed:validate xpath="//mods:location/mods:shelfLocator" matches="(\d\d\s[A-Za-z]+\s\d+.*)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
     <xed:validate xpath="//mods:abstract/@xlink:href" matches="(f|ht)tp(s?)://[\w\d.]+\S*" i18n="ubo.link.validation" display="global" />
     <!-- year is required, except for journal, series, newspaper and blog: -->
     <xed:validate xpath="//mods:mods" test="descendant::mods:dateIssued[string-length(.) > 0]" relevant-if="not(mods:genre='journal' or mods:genre='series' or mods:genre='blog' or mods:genre='newspaper')" i18n="ubo.date.issued.4.validation" display="global" />
@@ -46,6 +34,29 @@
       });
       ]]>
     </script>
+  </xed:template>
+  
+  <xed:template id="displayValidationMessages">
+    <xed:if test="$xed-validation-failed">
+      <div class="validation-failures">
+        <h3>
+          <xed:output i18n="form.validation.failed" />
+        </h3>
+        <ul>
+          <xed:display-validation-messages />
+        </ul>
+      </div>
+    </xed:if>
+  </xed:template>
+  
+  <xed:template id="validationRules4Identifiers">
+    <xed:validate xpath="//mods:identifier[@type='doi']" matches="10\.\d+.*" i18n="ubo.identifier.doi.validation" display="global" />
+    <xed:validate xpath="//mods:identifier[@type='urn']" matches="urn:nbn:[a-z]{2}:\S*" i18n="ubo.identifier.urn.validation" display="global" />
+    <xed:validate xpath="//mods:identifier[@type='issn']" matches="[0-9X]{4}\-[0-9X]{4}" i18n="ubo.identifier.issn.validation" display="global" />
+    <xed:validate xpath="//mods:identifier[@type='isbn']" matches="^((978|979)-?)?([\d -]{12}|\d{9})(\d|X)$" i18n="ubo.identifier.isbn.validation" display="global" />
+    <xed:validate xpath="//mods:identifier[@type='duepublico']" matches="\d+" display="global" />
+    <xed:validate xpath="//mods:identifier[@type='duepublico2']" matches="duepublico_mods_\d\d\d\d\d\d\d\d" display="global" />
+    <xed:validate xpath="//mods:location/mods:shelfLocator" matches="(\d\d\s[A-Za-z]+\s\d+.*)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
   </xed:template>
 
   <xed:template id="common.metafields">
