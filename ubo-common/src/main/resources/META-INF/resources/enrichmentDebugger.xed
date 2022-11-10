@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<webpage id="ubo.enrichmentDebugger">
+  <title xml:lang="de">Enrichment Resolver Debugger</title>
+
+  <article class="card mb-1">
+    <div class="card-body">
+      <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
+
+        <xed:bind xpath="enrichmentDebugger">
+        
+          <xed:if test="$xed-validation-failed">
+            <div class="validation-failures">
+              <h3>
+                <xed:output i18n="form.validation.failed" />
+              </h3>
+              <ul>
+                <xed:display-validation-messages />
+              </ul>
+            </div>
+          </xed:if>
+
+          <fieldset>
+            <legend>Zu verwendende Enrichment Resolver Konfiguration:</legend>
+            
+            <!-- Currently hard-coded, will be read as source URI in the future -->
+            <xed:bind set="import"        xpath="enricher[@sources='DuEPublico1 DuEPublico2 EVALuna (Scopus CrossRef PubMed IEEE DataCite arXiv) Unpaywall (LOBID GBV Alma) ZDB JOP']" />
+            <xed:bind set="import-list"   xpath="enricher[@sources='(Scopus CrossRef PubMed IEEE DataCite arXiv) Unpaywall (LOBID GBV Alma) ZDB JOP']" />
+            <xed:bind set="scopus-import" xpath="enricher[@sources='Unpaywall (LOBID GBV Alma) ZDB JOP']" />
+
+            <!--
+              One would normally choose a model like <enricher id="import">Scopus CrossRef PubMed ...</enricher> 
+              But we want to choose the ID via radio button & list the enrichers via xed:repeat.
+              Therefore, to circumvent XEditor restrictions (which is that '..' and other xpaths do not work on Attributes),
+              I choose this model: <enricher sources="Scopus CrossRef PubMed ...">import</enricher>
+             -->
+
+            <xed:repeat xpath="enricher">
+              <div class="form-group form-inline">
+                <xed:bind xpath="." name="id"> <!-- Workaround: xed:repeat does not support @name -->
+                  <label class="mycore-form-label">
+                    <xed:output />
+                    <xed:bind xpath="../@enricherID">
+                      <input type="radio" value="{$id}" class="ml-2" style="transform:scale(1.5);" />
+                    </xed:bind>
+                  </label>
+                  <xed:bind xpath="@sources">
+                    <input type="text" class="mycore-form-input" style="flex: 0 0 70%; max-width: 70%;" disabled="disabled" />
+                  </xed:bind>
+                </xed:bind>
+              </div>
+            </xed:repeat>
+            
+            <xed:bind xpath="customDataSources">
+              <div class="form-group form-inline">
+                <label class="mycore-form-label">
+                  <span>... oder frei definiert</span>
+                  <xed:bind xpath="../@enricherID">
+                    <input type="radio" value="custom" class="ml-2" style="transform:scale(1.5);" />
+                  </xed:bind>
+                </label>
+                <input type="text" class="mycore-form-input {$xed-validation-marker}" style="flex: 0 0 70%; max-width: 70%;" />
+              </div>
+            </xed:bind>
+            
+            <xed:validate xpath="/enrichmentDebugger/@enricherID" required="true" display="global">Bitte eine Enrichment Resolver Konfiguration wählen</xed:validate>
+            <xed:validate xpath="/enrichmentDebugger/customDataSources" relevant-if="/enrichmentDebugger/@enricherID='custom'" required="true" display="global">Bitte IDs der Datenquellen eingeben</xed:validate>
+            
+          </fieldset>
+          <fieldset>
+            <legend>Aufzulösende Identifier als Ausgangsbasis:</legend>
+            
+            <xed:bind xpath="mods:mods">
+                      
+              <xed:bind xpath="mods:identifier">
+              
+                <div class="form-group form-inline">
+      
+                  <div class="mycore-form-label">
+                    <xed:bind xpath="@type" default="doi">
+                      <select class="form-control w-100 custom-select">
+                        <option value="doi">DOI (10. ...):</option>
+                        <option value="urn">URN (urn:nbn:de: ...):</option>
+                        <option value="issn">ISSN:</option>
+                        <option value="isbn">ISBN:</option>
+                        <option value="pubmed">PubMed ID:</option>
+                        <option value="scopus">Scopus ID:</option>
+                        <option value="arxiv">arXiv.org:</option>
+                        <option value="ieee">IEEE Explore:</option>
+                        <option value="isi">Web of Science ID:</option>
+                        <option value="duepublico2">DuEPublico 2 ID:</option>
+                        <option value="mms">Alma MMS ID:</option>
+                        <option value="ppn">PPN:</option>
+                        <option value="zdb">ZDB ID:</option>
+                      </select>
+                    </xed:bind>
+                  </div>
+      
+                  <input type="text" class="mycore-form-input {$xed-validation-marker}" />
+                </div>
+              </xed:bind>
+              
+              <xed:validate xpath="//mods:identifier[@type='doi']" matches="10\.\d+.*" i18n="ubo.identifier.doi.validation" display="global" />
+              <xed:validate xpath="//mods:identifier[@type='urn']" matches="urn:nbn:[a-z]{2}:\S*" i18n="ubo.identifier.urn.validation" display="global" />
+              <xed:validate xpath="//mods:identifier[@type='issn']" matches="[0-9X]{4}\-[0-9X]{4}" i18n="ubo.identifier.issn.validation" display="global" />
+              <xed:validate xpath="//mods:identifier[@type='isbn']" matches="^((978|979)-?)?([\d -]{12}|\d{9})(\d|X)$" i18n="ubo.identifier.isbn.validation" display="global" />
+              <xed:validate xpath="//mods:identifier[@type='duepublico2']" matches="duepublico_mods_\d\d\d\d\d\d\d\d" display="global" />
+              
+              <xed:bind xpath="mods:location/mods:shelfLocator">
+                <div class="form-group form-inline">
+                  <label class="mycore-form-label">Signatur der UB:</label>
+                  <input type="text" class="mycore-form-input" />
+                </div>
+              </xed:bind>
+              
+              <xed:validate xpath="//mods:location/mods:shelfLocator" matches="(\d\d\s[A-Za-z]+\s\d+.*)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
+              
+            </xed:bind>
+
+          </fieldset>
+            
+          <div class="form-inline form-group">
+            <label class="mycore-form-label" />
+            <button class="btn btn-sm btn-primary mr-2" type="submit" xed:target="servlet" xed:href="EnrichmentDebuggerServlet">
+              <xed:output i18n="button.submit" />
+            </button>
+            <button class="ml-2 btn btn-sm btn-primary" type="submit" xed:target="debug">Debug</button>
+          </div>
+      
+        </xed:bind>
+
+      </xed:form>
+    </div>
+  </article>
+
+</webpage>

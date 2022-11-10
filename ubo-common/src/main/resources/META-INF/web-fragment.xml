@@ -97,6 +97,15 @@
     <url-pattern>/servlets/CascadingLoginServlet</url-pattern>
   </servlet-mapping>
 
+  <servlet id="EnrichmentDebuggerServlet">
+    <servlet-name>EnrichmentDebuggerServlet</servlet-name>
+    <servlet-class>org.mycore.mods.enrichment.EnrichmentDebuggerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EnrichmentDebuggerServlet</servlet-name>
+    <url-pattern> /servlets/EnrichmentDebuggerServlet </url-pattern>
+  </servlet-mapping>
+  
   <session-config>
     <session-timeout>30</session-timeout>
   </session-config>
