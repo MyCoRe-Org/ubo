@@ -13,8 +13,7 @@
     <div class="card-body">
       <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
 
-        <!-- Currently hard-coded, will be generated from a new URI resolver in the future -->
-        <xed:source uri="resource:enrichmentDebugger.xml" />
+        <xed:source uri="cache:enrichmentConfig:custom" />
 
         <xed:bind xpath="enrichmentDebugger">
         
@@ -24,8 +23,7 @@
             <legend>Zu verwendende Enrichment Resolver Konfiguration:</legend>
             
             <xed:bind xpath="enrichers">
-              <xed:bind xpath="@selected" initially="custom" />
-              <xed:bind xpath="enricher[@id='custom']" /> <!-- Placeholder for custom enrichment -->
+              <xed:bind xpath="enricher[@id='custom']" /> <!-- Empty placeholder for custom enrichment -->
 
               <xed:repeat xpath="enricher">
                 <div class="form-group form-inline">
