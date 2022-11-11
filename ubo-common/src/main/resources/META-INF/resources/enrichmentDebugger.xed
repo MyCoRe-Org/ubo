@@ -57,6 +57,9 @@
             <xed:validate xpath="/enrichmentDebugger/@enricherID" required="true" display="global">Bitte eine Enrichment Resolver Konfiguration wählen</xed:validate>
             <xed:validate xpath="/enrichmentDebugger/enricher[@id='custom']" relevant-if="/enrichmentDebugger/@enricherID='custom'" required="true" display="global">Bitte IDs der Datenquellen eingeben</xed:validate>
             
+            <!-- Remove those enrichment resolver configs that have not been selected -->
+            <xed:cleanup-rule xpath="/enrichmentDebugger/enricher" relevant-if="@id=../@enricherID" />
+            
           </fieldset>
           <fieldset>
             <legend>Aufzulösende Identifier als Ausgangsbasis:</legend>

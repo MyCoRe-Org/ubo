@@ -35,17 +35,13 @@ public class EnrichmentDebuggerServlet extends MCRServlet {
         Element root = doc.getRootElement();
 
         String enricherID = root.getAttributeValue("enricherID");
-        if("custom".equals(enricherID)) {
-            for( Element enricher : root.getChildren("enricher") ) {
-                if( enricherID.equals( enricher.getAttributeValue("id" ))) {
-                    String propertyName = "MCR.MODS.EnrichmentResolver.DataSources." + enricherID;
-                    MCRConfiguration2.set(propertyName, enricher.getTextTrim());
-                    break;
-                }
-            }
+        if ("custom".equals(enricherID)) {
+            // Do ad-hoc configuration of a custom enrichment resolver
+            String propertyName = "MCR.MODS.EnrichmentResolver.DataSources." + enricherID;
+            MCRConfiguration2.set(propertyName, root.getChildTextTrim("enricher"));
         }
         MCREnricher enricher = new MCREnricher(enricherID);
-        
+
         MCRToXMLEnrichmentDebugger debugger = new MCRToXMLEnrichmentDebugger();
         enricher.setDebugger(debugger);
 
