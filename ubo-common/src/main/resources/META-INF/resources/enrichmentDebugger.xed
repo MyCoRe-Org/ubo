@@ -60,7 +60,8 @@
             </xed:bind>
             
           </fieldset>
-          <fieldset>
+          
+          <fieldset class="mt-4">
             <legend>Aufzulösende Identifier als Ausgangsbasis:</legend>
             
             <xed:bind xpath="mods:mods">
@@ -106,7 +107,7 @@
 
           </fieldset>
             
-          <div class="form-inline form-group">
+          <div class="form-inline form-group mb-4">
             <label class="mycore-form-label" />
             <button class="btn btn-sm btn-primary mr-2" type="submit" xed:target="servlet" xed:href="EnrichmentDebuggerServlet">
               <xed:output i18n="button.submit" />
@@ -114,6 +115,28 @@
             <button class="ml-2 btn btn-sm btn-primary" type="submit" xed:target="debug">Debug</button>
           </div>
       
+          <!-- List all supported data sources and identifiers -->
+          <xed:bind xpath="dataSources">
+            <table class="table table-sm table-hover mt-4">
+              <thead>
+                <th class="text-right" scope="col">Datenquelle</th>
+                <th scope="col">Unterstütze Identifier</th>
+              </thead>
+              <tbody>
+                <xed:repeat xpath="dataSource">
+                  <tr>
+                    <th class="text-right" scope="row">
+                      <xed:output value="@id" />
+                    </th>
+                    <td>
+                      <xed:output value="text()" />
+                    </td>
+                  </tr>
+                </xed:repeat>
+              </tbody>
+            </table>
+          </xed:bind>          
+          
         </xed:bind>
 
       </xed:form>
