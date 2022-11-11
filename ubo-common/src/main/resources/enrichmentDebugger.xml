@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<enrichmentDebugger>
+  <enrichers>
+    <enricher id="import">DuEPublico1 DuEPublico2 EVALuna (Scopus CrossRef PubMed IEEE DataCite arXiv) Unpaywall (LOBID GBV Alma) ZDB JOP</enricher>
+    <enricher id="import-list">(Scopus CrossRef PubMed IEEE DataCite arXiv) Unpaywall (LOBID GBV Alma) ZDB JOP</enricher>
+    <enricher id="scopus-import">Unpaywall (LOBID GBV Alma) ZDB JOP</enricher>
+  </enrichers>
+</enrichmentDebugger>

@@ -34,7 +34,7 @@ public class EnrichmentDebuggerServlet extends MCRServlet {
         Document doc = (Document) req.getAttribute("MCRXEditorSubmission");
         Element root = doc.getRootElement();
 
-        Element choosenEnricher = root.getChild("enricher");
+        Element choosenEnricher = root.getChild("enrichers").getChild("enricher");
         String enricherID = choosenEnricher.getAttributeValue("id");
         
         if ("custom".equals(enricherID)) {
