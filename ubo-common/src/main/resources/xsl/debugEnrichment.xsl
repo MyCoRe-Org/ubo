@@ -9,7 +9,10 @@
   <xsl:template match="/">
     <html id="debugEnrichment">
       <head>
-        <title>Enrichment Resolver Debugger</title>
+        <title>
+          <xsl:text>Enrichment Resolver Debugger: </xsl:text>
+          <xsl:value-of select="debugEnrichment/enricher/@id" />
+        </title>
         <link rel="stylesheet" href="{$WebApplicationBaseURL}webjars/highlightjs/11.5.0/styles/default.min.css" />
         <script src="{$WebApplicationBaseURL}webjars/highlightjs/11.5.0/highlight.min.js" />
         <script src="{$WebApplicationBaseURL}js/ModsDisplayUtils.js" />
@@ -23,6 +26,11 @@
   </xsl:template>
   
   <xsl:template match="debugEnrichment">
+    <h3>
+      <xsl:text>Datenquellen:</xsl:text>
+      <br />
+      <xsl:value-of select="enricher" />
+    </h3>
     <xsl:apply-templates select="*" />
   </xsl:template>
   

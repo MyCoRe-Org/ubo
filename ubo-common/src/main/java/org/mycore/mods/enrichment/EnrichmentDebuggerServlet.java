@@ -34,12 +34,15 @@ public class EnrichmentDebuggerServlet extends MCRServlet {
         Document doc = (Document) req.getAttribute("MCRXEditorSubmission");
         Element root = doc.getRootElement();
 
-        String enricherID = root.getAttributeValue("enricherID");
+        Element choosenEnricher = root.getChild("enricher");
+        String enricherID = choosenEnricher.getAttributeValue("id");
+        
         if ("custom".equals(enricherID)) {
             // Do ad-hoc configuration of a custom enrichment resolver
             String propertyName = "MCR.MODS.EnrichmentResolver.DataSources." + enricherID;
-            MCRConfiguration2.set(propertyName, root.getChildTextTrim("enricher"));
+            MCRConfiguration2.set(propertyName, choosenEnricher.getTextTrim());
         }
+        
         MCREnricher enricher = new MCREnricher(enricherID);
 
         MCRToXMLEnrichmentDebugger debugger = new MCRToXMLEnrichmentDebugger();
@@ -49,6 +52,7 @@ public class EnrichmentDebuggerServlet extends MCRServlet {
         enricher.enrich(mods);
 
         Element output = debugger.getDebugXML();
+        output.addContent(0, choosenEnricher.detach());
         output.addContent(new Element("result").addContent(mods));
 
         getLayoutService().doLayout(req, res, new MCRJDOMContent(output));
