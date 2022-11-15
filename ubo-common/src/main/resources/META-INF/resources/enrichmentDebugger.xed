@@ -99,7 +99,7 @@
               <xed:bind xpath="mods:location/mods:shelfLocator">
                 <div class="form-group form-inline">
                   <label class="mycore-form-label">Signatur der UB:</label>
-                  <input type="text" class="mycore-form-input" />
+                  <input type="text" class="mycore-form-input {$xed-validation-marker}" />
                 </div>
               </xed:bind>
               
