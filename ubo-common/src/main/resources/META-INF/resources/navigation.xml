@@ -72,6 +72,10 @@
       <label xml:lang="de">Dubletten-Bericht</label>
       <label xml:lang="en">Duplicates report</label>
     </item>
+    <item id="ubo.enrichmentDebugger" ref="enrichmentDebugger.xed" role="admin">
+      <label xml:lang="de">Enrichment Debugger</label>
+      <label xml:lang="en">Enrichment Debugger</label>
+    </item>
     <item id="classeditor" ref="modules/classeditor/classificationEditor.xml" role="admin">
       <label xml:lang="de">Klassifikationseditor</label>
       <label xml:lang="en">Classification editor</label>
