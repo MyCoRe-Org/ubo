@@ -785,12 +785,20 @@
       <div class="col-3">
         <xsl:choose>
           <xsl:when test="contains(text(), 'uri.gbv.de/document')">
-            <xsl:value-of select="i18n:translate('ubo.identifier.ppn')" />
-            <xsl:text>:</xsl:text>
+            <xsl:value-of select="concat(i18n:translate('ubo.identifier.ppn'), ':')" />
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="i18n:translate(concat('ubo.identifier.',@type))" />
-            <xsl:text>:</xsl:text>
+            <xsl:choose>
+              <xsl:when test="i18n:exists(concat('ubo.identifier.', @type))">
+                <xsl:value-of select="i18n:translate(concat('ubo.identifier.', @type), ':')" />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:attribute name="title">
+                  <xsl:value-of select="concat(i18n:translate('ubo.identifier'), ' (', @type, ')')"/>
+                </xsl:attribute>
+                <xsl:value-of select="i18n:translate('ubo.identifier')"/>
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:otherwise>
         </xsl:choose>
       </div>
@@ -1288,6 +1296,12 @@
   <xsl:template match="mods:identifier[@type='oclc']">
     <a href="https://www.worldcat.org/oclc/{text()}">
       <xsl:value-of select="text()" />
+    </a>
+  </xsl:template>
+
+  <xsl:template match="mods:identifier[@type = 'dbt']">
+    <a href="{concat('https://www.db-thueringen.de/receive/', .)}" target="_blank">
+      <xsl:value-of select="."/>
     </a>
   </xsl:template>
 
