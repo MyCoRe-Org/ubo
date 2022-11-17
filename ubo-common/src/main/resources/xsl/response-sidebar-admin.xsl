@@ -7,19 +7,19 @@
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:solr="xalan://org.mycore.solr.MCRSolrUtils"
   xmlns:encoder="xalan://java.net.URLEncoder"
-  exclude-result-prefixes="xsl mods xalan i18n encoder">
+  exclude-result-prefixes="xsl mods xalan i18n encoder solr">
 
   <xsl:param name="ServletsBaseURL" />
 
   <xsl:template match="/response">
     <xsl:if xmlns:check="xalan://org.mycore.ubo.AccessControl" test="check:currentUserIsAdmin()">
-      <article class="card">
-	<div class="card-body">
+      <article class="card mb-2">
+	      <div class="card-body">
           <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_fields']/lst[@name='status']" />
           <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_ranges']/lst[@name='modified']/lst[@name='counts']" />
           <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_ranges']/lst[@name='created']/lst[@name='counts']" />
           <xsl:apply-templates select="lst[@name='facet_counts']/lst[@name='facet_fields']/lst[@name='importID']" />
-	</div>
+	      </div>
       </article>
     </xsl:if>
   </xsl:template>
@@ -96,18 +96,18 @@
 
     <li class="list-group-item py-0 px-0 border-0">
       <a href="{$ServletsBaseURL}solr/select?q={encoder:encode($query,'UTF-8')}">
-	<table class="table table-borderless w-100 mb-0">
-	  <tbody>
-	    <tr>
-	      <td class="w-75 py-0 text-right">
-		<xsl:value-of select="$label"/>:
-	      </td>
-	      <td class="py-0" align="left">
-		<xsl:value-of select="$value"/>
-	      </td>
-	    </tr>
-	  </tbody>
-	</table>
+        <table class="table table-borderless w-100 mb-0">
+          <tbody>
+            <tr>
+              <td class="w-75 py-0 text-right">
+                <xsl:value-of select="$label"/>:
+              </td>
+              <td class="py-0" align="left">
+                <xsl:value-of select="$value"/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </a>
     </li>
   </xsl:template>
