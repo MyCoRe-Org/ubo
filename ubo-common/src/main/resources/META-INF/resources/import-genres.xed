@@ -49,7 +49,7 @@
   <xed:template id="genre.abstract">
     <xed:include uri="webapp:import-editor.xed" ref="title" />
     <xed:include uri="webapp:import-editor.xed" ref="author" />
-    <xed:if test="$host_intern='journal'">      
+    <xed:if test="not($host_intern='proceedings')">      
       <xed:include uri="webapp:import-editor.xed" ref="year" />
     </xed:if>
     <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
@@ -273,6 +273,10 @@
     <xed:include uri="webapp:import-editor.xed" ref="volume" />
     <xed:include uri="webapp:import-editor.xed" ref="issue" />
     <xed:include uri="webapp:import-editor.xed" ref="pages" />
+  </xed:template>
+  
+  <xed:template id="host.newspaper">  
+    <xed:include uri="webapp:import-genres.xed" ref="host.journal" />    
   </xed:template>
   
   <xed:template id="host.blog">
