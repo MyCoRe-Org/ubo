@@ -5,7 +5,8 @@
                 xmlns:mods="http://www.loc.gov/mods/v3"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 xmlns:str="http://exslt.org/strings"
-                exclude-result-prefixes="mods xlink str">
+                xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
+                exclude-result-prefixes="mods xlink str mcrxsl">
 
   <xsl:import href="xslImport:solr-document:ubo-solr.xsl" />
 
@@ -83,6 +84,11 @@
     <field name="importID">
       <xsl:value-of select="text()" />
     </field>
+
+    <field name="importDate">
+      <xsl:value-of select="mcrxsl:regexp(text(), '[^(\d\d\d\d)]*', '')" />
+    </field>
+
   </xsl:template>
 
   <xsl:template match="mods:mods/mods:titleInfo" mode="solrField">

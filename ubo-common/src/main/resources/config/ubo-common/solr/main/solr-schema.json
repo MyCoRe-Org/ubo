@@ -349,6 +349,15 @@
   },
   {
     "add-field": {
+      "name": "importDate",
+      "type": "string",
+      "multiValued": false,
+      "indexed": true,
+      "stored": false
+    }
+  },
+  {
+    "add-field": {
       "name": "issue",
       "type": "ubo_text",
       "multiValued": false,
