@@ -353,7 +353,7 @@
       "type": "string",
       "multiValued": false,
       "indexed": true,
-      "stored": false
+      "stored": true
     }
   },
   {

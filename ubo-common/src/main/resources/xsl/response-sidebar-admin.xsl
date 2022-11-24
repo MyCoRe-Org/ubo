@@ -7,7 +7,8 @@
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:solr="xalan://org.mycore.solr.MCRSolrUtils"
   xmlns:encoder="xalan://java.net.URLEncoder"
-  exclude-result-prefixes="xsl mods xalan i18n encoder solr">
+  xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
+  exclude-result-prefixes="xsl mods xalan i18n encoder solr mcrxsl">
 
   <xsl:param name="ServletsBaseURL" />
 
@@ -47,7 +48,7 @@
     </hgroup>
     <ul class="list-group list-group-flush">
       <xsl:for-each select="int">
-        <xsl:sort select="@name"  order="descending" />
+        <xsl:sort select="mcrxsl:regexp(@name, '[^(\d\d\d\d)]*', '')"  order="descending" />
         <xsl:if test="position() &lt;= 20"> <!-- show only latest 20 imports -->
           <xsl:call-template name="output.value">
   	        <xsl:with-param name="label" select="@name"/>
