@@ -3,16 +3,7 @@
 <xed:templates xmlns:xed="http://www.mycore.de/xeditor">
 
   <xed:template id="validation">
-    <xed:if test="$xed-validation-failed">
-      <div class="validation-failures">
-        <h3>
-          <xed:output i18n="form.validation.failed" />
-        </h3>
-        <ul>
-          <xed:display-validation-messages />
-        </ul>
-      </div>
-    </xed:if>
+    <xed:include uri="webapp:import-editor.xed" ref="displayValidationMessages" />
   </xed:template>
 
   <xed:template id="name">

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+  Frontend of enrichment debugger:  
+  Form to select enrichment resolver configuration and input mods:mods.
+  Sends input to EnrichmentDebuggerServlet to run and display debug output.
+ -->
+
+<webpage id="ubo.enrichmentDebugger">
+  <title xml:lang="de">Enrichment Resolver Debugger</title>
+
+  <article class="card mb-1">
+    <div class="card-body">
+      <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
+
+        <xed:source uri="cache:enrichmentConfig:custom" />
+
+        <xed:bind xpath="enrichmentDebugger">
+        
+          <xed:include uri="webapp:import-editor.xed" ref="displayValidationMessages" />
+   
+          <fieldset>
+            <legend>Zu verwendende Enrichment Resolver Konfiguration:</legend>
+            
+            <xed:bind xpath="enrichers">
+              <xed:bind xpath="enricher[@id='custom']" /> <!-- Empty placeholder for custom enrichment -->
+
+              <xed:repeat xpath="enricher">
+                <div class="form-group form-inline">
+                  <label class="mycore-form-label">
+                    <xed:output value="@id" />
+                    
+                    <!-- Workaround to choose the ID via radio buttons: -->
+                    <!-- 1. Remember the current enricher/@id in a variable -->
+                    <!-- 2. Bind to a common parent's attribute so all radio buttons get same name -->
+                    <xed:bind xpath="@id" name="id" />
+                    <xed:bind xpath="../@selected">
+                      <input type="radio" value="{$id}" class="ml-2" style="transform:scale(1.5);" />
+                    </xed:bind>
+                    
+                  </label>
+                  <xed:choose>
+                    <xed:when test="@id='custom'">
+                      <input type="text" class="mycore-form-input {$xed-validation-marker}" style="flex: 0 0 70%; max-width: 70%;" />
+                    </xed:when>
+                    <xed:otherwise>
+                      <input type="text" class="mycore-form-input" style="flex: 0 0 70%; max-width: 70%;" disabled="disabled" />
+                    </xed:otherwise>
+                  </xed:choose>
+                  
+                </div>
+              </xed:repeat>
+
+              <xed:validate xpath="/enrichmentDebugger/enrichers/@selected" required="true" display="global">Bitte eine Enrichment Resolver Konfiguration wählen!</xed:validate>
+              <xed:validate xpath="/enrichmentDebugger/enrichers/enricher[@id='custom']" relevant-if="/enrichmentDebugger/enrichers/@selected='custom'" required="true" display="global">Bitte IDs der Datenquellen eingeben!</xed:validate>
+
+              <!-- Remove those enrichment resolver configs that have not been selected -->
+              <xed:cleanup-rule xpath="/enrichmentDebugger/enrichers/enricher" relevant-if="@id=../@selected" />
+              
+            </xed:bind>
+            
+          </fieldset>
+          
+          <fieldset class="mt-4">
+            <legend>Aufzulösende Identifier als Ausgangsbasis:</legend>
+            
+            <xed:bind xpath="mods:mods">
+                      
+              <xed:bind xpath="mods:identifier">
+              
+                <div class="form-group form-inline">
+      
+                  <div class="mycore-form-label">
+                    <xed:bind xpath="@type" default="doi">
+                      <select class="form-control w-100 custom-select">
+                        <option value="doi">DOI (10. ...):</option>
+                        <option value="urn">URN (urn:nbn:de: ...):</option>
+                        <option value="issn">ISSN:</option>
+                        <option value="isbn">ISBN:</option>
+                        <option value="pubmed">PubMed ID:</option>
+                        <option value="scopus">Scopus ID:</option>
+                        <option value="arxiv">arXiv.org:</option>
+                        <option value="ieee">IEEE Explore:</option>
+                        <option value="isi">Web of Science ID:</option>
+                        <option value="duepublico2">DuEPublico 2 ID:</option>
+                        <option value="mms">Alma MMS ID:</option>
+                        <option value="ppn">PPN:</option>
+                        <option value="zdb">ZDB ID:</option>
+                      </select>
+                    </xed:bind>
+                  </div>
+      
+                  <input type="text" class="mycore-form-input {$xed-validation-marker}" />
+                </div>
+              </xed:bind>
+              
+              <xed:include uri="webapp:import-editor.xed" ref="validationRules4Identifiers" />
+              
+              <xed:bind xpath="mods:location/mods:shelfLocator">
+                <div class="form-group form-inline">
+                  <label class="mycore-form-label">Signatur der UB:</label>
+                  <input type="text" class="mycore-form-input {$xed-validation-marker}" />
+                </div>
+              </xed:bind>
+              
+            </xed:bind>
+
+          </fieldset>
+            
+          <div class="form-inline form-group mb-4">
+            <label class="mycore-form-label" />
+            <button class="btn btn-sm btn-primary mr-2" type="submit" xed:target="servlet" xed:href="EnrichmentDebuggerServlet">
+              <xed:output i18n="button.submit" />
+            </button>
+            <button class="ml-2 btn btn-sm btn-primary" type="submit" xed:target="debug">Debug</button>
+          </div>
+      
+          <!-- List all supported data sources and identifiers -->
+          <xed:bind xpath="dataSources">
+            <table class="table table-sm table-hover mt-4">
+              <thead>
+                <th class="text-right" scope="col">Datenquelle</th>
+                <th scope="col">Unterstütze Identifier</th>
+              </thead>
+              <tbody>
+                <xed:repeat xpath="dataSource">
+                  <tr>
+                    <th class="text-right" scope="row">
+                      <xed:output value="@id" />
+                    </th>
+                    <td>
+                      <xed:output value="text()" />
+                    </td>
+                  </tr>
+                </xed:repeat>
+              </tbody>
+            </table>
+          </xed:bind>          
+          
+        </xed:bind>
+
+      </xed:form>
+    </div>
+  </article>
+
+</webpage>
