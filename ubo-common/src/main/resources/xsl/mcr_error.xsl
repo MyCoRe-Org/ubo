@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="i18n">
+                xmlns:xalan="http://xml.apache.org/xalan"
+                xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+                xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
+                exclude-result-prefixes="i18n mcrxsl xalan">
+
+  <xsl:param name="MCR.Users.Superuser.GroupName"/>
 
   <xsl:template match="/">
     <html>
@@ -23,7 +28,7 @@
         <p>
           <xsl:value-of select="concat(i18n:translate('error.intro'),' :')"/>
         </p>
-        <pre style="padding-left:3ex;">
+        <pre class="pl-3">
           <xsl:value-of select="text()"/>
         </pre>
         <xsl:choose>
@@ -52,7 +57,9 @@
         <p>
           <xsl:value-of select="i18n:translate('error.requestURI',@requestURI)"/>
         </p>
-        <xsl:apply-templates select="exception"/>
+        <xsl:if test="mcrxsl:isCurrentUserInRole($MCR.Users.Superuser.GroupName)">
+          <xsl:apply-templates select="exception"/>
+        </xsl:if>
       </div>
     </div>
   </xsl:template>
