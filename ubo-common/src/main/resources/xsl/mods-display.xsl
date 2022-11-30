@@ -1003,7 +1003,9 @@
     <xsl:apply-templates select="mods:part" mode="details" />
     <xsl:apply-templates select="mods:originInfo/mods:dateOther" mode="details" />
     <xsl:apply-templates select="mods:physicalDescription/mods:extent" mode="details" />
-    <xsl:apply-templates select="mods:identifier" mode="details" />
+    <xsl:apply-templates select="mods:identifier" mode="details">
+      <xsl:sort select="@type"/>
+    </xsl:apply-templates>
     <xsl:apply-templates select="mods:location/mods:shelfLocator" mode="details" />
     <xsl:apply-templates select="mods:extension[@displayLabel='project']/cerif:Project" mode="details" />
     <xsl:apply-templates select="mods:location/mods:url" mode="details" />
