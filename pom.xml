@@ -309,11 +309,6 @@
       </dependency>
       <dependency>
         <groupId>org.webjars</groupId>
-        <artifactId>highlightjs</artifactId>
-        <version>11.5.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.webjars</groupId>
         <artifactId>jquery</artifactId>
         <version>3.3.1</version>
       </dependency>
@@ -343,6 +338,12 @@
             <artifactId>commons-logging</artifactId>
           </exclusion>
         </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.webjars</groupId>
+        <artifactId>highlightjs</artifactId>
+        <version>11.5.0</version>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>wsdl4j</groupId>
