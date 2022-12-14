@@ -11,7 +11,7 @@
 
   <groupId>org.mycore.ubo</groupId>
   <artifactId>ubo</artifactId>
-  <version>prod-SNAPSHOT</version>
+  <version>dev-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Universitätsbibliographie</name>
