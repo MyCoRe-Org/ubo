@@ -253,7 +253,7 @@
 
       <xsl:choose>
 
-        <xsl:when test="count(./item/@ref) &gt; 0">
+        <xsl:when test="count(./item/@ref) &gt; 0 ">
           <!-- print dropdown menu option -->
           <li class="nav-item dropdown {$class_active}">
             <xsl:if test="@class != ''">
@@ -267,10 +267,20 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <xsl:for-each select="./item">
-                <a class="dropdown-item" href="{$WebApplicationBaseURL}{@ref}">
-                  <xsl:copy-of select="@target" />
-                  <xsl:call-template name="output.label.for.lang" />
-                </a>
+                <xsl:choose xmlns:check="xalan://org.mycore.common.xml.MCRXMLFunctions">
+                  <xsl:when test="@role and check:isCurrentUserInRole(@role)">
+                    <a class="dropdown-item" href="{$WebApplicationBaseURL}{@ref}">
+                      <xsl:copy-of select="@target" />
+                      <xsl:call-template name="output.label.for.lang" />
+                    </a>
+                  </xsl:when>
+                  <xsl:when test="not(@role)">
+                    <a class="dropdown-item" href="{$WebApplicationBaseURL}{@ref}">
+                      <xsl:copy-of select="@target" />
+                      <xsl:call-template name="output.label.for.lang" />
+                    </a>
+                  </xsl:when>
+                </xsl:choose>
               </xsl:for-each>
             </div>
           </li>
