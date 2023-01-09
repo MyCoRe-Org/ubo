@@ -10,6 +10,8 @@
 
   <xsl:include href="xslInclude:components" />
 
+  <xsl:param name="CurrentLang"/>
+
   <!-- last navigation id calculated from navigation.xml -->
   <xsl:variable name="NavigationID" xmlns:lastPageID="xalan://org.mycore.ubo.LastPageID">
     <xsl:choose>
@@ -207,7 +209,13 @@
 
       <!-- ==== link to internal url ==== -->
       <xsl:when test="@ref">
-        <a class="nav-link" href="{$WebApplicationBaseURL}{@ref}">
+        <a class="nav-link">
+          <xsl:attribute name="href">
+            <xsl:call-template name="generate-href-with-lang-param">
+              <xsl:with-param name="ref" select="@ref"/>
+            </xsl:call-template>
+          </xsl:attribute>
+
           <xsl:copy-of select="@target" />
           <xsl:call-template name="output.label.for.lang" />
         </a>
@@ -250,10 +258,8 @@
     </xsl:variable>
 
     <xsl:if test="$allowed = 'true' or $alwaysVisible = 'true'">
-
       <xsl:choose>
-
-        <xsl:when test="count(./item/@ref) &gt; 0">
+        <xsl:when test="count(./item/@ref) &gt; 0 ">
           <!-- print dropdown menu option -->
           <li class="nav-item dropdown {$class_active}">
             <xsl:if test="@class != ''">
@@ -267,10 +273,32 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <xsl:for-each select="./item">
-                <a class="dropdown-item" href="{$WebApplicationBaseURL}{@ref}">
-                  <xsl:copy-of select="@target" />
-                  <xsl:call-template name="output.label.for.lang" />
-                </a>
+                <xsl:choose xmlns:check="xalan://org.mycore.common.xml.MCRXMLFunctions">
+                  <xsl:when test="@role and check:isCurrentUserInRole(@role)">
+                    <a class="dropdown-item">
+                      <xsl:attribute name="href">
+                        <xsl:call-template name="generate-href-with-lang-param">
+                          <xsl:with-param name="ref" select="@ref"/>
+                        </xsl:call-template>
+                      </xsl:attribute>
+
+                      <xsl:copy-of select="@target" />
+                      <xsl:call-template name="output.label.for.lang" />
+                    </a>
+                  </xsl:when>
+                  <xsl:when test="not(@role)">
+                    <a class="dropdown-item">
+                      <xsl:attribute name="href">
+                        <xsl:call-template name="generate-href-with-lang-param">
+                          <xsl:with-param name="ref" select="@ref"/>
+                        </xsl:call-template>
+                      </xsl:attribute>
+
+                      <xsl:copy-of select="@target" />
+                      <xsl:call-template name="output.label.for.lang" />
+                    </a>
+                  </xsl:when>
+                </xsl:choose>
               </xsl:for-each>
             </div>
           </li>
@@ -284,6 +312,22 @@
       </xsl:choose>
     </xsl:if>
 
+  </xsl:template>
+
+  <xsl:template name="generate-href-with-lang-param">
+    <xsl:param name="ref"/>
+    <xsl:variable name="param-separator">
+      <xsl:choose>
+        <xsl:when test="contains($ref, '?')">
+          <xsl:value-of select="'&amp;'"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="'?'"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:value-of select="concat($WebApplicationBaseURL, $ref, $param-separator, 'lang=', $CurrentLang)"/>
   </xsl:template>
 
 </xsl:stylesheet>
