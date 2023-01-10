@@ -1435,7 +1435,7 @@
     <xsl:value-of select="mods:number" />
 
     <xsl:variable name="volume.number" select="mods:number" />
-    <xsl:variable name="year.issued" select="//mods:dateIssued[not(ancestor::mods:relatedItem[@type='host'])][1]" />
+    <xsl:variable name="year.issued" select="ancestor::mods:mods/descendant::mods:dateIssued[not(ancestor::mods:relatedItem[@type='host'])][1]" />
 
     <xsl:if test="ancestor::mods:relatedItem/mods:genre[@type='intern']='journal'"> <!-- if it is a journal -->
       <xsl:if test="(string-length($year.issued) &gt; 0) and translate($year.issued,'0123456789','jjjjjjjjjj') = 'jjjj'"> <!-- and there is a year -->
