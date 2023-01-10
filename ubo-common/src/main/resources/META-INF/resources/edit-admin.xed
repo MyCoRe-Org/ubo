@@ -71,7 +71,7 @@
             <legend>erschienen in:</legend>
             <xed:bind xpath="mods:relatedItem[@type='host']">
               <xed:choose>
-                <xed:when test="@xlink:href">
+                <xed:when test="string-length(@xlink:href) &gt; 0">
                   <xed:include uri="webapp:import-editor.xed" ref="linked.relatedItem" />
                   <xed:include uri="webapp:import-editor.xed" ref="volume" />
                   <xed:include uri="webapp:import-editor.xed" ref="issue" />
@@ -79,6 +79,7 @@
                   <xed:include uri="webapp:import-editor.xed" ref="article_number" />
                 </xed:when>
                 <xed:otherwise>
+                  <xed:include uri="webapp:import-editor.xed" ref="linked.relatedItem" />
                   <xed:include uri="webapp:import-editor.xed" ref="host" />
                   <xed:include uri="webapp:import-editor.xed" ref="oa" />    
                   <xed:include uri="webapp:import-editor.xed" ref="title.complex" />
