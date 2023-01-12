@@ -23,6 +23,7 @@
   <xsl:param name="UBO.LSF.Link" />
   <xsl:param name="UBO.JOP.Parameters" />
   <xsl:param name="UBO.JOP.URL" />
+  <xsl:param name="UBO.URI.gbv.de.ppn.redirect" />
 
   <!-- Expect one more author to be displayed as the last author is always getting displayed -->
   <xsl:param name="UBO.Initially.Visible.Authors" select="14" />
@@ -1310,10 +1311,17 @@
   <!-- ========== URI / PPN ========== -->
 
   <xsl:template match="mods:identifier[@type='uri']">
+    <xsl:variable name="ppn" select="substring-after(text(), ':ppn:')"/>
+
     <xsl:choose>
+      <xsl:when test="$UBO.URI.gbv.de.ppn.redirect">
+        <a href="{$UBO.URI.gbv.de.ppn.redirect}{$ppn}">
+          <xsl:value-of select="$ppn" />
+        </a>
+      </xsl:when>
       <xsl:when test="contains(text(), 'uri.gbv.de/document')">
         <a href="{text()}?format=redirect">
-          <xsl:value-of select="substring-after(text(), ':ppn:')" />
+          <xsl:value-of select="$ppn" />
         </a>
       </xsl:when>
       <xsl:otherwise>
