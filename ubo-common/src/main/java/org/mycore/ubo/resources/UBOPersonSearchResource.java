@@ -40,6 +40,9 @@ public class UBOPersonSearchResource {
 
     public static final String PATH = "search/person";
 
+    private static final boolean INCLUDE_LOCAL_USERS = MCRConfiguration2.getBoolean(
+        "UBO.Search.include.Local.Users").orElse(false);
+
     @GET
     public Response search(@QueryParam("query") String searchQuery) {
         String id = "webpage:/rsc/" + PATH;
@@ -54,7 +57,7 @@ public class UBOPersonSearchResource {
 
         try {
             PersonSearchResult results = service.searchPerson(searchQuery);
-            if (!LocalService.class.getName().equals(classPrefix + STRATEGY_CLASS_SUFFIX)) {
+            if (INCLUDE_LOCAL_USERS && !LocalService.class.getName().equals(classPrefix + STRATEGY_CLASS_SUFFIX)) {
                 LocalService ls = new LocalService();
                 PersonSearchResult localSr = ls.searchPerson(searchQuery);
                 results.personList.addAll(0, localSr.personList);
