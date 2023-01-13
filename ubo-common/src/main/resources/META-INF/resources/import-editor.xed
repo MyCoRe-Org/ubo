@@ -368,7 +368,7 @@
     <xed:repeat xpath="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='inv']" max="99">
       <div class="form-group form-inline ubo-repeat-group">
         <label for="{xed:generate-id()}" class="mycore-form-label">
-          <xed:output value="concat(i18:translate('ubo.role.inventor'), ': ')" />
+          <xed:output value="concat(i18n:translate('ubo.role.inventor'), ': ')" />
         </label>
         <xed:include uri="webapp:import-editor.xed" ref="person" />
       </div>
@@ -814,7 +814,13 @@
             </a>
             <br/>
             <xed:include uri="xslStyle:relatedItem-editor:mcrobject:{.}" />
+            <button type="submit" class="btn btn-sm btn-primary" name="_xed_submit_remove:/mycoreobject/descendant::mods:relatedItem/@xlink:href[.='{.}']|host">
+              <xed:output i18n="ubo.relatedItem.host.unlink" /> 
+            </button>
           </xed:if>
+          <button class="btn btn-sm btn-primary" type="submit" xed:target="subselect" xed:href="../search.xed?id_type=id&amp;genre={../mods:genre[@type='intern']}">
+            <xed:output i18n="ubo.relatedItem.host.select" />
+          </button>
         </div>
       </div>
     </xed:bind>
