@@ -37,6 +37,10 @@
     @extend .col-sm-3;
   }
 
+  .mycore-form-input::placeholder, .mycore-form-input-double::placeholder {
+    color:#999;
+  }
+
   .form-control.ubo-repeater-button-box:hover {
     border: 1px solid $primary;
   }
