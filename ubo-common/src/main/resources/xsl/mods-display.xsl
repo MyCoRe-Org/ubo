@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -23,6 +23,7 @@
   <xsl:param name="UBO.LSF.Link" />
   <xsl:param name="UBO.JOP.Parameters" />
   <xsl:param name="UBO.JOP.URL" />
+  <xsl:param name="UBO.URI.gbv.de.ppn.redirect" />
 
   <!-- Expect one more author to be displayed as the last author is always getting displayed -->
   <xsl:param name="UBO.Initially.Visible.Authors" select="14" />
@@ -71,7 +72,7 @@
     </span>
   </xsl:template>
 
-  <!-- ========== Ausgabe Fakultät ========== -->
+  <!-- ========== Ausgabe FakultÃ¤t ========== -->
 
   <xsl:template match="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info">
     <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.department')}"
@@ -177,7 +178,7 @@
     </div>
   </xsl:template>
 
-  <!-- ========== Ausgabe Datenträgertyp ========== -->
+  <!-- ========== Ausgabe DatentrÃ¤gertyp ========== -->
 
   <xsl:template match="mods:classification[contains(@authorityURI,'mediaType')]" mode="details">
     <div class="row">
@@ -190,7 +191,7 @@
     </div>
   </xsl:template>
 
-  <!-- ========== Ausgabe Zweitveröffentlichung ========== -->
+  <!-- ========== Ausgabe ZweitverÃ¶ffentlichung ========== -->
 
   <xsl:template match="mods:classification[contains(@authorityURI,'republication')]" mode="details">
     <div class="row">
@@ -278,7 +279,7 @@
 
   <!-- ========== Zitierform ========== -->
   <xsl:template match="mods:mods|mods:relatedItem" mode="cite">
-    <xsl:param name="mode">plain</xsl:param> <!-- plain: Als Fließtext formatieren, sonst mit <div>'s -->
+    <xsl:param name="mode">plain</xsl:param> <!-- plain: Als FlieÃŸtext formatieren, sonst mit <div>'s -->
 
     <xsl:apply-templates select="." mode="cite.title.name">
       <xsl:with-param name="mode" select="$mode" />
@@ -410,7 +411,7 @@
     </xsl:if>
   </xsl:template>
 
-  <!-- ========== Überordnung (In:) ========== -->
+  <!-- ========== Ãœberordnung (In:) ========== -->
   <xsl:template match="mods:relatedItem[@type='host']" mode="brief">
     <xsl:text>In: </xsl:text>
     <xsl:apply-templates select="." mode="cite" />
@@ -642,7 +643,7 @@
     </div>
   </xsl:template>
 
-   <!-- ========== Erster Titel der Überordnung/Serie in Detailansicht, Tabelle ========== -->
+   <!-- ========== Erster Titel der Ãœberordnung/Serie in Detailansicht, Tabelle ========== -->
   <xsl:template match="mods:relatedItem/mods:titleInfo[1]" mode="details" priority="1">
     <div class="row">
       <div class="col-3">
@@ -785,12 +786,20 @@
       <div class="col-3">
         <xsl:choose>
           <xsl:when test="contains(text(), 'uri.gbv.de/document')">
-            <xsl:value-of select="i18n:translate('ubo.identifier.ppn')" />
-            <xsl:text>:</xsl:text>
+            <xsl:value-of select="concat(i18n:translate('ubo.identifier.ppn'), ':')" />
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="i18n:translate(concat('ubo.identifier.',@type))" />
-            <xsl:text>:</xsl:text>
+            <xsl:choose>
+              <xsl:when test="i18n:exists(concat('ubo.identifier.', @type))">
+                <xsl:value-of select="i18n:translate(concat('ubo.identifier.', @type), ':')" />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:attribute name="title">
+                  <xsl:value-of select="concat(i18n:translate('ubo.identifier'), ' (', @type, ')')"/>
+                </xsl:attribute>
+                <xsl:value-of select="i18n:translate('ubo.identifier')"/>
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:otherwise>
         </xsl:choose>
       </div>
@@ -881,11 +890,11 @@
         </div>
         <div class="col-9">
           <span title="{i18n:translate('ubo.coordinates.latitude')}">
-            <xsl:value-of select="concat(mods:coordinates[1], '°')"/>
+            <xsl:value-of select="concat(mods:coordinates[1], 'Â°')"/>
           </span>
           <xsl:text>, </xsl:text>
           <span title="{i18n:translate('ubo.coordinates.longitude')}">
-            <xsl:value-of select="concat(mods:coordinates[2], '°')"/>
+            <xsl:value-of select="concat(mods:coordinates[2], 'Â°')"/>
           </span>
         </div>
       </div>
@@ -932,7 +941,7 @@
     </div>
   </xsl:template>
 
-  <!-- ========== Verweise/Überordnung ========== -->
+  <!-- ========== Verweise/Ãœberordnung ========== -->
   <xsl:template match="mods:relatedItem[(@type='host') or (@type='series')]" mode="details">
     <div class="ubo_related_details">
       <xsl:apply-templates select="." mode="details_lines" />
@@ -995,7 +1004,9 @@
     <xsl:apply-templates select="mods:part" mode="details" />
     <xsl:apply-templates select="mods:originInfo/mods:dateOther" mode="details" />
     <xsl:apply-templates select="mods:physicalDescription/mods:extent" mode="details" />
-    <xsl:apply-templates select="mods:identifier" mode="details" />
+    <xsl:apply-templates select="mods:identifier" mode="details">
+      <xsl:sort select="@type"/>
+    </xsl:apply-templates>
     <xsl:apply-templates select="mods:location/mods:shelfLocator" mode="details" />
     <xsl:apply-templates select="mods:extension[@displayLabel='project']/cerif:Project" mode="details" />
     <xsl:apply-templates select="mods:location/mods:url" mode="details" />
@@ -1080,7 +1091,7 @@
     <xsl:apply-templates select="mods:subTitle" />
   </xsl:template>
 
-  <!-- ========== Führende Artikel: Der, Die, Das ========== -->
+  <!-- ========== FÃ¼hrende Artikel: Der, Die, Das ========== -->
   <xsl:template match="mods:nonSort">
     <xsl:value-of select="text()" />
     <xsl:text> </xsl:text>
@@ -1102,14 +1113,14 @@
     <xsl:value-of select="text()" />
   </xsl:template>
 
-  <!-- ========== Typ des Titels: Haupttitel, abgekürzt, übersetzt, ... ========== -->
+  <!-- ========== Typ des Titels: Haupttitel, abgekÃ¼rzt, Ã¼bersetzt, ... ========== -->
   <xsl:template match="mods:titleInfo/@type">
     <xsl:text> (</xsl:text>
     <xsl:value-of select="i18n:translate(concat('ubo.title.type.',.))" />
     <xsl:text>)</xsl:text>
   </xsl:template>
 
-  <!-- ========== Rolle einer Person oder Körperschaft ========== -->
+  <!-- ========== Rolle einer Person oder KÃ¶rperschaft ========== -->
   <xsl:template match="mods:roleTerm[@type='code' and @authority='marcrelator']">
     <xsl:variable name="uri">
       <xsl:choose>
@@ -1156,7 +1167,7 @@
     <xsl:value-of select="text()" />
   </xsl:template>
 
-  <!-- ========== Körperschaft ============ -->
+  <!-- ========== KÃ¶rperschaft ============ -->
   <xsl:template match="mods:name[@type='corporate']">
     <xsl:value-of select="mods:namePart" />
   </xsl:template>
@@ -1291,13 +1302,26 @@
     </a>
   </xsl:template>
 
+  <xsl:template match="mods:identifier[@type = 'dbt']">
+    <a href="{concat('https://www.db-thueringen.de/receive/', .)}" target="_blank">
+      <xsl:value-of select="."/>
+    </a>
+  </xsl:template>
+
   <!-- ========== URI / PPN ========== -->
 
   <xsl:template match="mods:identifier[@type='uri']">
+    <xsl:variable name="ppn" select="substring-after(text(), ':ppn:')"/>
+
     <xsl:choose>
+      <xsl:when test="$UBO.URI.gbv.de.ppn.redirect">
+        <a href="{$UBO.URI.gbv.de.ppn.redirect}{$ppn}">
+          <xsl:value-of select="$ppn" />
+        </a>
+      </xsl:when>
       <xsl:when test="contains(text(), 'uri.gbv.de/document')">
         <a href="{text()}?format=redirect">
-          <xsl:value-of select="substring-after(text(), ':ppn:')" />
+          <xsl:value-of select="$ppn" />
         </a>
       </xsl:when>
       <xsl:otherwise>
@@ -1353,7 +1377,7 @@
   <!-- ========== Auflage ========== -->
   <xsl:template match="mods:edition">
     <xsl:value-of select="text()" />
-    <!-- Wenn Auflage nicht "Aufl." oder "Ed." und nur Ziffern enthält (Auflagennummer), ergänze "Aufl." -->
+    <!-- Wenn Auflage nicht "Aufl." oder "Ed." und nur Ziffern enthÃ¤lt (Auflagennummer), ergÃ¤nze "Aufl." -->
     <xsl:if test="not(contains(translate(text(),'AaUuEeDd','@@@@@@@@'),'@')) and (string-length(translate(text(),'0123456789. ','')) = 0)">
       <xsl:if test="substring(.,string-length(.)) != '.'">
         <xsl:text>.</xsl:text>
@@ -1419,7 +1443,7 @@
     <xsl:value-of select="mods:number" />
 
     <xsl:variable name="volume.number" select="mods:number" />
-    <xsl:variable name="year.issued" select="//mods:dateIssued[not(ancestor::mods:relatedItem[@type='host'])][1]" />
+    <xsl:variable name="year.issued" select="ancestor::mods:mods/descendant::mods:dateIssued[not(ancestor::mods:relatedItem[@type='host'])][1]" />
 
     <xsl:if test="ancestor::mods:relatedItem/mods:genre[@type='intern']='journal'"> <!-- if it is a journal -->
       <xsl:if test="(string-length($year.issued) &gt; 0) and translate($year.issued,'0123456789','jjjjjjjjjj') = 'jjjj'"> <!-- and there is a year -->
@@ -1528,7 +1552,7 @@
     </a>
   </xsl:template>
 
-  <!-- ========== ( Serie ; Bandzählung ) ========== -->
+  <!-- ========== ( Serie ; BandzÃ¤hlung ) ========== -->
   <xsl:template match="mods:relatedItem[@type='series']">
     <xsl:text>(</xsl:text>
     <xsl:apply-templates select="mods:titleInfo[1]" />
