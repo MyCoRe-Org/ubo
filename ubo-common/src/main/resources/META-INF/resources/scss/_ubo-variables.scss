@@ -44,6 +44,6 @@ $theme-colors: (
 $pmud-color:          $primary !default;
 $pmud-color-hover:  white !default;
 
-// use transparency based on input color for placeholder
+// use input color for placeholder
 $input-color: $body-color !default;
-$input-placeholder-color: rgba($input-color, .4) !default;
+$input-placeholder-color: $input-color !default;
