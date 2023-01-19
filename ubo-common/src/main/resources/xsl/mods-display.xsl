@@ -99,7 +99,8 @@
 
   <xsl:template match="mods:classification[contains(@authorityURI,'oa')]" mode="label-info">
     <xsl:variable name="category" select="$oa//category[@ID=substring-after(current()/@valueURI,'#')]" />
-    <span class="label-info badge badge-inverse mr-1 ubo-hover-pointer" style="background-color:{$category/label[lang('x-color')]/@text}"
+
+    <span class="label-info badge badge-inverse mr-1 ubo-oa-{$category/@ID} ubo-hover-pointer" style="background-color:{$category/label[lang('x-color')]/@text}"
           onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+oa_exact:', $category/@ID))}')">
       <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
     </span>
