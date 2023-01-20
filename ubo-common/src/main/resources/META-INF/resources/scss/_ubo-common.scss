@@ -146,6 +146,38 @@
     content: "* \00A0";
   }
 
+  .ubo-oa-closed {
+    background-color: #5fa8e8;
+  }
+
+  .ubo-oa-oa {
+    background-color: #c8fe2e;
+  }
+
+  .ubo-oa-green {
+    background-color: #00ff00;
+  }
+
+  .ubo-oa-gold {
+    background-color: #ffff00;
+  }
+
+  .ubo-oa-platin {
+    background-color: #cecece;
+  }
+
+  .ubo-oa-hybrid {
+    background-color: #ff8000;
+  }
+
+  .ubo-oa-bronze {
+    background-color: #bf8970;
+  }
+
+  .ubo-oa-embargo {
+    background-color: #868a08;
+  }
+
 // Large devices (desktops) and below: <= 1200px
 @include media-breakpoint-down(lg) {
 // add/overwrite styles for responsive level lg and lower
