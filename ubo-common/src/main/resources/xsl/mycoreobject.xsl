@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!-- ============================================== -->
 <!-- $Revision$ $Date$ -->
@@ -64,9 +64,12 @@
 
 <xsl:template name="breadcrumb">
   <ul id="breadcrumb">
-    <li>
-      <xsl:value-of select="i18n:translate('result.dozbib.results')" />
-    </li>
+    <xsl:if test="contains($Referer, concat($WebApplicationBaseURL, 'servlets/solr'))">
+      <li data-href="{$Referer}">
+        <xsl:value-of select="i18n:translate('result.dozbib.results')" />
+      </li>
+    </xsl:if>
+
     <li>
       <xsl:value-of select="i18n:translate('result.dozbib.entry')" />
       <xsl:text> </xsl:text>
