@@ -91,8 +91,7 @@
                     }
                 },
                 colors: [
-                  '<xsl:value-of select="$colorNoOA" />',
-                  <xsl:apply-templates select="$categories/category" mode="color" />
+                  '<xsl:value-of select="$colorNoOA" />'
                 ],
                 series: [
                   <xsl:call-template name="seriesNoOA" />
