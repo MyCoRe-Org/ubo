@@ -144,7 +144,9 @@
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>, data: [</xsl:text>
     <xsl:apply-templates select="." mode="values" />
-    <xsl:text>] }</xsl:text>
+    <xsl:text>], className: &quot;</xsl:text>
+    <xsl:value-of select="concat('ubo-statistic-oa-', @ID)"/>
+    <xsl:text>&quot; }</xsl:text>
 
     <xsl:if test="category|following::category">, </xsl:if>
     <xsl:apply-templates select="category" mode="series" />
