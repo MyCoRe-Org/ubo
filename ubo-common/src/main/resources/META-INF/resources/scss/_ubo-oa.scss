@@ -48,6 +48,10 @@
 }
 
 .ubo-statistic-oa {
+    &:hover {
+        filter: brightness(110%);
+    }
+
     &-closed rect {
         @extend .ubo-statistic-oa;
         fill: $openaccess-closed-color;
