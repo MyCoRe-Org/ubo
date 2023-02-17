@@ -1,26 +1,29 @@
 .ubo-badge-oa {
     @extend .badge;
 
+    color: $openaccess-text-color;
+
     &-closed {
         @extend .ubo-badge-oa;
         background-color: $openaccess-closed-color;
-        color: white;
     }
 
     &-oa {
         @extend .ubo-badge-oa;
         background-color: $openaccess-oa-color;
+        color: $primary;
     }
 
     &-green {
         @extend .ubo-badge-oa;
         background-color: $openaccess-green-color;
+        color: $openaccess-green-text-color;
     }
 
     &-gold {
         @extend .ubo-badge-oa;
         background-color: $openaccess-gold-color;
-        color: $primary;
+        color: $openaccess-gold-text-color;
     }
 
     &-platin {
@@ -36,13 +39,11 @@
     &-bronze {
         @extend .ubo-badge-oa;
         background-color: $openaccess-bronze-color;
-        color: white;
     }
 
     &-embargo {
         @extend .ubo-badge-oa;
         background-color: $openaccess-embargo-color;
-        color: white;
     }
 }
 

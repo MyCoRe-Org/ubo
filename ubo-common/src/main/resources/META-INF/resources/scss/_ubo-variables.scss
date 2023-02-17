@@ -49,13 +49,15 @@ $input-color: $body-color !default;
 $input-placeholder-color: $input-color !default;
 
 // OpenAccess colors
-$openaccess-closed-color:   #5fa8e8;
-$openaccess-oa-color:       #C8FE2E;
-$openaccess-green-color:    #00FF00;
-$openaccess-gold-color:     #FFFF00;
-$openaccess-platin-color:   #CECECE;
-$openaccess-hybrid-color:   #FF8000;
-$openaccess-bronze-color:   #BF8970;
-$openaccess-embargo-color:  #868A08;
-
+$openaccess-closed-color:       #5fa8e8 !default;
+$openaccess-oa-color:           #C8FE2E !default;
+$openaccess-green-color:        #00FF00 !default;
+$openaccess-gold-color:         #FFFF00 !default;
+$openaccess-platin-color:       #CECECE !default;
+$openaccess-hybrid-color:       #FF8000 !default;
+$openaccess-bronze-color:       #BF8970 !default;
+$openaccess-embargo-color:      #868A08 !default;
+$openaccess-text-color:         #FFFFFF !default;
+$openaccess-green-text-color:   $primary !default;
+$openaccess-gold-text-color:    $primary !default;
 
