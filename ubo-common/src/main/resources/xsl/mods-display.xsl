@@ -953,7 +953,17 @@
     <div class="ubo_related_details">
       <div class="row">
         <div class="col-3 label">
-          <xsl:value-of select="concat(i18n:translate(concat('ubo.relatedItem.',@type)), ':')" />
+          <xsl:choose>
+            <xsl:when test="i18n:exists(concat('ubo.relatedItem.', @type))">
+              <xsl:value-of select="i18n:translate(concat('ubo.relatedItem.', @type, ':'))" />
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:attribute name="title">
+                <xsl:value-of select="@type"/>
+              </xsl:attribute>
+              <xsl:value-of select="concat(i18n:translate('ubo.relatedItem.unknown.type'), ':')"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </div>
         <div class="col-9">
           <a href="{$ServletsBaseURL}DozBibEntryServlet?id={@xlink:href}">
@@ -969,7 +979,17 @@
     <div class="ubo_related_details">
       <div class="row">
         <div class="col-3 label">
-          <xsl:value-of select="i18n:translate(concat('ubo.relatedItem.',@type))" />
+          <xsl:choose>
+            <xsl:when test="i18n:exists(concat('ubo.relatedItem.', @type))">
+              <xsl:value-of select="i18n:translate(concat('ubo.relatedItem.', @type), ':')" />
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:attribute name="title">
+                <xsl:value-of select="@type"/>
+              </xsl:attribute>
+              <xsl:value-of select="concat(i18n:translate('ubo.relatedItem.unknown.type'), ':')"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </div>
         <div class="col-9">
           <xsl:apply-templates select="." mode="cite" />
