@@ -137,7 +137,9 @@ export default class App extends Vue {
     if (this.personModel.pid.length > 0 || this.pid != "") {
       parms.push(encodeURIComponent(xpPid) + "=" + encodeURIComponent(this.personModel.pid));
     }
-    url += "&" + parms.join("&");
+
+    let urlParams = new URLSearchParams(window.location.href);
+    url += "&" + parms.join("&") + (urlParams.has("xEditorHook") ? "#" + urlParams.get("xEditorHook") : "");
 
     if (!this.formSend) {
       window.location.assign(url);
