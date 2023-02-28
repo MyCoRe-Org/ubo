@@ -1451,15 +1451,19 @@
 
   <!-- ========== Band/Jahrgang ========== -->
   <xsl:template match="mods:detail[@type='volume']">
-    <xsl:choose>
-      <xsl:when test="../mods:detail[@type='issue']">
-        <xsl:value-of select="i18n:translate('ubo.details.volume.journal')" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="i18n:translate('ubo.details.volume.series')" />
-      </xsl:otherwise>
-    </xsl:choose>
+    <span class="ubo-mods-detail-volume">
+      <xsl:choose>
+        <xsl:when test="../mods:detail[@type='issue']">
+          <xsl:value-of select="i18n:translate('ubo.details.volume.journal')" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="i18n:translate('ubo.details.volume.series')" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </span>
     <xsl:text> </xsl:text>
+    
+
     <xsl:value-of select="mods:number" />
 
     <xsl:variable name="volume.number" select="mods:number" />
