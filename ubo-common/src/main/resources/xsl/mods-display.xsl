@@ -1431,7 +1431,7 @@
 
   <!-- ========== Band/Jahrgang ========== -->
   <xsl:template match="mods:detail[@type='volume']">
-    <span class="ubo-mods-detail-volume ubo-mods-detail-volume-{position()}">
+    <span class="ubo-mods-detail-volume">
       <xsl:choose>
         <xsl:when test="../mods:detail[@type='issue']">
           <xsl:value-of select="i18n:translate('ubo.details.volume.journal')" />
