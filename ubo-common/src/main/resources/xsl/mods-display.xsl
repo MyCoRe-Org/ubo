@@ -1440,8 +1440,9 @@
           <xsl:value-of select="i18n:translate('ubo.details.volume.series')" />
         </xsl:otherwise>
       </xsl:choose>
-      <xsl:text> </xsl:text>
     </span>
+    <xsl:text> </xsl:text>
+    
 
     <xsl:value-of select="mods:number" />
 
