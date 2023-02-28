@@ -114,7 +114,7 @@
       data: [
         <xsl:for-each select="$facets/arr[@name='buckets']/lst">
           <!-- #unspecified = #totalPub - #inCategoryOAwhichIncludesSubCat - #closedAccess -->
-          <xsl:value-of select="int[@name='count']" /> 
+          <xsl:value-of select="int[@name='count']" />
           <xsl:for-each select="lst[@name='oa']/arr[@name='buckets']/lst[(str[@name='val']='oa') or (str[@name='val']='closed')]">
             <xsl:text> - </xsl:text>
             <xsl:value-of select="int[@name='count']" />
@@ -144,7 +144,8 @@
     <xsl:text>, data: [</xsl:text>
     <xsl:apply-templates select="." mode="values" />
     <xsl:text>], className: &quot;</xsl:text>
-    <xsl:value-of select="concat('ubo-statistic-oa-', @ID)"/>
+    <xsl:value-of select="oa-statistic "/>
+    <xsl:value-of select="concat('oa-statistic-', @ID)"/>
     <xsl:text>&quot; }</xsl:text>
 
     <xsl:if test="category|following::category">, </xsl:if>

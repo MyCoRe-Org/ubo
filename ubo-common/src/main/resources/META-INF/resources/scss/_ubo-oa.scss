@@ -1,94 +1,48 @@
-.ubo-badge-oa {
-    @extend .badge;
-
-    color: $openaccess-text-color;
-
-    &-closed {
-        @extend .ubo-badge-oa;
-        background-color: $openaccess-closed-color;
-    }
-
-    &-oa {
-        @extend .ubo-badge-oa;
-        background-color: $openaccess-oa-color;
-        color: $primary;
-    }
-
-    &-green {
-        @extend .ubo-badge-oa;
-        background-color: $openaccess-green-color;
-        color: $openaccess-green-text-color;
-    }
-
-    &-gold {
-        @extend .ubo-badge-oa;
-        background-color: $openaccess-gold-color;
-        color: $openaccess-gold-text-color;
-    }
-
-    &-platin {
-        @extend .ubo-badge-oa;
-        background-color: $openaccess-platin-color;
-    }
-
-    &-hybrid {
-        @extend .ubo-badge-oa;
-        background-color: $openaccess-hybrid-color;
-    }
-
-    &-bronze {
-        @extend .ubo-badge-oa;
-        background-color: $openaccess-bronze-color;
-    }
-
-    &-embargo {
-        @extend .ubo-badge-oa;
-        background-color: $openaccess-embargo-color;
-    }
+.oa-badge {
+  &-oa {
+    color: $oa-text;
+    background-color: $oa;
+  }
+  &-green {
+    color: $oa-green-text;
+    background-color: $oa-green;
+  }
+  &-gold {
+    color: $oa-gold-text;
+    background-color: $oa-gold;
+  }
+  &-closed  {
+    color: $oa-closed-text;
+    background-color: $oa-closed;
+  }
+  &-platin  {
+    color: $oa-platin-text;
+    background-color: $oa-platin;
+  }
+  &-hybrid  {
+    color: $oa-hybrid-text;
+    background-color: $oa-hybrid;
+  }
+  &-bronze  {
+    color: $oa-bronze-text;
+    background-color: $oa-bronze;
+  }
+  &-embargo {
+    color: $oa-embargo-text;
+    background-color: $oa-embargo;
+  }
 }
 
-.ubo-statistic-oa {
-    &:hover {
-        filter: brightness(110%);
-    }
-
-    &-closed rect {
-        @extend .ubo-statistic-oa;
-        fill: $openaccess-closed-color;
-    }
-
-    &-oa rect {
-        @extend .ubo-statistic-oa;
-        fill: $openaccess-oa-color;
-    }
-
-    &-green rect {
-        @extend .ubo-statistic-oa;
-        fill: $openaccess-green-color;
-    }
-
-    &-gold rect {
-        @extend .ubo-statistic-oa;
-        fill: $openaccess-gold-color;
-    }
-
-    &-platin rect {
-        @extend .ubo-statistic-oa;
-        fill: $openaccess-platin-color;
-    }
-
-    &-hybrid rect {
-        @extend .ubo-statistic-oa;
-        fill: $openaccess-hybrid-color;
-    }
-
-    &-bronze rect {
-        @extend .ubo-statistic-oa;
-        fill: $openaccess-bronze-color;
-    }
-
-    &-embargo rect {
-        @extend .ubo-statistic-oa;
-        fill: $openaccess-embargo-color;
-    }
+.oa-statistic {
+  &:hover {
+    filter: brightness(110%);
+  }
+  &-closed  rect { fill: $oa-closed; }
+  &-oa      rect { fill: $oa; }
+  &-green   rect { fill: $oa-green; }
+  &-gold    rect { fill: $oa-gold; }
+  &-platin  rect { fill: $oa-platin; }
+  &-hybrid  rect { fill: $oa-hybrid; }
+  &-bronze  rect { fill: $oa-bronze; }
+  &-embargo rect { fill: $oa-embargo; }
 }
