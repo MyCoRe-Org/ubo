@@ -31,6 +31,10 @@
     color: $oa-embargo-text;
     background-color: $oa-embargo;
   }
+  &-unvalidated {
+    color: $oa-unvalidated-text;
+    background-color: $oa-unvalidated;
+  }
 }
 
 .oa-statistic {
@@ -45,4 +49,5 @@
   &-hybrid  rect { fill: $oa-hybrid; }
   &-bronze  rect { fill: $oa-bronze; }
   &-embargo rect { fill: $oa-embargo; }
+  &-unvalidated rect { fill: $oa-unvalidated; }
 }

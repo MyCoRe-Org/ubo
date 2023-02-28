@@ -13,7 +13,6 @@
   <xsl:variable name="ofTotal" select="i18n:translate('stats.ofTotal')" />
   <xsl:variable name="oaGeneral" select="i18n:translate('stats.oa.unspecified')" />
   <xsl:variable name="labelNoOA" select="i18n:translate('stats.oa.notOA')" />
-  <xsl:variable name="colorNoOA">#5858FA</xsl:variable>
 
   <xsl:variable name="categories" select="document('classification:metadata:-1:children:oa')/mycoreclass/categories" />
   <xsl:variable name="facets" select="/response/lst[@name='facets']/lst[@name='year']" />
@@ -90,9 +89,6 @@
                        }
                     }
                 },
-                colors: [
-                  '<xsl:value-of select="$colorNoOA" />'
-                ],
                 series: [
                   <xsl:call-template name="seriesNoOA" />
                   <xsl:text>, </xsl:text>
@@ -121,7 +117,8 @@
           </xsl:for-each>
           <xsl:if test="position() != last()">, </xsl:if>
         </xsl:for-each>
-      ]
+      ],
+      className:'<xsl:value-of select="'oa-statistic oa-statistic-unvalidated'"/>'
     }
   </xsl:template>
 
@@ -130,12 +127,6 @@
       <xsl:value-of select="concat($apos,int[@name='val'],$apos)" />
       <xsl:if test="position() != last()">, </xsl:if>
     </xsl:for-each>
-  </xsl:template>
-
-  <xsl:template match="category" mode="color">
-    <xsl:value-of select="concat($apos,label[lang('x-color')]/@text,$apos)" />
-    <xsl:if test="category|following::category">, </xsl:if>
-    <xsl:apply-templates select="category" mode="color" />
   </xsl:template>
 
   <xsl:template match="category" mode="series">

@@ -26,18 +26,20 @@ $oa-platin:       #CECECE !default;
 $oa-hybrid:       #FF8000 !default;
 $oa-bronze:       #BF8970 !default;
 $oa-embargo:      #868A08 !default;
+$oa-unvalidated:  #5858FA !default;
 
 $oa-default-text-light: white !default;
 $oa-default-text-dark:  black !default;
 
-$oa-text:         $oa-default-text-dark   !default;
-$oa-closed-text:  $oa-default-text-light  !default;
-$oa-green-text:   $oa-default-text-dark   !default;
-$oa-gold-text:    $oa-default-text-dark   !default;
-$oa-platin-text:  $oa-default-text-dark   !default;
-$oa-hybrid-text:  $oa-default-text-light  !default;
-$oa-bronze-text:  $oa-default-text-light  !default;
-$oa-embargo-text: $oa-default-text-light  !default;
+$oa-text:             $oa-default-text-dark   !default;
+$oa-closed-text:      $oa-default-text-light  !default;
+$oa-green-text:       $oa-default-text-dark   !default;
+$oa-gold-text:        $oa-default-text-dark   !default;
+$oa-platin-text:      $oa-default-text-dark   !default;
+$oa-hybrid-text:      $oa-default-text-light  !default;
+$oa-bronze-text:      $oa-default-text-light  !default;
+$oa-embargo-text:     $oa-default-text-light  !default;
+$oa-unvalidated-text: $oa-default-text-light  !default;
 
 // bootstrap variables
 // overwrite or modify
