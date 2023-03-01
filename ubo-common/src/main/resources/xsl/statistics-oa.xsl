@@ -13,7 +13,6 @@
   <xsl:variable name="ofTotal" select="i18n:translate('stats.ofTotal')" />
   <xsl:variable name="oaGeneral" select="i18n:translate('stats.oa.unspecified')" />
   <xsl:variable name="labelNoOA" select="i18n:translate('stats.oa.notOA')" />
-  <xsl:variable name="colorNoOA">#5858FA</xsl:variable>
 
   <xsl:variable name="categories" select="document('classification:metadata:-1:children:oa')/mycoreclass/categories" />
   <xsl:variable name="facets" select="/response/lst[@name='facets']/lst[@name='year']" />
@@ -90,10 +89,6 @@
                        }
                     }
                 },
-                colors: [
-                  '<xsl:value-of select="$colorNoOA" />',
-                  <xsl:apply-templates select="$categories/category" mode="color" />
-                ],
                 series: [
                   <xsl:call-template name="seriesNoOA" />
                   <xsl:text>, </xsl:text>
@@ -115,14 +110,15 @@
       data: [
         <xsl:for-each select="$facets/arr[@name='buckets']/lst">
           <!-- #unspecified = #totalPub - #inCategoryOAwhichIncludesSubCat - #closedAccess -->
-          <xsl:value-of select="int[@name='count']" /> 
+          <xsl:value-of select="int[@name='count']" />
           <xsl:for-each select="lst[@name='oa']/arr[@name='buckets']/lst[(str[@name='val']='oa') or (str[@name='val']='closed')]">
             <xsl:text> - </xsl:text>
             <xsl:value-of select="int[@name='count']" />
           </xsl:for-each>
           <xsl:if test="position() != last()">, </xsl:if>
         </xsl:for-each>
-      ]
+      ],
+      className:'<xsl:value-of select="'oa-statistic oa-statistic-unvalidated '"/>'
     }
   </xsl:template>
 
@@ -133,18 +129,15 @@
     </xsl:for-each>
   </xsl:template>
 
-  <xsl:template match="category" mode="color">
-    <xsl:value-of select="concat($apos,label[lang('x-color')]/@text,$apos)" />
-    <xsl:if test="category|following::category">, </xsl:if>
-    <xsl:apply-templates select="category" mode="color" />
-  </xsl:template>
-
   <xsl:template match="category" mode="series">
     <xsl:text>{ </xsl:text>
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>, data: [</xsl:text>
     <xsl:apply-templates select="." mode="values" />
-    <xsl:text>] }</xsl:text>
+    <xsl:text>], className: &quot;</xsl:text>
+    <xsl:value-of select="oa-statistic "/>
+    <xsl:value-of select="concat('oa-statistic-', @ID, ' ')"/>
+    <xsl:text>&quot; }</xsl:text>
 
     <xsl:if test="category|following::category">, </xsl:if>
     <xsl:apply-templates select="category" mode="series" />
