@@ -136,7 +136,7 @@
     <xsl:apply-templates select="." mode="values" />
     <xsl:text>], className: &quot;</xsl:text>
     <xsl:value-of select="oa-statistic "/>
-    <xsl:value-of select="concat('oa-statistic-', @ID)"/>
+    <xsl:value-of select="concat('oa-statistic-', @ID, ' ')"/>
     <xsl:text>&quot; }</xsl:text>
 
     <xsl:if test="category|following::category">, </xsl:if>
