@@ -118,7 +118,7 @@
           <xsl:if test="position() != last()">, </xsl:if>
         </xsl:for-each>
       ],
-      className:'<xsl:value-of select="'oa-statistic oa-statistic-unvalidated'"/>'
+      className:'<xsl:value-of select="'oa-statistic oa-statistic-unvalidated '"/>'
     }
   </xsl:template>
 
