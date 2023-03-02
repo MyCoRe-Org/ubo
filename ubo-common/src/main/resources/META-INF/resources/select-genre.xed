@@ -54,11 +54,11 @@
             <xed:if test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
 	      <div class="form-inline form-group">
 		<label for="form" class="mycore-form-label">
-		  Ziel-Formular:
+		  <xed:output i18n="ubo.newPublicationWizard.targetForm" />
 		</label>
 		<select id="form" class="mycore-form-input custom-select">
-                  <option value="edit-publication.xed">Standard-Formular</option>
-                  <option value="edit-admin.xed">Admin-Formular</option>
+                  <option value="edit-publication.xed"><xed:output i18n="ubo.newPublicationWizard.selectForm.standard" /></option>
+                  <option value="edit-admin.xed"><xed:output i18n="ubo.newPublicationWizard.selectForm.admin" /></option>
 		</select>
 	      </div>
             </xed:if>

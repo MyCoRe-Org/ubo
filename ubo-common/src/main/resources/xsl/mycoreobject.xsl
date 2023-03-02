@@ -99,7 +99,7 @@
           </a>
         </xsl:if>
         <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.Style=structure">
-          Struktur
+          <xsl:value-of select="i18n:translate('button.structure')"/>
         </a>
       </xsl:if>
     </xsl:if>
