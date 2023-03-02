@@ -36,7 +36,7 @@
           <xsl:value-of select="$title" />
         </a>
       </li>
-      <li>Struktur-Editor</li>
+      <li><xsl:value-of select="i18n:translate('structure.editor')"/></li>
     </ul>
   </xsl:template>
 
@@ -47,7 +47,7 @@
       <head>
         <title>
           <xsl:value-of select="$title" />
-          <xsl:text>: Struktur bearbeiten</xsl:text>
+          <xsl:value-of select="i18n:translate('structure.editor.edit')"/>
         </title>
       </head>
       <body>
@@ -102,7 +102,9 @@
       <xsl:for-each select="*[not(name()='mycoreobject')]">
         <xsl:call-template name="alert">
           <xsl:with-param name="id" select="$id" />
-          <xsl:with-param name="text">Verknüpfte Überordnung (parent)</xsl:with-param>
+          <xsl:with-param name="text">
+            <xsl:value-of select="i18n:translate('error.noParent')"/>
+          </xsl:with-param>
         </xsl:call-template>
       </xsl:for-each>
     </xsl:for-each>
@@ -113,10 +115,10 @@
       <span class="ubo-badge-children badge badge-light">
         <a href="solr/select?q=parent:{ancestor::mycoreobject/@ID}&amp;sort=id+desc">
           <xsl:value-of select="count(child)" />
-          <xsl:text> Publikation(en) verknüpft.</xsl:text>
+          <xsl:value-of select="i18n:translate('structure.editor.linked')"/>
         </a>
         <xsl:if test="(ancestor::mycoreobject/@ID=$baseID) and (count(child) &gt; $displayLimit)">
-          <xsl:value-of select="concat(' Es werden nur die ersten ',$displayLimit,' angezeigt.')" />
+          <xsl:value-of select="concat(i18n:translate('structure.editor.limit') ,$displayLimit,i18n:translate('structure.editor.limitDisplay'))" />
         </xsl:if>
       </span>
     </div>
@@ -141,7 +143,9 @@
       <xsl:for-each select="*[not(name()='mycoreobject')]">
         <xsl:call-template name="alert">
           <xsl:with-param name="id" select="$id" />
-          <xsl:with-param name="text">Verknüpfte Publikation (child)</xsl:with-param>
+          <xsl:with-param name="text">
+            <xsl:value-of select="i18n:translate('error.noChild')"/>
+          </xsl:with-param>
         </xsl:call-template>
       </xsl:for-each>
     </xsl:for-each>
@@ -152,11 +156,11 @@
     <xsl:param name="text" />
 
     <div class="ubo-alert alert alert-danger" role="alert">
-      <xsl:value-of select="concat('Fehler: ',$text,' ')" />
+      <xsl:value-of select="concat(i18n:translate('error.editor'), ': ',$text,' ')" />
       <a href="DozBibEntryServlet?id={$id}">
         <xsl:value-of select="$id" />
       </a>
-      <xsl:text> existiert nicht!</xsl:text>
+      <xsl:value-of select="i18n:translate('error.noDocument')"/>
     </div>
   </xsl:template>
 
@@ -197,10 +201,10 @@
           <span class="ubo-badge-orphans badge badge-light">
             <a href="solr/select?{$solrURI}&amp;sort=id+desc">
               <xsl:value-of select="$numOrphans" />
-              <xsl:text> evtl. zu adoptierende Waise(n) gefunden.</xsl:text>
+              <xsl:value-of select="i18n:translate('structure.editor.orphans')"/>
             </a>
             <xsl:if test="(@ID=$baseID) and ($numOrphans &gt; $displayLimit)">
-              <xsl:value-of select="concat(' Es werden nur die ersten ',$displayLimit,' angezeigt.')" />
+              <xsl:value-of select="concat(i18n:translate('structure.editor.limit') ,$displayLimit,i18n:translate('structure.editor.limitDisplay'))" />
             </xsl:if>
           </span>
         </div>
@@ -358,7 +362,7 @@
         <a role="button" class="ubo-btn-structure btn btn-primary btn-sm"
           href="{$ServletsBaseURL}DozBibEntryServlet?id={@ID}&amp;XSL.Style=structure">
           <i class="fa fa-arrows-alt" aria-hidden="true"></i>
-          <xsl:text> Struktur</xsl:text>
+          <xsl:value-of select="i18n:translate('button.structureBlank')"/>
         </a>
       </xsl:if>
 
@@ -367,45 +371,69 @@
           <xsl:with-param name="if" select="not(structure/children/child or (@ID=$baseID))" />
           <xsl:with-param name="action" select="'delete'" />
           <xsl:with-param name="icon" select="'trash'" />
-          <xsl:with-param name="button" select="'Löschen'" />
-          <xsl:with-param name="text" select="concat('Diese Publikation löschen? {id=',@ID,'}')" />
+          <xsl:with-param name="button" >
+            <xsl:value-of select="i18n:translate('button.delete')"/>
+          </xsl:with-param>
+          <xsl:with-param name="text">
+            <xsl:value-of select="concat(i18n:translate('button.deletePublication'), '{id=',@ID,'}')" />             
+          </xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="button-with-confirm-dialog">
           <xsl:with-param name="if" select="($role='duplicate') and not ($from='base')" />
           <xsl:with-param name="action" select="'linkHost'" />
           <xsl:with-param name="icon" select="'link'" />
-          <xsl:with-param name="button" select="'Als Überordnung wählen'" />
-          <xsl:with-param name="text" select="concat('Diese Publikation {child=',$baseID,'} mit dieser Überordnung {parent=',@ID,'} neu verknüpfen?')" />
+          <xsl:with-param name="button" >
+             <xsl:value-of select="i18n:translate('button.selectHost')"/>
+          </xsl:with-param>
+          <xsl:with-param name="text" >
+            <xsl:value-of select="concat(i18n:translate('structure.editor.relink'), '{child=',$baseID,'}', i18n:translate('structure.editor.relinkHost'), '{parent=',@ID,'}', i18n:translate('structure.editor.relinkQMark'))" />
+          </xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="button-with-confirm-dialog">
           <xsl:with-param name="if" select="(($role='child') or ($role='base')) and (structure/parents/parent)" />
           <xsl:with-param name="action" select="'unlinkHost'" />
           <xsl:with-param name="icon" select="'unlink'" />
-          <xsl:with-param name="button" select="'Verknüpfung lösen'" />
-          <xsl:with-param name="text" select="concat('Verknüpfung dieser Publikation {child=',@ID,'} mit der Überordnung {parent=',structure/parents/parent/@xlink:href,'} lösen?')" />
+          <xsl:with-param name="button">
+            <xsl:value-of select="i18n:translate('button.unlink')"/>
+          </xsl:with-param>
+          <xsl:with-param name="text" >
+            <xsl:value-of select="concat(i18n:translate('structure.editor.unlink'), '{child=',@ID,'}', i18n:translate('structure.editor.unlinkHost'), '{parent=',structure/parents/parent/@xlink:href,'}', i18n:translate('structure.editor.unlinkQMark'))" />
+          </xsl:with-param>
           <xsl:with-param name="base" select="@ID" />
         </xsl:call-template>
         <xsl:call-template name="button-with-confirm-dialog">
           <xsl:with-param name="if" select="($role='base') and //mods:mods/mods:relatedItem[@type='host'][not(@xlink:href)]" />
           <xsl:with-param name="action" select="'extractHost'" />
           <xsl:with-param name="icon" select="'external-link-alt'" />
-          <xsl:with-param name="button" select="'Überordnung herauslösen'" />
-          <xsl:with-param name="text" select="concat('Überordnung dieser Publikation {id=',@ID,'} als separaten Eintrag herauslösen und verknüpfen?')" />
+          <xsl:with-param name="button" >
+            <xsl:value-of select="i18n:translate('button.extractHost')"/>
+          </xsl:with-param>
+          <xsl:with-param name="text" >
+            <xsl:value-of select="concat(i18n:translate('structure.editor.extractHost'), '{id=',@ID,'}', i18n:translate('structure.editor.extractHostLink'))" />
+          </xsl:with-param> 
         </xsl:call-template>
         <xsl:call-template name="button-with-confirm-dialog">
           <xsl:with-param name="if" select="($role='duplicate') and (($from='parent') or ($from='base'))" />
           <xsl:with-param name="action" select="'mergeMetadata'" />
           <xsl:with-param name="icon" select="'copy'" />
-          <xsl:with-param name="button" select="'Daten zusammenführen'" />
-          <xsl:with-param name="text" select="concat('Titeldaten dieser Dublette {from=',@ID,'} in dieser Publikation {into=',$duplicateOfID,'} zusammenführen?')" />
+          <xsl:with-param name="button" >
+            <xsl:value-of select="i18n:translate('button.merge')"/>
+          </xsl:with-param>
+          <xsl:with-param name="text" >
+            <xsl:value-of select="concat(i18n:translate('structure.editor.merge'), '{from=',@ID,'}', i18n:translate('structure.editor.mergeInto'), '{into=',$duplicateOfID,'}',i18n:translate('structure.editor.mergeQMark'))" /> 
+          </xsl:with-param>
           <xsl:with-param name="preview" select="true()" />
         </xsl:call-template>
         <xsl:call-template name="button-with-confirm-dialog">
           <xsl:with-param name="if" select="($role='duplicate') and (($from='parent') or ($from='base')) and (structure/children/child)" />
           <xsl:with-param name="action" select="'adoptChildren'" />
           <xsl:with-param name="icon" select="'baby-carriage'" />
-          <xsl:with-param name="button" select="concat(count(structure/children/child),' adoptieren')" />
-          <xsl:with-param name="text" select="concat(count(structure/children/child),' mit dieser Überordnung {from=',@ID,'} verknüpfte Publikation(en) in diese Überordnung {into=',$duplicateOfID,'} verschieben?')" />
+          <xsl:with-param name="button" >
+            <xsl:value-of select="concat(i18n:translate('button.adoptEn'),count(structure/children/child), i18n:translate('button.adoptDe'))" />            
+          </xsl:with-param>
+          <xsl:with-param name="text" >
+            <xsl:value-of select="concat(i18n:translate('structure.editor.move'), count(structure/children/child), i18n:translate('structure.editor.moveHost'), '{from=',@ID,'}', i18n:translate('structure.editor.moveInto'), '{into=',$duplicateOfID,'}', i18n:translate('structure.editor.moveQMark'))" />
+          </xsl:with-param>
         </xsl:call-template>
       </xsl:if>
     </div>
@@ -474,12 +502,12 @@
               <div class="modal-footer">
                 <button type="button" class="ubo-btn-cancel btn btn-secondary" data-dismiss="modal">
                   <i class="fa fa-times mr-1" aria-hidden="true" />
-                  <xsl:text>Abbrechen</xsl:text>
+                  <xsl:value-of select="i18n:translate('button.cancel')"/>
                 </button>
                 <xsl:if test="$preview">
                   <button type="submit" name="preview" value="true" class="ubo-btn-preview btn btn-secondary">
                     <i class="fa fa-{$icon} mr-1" aria-hidden="true" />
-                    <xsl:text>Vorschau</xsl:text>
+                    <xsl:value-of select="i18n:translate('button.preview')"/>
                   </button>
                 </xsl:if>
                 <button type="submit" class="ubo-btn-submit btn btn-primary structure-action">
