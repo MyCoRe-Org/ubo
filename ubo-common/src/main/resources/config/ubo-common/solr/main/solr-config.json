@@ -34,7 +34,8 @@
 			"class": "solr.SearchHandler",
 			"defaults": {
 				"fl": "id",
-				"wt": "xml"
+				"wt": "xml",
+				"echoParams": "explicit"
 			}
 		}
 	},
