@@ -102,7 +102,9 @@
       <xsl:for-each select="*[not(name()='mycoreobject')]">
         <xsl:call-template name="alert">
           <xsl:with-param name="id" select="$id" />
-          <xsl:with-param name="text">Verknüpfte Überordnung (parent)</xsl:with-param>
+          <xsl:with-param name="text">
+            <xsl:value-of select="i18n:translate('error.noParent')"/>
+          </xsl:with-param>
         </xsl:call-template>
       </xsl:for-each>
     </xsl:for-each>
@@ -141,7 +143,9 @@
       <xsl:for-each select="*[not(name()='mycoreobject')]">
         <xsl:call-template name="alert">
           <xsl:with-param name="id" select="$id" />
-          <xsl:with-param name="text">Verknüpfte Publikation (child)</xsl:with-param>
+          <xsl:with-param name="text">
+            <xsl:value-of select="i18n:translate('error.noChild')"/>
+          </xsl:with-param>
         </xsl:call-template>
       </xsl:for-each>
     </xsl:for-each>
@@ -152,11 +156,11 @@
     <xsl:param name="text" />
 
     <div class="ubo-alert alert alert-danger" role="alert">
-      <xsl:value-of select="concat('Fehler: ',$text,' ')" />
+      <xsl:value-of select="concat(i18n:translate('error.editor'), ': ',$text,' ')" />
       <a href="DozBibEntryServlet?id={$id}">
         <xsl:value-of select="$id" />
       </a>
-      <xsl:text> existiert nicht!</xsl:text>
+      <xsl:value-of select="i18n:translate('error.noDocument')"/>
     </div>
   </xsl:template>
 
@@ -425,9 +429,11 @@
           <xsl:with-param name="action" select="'adoptChildren'" />
           <xsl:with-param name="icon" select="'baby-carriage'" />
           <xsl:with-param name="button" >
-            <xsl:value-of select="concat(count(structure/children/child), i18n:translate('button.adoptChildren'))" />            
+            <xsl:value-of select="concat(i18n:translate('button.adoptEn'),count(structure/children/child), i18n:translate('button.adoptDe'))" />            
           </xsl:with-param>
-          <xsl:with-param name="text" select="concat(count(structure/children/child),' mit dieser Überordnung {from=',@ID,'} verknüpfte Publikation(en) in diese Überordnung {into=',$duplicateOfID,'} verschieben?')" />
+          <xsl:with-param name="text" >
+            <xsl:value-of select="concat(i18n:translate('structure.editor.move'), count(structure/children/child), i18n:translate('structure.editor.moveHost'), '{from=',@ID,'}', i18n:translate('structure.editor.moveInto'), '{into=',$duplicateOfID,'}', i18n:translate('structure.editor.moveQMark'))" />
+          </xsl:with-param>
         </xsl:call-template>
       </xsl:if>
     </div>
