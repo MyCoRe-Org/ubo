@@ -57,7 +57,7 @@
             <xed:bind xpath="@sourceType">
               <div class="form-group form-inline">
                 <label for="{generate-id()}" class="mycore-form-label">Quell-Format :</label>
-                <select id="{generate-id()}" class="form-control col-7 mr-1 custom-select">
+                <select id="{generate-id()}" class="form-control col-7 mr-1 custom-select" onchange="toggleEnrichment(this)">
                   <option value="BibTeX">BibTeX Quellcode</option>
                   <option value="ORCID">Publikationen aus dem ORCID Profil</option>
                   <option value="IAQ">Literaturliste im CSV-Format: IAQ</option>
@@ -90,13 +90,14 @@
             <xed:bind xpath="source">
               <div class="form-group form-inline">
                 <textarea id="{xed:generate-id()}" class="{$xed-validation-marker} form-control col" type="text"
-                          placeholder="BibTeX Quellcode bzw. ORCID bzw. CSV-Literaturliste hierhin kopieren" rows="10"/>
+                          placeholder="BibTeX Quellcode bzw. ORCID bzw. PPN/CSV-Literaturliste hierhin kopieren" rows="10"
+                          oninput="toggleSubmit()"/>
               </div>
               <xed:validate required="true" display="global" />
             </xed:bind>
 
             <div>
-              <button class="btn btn-sm btn-primary" type="submit" xed:target="servlet" xed:href="DozBibImportServlet">
+              <button id="submitBtn" class="btn btn-sm btn-primary" disabled="disabled" type="submit" xed:target="servlet" xed:href="DozBibImportServlet">
                 <xed:output i18n="button.submit" />
               </button>
             </div>
@@ -107,7 +108,29 @@
       </xed:form>
 
       <script type="text/javascript">
-        $(document).ready(function() { $('select[class*="autocomplete"]').chosen({search_contains: true}); });
+        function toggleEnrichment(select){
+          if($(select).val() == "PPNList"){
+            $("#enrich-yes").click();
+            $("#enrich-no").attr("disabled","disabled");
+          } else{
+            $("#enrich-no").removeAttr("disabled");
+          }
+        }
+
+        function toggleSubmit(){
+          console.log("toggleSubmit()");
+          let v = $("textarea").val();
+
+          if(v === "undefined" || v.length == 0){
+            $("#submitBtn").attr("disabled","disabled");
+          }else{
+            $("#submitBtn").removeAttr("disabled");
+          }
+        }
+
+        $(document).ready(function() {
+          $('select[class*="autocomplete"]').chosen({search_contains: true});
+        });
       </script>
 
     </div>
