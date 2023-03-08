@@ -955,7 +955,7 @@
         <div class="col-3 label">
           <xsl:choose>
             <xsl:when test="i18n:exists(concat('ubo.relatedItem.', @type))">
-              <xsl:value-of select="i18n:translate(concat('ubo.relatedItem.', @type, ':'))" />
+              <xsl:value-of select="concat(i18n:translate(concat('ubo.relatedItem.', @type)), ':')" />
             </xsl:when>
             <xsl:otherwise>
               <xsl:attribute name="title">
@@ -981,7 +981,7 @@
         <div class="col-3 label">
           <xsl:choose>
             <xsl:when test="i18n:exists(concat('ubo.relatedItem.', @type))">
-              <xsl:value-of select="i18n:translate(concat('ubo.relatedItem.', @type), ':')" />
+              <xsl:value-of select="concat(i18n:translate(concat('ubo.relatedItem.', @type)), ':')" />
             </xsl:when>
             <xsl:otherwise>
               <xsl:attribute name="title">
