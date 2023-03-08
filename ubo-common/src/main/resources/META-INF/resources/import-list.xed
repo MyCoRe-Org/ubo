@@ -107,32 +107,7 @@
         </xed:bind>
       </xed:form>
 
-      <script type="text/javascript">
-        function toggleEnrichment(select){
-          if($(select).val() == "PPNList"){
-            $("#enrich-yes").click();
-            $("#enrich-no").attr("disabled","disabled");
-          } else{
-            $("#enrich-no").removeAttr("disabled");
-          }
-        }
-
-        function toggleSubmit(){
-          console.log("toggleSubmit()");
-          let v = $("textarea").val();
-
-          if(v === "undefined" || v.length == 0){
-            $("#submitBtn").attr("disabled","disabled");
-          }else{
-            $("#submitBtn").removeAttr("disabled");
-          }
-        }
-
-        $(document).ready(function() {
-          $('select[class*="autocomplete"]').chosen({search_contains: true});
-        });
-      </script>
-
+      <script src="js/ImportList.js"/>
     </div>
   </article>
 </webpage>
