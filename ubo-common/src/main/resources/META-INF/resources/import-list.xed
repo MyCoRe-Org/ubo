@@ -63,6 +63,7 @@
                   <option value="IAQ">Literaturliste im CSV-Format: IAQ</option>
                   <option value="NST">Literaturliste im CSV-Format: Nanostrukturtechnik</option>
                   <option value="Opto">Literaturliste im CSV-Format: Optoelektronik</option>
+                  <option value="PPNList">Literaturliste im PPN-Listenformat</option>
                 </select>
               </div>
             </xed:bind>
