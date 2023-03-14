@@ -483,10 +483,10 @@
             </span>
           </xsl:for-each>
 
-          <xsl:if test="count($list) &gt; $UBO.Initially.Visible.Authors">
+          <xsl:variable name="hideable-count" select="count($list) - $UBO.Initially.Visible.Authors - 1"/>
+          <xsl:if test="count($list) &gt; $UBO.Initially.Visible.Authors and $hideable-count &gt; 0">
             <div class="row">
               <div class="col">
-                <xsl:variable name="hideable-count" select="count($list) - $UBO.Initially.Visible.Authors - 1"/>
                 <a href="javascript:void(0)" onclick="ModsDisplayUtils.expand(this)" data-hideable-count="{$hideable-count}">
                   <xsl:value-of select="i18n:translate('button.view.all.authors', $hideable-count)" />
                 </a>
