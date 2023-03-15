@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.mycore</groupId>
     <artifactId>mycore-parent</artifactId>
     <version>48</version>
-    <relativePath />
+    <relativePath/>
   </parent>
 
   <groupId>org.mycore.ubo</groupId>
@@ -45,6 +46,7 @@
     <MCR.AppName>ubo</MCR.AppName>
     <axis1.version>1.4</axis1.version>
     <java.target.version>11</java.target.version>
+    <jquery.version>3.5.1</jquery.version>
     <mycore.version>2021.06.2-SNAPSHOT</mycore.version>
     <node.version>v16.0.0</node.version>
     <sortpom.sortDeps>scope,groupId,artifactId</sortpom.sortDeps>
@@ -158,8 +160,9 @@
       <properties>
         <MCR.DataPrefix>dev</MCR.DataPrefix>
         <cargo.jvmargs>-DMCR.AppName=${MCR.AppName}
-        -Dsolr.solr.home=${solr.home}
-        -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=${cargo.debug.suspend},address=${cargo.debug.address}</cargo.jvmargs>
+          -Dsolr.solr.home=${solr.home}
+          -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=${cargo.debug.suspend},address=${cargo.debug.address}
+        </cargo.jvmargs>
       </properties>
     </profile>
     <profile>
@@ -196,7 +199,8 @@
                 <configuration>
                   <properties>
                     <cargo.servlet.port>${cargo.servlet.port}</cargo.servlet.port>
-                    <cargo.runtime.args>-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.JavaUtilLog</cargo.runtime.args>
+                    <cargo.runtime.args>-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.JavaUtilLog
+                    </cargo.runtime.args>
                     <cargo.jetty.realm.name>Restricted</cargo.jetty.realm.name>
                   </properties>
                 </configuration>
@@ -246,7 +250,7 @@
                     <cargo.tomcat.ajp.port>${cargo.tomcat.ajp.port}</cargo.tomcat.ajp.port>
                     <cargo.tomcat.uriencoding>UTF-8</cargo.tomcat.uriencoding>
                     <!-- fixes IIIF identifier encoding issues -->
-                    <cargo.start.jvmargs>-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true ${cargo.start.jvmargs}</cargo.start.jvmargs>
+                    <cargo.start.jvmargs>-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true${cargo.start.jvmargs}</cargo.start.jvmargs>
                   </properties>
                 </configuration>
               </configuration>
@@ -310,7 +314,7 @@
       <dependency>
         <groupId>org.webjars</groupId>
         <artifactId>jquery</artifactId>
-        <version>3.3.1</version>
+        <version>${jquery.version}</version>
       </dependency>
       <dependency>
         <groupId>org.webjars</groupId>
