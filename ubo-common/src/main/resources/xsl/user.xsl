@@ -345,19 +345,37 @@
 
 <xsl:template name="numPublicationsUBO">
   <xsl:variable name="connection_id" select="attributes/attribute[@name='id_connection']/@value" />
-  <xsl:variable name="solr_query" select="concat('q=status:confirmed+nid_connection:',$connection_id)" />
-  
+  <xsl:variable name="solr_query_confirmed" select="concat('q=status:confirmed+nid_connection:',$connection_id)" />
+  <xsl:variable name="solr_query_all" select="concat('q=nid_connection:',$connection_id)" />
+  <xsl:variable name="numFoundConfirmed" select="document(concat('solr:rows=0&amp;',$solr_query_confirmed))/response/result/@numFound"/>
+  <xsl:variable name="numFoundAll" select="document(concat('solr:rows=0&amp;',$solr_query_all))/response/result/@numFound"/>
+  <xsl:variable name="numPubsConfirmedText">
+    <xsl:call-template name="numPublications">
+      <xsl:with-param name="num" select="$numFoundConfirmed" />
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:variable name="numPubsAllText">
+    <xsl:call-template name="numPublications">
+      <xsl:with-param name="num" select="$numFoundAll" />
+    </xsl:call-template>
+  </xsl:variable>
+
   <li>
-    <xsl:value-of select="i18n:translate('user.profile.publications.ubo.intro')" />
-    <xsl:text> </xsl:text>
-    <a href="{$ServletsBaseURL}solr/select?{$solr_query}&amp;sort=year+desc">
-      <xsl:call-template name="numPublications">
-        <xsl:with-param name="num" select="document(concat('solr:rows=0&amp;',$solr_query))/response/result/@numFound" /> 
-      </xsl:call-template>
-      <xsl:text> </xsl:text>
-      <xsl:value-of select="i18n:translate('user.profile.publications.ubo.outro')" />
-      <xsl:text>.</xsl:text>
+    <xsl:value-of select="concat(i18n:translate('user.profile.publications.ubo.intro'), ' ')" />
+    <a href="{$ServletsBaseURL}solr/select?{$solr_query_all}&amp;sort=year+desc">
+      <xsl:value-of select="$numPubsAllText"/>
+      <xsl:value-of select="concat(i18n:translate('user.profile.publications.ubo.outro'), '.')" />
     </a>
+
+    <xsl:if test="$numFoundAll &gt; 1 and $numFoundConfirmed != $numFoundAll">
+      <xsl:variable name="isMulti" select="($numFoundConfirmed = 0 or $numFoundConfirmed &gt; 1)"/>
+
+      <xsl:value-of select="concat(' ', i18n:translate(concat('user.profile.publications.ubo.published.intro.plural.', $isMulti)), ' ')"/>
+      <a href="{$ServletsBaseURL}solr/select?{$solr_query_confirmed}&amp;sort=year+desc">
+        <xsl:value-of select="$numPubsConfirmedText"/>
+     </a>
+      <xsl:value-of select="concat(' ', i18n:translate(concat('user.profile.publications.ubo.published.extro.plural.', $isMulti)))" disable-output-escaping="yes" />
+    </xsl:if>
   </li>
 </xsl:template>
 
