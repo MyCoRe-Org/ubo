@@ -56,7 +56,7 @@
 
             <xed:bind xpath="@sourceType">
               <div class="form-group form-inline">
-                <label for="{generate-id()}" class="mycore-form-label">Quell-Format :</label>
+                <label for="{generate-id()}" class="mycore-form-label">Quell-Format:</label>
                 <select id="{generate-id()}" class="form-control col-7 mr-1 custom-select" onchange="toggleEnrichment(this)">
                   <option value="BibTeX">BibTeX Quellcode</option>
                   <option value="ORCID">Publikationen aus dem ORCID Profil</option>
@@ -70,7 +70,7 @@
 
             <xed:bind xpath="@targetType">
               <div class="form-group form-inline">
-                <label for="{generate-id()}" class="mycore-form-label">Ausgabe-Format :</label>
+                <label for="{generate-id()}" class="mycore-form-label">Ausgabe-Format:</label>
                 <select id="{generate-id()}" class="form-control col custom-select">
                   <option value="preview-html">Vorschau (HTML)</option>
                   <option value="preview-mods-raw">Vorschau (MODS)</option>
@@ -81,7 +81,7 @@
 
             <xed:bind xpath="@enrich" initially="false">
               <div class="form-group form-inline">
-                <label class="mycore-form-label">aus externen Datenquellen anreichern :</label>
+                <label class="mycore-form-label">aus externen Datenquellen anreichern:</label>
                 <input type="radio" value="true"  class="form-control ml-2 mr-2" id="enrich-yes" /><label for="enrich-yes">Ja</label>
                 <input type="radio" value="false" class="form-control ml-4 mr-2" id="enrich-no"  /><label for="enrich-no" >Nein</label>
               </div>

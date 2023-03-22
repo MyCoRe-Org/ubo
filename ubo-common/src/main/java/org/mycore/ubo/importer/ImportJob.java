@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
@@ -30,6 +31,7 @@ import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRTransactionHelper;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRContent;
+import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRContentTransformer;
 import org.mycore.common.content.transformer.MCRContentTransformerFactory;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -66,6 +68,8 @@ public abstract class ImportJob {
         return publications.size();
     }
 
+    protected Optional<MCRContentTransformer> filterTransformer = null;
+
     public void transform(MCRContent source) throws IOException, JDOMException, SAXException {
         String transformerID = getTransformerID();
         MCRContentTransformer transformer = MCRContentTransformerFactory.getTransformer(transformerID);
@@ -100,11 +104,43 @@ public abstract class ImportJob {
 
     public void savePublications() throws MCRPersistenceException, MCRAccessException {
         for (Document publication : publications) {
+            if (getFilterTransformer().isPresent()) {
+                publication = applyFilterTransformer(publication, getFilterTransformer().get());
+            }
+
             MCRObject obj = new MCRObject(publication);
             MCRObjectID oid = MCRObjectID.getNextFreeId(PROJECT_ID + "_mods");
             obj.setId(oid);
             obj.getService().addFlag("importID", id);
+
             MCRMetadataManager.create(obj);
+        }
+    }
+
+    protected Optional<MCRContentTransformer> getFilterTransformer() {
+        if (filterTransformer == null) {
+            Optional<String> name = MCRConfiguration2.getString(
+                "MCR.ContentTransformer." + getTransformerID() + ".Filter");
+
+            if (name.isEmpty()) {
+                LOGGER.warn(
+                    "Property 'MCR.ContentTransformer.{}.Filter' is not set. Set it to apply additional filtering before the publication is actually saved.",
+                    getTransformerID());
+                filterTransformer = Optional.empty();
+            } else {
+                filterTransformer = Optional.of(MCRContentTransformerFactory.getTransformer(name.get()));
+            }
+        }
+
+        return filterTransformer;
+    }
+
+    private Document applyFilterTransformer(Document publication, MCRContentTransformer transformer) {
+        try {
+            return transformer.transform(new MCRJDOMContent(publication)).asXML();
+        } catch (JDOMException | IOException | SAXException e) {
+            LOGGER.error(e.getMessage(), e);
+            return publication;
         }
     }
 
