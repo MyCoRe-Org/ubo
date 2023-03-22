@@ -39,7 +39,7 @@
     @extend .py-0;
     @extend .px-0;
   }
-  
+
   .mycore-list > .list-group-item:first-child {
     padding-top: 0px;
   }
@@ -61,7 +61,7 @@
     vertical-align: top;
     margin: 0px 2px 0px 2px;
   }
-  
+
   .orcid-status {
     display: inline;
     .orcid-info > img.orcid-icon {
@@ -122,7 +122,7 @@
     margin-top: 2rem;
     margin-bottom: 3rem;
   }
-  
+
   .mycore-tag {
     margin-right: 0.25rem;
   }
@@ -138,7 +138,8 @@
     margin-top: -.5rem;
   }
 
-  .ubo-person-popover, .ubo-hover-pointer:hover {
+  .ubo-person-popover,
+  .ubo-hover-pointer:hover {
     cursor: pointer;
   }
 

@@ -118,6 +118,10 @@
     }
   }
 
+  .form-control::placeholder, .mycore-form-input-double::placeholder, .mycore-form-input::placeholder {
+    opacity: 0.4;
+  }
+
 // Large devices (desktops) and below: <= 1200px
 @include media-breakpoint-down(lg) {
 // add/overwrite styles for responsive level lg and lower

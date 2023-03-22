@@ -36,6 +36,7 @@
     <xsl:apply-templates select="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][contains('aut cre tch pht prg edt',text())]]/mods:nameIdentifier[@type='orcid']" mode="solrField.ae" />
     <xsl:apply-templates select="descendant::mods:name[@type='personal']" mode="child" />
     <xsl:apply-templates select="mods:genre[@type='intern']" mode="solrField" />
+    <xsl:apply-templates select="mods:accessCondition[@classID='licenses']" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:genre[@type='intern']" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="solrField" />
@@ -210,6 +211,12 @@
 
   <xsl:template match="mods:mods/mods:genre[@type='intern']" mode="solrField">
     <field name="genre">
+      <xsl:value-of select="text()" />
+    </field>
+  </xsl:template>
+
+  <xsl:template match="mods:accessCondition[@classID='licenses']" mode="solrField">
+    <field name="license">
       <xsl:value-of select="text()" />
     </field>
   </xsl:template>

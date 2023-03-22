@@ -69,8 +69,8 @@
   <xed:template id="legend.ID">
     <xed:bind xpath="/mycoreobject/@ID" default="{$UBO.projectid.default}_mods_00000000">
       <xed:choose>
-        <xed:when test="contains(.,'_mods_00000000')">Neue Publikation erfassen: </xed:when>
-        <xed:otherwise>Eintrag <xed:output value="number(substring-after(.,'mods_'))"/> korrigieren: </xed:otherwise>
+        <xed:when test="contains(.,'_mods_00000000')"><xed:output i18n="ubo.newPublication" /></xed:when>
+        <xed:otherwise><xed:output i18n="ubo.entry.correct"/><xed:output value="number(substring-after(.,'mods_'))"/><xed:output i18n="ubo.entry.correct.colon"/></xed:otherwise>
       </xed:choose>
     </xed:bind>
   </xed:template>
@@ -404,7 +404,7 @@
         </xed:choose>
       </span>
       <div class="ml-auto pb-1">
-        <button class="btn btn-xs btn-primary mr-1" type="submit" xed:target="subselect" xed:href="../identitypicker.html?{xed:call-java('org.mycore.ubo.matcher.MCRUserMatcherUtils', 'getAttributesAsURLString', .)}">
+        <button id="{xed:generate-id()}" class="btn btn-xs btn-primary mr-1" type="submit" xed:target="subselect" xed:href="../identitypicker.html?{xed:call-java('org.mycore.ubo.matcher.MCRUserMatcherUtils', 'getAttributesAsURLString', .)}&amp;xEditorHook={xed:generate-id()}">
           <xed:output i18n="search.select" />
         </button>
       </div>
@@ -828,16 +828,16 @@
 
   <xed:template id="relations">
     <fieldset>
-      <legend>Verweise:</legend>
+      <legend><xed:output i18n="edit.reference"/>:</legend>
       <xed:repeat xpath="mods:relatedItem[not(@type='host')][not(@type='series')]" max="30">
         <div class="form-group form-inline ubo-repeat-group">
           <xed:bind xpath="@type" default="references">
             <div class="mycore-form-label">
               <select class="form-control custom-select">
-                <option value="references">Referenziert</option>
-                <option value="preceding">Vorgänger</option>
-                <option value="succeeding">Nachfolger</option>
-                <option value="reviewOf">Ist Review von</option>
+                <option value="references"><xed:output i18n="ubo.relatedItem.references" /></option>
+                <option value="preceding"><xed:output i18n="ubo.relatedItem.preceding" /></option>
+                <option value="succeeding"><xed:output i18n="ubo.relatedItem.succeeding" /></option>
+                <option value="reviewOf"><xed:output i18n="ubo.relatedItem.reviewOf" /></option>
               </select>:
             </div>
           </xed:bind>

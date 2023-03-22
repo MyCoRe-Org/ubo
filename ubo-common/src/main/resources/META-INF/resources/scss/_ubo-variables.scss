@@ -12,11 +12,40 @@
  *   or use this web app: https://bootstrap.build/app
  */
 
+// UBO colors
+$ubo-blue:  #003b7a;
+$ubo-light: #efe4bf;
+$ubo-gray:  #495353;
+
+// OpenAccess colors
+$oa:              #C8FE2E !default;
+$oa-closed:       #5fa8e8 !default;
+$oa-green:        #00FF00 !default;
+$oa-gold:         #FFFF00 !default;
+$oa-platin:       #CECECE !default;
+$oa-hybrid:       #FF8000 !default;
+$oa-bronze:       #BF8970 !default;
+$oa-embargo:      #868A08 !default;
+$oa-unvalidated:  #5858FA !default;
+
+$oa-default-text-light: white !default;
+$oa-default-text-dark:  black !default;
+
+$oa-text:             $oa-default-text-dark   !default;
+$oa-closed-text:      $oa-default-text-light  !default;
+$oa-green-text:       $oa-default-text-dark   !default;
+$oa-gold-text:        $oa-default-text-dark   !default;
+$oa-platin-text:      $oa-default-text-dark   !default;
+$oa-hybrid-text:      $oa-default-text-light  !default;
+$oa-bronze-text:      $oa-default-text-light  !default;
+$oa-embargo-text:     $oa-default-text-light  !default;
+$oa-unvalidated-text: $oa-default-text-light  !default;
+
 // bootstrap variables
 // overwrite or modify
-$primary: #003b7a !default;
-$body-bg: #efe4bf !default;
-$body-color: #495353 !default;
+$primary:     $ubo-blue  !default;
+$body-bg:     $ubo-light !default;
+$body-color:  $ubo-gray  !default;
 
 $border-radius: .2rem !default;
 
@@ -41,9 +70,9 @@ $theme-colors: (
 ) !default;
 
 // ubo variables
-$pmud-color:          $primary !default;
+$pmud-color:        $primary !default;
 $pmud-color-hover:  white !default;
 
-// use transparency based on input color for placeholder
+// use input color for placeholder
 $input-color: $body-color !default;
-$input-placeholder-color: rgba($input-color, .4) !default;
+$input-placeholder-color: $input-color !default;

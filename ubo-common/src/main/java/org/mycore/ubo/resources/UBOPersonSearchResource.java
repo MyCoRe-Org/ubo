@@ -18,21 +18,17 @@
 
 package org.mycore.ubo.resources;
 
-import com.google.gson.Gson;
-import org.mycore.access.MCRAccessManager;
-import org.mycore.common.MCRSession;
-import org.mycore.common.MCRSessionMgr;
-import org.mycore.common.MCRSystemUserInformation;
-import org.mycore.common.MCRUserInformation;
-import org.mycore.common.config.MCRConfiguration2;
-import org.mycore.ubo.picker.IdentityService;
-import org.mycore.ubo.picker.PersonSearchResult;
-
 import javax.naming.OperationNotSupportedException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
+
+import com.google.gson.Gson;
+import org.mycore.access.MCRAccessManager;
+import org.mycore.common.config.MCRConfiguration2;
+import org.mycore.ubo.picker.IdentityService;
+import org.mycore.ubo.picker.PersonSearchResult;
 
 @Path(UBOPersonSearchResource.PATH)
 public class UBOPersonSearchResource {

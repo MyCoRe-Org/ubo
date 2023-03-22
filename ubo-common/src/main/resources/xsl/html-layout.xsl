@@ -197,7 +197,16 @@
                              select="$CurrentItem/ancestor-or-self::item[@label|label][ancestor-or-self::*=$navigation.tree[@role='main']]" />
         <xsl:for-each select="body/ul[@id='breadcrumb']/li">
           <li class="breadcrumb-item">
-              <xsl:copy-of select="node()" />
+            <xsl:choose>
+              <xsl:when test="@data-href">
+                <a href="{@data-href}">
+                  <xsl:copy-of select="node()"/>
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:copy-of select="node()"/>
+              </xsl:otherwise>
+            </xsl:choose>
           </li>
         </xsl:for-each>
       </ol>

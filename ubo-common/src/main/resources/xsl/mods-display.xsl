@@ -99,7 +99,7 @@
 
   <xsl:template match="mods:classification[contains(@authorityURI,'oa')]" mode="label-info">
     <xsl:variable name="category" select="$oa//category[@ID=substring-after(current()/@valueURI,'#')]" />
-    <span class="label-info badge badge-inverse mr-1 ubo-hover-pointer" style="background-color:{$category/label[lang('x-color')]/@text}"
+    <span class="badge oa-badge oa-badge-{$category/@ID} ubo-hover-pointer mr-1"
           onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+oa_exact:', $category/@ID))}')">
       <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
     </span>
@@ -483,10 +483,10 @@
             </span>
           </xsl:for-each>
 
-          <xsl:if test="count($list) &gt; $UBO.Initially.Visible.Authors">
+          <xsl:variable name="hideable-count" select="count($list) - $UBO.Initially.Visible.Authors - 1"/>
+          <xsl:if test="count($list) &gt; $UBO.Initially.Visible.Authors and $hideable-count &gt; 0">
             <div class="row">
               <div class="col">
-                <xsl:variable name="hideable-count" select="count($list) - $UBO.Initially.Visible.Authors - 1"/>
                 <a href="javascript:void(0)" onclick="ModsDisplayUtils.expand(this)" data-hideable-count="{$hideable-count}">
                   <xsl:value-of select="i18n:translate('button.view.all.authors', $hideable-count)" />
                 </a>
@@ -953,7 +953,17 @@
     <div class="ubo_related_details">
       <div class="row">
         <div class="col-3 label">
-          <xsl:value-of select="concat(i18n:translate(concat('ubo.relatedItem.',@type)), ':')" />
+          <xsl:choose>
+            <xsl:when test="i18n:exists(concat('ubo.relatedItem.', @type))">
+              <xsl:value-of select="concat(i18n:translate(concat('ubo.relatedItem.', @type)), ':')" />
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:attribute name="title">
+                <xsl:value-of select="@type"/>
+              </xsl:attribute>
+              <xsl:value-of select="concat(i18n:translate('ubo.relatedItem.unknown.type'), ':')"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </div>
         <div class="col-9">
           <a href="{$ServletsBaseURL}DozBibEntryServlet?id={@xlink:href}">
@@ -969,7 +979,17 @@
     <div class="ubo_related_details">
       <div class="row">
         <div class="col-3 label">
-          <xsl:value-of select="i18n:translate(concat('ubo.relatedItem.',@type))" />
+          <xsl:choose>
+            <xsl:when test="i18n:exists(concat('ubo.relatedItem.', @type))">
+              <xsl:value-of select="concat(i18n:translate(concat('ubo.relatedItem.', @type)), ':')" />
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:attribute name="title">
+                <xsl:value-of select="@type"/>
+              </xsl:attribute>
+              <xsl:value-of select="concat(i18n:translate('ubo.relatedItem.unknown.type'), ':')"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </div>
         <div class="col-9">
           <xsl:apply-templates select="." mode="cite" />
@@ -1431,15 +1451,19 @@
 
   <!-- ========== Band/Jahrgang ========== -->
   <xsl:template match="mods:detail[@type='volume']">
-    <xsl:choose>
-      <xsl:when test="../mods:detail[@type='issue']">
-        <xsl:value-of select="i18n:translate('ubo.details.volume.journal')" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="i18n:translate('ubo.details.volume.series')" />
-      </xsl:otherwise>
-    </xsl:choose>
+    <span class="ubo-mods-detail-volume">
+      <xsl:choose>
+        <xsl:when test="../mods:detail[@type='issue']">
+          <xsl:value-of select="i18n:translate('ubo.details.volume.journal')" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="i18n:translate('ubo.details.volume.series')" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </span>
     <xsl:text> </xsl:text>
+    
+
     <xsl:value-of select="mods:number" />
 
     <xsl:variable name="volume.number" select="mods:number" />
