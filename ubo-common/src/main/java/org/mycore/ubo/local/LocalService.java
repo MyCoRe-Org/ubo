@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.naming.OperationNotSupportedException;
+
 import org.jdom2.Element;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.ubo.picker.IdentityService;
@@ -12,8 +14,6 @@ import org.mycore.ubo.picker.PersonSearchResult;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
-
-import javax.naming.OperationNotSupportedException;
 
 public class LocalService implements IdentityService {
 
