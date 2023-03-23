@@ -274,22 +274,11 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-lang3</artifactId>
-        <version>3.10</version>
-      </dependency>
-      <dependency>
         <groupId>org.mycore</groupId>
         <artifactId>mycore-bom</artifactId>
         <version>${mycore.version}</version>
         <type>pom</type>
         <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>com.sun.activation</groupId>
-        <artifactId>jakarta.activation</artifactId>
-        <version>${jakarta.activation.version}</version>
-        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>jakarta.servlet</groupId>
@@ -305,6 +294,11 @@
         <groupId>jakarta.xml.bind</groupId>
         <artifactId>jakarta.xml.bind-api</artifactId>
         <version>${jakarta.xml.bind.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>3.10</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
@@ -360,6 +354,12 @@
         <groupId>xml-apis</groupId>
         <artifactId>xml-apis</artifactId>
         <version>1.0.b2</version>
+      </dependency>
+      <dependency>
+        <groupId>com.sun.activation</groupId>
+        <artifactId>jakarta.activation</artifactId>
+        <version>${jakarta.activation.version}</version>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>commons-discovery</groupId>
