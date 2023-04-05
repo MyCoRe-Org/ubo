@@ -24,6 +24,7 @@
   <xsl:param name="UBO.JOP.Parameters" />
   <xsl:param name="UBO.JOP.URL" />
   <xsl:param name="UBO.URI.gbv.de.ppn.redirect" />
+  <xsl:param name="UBO.CreatorRoles" select="'cre aut tch pht prg'" />   <!-- Rollen, die als DC.Creator betrachtet werden -->
 
   <!-- Expect one more author to be displayed as the last author is always getting displayed -->
   <xsl:param name="UBO.Initially.Visible.Authors" select="14" />
@@ -319,7 +320,7 @@
     <xsl:param name="mode">plain</xsl:param>
 
     <xsl:call-template name="output.line">
-      <xsl:with-param name="selected" select="mods:name[mods:role/mods:roleTerm][contains($creator.roles,mods:role/mods:roleTerm[@type='code'])]" />
+      <xsl:with-param name="selected" select="mods:name[mods:role/mods:roleTerm][contains($UBO.CreatorRoles,mods:role/mods:roleTerm[@type='code'])]" />
       <xsl:with-param name="after" select="': '" />
       <xsl:with-param name="mode" select="$mode" />
       <xsl:with-param name="class" select="'authors'" />
@@ -329,6 +330,12 @@
       <xsl:with-param name="after" select="concat(' ',i18n:translate('ubo.editors.abbreviated'),': ')" />
       <xsl:with-param name="mode" select="$mode" />
       <xsl:with-param name="class" select="'editors'" />
+    </xsl:call-template>
+    <xsl:call-template name="output.line">
+      <xsl:with-param name="selected" select="mods:name[mods:role/mods:roleTerm='ivr']" />
+      <xsl:with-param name="after" select="concat(' ',i18n:translate('ubo.role.interviewer'),': ')" />
+      <xsl:with-param name="mode" select="$mode" />
+      <xsl:with-param name="class" select="'interviewer'" />
     </xsl:call-template>
     <xsl:call-template name="output.line">
       <xsl:with-param name="selected" select="mods:titleInfo[1]" />
@@ -342,7 +349,7 @@
     <xsl:param name="mode">plain</xsl:param>
 
     <xsl:call-template name="output.line">
-      <xsl:with-param name="selected" select="mods:name[mods:role/mods:roleTerm][contains($creator.roles,mods:role/mods:roleTerm[@type='code'])]" />
+      <xsl:with-param name="selected" select="mods:name[mods:role/mods:roleTerm][contains($UBO.CreatorRoles,mods:role/mods:roleTerm[@type='code'])]" />
       <xsl:with-param name="after" select="': '" />
       <xsl:with-param name="mode" select="$mode" />
       <xsl:with-param name="class" select="'authors'" />
@@ -358,6 +365,12 @@
       <xsl:with-param name="after" select="concat(' ',i18n:translate('ubo.editors.abbreviated'),'. ')" />
       <xsl:with-param name="mode" select="$mode" />
       <xsl:with-param name="class" select="'editors'" />
+    </xsl:call-template>
+    <xsl:call-template name="output.line">
+      <xsl:with-param name="selected" select="mods:name[mods:role/mods:roleTerm='ivr']" />
+      <xsl:with-param name="after" select="concat(' ',i18n:translate('ubo.role.interviewer'),'. ')" />
+      <xsl:with-param name="mode" select="$mode" />
+      <xsl:with-param name="class" select="'interviewer'" />
     </xsl:call-template>
   </xsl:template>
 
@@ -1099,10 +1112,6 @@
 
   <xsl:param name="CurrentLang" />
   <xsl:param name="DefaultLang" />
-
-  <!-- ========== Rollen, die als DC.Creator betrachtet werden ========== -->
-
-  <xsl:variable name="creator.roles">cre aut tch pht prg</xsl:variable>
 
   <!-- ========== Titel ========== -->
   <xsl:template match="mods:titleInfo">
