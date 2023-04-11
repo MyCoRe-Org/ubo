@@ -12,10 +12,7 @@ public class LDAPWithLocalService extends LDAPService {
         PersonSearchResult results = super.searchPerson(query);
         LocalService localService = new LocalService();
         PersonSearchResult personSearchResult = localService.searchPerson(query);
-
-        results.personList.addAll(0, personSearchResult.personList);
-        results.count += personSearchResult.count;
-
+        results.join(personSearchResult, 0);
         return results;
     }
 }
