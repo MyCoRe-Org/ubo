@@ -10,9 +10,12 @@ public class LDAPWithLocalService extends LDAPService {
     @Override
     public PersonSearchResult searchPerson(String query) throws OperationNotSupportedException {
         PersonSearchResult results = super.searchPerson(query);
-        LocalService ls = new LocalService();
-        PersonSearchResult localSr = ls.searchPerson(query);
-        results.personList.addAll(0, localSr.personList);
+        LocalService localService = new LocalService();
+        PersonSearchResult personSearchResult = localService.searchPerson(query);
+
+        results.personList.addAll(0, personSearchResult.personList);
+        results.count += personSearchResult.count;
+
         return results;
     }
 }
