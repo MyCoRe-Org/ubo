@@ -15,17 +15,17 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.TransformerException;
 
-import org.mycore.ubo.picker.IdentityPickerService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
+import org.mycore.ubo.picker.IdentityPickerService;
 import org.xml.sax.SAXException;
 
 public class LSFPIDSearch extends MCRServlet implements IdentityPickerService {

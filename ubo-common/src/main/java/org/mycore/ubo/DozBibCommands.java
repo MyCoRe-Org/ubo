@@ -13,7 +13,6 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
-import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,7 +23,6 @@ import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.mycore.ubo.importer.scopus.ScopusInitialImporter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Attribute;
@@ -51,6 +49,7 @@ import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.MCRCommand;
 import org.mycore.mods.MCRMODSCommands;
 import org.mycore.mods.MCRMODSWrapper;
+import org.mycore.ubo.importer.scopus.ScopusInitialImporter;
 
 public class DozBibCommands extends MCRAbstractCommands {
 

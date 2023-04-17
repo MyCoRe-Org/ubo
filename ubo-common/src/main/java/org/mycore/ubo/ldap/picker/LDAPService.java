@@ -2,7 +2,6 @@ package org.mycore.ubo.ldap.picker;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -17,11 +16,11 @@ import java.util.stream.Stream;
 
 import javax.naming.OperationNotSupportedException;
 
+import com.google.common.collect.Multimap;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
-import org.jdom2.output.XMLOutputter;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.config.MCRConfiguration2;
@@ -30,8 +29,6 @@ import org.mycore.ubo.matcher.MCRUserMatcherLDAP;
 import org.mycore.ubo.picker.IdentityService;
 import org.mycore.ubo.picker.PersonSearchResult;
 import org.mycore.user2.MCRUserAttribute;
-
-import com.google.common.collect.Multimap;
 
 /**
  * With a configuration in mycore.properties, it is necessary to map two of the input fields of the search/pick-form,

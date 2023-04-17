@@ -7,10 +7,10 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.TransformerException;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,9 +19,8 @@ import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
-import org.xml.sax.SAXException;
-
 import org.mycore.ubo.picker.IdentityPickerService;
+import org.xml.sax.SAXException;
 
 /**
  * Servlet that handles requests when the LDAP strategy is configured in the mycore.properties:

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.mycore.ubo</groupId>
@@ -11,24 +12,27 @@
   <packaging>war</packaging>
   <name>Universitätsbibliographie - WAR Module</name>
   <properties>
-    <cargo.container.zipUrlInstaller.downloadDir>${settings.localRepository}/../cargo/containers</cargo.container.zipUrlInstaller.downloadDir>
+    <cargo.container.zipUrlInstaller.downloadDir>${settings.localRepository}/../cargo/containers
+    </cargo.container.zipUrlInstaller.downloadDir>
     <cargo.debug.address>8295</cargo.debug.address>
     <cargo.debug.suspend>n</cargo.debug.suspend>
     <cargo.deployable.default.artifactId>${project.artifactId}</cargo.deployable.default.artifactId>
     <cargo.deployable.default.context>/</cargo.deployable.default.context>
     <cargo.deployable.default.groupId>${project.groupId}</cargo.deployable.default.groupId>
-    <cargo.jvmargs>-DMCR.AppName=${MCR.AppName} -Dsolr.solr.home=${solr.home} -Xms512m -Xmx2048m -Xrunjdwp:transport=dt_socket,server=y,suspend=${cargo.debug.suspend},address=${cargo.debug.address}</cargo.jvmargs>
+    <cargo.jvmargs>-DMCR.AppName=${MCR.AppName} -Dsolr.solr.home=${solr.home} -Xms512m -Xmx2048m
+      -Xrunjdwp:transport=dt_socket,server=y,suspend=${cargo.debug.suspend},address=${cargo.debug.address}
+    </cargo.jvmargs>
     <cargo.rmi.port>8290</cargo.rmi.port>
     <cargo.servlet.port>8080</cargo.servlet.port>
     <cargo.servlet.uriencoding>UTF-8</cargo.servlet.uriencoding>
-    <cargo.start.jvmargs />
+    <cargo.start.jvmargs/>
     <cargo.tomcat.ajp.port>8292</cargo.tomcat.ajp.port>
     <cargo.version>1.7.8</cargo.version>
-    <jetty.version>9.4.26.v20200117</jetty.version>
+    <jetty.version>9.4.51.v20230217</jetty.version>
     <solr-runner.solrMirrorURL>https://archive.apache.org/dist/lucene/solr/</solr-runner.solrMirrorURL>
     <solr-runner.solrVersionString>8.6.2</solr-runner.solrVersionString>
     <solr.home>${user.config.dir}/${MCR.AppName}/data/solr</solr.home>
-    <tomcat.version>9.0.34</tomcat.version>
+    <tomcat.version>10.1.2</tomcat.version>
   </properties>
   <build>
     <plugins>
@@ -57,7 +61,7 @@
       <plugin>
         <groupId>org.mycore.plugins</groupId>
         <artifactId>solr-runner-maven-plugin</artifactId>
-        <version>1.1</version>
+        <version>1.2</version>
         <configuration>
           <solrMirrorURL>${solr-runner.solrMirrorURL}</solrMirrorURL>
           <solrVersionString>${solr-runner.solrVersionString}</solrVersionString>
@@ -67,6 +71,7 @@
       </plugin>
     </plugins>
   </build>
+
   <dependencies>
     <dependency>
       <groupId>org.mycore</groupId>
@@ -79,5 +84,4 @@
       <scope>runtime</scope>
     </dependency>
   </dependencies>
-
 </project>

@@ -1,9 +1,8 @@
 <xsl:stylesheet version="1.0"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:mods="http://www.loc.gov/mods/v3"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:strutils="xalan://org.apache.commons.lang.StringEscapeUtils"
-  exclude-result-prefixes="strutils"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:mods="http://www.loc.gov/mods/v3"
+                xmlns:strutils="xalan://org.apache.commons.lang3.StringEscapeUtils"
+                exclude-result-prefixes="strutils"
 >
 
 <!-- Serialize <mycoreobject> so that MODS in <modsContainer> becomes plain text, used in edit-mods.xed -->

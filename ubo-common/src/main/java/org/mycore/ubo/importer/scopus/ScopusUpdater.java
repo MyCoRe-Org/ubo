@@ -1,11 +1,5 @@
 package org.mycore.ubo.importer.scopus;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.time.Instant;
-import java.time.MonthDay;
-import java.time.temporal.TemporalAmount;
-import java.time.temporal.TemporalUnit;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;

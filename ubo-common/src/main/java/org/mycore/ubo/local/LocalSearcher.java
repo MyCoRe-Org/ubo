@@ -1,12 +1,12 @@
 package org.mycore.ubo.local;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.jdom2.Element;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
-
-import java.util.List;
-import java.util.Optional;
 
 public class LocalSearcher {
 
