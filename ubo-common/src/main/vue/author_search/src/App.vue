@@ -148,7 +148,11 @@ export default class App extends Vue {
   }
 
   public cancel() {
-    window.location.assign(this.baseurl + "servlets/XEditor?_xed_submit_return_cancel=&_xed_session=" + this.sessionid);
+    let urlParams = new URLSearchParams(window.location.href);
+    let url = this.baseurl + "servlets/XEditor?_xed_submit_return_cancel=&_xed_session=" + this.sessionid;
+    url += (urlParams.has("xEditorHook") ? "#" + urlParams.get("xEditorHook") : "");
+
+    window.location.assign(url);
   }
 
   public personApplied(person: PersonResult) {
