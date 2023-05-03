@@ -234,7 +234,7 @@
 
   <xsl:variable name="linkURI">
     <xsl:text>solr:fl=id&amp;rows=999&amp;</xsl:text>
-    <xsl:value-of select="concat('q=link:',/mycoreobject/@ID)" />
+    <xsl:value-of select="concat('q=link%3A',/mycoreobject/@ID)" />
   </xsl:variable>
   <xsl:variable name="numlinks" select="count(document($linkURI)/response/result[@name='response']/doc)" />
 

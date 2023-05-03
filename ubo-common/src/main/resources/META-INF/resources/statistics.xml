@@ -31,35 +31,35 @@
     </div>
   </article>
 
-  <xinclude uri="xslStyle:statistics-oa:solr:q=status:confirmed+AND+year:[2019+TO+2022]&amp;rows=0&amp;json.facet={year:{type:terms,field:year,sort:{index:asc},facet:{oa:{type:terms,field:oa,sort:{index:asc}}}}}" />
+  <xinclude uri="xslStyle:statistics-oa:solr:q=status%3Aconfirmed+AND+year%3A[2020+TO+2023]&amp;rows=0&amp;json.facet={year:{type:terms,field:year,sort:{index:asc},facet:{oa:{type:terms,field:oa,sort:{index:asc}}}}}" />
 
-  <xinclude uri="xslStyle:statistics:solr:q=status:confirmed+AND+year:%5B1980+TO+*%5D&amp;rows=0&amp;facet.field=year" />
-  <xinclude uri="xslStyle:statistics:solr:q=status:confirmed&amp;rows=0&amp;facet.field=subject" />
-  <xinclude uri="xslStyle:statistics:solr:q=status:confirmed&amp;rows=0&amp;facet.field=genre" />
+  <xinclude uri="xslStyle:statistics:solr:q=status%3Aconfirmed+AND+year%3A%5B1980+TO+*%5D&amp;rows=0&amp;facet.field=year" />
+  <xinclude uri="xslStyle:statistics:solr:q=status%3Aconfirmed&amp;rows=0&amp;facet.field=subject" />
+  <xinclude uri="xslStyle:statistics:solr:q=status%3Aconfirmed&amp;rows=0&amp;facet.field=genre" />
 
   <article class="card mb-3" xml:lang="de">
     <div class="card-body">
       <h3>Am häufigsten verzeichnete Personen (nur mit UDE LSF Zuordnung, Top 50, in Publikationen ab 2015):</h3>
-    <xinclude uri="xslStyle:statistics:solr:q=status:confirmed+AND+year:%5B2015+TO+*%5D&amp;rows=0&amp;facet.field=nid_connection&amp;facet.limit=50" />
+    <xinclude uri="xslStyle:statistics:solr:q=status%3Aconfirmed+AND+year%3A%5B2015+TO+*%5D&amp;rows=0&amp;facet.field=nid_connection&amp;facet.limit=50" />
     </div>
   </article>
   <article class="card mb-3" xml:lang="en">
     <div class="card-body">
       <h3>Most frequently listed staff (University members only that are linked to HIS LSF, top 50, in publications from 2015):</h3>
-    <xinclude uri="xslStyle:statistics:solr:q=status:confirmed+AND+year:%5B2015+TO+*%5D&amp;rows=0&amp;facet.field=nid_connection&amp;facet.limit=50" />
+    <xinclude uri="xslStyle:statistics:solr:q=status%3Aconfirmed+AND+year%3A%5B2015+TO+*%5D&amp;rows=0&amp;facet.field=nid_connection&amp;facet.limit=50" />
     </div>
   </article>
 
   <article class="card" xml:lang="de">
     <div class="card-body">
       <h3>In Publikationen verwendete Autoren-Identifikatoren:</h3>
-      <xinclude uri="xslStyle:statistics:solr:q=objectKind:name&amp;rows=0&amp;facet.pivot=name_id_type,name_id_type" />
+      <xinclude uri="xslStyle:statistics:solr:q=objectKind%3Aname&amp;rows=0&amp;facet.pivot=name_id_type,name_id_type" />
     </div>
   </article>
   <article class="card" xml:lang="en">
     <div class="card-body">
       <h3>Author identifier schemes used in publications:</h3>
-      <xinclude uri="xslStyle:statistics:solr:q=objectKind:name&amp;rows=0&amp;facet.pivot=name_id_type,name_id_type" />
+      <xinclude uri="xslStyle:statistics:solr:q=objectKind%3Aname&amp;rows=0&amp;facet.pivot=name_id_type,name_id_type" />
     </div>
   </article>
 
