@@ -11,11 +11,11 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>DozBibServlet</servlet-name>
-    <url-pattern> /servlets/DozBibServlet </url-pattern>
+    <url-pattern>/servlets/DozBibServlet</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>DozBibServlet</servlet-name>
-    <url-pattern> /servlets/DozBibServlet/* </url-pattern>
+    <url-pattern>/servlets/DozBibServlet/*</url-pattern>
   </servlet-mapping>
 
   <servlet id="NewPublicationWizard">
@@ -24,7 +24,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>NewPublicationWizard</servlet-name>
-    <url-pattern> /servlets/NewPublicationWizard </url-pattern>
+    <url-pattern>/servlets/NewPublicationWizard</url-pattern>
   </servlet-mapping>
 
   <servlet id="DozBibEntryServlet">
@@ -33,7 +33,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>DozBibEntryServlet</servlet-name>
-    <url-pattern> /servlets/DozBibEntryServlet </url-pattern>
+    <url-pattern>/servlets/DozBibEntryServlet</url-pattern>
   </servlet-mapping>
 
   <servlet id="RelationEditorServlet">
@@ -42,7 +42,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>RelationEditorServlet</servlet-name>
-    <url-pattern> /servlets/RelationEditorServlet </url-pattern>
+    <url-pattern>/servlets/RelationEditorServlet</url-pattern>
   </servlet-mapping>
 
   <servlet id="DozBibImportServlet">
@@ -51,7 +51,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>DozBibImportServlet</servlet-name>
-    <url-pattern> /servlets/DozBibImportServlet </url-pattern>
+    <url-pattern>/servlets/DozBibImportServlet</url-pattern>
   </servlet-mapping>
 
   <servlet id="Results2Basket">
@@ -60,7 +60,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Results2Basket</servlet-name>
-    <url-pattern> /servlets/Results2Basket </url-pattern>
+    <url-pattern>/servlets/Results2Basket</url-pattern>
   </servlet-mapping>
 
   <servlet id="BasketName2PIDEditor">
@@ -69,7 +69,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>BasketName2PIDEditor</servlet-name>
-    <url-pattern> /servlets/BasketName2PIDEditor </url-pattern>
+    <url-pattern>/servlets/BasketName2PIDEditor</url-pattern>
   </servlet-mapping>
 
   <servlet id="IdentityPicker">
@@ -78,7 +78,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>IdentityPicker</servlet-name>
-    <url-pattern> /identitypicker.html </url-pattern>
+    <url-pattern>/identitypicker.html</url-pattern>
   </servlet-mapping>
 
   <servlet id="OAI">
@@ -87,7 +87,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>OAI</servlet-name>
-    <url-pattern> /oai </url-pattern>
+    <url-pattern>/oai</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -105,9 +105,28 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>EnrichmentDebuggerServlet</servlet-name>
-    <url-pattern> /servlets/EnrichmentDebuggerServlet </url-pattern>
+    <url-pattern>/servlets/EnrichmentDebuggerServlet</url-pattern>
   </servlet-mapping>
-  
+
+  <servlet id="DozBibUserServlet">
+    <servlet-name>DozBibUserServlet</servlet-name>
+    <servlet-class>org.mycore.ubo.user.DozBibUserServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DozBibUserServlet</servlet-name>
+    <url-pattern>/servlets/DozBibUserServlet</url-pattern>
+  </servlet-mapping>
+
+  <!-- TODO only for testing -->
+  <servlet id="OAuthServlet2">
+    <servlet-name>OAuthServlet2</servlet-name>
+    <servlet-class>org.mycore.orcid.oauth.MCROAuthServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OAuthServlet2</servlet-name>
+    <url-pattern>/servlets/ORCIDRedirectConsumerServlet</url-pattern>
+  </servlet-mapping>
+
   <session-config>
     <session-timeout>30</session-timeout>
   </session-config>

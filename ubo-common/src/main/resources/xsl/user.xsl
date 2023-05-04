@@ -281,6 +281,11 @@
       </li>
     </ul>
   </xsl:if>
+  <p>
+    <a class="btn btn-danger" href="{$WebApplicationBaseURL}servlets/DozBibUserServlet">
+      <xsl:value-of select="i18n:translate('orcid.integration.unlink')"/>
+    </a>
+  </p>
 </xsl:template>
 
 <xsl:template name="orcidIntegrationPending">
@@ -307,10 +312,14 @@
       });
     }
   </script>
-  <button id="orcid-oauth-button" onclick="orcidOAuth();" title="({i18n:translate('orcid.integration.popup.tooltip')})">
-    <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
-    <xsl:value-of select="i18n:translate('orcid.oauth.link')" />
-  </button>
+
+  <p>
+    <button class="btn btn-primary" id="orcid-oauth-button" onclick="orcidOAuth();" title="({i18n:translate('orcid.integration.popup.tooltip')})">
+      <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
+      <xsl:value-of select="i18n:translate('orcid.oauth.link')" />
+    </button>
+  </p>
+
   <p>
     <xsl:value-of disable-output-escaping="yes" select="i18n:translate('orcid.integration.pending.authorize')" />
   </p>
