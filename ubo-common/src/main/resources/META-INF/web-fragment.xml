@@ -117,16 +117,6 @@
     <url-pattern>/servlets/DozBibUserServlet</url-pattern>
   </servlet-mapping>
 
-  <!-- TODO only for testing -->
-  <servlet id="OAuthServlet2">
-    <servlet-name>OAuthServlet2</servlet-name>
-    <servlet-class>org.mycore.orcid.oauth.MCROAuthServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>OAuthServlet2</servlet-name>
-    <url-pattern>/servlets/ORCIDRedirectConsumerServlet</url-pattern>
-  </servlet-mapping>
-
   <session-config>
     <session-timeout>30</session-timeout>
   </session-config>

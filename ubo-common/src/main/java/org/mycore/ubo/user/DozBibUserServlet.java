@@ -10,8 +10,7 @@ import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
-import org.mycore.orcid.oauth.MCROAuthClient;
-import org.mycore.orcid.oauth.MCRRevokeRequest;
+import org.mycore.orcid2.auth.MCRORCIDOAuthClient;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
@@ -33,8 +32,7 @@ public class DozBibUserServlet extends MCRServlet {
         SortedSet<MCRUserAttribute> userAttributes = user.getAttributes();
         for (MCRUserAttribute attribute : userAttributes) {
             if (attribute.getName().matches("token_orcid")) {
-                MCRRevokeRequest request = MCROAuthClient.instance().getRevokeRequest(attribute.getValue());
-                request.post();
+                MCRORCIDOAuthClient.getInstance().revokeToken(attribute.getValue());
             }
         }
         userAttributes.removeIf(attribute -> attribute.getName().equals("token_orcid"));
