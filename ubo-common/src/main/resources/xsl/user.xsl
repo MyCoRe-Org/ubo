@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
@@ -213,7 +213,7 @@
     </td>
   </tr>
 </xsl:template>
-  
+
 <xsl:template match="attribute[starts-with(@name, 'id_')]">
   <xsl:choose>
     <xsl:when test="@name='id_scopus'">
@@ -300,11 +300,11 @@
   <script type="text/javascript">
     function orcidOAuth() {
       <!-- Force logout before login -->
-      jQuery.ajax({ 
-        url: '<xsl:value-of select='$MCR.ORCID.LinkURL' />userStatus.json?logUserOut=true', 
+      jQuery.ajax({
+        url: '<xsl:value-of select='$MCR.ORCID.LinkURL' />userStatus.json?logUserOut=true',
         dataType: 'jsonp',
         success: function(result,status,xhr) {
-          <!-- Login in popup window --> 
+          <!-- Login in popup window -->
           window.open("<xsl:value-of select='$WebApplicationBaseURL' />orcid",
             "_blank", "toolbar=no, scrollbars=yes, width=500, height=600, top=500, left=500");
         },
@@ -393,7 +393,7 @@
     <xsl:value-of disable-output-escaping="yes" select="concat(i18n:translate('user.profile.publications.orcid.intro'), ' ')" />
     <a href="{$MCR.ORCID.LinkURL}{@value}">
       <xsl:call-template name="numPublications">
-        <xsl:with-param name="num" select="orcid:getNumWorks()" /> 
+        <xsl:with-param name="num" select="orcid:getNumWorks()" />
       </xsl:call-template>
       <xsl:text>.</xsl:text>
     </a>
