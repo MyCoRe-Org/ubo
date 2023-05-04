@@ -20,10 +20,10 @@
 <xsl:param name="CurrentUser" />
 <xsl:param name="UBO.LSF.Link" />
 <xsl:param name="UBO.Scopus.Author.Link" />
-<xsl:param name="UBO.ORCID.InfoURL" />
-<xsl:param name="MCR.ORCID.LinkURL" />
-<xsl:param name="MCR.ORCID.OAuth.ClientSecret" select="''"/>
-<xsl:param name="MCR.ORCID.OAuth.Scopes" select="''" />
+<xsl:param name="UBO.ORCID2.InfoURL" />
+<xsl:param name="MCR.ORCID2.LinkURL" />
+<xsl:param name="MCR.ORCID2.OAuth.ClientSecret" select="''"/>
+<xsl:param name="MCR.ORCID2.OAuth.Scope" select="''"/>
 
 <xsl:variable name="uid">
   <xsl:value-of select="/user/@name" />
@@ -71,7 +71,7 @@
     </div>
   </article>
 
-  <xsl:if test="string-length($MCR.ORCID.OAuth.ClientSecret) &gt; 0 and $isCurrentUser">
+  <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and $isCurrentUser">
     <xsl:call-template name="orcid" />
   </xsl:if>
   <xsl:call-template name="publications" />
@@ -177,7 +177,7 @@
       <xsl:text>:</xsl:text>
     </th>
     <td>
-      <xsl:variable name="url" select="concat($MCR.ORCID.LinkURL,@value)" />
+      <xsl:variable name="url" select="concat($MCR.ORCID2.LinkURL,@value)" />
       <a href="{$url}">
         <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
         <xsl:value-of select="$url" />
@@ -252,7 +252,7 @@
         </xsl:otherwise>
       </xsl:choose>
       <p>
-        <a href="{$UBO.ORCID.InfoURL}">
+        <a href="{$UBO.ORCID2.InfoURL}">
           <xsl:value-of select="i18n:translate('orcid.integration.more')" />
           <xsl:text>...</xsl:text>
         </a>
@@ -289,6 +289,8 @@
 </xsl:template>
 
 <xsl:template name="orcidIntegrationPending">
+  <script src="{$WebApplicationBaseURL}js/ORCIDTools.js"/>
+
   <h3>
     <span class="far fa-hand-point-right mr-1" aria-hidden="true" />
     <xsl:text> </xsl:text>
@@ -297,24 +299,10 @@
   <p>
     <xsl:value-of disable-output-escaping="yes" select="i18n:translate('orcid.integration.pending.intro')" />
   </p>
-  <script type="text/javascript">
-    function orcidOAuth() {
-      <!-- Force logout before login -->
-      jQuery.ajax({
-        url: '<xsl:value-of select='$MCR.ORCID.LinkURL' />userStatus.json?logUserOut=true',
-        dataType: 'jsonp',
-        success: function(result,status,xhr) {
-          <!-- Login in popup window -->
-          window.open("<xsl:value-of select='$WebApplicationBaseURL' />orcid",
-            "_blank", "toolbar=no, scrollbars=yes, width=500, height=600, top=500, left=500");
-        },
-        error: function (xhr, status, error) { alert(status); }
-      });
-    }
-  </script>
 
   <p>
-    <button class="btn btn-primary" id="orcid-oauth-button" onclick="orcidOAuth();" title="({i18n:translate('orcid.integration.popup.tooltip')})">
+    <button class="btn btn-primary" id="orcid-oauth-button" title="({i18n:translate('orcid.integration.popup.tooltip')})"
+            onclick="ORCIDTools.orcidOAuth('{$MCR.ORCID2.LinkURL}','{$WebApplicationBaseURL}rsc/orcid/auth?scope={$MCR.ORCID2.OAuth.Scope}');">
       <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
       <xsl:value-of select="i18n:translate('orcid.oauth.link')" />
     </button>
@@ -391,7 +379,7 @@
 <xsl:template match="attribute[@name='id_orcid']" mode="publications">
   <li>
     <xsl:value-of disable-output-escaping="yes" select="concat(i18n:translate('user.profile.publications.orcid.intro'), ' ')" />
-    <a href="{$MCR.ORCID.LinkURL}{@value}">
+    <a href="{$MCR.ORCID2.LinkURL}{@value}">
       <xsl:call-template name="numPublications">
         <xsl:with-param name="num" select="orcid:getNumWorks()" />
       </xsl:call-template>
