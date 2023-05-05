@@ -14,7 +14,7 @@
     <xsl:param name="button.confirm.text" select="i18n:translate('button.action')"/>
     <xsl:param name="button.cancel.text" select="i18n:translate('button.cancel')"/>
 
-    <div id="{$id}" class="modal fade" data-backdrop="static" tabindex="-1">
+    <div id="{$id}" class="modal fade" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">

@@ -11,6 +11,8 @@
   xmlns:const="xalan://org.mycore.user2.MCRUser2Constants"
   exclude-result-prefixes="xsl xalan i18n encoder orcid mods acl const">
 
+  <xsl:import href="ubo-dialog.xsl"/>
+
 <xsl:param name="error" />
 <xsl:param name="url" />
 <xsl:param name="step" />
@@ -282,9 +284,22 @@
     </ul>
   </xsl:if>
   <p>
-    <a class="btn btn-danger" href="{$WebApplicationBaseURL}servlets/DozBibUserServlet">
+    <xsl:variable name="dialog-id" select="generate-id()"/>
+    <xsl:variable name="single-quote">
+      <xsl:text>'</xsl:text>
+    </xsl:variable>
+    <xsl:variable name="action" select="concat('location.assign(', $single-quote, $WebApplicationBaseURL, 'servlets/DozBibUserServlet', $single-quote,')')"/>
+
+    <button class="btn btn-danger" onclick="$('#{$dialog-id}').modal('show')">
       <xsl:value-of select="i18n:translate('orcid.integration.unlink')"/>
-    </a>
+    </button>
+
+    <xsl:call-template name="confirm-dialog">
+      <xsl:with-param name="id" select="$dialog-id"/>
+      <xsl:with-param name="title" select="i18n:translate('orcid.integration.confirm.delete.title')"/>
+      <xsl:with-param name="message" select="i18n:translate('orcid.integration.confirm.delete.message')"/>
+      <xsl:with-param name="action" select="$action"/>
+    </xsl:call-template>
   </p>
 </xsl:template>
 
