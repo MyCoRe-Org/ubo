@@ -14,6 +14,12 @@ import org.mycore.orcid2.user.MCRORCIDSessionUtils;
 import org.mycore.orcid2.user.MCRORCIDUser;
 import org.mycore.orcid2.user.MCRORCIDUserUtils;
 
+/**
+ * Servlet removes all orcid access tokens of the current user. If you want to remove a single access token for
+ * a given orcid please see {@link org.mycore.orcid2.resources.MCRORCIDResource#revoke(String)}
+ *
+ * @author shermann
+ * */
 public class DozBibUserServlet extends MCRServlet {
 
     public final static Logger LOGGER = LogManager.getLogger(DozBibUserServlet.class);
