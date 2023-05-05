@@ -1,19 +1,18 @@
 package org.mycore.ubo.user;
 
-import java.util.SortedSet;
+import java.io.IOException;
+import java.util.Set;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
-import org.mycore.orcid2.auth.MCRORCIDOAuthClient;
-import org.mycore.user2.MCRUser;
-import org.mycore.user2.MCRUserAttribute;
-import org.mycore.user2.MCRUserManager;
+import org.mycore.orcid2.user.MCRORCIDSessionUtils;
+import org.mycore.orcid2.user.MCRORCIDUser;
+import org.mycore.orcid2.user.MCRORCIDUserUtils;
 
 public class DozBibUserServlet extends MCRServlet {
 
@@ -25,19 +24,23 @@ public class DozBibUserServlet extends MCRServlet {
             job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
         }
 
-        String userID = MCRSessionMgr.getCurrentSession().getUserInformation().getUserID();
+        MCRORCIDUser orcidUser = MCRORCIDSessionUtils.getCurrentUser();
+        Set<String> orcidIdentifiers = orcidUser.getORCIDs();
 
-        LOGGER.info("Unlink ORCID for user {}", userID);
-        MCRUser user = MCRUserManager.getUser(userID);
-        SortedSet<MCRUserAttribute> userAttributes = user.getAttributes();
-        for (MCRUserAttribute attribute : userAttributes) {
-            if (attribute.getName().matches("token_orcid")) {
-                MCRORCIDOAuthClient.getInstance().revokeToken(attribute.getValue());
-            }
+        if (orcidIdentifiers.isEmpty()) {
+            redirectToProfile(job);
+            return;
         }
-        userAttributes.removeIf(attribute -> attribute.getName().equals("token_orcid"));
-        user.setAttributes(userAttributes);
 
+        orcidIdentifiers.forEach(orcid -> {
+            LOGGER.info("Unlinking ORCID {} for user {}", orcid, orcidUser.getUser().getUserID());
+            MCRORCIDUserUtils.revokeCredentialByORCID(orcidUser, orcid);
+        });
+
+        redirectToProfile(job);
+    }
+
+    protected void redirectToProfile(MCRServletJob job) throws IOException {
         job.getResponse().sendRedirect(MCRFrontendUtil.getBaseURL() + "servlets/MCRUserServlet?action=show");
     }
 }
