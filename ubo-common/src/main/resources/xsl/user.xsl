@@ -9,7 +9,8 @@
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
   xmlns:const="xalan://org.mycore.user2.MCRUser2Constants"
-  exclude-result-prefixes="xsl xalan i18n encoder orcid mods acl const">
+  xmlns:orcidUtils="xalan://org.mycore.ubo.orcid.DozBibORCIDUtils"
+  exclude-result-prefixes="xsl xalan i18n encoder orcid mods acl const orcidUtils">
 
   <xsl:import href="ubo-dialog.xsl"/>
 
@@ -348,7 +349,7 @@
       <ul>
         <xsl:call-template name="numPublicationsUBO" />
         <xsl:if test="$isCurrentUser">
-          <xsl:apply-templates select="attributes[attribute[@name='token_orcid']]/attribute[@name='id_orcid']" mode="publications" />
+          <xsl:apply-templates select="attributes[attribute[contains(@name, 'orcid_credential')]]/attribute[@name='id_orcid']" mode="publications" />
         </xsl:if>
       </ul>
     </div>
@@ -396,7 +397,7 @@
     <xsl:value-of disable-output-escaping="yes" select="concat(i18n:translate('user.profile.publications.orcid.intro'), ' ')" />
     <a href="{$MCR.ORCID2.LinkURL}{@value}">
       <xsl:call-template name="numPublications">
-        <xsl:with-param name="num" select="orcid:getNumWorks()" />
+        <xsl:with-param name="num" select="orcidUtils:getNumWorks()" />
       </xsl:call-template>
       <xsl:text>.</xsl:text>
     </a>
