@@ -244,7 +244,7 @@
   <article class="card mb-3" xml:lang="de">
     <div class="card-body">
       <xsl:choose>
-        <xsl:when test="attributes/attribute[@name='token_orcid']">
+        <xsl:when test="attributes/attribute[starts-with(@name, 'orcid_credential')]">
           <xsl:call-template name="orcidIntegrationConfirmed" />
         </xsl:when>
         <xsl:otherwise>
