@@ -349,7 +349,7 @@
       <ul>
         <xsl:call-template name="numPublicationsUBO" />
         <xsl:if test="$isCurrentUser">
-          <xsl:apply-templates select="attributes[attribute[contains(@name, 'orcid_credential')]]/attribute[@name='id_orcid']" mode="publications" />
+          <xsl:apply-templates select="attributes/attribute[contains(@name, 'orcid_credential')]" mode="publications" />
         </xsl:if>
       </ul>
     </div>
@@ -392,7 +392,7 @@
   </li>
 </xsl:template>
 
-<xsl:template match="attribute[@name='id_orcid']" mode="publications">
+<xsl:template match="attribute[contains(@name, 'orcid_credential')]" mode="publications">
   <li>
     <xsl:value-of disable-output-escaping="yes" select="concat(i18n:translate('user.profile.publications.orcid.intro'), ' ')" />
     <a href="{$MCR.ORCID2.LinkURL}{@value}">
