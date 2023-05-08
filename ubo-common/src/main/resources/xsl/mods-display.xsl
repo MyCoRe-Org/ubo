@@ -269,7 +269,7 @@
   <xsl:template name="buildFindDuplicatesURI">
     <xsl:text>solr:fl=id&amp;rows=999&amp;q=(</xsl:text>
     <xsl:for-each select="dedup">
-      <xsl:text>dedup:</xsl:text>
+      <xsl:text>dedup%3A</xsl:text>
       <xsl:value-of select="encoder:encode(@key,'UTF-8')" xmlns:encoder="xalan://java.net.URLEncoder" />
       <xsl:if test="position() != last()">
         <xsl:text>+OR+</xsl:text>

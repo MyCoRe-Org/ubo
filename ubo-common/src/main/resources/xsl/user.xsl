@@ -345,8 +345,8 @@
 
 <xsl:template name="numPublicationsUBO">
   <xsl:variable name="connection_id" select="attributes/attribute[@name='id_connection']/@value" />
-  <xsl:variable name="solr_query_confirmed" select="concat('q=status:confirmed+nid_connection:',$connection_id)" />
-  <xsl:variable name="solr_query_all" select="concat('q=nid_connection:',$connection_id)" />
+  <xsl:variable name="solr_query_confirmed" select="concat('q=status%3Aconfirmed+nid_connection%3A',$connection_id)" />
+  <xsl:variable name="solr_query_all" select="concat('q=nid_connection%3A',$connection_id)" />
   <xsl:variable name="numFoundConfirmed" select="document(concat('solr:rows=0&amp;',$solr_query_confirmed))/response/result/@numFound"/>
   <xsl:variable name="numFoundAll" select="document(concat('solr:rows=0&amp;',$solr_query_all))/response/result/@numFound"/>
   <xsl:variable name="numPubsConfirmedText">
