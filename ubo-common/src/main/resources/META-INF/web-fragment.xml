@@ -108,13 +108,13 @@
     <url-pattern>/servlets/EnrichmentDebuggerServlet</url-pattern>
   </servlet-mapping>
 
-  <servlet id="DozBibUserServlet">
-    <servlet-name>DozBibUserServlet</servlet-name>
-    <servlet-class>org.mycore.ubo.user.DozBibUserServlet</servlet-class>
+  <servlet id="DozBibORCIDUserServlet">
+    <servlet-name>DozBibORCIDUserServlet</servlet-name>
+    <servlet-class>org.mycore.ubo.orcid.DozBibORCIDUserServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>DozBibUserServlet</servlet-name>
-    <url-pattern>/servlets/DozBibUserServlet</url-pattern>
+    <servlet-name>DozBibORCIDUserServlet</servlet-name>
+    <url-pattern>/servlets/DozBibORCIDUserServlet</url-pattern>
   </servlet-mapping>
 
   <session-config>

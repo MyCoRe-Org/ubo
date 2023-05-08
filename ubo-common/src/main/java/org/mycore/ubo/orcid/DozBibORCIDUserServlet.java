@@ -1,4 +1,4 @@
-package org.mycore.ubo.user;
+package org.mycore.ubo.orcid;
 
 import java.io.IOException;
 import java.util.Set;
@@ -20,9 +20,9 @@ import org.mycore.orcid2.user.MCRORCIDUserUtils;
  *
  * @author shermann
  * */
-public class DozBibUserServlet extends MCRServlet {
+public class DozBibORCIDUserServlet extends MCRServlet {
 
-    public final static Logger LOGGER = LogManager.getLogger(DozBibUserServlet.class);
+    public final static Logger LOGGER = LogManager.getLogger(DozBibORCIDUserServlet.class);
 
     @Override
     protected void doGetPost(MCRServletJob job) throws Exception {

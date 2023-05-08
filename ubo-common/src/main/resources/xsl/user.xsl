@@ -289,7 +289,7 @@
     <xsl:variable name="single-quote">
       <xsl:text>'</xsl:text>
     </xsl:variable>
-    <xsl:variable name="action" select="concat('location.assign(', $single-quote, $WebApplicationBaseURL, 'servlets/DozBibUserServlet', $single-quote,')')"/>
+    <xsl:variable name="action" select="concat('location.assign(', $single-quote, $WebApplicationBaseURL, 'servlets/DozBibORCIDUserServlet', $single-quote,')')"/>
 
     <button class="btn btn-danger" onclick="$('#{$dialog-id}').modal('show')">
       <xsl:value-of select="i18n:translate('orcid.integration.unlink')"/>
