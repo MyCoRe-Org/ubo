@@ -1,8 +1,10 @@
 package org.mycore.ubo.orcid;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.mycore.orcid2.client.MCRORCIDCredential;
 import org.mycore.orcid2.user.MCRORCIDSessionUtils;
 import org.mycore.orcid2.user.MCRORCIDUser;
 import org.mycore.orcid2.v3.MCRORCIDClientHelper;
@@ -25,5 +27,12 @@ public class DozBibORCIDUtils {
         });
 
         return numWorks.get();
+    }
+
+    public static boolean weAreTrustedParty() {
+        MCRORCIDUser orcidUser = MCRORCIDSessionUtils.getCurrentUser();
+        Map<String, MCRORCIDCredential> credentials = orcidUser.getCredentials();
+
+        return !credentials.isEmpty();
     }
 }
