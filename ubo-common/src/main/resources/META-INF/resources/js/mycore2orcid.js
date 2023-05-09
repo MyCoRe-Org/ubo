@@ -99,12 +99,13 @@ function updateORCIDPublishButton(div, objectStatus) {
         $(div).find('.orcid-button').click(async function () {
             div = this;
 
-            const resp = await fetch(orcidPublishURL + id)
-                .then(resp => alert(orcidI18n['orcid.publication.action.confirmation']))
-                .then(() => updateUI())
-                .catch(error => {
-                    console.error(error);
-                });
+            const resp = await fetch(orcidPublishURL + id);
+            if (resp.ok) {
+                $("#notification-dialog-success").modal('show');
+                await updateUI();
+            } else {
+                $("#notification-dialog-fail").modal('show');
+            }
         });
     }
 }

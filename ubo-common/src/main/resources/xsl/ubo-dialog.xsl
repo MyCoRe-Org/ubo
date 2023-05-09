@@ -40,4 +40,33 @@
     </div>
   </xsl:template>
 
+  <xsl:template name="notification-dialog">
+    <xsl:param name="id" select="generate-id()"/>
+    <xsl:param name="title" select="''"/>
+    <xsl:param name="message" select="''"/>
+    <xsl:param name="button.confirm.text" select="i18n:translate('button.ok')"/>
+
+    <div id="notification-dialog-{$id}" class="modal fade" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 id="notification-dialog-h" class="modal-title">
+              <xsl:value-of select="$title"/>
+            </h5>
+          </div>
+          <div class="modal-body">
+            <p id="notification-dialog-message-p">
+              <xsl:value-of select="$message"/>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">
+              <xsl:value-of select="$button.confirm.text"/>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </xsl:template>
+
 </xsl:stylesheet>
