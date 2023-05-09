@@ -32,7 +32,7 @@
 <!-- ============ Katalogsuche Basis-URLs ============ -->
   <xsl:param name="UBO.Primo.Search.Link" />
   <xsl:param name="UBO.ISBN.Search.Link" />
-  <xsl:param name="MCR.ORCID.LinkURL"/>
+  <xsl:param name="MCR.ORCID2.LinkURL"/>
 
   <xsl:variable name="genres"                select="document('classification:metadata:-1:children:ubogenre')/mycoreclass/categories" />
   <xsl:variable name="origin"                select="document('classification:metadata:-1:children:ORIGIN')/mycoreclass/categories" />
@@ -571,7 +571,7 @@
                 <xsl:choose>
                   <xsl:when test="$attrName='id_orcid'">
                     <!-- special display code for orcid -->
-                    <xsl:variable name="url" select="concat($MCR.ORCID.LinkURL,@value)" />
+                    <xsl:variable name="url" select="concat($MCR.ORCID2.LinkURL,@value)" />
                     <a href="{$url}" title="ORCID iD: {@value}">
                       <xsl:value-of select="@value" />
                       <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
@@ -603,7 +603,7 @@
   </xsl:template>
 
   <xsl:template match="mods:nameIdentifier[@type='orcid']">
-    <xsl:variable name="url" select="concat($MCR.ORCID.LinkURL,text())" />
+    <xsl:variable name="url" select="concat($MCR.ORCID2.LinkURL,text())" />
     <a href="{$url}" title="ORCID iD: {text()}">
       <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
     </a>

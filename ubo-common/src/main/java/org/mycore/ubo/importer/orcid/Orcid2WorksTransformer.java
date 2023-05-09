@@ -51,7 +51,6 @@ public class Orcid2WorksTransformer extends MCRContentTransformer {
         List<Element> workElements = MCRORCIDWorkUtils.buildUnmergedMODSFromWorks(workList);
         Element modsCollection = MCRORCIDUtils.buildMODSCollection(workElements);
 
-        /*TODO handle putCOdes */
         return new MCRJDOMContent(modsCollection);
     }
 }
