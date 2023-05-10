@@ -62,7 +62,7 @@ function setORCIDPublicationStatus(div, objectStatus) {
 
     if (objectStatus.usersPublication) {
         let html = "<span class='orcid-info' title='" + orcidI18n[
-            (objectStatus.isInORCIDProfile ? 'orcid.publication.inProfile.true' : 'orcid.publication.inProfile.false')
+            (objectStatus.inORCIDProfile ? 'orcid.publication.inProfile.true' : 'orcid.publication.inProfile.false')
             ] + "'>";
         html += orcidIcon;
         html += "<span class='far fa-thumbs-" + (objectStatus.inORCIDProfile ? "up" : "down")
