@@ -1,3 +1,6 @@
+/*
+ * @deprecated -> code is available in mycore-orcid2/../modules/orcid2/js/orcid-auth.js
+ * */
 ORCIDTools = {
     orcidOAuth: async function (linkURL, authURL) {
         const logoutURL = linkURL + 'userStatus.json?logUserOut=true';
