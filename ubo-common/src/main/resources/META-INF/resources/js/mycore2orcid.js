@@ -1,15 +1,14 @@
-const orcidObjectStatusURL = webApplicationBaseURL + "rsc/orcid/objectStatus/";
-const orcidUserStatusURL = webApplicationBaseURL + "rsc/orcid/userStatus/";
-const orcidPublishURL = webApplicationBaseURL + "rsc/orcid/publish/";
+const orcidObjectStatusURL = webApplicationBaseURL + "api/orcid/v1/object-status/v3/";
+const orcidUserStatusURL = webApplicationBaseURL + "api/orcid/v1/user-status/";
+const orcidPublishURL = webApplicationBaseURL + "api/orcid/v1/publish/v3/";
 const orcidIcon = "<img alt='ORCID iD' src='" + webApplicationBaseURL + "images/orcid_icon.svg' class='orcid-icon' />";
 
 let orcidI18n;
 let userStatus = {orcids: [], trustedOrcids: []};
 
 $(document).ready(async function () {
-    let orcidI18nURL = webApplicationBaseURL + "rsc/locale/translate/" + currentLang + "/orcid.publication.*";
-
     // load i18n key/values
+    let orcidI18nURL = webApplicationBaseURL + "rsc/locale/translate/" + currentLang + "/orcid.publication.*";
     await fetch(orcidI18nURL)
         .then(data => data.json())
         .then(json => orcidI18n = json)
