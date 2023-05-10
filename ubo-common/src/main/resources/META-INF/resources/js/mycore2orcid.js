@@ -91,7 +91,7 @@ function updateORCIDPublishButton(div, objectStatus) {
     $(div).empty();
 
     if (userStatus.trustedOrcids.length > 0 && objectStatus.usersPublication) {
-        let html = "<button class='orcid-button btn btn-sm btn-outline-primary'>" +
+        let html = "<button class='orcid-button btn btn-sm btn-outline-secondary'>" +
             orcidI18n[(objectStatus.inORCIDProfile ? 'orcid.publication.action.update' : 'orcid.publication.action.create')] +
             "</button>";
         $(div).html(html);
