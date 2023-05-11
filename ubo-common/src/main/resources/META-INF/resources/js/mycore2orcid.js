@@ -115,19 +115,3 @@ function updateORCIDPublishButton(div, objectStatus, headers) {
         });
     }
 }
-
-async function loadScript(url) {
-    let script = document.createElement("script");
-
-    script.setAttribute("src", url);
-    script.setAttribute("type", "text/javascript");
-
-    document.head.appendChild(script);
-
-    script.addEventListener("load", () => {
-        console.info(url + " loaded");
-    });
-    script.addEventListener("error", (event) => {
-        console.log("Error on loading file " + url, event);
-    });
-}
