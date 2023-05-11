@@ -5,9 +5,11 @@
                 xmlns:mods="http://www.loc.gov/mods/v3"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 xmlns:str="http://exslt.org/strings"
-                exclude-result-prefixes="mods xlink str">
+                xmlns:xalan="http://xml.apache.org/xalan"
+                exclude-result-prefixes="mods xlink str xalan">
 
   <xsl:import href="xslImport:solr-document:ubo-solr.xsl" />
+  <xsl:include href="tokenizer.xsl"/>
 
   <xsl:template match="mycoreobject">
     <xsl:apply-templates select="." mode="baseFields" />
@@ -237,6 +239,24 @@
     <field name="origin_exact">
       <xsl:value-of select="$category" />
     </field>
+
+    <!-- Derive destatis from origin if fachreferate is not set -->
+    <xsl:if test="not (../mods:classification[contains(@authorityURI,'fachreferate')])">
+      <xsl:variable name="origin" select="document('classification:metadata:-1:children:ORIGIN')/mycoreclass/categories" />
+      <xsl:variable name="destatis-attr" select="$origin//category[@ID = $category]/label[@xml:lang = 'x-destatis']/@text"/>
+
+      <xsl:variable name="destatis-categories">
+        <xsl:call-template name="tokenizer">
+          <xsl:with-param name="string" select="$destatis-attr"/>
+        </xsl:call-template>
+      </xsl:variable>
+
+      <xsl:for-each select="xalan:nodeset($destatis-categories)/token">
+        <field name="subject">
+          <xsl:value-of select="."/>
+        </field>
+      </xsl:for-each>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="oa">
