@@ -62,6 +62,8 @@ public class UBOExportResource {
         return URLEncoder.encode(s, StandardCharsets.UTF_8);
     }
 
+    protected static final String STATUS_RESTRICTION = MCRConfiguration2.getString("UBO.Export.Status.Restriction").orElse("+status:confirmed");
+
     @GET
     @Path("styles")
     @Produces(MediaType.APPLICATION_JSON)
@@ -133,7 +135,7 @@ public class UBOExportResource {
             childFilterQuery += " +role:(" + String.join(" OR ", ROLES) + ")";
         }
 
-        String solrQuery = "+status:confirmed " + yearPart + partOfPart
+        String solrQuery = UBOExportResource.STATUS_RESTRICTION + " " + yearPart + partOfPart
             + "+{!parent which=\"objectType:mods\" filters=$childfq}objectKind:name";
 
         StringBuilder solrRequest = new StringBuilder()
