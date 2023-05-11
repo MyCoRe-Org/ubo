@@ -7,6 +7,12 @@ let orcidI18n;
 let userStatus = {orcids: [], trustedOrcids: []};
 
 $(document).ready(async function () {
+    const jwt = await fetchJWT();
+    const headers = {
+        method: 'GET',
+        headers: {Authorization: `Bearer ${jwt}`}
+    };
+
     // load i18n key/values
     let orcidI18nURL = webApplicationBaseURL + "rsc/locale/translate/" + currentLang + "/orcid.publication.*";
     await fetch(orcidI18nURL)
@@ -14,13 +20,14 @@ $(document).ready(async function () {
         .then(json => orcidI18n = json)
         .catch(error => console.error(error));
 
-    await updateUI();
+    await updateUI(headers);
 });
 
-async function updateUI() {
+
+async function updateUI(headers) {
     // get user status
     console.info("Getting ORCID user status...");
-    const userStatusResp = await fetch(orcidUserStatusURL);
+    const userStatusResp = await fetch(orcidUserStatusURL, headers);
     if (!userStatusResp.ok) {
         return;
     }
@@ -33,20 +40,20 @@ async function updateUI() {
     }
 
     $('div.orcid-status').each(function () {
-        getORCIDPublicationStatus(this);
+        getORCIDPublicationStatus(this, headers);
     });
 
     $('div.orcid-publish').each(function () {
-        showORCIDPublishButton(this);
+        showORCIDPublishButton(this, headers);
     });
 }
 
-async function getORCIDPublicationStatus(div) {
+async function getORCIDPublicationStatus(div, headers) {
     console.info("Fetching publication status");
     let id = $(div).data('id');
     let url = orcidObjectStatusURL + id;
 
-    const response = await fetch(url);
+    const response = await fetch(url, headers);
 
     if (!response.ok) {
         return;
@@ -71,21 +78,21 @@ function setORCIDPublicationStatus(div, objectStatus) {
     }
 }
 
-async function showORCIDPublishButton(div) {
+async function showORCIDPublishButton(div, headers) {
     console.info("Showing ORCID publish button.");
     let id = $(div).data('id');
     let url = orcidObjectStatusURL + id;
 
-    const objectStatusResponse = await fetch(url);
+    const objectStatusResponse = await fetch(url, headers);
     if (!objectStatusResponse.ok) {
         return;
     }
 
     const objectStatus = await objectStatusResponse.json();
-    updateORCIDPublishButton(div, objectStatus);
+    updateORCIDPublishButton(div, objectStatus, headers);
 }
 
-function updateORCIDPublishButton(div, objectStatus) {
+function updateORCIDPublishButton(div, objectStatus, headers) {
     let id = $(div).data('id');
     $(div).empty();
 
@@ -98,13 +105,29 @@ function updateORCIDPublishButton(div, objectStatus) {
         $(div).find('.orcid-button').click(async function () {
             div = this;
 
-            const resp = await fetch(orcidPublishURL + id);
+            const resp = await fetch(orcidPublishURL + id, headers);
             if (resp.ok) {
                 $("#notification-dialog-success").modal('show');
-                await updateUI();
+                await updateUI(headers);
             } else {
                 $("#notification-dialog-fail").modal('show');
             }
         });
     }
+}
+
+async function loadScript(url) {
+    let script = document.createElement("script");
+
+    script.setAttribute("src", url);
+    script.setAttribute("type", "text/javascript");
+
+    document.head.appendChild(script);
+
+    script.addEventListener("load", () => {
+        console.info(url + " loaded");
+    });
+    script.addEventListener("error", (event) => {
+        console.log("Error on loading file " + url, event);
+    });
 }

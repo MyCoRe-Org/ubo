@@ -109,6 +109,7 @@
     <head>
       <xsl:call-template name="page.title" />
       <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update')">
+        <script src="{$WebApplicationBaseURL}modules/orcid2/js/orcid-auth.js"/>
         <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
         <xsl:call-template name="notification-dialog">
           <xsl:with-param name="id" select="'success'"/>

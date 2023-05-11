@@ -58,6 +58,7 @@
 <xsl:template name="head.additional">
   <xsl:apply-templates select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods" mode="dc-meta" />
   <xsl:apply-templates select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods" mode="highwire" />
+  <script src="{$WebApplicationBaseURL}modules/orcid2/js/orcid-auth.js"/>
   <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
 </xsl:template>
 

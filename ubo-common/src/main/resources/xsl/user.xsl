@@ -305,7 +305,7 @@
 </xsl:template>
 
 <xsl:template name="orcidIntegrationPending">
-  <script src="{$WebApplicationBaseURL}js/ORCIDTools.js"/>
+  <script src="{$WebApplicationBaseURL}modules/orcid2/js/orcid-auth.js"/>
 
   <h3>
     <span class="far fa-hand-point-right mr-1" aria-hidden="true" />
@@ -318,7 +318,7 @@
 
   <p>
     <button class="btn btn-primary" id="orcid-oauth-button" title="({i18n:translate('orcid.integration.popup.tooltip')})"
-            onclick="ORCIDTools.orcidOAuth('{$MCR.ORCID2.LinkURL}','{$WebApplicationBaseURL}rsc/orcid/auth?scope={$MCR.ORCID2.OAuth.Scope}');">
+            onclick="orcidOAuth('{$MCR.ORCID2.OAuth.Scope}')">
       <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
       <xsl:value-of select="i18n:translate('orcid.oauth.link')" />
     </button>
