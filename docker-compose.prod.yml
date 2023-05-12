@@ -1,0 +1,49 @@
+version: '3.1'
+
+services:
+  db:
+    container_name: ${NAME}-db
+    image: postgres:12
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=ubo
+    volumes:
+      - ${DB_DATA}:/var/lib/postgresql/data/
+    ports:
+      - ${DB_PORT}:5432
+  solr:
+    container_name: ${NAME}-solr
+    image: mycoreorg/ubo-solr:development
+    restart: unless-stopped
+    volumes:
+      - ${SOLR_DATA}:/var/solr/data
+    ports:
+      - ${SOLR_HTTP}:8983
+  ubo:
+    container_name: ${NAME}-ubo
+    image: mycoreorg/ubo:development
+    restart: unless-stopped
+    environment:
+      - APP_CONTEXT=${APP_CONTEXT}
+      - JDBC_NAME=${DB_USER}
+      - JDBC_PASSWORD=${DB_PASSWORD}
+      - JDBC_DRIVER=org.postgresql.Driver
+      - JDBC_URL=jdbc:postgresql://db:5432/ubo
+      - SOLR_URL=http://solr:8983
+      - SOLR_CORE=ubo
+      - SOLR_CLASSIFICATION_CORE=ubo-classifications
+      - XMX=${APP_XMX}
+      - XMS=${APP_XMS}
+    volumes:
+      - ${APP_HOME}:/mcr/home/
+      - ${APP_DATA}:/mcr/data/
+      - ${APP_LOGS}:/mcr/logs/
+      - ${APP_TMP}:/mcr/tmp/
+    depends_on:
+      - db
+      - solr
+    ports:
+      - ${APP_HTTP}:8080
+      - ${APP_AJP}:8009

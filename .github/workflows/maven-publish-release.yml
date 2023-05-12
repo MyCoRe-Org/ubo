@@ -31,3 +31,16 @@ jobs:
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+      - name: Login to Docker Hub
+        if: success()
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build the mir Docker images and push them
+        if: success()
+        run: |
+          docker build . --file Dockerfile --tag mycoreorg/ubo:${GITHUB_REF_NAME}
+          docker build ubo-webapp/src/main/setup/solr/ --file ubo-webapp/src/main/setup/solr/Dockerfile --tag mycoreorg/ubo-solr:${GITHUB_REF_NAME}
+          docker push mycoreorg/ubo:${GITHUB_REF_NAME}
+          docker push mycoreorg/ubo-solr:${GITHUB_REF_NAME}
