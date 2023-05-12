@@ -15,7 +15,7 @@ services:
       - ${DB_PORT}:5432
   solr:
     container_name: ${NAME}-solr
-    image: mycoreorg/ubo-solr:development
+    image: mycoreorg/ubo-solr:develop
     restart: unless-stopped
     volumes:
       - ${SOLR_DATA}:/var/solr/data
@@ -23,7 +23,7 @@ services:
       - ${SOLR_HTTP}:8983
   ubo:
     container_name: ${NAME}-ubo
-    image: mycoreorg/ubo:development
+    image: mycoreorg/ubo:develop
     restart: unless-stopped
     environment:
       - APP_CONTEXT=${APP_CONTEXT}
