@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.orcid2.client.MCRORCIDCredential;
 import org.mycore.orcid2.user.MCRORCIDSessionUtils;
 import org.mycore.orcid2.user.MCRORCIDUser;
@@ -19,9 +20,9 @@ public class DozBibORCIDUtils {
 
         AtomicInteger numWorks = new AtomicInteger(0);
 
-        orcidIdentifiers.forEach(next -> {
+        orcidIdentifiers.forEach(orcid -> {
             Works works = MCRORCIDClientHelper.getClientFactory()
-                .createUserClient(next, orcidUser.getCredentials().values().stream().findFirst().get()).
+                .createUserClient(orcid, orcidUser.getCredentials().values().stream().findFirst().get()).
                 fetch(MCRORCIDSectionImpl.WORKS, Works.class);
             numWorks.addAndGet(works.getWorkGroup().size());
         });
@@ -30,6 +31,10 @@ public class DozBibORCIDUtils {
     }
 
     public static boolean weAreTrustedParty() {
+        if (MCRXMLFunctions.isCurrentUserGuestUser()) {
+            return false;
+        }
+
         MCRORCIDUser orcidUser = MCRORCIDSessionUtils.getCurrentUser();
         Map<String, MCRORCIDCredential> credentials = orcidUser.getCredentials();
 
