@@ -8,10 +8,12 @@ let userStatus = {orcids: [], trustedOrcids: []};
 
 $(document).ready(async function () {
     const jwt = await fetchJWT();
-    const headers = {
-        method: 'GET',
-        headers: {Authorization: `Bearer ${jwt}`}
-    };
+    const headers = function build(httpMethod) {
+        return {
+            method: httpMethod,
+            headers: {Authorization: `Bearer ${jwt}`}
+        };
+    }
 
     // load i18n key/values
     let orcidI18nURL = webApplicationBaseURL + "rsc/locale/translate/" + currentLang + "/orcid.publication.*";
@@ -26,8 +28,8 @@ $(document).ready(async function () {
 
 async function updateUI(headers) {
     // get user status
-    console.info("Getting ORCID user status...");
-    const userStatusResp = await fetch(orcidUserStatusURL, headers);
+    console.debug("Getting ORCID user status...");
+    const userStatusResp = await fetch(orcidUserStatusURL, headers('GET'));
     if (!userStatusResp.ok) {
         return;
     }
@@ -35,7 +37,7 @@ async function updateUI(headers) {
     // if user has no orcid at all do not display orcid icons
     userStatus = await userStatusResp.json();
     if (userStatus.orcids.length == 0) {
-        console.info("Current user does not have any orcid. Nothing to do.");
+        console.debug("Current user does not have any orcid. Nothing to do.");
         return;
     }
 
@@ -49,11 +51,11 @@ async function updateUI(headers) {
 }
 
 async function getORCIDPublicationStatus(div, headers) {
-    console.info("Fetching publication status");
+    console.debug("Fetching publication status");
     let id = $(div).data('id');
     let url = orcidObjectStatusURL + id;
 
-    const response = await fetch(url, headers);
+    const response = await fetch(url, headers('GET'));
 
     if (!response.ok) {
         return;
@@ -63,7 +65,7 @@ async function getORCIDPublicationStatus(div, headers) {
 }
 
 function setORCIDPublicationStatus(div, objectStatus) {
-    console.info("Setting publication status");
+    console.debug("Setting publication status");
     $(div).empty();
 
     if (objectStatus.usersPublication) {
@@ -79,11 +81,11 @@ function setORCIDPublicationStatus(div, objectStatus) {
 }
 
 async function showORCIDPublishButton(div, headers) {
-    console.info("Showing ORCID publish button.");
+    console.debug("Showing ORCID publish button.");
     let id = $(div).data('id');
     let url = orcidObjectStatusURL + id;
 
-    const objectStatusResponse = await fetch(url, headers);
+    const objectStatusResponse = await fetch(url, headers('GET'));
     if (!objectStatusResponse.ok) {
         return;
     }
@@ -105,7 +107,7 @@ function updateORCIDPublishButton(div, objectStatus, headers) {
         $(div).find('.orcid-button').click(async function () {
             div = this;
 
-            const resp = await fetch(orcidPublishURL + id, headers);
+            const resp = await fetch(orcidPublishURL + id, headers('POST'));
             if (resp.ok) {
                 $("#notification-dialog-success").modal('show');
                 await updateUI(headers);
