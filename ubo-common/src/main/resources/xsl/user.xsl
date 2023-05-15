@@ -284,22 +284,47 @@
       </li>
     </ul>
   </xsl:if>
-  <p>
-    <xsl:variable name="dialog-id" select="generate-id()"/>
-    <xsl:variable name="single-quote">
-      <xsl:text>'</xsl:text>
-    </xsl:variable>
-    <xsl:variable name="action" select="concat('location.assign(', $single-quote, $WebApplicationBaseURL, 'servlets/DozBibORCIDUserServlet', $single-quote,')')"/>
 
-    <button class="btn btn-danger" onclick="$('#{$dialog-id}').modal('show')">
+  <xsl:variable name="single-quote">
+    <xsl:text>'</xsl:text>
+  </xsl:variable>
+
+  <p>
+    <xsl:variable name="has-sync-enabled" select="orcidUtils:hasSyncEnabled()"/>
+
+    <xsl:variable name="sync-dialog-id" select="'sync-dialog'"/>
+    <xsl:variable name="revoke-dialog-id" select="'revoke-dialog'"/>
+
+    <xsl:variable name="outline">
+      <xsl:choose>
+        <xsl:when test="$has-sync-enabled = 'true'">
+          <xsl:value-of select="'outline-'"/>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+
+    <button class="btn btn-{$outline}primary mr-2" onclick="$('#{$sync-dialog-id}').modal('show')">
+      <xsl:value-of select="i18n:translate(concat('orcid.integration.auto.update.', $has-sync-enabled))"/>
+    </button>
+
+    <button class="btn btn-outline-danger" onclick="$('#{$revoke-dialog-id}').modal('show')">
       <xsl:value-of select="i18n:translate('orcid.integration.unlink')"/>
     </button>
 
+    <xsl:variable name="sync-action" select="concat('location.assign(', $single-quote, $WebApplicationBaseURL, 'servlets/DozBibORCIDUserServlet?sync', $single-quote,')')"/>
     <xsl:call-template name="confirm-dialog">
-      <xsl:with-param name="id" select="$dialog-id"/>
+      <xsl:with-param name="id" select="$sync-dialog-id"/>
+      <xsl:with-param name="title" select="concat(i18n:translate(concat('orcid.integration.auto.update.', $has-sync-enabled)), '?')"/>
+      <xsl:with-param name="message" select="i18n:translate(concat('orcid.integration.auto.update.', $has-sync-enabled, '.msg'))"/>
+      <xsl:with-param name="action" select="$sync-action"/>
+    </xsl:call-template>
+
+    <xsl:variable name="revoke-action" select="concat('location.assign(', $single-quote, $WebApplicationBaseURL, 'servlets/DozBibORCIDUserServlet', $single-quote,')')"/>
+    <xsl:call-template name="confirm-dialog">
+      <xsl:with-param name="id" select="$revoke-dialog-id"/>
       <xsl:with-param name="title" select="i18n:translate('orcid.integration.confirm.delete.title')"/>
       <xsl:with-param name="message" select="i18n:translate('orcid.integration.confirm.delete.message')"/>
-      <xsl:with-param name="action" select="$action"/>
+      <xsl:with-param name="action" select="$revoke-action"/>
     </xsl:call-template>
   </p>
 </xsl:template>
