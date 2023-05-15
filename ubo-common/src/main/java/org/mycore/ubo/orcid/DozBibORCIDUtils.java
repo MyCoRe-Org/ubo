@@ -47,7 +47,7 @@ public class DozBibORCIDUtils {
     public static boolean hasSyncEnabled() {
         MCRUser user = MCRUserManager.getUser(MCRSessionMgr.getCurrentSession().getUserInformation().getUserID());
         return user.getAttributes().stream()
-            .filter(a -> a.getName().equals("orcid_sync") && a.getValue().equals(String.valueOf(true)))
+            .filter(a -> a.getName().equals("orcid_update_profile") && a.getValue().equals(String.valueOf(true)))
             .findFirst()
             .isPresent();
     }

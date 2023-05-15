@@ -60,12 +60,12 @@ public class DozBibORCIDUserServlet extends MCRServlet {
         SortedSet<MCRUserAttribute> attributes = user.getAttributes();
 
         attributes.stream()
-            .filter(attr -> attr.getName().equals("orcid_sync"))
+            .filter(attr -> attr.getName().equals("orcid_update_profile"))
             .findFirst()
             .ifPresentOrElse(present -> {
                 attributes.remove(present);
             }, () -> {
-                attributes.add(new MCRUserAttribute("orcid_sync", String.valueOf(true)));
+                attributes.add(new MCRUserAttribute("orcid_update_profile", String.valueOf(true)));
             });
     }
 
