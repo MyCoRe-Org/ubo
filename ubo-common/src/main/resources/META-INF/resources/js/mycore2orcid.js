@@ -1,6 +1,7 @@
 const orcidObjectStatusURL = webApplicationBaseURL + "api/orcid/v1/object-status/v3/";
 const orcidUserStatusURL = webApplicationBaseURL + "api/orcid/v1/user-status/";
-const orcidPublishURL = webApplicationBaseURL + "api/orcid/v1/publish/v3/";
+const orcidPublishURL = webApplicationBaseURL + "api/orcid/v1/create-object/v3/";
+const orcidUpdateURL = webApplicationBaseURL + "api/orcid/v1/update-object/v3/";
 const orcidIcon = "<img alt='ORCID iD' src='" + webApplicationBaseURL + "images/orcid_icon.svg' class='orcid-icon' />";
 
 let orcidI18n;
@@ -51,7 +52,7 @@ async function updateUI(headers) {
 }
 
 async function getORCIDPublicationStatus(div, headers) {
-    console.debug("Fetching publication status");
+    console.debug("Fetching publication/object status");
     let id = $(div).data('id');
     let url = orcidObjectStatusURL + id;
 
@@ -61,11 +62,13 @@ async function getORCIDPublicationStatus(div, headers) {
         return;
     }
     const objectStatus = await response.json();
+    console.debug("Publication/object status is: ");
+    console.debug(objectStatus);
     setORCIDPublicationStatus(div, objectStatus);
 }
 
 function setORCIDPublicationStatus(div, objectStatus) {
-    console.debug("Setting publication status");
+    console.debug("Setting publication status icon");
     $(div).empty();
 
     if (objectStatus.usersPublication) {
@@ -81,7 +84,7 @@ function setORCIDPublicationStatus(div, objectStatus) {
 }
 
 async function showORCIDPublishButton(div, headers) {
-    console.debug("Showing ORCID publish button.");
+    console.debug("Showing ORCID publish button");
     let id = $(div).data('id');
     let url = orcidObjectStatusURL + id;
 
@@ -91,10 +94,10 @@ async function showORCIDPublishButton(div, headers) {
     }
 
     const objectStatus = await objectStatusResponse.json();
-    updateORCIDPublishButton(div, objectStatus, headers);
+    updateORCIDPublishOrUpdateButton(div, objectStatus, headers);
 }
 
-function updateORCIDPublishButton(div, objectStatus, headers) {
+function updateORCIDPublishOrUpdateButton(div, objectStatus, headers) {
     let id = $(div).data('id');
     $(div).empty();
 
@@ -106,8 +109,8 @@ function updateORCIDPublishButton(div, objectStatus, headers) {
 
         $(div).find('.orcid-button').click(async function () {
             div = this;
-
-            const resp = await fetch(orcidPublishURL + id, headers('POST'));
+            let requestURL = objectStatus.inORCIDProfile == true ? orcidUpdateURL : orcidPublishURL;
+            const resp = await fetch(requestURL + id, headers('POST'));
             if (resp.ok) {
                 $("#notification-dialog-success").modal('show');
                 await updateUI(headers);
