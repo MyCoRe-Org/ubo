@@ -265,10 +265,17 @@
 </xsl:template>
 
 <xsl:template name="orcidIntegrationConfirmed">
+  <xsl:variable name="has-sync-enabled" select="orcidUtils:hasSyncEnabled()"/>
+
   <h3>
     <span class="fas fa-check" aria-hidden="true" />
     <xsl:text> </xsl:text>
     <xsl:value-of select="i18n:translate('orcid.integration.confirmed.headline')" />
+
+    <xsl:if test="$has-sync-enabled = 'true'">
+      <xsl:value-of select="concat(' ', i18n:translate('orcid.integration.confirmed.headline.with.update'))" />
+    </xsl:if>
+    <xsl:text>.</xsl:text>
   </h3>
   <p>
     <xsl:value-of disable-output-escaping="yes" select="i18n:translate('orcid.integration.confirmed.text')" />
@@ -290,8 +297,6 @@
   </xsl:variable>
 
   <p>
-    <xsl:variable name="has-sync-enabled" select="orcidUtils:hasSyncEnabled()"/>
-
     <xsl:variable name="sync-dialog-id" select="'sync-dialog'"/>
     <xsl:variable name="revoke-dialog-id" select="'revoke-dialog'"/>
 
