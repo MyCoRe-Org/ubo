@@ -48,6 +48,10 @@ public class DozBibORCIDUserServlet extends MCRServlet {
         if (map.get("sync") != null && map.get("sync").length == 1) {
             toggleSync();
         } else {
+            orcidUser.getUser()
+                .getAttributes()
+                .removeIf(a -> a.getName().equals("orcid_update_profile"));
+
             orcidIdentifiers.forEach(orcid -> {
                 LOGGER.info("Unlinking ORCID {} for user {}", orcid, orcidUser.getUser().getUserID());
                 MCRORCIDUserUtils.revokeCredentialByORCID(orcidUser, orcid);
