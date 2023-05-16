@@ -1,7 +1,6 @@
 package org.mycore.ubo.orcid;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -36,6 +35,12 @@ public class DozBibORCIDUserServlet extends MCRServlet {
             job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
         }
 
+        String action = job.getRequest().getParameter("action");
+        if (action == null) {
+            redirectToProfile(job);
+            return;
+        }
+
         MCRORCIDUser orcidUser = MCRORCIDSessionUtils.getCurrentUser();
         Set<String> orcidIdentifiers = orcidUser.getORCIDs();
 
@@ -44,18 +49,20 @@ public class DozBibORCIDUserServlet extends MCRServlet {
             return;
         }
 
-        Map<String, String[]> map = job.getRequest().getParameterMap();
-        if (map.get("sync") != null && map.get("sync").length == 1) {
-            toggleSync();
-        } else {
-            orcidUser.getUser()
-                .getAttributes()
-                .removeIf(a -> a.getName().equals("orcid_update_profile"));
+        switch (action) {
+            case "sync":
+                toggleSync();
+                break;
+            case "revoke":
+                orcidUser.getUser()
+                    .getAttributes()
+                    .removeIf(a -> a.getName().equals("orcid_update_profile"));
 
-            orcidIdentifiers.forEach(orcid -> {
-                LOGGER.info("Unlinking ORCID {} for user {}", orcid, orcidUser.getUser().getUserID());
-                MCRORCIDUserUtils.revokeCredentialByORCID(orcidUser, orcid);
-            });
+                orcidIdentifiers.forEach(orcid -> {
+                    LOGGER.info("Unlinking ORCID {} for user {}", orcid, orcidUser.getUser().getUserID());
+                    MCRORCIDUserUtils.revokeCredentialByORCID(orcidUser, orcid);
+                });
+                break;
         }
 
         redirectToProfile(job);
