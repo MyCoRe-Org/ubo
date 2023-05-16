@@ -1,6 +1,7 @@
 package org.mycore.ubo.orcid;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -21,7 +22,7 @@ import org.mycore.user2.MCRUserManager;
 
 /**
  * Servlet removes all orcid access tokens of the current user. If you want to remove a single access token for
- * a given orcid please see {@link org.mycore.orcid2.resources.MCRORCIDResource#revoke(String)}
+ * a given orcid please see {@link org.mycore.orcid2.rest.resources.MCRORCIDResource#revoke(String, String)}
  *
  * @author shermann
  * */
@@ -43,7 +44,8 @@ public class DozBibORCIDUserServlet extends MCRServlet {
             return;
         }
 
-        if (job.getRequest().getParameterMap().get("sync").length == 1) {
+        Map<String, String[]> map = job.getRequest().getParameterMap();
+        if (map.get("sync") != null && map.get("sync").length == 1) {
             toggleSync();
         } else {
             orcidIdentifiers.forEach(orcid -> {
