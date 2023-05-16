@@ -21,6 +21,7 @@ import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.mods.MCRMODSWrapper;
+import org.mycore.orcid2.user.MCRORCIDUser;
 import org.mycore.ubo.ldap.LDAPObject;
 import org.mycore.user2.MCRRealmFactory;
 import org.mycore.user2.MCRUser;
@@ -99,8 +100,7 @@ public class MCRUserMatcherUtils {
     }
 
     private static String mapModsNameIdentifierTypeToMycore(String nameIdentifierType) {
-        //TODO
-        return "TODO";/*MCRORCIDUser.ATTR_ID_PREFIX + nameIdentifierType;*/
+        return MCRORCIDUser.ATTR_ID_PREFIX + nameIdentifierType;
     }
 
     /**
