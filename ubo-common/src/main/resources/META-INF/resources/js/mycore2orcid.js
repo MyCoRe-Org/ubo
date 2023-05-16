@@ -107,7 +107,8 @@ function updateORCIDPublishOrUpdateButton(div, objectStatus, headers) {
             "</button>";
         $(div).html(html);
 
-        $(div).find('.orcid-button').click(async function () {
+        $(div).find('.orcid-button').one("click", async function () {
+            $(this).attr("disabled", "disabled");
             div = this;
             let requestURL = objectStatus.inORCIDProfile == true ? orcidUpdateURL : orcidPublishURL;
             const resp = await fetch(requestURL + id, headers('POST'));
