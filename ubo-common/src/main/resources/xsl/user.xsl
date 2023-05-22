@@ -27,6 +27,7 @@
 <xsl:param name="MCR.ORCID2.LinkURL" />
 <xsl:param name="MCR.ORCID2.OAuth.ClientSecret" select="''"/>
 <xsl:param name="MCR.ORCID2.OAuth.Scope" select="''"/>
+<xsl:param name="MCR.ORCID2.Client.V3.APIMode"/>
 
 <xsl:variable name="uid">
   <xsl:value-of select="/user/@name" />
@@ -74,7 +75,7 @@
     </div>
   </article>
 
-  <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and $isCurrentUser">
+  <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and $isCurrentUser  and $MCR.ORCID2.Client.V3.APIMode = 'member'">
     <xsl:call-template name="orcid" />
   </xsl:if>
   <xsl:call-template name="publications" />
