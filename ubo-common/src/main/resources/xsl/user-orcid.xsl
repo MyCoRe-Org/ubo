@@ -11,12 +11,14 @@
   <xsl:output method="xml" encoding="UTF-8"/>
 
   <xsl:param name="WebApplicationBaseURL"/>
+  <xsl:param name="MCR.ORCID2.LinkURL"/>
 
   <!-- If current user has ORCID, and we are his trusted party, display ORCID icon to indicate that -->
   <xsl:template name="orcidUser">
     <xsl:if test="orcidUtils:weAreTrustedParty() = 'true'">
-      <img alt="ORCID" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon"/>
+      <a href="{$MCR.ORCID2.LinkURL}{orcidUtils:getFirstOrcidByCurrentUser()}">
+        <img alt="ORCID" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon"/>
+      </a>
     </xsl:if>
   </xsl:template>
-
 </xsl:stylesheet>

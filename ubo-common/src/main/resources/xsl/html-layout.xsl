@@ -18,8 +18,6 @@
   <xsl:param name="UBO.Frontend.bootstrap.version" />
   <xsl:param name="UBO.Frontend.font-awesome.version" />
 
-  <xsl:param name="MCR.ORCID2.LinkURL" />
-
   <!-- ==================== IMPORTS ==================== -->
   <!-- additional stylesheets -->
   <xsl:include href="coreFunctions.xsl" />

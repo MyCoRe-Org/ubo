@@ -46,6 +46,11 @@ public class DozBibORCIDUtils {
         return numWorks.get();
     }
 
+    public static String getFirstOrcidByCurrentUser() {
+        MCRORCIDUser orcidUser = MCRORCIDSessionUtils.getCurrentUser();
+        return orcidUser.getORCIDs().isEmpty() ? "" : orcidUser.getORCIDs().iterator().next();
+    }
+
     public static boolean weAreTrustedParty() {
         if (MCRXMLFunctions.isCurrentUserGuestUser()) {
             return false;
