@@ -18,11 +18,13 @@
   <xsl:param name="UBO.Frontend.bootstrap.version" />
   <xsl:param name="UBO.Frontend.font-awesome.version" />
 
+  <xsl:param name="MCR.ORCID2.LinkURL" />
+
   <!-- ==================== IMPORTS ==================== -->
   <!-- additional stylesheets -->
   <xsl:include href="coreFunctions.xsl" />
   <xsl:include href="html-layout-backend.xsl" />
-
+  <xsl:include href="user-orcid.xsl"/>
 
   <!-- ==================== HTML ==================== -->
 
@@ -247,7 +249,7 @@
           </div>
         </xsl:otherwise>
       </xsl:choose>
-      <xsl:call-template name="orcidUser" />
+      <xsl:call-template name="orcidUser"/>
 
     </div>
     <div class="nav-item mr-2">
@@ -294,23 +296,6 @@
       </span>
     </div>
 
-  </xsl:template>
-
-  <!-- If current user has ORCID and we are his trusted party, display ORCID icon to indicate that -->
-  <xsl:param name="MCR.ORCID.LinkURL" />
-
-  <xsl:template name="orcidUser">
-
-    <xsl:variable name="orcidUser" select="orcidSession:getCurrentUser()" xmlns:orcidSession="xalan://org.mycore.orcid.user.MCRORCIDSession" />
-    <xsl:variable name="userStatus" select="orcidUser:getStatus($orcidUser)" xmlns:orcidUser="xalan://org.mycore.orcid.user.MCRORCIDUser" />
-    <xsl:variable name="trustedParty" select="userStatus:weAreTrustedParty($userStatus)" xmlns:userStatus="xalan://org.mycore.orcid.user.MCRUserStatus" />
-
-    <xsl:if test="$trustedParty = 'true'">
-      <xsl:variable name="orcid" select="orcidUser:getORCID($orcidUser)" xmlns:orcidUser="xalan://org.mycore.orcid.user.MCRORCIDUser" />
-      <a href="{$MCR.ORCID.LinkURL}{$orcid}">
-        <img alt="ORCID {$orcid}" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
-      </a>
-    </xsl:if>
   </xsl:template>
 
   <!-- main navigation -->
