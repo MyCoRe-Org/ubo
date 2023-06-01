@@ -40,7 +40,7 @@
             {{ i18n["editor.identity.picker.lead_id"] }}:
           </label>
           <input class="mycore-form-input" size="6" type="text" :readonly="isadmin==='false'" v-model="person.pid"
-                 id="pid">
+                 id="pid" v-bind:placeholder="i18n['editor.identity.picker.lead_id']">
         </div>
         <div class="cancel-submit form-group form-inline">
           <label class="mycore-form-label"></label>

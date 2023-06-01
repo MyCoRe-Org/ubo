@@ -136,6 +136,8 @@ export default class App extends Vue {
 
     if (this.personModel.pid != null && this.personModel.pid.length > 0 || this.pid != "") {
       parms.push(encodeURIComponent(xpPid) + "=" + encodeURIComponent(this.personModel.pid));
+    } else {
+      return;
     }
 
     let urlParams = new URLSearchParams(window.location.href);

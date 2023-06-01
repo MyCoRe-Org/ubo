@@ -151,3 +151,8 @@
     margin-left: 0;
   }
 }
+
+
+input#pid:placeholder-shown {
+  border-color: $danger;
+}
