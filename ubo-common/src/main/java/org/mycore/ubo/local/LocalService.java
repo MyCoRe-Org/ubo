@@ -70,7 +70,7 @@ public class LocalService implements IdentityService {
             }
 
             return personSearchResult;
-        }).filter(psr -> psr.pid != null && !psr.pid.isEmpty() || !ENFORCE_LEAD_ID_PRESENT)
+        }).filter(psr -> (psr.pid != null && !psr.pid.isEmpty()) || !ENFORCE_LEAD_ID_PRESENT)
           .collect(Collectors.toList());
 
         PersonSearchResult personSearchResult = new PersonSearchResult();
