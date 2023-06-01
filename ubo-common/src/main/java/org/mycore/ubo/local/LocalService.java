@@ -44,7 +44,7 @@ public class LocalService implements IdentityService {
         final List<MCRUser> matchingUsers = MCRUserManager.listUsers(null, "local", displayName, null);
 
         List<PersonSearchResult.PersonResult> personResults = matchingUsers.stream().map(user -> {
-            PersonSearchResult.PersonResult personSearchResult = new PersonSearchResult.PersonResult();
+            PersonSearchResult.PersonResult personSearchResult = new PersonSearchResult.PersonResult(this);
             personSearchResult.pid = user.getUserAttribute("id_" + LEAD_ID);
             personSearchResult.displayName = user.getRealName().length() > 0 ? user.getRealName() : user.getUserName();
 

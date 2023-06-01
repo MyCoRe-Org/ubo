@@ -40,7 +40,11 @@
           <tbody>
           <tr v-for="person in searchresults.personList" :key="person.pid">
             <td class="align-top">
+              <i v-if="person.service == 'LocalService'" class="fas fa-map-pin" v-bind:title="person.service"/>
+              <i v-if="person.service != 'LocalService'" class="fas fa-university" v-bind:title="person.service"/>
+
               {{ person.displayName }}
+
               <br />
               <ul v-if="(person.affiliation && person.affiliation.length>0) || (person.information && person.information.length>0)">
                 <li v-for="aff in person.affiliation" :key="aff">

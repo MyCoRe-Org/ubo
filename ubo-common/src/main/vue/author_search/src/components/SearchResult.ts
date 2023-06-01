@@ -33,6 +33,11 @@ export interface PersonResult {
     displayName: string;
 
     /**
+     * The service which provided the result [Required]
+     * */
+    service: string;
+
+    /**
      * [Optional]
      */
     firstName?: string;
