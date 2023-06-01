@@ -3,7 +3,7 @@ $(document).ready(function () {
 });
 
 function toggleEnrichment(select) {
-    if ($(select).val() == "PPNList") {
+    if ("PPNList DOIList".includes($(select).val())) {
         $("#enrich-yes").click();
         $("#enrich-no").attr("disabled", "disabled");
     } else {

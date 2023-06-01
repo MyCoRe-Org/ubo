@@ -64,6 +64,7 @@
                   <option value="NST">Literaturliste im CSV-Format: Nanostrukturtechnik</option>
                   <option value="Opto">Literaturliste im CSV-Format: Optoelektronik</option>
                   <option value="PPNList">Literaturliste im PPN-Listenformat</option>
+                  <option value="DOIList">Literaturliste im DOI-Listenformat</option>
                 </select>
               </div>
             </xed:bind>
