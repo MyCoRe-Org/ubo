@@ -23,6 +23,9 @@ public class LocalService implements IdentityService {
 
     private final String LEAD_ID = MCRConfiguration2.getStringOrThrow("MCR.user2.matching.lead_id");
 
+    private final boolean ENFORCE_LEAD_ID_PRESENT = MCRConfiguration2.getBoolean(
+        "MCR.IdentityPicker.strategy.Local.PID.Filter.enabled").orElse(true);
+
     @Override
     public Element getPersonDetails(Map<String, String> paramMap) {
         return null;
@@ -67,7 +70,7 @@ public class LocalService implements IdentityService {
             }
 
             return personSearchResult;
-        }).filter(psr -> psr.pid != null && !psr.pid.isEmpty())
+        }).filter(psr -> psr.pid != null && !psr.pid.isEmpty() || !ENFORCE_LEAD_ID_PRESENT)
           .collect(Collectors.toList());
 
         PersonSearchResult personSearchResult = new PersonSearchResult();
