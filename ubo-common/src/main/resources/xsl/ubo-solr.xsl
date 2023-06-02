@@ -9,7 +9,7 @@
                 exclude-result-prefixes="mods xlink str xalan">
 
   <xsl:import href="xslImport:solr-document:ubo-solr.xsl" />
-  <xsl:include href="tokenizer.xsl"/>
+  <xsl:include href="coreFunctions.xsl"/>
 
   <xsl:template match="mycoreobject">
     <xsl:apply-templates select="." mode="baseFields" />
@@ -246,7 +246,7 @@
       <xsl:variable name="destatis-attr" select="$origin//category[@ID = $category]/label[@xml:lang = 'x-destatis']/@text"/>
 
       <xsl:variable name="destatis-categories">
-        <xsl:call-template name="tokenizer">
+        <xsl:call-template name="Tokenizer">
           <xsl:with-param name="string" select="$destatis-attr"/>
         </xsl:call-template>
       </xsl:variable>
