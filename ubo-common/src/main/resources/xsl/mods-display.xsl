@@ -15,6 +15,7 @@
 
   <xsl:include href="shelfmark-normalization.xsl" />
   <xsl:include href="output-category.xsl" />
+  <xsl:include href="coreFunctions.xsl" />
 
   <xsl:param name="step" />
   <xsl:param name="RequestURL" />
@@ -83,6 +84,29 @@
         <xsl:with-param name="categID" select="substring-after(@valueURI,'#')" />
       </xsl:call-template>
     </span>
+  </xsl:template>
+
+  <!-- Derive destatis from origin if fachreferate is not set -->
+  <xsl:template match="mods:classification[contains(@authorityURI,'ORIGIN') and not (../mods:classification[contains(@authorityURI,'fachreferate')])]" mode="label-info-destatis">
+    <xsl:variable name="origin-value" select="substring-after(@valueURI, '#')"/>
+    <xsl:variable name="destatis-attr" select="$origin//category[@ID = $origin-value]/label[@xml:lang = 'x-destatis']/@text"/>
+
+    <xsl:if test="string-length($destatis-attr) &gt; 0">
+      <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('facets.facet.subject')}">
+        <xsl:variable name="destatis-categories">
+          <xsl:call-template name="Tokenizer">
+            <xsl:with-param name="string" select="$destatis-attr"/>
+          </xsl:call-template>
+        </xsl:variable>
+
+        <xsl:for-each select="xalan:nodeset($destatis-categories)/token">
+          <xsl:call-template name="output.category">
+            <xsl:with-param name="classID" select="'fachreferate'" />
+            <xsl:with-param name="categID" select="." />
+          </xsl:call-template>
+        </xsl:for-each>
+      </span>
+    </xsl:if>
   </xsl:template>
 
   <!-- ============ Ausgabe Open Access ============ -->

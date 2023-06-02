@@ -172,7 +172,7 @@
     <xsl:variable name="duplicatesURI">
       <xsl:text>notnull:</xsl:text>
       <xsl:call-template name="buildFindDuplicatesURI" />
-      <xsl:value-of select="concat('+AND+-id:',$myID,'&amp;sort=id+desc')" />
+      <xsl:value-of select="concat('+AND+-id%3A',$myID,'&amp;sort=id+desc')" />
     </xsl:variable>
 
     <xsl:for-each select="document($duplicatesURI)/response/result[@name='response']/doc">

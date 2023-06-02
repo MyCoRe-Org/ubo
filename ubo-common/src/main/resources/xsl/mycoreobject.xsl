@@ -194,6 +194,7 @@
         <div class="row">
           <div class="col">
             <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info" />
+            <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info-destatis" />
             <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info" />
           </div>
         </div>
@@ -271,7 +272,7 @@
     <xsl:for-each select="mods:extension[dedup][1]">
       <xsl:call-template name="buildFindDuplicatesURI" />
     </xsl:for-each>
-    <xsl:value-of select="concat('+AND+-id:',/mycoreobject/@ID)" />
+    <xsl:value-of select="concat('+AND+-id%3A',/mycoreobject/@ID)" />
   </xsl:variable>
 
   <xsl:variable name="numDuplicates" select="count(document($duplicatesURI)/response/result[@name='response']/doc)" />
