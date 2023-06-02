@@ -272,7 +272,7 @@
     <xsl:for-each select="mods:extension[dedup][1]">
       <xsl:call-template name="buildFindDuplicatesURI" />
     </xsl:for-each>
-    <xsl:value-of select="concat('+AND+-id:',/mycoreobject/@ID)" />
+    <xsl:value-of select="concat('+AND+-id%3A',/mycoreobject/@ID)" />
   </xsl:variable>
 
   <xsl:variable name="numDuplicates" select="count(document($duplicatesURI)/response/result[@name='response']/doc)" />
