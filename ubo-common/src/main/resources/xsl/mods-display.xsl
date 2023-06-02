@@ -91,6 +91,7 @@
     <xsl:variable name="origin-value" select="substring-after(@valueURI, '#')"/>
     <xsl:variable name="destatis-attr" select="$origin//category[@ID = $origin-value]/label[@xml:lang = 'x-destatis']/@text"/>
 
+    <xsl:if test="string-length($destatis-attr) &gt; 0">
       <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('facets.facet.subject')}">
         <xsl:variable name="destatis-categories">
           <xsl:call-template name="tokenizer">
@@ -105,6 +106,7 @@
           </xsl:call-template>
         </xsl:for-each>
       </span>
+    </xsl:if>
   </xsl:template>
 
   <!-- ============ Ausgabe Open Access ============ -->
