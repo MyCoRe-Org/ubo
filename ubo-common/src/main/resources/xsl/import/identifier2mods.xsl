@@ -5,15 +5,29 @@
 
   <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
 
-  <xsl:template match="/list">
+  <xsl:template match="/list[ppn]">
     <mods:modsCollection>
       <xsl:apply-templates select="ppn"/>
+    </mods:modsCollection>
+  </xsl:template>
+
+  <xsl:template match="/list[doi]">
+    <mods:modsCollection>
+      <xsl:apply-templates select="doi"/>
     </mods:modsCollection>
   </xsl:template>
 
   <xsl:template match="ppn">
     <mods:mods>
       <mods:identifier type="ppn">
+        <xsl:value-of select="."/>
+      </mods:identifier>
+    </mods:mods>
+  </xsl:template>
+
+  <xsl:template match="doi">
+    <mods:mods>
+      <mods:identifier type="doi">
         <xsl:value-of select="."/>
       </mods:identifier>
     </mods:mods>
