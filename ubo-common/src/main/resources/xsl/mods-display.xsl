@@ -15,7 +15,6 @@
 
   <xsl:include href="shelfmark-normalization.xsl" />
   <xsl:include href="output-category.xsl" />
-  <xsl:include href="coreFunctions.xsl" />
 
   <xsl:param name="step" />
   <xsl:param name="RequestURL" />
@@ -95,7 +94,7 @@
       <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('facets.facet.subject')}">
         <xsl:variable name="destatis-categories">
           <xsl:call-template name="Tokenizer">
-            <xsl:with-param name="string" select="$destatis-attr"/>
+            <xsl:with-param name="string" select="$destatis-attr" />
           </xsl:call-template>
         </xsl:variable>
 

@@ -10,7 +10,6 @@
   <xsl:param name="JSessionID" />
   <xsl:param name="CurrentUser" />
   <!-- TODO: remove printMetaDate, derivateLink and maybe others -->
-  <xsl:include href="coreFunctions.xsl" />
   <xsl:include href="xslInclude:components" />
   <!-- website write protected ? -->
   <xsl:variable name="writeProtectedWebsite" select="not(mcrxsl:isCurrentUserGuestUser()) and websiteWriteProtection:isActive()" />
