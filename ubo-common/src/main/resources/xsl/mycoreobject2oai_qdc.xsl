@@ -11,6 +11,7 @@
 <xsl:include href="mods-display.xsl" />
 <xsl:include href="mods-qdc.xsl" />
 <xsl:include href="mycoreobject2record.xsl" />
+<xsl:include href="coreFunctions.xsl" />
 
 <xsl:template match="mycoreobject" mode="metadata">
   <oai_qdc:qualifieddc>

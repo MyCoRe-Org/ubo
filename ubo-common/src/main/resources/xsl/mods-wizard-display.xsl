@@ -7,6 +7,7 @@
 >
 
 <xsl:include href="mods-display.xsl" />
+<xsl:include href="coreFunctions.xsl" />
 
 <xsl:template match="mods:mods">
   <div>
