@@ -39,9 +39,8 @@
         <table class="table table-sm">
           <tbody>
           <tr v-for="person in searchresults.personList" :key="person.pid">
-            <td class="align-top">
-              <i v-if="person.service == 'LocalService'" class="fas fa-map-pin" v-bind:title="person.service"/>
-              <i v-if="person.service != 'LocalService'" class="fas fa-university" v-bind:title="person.service"/>
+            <td class="align-top" >
+              <i v-bind:class="'fas ubo-picker-service-' + person.service" v-bind:title="person.service"/>
 
               {{ person.displayName }}
 

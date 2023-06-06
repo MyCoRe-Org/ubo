@@ -156,3 +156,11 @@
 input#pid:placeholder-shown {
   border-color: $danger;
 }
+
+i.ubo-picker-service-LocalService::before {
+  content: "\f276";
+}
+
+i.ubo-picker-service-LDAPWithLocalService::before {
+  content: "\f19c";
+}
