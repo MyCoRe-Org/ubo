@@ -1,7 +1,6 @@
 const orcidObjectStatusURL = webApplicationBaseURL + "api/orcid/v1/object-status/v3/";
 const orcidUserStatusURL = webApplicationBaseURL + "api/orcid/v1/user-status/";
 const orcidPublishURL = webApplicationBaseURL + "api/orcid/v1/create-object/v3/";
-const orcidUpdateURL = webApplicationBaseURL + "api/orcid/v1/update-object/v3/";
 const orcidIcon = "<img alt='ORCID iD' src='" + webApplicationBaseURL + "images/orcid_icon.svg' class='orcid-icon' />";
 
 let orcidI18n;
@@ -84,9 +83,10 @@ function setORCIDPublicationStatus(div, objectStatus) {
 }
 
 async function showORCIDPublishButton(div, headers) {
-    console.debug("Showing ORCID publish button");
     let id = $(div).data('id');
     let url = orcidObjectStatusURL + id;
+
+    console.debug("Showing ORCID publish button for id [" + id + "]");
 
     const objectStatusResponse = await fetch(url, headers('GET'));
     if (!objectStatusResponse.ok) {
@@ -94,6 +94,12 @@ async function showORCIDPublishButton(div, headers) {
     }
 
     const objectStatus = await objectStatusResponse.json();
+
+    if (objectStatus.inORCIDProfile == true) {
+        console.debug("Publication '" + id + "' is already in profile of current user");
+        return;
+    }
+
     updateORCIDPublishOrUpdateButton(div, objectStatus, headers);
 }
 
@@ -110,8 +116,8 @@ function updateORCIDPublishOrUpdateButton(div, objectStatus, headers) {
         $(div).find('.orcid-button').one("click", async function () {
             $(this).attr("disabled", "disabled");
             div = this;
-            let requestURL = objectStatus.inORCIDProfile == true ? orcidUpdateURL : orcidPublishURL;
-            const resp = await fetch(requestURL + id, headers('POST'));
+
+            const resp = await fetch(orcidPublishURL + id, headers('POST'));
             if (resp.ok) {
                 $("#notification-dialog-success").modal('show');
                 await updateUI(headers);
