@@ -51,9 +51,10 @@ async function updateUI(headers) {
 }
 
 async function getORCIDPublicationStatus(div, headers) {
-    console.debug("Fetching publication/object status");
     let id = $(div).data('id');
     let url = orcidObjectStatusURL + id;
+
+    console.debug(id + " Fetching publication/object status");
 
     const response = await fetch(url, headers('GET'));
 
@@ -61,13 +62,14 @@ async function getORCIDPublicationStatus(div, headers) {
         return;
     }
     const objectStatus = await response.json();
-    console.debug("Publication/object status is: ");
+    console.debug(id + " Publication/object status is: ");
     console.debug(objectStatus);
-    setORCIDPublicationStatus(div, objectStatus);
+    setORCIDPublicationStatus(id, div, objectStatus);
 }
 
-function setORCIDPublicationStatus(div, objectStatus) {
-    console.debug("Setting publication status icon");
+function setORCIDPublicationStatus(id, div, objectStatus) {
+    console.debug(id + " Setting publication status icon");
+
     $(div).empty();
 
     if (objectStatus.usersPublication) {
@@ -86,7 +88,7 @@ async function showORCIDPublishButton(div, headers) {
     let id = $(div).data('id');
     let url = orcidObjectStatusURL + id;
 
-    console.debug("Showing ORCID publish button for id [" + id + "]");
+    console.debug(id + " Showing ORCID publish button");
 
     const objectStatusResponse = await fetch(url, headers('GET'));
     if (!objectStatusResponse.ok) {
@@ -96,7 +98,7 @@ async function showORCIDPublishButton(div, headers) {
     const objectStatus = await objectStatusResponse.json();
 
     if (objectStatus.inORCIDProfile == true) {
-        console.debug("Publication '" + id + "' is already in profile of current user");
+        console.debug(id + " Publication is already in profile of current user");
         return;
     }
 
