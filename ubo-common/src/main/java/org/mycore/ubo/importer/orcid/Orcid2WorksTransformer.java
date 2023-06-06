@@ -15,7 +15,7 @@ import org.mycore.orcid2.MCRORCIDUtils;
 import org.mycore.orcid2.client.exception.MCRORCIDRequestException;
 import org.mycore.orcid2.v3.MCRORCIDClientHelper;
 import org.mycore.orcid2.v3.MCRORCIDSectionImpl;
-import org.mycore.orcid2.v3.MCRORCIDWorkUtils;
+import org.mycore.orcid2.v3.work.MCRORCIDWorkUtils;
 import org.orcid.jaxb.model.v3.release.record.Work;
 import org.orcid.jaxb.model.v3.release.record.summary.WorkGroup;
 import org.orcid.jaxb.model.v3.release.record.summary.WorkSummary;
