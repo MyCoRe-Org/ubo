@@ -10,9 +10,9 @@
 
 <xsl:include href="mycoreobject-mods.xsl" />
 
-<xsl:template match="/export">
+<xsl:template match="/export | /basket[@type='objects'] | /exportCollection">
   <mods:modsCollection xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd">
-    <xsl:apply-templates select="mycoreobject" />
+    <xsl:apply-templates select="descendant::mycoreobject" />
   </mods:modsCollection>
 </xsl:template>
 
