@@ -207,7 +207,7 @@ public class LDAPService implements IdentityService {
                 .filter(user -> user.isUserInRole("admin")).isPresent();
 
         persons.forEach(person-> {
-            PersonSearchResult.PersonResult pr = new PersonSearchResult.PersonResult();
+            PersonSearchResult.PersonResult pr = new PersonSearchResult.PersonResult(this);
             pr.firstName = person.getChildText("firstName");
             pr.lastName = person.getChildText("lastName");
             pr.displayName = pr.firstName + ((pr.lastName != null) ? " " + pr.lastName : "");

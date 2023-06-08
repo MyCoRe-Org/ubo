@@ -238,7 +238,7 @@ public class LSFService implements IdentityService {
 
             for (Element object : list.getChildren("object")) {
 
-                PersonSearchResult.PersonResult personResult = new PersonSearchResult.PersonResult();
+                PersonSearchResult.PersonResult personResult = new PersonSearchResult.PersonResult(this);
 
                 List<Element> attributes = object.getChildren("attribute");
                 for (Element attribute : attributes) {

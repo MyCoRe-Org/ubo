@@ -39,8 +39,11 @@
         <table class="table table-sm">
           <tbody>
           <tr v-for="person in searchresults.personList" :key="person.pid">
-            <td class="align-top">
+            <td class="align-top" >
+              <i v-bind:class="'fas ubo-picker-service-' + person.service" v-bind:title="person.service"/>
+
               {{ person.displayName }}
+
               <br />
               <ul v-if="(person.affiliation && person.affiliation.length>0) || (person.information && person.information.length>0)">
                 <li v-for="aff in person.affiliation" :key="aff">

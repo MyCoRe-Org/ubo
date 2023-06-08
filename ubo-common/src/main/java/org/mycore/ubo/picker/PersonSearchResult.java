@@ -27,6 +27,16 @@ public class PersonSearchResult {
     public List<PersonResult> personList;
 
     public static class PersonResult {
+
+        public PersonResult(IdentityService identityService){
+            this.service = identityService.getClass().getSimpleName();
+        }
+
+        /**
+         * The service this result was provided by
+         * */
+        public String service;
+
         /**
          * The Identifier of the person [Required]
          */
