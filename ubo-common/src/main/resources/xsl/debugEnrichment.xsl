@@ -5,7 +5,6 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mods="http://www.loc.gov/mods/v3">
 
   <xsl:include href="mods-display.xsl" />
-  <xsl:include href="coreFunctions.xsl" />
 
   <xsl:template match="/">
     <html id="debugEnrichment">

@@ -8,7 +8,6 @@
   exclude-result-prefixes="xsl mods xalan i18n">
 
   <xsl:include href="mods-display.xsl" />
-  <xsl:include href="coreFunctions.xsl" />
 
   <xsl:param name="ServletsBaseURL" />
 
