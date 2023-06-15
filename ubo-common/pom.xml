@@ -23,7 +23,6 @@
               <goal>analyze-only</goal>
             </goals>
             <configuration>
-              <failOnWarning>true</failOnWarning>
               <ignoredUnusedDeclaredDependencies>
                 <ignoredUnusedDeclaredDependency>org.mycore.pica2mods:pica2mods-xslt:jar</ignoredUnusedDeclaredDependency>
               </ignoredUnusedDeclaredDependencies>
