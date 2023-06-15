@@ -16,11 +16,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
-          distribution: 'temurin'
+          java-version: '17'
+          distribution: 'adopt'
           server-id: ossrh # Value of the distributionManagement/repository/id field of the pom.xml
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
@@ -31,3 +31,16 @@ jobs:
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+      - name: Login to Docker Hub
+        if: success()
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build the mir Docker images and push them
+        if: success()
+        run: |
+          docker build . --file Dockerfile --tag mycoreorg/ubo:${GITHUB_REF_NAME}
+          docker build ubo-webapp/src/main/setup/solr/ --file ubo-webapp/src/main/setup/solr/Dockerfile --tag mycoreorg/ubo-solr:${GITHUB_REF_NAME}
+          docker push mycoreorg/ubo:${GITHUB_REF_NAME}
+          docker push mycoreorg/ubo-solr:${GITHUB_REF_NAME}

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.naming.OperationNotSupportedException;
+
 import org.jdom2.Element;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.ubo.picker.IdentityService;
@@ -13,8 +15,6 @@ import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
 
-import javax.naming.OperationNotSupportedException;
-
 public class LocalService implements IdentityService {
 
     private final String USER_FIRST_NAME_ATTR = "firstName";
@@ -22,6 +22,9 @@ public class LocalService implements IdentityService {
     private final String USER_LAST_NAME_ATTR = "lastName";
 
     private final String LEAD_ID = MCRConfiguration2.getStringOrThrow("MCR.user2.matching.lead_id");
+
+    private final boolean ENFORCE_LEAD_ID_PRESENT = MCRConfiguration2.getBoolean(
+        "MCR.IdentityPicker.strategy.Local.PID.Filter.enabled").orElse(true);
 
     @Override
     public Element getPersonDetails(Map<String, String> paramMap) {
@@ -41,7 +44,7 @@ public class LocalService implements IdentityService {
         final List<MCRUser> matchingUsers = MCRUserManager.listUsers(null, "local", displayName, null);
 
         List<PersonSearchResult.PersonResult> personResults = matchingUsers.stream().map(user -> {
-            PersonSearchResult.PersonResult personSearchResult = new PersonSearchResult.PersonResult();
+            PersonSearchResult.PersonResult personSearchResult = new PersonSearchResult.PersonResult(this);
             personSearchResult.pid = user.getUserAttribute("id_" + LEAD_ID);
             personSearchResult.displayName = user.getRealName().length() > 0 ? user.getRealName() : user.getUserName();
 
@@ -67,7 +70,7 @@ public class LocalService implements IdentityService {
             }
 
             return personSearchResult;
-        }).filter(psr -> psr.pid != null && !psr.pid.isEmpty())
+        }).filter(psr -> (psr.pid != null && !psr.pid.isEmpty()) || !ENFORCE_LEAD_ID_PRESENT)
           .collect(Collectors.toList());
 
         PersonSearchResult personSearchResult = new PersonSearchResult();

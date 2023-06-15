@@ -19,14 +19,13 @@ import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.user2.MCRUser;
-import org.mycore.user2.MCRUserAttribute;
-import org.mycore.user2.MCRUserManager;
-
 import org.mycore.ubo.matcher.MCRUserMatcher;
 import org.mycore.ubo.matcher.MCRUserMatcherDTO;
 import org.mycore.ubo.matcher.MCRUserMatcherLocal;
 import org.mycore.ubo.matcher.MCRUserMatcherUtils;
+import org.mycore.user2.MCRUser;
+import org.mycore.user2.MCRUserAttribute;
+import org.mycore.user2.MCRUserManager;
 
 
 /**

@@ -20,6 +20,7 @@
 <xsl:include href="mods-dc-meta.xsl" />
 <xsl:include href="mods-highwire.xsl" />
 <xsl:include href="mods-display.xsl" />
+<xsl:include href="coreFunctions.xsl" />
 
 <xsl:param name="Referer" select="concat($ServletsBaseURL,'DozBibEntryServlet?id=',/mycoreobject/@ID)" />
 <xsl:param name="CurrentUserPID" />
@@ -194,6 +195,7 @@
         <div class="row">
           <div class="col">
             <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info" />
+            <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info-destatis" />
             <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info" />
           </div>
         </div>
@@ -234,7 +236,7 @@
 
   <xsl:variable name="linkURI">
     <xsl:text>solr:fl=id&amp;rows=999&amp;</xsl:text>
-    <xsl:value-of select="concat('q=link:',/mycoreobject/@ID)" />
+    <xsl:value-of select="concat('q=link%3A',/mycoreobject/@ID)" />
   </xsl:variable>
   <xsl:variable name="numlinks" select="count(document($linkURI)/response/result[@name='response']/doc)" />
 
@@ -271,7 +273,7 @@
     <xsl:for-each select="mods:extension[dedup][1]">
       <xsl:call-template name="buildFindDuplicatesURI" />
     </xsl:for-each>
-    <xsl:value-of select="concat('+AND+-id:',/mycoreobject/@ID)" />
+    <xsl:value-of select="concat('+AND+-id%3A',/mycoreobject/@ID)" />
   </xsl:variable>
 
   <xsl:variable name="numDuplicates" select="count(document($duplicatesURI)/response/result[@name='response']/doc)" />

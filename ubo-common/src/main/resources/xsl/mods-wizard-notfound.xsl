@@ -14,6 +14,8 @@
 >
 
 <xsl:include href="mods-display.xsl" />
+<xsl:include href="coreFunctions.xsl" />
+
 
 <xsl:param name="WebApplicationBaseURL" />
 <xsl:param name="RequestURL" />

@@ -8,10 +8,13 @@
   exclude-result-prefixes="xsl mods xalan i18n">
 
   <xsl:include href="mods-display.xsl" />
+  <xsl:include href="coreFunctions.xsl" />
 
   <xsl:param name="ServletsBaseURL" />
 
   <xsl:template match="/response">
+    <xsl:variable name="originalQuery" select="lst[@name='responseHeader']/lst[@name='params']/str[@name='q']"/>
+
     <article class="card">
       <div class="card-body">
         <h3>
@@ -33,7 +36,7 @@
           </ul>
           <xsl:variable name="year" select="doc[1]/int[@name='year']" />
           <p>
-          <a href="{$ServletsBaseURL}solr/select?q=status:confirmed+AND+year:%5B{$year - 1}+TO+*%5D&amp;sort=year+desc,created+desc">
+          <a href="{$ServletsBaseURL}solr/select?q={$originalQuery}+AND+year:%5B{$year - 1}+TO+*%5D&amp;sort=year+desc,created+desc">
               <xsl:value-of select="i18n:translate('ubo.more')" />...
             </a>
           </p>

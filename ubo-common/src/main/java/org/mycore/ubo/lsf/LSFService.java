@@ -22,13 +22,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import org.mycore.ubo.picker.IdentityService;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.glassfish.jersey.uri.UriComponent;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.Filters;
@@ -38,13 +34,10 @@ import org.jdom2.output.XMLOutputter;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRException;
-import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.mods.merger.MCRHyphenNormalizer;
+import org.mycore.ubo.picker.IdentityService;
 import org.mycore.ubo.picker.PersonSearchResult;
-
-import javax.naming.OperationNotSupportedException;
-import javax.ws.rs.core.MultivaluedMap;
 
 /**
  * Implements a Web Services client for HIS LSF.
@@ -245,7 +238,7 @@ public class LSFService implements IdentityService {
 
             for (Element object : list.getChildren("object")) {
 
-                PersonSearchResult.PersonResult personResult = new PersonSearchResult.PersonResult();
+                PersonSearchResult.PersonResult personResult = new PersonSearchResult.PersonResult(this);
 
                 List<Element> attributes = object.getChildren("attribute");
                 for (Element attribute : attributes) {

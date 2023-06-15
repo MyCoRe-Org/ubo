@@ -1,11 +1,10 @@
 package org.mycore.ubo.picker;
 
-
 import java.util.Map;
 
-import org.jdom2.Element;
-
 import javax.naming.OperationNotSupportedException;
+
+import org.jdom2.Element;
 
 public interface IdentityService {
 

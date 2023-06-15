@@ -7,3 +7,4 @@
 pom.xml.bak
 */target/
 .DS_Store
+/docker/

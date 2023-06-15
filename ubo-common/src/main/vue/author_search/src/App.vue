@@ -134,8 +134,10 @@ export default class App extends Vue {
     const parms = [encodeURIComponent(xpFam) + "=" + encodeURIComponent(this.personModel.lastName),
       encodeURIComponent(xpGiven) + "=" + encodeURIComponent(this.personModel.firstName)]
 
-    if (this.personModel.pid.length > 0 || this.pid != "") {
+    if (this.personModel.pid != null && this.personModel.pid.length > 0 || this.pid != "") {
       parms.push(encodeURIComponent(xpPid) + "=" + encodeURIComponent(this.personModel.pid));
+    } else {
+      return;
     }
 
     let urlParams = new URLSearchParams(window.location.href);
@@ -148,7 +150,11 @@ export default class App extends Vue {
   }
 
   public cancel() {
-    window.location.assign(this.baseurl + "servlets/XEditor?_xed_submit_return_cancel=&_xed_session=" + this.sessionid);
+    let urlParams = new URLSearchParams(window.location.href);
+    let url = this.baseurl + "servlets/XEditor?_xed_submit_return_cancel=&_xed_session=" + this.sessionid;
+    url += (urlParams.has("xEditorHook") ? "#" + urlParams.get("xEditorHook") : "");
+
+    window.location.assign(url);
   }
 
   public personApplied(person: PersonResult) {

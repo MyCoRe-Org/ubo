@@ -26,8 +26,17 @@ public class PersonSearchResult {
 
     public List<PersonResult> personList;
 
+    public static class PersonResult {
 
-    public static class  PersonResult {
+        public PersonResult(IdentityService identityService){
+            this.service = identityService.getClass().getSimpleName();
+        }
+
+        /**
+         * The service this result was provided by
+         * */
+        public String service;
+
         /**
          * The Identifier of the person [Required]
          */
@@ -58,5 +67,28 @@ public class PersonSearchResult {
          */
         public List<String> information;
     }
+
+    /**
+     * Joins another {@link PersonSearchResult} with the current {@link PersonSearchResult}. The count field is updated
+     * automatically.
+     *
+     * @param other the {@link PersonSearchResult} to join.
+     * */
+    public void join(PersonSearchResult other) {
+        join(other, personList.size() - 1);
+    }
+
+    /**
+     * Joins another {@link PersonSearchResult} with the current {@link PersonSearchResult}. The count field is updated
+     * automatically.
+     *
+     * @param other the {@link PersonSearchResult} to join.
+     * @param index index at which to insert the first element from the specified {@link PersonSearchResult}
+     * */
+    public void join(PersonSearchResult other, int index) {
+        this.personList.addAll(index, other.personList);
+        this.count += other.count;
+    }
+
 }
 

@@ -29,14 +29,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
+import com.google.gson.Gson;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
@@ -44,9 +44,6 @@ import org.jdom2.Namespace;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.frontend.MCRFrontendUtil;
-
-import com.google.gson.Gson;
-
 
 @Path("export")
 public class UBOExportResource {
@@ -64,10 +61,13 @@ public class UBOExportResource {
         return URLEncoder.encode(s, StandardCharsets.UTF_8);
     }
 
+    protected static final String STATUS_RESTRICTION = MCRConfiguration2.getString("UBO.Export.Status.Restriction")
+        .orElse("+status:confirmed");
+
     @GET
     @Path("styles")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listStyles(){
+    public Response listStyles() {
         String[] styles = MCRConfiguration2.getStringOrThrow("MCR.Export.CSL.Styles").split(",");
 
         List<CSLEntry> result = new ArrayList<>(styles.length);
@@ -75,10 +75,10 @@ public class UBOExportResource {
             Element element = MCRURIResolver.instance().resolve("resource:" + style + ".csl");
 
             String title = Optional.ofNullable(element.getChild("info", CSL_NAMESPACE))
-                    .map(el -> Optional.ofNullable(el.getChild("title", CSL_NAMESPACE)))
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .map(Element::getTextNormalize).orElse(style);
+                .map(el -> Optional.ofNullable(el.getChild("title", CSL_NAMESPACE)))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(Element::getTextNormalize).orElse(style);
 
             CSLEntry cslEntry = new CSLEntry(style, title);
             result.add(cslEntry);
@@ -120,7 +120,7 @@ public class UBOExportResource {
             yearPart = "";
         }
 
-        if(yearNew != null) {
+        if (yearNew != null) {
             yearPart = "+year:" + yearNew + " ";
         }
 
@@ -135,7 +135,7 @@ public class UBOExportResource {
             childFilterQuery += " +role:(" + String.join(" OR ", ROLES) + ")";
         }
 
-        String solrQuery = "+status:confirmed " + yearPart + partOfPart
+        String solrQuery = UBOExportResource.STATUS_RESTRICTION + " " + yearPart + partOfPart
             + "+{!parent which=\"objectType:mods\" filters=$childfq}objectKind:name";
 
         StringBuilder solrRequest = new StringBuilder()
@@ -177,6 +177,7 @@ public class UBOExportResource {
         }
 
         public String id;
+
         public String title;
     }
 }
