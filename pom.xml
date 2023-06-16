@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.mycore</groupId>
     <artifactId>mycore-parent</artifactId>
     <version>49</version>
-    <relativePath/>
   </parent>
 
   <groupId>org.mycore.ubo</groupId>
@@ -58,9 +56,7 @@
     <mycore.version>2022.06.2-SNAPSHOT</mycore.version>
     <node.version>v16.0.0</node.version>
     <sortpom.sortDeps>scope,groupId,artifactId</sortpom.sortDeps>
-    <sortpom.sortFile>
-      https://gist.githubusercontent.com/yagee-de/dfd3698c1b49173dbf251f74eb6a9297/raw/406460c088ff3cb6354e4ae6b40535e6f841607d/mycore_sort.xml
-    </sortpom.sortFile>
+    <sortpom.sortFile>https://gist.githubusercontent.com/yagee-de/dfd3698c1b49173dbf251f74eb6a9297/raw/406460c088ff3cb6354e4ae6b40535e6f841607d/mycore_sort.xml</sortpom.sortFile>
     <sortpom.sortProps>true</sortpom.sortProps>
     <timestamp>${maven.build.timestamp}</timestamp>
     <yarn.version>v1.22.10</yarn.version>
@@ -171,8 +167,7 @@
         <MCR.DataPrefix>dev</MCR.DataPrefix>
         <cargo.jvmargs>-DMCR.AppName=${MCR.AppName}
           -Dsolr.solr.home=${solr.home}
-          -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=${cargo.debug.suspend},address=${cargo.debug.address}
-        </cargo.jvmargs>
+          -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=${cargo.debug.suspend},address=${cargo.debug.address}</cargo.jvmargs>
       </properties>
     </profile>
     <profile>
@@ -209,8 +204,7 @@
                 <configuration>
                   <properties>
                     <cargo.servlet.port>${cargo.servlet.port}</cargo.servlet.port>
-                    <cargo.runtime.args>-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.JavaUtilLog
-                    </cargo.runtime.args>
+                    <cargo.runtime.args>-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.JavaUtilLog</cargo.runtime.args>
                     <cargo.jetty.realm.name>Restricted</cargo.jetty.realm.name>
                   </properties>
                 </configuration>
@@ -260,9 +254,7 @@
                     <cargo.tomcat.ajp.port>${cargo.tomcat.ajp.port}</cargo.tomcat.ajp.port>
                     <cargo.tomcat.uriencoding>UTF-8</cargo.tomcat.uriencoding>
                     <!-- fixes IIIF identifier encoding issues -->
-                    <cargo.start.jvmargs>
-                      -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true${cargo.start.jvmargs}
-                    </cargo.start.jvmargs>
+                    <cargo.start.jvmargs>-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true${cargo.start.jvmargs}</cargo.start.jvmargs>
                   </properties>
                 </configuration>
               </configuration>
@@ -375,6 +367,11 @@
             <artifactId>commons-logging</artifactId>
           </exclusion>
         </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.mycore</groupId>
+        <artifactId>mycore-classifications</artifactId>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.webjars</groupId>
