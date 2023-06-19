@@ -1,6 +1,6 @@
 const orcidObjectStatusURL = webApplicationBaseURL + "api/orcid/v1/object-status/v3/";
 const orcidUserStatusURL = webApplicationBaseURL + "api/orcid/v1/user-status/";
-const orcidPublishURL = webApplicationBaseURL + "api/orcid/v1/create-object/v3/";
+const orcidPublishURL = webApplicationBaseURL + "api/orcid/v1/create-work/v3/";
 const orcidIcon = "<img alt='ORCID iD' src='" + webApplicationBaseURL + "images/orcid_icon.svg' class='orcid-icon' />";
 
 let orcidI18n;
