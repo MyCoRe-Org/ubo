@@ -482,7 +482,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         settingsButton.textContent = settingsText;
         settingsButton.addEventListener("click", async () => {
             let currentSettings = await OrcidProfile.getUserProperties(baseURL, orcid);
-            let newSettings = await OrcidProfileGUI.settingsDialog(baseURL, orcid, currentSettings);
+            let newSettings = await OrcidProfileGUI.settingsDialog(baseURL, lang, currentSettings);
             if (newSettings) {
                 const success = await OrcidProfile.setUserProperties(baseURL, orcid, newSettings);
                 await OrcidProfileGUI.bootstrapConfirm(settingsText, success ? settingsSuccessText : settingsErrorText, null, okText);
