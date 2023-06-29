@@ -427,7 +427,7 @@
         </xsl:when>
       </xsl:choose>
       <xsl:if test="/user/@realm = 'local' and (not($isCurrentUser) or not(/user/@locked = 'true'))">
-        <a class="btn btn-primary" href="{$WebApplicationBaseURL}authorization/change-password.xed?action=password&amp;userName={$uid}">
+        <a class="btn btn-primary" href="{$WebApplicationBaseURL}authorization/change-password.xed?action=password&amp;id={$uid}">
           <xsl:value-of select="i18n:translate('component.user2.admin.changepw')" />
         </a>
       </xsl:if>
