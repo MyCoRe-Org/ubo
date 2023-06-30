@@ -6,7 +6,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.orcid2.client.MCRORCIDCredential;
 import org.mycore.orcid2.client.MCRORCIDUserClient;
@@ -15,8 +14,6 @@ import org.mycore.orcid2.user.MCRORCIDSessionUtils;
 import org.mycore.orcid2.user.MCRORCIDUser;
 import org.mycore.orcid2.v3.client.MCRORCIDClientHelper;
 import org.mycore.orcid2.v3.client.MCRORCIDSectionImpl;
-import org.mycore.user2.MCRUser;
-import org.mycore.user2.MCRUserManager;
 import org.orcid.jaxb.model.v3.release.record.summary.Works;
 
 public class DozBibORCIDUtils {
@@ -94,13 +91,5 @@ public class DozBibORCIDUtils {
 
     public static boolean isConnected(String orcid) {
         return MCRORCIDSessionUtils.getCurrentUser().getCredentialByORCID(orcid) != null;
-    }
-
-    public static boolean hasSyncEnabled() {
-        MCRUser user = MCRUserManager.getUser(MCRSessionMgr.getCurrentSession().getUserInformation().getUserID());
-        return user.getAttributes().stream()
-            .filter(a -> a.getName().equals("orcid_update_profile") && a.getValue().equals(String.valueOf(true)))
-            .findFirst()
-            .isPresent();
     }
 }
