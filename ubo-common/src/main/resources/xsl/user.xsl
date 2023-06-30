@@ -415,18 +415,18 @@
             <xsl:value-of select="i18n:translate('component.user2.admin.changedata')" />
           </a>
         </xsl:when>
-        <!-- xsl:when test="not($isCurrentUser)">
-          <a class="btn btn-secondary" href="{$WebApplicationBaseURL}authorization/change-read-user.xed?action=save&amp;id={$uid}">
-            <xsl:value-of select="i18n:translate('component.user2.admin.changedata')" />
-          </a>
-        </xsl:when -->
         <xsl:when test="$isCurrentUser and not(/user/@locked = 'true')">
           <a class="btn btn-secondary" href="{$WebApplicationBaseURL}authorization/change-current-user.xed?action=saveCurrentUser">
             <xsl:value-of select="i18n:translate('component.user2.admin.changedata')" />
           </a>
         </xsl:when>
       </xsl:choose>
-      <xsl:if test="/user/@realm = 'local' and (not($isCurrentUser) or not(/user/@locked = 'true'))">
+      <xsl:if test="/user/@realm = 'local' and $isCurrentUser and not(/user/@locked = 'true')">
+        <a class="btn btn-primary" href="{$WebApplicationBaseURL}authorization/change-password.xed?action=password">
+          <xsl:value-of select="i18n:translate('component.user2.admin.changepw')" />
+        </a>
+      </xsl:if>
+      <xsl:if test="/user/@realm = 'local' and not($isCurrentUser)">
         <a class="btn btn-primary" href="{$WebApplicationBaseURL}authorization/change-password.xed?action=password&amp;id={$uid}">
           <xsl:value-of select="i18n:translate('component.user2.admin.changepw')" />
         </a>
