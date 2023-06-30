@@ -21,7 +21,7 @@ import org.mycore.user2.MCRUserManager;
 
 /**
  * Servlet removes all orcid access tokens of the current user. If you want to remove a single access token for
- * a given orcid please see {@link org.mycore.orcid2.rest.resources.MCRORCIDResource#revoke(String, String)}
+ * a given orcid please see {@link org.mycore.orcid2.rest.resources.MCRORCIDResource#revoke(String)} )}
  *
  * @author shermann
  * */
