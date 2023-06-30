@@ -177,11 +177,16 @@
 <xsl:template name="id_orcid">
   <tr>
     <th scope="row">
-      <xsl:value-of select="i18n:translate('user.profile.id.orcid')" />
-      <xsl:text>:</xsl:text>
+      <xsl:if test="orcidUtils:isConnected(@value)">
+        <xsl:attribute name="title">
+          <xsl:value-of select="i18n:translate('orcid.integration.confirmed.headline')"/>
+        </xsl:attribute>
+      </xsl:if>
+
+      <xsl:value-of select="concat(i18n:translate('user.profile.id.orcid'), ':')" />
     </th>
     <td>
-      <xsl:variable name="url" select="concat($MCR.ORCID2.LinkURL,@value)" />
+      <xsl:variable name="url" select="concat($MCR.ORCID2.LinkURL, @value)" />
       <a href="{$url}">
         <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
         <xsl:value-of select="$url" />

@@ -92,6 +92,10 @@ public class DozBibORCIDUtils {
         return !credentials.isEmpty();
     }
 
+    public static boolean isConnected(String orcid) {
+        return MCRORCIDSessionUtils.getCurrentUser().getCredentialByORCID(orcid) != null;
+    }
+
     public static boolean hasSyncEnabled() {
         MCRUser user = MCRUserManager.getUser(MCRSessionMgr.getCurrentSession().getUserInformation().getUserID());
         return user.getAttributes().stream()
