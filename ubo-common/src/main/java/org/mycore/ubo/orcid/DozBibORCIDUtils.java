@@ -46,6 +46,23 @@ public class DozBibORCIDUtils {
         return numWorks.get();
     }
 
+    public static int getNumWorks(String orcid) {
+        MCRORCIDUser orcidUser = MCRORCIDSessionUtils.getCurrentUser();
+        MCRORCIDCredential credentialByORCID = orcidUser.getCredentialByORCID(orcid);
+
+        MCRORCIDUserClient client = MCRORCIDClientHelper.getClientFactory().createUserClient(orcid, credentialByORCID);
+        AtomicInteger numWorks = new AtomicInteger(0);
+
+        try {
+            Works works = client.fetch(MCRORCIDSectionImpl.WORKS, Works.class);
+            numWorks.addAndGet(works.getWorkGroup().size());
+        } catch (MCRORCIDRequestException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+
+        return numWorks.get();
+    }
+
     public static String getFirstOrcidByCurrentUser() {
         MCRORCIDUser orcidUser = MCRORCIDSessionUtils.getCurrentUser();
         return orcidUser.getORCIDs().isEmpty() ? "" : orcidUser.getORCIDs().iterator().next();
