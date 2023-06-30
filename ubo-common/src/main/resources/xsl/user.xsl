@@ -393,11 +393,10 @@
 </xsl:template>
 
 <xsl:template match="attribute[contains(@name, 'orcid_credential')]" mode="publications">
+  <xsl:variable name="orcid" select="substring-after(@name, 'orcid_credential_')" />
+
   <li>
-    <xsl:value-of disable-output-escaping="yes" select="concat(i18n:translate('user.profile.publications.orcid.intro'), ' ')" />
-
-    <xsl:variable name="orcid" select="substring-after(@name, 'orcid_credential_')" />
-
+    <xsl:value-of disable-output-escaping="yes" select="concat(i18n:translate('user.profile.publications.orcid.intro', $orcid), ' ')" />
     <a href="{$MCR.ORCID2.LinkURL}{$orcid}" target="_blank">
       <xsl:call-template name="numPublications">
         <xsl:with-param name="num" select="orcidUtils:getNumWorks($orcid)" />
