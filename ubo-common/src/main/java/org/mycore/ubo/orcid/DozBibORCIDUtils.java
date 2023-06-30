@@ -23,6 +23,11 @@ public class DozBibORCIDUtils {
 
     protected static final Logger LOGGER = LogManager.getLogger(DozBibORCIDUtils.class);
 
+    /**
+     * Get the total number of publications for all orcids connected with UBO.
+     *
+     * @return the total number of publications
+     * */
     public static int getNumWorks() {
         MCRORCIDUser orcidUser = MCRORCIDSessionUtils.getCurrentUser();
         Set<String> orcidIdentifiers = orcidUser.getORCIDs();
@@ -30,22 +35,30 @@ public class DozBibORCIDUtils {
         AtomicInteger numWorks = new AtomicInteger(0);
 
         orcidIdentifiers.forEach(orcid -> {
-            MCRORCIDUserClient client = MCRORCIDClientHelper.getClientFactory()
-                .createUserClient(orcid, orcidUser.getCredentials().values()
-                    .stream()
-                    .findFirst()
-                    .get());
-            try {
-                Works works = client.fetch(MCRORCIDSectionImpl.WORKS, Works.class);
-                numWorks.addAndGet(works.getWorkGroup().size());
-            } catch (MCRORCIDRequestException e) {
-                LOGGER.error(e.getMessage(), e);
+            MCRORCIDCredential credential = orcidUser.getCredentialByORCID(orcid);
+            if (credential != null) {
+                try {
+                    MCRORCIDUserClient client = MCRORCIDClientHelper.getClientFactory()
+                        .createUserClient(orcid, credential);
+                    Works works = client.fetch(MCRORCIDSectionImpl.WORKS, Works.class);
+                    numWorks.addAndGet(works.getWorkGroup().size());
+                } catch (MCRORCIDRequestException e) {
+                    LOGGER.error(e.getMessage(), e);
+                }
             }
         });
 
         return numWorks.get();
     }
 
+    /**
+     * Returns the number of publications for the given orcid. The orcid must be connected with UBO otherwise 0
+     * will be returned.
+     *
+     * @param orcid the orcid for which the number of publications will be retrieved
+     *
+     * @return the number of publications for the given orcid
+     * */
     public static int getNumWorks(String orcid) {
         MCRORCIDUser orcidUser = MCRORCIDSessionUtils.getCurrentUser();
         MCRORCIDCredential credentialByORCID = orcidUser.getCredentialByORCID(orcid);
