@@ -188,10 +188,17 @@ public class PublicationEventHandler extends MCREventHandlerBase {
                     enrichModsNameElementByLeadID(modsNameElement, leadIDName, affiliatedUser);
                     connectModsNameElementWithMCRUser(modsNameElement, affiliatedUser);
                 } else {
-                    MCRUser newLocalUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(
-                        modsNameElement, MCRRealmFactory.getLocalRealm().getID());
-                    newLocalUser.setRealName(getRealNameFromNameElement(modsNameElement, newLocalUser));
-                    connectModsNameElementWithMCRUser(modsNameElement, newLocalUser);
+                    Optional<Element> leadId = modsNameElement.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
+                        .stream()
+                        .filter(element -> element.getAttributeValue("type").equals(leadIDName))
+                        .findFirst();
+
+                    if(leadId.isPresent()) {
+                        MCRUser newLocalUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(
+                            modsNameElement, MCRRealmFactory.getLocalRealm().getID());
+                        newLocalUser.setRealName(getRealNameFromNameElement(modsNameElement, newLocalUser));
+                        connectModsNameElementWithMCRUser(modsNameElement, newLocalUser);
+                    }
                 }
             }
 
