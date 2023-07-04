@@ -24,7 +24,6 @@ import org.mycore.ubo.matcher.MCRUserMatcher;
 import org.mycore.ubo.matcher.MCRUserMatcherDTO;
 import org.mycore.ubo.matcher.MCRUserMatcherLocal;
 import org.mycore.ubo.matcher.MCRUserMatcherUtils;
-import org.mycore.user2.MCRRealmFactory;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
@@ -195,7 +194,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
 
                     if(leadId.isPresent()) {
                         MCRUser newLocalUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(
-                            modsNameElement, MCRRealmFactory.getLocalRealm().getID());
+                            modsNameElement, UNVALIDATED_REALM);
                         newLocalUser.setRealName(getRealNameFromNameElement(modsNameElement, newLocalUser));
                         connectModsNameElementWithMCRUser(modsNameElement, newLocalUser);
                     }
