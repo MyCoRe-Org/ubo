@@ -91,7 +91,6 @@
     <xsl:variable name="destatis-attr" select="$origin//category[@ID = $origin-value]/label[@xml:lang = 'x-destatis']/@text"/>
 
     <xsl:if test="string-length($destatis-attr) &gt; 0">
-      <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('facets.facet.subject')}">
         <xsl:variable name="destatis-categories">
           <xsl:call-template name="Tokenizer">
             <xsl:with-param name="string" select="$destatis-attr" />
@@ -99,12 +98,13 @@
         </xsl:variable>
 
         <xsl:for-each select="xalan:nodeset($destatis-categories)/token">
-          <xsl:call-template name="output.category">
-            <xsl:with-param name="classID" select="'fachreferate'" />
-            <xsl:with-param name="categID" select="." />
-          </xsl:call-template>
+          <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('facets.facet.subject')}">
+            <xsl:call-template name="output.category">
+              <xsl:with-param name="classID" select="'fachreferate'" />
+              <xsl:with-param name="categID" select="." />
+            </xsl:call-template>
+          </span>
         </xsl:for-each>
-      </span>
     </xsl:if>
   </xsl:template>
 
