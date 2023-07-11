@@ -104,12 +104,18 @@
 </xsl:template>
 
 <xsl:template name="display.facet">
+  <xsl:variable name="max">
+    <xsl:for-each select="int">
+      <xsl:sort select="text()" data-type="number" order="descending"/>
+      <xsl:if test="position() = 1"><xsl:value-of select="string-length(text())"/></xsl:if>
+    </xsl:for-each>
+  </xsl:variable>
   <article class="card mb-3">
     <div class="card-body">
       <hgroup>
-	<h3><xsl:value-of select="i18n:translate(concat('facets.facet.',str:replaceAll(str:new(@name),'facet_','')))" /></h3>
+        <h3><xsl:value-of select="i18n:translate(concat('facets.facet.',str:replaceAll(str:new(@name),'facet_','')))" /></h3>
       </hgroup>
-      <ul id="{generate-id(.)}" class="list-group">
+      <ul id="{generate-id(.)}" class="list-group counter-length-{$max}">
         <xsl:choose>
           <xsl:when test="@name='year'"> <!-- sort year facets by year, descending -->
             <xsl:apply-templates select="int" mode="facets">
