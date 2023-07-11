@@ -7,7 +7,8 @@
 
   // facets (sidebar searchresults etc.)
   .mycore-facet-count:after {
-    content: " | ";
+    content: "|";
+    padding: 0 0 0 0.25rem;
   }
 
   .mycore-facet-exclude, .mycore-facet-remove {
@@ -23,6 +24,37 @@
     margin: 0;
     padding: 0;
     text-align: right;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-wrap: normal;
+    padding-right: .25rem;
+  }
+
+  .counter-length {
+    &-1 {
+      .mycore-facet-count { width: 25px; }
+      .mycore-facet-value { width: 210px; }
+    }
+    &-2 {
+      .mycore-facet-count { width: 30px; }
+      .mycore-facet-value { width: 205px; }
+    }
+    &-3 {
+      .mycore-facet-count { width: 40px; }
+      .mycore-facet-value { width: 195px; }
+    }
+    &-4 {
+      .mycore-facet-count { width: 50px; }
+      .mycore-facet-value { width: 185px; }
+    }
+    &-5 {
+      .mycore-facet-count { width: 60px; }
+      .mycore-facet-value { width: 175px; }
+    }
+    &-6 {
+      .mycore-facet-count { width: 70px; }
+      .mycore-facet-value { width: 165px; }
+    }
   }
 
   .mycore-facet-value {

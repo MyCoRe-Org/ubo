@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
+import org.jdom2.filter.Filters;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.common.MCRClassTools;
@@ -23,10 +24,13 @@ import org.mycore.ubo.matcher.MCRUserMatcher;
 import org.mycore.ubo.matcher.MCRUserMatcherDTO;
 import org.mycore.ubo.matcher.MCRUserMatcherLocal;
 import org.mycore.ubo.matcher.MCRUserMatcherUtils;
+import org.mycore.user2.MCRRealmFactory;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
 
+import static org.mycore.common.MCRConstants.XPATH_FACTORY;
+import static org.mycore.ubo.matcher.MCRUserMatcherUtils.MODS_NAMESPACE;
 
 /**
  * EventHandler for new publications in MODS-format.
@@ -184,7 +188,17 @@ public class PublicationEventHandler extends MCREventHandlerBase {
                     enrichModsNameElementByLeadID(modsNameElement, leadIDName, affiliatedUser);
                     connectModsNameElementWithMCRUser(modsNameElement, affiliatedUser);
                 } else {
-                    // ignore Person, do NOT create a new MCRUser
+                    Optional<Element> leadId = modsNameElement.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
+                        .stream()
+                        .filter(element -> element.getAttributeValue("type").equals(leadIDName))
+                        .findFirst();
+
+                    if(leadId.isPresent()) {
+                        MCRUser newLocalUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(
+                            modsNameElement, MCRRealmFactory.getLocalRealm().getID());
+                        newLocalUser.setRealName(getRealNameFromNameElement(modsNameElement, newLocalUser));
+                        connectModsNameElementWithMCRUser(modsNameElement, newLocalUser);
+                    }
                 }
             }
 
@@ -228,7 +242,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
 
     private void enrichModsNameElementByNameIdentifierElement(Element modsNameElement,
                                                               String attributeType, String attributeValue) {
-        Element nameIdentifier = new Element("nameIdentifier", MCRUserMatcherUtils.MODS_NAMESPACE)
+        Element nameIdentifier = new Element("nameIdentifier", MODS_NAMESPACE)
                 .setAttribute("type", attributeType)
                 .setText(attributeValue);
         modsNameElement.addContent(nameIdentifier);
@@ -258,5 +272,19 @@ public class PublicationEventHandler extends MCREventHandlerBase {
                 enrichModsNameElementByNameIdentifierElement(modsNameElement, modsTypeName, uuid);
             }
         }
+    }
+
+    protected String getRealNameFromNameElement(Element nameElement, MCRUser mcrUser){
+        Element givenName = XPATH_FACTORY.compile("mods:namePart[@type='given']",
+                    Filters.element(), null, MODS_NAMESPACE).evaluateFirst(nameElement);
+
+        Element familyName = XPATH_FACTORY.compile("mods:namePart[@type='family']",
+            Filters.element(), null, MODS_NAMESPACE).evaluateFirst(nameElement);
+
+        if((givenName != null) && (familyName != null)) {
+            return givenName.getText() + " " + familyName.getText();
+        }
+
+        return mcrUser.getUserID();
     }
 }

@@ -35,7 +35,7 @@
 	<xsl:apply-templates select="group">
           <xsl:sort select="count(id)" data-type="number" />
           <xsl:sort select="count(key)" data-type="number" order="descending"/>
-          <xsl:sort select="id" data-type="number" order="descending" />
+          <xsl:sort select="id" data-type="text" order="descending" />
 	</xsl:apply-templates>
       </table>
     </div>
@@ -48,8 +48,9 @@
       <a>
         <xsl:attribute name="href">
           <xsl:value-of select="$ServletsBaseURL" />
-          <xsl:text>DozBibServlet?</xsl:text>
-          <xsl:apply-templates select="dedup" mode="search" />
+          <xsl:text>DozBibEntryServlet?id=</xsl:text>
+          <xsl:value-of select="id[1]" />
+          <xsl:text>&amp;XSL.Style=structure</xsl:text>
         </xsl:attribute>
         <xsl:text>Anzeigen</xsl:text>
       </a>
@@ -59,7 +60,7 @@
     </td>
     <td>
       <xsl:apply-templates select="id">
-        <xsl:sort order="descending" data-type="number" />
+        <xsl:sort order="ascending" data-type="text" />
       </xsl:apply-templates>
     </td>
     <td>
@@ -87,14 +88,6 @@
   <xsl:value-of select="text()" />
   <xsl:if test="position() != last()">
     <br />
-  </xsl:if>
-</xsl:template>
-
-<xsl:template match="dedup" mode="search">
-  <xsl:text>dedup=</xsl:text>
-  <xsl:value-of select="@key" />
-  <xsl:if test="position() != last()">
-    <xsl:text>&amp;</xsl:text>
   </xsl:if>
 </xsl:template>
 
