@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.SortedSet;
+import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -139,6 +140,7 @@ public class MCRUserMatcherUtils {
             userName = (givenNameElem.getText() + "_" + familyNameElem.getText()).toLowerCase(Locale.ROOT);
         }
 
+        userName += "_" + UUID.randomUUID();
         return userName;
     }
 
