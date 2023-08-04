@@ -514,6 +514,7 @@
                 <xsl:otherwise>
                   <xsl:apply-templates select="mods:nameIdentifier[@type='orcid']" />
                   <xsl:apply-templates select="mods:nameIdentifier[not(@type='orcid')]" />
+                  <xsl:apply-templates select="mods:role/mods:roleTerm" mode="corresponding-author"/>
                 </xsl:otherwise>
               </xsl:choose>
             </span>
@@ -543,11 +544,23 @@
 
   <xsl:template match="mods:nameIdentifier[@type='connection']">
     <xsl:variable name="userXML" select="document(concat('userconnection:', text()))"/>
-    <xsl:variable name="userAttributeClassification"
-                  select="document('classification:metadata:-1:children:user_attributes')"/>
+    <xsl:variable name="userAttributeClassification" select="document('classification:metadata:-1:children:user_attributes')"/>
     <xsl:variable name="popId" select="generate-id()"/>
-    <span class="fas fa-user ubo-person-popover ml-1" id="{$popId}" title="{i18n:translate('person.search.information')}">
-    </span>
+    <xsl:variable name="is-corresponding-author" select="contains(../mods:role/mods:roleTerm/@valueURI, 'author_roles#corresponding_author')"/>
+
+    <xsl:variable name="icon-class">
+      <xsl:choose>
+        <xsl:when test="$is-corresponding-author = true()">
+          <xsl:value-of select="'fas fa-user-edit'"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="'fas fa-user'"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <span class="{$icon-class} ubo-person-popover ml-1" id="{$popId}" title="{i18n:translate('person.search.information')}"/>
+
     <div id="{$popId}-content" class="d-none">
       <dl>
         <xsl:if test="count($userXML/user/attributes/attribute) &gt; 0">
@@ -1186,6 +1199,12 @@
     </xsl:variable>
 
     <xsl:apply-templates select="document($uri)/mycoreclass/categories/category[1]" />
+  </xsl:template>
+
+  <xsl:template match="mods:roleTerm" mode="corresponding-author">
+    <xsl:if test="contains(@valueURI, 'author_roles#corresponding_author')" >
+      <i class="fas fa-user-edit" title="{i18n:translate('ubo.corresponding_author')}"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="category">
