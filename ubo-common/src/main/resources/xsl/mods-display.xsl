@@ -548,18 +548,14 @@
     <xsl:variable name="popId" select="generate-id()"/>
     <xsl:variable name="is-corresponding-author" select="contains(../mods:role/mods:roleTerm/@valueURI, 'author_roles#corresponding_author')"/>
 
-    <xsl:variable name="icon-class">
-      <xsl:choose>
-        <xsl:when test="$is-corresponding-author = true()">
-          <xsl:value-of select="'fas fa-user-edit'"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="'fas fa-user'"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-
-    <span class="{$icon-class} ubo-person-popover ml-1" id="{$popId}" title="{i18n:translate('person.search.information')}"/>
+    <span id="{$popId}" title="{i18n:translate('person.search.information')}">
+      <xsl:attribute name="class">
+        <xsl:text>ubo-person-popover ml-1 fas fa-user</xsl:text>
+        <xsl:if test="$is-corresponding-author = true()">
+          <xsl:text>-edit</xsl:text>
+        </xsl:if>
+      </xsl:attribute>
+    </span>
 
     <div id="{$popId}-content" class="d-none">
       <dl>
