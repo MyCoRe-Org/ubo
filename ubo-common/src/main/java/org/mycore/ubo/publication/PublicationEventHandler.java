@@ -176,17 +176,17 @@ public class PublicationEventHandler extends MCREventHandlerBase {
             if (localMatcherDTO.wasMatchedOrEnriched()) {
                 MCRUser mcrUserFinal = localMatcherDTO.getMCRUser();
                 mcrUserFinal.assignRole(defaultRole);
-                MCRUserManager.updateUser(mcrUserFinal);
                 enrichModsNameElementByLeadID(modsNameElement, leadIDName, mcrUserFinal);
                 connectModsNameElementWithMCRUser(modsNameElement, mcrUserFinal);
+                MCRUserManager.updateUser(mcrUserFinal);
             } else {
                 if(MCRUserMatcherUtils.checkAffiliation(modsNameElement) &&
                         (MCRUserMatcherUtils.getNameIdentifiers(modsNameElement).size() > 0)) {
                     MCRUser affiliatedUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement, UNVALIDATED_REALM);
                     affiliatedUser.assignRole(defaultRole);
-                    MCRUserManager.updateUser(affiliatedUser);
                     enrichModsNameElementByLeadID(modsNameElement, leadIDName, affiliatedUser);
                     connectModsNameElementWithMCRUser(modsNameElement, affiliatedUser);
+                    MCRUserManager.updateUser(affiliatedUser);
                 } else {
                     Optional<Element> leadId = modsNameElement.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
                         .stream()
@@ -198,6 +198,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
                             modsNameElement, MCRRealmFactory.getLocalRealm().getID());
                         newLocalUser.setRealName(getRealNameFromNameElement(modsNameElement, newLocalUser));
                         connectModsNameElementWithMCRUser(modsNameElement, newLocalUser);
+                        MCRUserManager.updateUser(newLocalUser);
                     }
                 }
             }
@@ -263,7 +264,6 @@ public class PublicationEventHandler extends MCREventHandlerBase {
                 // create new UUID and persist it for mcrUser
                 uuid = UUID.randomUUID().toString();
                 mcrUser.getAttributes().add(new MCRUserAttribute(CONNECTION_TYPE_NAME, uuid));
-                MCRUserManager.updateUser(mcrUser);
             }
             // if not already present, persist connection in mods:name - nameIdentifier-Element
             if(!MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, modsTypeName)) {
