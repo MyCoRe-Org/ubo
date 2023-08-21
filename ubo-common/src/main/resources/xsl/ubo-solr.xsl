@@ -43,6 +43,7 @@
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'project')]" mode="solrField" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fundingType')]" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:titleInfo[not(@type)]" mode="solrField.host" />
     <xsl:apply-templates select="mods:relatedItem[@type='host'][mods:genre='journal']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:part" mode="solrField" />
@@ -293,6 +294,12 @@
 
   <xsl:template match="mods:classification[contains(@authorityURI,'project')]" mode="solrField">
     <field name="project">
+      <xsl:value-of select="substring-after(@valueURI,'#')" />
+    </field>
+  </xsl:template>
+
+  <xsl:template match="mods:classification[contains(@authorityURI,'fundingType')]" mode="solrField">
+    <field name="fundingType">
       <xsl:value-of select="substring-after(@valueURI,'#')" />
     </field>
   </xsl:template>
