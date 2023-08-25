@@ -174,6 +174,10 @@
     <field name="nid_{@type}">
       <xsl:value-of select="text()" />
     </field>
+
+    <field name="{@type}_nid_text">
+      <xsl:apply-templates select=".." mode="solrField" />
+    </field>
   </xsl:template>
 
   <xsl:template match="mods:name[mods:nameIdentifier[@type='lsf']]" mode="solrField.lsf">
