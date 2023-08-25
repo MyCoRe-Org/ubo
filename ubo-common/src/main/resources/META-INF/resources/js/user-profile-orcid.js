@@ -266,6 +266,7 @@ class OrcidProfileGUI {
      */
     static async settingsDialog(baseURL, language, current) {
         const [save, cancel, title,
+            orcidModalIntro,
             alwaysUpdateWorkLabel,
             createDuplicateWorkLabel,
             createFirstWorkLabel,
@@ -274,6 +275,7 @@ class OrcidProfileGUI {
                 OrcidProfileGUI.translate(baseURL, language, "button.save"),
                 OrcidProfileGUI.translate(baseURL, language, "button.cancel"),
                 OrcidProfileGUI.translate(baseURL, language, "orcid.integration.settings.title"),
+                OrcidProfileGUI.translate(baseURL, language, "orcid.integration.settings.intro"),
                 OrcidProfileGUI.translate(baseURL, language, "orcid.integration.settings.alwaysUpdateWork"),
                 OrcidProfileGUI.translate(baseURL, language, "orcid.integration.settings.createDuplicateWork"),
                 OrcidProfileGUI.translate(baseURL, language, "orcid.integration.settings.createFirstWork"),
@@ -293,6 +295,9 @@ class OrcidProfileGUI {
             </div>
             <!-- Body -->
             <div class="modal-body">
+                <p>
+                  ${orcidModalIntro}
+                </p>
                 <form id="${modalId}Settings">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="${modalId}createFirstWork">
