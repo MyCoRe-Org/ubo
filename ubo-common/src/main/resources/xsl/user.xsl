@@ -362,11 +362,13 @@
   <xsl:variable name="solr_query_all" select="concat('q=nid_connection%3A',$connection_id)" />
   <xsl:variable name="numFoundConfirmed" select="document(concat('solr:rows=0&amp;',$solr_query_confirmed))/response/result/@numFound"/>
   <xsl:variable name="numFoundAll" select="document(concat('solr:rows=0&amp;',$solr_query_all))/response/result/@numFound"/>
+
   <xsl:variable name="numPubsConfirmedText">
     <xsl:call-template name="numPublications">
       <xsl:with-param name="num" select="$numFoundConfirmed" />
     </xsl:call-template>
   </xsl:variable>
+
   <xsl:variable name="numPubsAllText">
     <xsl:call-template name="numPublications">
       <xsl:with-param name="num" select="$numFoundAll" />
@@ -377,7 +379,7 @@
     <xsl:value-of select="concat(i18n:translate('user.profile.publications.ubo.intro'), ' ')" />
     <a href="{$ServletsBaseURL}solr/select?{$solr_query_all}&amp;sort=year+desc">
       <xsl:value-of select="$numPubsAllText"/>
-      <xsl:value-of select="concat(i18n:translate('user.profile.publications.ubo.outro'), '.')" />
+      <xsl:value-of select="concat(i18n:translate(concat('user.profile.publications.ubo.outro.plural.', $numFoundAll &gt; 1)), '.')" />
     </a>
 
     <xsl:if test="$numFoundAll &gt; 1 and $numFoundConfirmed != $numFoundAll">
