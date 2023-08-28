@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
@@ -9,7 +9,10 @@
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
   xmlns:const="xalan://org.mycore.user2.MCRUser2Constants"
-  exclude-result-prefixes="xsl xalan i18n encoder orcid mods acl const">
+  xmlns:orcidUtils="xalan://org.mycore.ubo.orcid.DozBibORCIDUtils"
+  exclude-result-prefixes="xsl xalan i18n encoder orcid mods acl const orcidUtils">
+
+  <xsl:import href="ubo-dialog.xsl"/>
 
 <xsl:param name="error" />
 <xsl:param name="url" />
@@ -20,10 +23,11 @@
 <xsl:param name="CurrentUser" />
 <xsl:param name="UBO.LSF.Link" />
 <xsl:param name="UBO.Scopus.Author.Link" />
-<xsl:param name="UBO.ORCID.InfoURL" />
-<xsl:param name="MCR.ORCID.LinkURL" />
-<xsl:param name="MCR.ORCID.OAuth.ClientSecret" select="''"/>
-<xsl:param name="MCR.ORCID.OAuth.Scopes" select="''" />
+<xsl:param name="UBO.ORCID2.InfoURL" />
+<xsl:param name="MCR.ORCID2.LinkURL" />
+<xsl:param name="MCR.ORCID2.OAuth.ClientSecret" select="''"/>
+<xsl:param name="MCR.ORCID2.OAuth.Scope" select="''"/>
+<xsl:param name="MCR.ORCID2.Client.V3.APIMode"/>
 
 <xsl:variable name="uid">
   <xsl:value-of select="/user/@name" />
@@ -71,7 +75,7 @@
     </div>
   </article>
 
-  <xsl:if test="string-length($MCR.ORCID.OAuth.ClientSecret) &gt; 0 and $isCurrentUser">
+  <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and $isCurrentUser  and $MCR.ORCID2.Client.V3.APIMode = 'member'">
     <xsl:call-template name="orcid" />
   </xsl:if>
   <xsl:call-template name="publications" />
@@ -173,11 +177,16 @@
 <xsl:template name="id_orcid">
   <tr>
     <th scope="row">
-      <xsl:value-of select="i18n:translate('user.profile.id.orcid')" />
-      <xsl:text>:</xsl:text>
+      <xsl:if test="orcidUtils:isConnected(@value)">
+        <xsl:attribute name="title">
+          <xsl:value-of select="i18n:translate('orcid.integration.confirmed.headline')"/>
+        </xsl:attribute>
+      </xsl:if>
+
+      <xsl:value-of select="concat(i18n:translate('user.profile.id.orcid'), ':')" />
     </th>
     <td>
-      <xsl:variable name="url" select="concat($MCR.ORCID.LinkURL,@value)" />
+      <xsl:variable name="url" select="concat($MCR.ORCID2.LinkURL, @value)" />
       <a href="{$url}">
         <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
         <xsl:value-of select="$url" />
@@ -213,7 +222,7 @@
     </td>
   </tr>
 </xsl:template>
-  
+
 <xsl:template match="attribute[starts-with(@name, 'id_')]">
   <xsl:choose>
     <xsl:when test="@name='id_scopus'">
@@ -244,7 +253,7 @@
   <article class="card mb-3" xml:lang="de">
     <div class="card-body">
       <xsl:choose>
-        <xsl:when test="attributes/attribute[@name='token_orcid']">
+        <xsl:when test="attributes/attribute[starts-with(@name, 'orcid_credential')]">
           <xsl:call-template name="orcidIntegrationConfirmed" />
         </xsl:when>
         <xsl:otherwise>
@@ -252,7 +261,7 @@
         </xsl:otherwise>
       </xsl:choose>
       <p>
-        <a href="{$UBO.ORCID.InfoURL}">
+        <a href="{$UBO.ORCID2.InfoURL}">
           <xsl:value-of select="i18n:translate('orcid.integration.more')" />
           <xsl:text>...</xsl:text>
         </a>
@@ -264,8 +273,7 @@
 <xsl:template name="orcidIntegrationConfirmed">
   <h3>
     <span class="fas fa-check" aria-hidden="true" />
-    <xsl:text> </xsl:text>
-    <xsl:value-of select="i18n:translate('orcid.integration.confirmed.headline')" />
+    <xsl:value-of select="concat(' ', i18n:translate('orcid.integration.confirmed.headline'), '.')" />
   </h3>
   <p>
     <xsl:value-of disable-output-escaping="yes" select="i18n:translate('orcid.integration.confirmed.text')" />
@@ -281,9 +289,19 @@
       </li>
     </ul>
   </xsl:if>
+
+  <p>
+    <b><xsl:value-of select="i18n:translate('orcid.integration.list')" /></b>
+    <script src="{$WebApplicationBaseURL}js/user-profile-orcid.js"/>
+    <ul class="orcid-list-gui">
+      <!-- this gets filled by the javascript above -->
+    </ul>
+  </p>
 </xsl:template>
 
 <xsl:template name="orcidIntegrationPending">
+  <script src="{$WebApplicationBaseURL}modules/orcid2/js/orcid-auth.js"/>
+
   <h3>
     <span class="far fa-hand-point-right mr-1" aria-hidden="true" />
     <xsl:text> </xsl:text>
@@ -292,25 +310,15 @@
   <p>
     <xsl:value-of disable-output-escaping="yes" select="i18n:translate('orcid.integration.pending.intro')" />
   </p>
-  <script type="text/javascript">
-    function orcidOAuth() {
-      <!-- Force logout before login -->
-      jQuery.ajax({ 
-        url: '<xsl:value-of select='$MCR.ORCID.LinkURL' />userStatus.json?logUserOut=true', 
-        dataType: 'jsonp',
-        success: function(result,status,xhr) {
-          <!-- Login in popup window --> 
-          window.open("<xsl:value-of select='$WebApplicationBaseURL' />orcid",
-            "_blank", "toolbar=no, scrollbars=yes, width=500, height=600, top=500, left=500");
-        },
-        error: function (xhr, status, error) { alert(status); }
-      });
-    }
-  </script>
-  <button id="orcid-oauth-button" onclick="orcidOAuth();" title="({i18n:translate('orcid.integration.popup.tooltip')})">
-    <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
-    <xsl:value-of select="i18n:translate('orcid.oauth.link')" />
-  </button>
+
+  <p>
+    <button class="btn btn-primary" id="orcid-oauth-button" title="({i18n:translate('orcid.integration.popup.tooltip')})"
+            onclick="orcidOAuth('{$MCR.ORCID2.OAuth.Scope}')">
+      <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
+      <xsl:value-of select="i18n:translate('orcid.oauth.link')" />
+    </button>
+  </p>
+
   <p>
     <xsl:value-of disable-output-escaping="yes" select="i18n:translate('orcid.integration.pending.authorize')" />
   </p>
@@ -336,7 +344,7 @@
       <ul>
         <xsl:call-template name="numPublicationsUBO" />
         <xsl:if test="$isCurrentUser">
-          <xsl:apply-templates select="attributes[attribute[@name='token_orcid']]/attribute[@name='id_orcid']" mode="publications" />
+          <xsl:apply-templates select="attributes/attribute[contains(@name, 'orcid_credential')]" mode="publications" />
         </xsl:if>
       </ul>
     </div>
@@ -349,11 +357,13 @@
   <xsl:variable name="solr_query_all" select="concat('q=nid_connection%3A',$connection_id)" />
   <xsl:variable name="numFoundConfirmed" select="document(concat('solr:rows=0&amp;',$solr_query_confirmed))/response/result/@numFound"/>
   <xsl:variable name="numFoundAll" select="document(concat('solr:rows=0&amp;',$solr_query_all))/response/result/@numFound"/>
+
   <xsl:variable name="numPubsConfirmedText">
     <xsl:call-template name="numPublications">
       <xsl:with-param name="num" select="$numFoundConfirmed" />
     </xsl:call-template>
   </xsl:variable>
+
   <xsl:variable name="numPubsAllText">
     <xsl:call-template name="numPublications">
       <xsl:with-param name="num" select="$numFoundAll" />
@@ -364,7 +374,7 @@
     <xsl:value-of select="concat(i18n:translate('user.profile.publications.ubo.intro'), ' ')" />
     <a href="{$ServletsBaseURL}solr/select?{$solr_query_all}&amp;sort=year+desc">
       <xsl:value-of select="$numPubsAllText"/>
-      <xsl:value-of select="concat(i18n:translate('user.profile.publications.ubo.outro'), '.')" />
+      <xsl:value-of select="concat(i18n:translate(concat('user.profile.publications.ubo.outro.plural.', $numFoundAll &gt; 1)), '.')" />
     </a>
 
     <xsl:if test="$numFoundAll &gt; 1 and $numFoundConfirmed != $numFoundAll">
@@ -379,12 +389,14 @@
   </li>
 </xsl:template>
 
-<xsl:template match="attribute[@name='id_orcid']" mode="publications">
+<xsl:template match="attribute[contains(@name, 'orcid_credential')]" mode="publications">
+  <xsl:variable name="orcid" select="substring-after(@name, 'orcid_credential_')" />
+
   <li>
-    <xsl:value-of disable-output-escaping="yes" select="concat(i18n:translate('user.profile.publications.orcid.intro'), ' ')" />
-    <a href="{$MCR.ORCID.LinkURL}{@value}">
+    <xsl:value-of disable-output-escaping="yes" select="concat(i18n:translate('user.profile.publications.orcid.intro', $orcid), ' ')" />
+    <a href="{$MCR.ORCID2.LinkURL}{$orcid}" target="_blank">
       <xsl:call-template name="numPublications">
-        <xsl:with-param name="num" select="orcid:getNumWorks()" /> 
+        <xsl:with-param name="num" select="orcidUtils:getNumWorks($orcid)" />
       </xsl:call-template>
       <xsl:text>.</xsl:text>
     </a>

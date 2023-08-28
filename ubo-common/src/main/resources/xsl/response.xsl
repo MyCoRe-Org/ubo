@@ -12,17 +12,17 @@
         xmlns:encoder="xalan://java.net.URLEncoder"
         xmlns:str="xalan://java.lang.String"
         xmlns:basket="xalan://org.mycore.ubo.basket.BasketUtils"
-        exclude-result-prefixes="xsl xalan i18n mods mcr encoder str basket"
->
+        exclude-result-prefixes="xsl xalan i18n mods mcr encoder str basket">
 
 <xsl:include href="mods-display.xsl" />
 <xsl:include href="response-facets.xsl" />
+<xsl:include href="ubo-dialog.xsl" />
 <xsl:include href="coreFunctions.xsl" />
 <xsl:include href="csl-export-gui.xsl" />
 
 <xsl:param name="RequestURL" />
-<xsl:param name="MCR.ORCID.OAuth.ClientSecret" select="''" />
-<xsl:param name="MCR.ORCID.OAuth.Scopes" select="''" />
+<xsl:param name="MCR.ORCID2.OAuth.ClientSecret" select="''" />
+<xsl:param name="MCR.ORCID2.OAuth.Scope" select="''" />
 
 <!-- ==================== Trefferliste Metadaten ==================== -->
 
@@ -108,8 +108,19 @@
   <html id="dozbib.search">
     <head>
       <xsl:call-template name="page.title" />
-      <xsl:if test="string-length($MCR.ORCID.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID.OAuth.Scopes,'update')">
+      <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update')">
+        <script src="{$WebApplicationBaseURL}modules/orcid2/js/orcid-auth.js"/>
         <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
+        <xsl:call-template name="notification-dialog">
+          <xsl:with-param name="id" select="'success'"/>
+          <xsl:with-param name="title" select="'⚠'"/>
+          <xsl:with-param name="message" select="i18n:translate('orcid.publication.action.confirmation')"/>
+        </xsl:call-template>
+        <xsl:call-template name="notification-dialog">
+          <xsl:with-param name="id" select="'fail'"/>
+          <xsl:with-param name="title" select="'⚠'"/>
+          <xsl:with-param name="message" select="i18n:translate('upload.failed')"/>
+        </xsl:call-template>
       </xsl:if>
     </head>
     <body>
@@ -271,7 +282,7 @@
           <xsl:call-template name="label-year" />
           <xsl:call-template name="pubtype" />
           <xsl:call-template name="label-oa" />
-          <xsl:if test="string-length($MCR.ORCID.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID.OAuth.Scopes,'update')">
+          <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update')">
             <xsl:call-template name="orcid-status" />
           </xsl:if>
         </div>
@@ -286,7 +297,7 @@
             <xsl:call-template name="bibentry.add.to.basket" />
           </xsl:if>
           <xsl:call-template name="bibentry.subselect.return" />
-          <xsl:if test="string-length($MCR.ORCID.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID.OAuth.Scopes,'update')">
+          <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update')">
             <xsl:call-template name="orcid-publish" />
           </xsl:if>
           <span class="float-right"># <xsl:value-of select="$hitNo"/></span>

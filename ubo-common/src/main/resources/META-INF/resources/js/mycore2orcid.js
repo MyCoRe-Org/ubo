@@ -1,82 +1,131 @@
-var orcidStatusURL  = webApplicationBaseURL + "rsc/orcid/status/";
-var orcidPublishURL = webApplicationBaseURL + "rsc/orcid/publish/";
+const orcidObjectStatusURL = webApplicationBaseURL + "api/orcid/v1/object-status/v3/";
+const orcidUserStatusURL = webApplicationBaseURL + "api/orcid/v1/user-status/";
+const orcidPublishURL = webApplicationBaseURL + "api/orcid/v1/create-work/v3/";
+const orcidIcon = "<img alt='ORCID iD' src='" + webApplicationBaseURL + "images/orcid_icon.svg' class='orcid-icon' />";
 
-var orcidIcon = "<img alt='ORCID iD' src='" + webApplicationBaseURL + "images/orcid_icon.svg' class='orcid-icon' />";
+let orcidI18n;
+let userStatus = {orcids: [], trustedOrcids: []};
 
-var orcidI18n;
+$(document).ready(async function () {
+    const jwt = await fetchJWT();
+    const headers = function build(httpMethod) {
+        return {
+            method: httpMethod,
+            headers: {Authorization: `Bearer ${jwt}`}
+        };
+    }
 
-jQuery(document).ready(function() {
-	var orcidI18nURL = webApplicationBaseURL + "rsc/locale/translate/" + currentLang + "/orcid.publication.*";
-	jQuery.ajax({ async: false, type: 'GET', url: orcidI18nURL, 
-		success: function(data) {
-			orcidI18n = data;
-		}
-	});
-	
-	jQuery('div.orcid-status').each(function() {
-		getORCIDPublicationStatus(this);
-	});
-	jQuery('div.orcid-publish').each(function() {
-		showORCIDPublishButton(this);
-	});
+    // load i18n key/values
+    let orcidI18nURL = webApplicationBaseURL + "rsc/locale/translate/" + currentLang + "/orcid.publication.*";
+    await fetch(orcidI18nURL)
+        .then(data => data.json())
+        .then(json => orcidI18n = json)
+        .catch(error => console.error(error));
+
+    await updateUI(headers);
 });
 
-function getORCIDPublicationStatus(div) {
-	var id = jQuery(div).data('id');
-	jQuery.get(orcidStatusURL + id, function(status) {
-		console.log(status);
-		setORCIDPublicationStatus(div, status);
-	});
+
+async function updateUI(headers) {
+    // get user status
+    console.debug("Getting ORCID user status...");
+    const userStatusResp = await fetch(orcidUserStatusURL, headers('GET'));
+    if (!userStatusResp.ok) {
+        return;
+    }
+
+    // if user has no orcid at all do not display orcid icons
+    userStatus = await userStatusResp.json();
+    if (userStatus.orcids.length == 0) {
+        console.debug("Current user does not have any orcid. Nothing to do.");
+        return;
+    }
+
+    $('div.orcid-status').each(function () {
+        getORCIDPublicationStatus(this, headers);
+    });
+
+    $('div.orcid-publish').each(function () {
+        showORCIDPublishButton(this, headers);
+    });
 }
 
-function setORCIDPublicationStatus(div, status) {
-	jQuery(div).empty();
-	if (status.user.isORCIDUser && status.isUsersPublication) {
-		var html = "<span class='orcid-info' title='" + orcidI18n[ 
-			(status.isInORCIDProfile ? 'orcid.publication.inProfile.true' : 'orcid.publication.inProfile.false')
-			]	+ "'>";
-		html += orcidIcon;
-		html += "<span class='far fa-thumbs-" + (status.isInORCIDProfile ? "up" : "down")
-		        + " orcid-in-profile-" + status.isInORCIDProfile + "' aria-hidden='true' />";
-		html += "</span>";
-		jQuery(div).html(html);
-	}
+async function getORCIDPublicationStatus(div, headers) {
+    let id = $(div).data('id');
+    let url = orcidObjectStatusURL + id;
+
+    console.debug(id + " Fetching publication/object status");
+
+    const response = await fetch(url, headers('GET'));
+
+    if (!response.ok) {
+        return;
+    }
+    const objectStatus = await response.json();
+    console.debug(id + " Publication/object status is: ");
+    console.debug(objectStatus);
+    setORCIDPublicationStatus(id, div, objectStatus);
 }
 
-function showORCIDPublishButton(div) {
-	var id = jQuery(div).data('id');
-	jQuery.get(orcidStatusURL + id, function(status) {
-		console.log(status);
-		updateORCIDPublishButton(div, status);
-	});
+function setORCIDPublicationStatus(id, div, objectStatus) {
+    console.debug(id + " Setting publication status icon");
+
+    $(div).empty();
+
+    if (objectStatus.usersPublication) {
+        let html = "<span class='orcid-info' title='" + orcidI18n[
+            (objectStatus.inORCIDProfile ? 'orcid.publication.inProfile.true' : 'orcid.publication.inProfile.false')
+            ] + "'>";
+        html += orcidIcon;
+        html += "<span class='far fa-thumbs-" + (objectStatus.inORCIDProfile ? "up" : "down")
+            + " orcid-in-profile-" + objectStatus.inORCIDProfile + "' aria-hidden='true' />";
+        html += "</span>";
+        $(div).html(html);
+    }
 }
 
-function updateORCIDPublishButton(div, status) {
-	var id = jQuery(div).data('id');
-	jQuery(div).empty();
-	if (status.user.isORCIDUser && status.user.weAreTrustedParty && status.isUsersPublication) {
-		var html = "<button class='orcid-button btn btn-sm btn-outline-primary'>" + orcidI18n[
-			(status.isInORCIDProfile ? 'orcid.publication.action.update' : 'orcid.publication.action.create')
-			] + "</button>";
-		jQuery(div).html(html);
-		jQuery(div).find('.orcid-button').click( function() {
-					div = this;
-					jQuery.ajax({ async: false, type: 'GET', url: orcidPublishURL + id, 
-						success: function(newStatus) {
-							alert(orcidI18n['orcid.publication.action.confirmation']);
-							jQuery("div.orcid-status[data-id='" + id + "']").each(
-									function() {
-										setORCIDPublicationStatus(this, newStatus);
-									});
-							jQuery("div.orcid-publish[data-id='" + id + "']").each(
-									function() {
-										updateORCIDPublishButton(this, newStatus);
-									});
-						},
-						error: function (xhr, ajaxOptions, thrownError) {
-					        alert(xhr.status + ": " + thrownError );
-					      }
-					});
-				});
-	}
+async function showORCIDPublishButton(div, headers) {
+    let id = $(div).data('id');
+    let url = orcidObjectStatusURL + id;
+
+    console.debug(id + " Showing ORCID publish button");
+
+    const objectStatusResponse = await fetch(url, headers('GET'));
+    if (!objectStatusResponse.ok) {
+        return;
+    }
+
+    const objectStatus = await objectStatusResponse.json();
+
+    if (objectStatus.inORCIDProfile == true) {
+        console.debug(id + " Publication is already in profile of current user");
+        return;
+    }
+
+    updateORCIDPublishOrUpdateButton(div, objectStatus, headers);
+}
+
+function updateORCIDPublishOrUpdateButton(div, objectStatus, headers) {
+    let id = $(div).data('id');
+    $(div).empty();
+
+    if (userStatus.trustedOrcids.length > 0 && objectStatus.usersPublication) {
+        let html = "<button class='orcid-button btn btn-sm btn-outline-secondary'>" +
+            orcidI18n[(objectStatus.inORCIDProfile ? 'orcid.publication.action.update' : 'orcid.publication.action.create')] +
+            "</button>";
+        $(div).html(html);
+
+        $(div).find('.orcid-button').one("click", async function () {
+            $(this).attr("disabled", "disabled");
+            div = this;
+
+            const resp = await fetch(orcidPublishURL + id, headers('POST'));
+            if (resp.ok) {
+                $("#notification-dialog-success").modal('show');
+                await updateUI(headers);
+            } else {
+                $("#notification-dialog-fail").modal('show');
+            }
+        });
+    }
 }

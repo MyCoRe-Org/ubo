@@ -21,6 +21,7 @@
   <html id="basket">
     <head>
       <title>Merkliste</title>
+      <script src="{$WebApplicationBaseURL}modules/orcid2/js/orcid-auth.js"/>
       <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
     </head>
     <body>
