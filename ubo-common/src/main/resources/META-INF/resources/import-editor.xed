@@ -7,7 +7,7 @@
    
     <xed:validate xpath="//mods:classification[@classID='fachreferate']" required="true" i18n="condition.subject" display="global" />
     <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:titleInfo/mods:title" required="true" i18n="ubo.title.validation" display="global" />
-    <xed:validate xpath="//mods:mods[not(mods:genre='journal' or mods:genre='newspaper') and string-length(mods:name[@type='corporate']/mods:namePart/text())=0]/mods:name[@type='personal'][1]" test="string-length(mods:namePart[@type='family']) &gt; 0" i18n="ubo.role.author.validation" display="global" />
+    <xed:validate xpath="//mods:mods[not(mods:genre='journal' or mods:genre='series' or mods:genre='blog' or mods:genre='newspaper') and string-length(mods:name[@type='corporate']/mods:namePart/text())=0]/mods:name[@type='personal'][1]" test="string-length(mods:namePart[@type='family']) &gt; 0" i18n="ubo.role.author.validation" display="global" />
     <xed:validate xpath="//mods:nameIdentifier[@type='orcid']" matches="\d{4}\-\d{4}\-\d{4}\-\d{3}[0-9X]" i18n="ubo.nameIdentifier.orcid.validation" display="global" />
 
     <xed:include uri="webapp:import-editor.xed" ref="validationRules4Identifiers" />
@@ -131,13 +131,19 @@
   <xed:template id="origin">
     <xed:repeat xpath="mods:classification[@classID='ORIGIN']" max="10">
       <div class="form-inline form-group ubo-repeat-group">
-        <label class="mycore-form-label" for="{xed:generate-id()}">
-          <xed:if test="$genre_intern = 'dissertation'">
-            <xed:output value="'*'" />
+      <xed:choose>
+        <xed:when test="$genre_intern = 'dissertation'">
+          <label class="mycore-form-label ubo-mandatory" for="{xed:generate-id()}">
             <xed:validate xpath="//mods:classification[@classID='ORIGIN']" required="true" i18n="condition.institution" display="global" />
-          </xed:if>
-          <xed:output value="concat(i18n:translate('ubo.department'), ': ')" />
-        </label>
+            <xed:output value="concat(i18n:translate('ubo.department'), ': ')" />
+          </label>
+        </xed:when>
+        <xed:otherwise>
+          <label class="mycore-form-label" for="{xed:generate-id()}">
+            <xed:output value="concat(i18n:translate('ubo.department'), ': ')" />
+          </label>
+        </xed:otherwise>
+      </xed:choose>
         <select id="{xed:generate-id()}" class="autocomplete {$xed-validation-marker} mycore-form-input">
           <option value=""><xed:output i18n="search.select.autocomplete" /></option>
           <xed:include uri="xslStyle:items2options:classification:editor:-1:children:ORIGIN" />
@@ -276,13 +282,14 @@
           <textarea id="{xed:generate-id()}" class="{$xed-validation-marker} mycore-form-input" type="text" placeholder="{i18n:ubo.title}" />
         </xed:bind>
       </div>
-      <div class="form-inline form-group">
-        <xed:bind xpath="mods:subTitle">
+      <xed:repeat xpath="mods:subTitle" max="6">
+        <div class="form-inline form-group">
           <label class="mycore-form-label">
           </label>
           <input class="{$xed-validation-marker} mycore-form-input" type="text" placeholder="{i18n:ubo.title.subTitle}" />
-        </xed:bind>
-      </div>
+          <xed:controls />
+        </div>
+      </xed:repeat>
     </xed:repeat>
   </xed:template>
 
@@ -323,10 +330,19 @@
   <xed:template id="editor">
     <xed:repeat xpath="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='edt']" max="99">
       <div class="form-group form-inline ubo-repeat-group">
-        <label for="{xed:generate-id()}" class="mycore-form-label">
-          <xed:output value="concat(i18n:translate('ubo.role.editor'), ': ')" />
-        </label>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />
+        <xed:choose>
+          <xed:when test="$genre_intern != 'journal' and $genre_intern != 'series' and $genre_intern !='blog' and $genre_intern != 'newspaper'">
+            <label for="{xed:generate-id()}" class="mycore-form-label ubo-mandatory">
+              <xed:output value="concat(i18n:translate('ubo.role.editor'), ': ')" />
+            </label>
+          </xed:when>
+          <xed:otherwise>
+            <label for="{xed:generate-id()}" class="mycore-form-label">
+              <xed:output value="concat(i18n:translate('ubo.role.editor'), ': ')" />
+            </label>
+          </xed:otherwise>
+        </xed:choose>
+        <xed:include uri="webapp:import-editor.xed" ref="person" />  
       </div>
     </xed:repeat>
   </xed:template>
@@ -507,9 +523,18 @@
   <xed:template id="year">
     <xed:bind xpath="mods:originInfo/mods:dateIssued[@encoding='w3cdtf']">
       <div class="form-inline form-group">
-        <label for="year" class="mycore-form-label ubo-mandatory">
-          <xed:output value="concat(i18n:translate('ubo.date.issued.4'), ': ')" />
-        </label>
+        <xed:choose>
+          <xed:when test="$genre_intern != 'journal' and $genre_intern != 'series' and $genre_intern !='blog' and $genre_intern != 'newspaper'">
+          <label for="year" class="mycore-form-label ubo-mandatory">
+            <xed:output value="concat(i18n:translate('ubo.date.issued.4'), ': ')" />
+          </label>
+          </xed:when>
+          <xed:otherwise>
+            <label for="year" class="mycore-form-label">
+              <xed:output value="concat(i18n:translate('ubo.date.issued.4'), ': ')" />
+            </label>
+          </xed:otherwise>
+        </xed:choose>
         <input id="{xed:generate-id()}" class="{$xed-validation-marker} mycore-form-input" type="text" placeholder="{i18n:ubo.date.issued.4.placeholder}" />
       </div>
       <xed:validate matches="[\d]{4}" i18n="ubo.date.issued.4.validation" display="global" />
@@ -803,6 +828,113 @@
     </xed:repeat>
   </xed:template>
 
+  <xed:template id="projectInformation">
+    <script src="{$WebApplicationBaseURL}js/project_autocomplete.js" />
+    <xed:bind xpath="mods:extension/temporary_search_input">
+      <div class="form-group form-inline">
+        <label for="{xed:generate-id()}" class="mycore-form-label">
+          <xed:output value="concat(i18n:translate('ubo.project.search'), ': ')" />
+        </label>
+        <input id="project_search" type="text" class="mycore-form-input" />
+    </div>
+    </xed:bind>
+    <xed:bind xpath="mods:extension[@displayLabel='project']">
+      <xed:bind xpath="cerif:Project">
+        <xed:bind xpath="cerif:Acronym">
+          <div class="form-group form-inline">
+            <label for="{xed:generate-id()}" class="mycore-form-label">
+              <xed:output value="concat(i18n:translate('ubo.project.acronym'), ': ')" />
+            </label>
+            <input id="project_acronym" readonly="readonly" type="text" class="mycore-form-input readonly" />
+          </div>
+        </xed:bind>
+        <xed:bind xpath="cerif:Title">
+          <div class="form-group form-inline">
+            <label for="{xed:generate-id()}" class="mycore-form-label">
+              <xed:output value="concat(i18n:translate('ubo.project.title'), ': ')" />
+            </label>
+            <input id="project_title" readonly="readonly" type="text" class="mycore-form-input readonly" />
+          </div>
+        </xed:bind>
+
+        <xed:bind xpath="cerif:Identifier[@type='https://w3id.org/cerif/vocab/IdentifierTypes#Project-MM-ID']">
+          <input id="project_id" type="text" style="display: none;" />
+        </xed:bind>
+
+        <xed:bind xpath="cerif:Identifier[@type='https://w3id.org/cerif/vocab/IdentifierTypes#Finance-ID']">
+          <div class="form-group form-inline">
+            <label for="{xed:generate-id()}" class="mycore-form-label">
+              <xed:output value="concat(i18n:translate('ubo.project.funder'), ': ')" />
+            </label>
+            <input id="funder" type="text" readonly="readonly" class="mycore-form-input readonly" />
+          </div>
+        </xed:bind>
+
+        <xed:bind xpath="cerif:Funded/cerif:As/cerif:Funding">
+          <xed:bind xpath="@id">
+            <div class="form-group form-inline">
+              <label for="{xed:generate-id()}" class="mycore-form-label">
+                <xed:output value="concat(i18n:translate('ubo.project.funding_number'), ': ')" />
+              </label>
+              <input id="funding_number" readonly="readonly" type="text" class="mycore-form-input readonly" />
+            </div>
+          </xed:bind>
+          <xed:bind xpath="cerif:Type">
+            <input id="funding_type_value" type="text" style="display: none;"
+                   value="https://www.openaire.eu/cerif-profile/vocab/OpenAIRE_Funding_Types#Contract"/>
+          </xed:bind>
+        </xed:bind>
+
+      </xed:bind>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="peerreviewed">
+    <xed:bind xpath="mods:classification[@classID='peerreviewed']">
+      <div class="form-group form-inline">
+        <label for="{xed:generate-id()}" class="mycore-form-label"><xed:output i18n="ubo.peerreviewed" />:</label>
+        <select id="{xed:generate-id()}" class="{$xed-validation-marker} mycore-form-input">
+          <option value=""><xed:output i18n="search.select" /></option>
+          <xed:include uri="xslStyle:items2options:classification:editor:-1:children:peerreviewed" />
+        </select>
+        <a tabindex="0" class="btn btn-secondary info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:ubo.help.peerreviewed}">
+          <i class="fas fa-info"></i>
+        </a>
+      </div>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="accessRights">
+    <xed:bind xpath="mods:classification[@classID='accessrights']">
+      <div class="form-group form-inline">
+        <label for="{xed:generate-id()}" class="mycore-form-label"><xed:output i18n="ubo.accessrights" />:</label>
+        <select id="{xed:generate-id()}" class="{$xed-validation-marker} mycore-form-input">
+          <option value=""><xed:output i18n="search.select" /></option>
+          <xed:include uri="xslStyle:items2options:classification:editor:-1:children:accessrights" />
+        </select>
+        <a tabindex="0" class="btn btn-secondary info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:ubo.help.accessrights}">
+          <i class="fas fa-info"></i>
+        </a>
+      </div>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="typeOfResource">
+    <xed:bind xpath="mods:typeOfResource" default="txt">
+      <div class="form-group form-inline">
+        <label for="{xed:generate-id()}" class="mycore-form-label">
+          <xed:output i18n="ubo.typeOfResource" />:
+        </label>
+        <select id="{xed:generate-id()}" class="{$xed-validation-marker} mycore-form-input">
+          <xed:include uri="xslStyle:items2options:classification:editor:-1:children:typeOfResource" />
+        </select>
+        <a tabindex="0" class="btn btn-secondary info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:ubo.help.typeOfResource}">
+          <i class="fas fa-info"></i>
+        </a>
+      </div>
+    </xed:bind>
+  </xed:template>
+
   <xed:template id="linked.relatedItem">
     <xed:bind xpath="@xlink:href">
       <div class="form-group form-inline">
@@ -882,7 +1014,7 @@
   </xed:template>
 
   <xed:template id="cancel.submit">
-    <div class="form-inline form-group">
+    <div class="form-inline form-group ubo-sticky-editor-buttons">
       <label class="mycore-form-label"></label>
       <button class="btn btn-sm btn-primary mr-2" type="submit" xed:target="servlet" xed:href="DozBibEntryServlet">
         <xed:output i18n="button.submit" />
@@ -892,67 +1024,6 @@
       </button>
       <!-- <button class="ml-2 btn btn-sm btn-primary" type="submit" xed:target="debug">Debug</button> -->
     </div>
-  </xed:template>
-
-  <xed:template id="projectInformation">
-    <script src="{$WebApplicationBaseURL}js/project_autocomplete.js" />
-    <xed:bind xpath="mods:extension/temporary_search_input">
-      <div class="form-group form-inline">
-        <label for="{xed:generate-id()}" class="mycore-form-label">
-          <xed:output value="concat(i18n:translate('ubo.project.search'), ': ')" />
-        </label>
-        <input id="project_search" type="text" class="mycore-form-input" />
-    </div>
-    </xed:bind>
-    <xed:bind xpath="mods:extension[@displayLabel='project']">
-      <xed:bind xpath="cerif:Project">
-        <xed:bind xpath="cerif:Acronym">
-          <div class="form-group form-inline">
-            <label for="{xed:generate-id()}" class="mycore-form-label">
-              <xed:output value="concat(i18n:translate('ubo.project.acronym'), ': ')" />
-            </label>
-            <input id="project_acronym" readonly="readonly" type="text" class="mycore-form-input readonly" />
-          </div>
-        </xed:bind>
-        <xed:bind xpath="cerif:Title">
-          <div class="form-group form-inline">
-            <label for="{xed:generate-id()}" class="mycore-form-label">
-              <xed:output value="concat(i18n:translate('ubo.project.title'), ': ')" />
-            </label>
-            <input id="project_title" readonly="readonly" type="text" class="mycore-form-input readonly" />
-          </div>
-        </xed:bind>
-
-        <xed:bind xpath="cerif:Identifier[@type='https://w3id.org/cerif/vocab/IdentifierTypes#Project-MM-ID']">
-          <input id="project_id" type="text" style="display: none;" />
-        </xed:bind>
-
-        <xed:bind xpath="cerif:Identifier[@type='https://w3id.org/cerif/vocab/IdentifierTypes#Finance-ID']">
-          <div class="form-group form-inline">
-            <label for="{xed:generate-id()}" class="mycore-form-label">
-              <xed:output value="concat(i18n:translate('ubo.project.funder'), ': ')" />
-            </label>
-            <input id="funder" type="text" readonly="readonly" class="mycore-form-input readonly" />
-          </div>
-        </xed:bind>
-
-        <xed:bind xpath="cerif:Funded/cerif:As/cerif:Funding">
-          <xed:bind xpath="@id">
-            <div class="form-group form-inline">
-              <label for="{xed:generate-id()}" class="mycore-form-label">
-                <xed:output value="concat(i18n:translate('ubo.project.funding_number'), ': ')" />
-              </label>
-              <input id="funding_number" readonly="readonly" type="text" class="mycore-form-input readonly" />
-            </div>
-          </xed:bind>
-          <xed:bind xpath="cerif:Type">
-            <input id="funding_type_value" type="text" style="display: none;"
-                   value="https://www.openaire.eu/cerif-profile/vocab/OpenAIRE_Funding_Types#Contract"/>
-          </xed:bind>
-        </xed:bind>
-
-      </xed:bind>
-    </xed:bind>
   </xed:template>
 
 </xed:template>

@@ -9,29 +9,29 @@
       <xed:form xmlns:xed="http://www.mycore.de/xeditor"
                 xmlns:cerif="https://www.openaire.eu/cerif-profile/1.1/"
                 method="post" role="form">
-	
-	<xed:source uri="xslStyle:mods-preprocessor:mcrobject:{$id}" />
-	<xed:source uri="xslStyle:mods2mycoreobject,mods-preprocessor:session:{$key}" />
-      
-    <xed:cancel url="servlets/MCRLockServlet?action=unlock&amp;id={$id}&amp;url=DozBibEntryServlet%3Fid={$id}" />
-	<xed:cancel url="newPublication.xed" />
-        
-	<xed:post-processor xsl="mods-postprocessor.xsl" />    
-	
-	<xed:bind xpath="/mycoreobject">
-          <xed:include uri="webapp:import-editor.xed" ref="common.metafields" />
-          
-          <xed:choose>
-            <xed:when test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
-              <xed:include uri="webapp:edit-admin.xed" ref="editor" />
-            </xed:when>
-            <xed:otherwise>
-              <p>Sie sind nicht berechtigt, dieses Formular zu verwenden.</p>
-            </xed:otherwise>
-          </xed:choose>
-	</xed:bind>
 
-	<xed:template id="editor">
+  <xed:source uri="xslStyle:mods-preprocessor:mcrobject:{$id}" />
+  <xed:source uri="xslStyle:mods2mycoreobject,mods-preprocessor:session:{$key}" />
+
+  <xed:cancel url="servlets/MCRLockServlet?action=unlock&amp;id={$id}&amp;url=DozBibEntryServlet%3Fid={$id}" />
+  <xed:cancel url="newPublication.xed" />
+
+  <xed:post-processor xsl="mods-postprocessor.xsl" />    
+  
+  <xed:bind xpath="/mycoreobject">
+    <xed:include uri="webapp:import-editor.xed" ref="common.metafields" />
+
+    <xed:choose>
+      <xed:when test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
+        <xed:include uri="webapp:edit-admin.xed" ref="editor" />
+      </xed:when>
+      <xed:otherwise>
+        <p>Sie sind nicht berechtigt, dieses Formular zu verwenden.</p>
+      </xed:otherwise>
+    </xed:choose>
+  </xed:bind>
+
+  <xed:template id="editor">
           <input type="hidden" name="mode" value="save" />
           <xed:include uri="webapp:import-editor.xed" ref="validation" />
           <fieldset>
@@ -42,7 +42,10 @@
               <xed:include uri="webapp:import-editor.xed" ref="status" />
               <xed:include uri="webapp:import-editor.xed" ref="partOf" />
               <xed:include uri="webapp:import-editor.xed" ref="subject" />
-              <xed:include uri="webapp:import-editor.xed" ref="origin" />    
+              <xed:include uri="webapp:import-editor.xed" ref="origin" />
+              <xed:include uri="webapp:import-editor.xed" ref="peerreviewed" />
+              <xed:include uri="webapp:import-editor.xed" ref="accessRights" />
+              <xed:include uri="webapp:import-editor.xed" ref="typeOfResource" />
               <xed:include uri="webapp:import-editor.xed" ref="tags" />
             </xed:bind>    
           </fieldset>
