@@ -11,6 +11,8 @@ import org.jdom2.Element;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.ubo.picker.IdentityService;
 import org.mycore.ubo.picker.PersonSearchResult;
+import org.mycore.user2.MCRRealm;
+import org.mycore.user2.MCRRealmFactory;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
@@ -40,38 +42,42 @@ public class LocalService implements IdentityService {
 
     @Override
     public PersonSearchResult searchPerson(String query) throws OperationNotSupportedException {
+        return searchPerson(query, MCRRealmFactory.getLocalRealm());
+    }
+
+    public PersonSearchResult searchPerson(String query, MCRRealm realm) {
         String displayName = "*" + query.trim() + "*";
-        final List<MCRUser> matchingUsers = MCRUserManager.listUsers(null, "local", displayName, null);
+        final List<MCRUser> matchingUsers = MCRUserManager.listUsers(null, realm.getID(), displayName, null);
 
         List<PersonSearchResult.PersonResult> personResults = matchingUsers.stream().map(user -> {
-            PersonSearchResult.PersonResult personSearchResult = new PersonSearchResult.PersonResult(this);
-            personSearchResult.pid = user.getUserAttribute("id_" + LEAD_ID);
-            personSearchResult.displayName = user.getRealName().length() > 0 ? user.getRealName() : user.getUserName();
+                PersonSearchResult.PersonResult personSearchResult = new PersonSearchResult.PersonResult(this);
+                personSearchResult.pid = user.getUserAttribute("id_" + LEAD_ID);
+                personSearchResult.displayName = user.getRealName().length() > 0 ? user.getRealName() : user.getUserName();
 
-            user.getAttributes().stream()
-                .filter(attr -> attr.getName().equals(USER_FIRST_NAME_ATTR))
-                .findFirst()
-                .map(MCRUserAttribute::getValue)
-                .ifPresent(attrVal -> {
-                    personSearchResult.firstName = attrVal;
-                });
+                user.getAttributes().stream()
+                    .filter(attr -> attr.getName().equals(USER_FIRST_NAME_ATTR))
+                    .findFirst()
+                    .map(MCRUserAttribute::getValue)
+                    .ifPresent(attrVal -> {
+                        personSearchResult.firstName = attrVal;
+                    });
 
-            user.getAttributes().stream()
-                .filter(attr -> attr.getName().equals(USER_LAST_NAME_ATTR))
-                .findFirst()
-                .map(MCRUserAttribute::getValue)
-                .ifPresent(attrVal -> {
-                    personSearchResult.lastName = attrVal;
-                });
+                user.getAttributes().stream()
+                    .filter(attr -> attr.getName().equals(USER_LAST_NAME_ATTR))
+                    .findFirst()
+                    .map(MCRUserAttribute::getValue)
+                    .ifPresent(attrVal -> {
+                        personSearchResult.lastName = attrVal;
+                    });
 
-            if (user.getEMailAddress() != null) {
-                personSearchResult.information = new ArrayList<>();
-                personSearchResult.information.add(user.getEMailAddress());
-            }
+                if (user.getEMailAddress() != null) {
+                    personSearchResult.information = new ArrayList<>();
+                    personSearchResult.information.add(user.getEMailAddress());
+                }
 
-            return personSearchResult;
-        }).filter(psr -> (psr.pid != null && !psr.pid.isEmpty()) || !ENFORCE_LEAD_ID_PRESENT)
-          .collect(Collectors.toList());
+                return personSearchResult;
+            }).filter(psr -> (psr.pid != null && !psr.pid.isEmpty()) || !ENFORCE_LEAD_ID_PRESENT)
+            .collect(Collectors.toList());
 
         PersonSearchResult personSearchResult = new PersonSearchResult();
         personSearchResult.count = personResults.size();
