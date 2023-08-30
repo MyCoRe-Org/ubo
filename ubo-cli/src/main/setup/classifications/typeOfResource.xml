@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="typeOfResource">
+  <label xml:lang="en" text="typeOfResource" />
+  <label xml:lang="de" text="typeOfResource" />
+  <label xml:lang="x-uri" text="http://www.mycore.org/classifications/typeOfResource" />
+  <categories>
+    <category ID="txt">
+      <label xml:lang="de" text="Text" />
+      <label xml:lang="en" text="Text" description="Resource intended to be perceived visually and understood through the use of language in written or spoken form." />
+      <url xlink:href="https://id.loc.gov/vocabulary/resourceTypes/txt.html" xlink:type="locator" />
+    </category>
+    <category ID="aud">
+      <label xml:lang="en" text="Audio" description="Resources expressed in an audible form, including music or other sounds." />
+      <label xml:lang="de" text="Audio" />
+      <url xlink:href="https://id.loc.gov/vocabulary/resourceTypes/aud.html" xlink:type="locator" />
+    </category>
+    <category ID="dat">
+      <label xml:lang="de" text="Datensatz" />
+      <label xml:lang="en" text="Dataset" description="Data encoded in a defined structure, but not normally displayed in its raw form." />
+      <url xlink:href="https://id.loc.gov/vocabulary/resourceTypes/dat.html" xlink:type="locator" />
+    </category>
+    <category ID="mov">
+      <label xml:lang="de" text="Bewegte Bilder" />
+      <label xml:lang="en" text="Moving image" description="Images intended to be perceived as moving, including motion pictures and video recordings." />
+      <url xlink:href="https://id.loc.gov/vocabulary/resourceTypes/mov.html" xlink:type="locator" />
+    </category>
+    <category ID="mul">
+      <label xml:lang="de" text="Multimedia" />
+      <label xml:lang="en" text="Multimedia" description="Electronic resource that is a computer program or which consists of multiple media types that are software driven." />
+      <url xlink:href="https://id.loc.gov/vocabulary/resourceTypes/mul.html" xlink:type="locator" />
+    </category>
+    <category ID="img">
+      <label xml:lang="de" text="Bild" />
+      <label xml:lang="en" text="Still image" description="Resource expressed through line, shape, shading, etc., intended to be perceived visually as a still image or images in two dimensions." />
+      <url xlink:href="https://id.loc.gov/vocabulary/resourceTypes/img.html" xlink:type="locator" />
+    </category>
+  </categories>
+</mycoreclass>
