@@ -19,6 +19,8 @@
 package org.mycore.ubo.picker;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PersonSearchResult {
 
@@ -28,7 +30,7 @@ public class PersonSearchResult {
 
     public static class PersonResult {
 
-        public PersonResult(IdentityService identityService){
+        public PersonResult(IdentityService identityService) {
             this.service = identityService.getClass().getSimpleName();
         }
 
@@ -70,7 +72,8 @@ public class PersonSearchResult {
 
     /**
      * Joins another {@link PersonSearchResult} with the current {@link PersonSearchResult}. The count field is updated
-     * automatically.
+     * automatically. If an item in the given {@link PersonSearchResult} is already contained (test is based on
+     * {@link PersonResult#pid}) it will not be added again.
      *
      * @param other the {@link PersonSearchResult} to join.
      * */
@@ -80,14 +83,21 @@ public class PersonSearchResult {
 
     /**
      * Joins another {@link PersonSearchResult} with the current {@link PersonSearchResult}. The count field is updated
-     * automatically.
+     * automatically. If an item in the given {@link PersonSearchResult} is already contained (test is based on
+     * {@link PersonResult#pid}) it will not be added again.
      *
      * @param other the {@link PersonSearchResult} to join.
      * @param index index at which to insert the first element from the specified {@link PersonSearchResult}
      * */
     public void join(PersonSearchResult other, int index) {
-        this.personList.addAll(index, other.personList);
-        this.count += other.count;
+        Stream<PersonResult> currentPersonList = this.personList.stream();
+
+        List<PersonResult> toAdd = other.personList.stream()
+            .filter(pr -> pr.pid == null || !currentPersonList.anyMatch(alreadyInList -> alreadyInList.pid == pr.pid))
+            .collect(Collectors.toList());
+
+        this.personList.addAll(index, toAdd);
+        this.count += toAdd.size();
     }
 
 }
