@@ -64,7 +64,7 @@
   <!-- ============ Ausgabe Fach ============ -->
 
   <xsl:template match="mods:mods/mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info">
-    <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('facets.facet.subject')}"
+    <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer badge-class-fachreferate" title="{i18n:translate('facets.facet.subject')}"
           onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+subject:', substring-after(@valueURI,'#')))}')">
       <xsl:call-template name="output.category">
         <xsl:with-param name="classID" select="'fachreferate'" />
@@ -98,7 +98,7 @@
         </xsl:variable>
 
         <xsl:for-each select="xalan:nodeset($destatis-categories)/token">
-          <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('facets.facet.subject')}">
+          <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer badge-class-fachreferate" title="{i18n:translate('facets.facet.subject')}">
             <xsl:call-template name="output.category">
               <xsl:with-param name="classID" select="'fachreferate'" />
               <xsl:with-param name="categID" select="." />
@@ -200,6 +200,34 @@
         <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
       </div>
     </div>
+  </xsl:template>
+
+  <xsl:template match="mods:classification[contains(@authorityURI,'ORIGIN') and not (../mods:classification[contains(@authorityURI,'fachreferate')])]" mode="details">
+    <xsl:variable name="origin-value" select="substring-after(@valueURI, '#')"/>
+    <xsl:variable name="destatis-attr" select="$origin//category[@ID = $origin-value]/label[@xml:lang = 'x-destatis']/@text"/>
+
+    <xsl:if test="string-length($destatis-attr) &gt; 0">
+      <xsl:variable name="destatis-categories">
+        <xsl:call-template name="Tokenizer">
+          <xsl:with-param name="string" select="$destatis-attr" />
+        </xsl:call-template>
+      </xsl:variable>
+
+      <xsl:for-each select="xalan:nodeset($destatis-categories)/token">
+        <div class="row ubo-metadata-destatis-by-origin">
+          <div class="col-3">
+            <xsl:value-of select="concat(i18n:translate('ubo.destatis'), ':')" />
+          </div>
+
+          <div class="col-9">
+            <xsl:call-template name="output.category">
+              <xsl:with-param name="classID" select="'fachreferate'" />
+              <xsl:with-param name="categID" select="." />
+            </xsl:call-template>
+          </div>
+        </div>
+      </xsl:for-each>
+    </xsl:if>
   </xsl:template>
 
   <!-- ========== Ausgabe Datenträgertyp ========== -->
@@ -1089,6 +1117,7 @@
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'partner')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'category')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'partOf')]" mode="details" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="details" />
     <xsl:apply-templates select="mods:abstract/@xlink:href" mode="details" />
     <xsl:apply-templates select="mods:abstract[string-length(.) &gt; 0]" mode="details" />
   </xsl:template>
