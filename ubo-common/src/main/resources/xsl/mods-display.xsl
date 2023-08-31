@@ -531,9 +531,7 @@
                         <xsl:apply-templates select="mods:nameIdentifier[@type='connection']" />
                       </xsl:when>
                       <xsl:otherwise>
-                        <xsl:apply-templates select="mods:nameIdentifier[@type='orcid']" />
-                        <xsl:apply-templates select="mods:nameIdentifier[not(@type='orcid')]" />
-                        <xsl:apply-templates select="mods:role/mods:roleTerm" mode="corresponding-author"/>
+                        <xsl:apply-templates select="mods:nameIdentifier[not(@type='connection')]" />
                       </xsl:otherwise>
                     </xsl:choose>
                   </dl>
@@ -562,8 +560,6 @@
     <xsl:value-of select="text()" />
     <xsl:if test="position() != last()"> / </xsl:if>
   </xsl:template>
-
-  <xsl:param name="UBO.LSF.Link"/>
 
   <xsl:template match="mods:nameIdentifier[@type='connection']">
     <xsl:variable name="userXML" select="document(concat('userconnection:', text()))"/>
@@ -602,95 +598,60 @@
         </xsl:if>
       </xsl:for-each>
     </xsl:if>
-
   </xsl:template>
 
-  <xsl:template match="mods:nameIdentifier[@type='lsf']">
-    <dt>
-      <xsl:value-of select="'LSF ID:'" />
-    </dt>
-    <dd>
-      <a title="LSF ID: {.}" href="{$UBO.LSF.Link}{.}">LSF</a>
-    </dd>
-  </xsl:template>
-
-  <xsl:template match="mods:nameIdentifier[@type='orcid']">
-    <xsl:variable name="url" select="concat($MCR.ORCID2.LinkURL,text())" />
-    <dt>
-      <xsl:value-of select="'ORCID:'"/>
-    </dt>
-    <dd>
-      <a href="{$url}" title="ORCID iD: {text()}">
-        <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
-      </a>
-    </dd>
-  </xsl:template>
-
-  <xsl:template match="mods:nameIdentifier[@type='researcherid']">
-    <dt>
-      <xsl:value-of select="'ResearcherID:'" />
-    </dt>
-    <dd>
-      <a href="http://www.researcherid.com/rid/{.}">ResearcherID</a>
-    </dd>
-  </xsl:template>
-
-  <xsl:template match="mods:nameIdentifier[@type='gnd']">
-    <dt>
-      <xsl:value-of select="'GND:'" />
-    </dt>
-    <dd>
-      <a href="http://d-nb.info/gnd/{.}">GND</a>
-    </dd>
-  </xsl:template>
-
-  <xsl:param name="UBO.Scopus.Author.Link" />
-
-  <xsl:template match="mods:nameIdentifier[@type='scopus']">
-    <dt>
-      <xsl:value-of select="'SCOPUS Author ID:'" />
-    </dt>
-    <dd>
-      <a href="{$UBO.Scopus.Author.Link}{.}">SCOPUS</a>
-    </dd>
-  </xsl:template>
-
-  <xsl:param name="UBO.Local.Author.Link" />
-
-  <xsl:template match="mods:nameIdentifier[@type='local']">
-    <dt>
-      <xsl:value-of select="i18n:translate('ubo.authorlink.local.title')" />:
-    </dt>
-    <dd>
-      <xsl:choose>
-        <xsl:when test="string-length($UBO.Local.Author.Link) &gt; 0">
-          <a href="{$UBO.Local.Author.Link}{.}"><xsl:value-of select="i18n:translate('ubo.authorlink.local.text')" /></a>
-        </xsl:when>
-        <xsl:otherwise><xsl:value-of select="i18n:translate('ubo.authorlink.local.text')" /></xsl:otherwise>
-      </xsl:choose>
-    </dd>
-  </xsl:template>
+  <xsl:variable name="nameIdentifierClassification" select="document('classification:metadata:-1:children:nameIdentifier')"/>
 
   <xsl:template match="mods:nameIdentifier">
-    <xsl:variable name="badge.label">
-      <xsl:choose>
-        <xsl:when test="i18n:exists(concat('badge.nameIdentifier.', @type))">
-          <xsl:value-of select="i18n:translate(concat('badge.nameIdentifier.', @type))"/>
+    <xsl:variable name="identifierType" select="@type" />
+    <xsl:variable name="classNode" select="$nameIdentifierClassification/.//category[@ID=$identifierType]"/>
+    <xsl:choose>
+        <xsl:when test="count($classNode)&gt;0 and count($classNode/label[@xml:lang='x-display' and @text='true'])&gt;0">
+          <dt>
+            <xsl:value-of select="$classNode/label[lang($CurrentLang)]/@text"/>
+          </dt>
+          <dd>
+            <xsl:choose>
+              <xsl:when test="@type='orcid'">
+                <!-- special display code for orcid -->
+                <xsl:variable name="url" select="concat($MCR.ORCID2.LinkURL, .)" />
+                <a href="{$url}" title="ORCID iD: {.}">
+                  <xsl:value-of select="." />
+                  <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
+                </a>
+              </xsl:when>
+              <xsl:when test="count($classNode/label[@xml:lang='x-uri']) &gt;0">
+                <!-- display as link -->
+                <a href="{$classNode/label[@xml:lang='x-uri']/@text}{.}" title="{$classNode/label[lang($CurrentLang)]/@text}: {.}">
+                  <xsl:value-of select="." />
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                <!-- display as text -->
+                <xsl:value-of select="." />
+              </xsl:otherwise>
+            </xsl:choose>
+          </dd>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="@type"/>
+          <xsl:variable name="identifier.label">
+            <xsl:choose>
+              <xsl:when test="i18n:exists(concat('badge.nameIdentifier.', @type))">
+                <xsl:value-of select="i18n:translate(concat('badge.nameIdentifier.', @type))"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="@type"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <dt>
+            <xsl:value-of select="$identifier.label" />
+          </dt>
+          <dd>
+            <xsl:value-of select="." />
+          </dd>
         </xsl:otherwise>
       </xsl:choose>
-    </xsl:variable>
-
-    <dt>
-      <xsl:value-of select="concat(@type, ': ', .)" />
-    </dt>
-    <dd>
-      <a href="javascript:void(0)">
-        <xsl:value-of select="$badge.label" />
-      </a>
-    </dd>
   </xsl:template>
 
   <!-- ========== Konferenz ========== -->
