@@ -606,7 +606,8 @@
     <xsl:variable name="identifierType" select="@type" />
     <xsl:variable name="classNode" select="$nameIdentifierClassification/.//category[@ID=$identifierType]"/>
     <xsl:choose>
-        <xsl:when test="count($classNode)&gt;0 and count($classNode/label[@xml:lang='x-display' and @text='true'])&gt;0">
+        <xsl:when test="$classNode/label[@xml:lang='x-display']/@text='false'"></xsl:when>
+        <xsl:when test="count($classNode)&gt;0 and $classNode/label[@xml:lang='x-display']/@text='true'">
           <dt>
             <xsl:value-of select="$classNode/label[lang($CurrentLang)]/@text"/>
           </dt>
