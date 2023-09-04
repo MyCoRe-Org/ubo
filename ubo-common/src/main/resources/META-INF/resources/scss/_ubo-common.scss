@@ -143,6 +143,10 @@
     cursor: pointer;
   }
 
+  .is-connected-author {
+    color: $primary;
+  }
+
   .ubo-mandatory::before {
     content: "* \00A0";
   }
