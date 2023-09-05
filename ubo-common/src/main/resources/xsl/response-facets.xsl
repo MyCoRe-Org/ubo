@@ -233,6 +233,9 @@
       <xsl:when test="$type='project'">
         <xsl:value-of select="mcrxml:getDisplayName('project', $value)"/>
       </xsl:when>
+      <xsl:when test="$type='fundingType'">
+        <xsl:value-of select="mcrxml:getDisplayName('fundingType', $value)"/>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$value"/>
       </xsl:otherwise>
