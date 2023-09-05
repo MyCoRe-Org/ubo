@@ -574,6 +574,15 @@
   },
   {
     "add-field": {
+      "name": "fundingType",
+      "type": "ubo_id",
+      "multiValued": false,
+      "indexed": true,
+      "stored": true
+    }
+  },
+  {
+    "add-field": {
       "name": "tag",
       "type": "ubo_id",
       "multiValued": true,
