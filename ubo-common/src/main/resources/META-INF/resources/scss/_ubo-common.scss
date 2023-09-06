@@ -142,10 +142,11 @@
   .ubo-hover-pointer:hover {
     cursor: pointer;
   }
-  
+
   .ubo-person-popover-close {
-    margin-left: 1rem;
-    margin-bottom: 0.5rem;
+    position: absolute;
+    top: 10px;
+    right: 10px;
   }
 
   .ubo-person-connected {
