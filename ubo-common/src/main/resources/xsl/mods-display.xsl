@@ -537,7 +537,7 @@
                         <xsl:apply-templates select="mods:nameIdentifier[not(@type='connection')]" />
                       </xsl:otherwise>
                     </xsl:choose>
-                    <xsl:if test="$is-connected-author = true() or $is-corresponding-author = true()">
+                    <xsl:if test="mods:affiliation">
                       <dt>
                         <xsl:value-of select="i18n:translate('ubo.person.affiliation')" />
                       </dt>
@@ -621,30 +621,6 @@
                 <xsl:value-of select="@value" />
               </xsl:otherwise>
             </xsl:choose>
-            <xsl:if test="$is-connected-author = true() or $is-corresponding-author = true()">
-              <dt>
-                <xsl:value-of select="i18n:translate('ubo.person.affiliation')" />
-              </dt>
-              <dd>
-                <xsl:apply-templates select="mods:affiliation" mode="details" />
-              </dd>
-            </xsl:if>
-            <xsl:if test="$is-connected-author = true() or $is-corresponding-author = true()">
-              <dt>
-                <xsl:value-of select="i18n:translate('ubo.person.other')" />
-              </dt>
-              <dd>
-                <xsl:if test="$is-connected-author = true()">
-                  <xsl:value-of select="i18n:translate('ubo.person.connected')" />
-                </xsl:if>
-                <xsl:if test="$is-connected-author = true() and $is-corresponding-author = true()">
-                  <br />
-                </xsl:if>
-                <xsl:if test="$is-corresponding-author = true()">
-                  <xsl:value-of select="i18n:translate('ubo.person.corresponding')" />
-                </xsl:if>
-              </dd>
-            </xsl:if>
           </dd>
         </xsl:if>
       </xsl:for-each>
