@@ -576,7 +576,7 @@
     "add-field": {
       "name": "fundingType",
       "type": "ubo_id",
-      "multiValued": false,
+      "multiValued": true,
       "indexed": true,
       "stored": true
     }
