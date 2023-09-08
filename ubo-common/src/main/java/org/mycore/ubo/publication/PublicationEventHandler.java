@@ -213,30 +213,31 @@ public class PublicationEventHandler extends MCREventHandlerBase {
                     elementsToRemove.forEach(modsNameElement::removeContent);
                 });
         }
-        LOGGER.debug("Final document: {}", new XMLOutputter(Format.getPrettyFormat()).outputString(obj.createXML()));
+        LOGGER.info("Final document: {}", new XMLOutputter(Format.getPrettyFormat()).outputString(obj.createXML()));
     }
 
     /**
      * Enriches the mods:name-element that corresponds to the given MCRUser with a mods:nameIdentifier-element if the
      * given MCRUser has an attribute with the name of the so called "lead_id" that is configured in the
-     * mycore.properties and given as parameter "leadIDmods".
+     * mycore.properties and given as parameter "leadID".
      * A new mods:nameIdentifier-element with type "lead_id" and its value will only be created if no other
      * mods:nameIdentifier-element with the same ID/type exists as a sub-element of the given modsNameElement.
 
      * @param modsNameElement the mods:name-element which will be enriched
-     * @param leadIDmods the "lead_id" (as configured in the mycore.properties) in mods format (no prefix "id_")
+     * @param leadID the "lead_id" (as configured in the mycore.properties) in mods format (no prefix "id_")
      * @param mcrUser the MCRUser corresponding to the modsNameElement
      */
-    private void enrichModsNameElementByLeadID(Element modsNameElement, String leadIDmods, MCRUser mcrUser) {
-        String leadIDmycore = "id_" + leadIDmods;
-        if(StringUtils.isNotEmpty(mcrUser.getUserAttribute(leadIDmycore))) {
-            String leadIDValue = mcrUser.getUserAttribute(leadIDmycore);
-            if(StringUtils.isNotEmpty(leadIDValue)) {
-                if(!MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, leadIDmods)) {
-                    LOGGER.info("Enriched publication for MCRUser: {}, with nameIdentifier of type: {} (lead_id) " +
-                            "and value: {}", mcrUser.getUserName(), leadIDmods, leadIDValue);
-                    enrichModsNameElementByNameIdentifierElement(modsNameElement, leadIDmods, leadIDValue);
-                }
+    private void enrichModsNameElementByLeadID(Element modsNameElement, String leadID, MCRUser mcrUser) {
+        String attributeName = "id_" + leadID;
+        Optional<MCRUserAttribute> leadIDAttribute = mcrUser.getAttributes().stream()
+            .filter(a -> a.getName().equals(attributeName) && StringUtils.isNotEmpty(a.getValue())).findFirst();
+
+        if (leadIDAttribute.isPresent()) {
+            String leadIDValue = leadIDAttribute.get().getValue();
+            if (!MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, leadID)) {
+                LOGGER.info("Enriched publication for MCRUser: {}, with nameIdentifier of type: {} (lead_id) " +
+                    "and value: {}", mcrUser.getUserName(), leadID, leadIDValue);
+                enrichModsNameElementByNameIdentifierElement(modsNameElement, leadID, leadIDValue);
             }
         }
     }
