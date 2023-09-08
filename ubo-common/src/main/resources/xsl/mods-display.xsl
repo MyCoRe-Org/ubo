@@ -562,7 +562,7 @@
                         <xsl:apply-templates select="mods:nameIdentifier[not(@type='connection')]" />
                       </xsl:otherwise>
                     </xsl:choose>
-                    <xsl:if test="mods:affiliation">
+                    <xsl:if test="mods:affiliation and check:currentUserIsAdmin()">
                       <dt>
                         <xsl:value-of select="i18n:translate('ubo.person.affiliation')" />
                       </dt>
