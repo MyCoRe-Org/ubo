@@ -1512,9 +1512,9 @@
   <xsl:template match="mods:part">
     <xsl:apply-templates select="mods:detail[@type='volume']" />
     <xsl:apply-templates select="mods:detail[@type='issue']" />
+    <xsl:apply-templates select="mods:detail[@type='article_number']" />
     <xsl:apply-templates select="mods:detail[@type='page']" />
     <xsl:apply-templates select="mods:extent[@unit='pages']" />
-    <xsl:apply-templates select="mods:detail[@type='article_number']" />
   </xsl:template>
 
   <!-- ========== Band/Jahrgang ========== -->
