@@ -202,6 +202,31 @@
     </div>
   </xsl:template>
 
+  <xsl:template match="mods:classification[contains(@authorityURI,'fundingType')][1]" mode="details">
+    <xsl:variable name="fundingType" select="document('notnull:classification:metadata:-1:children:fundingType')/mycoreclass/categories"/>
+
+    <xsl:if test="$fundingType">
+      <div class="row">
+        <div class="col-3">
+          <xsl:value-of select="concat(i18n:translate('ubo.fundingType'), ':')" />
+        </div>
+        <div class="col-9">
+            <xsl:for-each select="../mods:classification[contains(@authorityURI,'fundingType')]">
+              <xsl:if test="position() > 1">
+                <xsl:text>, </xsl:text>
+              </xsl:if>
+
+              <xsl:variable name="category" select="$fundingType//category[@ID=substring-after(current()/@valueURI,'#')]" />
+
+              <a href="{$WebApplicationBaseURL}servlets/solr/select?q={encoder:encode('+objectType:mods')}&amp;fq={encoder:encode(concat('+fundingType:', $category/@ID))}">
+                <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
+              </a>
+            </xsl:for-each>
+        </div>
+      </div>
+    </xsl:if>
+  </xsl:template>
+
   <!-- ========== Ausgabe Datenträgertyp ========== -->
 
   <xsl:template match="mods:classification[contains(@authorityURI,'mediaType')]" mode="details">
@@ -526,7 +551,7 @@
                 <xsl:if test="$is-connected-author = true()">
                   <sup><xsl:value-of select="i18n:translate('ubo.person.connected.sup')" /></sup>
                 </xsl:if>
-  
+
                 <div id="{$popId}-content" class="d-none">
                   <dl>
                     <xsl:choose>
@@ -1110,6 +1135,7 @@
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'partner')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'category')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'partOf')]" mode="details" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fundingType')]" mode="details" />
     <xsl:apply-templates select="mods:abstract/@xlink:href" mode="details" />
     <xsl:apply-templates select="mods:abstract[string-length(.) &gt; 0]" mode="details" />
   </xsl:template>
@@ -1530,7 +1556,7 @@
       </xsl:choose>
     </span>
     <xsl:text> </xsl:text>
-    
+
 
     <xsl:value-of select="mods:number" />
 
