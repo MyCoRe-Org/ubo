@@ -213,7 +213,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
                     elementsToRemove.forEach(modsNameElement::removeContent);
                 });
         }
-        LOGGER.info("Final document: {}", new XMLOutputter(Format.getPrettyFormat()).outputString(obj.createXML()));
+        LOGGER.debug("Final document: {}", new XMLOutputter(Format.getPrettyFormat()).outputString(obj.createXML()));
     }
 
     /**
