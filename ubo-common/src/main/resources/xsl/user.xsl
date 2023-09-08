@@ -20,6 +20,7 @@
 
 <xsl:param name="WebApplicationBaseURL" />
 <xsl:param name="ServletsBaseURL" />
+<xsl:param name="CurrentLang" />
 <xsl:param name="CurrentUser" />
 <xsl:param name="UBO.LSF.Link" />
 <xsl:param name="UBO.Scopus.Author.Link" />
@@ -75,7 +76,7 @@
     </div>
   </article>
 
-  <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and $isCurrentUser  and $MCR.ORCID2.Client.V3.APIMode = 'member'">
+  <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and $isCurrentUser and $MCR.ORCID2.Client.V3.APIMode = 'member'">
     <xsl:call-template name="orcid" />
   </xsl:if>
   <xsl:call-template name="publications" />
@@ -174,7 +175,7 @@
   </tr>
 </xsl:template>
 
-<xsl:template name="id_orcid">
+<xsl:template match="attribute[@name='id_orcid']" priority="1">
   <tr>
     <th scope="row">
       <xsl:if test="orcidUtils:isConnected(@value)">
@@ -195,58 +196,32 @@
   </tr>
 </xsl:template>
 
-<xsl:template name="id_lsf">
-  <tr>
-    <th scope="row">
-      <xsl:value-of select="i18n:translate('user.profile.id.lsf')" />
-      <xsl:text>:</xsl:text>
-    </th>
-    <td>
-      <a href="{$UBO.LSF.Link}{@value}">
-        <xsl:value-of select="@value" />
-      </a>
-    </td>
-  </tr>
-</xsl:template>
-
-<xsl:template name="id_scopus">
-  <tr>
-    <th scope="row">
-      <xsl:value-of select="i18n:translate('user.profile.id.scopus')" />
-      <xsl:text>:</xsl:text>
-    </th>
-    <td>
-      <a href="{$UBO.Scopus.Author.Link}{@value}">
-        <xsl:value-of select="@value" />
-      </a>
-    </td>
-  </tr>
-</xsl:template>
+<xsl:variable name="userAttributeClassification" select="document('xslStyle:nameIDs2UserAttr:classification:metadata:-1:children:nameIdentifier')"/>
 
 <xsl:template match="attribute[starts-with(@name, 'id_')]">
-  <xsl:choose>
-    <xsl:when test="@name='id_scopus'">
-      <xsl:call-template name="id_scopus" />
-    </xsl:when>
-    <xsl:when test="@name='id_orcid'">
-      <xsl:call-template name="id_orcid" />
-    </xsl:when>
-    <xsl:when test="@name='id_lsf'">
-      <xsl:call-template name="id_lsf" />
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:variable name="typeOfId" select="substring-after(@name, 'id_')" />
-      <tr>
-        <th scope="row">
-          <xsl:value-of select="i18n:translate(concat('user.profile.id.', $typeOfId))" />
-          <xsl:text>:</xsl:text>
-        </th>
-        <td>
+  <xsl:variable name="attrName" select="@name"/>
+  <xsl:variable name="classNode" select="$userAttributeClassification/.//category[@ID=$attrName]"/>
+  
+  <tr>
+    <th scope="row">
+      <xsl:value-of select="$classNode/label[lang($CurrentLang)]/@text"/>
+      <xsl:text>:</xsl:text>
+    </th>
+    <td>
+      <xsl:choose>
+        <xsl:when test="count($classNode/label[@xml:lang='x-uri'])  &gt;0">
+          <!-- display as link -->
+          <a href="{$classNode/label[@xml:lang='x-uri']/@text}{@value}" title="{$classNode/label[lang($CurrentLang)]/@text}: {@value}">
+            <xsl:value-of select="@value" />
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- display as text -->
           <xsl:value-of select="@value" />
-        </td>
-      </tr>
-    </xsl:otherwise>
-  </xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+  </tr>
 </xsl:template>
 
 <xsl:template name="orcid">

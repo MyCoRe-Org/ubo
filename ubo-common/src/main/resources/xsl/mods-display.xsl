@@ -590,7 +590,7 @@
 
   <xsl:template match="mods:nameIdentifier[@type='connection']">
     <xsl:variable name="userXML" select="document(concat('userconnection:', text()))"/>
-    <xsl:variable name="userAttributeClassification" select="document('classification:metadata:-1:children:user_attributes')"/>
+    <xsl:variable name="userAttributeClassification" select="document('xslStyle:nameIDs2UserAttr:classification:metadata:-1:children:nameIdentifier')"/>
 
     <xsl:if test="count($userXML/user/attributes/attribute) &gt; 0">
       <xsl:for-each select="$userXML/user/attributes/attribute">
