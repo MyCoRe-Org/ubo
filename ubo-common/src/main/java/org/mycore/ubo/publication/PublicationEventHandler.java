@@ -130,13 +130,21 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     }
 
     @Override
-    protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {
-        // TODO: remove this, since this EventHandler should only work for "ObjectCreated" events!
-        handleObjectCreated(evt, obj);
+    protected void handleObjectCreated(MCREvent evt, MCRObject obj) {
+        handlePublication(obj);
     }
 
     @Override
-    protected void handleObjectCreated(MCREvent evt, MCRObject obj) {
+    protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {
+        handlePublication(obj);
+    }
+
+    @Override
+    protected void handleObjectRepaired(MCREvent evt, MCRObject obj) {
+        handlePublication(obj);
+    }
+
+    protected void handlePublication(MCRObject obj) {
         // get default role for new users
         String defaultRole = loadDefaultRoleConfig();
 
