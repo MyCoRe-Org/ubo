@@ -38,5 +38,10 @@
       <label xml:lang="en" text="Local ID" />
       <label xml:lang="x-display" text="false" />
     </category>
+    <category ID="connection">
+      <label xml:lang="de" text="Connection ID" />
+      <label xml:lang="en" text="Connection ID" />
+      <label xml:lang="x-display" text="false" />
+    </category>
   </categories>
 </mycoreclass>
