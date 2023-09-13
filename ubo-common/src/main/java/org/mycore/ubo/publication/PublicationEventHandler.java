@@ -1,6 +1,7 @@
 package org.mycore.ubo.publication;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,7 +20,9 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectService;
 import org.mycore.ubo.matcher.MCRUserMatcher;
 import org.mycore.ubo.matcher.MCRUserMatcherDTO;
 import org.mycore.ubo.matcher.MCRUserMatcherLocal;
@@ -142,6 +145,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     @Override
     protected void handleObjectRepaired(MCREvent evt, MCRObject obj) {
         handlePublication(obj);
+        MCRXMLMetadataManager.instance().update(obj.getId(), obj.createXML(), new Date());
     }
 
     protected void handlePublication(MCRObject obj) {
@@ -198,7 +202,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
                 } else {
                     Optional<Element> leadId = modsNameElement.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
                         .stream()
-                        .filter(element -> element.getAttributeValue("type").equals(leadIDName))
+                        .filter(element -> leadIDName.equals(element.getAttributeValue("type")))
                         .findFirst();
 
                     if(leadId.isPresent()) {
