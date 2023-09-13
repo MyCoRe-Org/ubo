@@ -22,7 +22,6 @@ import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectService;
 import org.mycore.ubo.matcher.MCRUserMatcher;
 import org.mycore.ubo.matcher.MCRUserMatcherDTO;
 import org.mycore.ubo.matcher.MCRUserMatcherLocal;
