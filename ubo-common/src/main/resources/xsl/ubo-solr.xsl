@@ -177,7 +177,10 @@
     </field>
 
     <field name="{@type}_nid_text">
-      <xsl:apply-templates select=".." mode="solrField" />
+      <xsl:value-of select="../mods:namePart[@type='family']" />
+      <xsl:for-each select="../mods:namePart[@type='given'][1]">
+        <xsl:value-of select="concat(', ',text())" />
+      </xsl:for-each>
     </field>
   </xsl:template>
 
