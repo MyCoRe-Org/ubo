@@ -537,7 +537,7 @@
               <xsl:apply-templates select="." />
 
               <xsl:if test="mods:nameIdentifier or $is-corresponding-author = true()">
-                <span id="{$popId}" title="{i18n:translate('person.search.information')}">
+                <span id="{$popId}" title="{i18n:translate('person.information')}">
                   <xsl:attribute name="class">
                     <xsl:text>ubo-person-popover ml-1 fas fa-user</xsl:text>
                     <xsl:if test="$is-corresponding-author = true()">
