@@ -1657,7 +1657,7 @@
 
   <!-- ========== Sprache der Publikation ========== -->
   <xsl:template match="mods:languageTerm[@type='code']">
-    <xsl:value-of select="document(concat('language:',.))/language/label[@xml:lang=$CurrentLang]" />
+    <xsl:value-of select="document(concat('notnull:language:',.))/language/label[@xml:lang=$CurrentLang]" />
     <xsl:if test="position() != last()">
       <xsl:text>, </xsl:text>
     </xsl:if>
