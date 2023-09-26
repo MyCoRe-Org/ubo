@@ -13,7 +13,7 @@
     <xed:load-resource name="attributeNames" uri="xslStyle:nameIDs2UserAttr:classification:metadata:-1:children:nameIdentifier" />
 
     <xed:bind xpath="attributes">
-      <xed:repeat min="4" xpath="attribute[starts-with(@name,'id_')]" method="clone">
+      <xed:repeat xpath="attribute[starts-with(@name,'id_')]" method="clone">
       
         <div class="form-group row">
         
