@@ -20,7 +20,6 @@ package org.mycore.ubo.picker;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class PersonSearchResult {
 
@@ -90,10 +89,9 @@ public class PersonSearchResult {
      * @param index index at which to insert the first element from the specified {@link PersonSearchResult}
      * */
     public void join(PersonSearchResult other, int index) {
-        Stream<PersonResult> currentPersonList = this.personList.stream();
-
         List<PersonResult> toAdd = other.personList.stream()
-            .filter(pr -> pr.pid == null || !currentPersonList.anyMatch(alreadyInList -> alreadyInList.pid == pr.pid))
+            .filter(pr -> pr.pid == null || !this.personList.stream()
+                .anyMatch(alreadyInList -> alreadyInList.pid == pr.pid))
             .collect(Collectors.toList());
 
         this.personList.addAll(index, toAdd);
