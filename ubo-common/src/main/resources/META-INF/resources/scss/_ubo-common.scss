@@ -156,6 +156,10 @@
   .ubo-person-connected {
     // color: $warning;
   }
+  
+  .personalName {
+    white-space: nowrap;
+  }
 
   .ubo-mandatory::before {
     content: "* \00A0";

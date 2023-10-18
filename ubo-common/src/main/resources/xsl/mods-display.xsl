@@ -512,6 +512,11 @@
             <xsl:variable name="is-corresponding-author" select="contains(mods:role/mods:roleTerm/@valueURI, 'author_roles#corresponding_author')" />
             <xsl:variable name="is-connected-author" select="count(mods:nameIdentifier[@type='connection']) &gt; 0" />
             <xsl:variable name="popId" select="generate-id()"/>
+
+            <xsl:if test="position() &gt; 1">
+              <xsl:text>; </xsl:text>
+            </xsl:if>
+
             <span>
               <xsl:attribute name="class">
                 <xsl:choose>
@@ -528,10 +533,6 @@
                 <xsl:attribute name="title">
                   <xsl:apply-templates select="mods:affiliation" mode="details" />
                 </xsl:attribute>
-              </xsl:if>
-
-              <xsl:if test="position() &gt; 1">
-                <xsl:text>; </xsl:text>
               </xsl:if>
 
               <xsl:apply-templates select="." />
