@@ -57,7 +57,7 @@
     </xsl:variable>
 
     <div class="form-control ubo-repeater-button-box">
-      <button name="{$name}" class="xeditor-pmud fas" title="{$symbol}" tabindex="999">
+      <button type="submit" name="{$name}" class="xeditor-pmud fas" title="{$symbol}" tabindex="999">
         <i class="fas {$fa-class}"></i>
       </button>
     </div>
