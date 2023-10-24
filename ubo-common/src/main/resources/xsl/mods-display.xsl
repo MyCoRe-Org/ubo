@@ -513,18 +513,14 @@
             <xsl:variable name="is-connected-author" select="count(mods:nameIdentifier[@type='connection']) &gt; 0" />
             <xsl:variable name="popId" select="generate-id()"/>
 
-            <xsl:if test="position() &gt; 1">
-              <xsl:text>; </xsl:text>
-            </xsl:if>
-
             <span>
               <xsl:attribute name="class">
                 <xsl:choose>
                   <xsl:when test="position() &lt;= $UBO.Initially.Visible.Authors or (position() = last())">
-                    <xsl:value-of select="'personalName'" />
+                    <xsl:value-of select="'personalName float-left'" />
                   </xsl:when>
                   <xsl:otherwise>
-                    <xsl:value-of select="'personalName d-none'" />
+                    <xsl:value-of select="'personalName float-left d-none'" />
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:attribute>
@@ -591,21 +587,24 @@
                 </div>
               </xsl:if>
 
+              <xsl:if test="not(position() = last())">
+                <xsl:text>;&#160;</xsl:text>
+              </xsl:if>
             </span>
           </xsl:for-each>
-
-          <xsl:variable name="hideable-count" select="count($list) - $UBO.Initially.Visible.Authors - 1"/>
-          <xsl:if test="count($list) &gt; $UBO.Initially.Visible.Authors and $hideable-count &gt; 0">
-            <div class="row">
-              <div class="col">
-                <a href="javascript:void(0)" onclick="ModsDisplayUtils.expand(this)" data-hideable-count="{$hideable-count}">
-                  <xsl:value-of select="i18n:translate('button.view.all.authors', $hideable-count)" />
-                </a>
-              </div>
-            </div>
-          </xsl:if>
         </div>
       </div>
+
+      <xsl:variable name="hideable-count" select="count($list) - $UBO.Initially.Visible.Authors - 1"/>
+      <xsl:if test="count($list) &gt; $UBO.Initially.Visible.Authors and $hideable-count &gt; 0">
+        <div class="row">
+          <div class="col offset-3">
+            <a href="javascript:void(0)" onclick="ModsDisplayUtils.expand(this)" data-hideable-count="{$hideable-count}">
+              <xsl:value-of select="i18n:translate('button.view.all.authors', $hideable-count)" />
+            </a>
+          </div>
+        </div>
+      </xsl:if>
     </xsl:if>
   </xsl:template>
 
