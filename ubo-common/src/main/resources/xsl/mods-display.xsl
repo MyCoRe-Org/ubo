@@ -545,11 +545,12 @@
                     </xsl:if>
                   </xsl:attribute>
                 </span>
+
                 <xsl:if test="$is-connected-author = true()">
                   <sup><xsl:value-of select="i18n:translate('ubo.person.connected.sup')" /></sup>
                 </xsl:if>
 
-                <div id="{$popId}-content" class="d-none">
+                <span id="{$popId}-content" class="d-none">
                   <dl>
                     <xsl:choose>
                       <xsl:when test="count(mods:nameIdentifier[@type='connection']) &gt;0">
@@ -584,7 +585,7 @@
                       </dd>
                     </xsl:if>
                   </dl>
-                </div>
+                </span>
               </xsl:if>
 
               <xsl:if test="not(position() = last())">
