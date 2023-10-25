@@ -513,10 +513,6 @@
             <xsl:variable name="is-connected-author" select="count(mods:nameIdentifier[@type='connection']) &gt; 0" />
             <xsl:variable name="popId" select="generate-id()"/>
 
-            <xsl:if test="position() &gt; 1">
-              <xsl:text>; </xsl:text>
-            </xsl:if>
-
             <span>
               <xsl:attribute name="class">
                 <xsl:choose>
@@ -549,11 +545,12 @@
                     </xsl:if>
                   </xsl:attribute>
                 </span>
+
                 <xsl:if test="$is-connected-author = true()">
                   <sup><xsl:value-of select="i18n:translate('ubo.person.connected.sup')" /></sup>
                 </xsl:if>
 
-                <div id="{$popId}-content" class="d-none">
+                <span id="{$popId}-content" class="d-none">
                   <dl>
                     <xsl:choose>
                       <xsl:when test="count(mods:nameIdentifier[@type='connection']) &gt;0">
@@ -588,24 +585,26 @@
                       </dd>
                     </xsl:if>
                   </dl>
-                </div>
+                </span>
               </xsl:if>
-
+              <xsl:if test="not(position() = last())">
+                <xsl:text>;&#160;</xsl:text>
+              </xsl:if>
             </span>
           </xsl:for-each>
-
-          <xsl:variable name="hideable-count" select="count($list) - $UBO.Initially.Visible.Authors - 1"/>
-          <xsl:if test="count($list) &gt; $UBO.Initially.Visible.Authors and $hideable-count &gt; 0">
-            <div class="row">
-              <div class="col">
-                <a href="javascript:void(0)" onclick="ModsDisplayUtils.expand(this)" data-hideable-count="{$hideable-count}">
-                  <xsl:value-of select="i18n:translate('button.view.all.authors', $hideable-count)" />
-                </a>
-              </div>
-            </div>
-          </xsl:if>
         </div>
       </div>
+
+      <xsl:variable name="hideable-count" select="count($list) - $UBO.Initially.Visible.Authors - 1"/>
+      <xsl:if test="count($list) &gt; $UBO.Initially.Visible.Authors and $hideable-count &gt; 0">
+        <div class="row">
+          <div class="col offset-3">
+            <a href="javascript:void(0)" onclick="ModsDisplayUtils.expand(this)" data-hideable-count="{$hideable-count}">
+              <xsl:value-of select="i18n:translate('button.view.all.authors', $hideable-count)" />
+            </a>
+          </div>
+        </div>
+      </xsl:if>
     </xsl:if>
   </xsl:template>
 
