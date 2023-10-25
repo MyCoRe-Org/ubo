@@ -517,10 +517,10 @@
               <xsl:attribute name="class">
                 <xsl:choose>
                   <xsl:when test="position() &lt;= $UBO.Initially.Visible.Authors or (position() = last())">
-                    <xsl:value-of select="'personalName float-left'" />
+                    <xsl:value-of select="'personalName'" />
                   </xsl:when>
                   <xsl:otherwise>
-                    <xsl:value-of select="'personalName float-left d-none'" />
+                    <xsl:value-of select="'personalName d-none'" />
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:attribute>
@@ -587,7 +587,6 @@
                   </dl>
                 </span>
               </xsl:if>
-
               <xsl:if test="not(position() = last())">
                 <xsl:text>;&#160;</xsl:text>
               </xsl:if>
