@@ -9,7 +9,7 @@
 
 package org.mycore.ubo;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Attribute;
@@ -161,8 +161,9 @@ public class DozBibGNDCommands {
         int minLength = Math.min(titleFromAleph.length(), titleFromBibEntry.length());
         int maxDistance = minLength * MAX_DIFFERENCE_PERCENT / 100;
 
-        int distance = StringUtils.getLevenshteinDistance(normalizeTitle(titleFromAleph),
-            normalizeTitle(titleFromBibEntry));
+        int distance = LevenshteinDistance.getDefaultInstance()
+            .apply(normalizeTitle(titleFromAleph), normalizeTitle(titleFromBibEntry))
+            .intValue();
 
         if (distance > maxDistance) {
             String id = publication.getAttributeValue("ID");
