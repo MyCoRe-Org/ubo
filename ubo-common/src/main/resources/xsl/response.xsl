@@ -9,10 +9,11 @@
         xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
         xmlns:mods="http://www.loc.gov/mods/v3"
         xmlns:mcr="http://www.mycore.org/"
+        xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
         xmlns:encoder="xalan://java.net.URLEncoder"
         xmlns:str="xalan://java.lang.String"
         xmlns:basket="xalan://org.mycore.ubo.basket.BasketUtils"
-        exclude-result-prefixes="xsl xalan i18n mods mcr encoder str basket">
+        exclude-result-prefixes="xsl xalan i18n mods mcr mcrxml encoder str basket">
 
 <xsl:include href="mods-display.xsl" />
 <xsl:include href="response-facets.xsl" />
@@ -108,9 +109,8 @@
   <html id="dozbib.search">
     <head>
       <xsl:call-template name="page.title" />
-      <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update')">
-        <script src="{$WebApplicationBaseURL}modules/orcid2/js/orcid-auth.js"/>
-        <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
+      <xsl:if test="not(mcrxml:isCurrentUserGuestUser()) and string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update')">
+
         <xsl:call-template name="notification-dialog">
           <xsl:with-param name="id" select="'success'"/>
           <xsl:with-param name="title" select="'⚠'"/>
