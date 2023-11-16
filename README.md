@@ -26,6 +26,7 @@ grant all privileges on ubo.* to ubo@localhost identified by 'ubo';
 <mapping-file>META-INF/mycore-iview2-mappings.xml</mapping-file>
 <mapping-file>META-INF/mycore-viewer-mappings.xml</mapping-file>
 <mapping-file>META-INF/mycore-ifs-mappings.xml</mapping-file>
+
 ```
 ```
 vi ~/.mycore/ubo/resources/META-INF/persistence.xml
