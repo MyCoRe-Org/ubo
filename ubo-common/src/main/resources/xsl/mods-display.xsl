@@ -588,7 +588,7 @@
                 </span>
               </xsl:if>
               <xsl:if test="not(position() = last())">
-                <xsl:text>;&#160;</xsl:text>
+                <xsl:text>;</xsl:text>
               </xsl:if>
             </span>
           </xsl:for-each>
