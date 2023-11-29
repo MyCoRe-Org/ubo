@@ -156,10 +156,11 @@
   .ubo-person-connected {
     // color: $warning;
   }
-  
+
   .personalName {
     white-space: nowrap;
-    float:left;
+    display: inline-block;
+    margin-right: .5em;
   }
 
   .ubo-mandatory::before {
