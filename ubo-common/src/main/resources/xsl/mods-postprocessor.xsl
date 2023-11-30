@@ -2,11 +2,11 @@
 
 <!-- Post-processor for editor forms producing MODS -->
 
-<xsl:stylesheet version="1.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:mods="http://www.loc.gov/mods/v3"
-  xmlns:xalan="http://xml.apache.org/xalan" 
-  xmlns:xlink="http://www.w3.org/1999/xlink" 
+  xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
   exclude-result-prefixes="xsl xalan xlink">
 
   <xsl:include href="copynodes.xsl" />
@@ -23,6 +23,17 @@
   </xsl:template>
 
   <xsl:template match="mods:location/mods:url[contains(text(),'doi.org/10.')]" />
+
+  <xsl:template match="mods:genre[@type = 'intern']" >
+    <xsl:copy>
+      <xsl:attribute name="authorityURI">
+        <xsl:value-of select="concat($WebApplicationBaseURL, 'classifications/ubogenre')"/>
+      </xsl:attribute>
+      <xsl:attribute name="valueURI">
+        <xsl:value-of select="concat($WebApplicationBaseURL, 'classifications/ubogenre#', .)"/>
+      </xsl:attribute>
+    </xsl:copy>
+  </xsl:template>
 
   <xsl:template match="mods:location/mods:url[contains(text(),'doi.org/10.')]" mode="url2doi">
     <mods:identifier type="doi">
@@ -46,7 +57,7 @@
   <xsl:template match="mods:part/mods:extent[@unit='pages']" xmlns:pages="xalan://org.mycore.mods.MCRMODSPagesHelper">
     <xsl:copy-of select="pages:buildExtentPagesNodeSet(mods:list/text())" />
   </xsl:template>
-  
+
   <!-- Derive dateIssued from dateOther if not present -->
   <xsl:template match="mods:dateOther[(@type='accepted') and not(../mods:dateIssued)]">
     <mods:dateIssued>
@@ -55,7 +66,7 @@
     </mods:dateIssued>
     <xsl:copy-of select="." />
   </xsl:template>
-  
+
   <!-- Move volume number from series up to titleInfo as partNumber if series is not specified -->
   <xsl:template match="mods:titleInfo">
     <xsl:copy>
