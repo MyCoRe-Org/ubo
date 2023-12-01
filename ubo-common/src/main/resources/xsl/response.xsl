@@ -109,7 +109,12 @@
   <html id="dozbib.search">
     <head>
       <xsl:call-template name="page.title" />
-      <xsl:if test="not(mcrxml:isCurrentUserGuestUser()) and string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update')">
+      <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update')">
+
+        <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
+          <script src="{$WebApplicationBaseURL}modules/orcid2/js/orcid-auth.js"/>
+          <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
+        </xsl:if>
 
         <xsl:call-template name="notification-dialog">
           <xsl:with-param name="id" select="'success'"/>
