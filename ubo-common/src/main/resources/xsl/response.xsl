@@ -109,18 +109,24 @@
   <html id="dozbib.search">
     <head>
       <xsl:call-template name="page.title" />
-      <xsl:if test="not(mcrxml:isCurrentUserGuestUser()) and string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update')">
+      <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update')">
 
-        <xsl:call-template name="notification-dialog">
-          <xsl:with-param name="id" select="'success'"/>
-          <xsl:with-param name="title" select="'⚠'"/>
-          <xsl:with-param name="message" select="i18n:translate('orcid.publication.action.confirmation')"/>
-        </xsl:call-template>
-        <xsl:call-template name="notification-dialog">
-          <xsl:with-param name="id" select="'fail'"/>
-          <xsl:with-param name="title" select="'⚠'"/>
-          <xsl:with-param name="message" select="i18n:translate('upload.failed')"/>
-        </xsl:call-template>
+        <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
+          <script src="{$WebApplicationBaseURL}modules/orcid2/js/orcid-auth.js"/>
+          <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
+
+          <xsl:call-template name="notification-dialog">
+            <xsl:with-param name="id" select="'success'"/>
+            <xsl:with-param name="title" select="'⚠'"/>
+            <xsl:with-param name="message" select="i18n:translate('orcid.publication.action.confirmation')"/>
+          </xsl:call-template>
+
+          <xsl:call-template name="notification-dialog">
+            <xsl:with-param name="id" select="'fail'"/>
+            <xsl:with-param name="title" select="'⚠'"/>
+            <xsl:with-param name="message" select="i18n:translate('upload.failed')"/>
+          </xsl:call-template>
+        </xsl:if>
       </xsl:if>
     </head>
     <body>
