@@ -114,18 +114,19 @@
         <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
           <script src="{$WebApplicationBaseURL}modules/orcid2/js/orcid-auth.js"/>
           <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
-        </xsl:if>
 
-        <xsl:call-template name="notification-dialog">
-          <xsl:with-param name="id" select="'success'"/>
-          <xsl:with-param name="title" select="'⚠'"/>
-          <xsl:with-param name="message" select="i18n:translate('orcid.publication.action.confirmation')"/>
-        </xsl:call-template>
-        <xsl:call-template name="notification-dialog">
-          <xsl:with-param name="id" select="'fail'"/>
-          <xsl:with-param name="title" select="'⚠'"/>
-          <xsl:with-param name="message" select="i18n:translate('upload.failed')"/>
-        </xsl:call-template>
+          <xsl:call-template name="notification-dialog">
+            <xsl:with-param name="id" select="'success'"/>
+            <xsl:with-param name="title" select="'⚠'"/>
+            <xsl:with-param name="message" select="i18n:translate('orcid.publication.action.confirmation')"/>
+          </xsl:call-template>
+
+          <xsl:call-template name="notification-dialog">
+            <xsl:with-param name="id" select="'fail'"/>
+            <xsl:with-param name="title" select="'⚠'"/>
+            <xsl:with-param name="message" select="i18n:translate('upload.failed')"/>
+          </xsl:call-template>
+        </xsl:if>
       </xsl:if>
     </head>
     <body>
