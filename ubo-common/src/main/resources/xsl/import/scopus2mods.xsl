@@ -7,6 +7,9 @@
 
   <xsl:output method="xml" encoding="UTF-8" indent="yes" xalan:indent-amount="2" />
 
+  <xsl:key name="authors" match="author[@auid]" use="@auid" />
+  <xsl:key name="affiliation" match="affiliation[@afid]" use="@afid" />
+
   <xsl:template match="scopus:abstracts-retrieval-response">
     <mods:mods>
       <xsl:apply-templates select="item/bibrecord/head/citation-info/citation-type/@code" />
@@ -61,7 +64,7 @@
         <mods:roleTerm type="code" authority="marcrelator">aut</mods:roleTerm>
       </mods:role>
       <xsl:apply-templates select="scopus:affiliation" />
-      <xsl:apply-templates select="//author[@auid=current()/@auid][1]/ce:e-address[@type='email']" />
+      <xsl:apply-templates select="key('authors',@auid)[1]/ce:e-address[@type='email']" />
     </mods:name>
   </xsl:template>
 
@@ -72,7 +75,7 @@
   </xsl:template>
 
   <xsl:template match="scopus:affiliation">
-    <xsl:apply-templates select="//affiliation[@afid=current()/@id][1]" />
+    <xsl:apply-templates select="key('affiliation',@id)[1]" />
   </xsl:template>
 
   <xsl:template match="affiliation">
