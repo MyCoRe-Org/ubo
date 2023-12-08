@@ -182,25 +182,25 @@ public class PublicationEventHandler extends MCREventHandlerBase {
         MCRUserMatcherDTO localMatcherDTO = localMatcher.matchUser(matcherDTO);
         if (localMatcherDTO.wasMatchedOrEnriched()) {
             handleUser(modsNameElement, localMatcherDTO.getMCRUser());
+        } else if (MCRUserMatcherUtils.checkAffiliation(modsNameElement) &&
+            (!MCRUserMatcherUtils.getNameIdentifiers(modsNameElement).isEmpty())) {
+            MCRUser affiliatedUser
+                = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement, unvalidatedRealmID);
+            handleUser(modsNameElement, affiliatedUser);
         } else {
-            if(MCRUserMatcherUtils.checkAffiliation(modsNameElement) &&
-                    (MCRUserMatcherUtils.getNameIdentifiers(modsNameElement).size() > 0)) {
-                MCRUser affiliatedUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement, unvalidatedRealmID);
-                handleUser(modsNameElement, affiliatedUser);
-            } else {
-                Optional<Element> leadId = modsNameElement.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
-                    .stream()
-                    .filter(element -> leadIDName.equals(element.getAttributeValue("type")))
-                    .findFirst();
+            Optional<Element> leadId = modsNameElement.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
+                .stream()
+                .filter(element -> leadIDName.equals(element.getAttributeValue("type")))
+                .findFirst();
 
-                if(leadId.isPresent()) {
-                    MCRUser newLocalUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(
-                        modsNameElement, MCRRealmFactory.getLocalRealm().getID());
-                    newLocalUser.setRealName(getRealNameFromNameElement(modsNameElement, newLocalUser));
-                    connectModsNameElementWithMCRUser(modsNameElement, newLocalUser);
-                    MCRUserManager.updateUser(newLocalUser);
-                }
+            if (leadId.isPresent()) {
+                MCRUser newLocalUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(
+                    modsNameElement, MCRRealmFactory.getLocalRealm().getID());
+                newLocalUser.setRealName(getRealNameFromNameElement(modsNameElement, newLocalUser));
+                connectModsNameElementWithMCRUser(modsNameElement, newLocalUser);
+                MCRUserManager.updateUser(newLocalUser);
             }
+
         }
 
         MCRConfiguration2.getBoolean(CONFIG_SKIP_LEAD_ID)
