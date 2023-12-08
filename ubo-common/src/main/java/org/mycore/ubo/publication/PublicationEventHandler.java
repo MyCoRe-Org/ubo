@@ -181,19 +181,12 @@ public class PublicationEventHandler extends MCREventHandlerBase {
 
         MCRUserMatcherDTO localMatcherDTO = localMatcher.matchUser(matcherDTO);
         if (localMatcherDTO.wasMatchedOrEnriched()) {
-            MCRUser mcrUserFinal = localMatcherDTO.getMCRUser();
-            mcrUserFinal.assignRole(defaultRoleForNewlyCreatedUsers);
-            enrichModsNameElementByLeadID(modsNameElement, leadIDName, mcrUserFinal);
-            connectModsNameElementWithMCRUser(modsNameElement, mcrUserFinal);
-            MCRUserManager.updateUser(mcrUserFinal);
+            handleUser(modsNameElement, localMatcherDTO.getMCRUser());
         } else {
             if(MCRUserMatcherUtils.checkAffiliation(modsNameElement) &&
                     (MCRUserMatcherUtils.getNameIdentifiers(modsNameElement).size() > 0)) {
                 MCRUser affiliatedUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement, unvalidatedRealmID);
-                affiliatedUser.assignRole(defaultRoleForNewlyCreatedUsers);
-                enrichModsNameElementByLeadID(modsNameElement, leadIDName, affiliatedUser);
-                connectModsNameElementWithMCRUser(modsNameElement, affiliatedUser);
-                MCRUserManager.updateUser(affiliatedUser);
+                handleUser(modsNameElement, affiliatedUser);
             } else {
                 Optional<Element> leadId = modsNameElement.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
                     .stream()
@@ -219,6 +212,13 @@ public class PublicationEventHandler extends MCREventHandlerBase {
                         .collect(Collectors.toList());
                 elementsToRemove.forEach(modsNameElement::removeContent);
             });
+    }
+
+    private void handleUser(Element modsName, MCRUser user) {
+        enrichModsNameElementByLeadID(modsName, leadIDName, user);
+        connectModsNameElementWithMCRUser(modsName, user);
+        user.assignRole(defaultRoleForNewlyCreatedUsers);
+        MCRUserManager.updateUser(user);
     }
 
     private void logUserMatch(Element modsNameElement, MCRUserMatcherDTO matcherDTO, MCRUserMatcher matcher) {
