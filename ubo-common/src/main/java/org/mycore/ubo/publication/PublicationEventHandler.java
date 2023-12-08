@@ -7,6 +7,7 @@ import org.jdom2.Element;
 import org.jdom2.filter.Filters;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.jdom2.xpath.XPathExpression;
 import org.mycore.common.MCRClassTools;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.config.MCRConfiguration2;
@@ -126,10 +127,10 @@ public class PublicationEventHandler extends MCREventHandlerBase {
             for (int i = 0; i < matcherClasses.length; i++) {
                 String matcherClass = matcherClasses[i];
                 try {
+                    
                     matchers.add((MCRUserMatcher) MCRClassTools.forName(matcherClass).getDeclaredConstructor().newInstance());
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new MCRConfigurationException("Property key " + CONFIG_MATCHERS + " not valid.");
+                    throw new MCRConfigurationException("Property key " + CONFIG_MATCHERS + " not valid.", e);
                 }
             }
         }
@@ -215,7 +216,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     }
 
     private void handleUser(Element modsName, MCRUser user) {
-        enrichModsNameElementByLeadID(modsName, leadIDName, user);
+        enrichModsNameElementByLeadID(modsName, user);
         connectModsNameElementWithMCRUser(modsName, user);
         user.assignRole(defaultRoleForNewlyCreatedUsers);
         MCRUserManager.updateUser(user);
@@ -239,30 +240,25 @@ public class PublicationEventHandler extends MCREventHandlerBase {
      * mods:nameIdentifier-element with the same ID/type exists as a sub-element of the given modsNameElement.
 
      * @param modsNameElement the mods:name-element which will be enriched
-     * @param leadID the "lead_id" (as configured in the mycore.properties) in mods format (no prefix "id_")
      * @param mcrUser the MCRUser corresponding to the modsNameElement
      */
-    private void enrichModsNameElementByLeadID(Element modsNameElement, String leadID, MCRUser mcrUser) {
-        String attributeName = "id_" + leadID;
+    private void enrichModsNameElementByLeadID(Element modsNameElement, MCRUser mcrUser) {
+        String attributeName = "id_" + leadIDName;
         Optional<MCRUserAttribute> leadIDAttribute = mcrUser.getAttributes().stream()
             .filter(a -> a.getName().equals(attributeName) && StringUtils.isNotEmpty(a.getValue())).findFirst();
 
         if (leadIDAttribute.isPresent()) {
             String leadIDValue = leadIDAttribute.get().getValue();
-            if (!MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, leadID)) {
+            if (!MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, leadIDName)) {
                 LOGGER.info("Enriched publication for MCRUser: {}, with nameIdentifier of type: {} (lead_id) " +
-                    "and value: {}", mcrUser.getUserName(), leadID, leadIDValue);
-                enrichModsNameElementByNameIdentifierElement(modsNameElement, leadID, leadIDValue);
+                    "and value: {}", mcrUser.getUserName(), leadIDName, leadIDValue);
+                addNameIdentifierTo(modsNameElement, leadIDName, leadIDValue);
             }
         }
     }
 
-    private void enrichModsNameElementByNameIdentifierElement(Element modsNameElement,
-                                                              String attributeType, String attributeValue) {
-        Element nameIdentifier = new Element("nameIdentifier", MODS_NAMESPACE)
-                .setAttribute("type", attributeType)
-                .setText(attributeValue);
-        modsNameElement.addContent(nameIdentifier);
+    private void addNameIdentifierTo(Element modsName, String type, String value) {
+        modsName.addContent(new Element("nameIdentifier", MODS_NAMESPACE).setAttribute("type", type).setText(value));
     }
 
     /**
@@ -285,22 +281,24 @@ public class PublicationEventHandler extends MCREventHandlerBase {
             if(!MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, modsTypeName)) {
                 LOGGER.info("Connecting publication with MCRUser: {}, via nameIdentifier of type: {} " +
                         "and value: {}", mcrUser.getUserName(), modsTypeName, uuid);
-                enrichModsNameElementByNameIdentifierElement(modsNameElement, modsTypeName, uuid);
+                addNameIdentifierTo(modsNameElement, modsTypeName, uuid);
             }
         }
     }
 
-    protected String getRealNameFromNameElement(Element nameElement, MCRUser mcrUser){
-        Element givenName = XPATH_FACTORY.compile("mods:namePart[@type='given']",
-                    Filters.element(), null, MODS_NAMESPACE).evaluateFirst(nameElement);
+    private final static XPathExpression<Element> XPATH_TO_GET_GIVEN_NAME
+        = XPATH_FACTORY.compile("mods:namePart[@type='given']", Filters.element(), null, MODS_NAMESPACE);
+    private final static XPathExpression<Element> XPATH_TO_GET_FAMILY_NAME
+        = XPATH_FACTORY.compile("mods:namePart[@type='family']", Filters.element(), null, MODS_NAMESPACE);
 
-        Element familyName = XPATH_FACTORY.compile("mods:namePart[@type='family']",
-            Filters.element(), null, MODS_NAMESPACE).evaluateFirst(nameElement);
+    protected String getRealNameFromNameElement(Element nameElement, MCRUser mcrUser) {
+        Element givenName = XPATH_TO_GET_GIVEN_NAME.evaluateFirst(nameElement);
+        Element familyName = XPATH_TO_GET_FAMILY_NAME.evaluateFirst(nameElement);
 
         if((givenName != null) && (familyName != null)) {
             return familyName.getText() + ", " + givenName.getText();
+        } else {
+            return mcrUser.getUserID();
         }
-
-        return mcrUser.getUserID();
     }
 }
