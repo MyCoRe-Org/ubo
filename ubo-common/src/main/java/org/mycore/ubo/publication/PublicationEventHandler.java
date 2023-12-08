@@ -92,6 +92,27 @@ public class PublicationEventHandler extends MCREventHandlerBase {
 
     private final static String CONNECTION_TYPE_NAME = "id_connection";
 
+    /** The default Role that is assigned to newly created users **/
+    private String defaultRoleForNewlyCreatedUsers;
+    
+    /** The ID of the realm for newly created unvalidated MCRUsers **/
+    private String unvalidatedRealmID;
+
+    /** If the matched MCRUser has this ID set in its attributes, enrich the publication with it */
+    private String leadIDName;
+
+    /** Matcher to lookup a matching local user **/
+    private MCRUserMatcher localMatcher;
+
+    public PublicationEventHandler() {
+        super();
+                
+        this.defaultRoleForNewlyCreatedUsers = MCRConfiguration2.getString(CONFIG_DEFAULT_ROLE).orElse("submitter");
+        this.unvalidatedRealmID = MCRConfiguration2.getString(CONFIG_UNVALIDATED_REALM).get();
+        this.leadIDName = MCRConfiguration2.getString(CONFIG_LEAD_ID).orElse("");
+        this.localMatcher = new MCRUserMatcherLocal();
+    }
+
     private List<MCRUserMatcher> loadMatcherImplementationChain() {
         List<MCRUserMatcher> matchers = new ArrayList<>();
 
@@ -109,18 +130,6 @@ public class PublicationEventHandler extends MCREventHandlerBase {
             }
         }
         return matchers;
-    }
-
-    private String loadLeadIDName() {
-        return MCRConfiguration2.getString(CONFIG_LEAD_ID).orElse("");
-    }
-
-    private String loadDefaultRoleConfig() {
-        return MCRConfiguration2.getString(CONFIG_DEFAULT_ROLE).orElse("submitter");
-    }
-
-    private String loadUnvalidatedRealmConfig() {
-        return MCRConfiguration2.getString(CONFIG_UNVALIDATED_REALM).get();
     }
 
     /**
@@ -148,21 +157,12 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     }
 
     protected void handlePublication(MCRObject obj) {
-        // get default role for new users
-        String defaultRole = loadDefaultRoleConfig();
-
-        // get realmID for unvalidated MCRUsers
-        final String UNVALIDATED_REALM = loadUnvalidatedRealmConfig();
 
         // get all mods:name from persons (authors etc.) of the publication
         List<Element> modsNameElements = MCRUserMatcherUtils.getNameElements(obj);
 
-        // leadIDName -> if the matched MCRUser has this ID set in the attributes, enrich the publication with it
-        String leadIDName = loadLeadIDName();
-
         // for every mods:name element, call our configured Implementation(s) of MCRUserMatcher
         List<MCRUserMatcher> matchers = loadMatcherImplementationChain();
-        MCRUserMatcher localMatcher = new MCRUserMatcherLocal();
 
         for(Element modsNameElement : modsNameElements) {
 
@@ -186,15 +186,15 @@ public class PublicationEventHandler extends MCREventHandlerBase {
             MCRUserMatcherDTO localMatcherDTO = localMatcher.matchUser(matcherDTO);
             if (localMatcherDTO.wasMatchedOrEnriched()) {
                 MCRUser mcrUserFinal = localMatcherDTO.getMCRUser();
-                mcrUserFinal.assignRole(defaultRole);
+                mcrUserFinal.assignRole(defaultRoleForNewlyCreatedUsers);
                 enrichModsNameElementByLeadID(modsNameElement, leadIDName, mcrUserFinal);
                 connectModsNameElementWithMCRUser(modsNameElement, mcrUserFinal);
                 MCRUserManager.updateUser(mcrUserFinal);
             } else {
                 if(MCRUserMatcherUtils.checkAffiliation(modsNameElement) &&
                         (MCRUserMatcherUtils.getNameIdentifiers(modsNameElement).size() > 0)) {
-                    MCRUser affiliatedUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement, UNVALIDATED_REALM);
-                    affiliatedUser.assignRole(defaultRole);
+                    MCRUser affiliatedUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement, unvalidatedRealmID);
+                    affiliatedUser.assignRole(defaultRoleForNewlyCreatedUsers);
                     enrichModsNameElementByLeadID(modsNameElement, leadIDName, affiliatedUser);
                     connectModsNameElementWithMCRUser(modsNameElement, affiliatedUser);
                     MCRUserManager.updateUser(affiliatedUser);
