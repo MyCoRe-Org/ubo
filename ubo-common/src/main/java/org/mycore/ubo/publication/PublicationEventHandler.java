@@ -188,20 +188,12 @@ public class PublicationEventHandler extends MCREventHandlerBase {
             MCRUser affiliatedUser
                 = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement, unvalidatedRealmID);
             handleUser(modsNameElement, affiliatedUser);
-        } else {
-            Optional<Element> leadId = modsNameElement.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
-                .stream()
-                .filter(element -> leadIDName.equals(element.getAttributeValue("type")))
-                .findFirst();
-
-            if (leadId.isPresent()) {
-                MCRUser newLocalUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(
-                    modsNameElement, MCRRealmFactory.getLocalRealm().getID());
-                newLocalUser.setRealName(buildPersonNameFromMODS(modsNameElement).orElse(newLocalUser.getUserID()));
-                connectModsNameElementWithMCRUser(modsNameElement, newLocalUser);
-                MCRUserManager.updateUser(newLocalUser);
-            }
-
+        } else if (containsLeadID(modsNameElement)) {
+            MCRUser newLocalUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(
+                modsNameElement, MCRRealmFactory.getLocalRealm().getID());
+            newLocalUser.setRealName(buildPersonNameFromMODS(modsNameElement).orElse(newLocalUser.getUserID()));
+            connectModsNameElementWithMCRUser(modsNameElement, newLocalUser);
+            MCRUserManager.updateUser(newLocalUser);
         }
 
         MCRConfiguration2.getBoolean(CONFIG_SKIP_LEAD_ID)
@@ -213,6 +205,11 @@ public class PublicationEventHandler extends MCREventHandlerBase {
                         .collect(Collectors.toList());
                 elementsToRemove.forEach(modsNameElement::removeContent);
             });
+    }
+
+    private boolean containsLeadID(Element modsNameElement) {
+        return modsNameElement.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
+            .stream().anyMatch(element -> leadIDName.equals(element.getAttributeValue("type")));
     }
 
     private void handleUser(Element modsName, MCRUser user) {
@@ -243,18 +240,21 @@ public class PublicationEventHandler extends MCREventHandlerBase {
      * @param mcrUser the MCRUser corresponding to the modsNameElement
      */
     private void enrichModsNameElementByLeadID(Element modsNameElement, MCRUser mcrUser) {
-        String attributeName = "id_" + leadIDName;
-        Optional<MCRUserAttribute> leadIDAttribute = mcrUser.getAttributes().stream()
-            .filter(a -> a.getName().equals(attributeName) && StringUtils.isNotEmpty(a.getValue())).findFirst();
-
-        if (leadIDAttribute.isPresent()) {
-            String leadIDValue = leadIDAttribute.get().getValue();
-            if (!MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, leadIDName)) {
+        if (!MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, leadIDName)) {
+            getLeadIDAttributeFromUser(mcrUser).ifPresent(leadIDAttribute -> {
+                String leadIDValue = leadIDAttribute.getValue();
                 LOGGER.info("Enriched publication for MCRUser: {}, with nameIdentifier of type: {} (lead_id) " +
                     "and value: {}", mcrUser.getUserName(), leadIDName, leadIDValue);
                 addNameIdentifierTo(modsNameElement, leadIDName, leadIDValue);
-            }
+            });
         }
+    }
+
+    private Optional<MCRUserAttribute> getLeadIDAttributeFromUser(MCRUser mcrUser) {
+        String attributeName = "id_" + leadIDName;
+        return mcrUser.getAttributes().stream()
+            .filter(a -> a.getName().equals(attributeName))
+            .filter(a -> StringUtils.isNotEmpty(a.getValue())).findFirst();
     }
 
     private void addNameIdentifierTo(Element modsName, String type, String value) {
