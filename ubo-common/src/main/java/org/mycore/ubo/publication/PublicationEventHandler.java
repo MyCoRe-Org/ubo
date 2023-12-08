@@ -158,73 +158,77 @@ public class PublicationEventHandler extends MCREventHandlerBase {
 
     protected void handlePublication(MCRObject obj) {
 
-        // get all mods:name from persons (authors etc.) of the publication
-        List<Element> modsNameElements = MCRUserMatcherUtils.getNameElements(obj);
-
         // for every mods:name element, call our configured Implementation(s) of MCRUserMatcher
+        // TODO: Do any of these really have a state? Otherwise re-use instances and mv to constructor
         List<MCRUserMatcher> matchers = loadMatcherImplementationChain();
 
-        for(Element modsNameElement : modsNameElements) {
+        // for all mods:name from persons (authors etc.) of the publication...
+        MCRUserMatcherUtils.getNameElements(obj).forEach(modsNameElement -> handleName(matchers, modsNameElement));
 
-            MCRUserMatcherDTO matcherDTO = new MCRUserMatcherDTO(
-                    MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement));
-
-            for (MCRUserMatcher matcher : matchers) {
-                matcherDTO = matcher.matchUser(matcherDTO);
-                MCRUser mcrUser = matcherDTO.getMCRUser();
-                if (matcherDTO.wasMatchedOrEnriched()) {
-                    LOGGER.info("Found a match for user: {} of mods:name: {}, with attributes: {}, using " +
-                                    "matcher: {}",
-                            mcrUser.getUserName(),
-                            new XMLOutputter(Format.getPrettyFormat()).outputString(modsNameElement),
-                            mcrUser.getAttributes().stream().map(a -> a.getName() + "=" + a.getValue())
-                                    .collect(Collectors.joining(" | ")),
-                            matcher.getClass());
-                }
-            }
-
-            MCRUserMatcherDTO localMatcherDTO = localMatcher.matchUser(matcherDTO);
-            if (localMatcherDTO.wasMatchedOrEnriched()) {
-                MCRUser mcrUserFinal = localMatcherDTO.getMCRUser();
-                mcrUserFinal.assignRole(defaultRoleForNewlyCreatedUsers);
-                enrichModsNameElementByLeadID(modsNameElement, leadIDName, mcrUserFinal);
-                connectModsNameElementWithMCRUser(modsNameElement, mcrUserFinal);
-                MCRUserManager.updateUser(mcrUserFinal);
-            } else {
-                if(MCRUserMatcherUtils.checkAffiliation(modsNameElement) &&
-                        (MCRUserMatcherUtils.getNameIdentifiers(modsNameElement).size() > 0)) {
-                    MCRUser affiliatedUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement, unvalidatedRealmID);
-                    affiliatedUser.assignRole(defaultRoleForNewlyCreatedUsers);
-                    enrichModsNameElementByLeadID(modsNameElement, leadIDName, affiliatedUser);
-                    connectModsNameElementWithMCRUser(modsNameElement, affiliatedUser);
-                    MCRUserManager.updateUser(affiliatedUser);
-                } else {
-                    Optional<Element> leadId = modsNameElement.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
-                        .stream()
-                        .filter(element -> leadIDName.equals(element.getAttributeValue("type")))
-                        .findFirst();
-
-                    if(leadId.isPresent()) {
-                        MCRUser newLocalUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(
-                            modsNameElement, MCRRealmFactory.getLocalRealm().getID());
-                        newLocalUser.setRealName(getRealNameFromNameElement(modsNameElement, newLocalUser));
-                        connectModsNameElementWithMCRUser(modsNameElement, newLocalUser);
-                        MCRUserManager.updateUser(newLocalUser);
-                    }
-                }
-            }
-
-            MCRConfiguration2.getBoolean(CONFIG_SKIP_LEAD_ID)
-                .filter(Boolean::booleanValue)
-                .ifPresent(trueValue -> {
-                    List<Element> elementsToRemove = modsNameElement.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
-                            .stream()
-                            .filter(element -> element.getAttributeValue("type").equals(leadIDName))
-                            .collect(Collectors.toList());
-                    elementsToRemove.forEach(modsNameElement::removeContent);
-                });
-        }
         LOGGER.debug("Final document: {}", new XMLOutputter(Format.getPrettyFormat()).outputString(obj.createXML()));
+    }
+
+    private void handleName(List<MCRUserMatcher> matchers, Element modsNameElement) {
+        MCRUser userFromModsName = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement); 
+        MCRUserMatcherDTO matcherDTO = new MCRUserMatcherDTO(userFromModsName);
+
+        for (MCRUserMatcher matcher : matchers) {
+            matcherDTO = matcher.matchUser(matcherDTO);
+            if (matcherDTO.wasMatchedOrEnriched()) {
+                logUserMatch(modsNameElement, matcherDTO, matcher);
+            }
+        }
+
+        MCRUserMatcherDTO localMatcherDTO = localMatcher.matchUser(matcherDTO);
+        if (localMatcherDTO.wasMatchedOrEnriched()) {
+            MCRUser mcrUserFinal = localMatcherDTO.getMCRUser();
+            mcrUserFinal.assignRole(defaultRoleForNewlyCreatedUsers);
+            enrichModsNameElementByLeadID(modsNameElement, leadIDName, mcrUserFinal);
+            connectModsNameElementWithMCRUser(modsNameElement, mcrUserFinal);
+            MCRUserManager.updateUser(mcrUserFinal);
+        } else {
+            if(MCRUserMatcherUtils.checkAffiliation(modsNameElement) &&
+                    (MCRUserMatcherUtils.getNameIdentifiers(modsNameElement).size() > 0)) {
+                MCRUser affiliatedUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement, unvalidatedRealmID);
+                affiliatedUser.assignRole(defaultRoleForNewlyCreatedUsers);
+                enrichModsNameElementByLeadID(modsNameElement, leadIDName, affiliatedUser);
+                connectModsNameElementWithMCRUser(modsNameElement, affiliatedUser);
+                MCRUserManager.updateUser(affiliatedUser);
+            } else {
+                Optional<Element> leadId = modsNameElement.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
+                    .stream()
+                    .filter(element -> leadIDName.equals(element.getAttributeValue("type")))
+                    .findFirst();
+
+                if(leadId.isPresent()) {
+                    MCRUser newLocalUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(
+                        modsNameElement, MCRRealmFactory.getLocalRealm().getID());
+                    newLocalUser.setRealName(getRealNameFromNameElement(modsNameElement, newLocalUser));
+                    connectModsNameElementWithMCRUser(modsNameElement, newLocalUser);
+                    MCRUserManager.updateUser(newLocalUser);
+                }
+            }
+        }
+
+        MCRConfiguration2.getBoolean(CONFIG_SKIP_LEAD_ID)
+            .filter(Boolean::booleanValue)
+            .ifPresent(trueValue -> {
+                List<Element> elementsToRemove = modsNameElement.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
+                        .stream()
+                        .filter(element -> element.getAttributeValue("type").equals(leadIDName))
+                        .collect(Collectors.toList());
+                elementsToRemove.forEach(modsNameElement::removeContent);
+            });
+    }
+
+    private void logUserMatch(Element modsNameElement, MCRUserMatcherDTO matcherDTO, MCRUserMatcher matcher) {
+        MCRUser mcrUser = matcherDTO.getMCRUser();
+        LOGGER.info("Found a match for user: {} of mods:name: {}, with attributes: {}, using matcher: {}",
+            mcrUser.getUserName(),
+            new XMLOutputter(Format.getPrettyFormat()).outputString(modsNameElement),
+            mcrUser.getAttributes().stream().map(a -> a.getName() + "=" + a.getValue())
+                .collect(Collectors.joining(" | ")),
+            matcher.getClass());
     }
 
     /**
