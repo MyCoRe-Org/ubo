@@ -104,6 +104,9 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     /** Matcher to lookup a matching local user **/
     private MCRUserMatcher localMatcher;
 
+    /** A chain of implemented user matchers */
+    private List<MCRUserMatcher> chainOfUserMatchers;
+    
     public PublicationEventHandler() {
         super();
                 
@@ -111,6 +114,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
         this.unvalidatedRealmID = MCRConfiguration2.getString(CONFIG_UNVALIDATED_REALM).get();
         this.leadIDName = MCRConfiguration2.getString(CONFIG_LEAD_ID).orElse("");
         this.localMatcher = new MCRUserMatcherLocal();
+        this.chainOfUserMatchers = loadMatcherImplementationChain();
     }
 
     private List<MCRUserMatcher> loadMatcherImplementationChain() {
@@ -157,22 +161,18 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     }
 
     protected void handlePublication(MCRObject obj) {
-
-        // for every mods:name element, call our configured Implementation(s) of MCRUserMatcher
-        // TODO: Do any of these really have a state? Otherwise re-use instances and mv to constructor
-        List<MCRUserMatcher> matchers = loadMatcherImplementationChain();
-
-        // for all mods:name from persons (authors etc.) of the publication...
-        MCRUserMatcherUtils.getNameElements(obj).forEach(modsNameElement -> handleName(matchers, modsNameElement));
+        // for every mods:name[@type='person'] (authors etc.) of the publication...
+        MCRUserMatcherUtils.getNameElements(obj).forEach(modsNameElement -> handleName(modsNameElement));
 
         LOGGER.debug("Final document: {}", new XMLOutputter(Format.getPrettyFormat()).outputString(obj.createXML()));
     }
 
-    private void handleName(List<MCRUserMatcher> matchers, Element modsNameElement) {
+    private void handleName(Element modsNameElement) {
         MCRUser userFromModsName = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement); 
         MCRUserMatcherDTO matcherDTO = new MCRUserMatcherDTO(userFromModsName);
 
-        for (MCRUserMatcher matcher : matchers) {
+        // call our configured Implementation(s) of MCRUserMatcher
+        for (MCRUserMatcher matcher : chainOfUserMatchers) {
             matcherDTO = matcher.matchUser(matcherDTO);
             if (matcherDTO.wasMatchedOrEnriched()) {
                 logUserMatch(modsNameElement, matcherDTO, matcher);
