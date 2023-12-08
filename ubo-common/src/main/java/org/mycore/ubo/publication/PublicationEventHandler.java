@@ -197,7 +197,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
             if (leadId.isPresent()) {
                 MCRUser newLocalUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(
                     modsNameElement, MCRRealmFactory.getLocalRealm().getID());
-                newLocalUser.setRealName(getRealNameFromNameElement(modsNameElement, newLocalUser));
+                newLocalUser.setRealName(buildPersonNameFromMODS(modsNameElement).orElse(newLocalUser.getUserID()));
                 connectModsNameElementWithMCRUser(modsNameElement, newLocalUser);
                 MCRUserManager.updateUser(newLocalUser);
             }
@@ -291,14 +291,14 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     private final static XPathExpression<Element> XPATH_TO_GET_FAMILY_NAME
         = XPATH_FACTORY.compile("mods:namePart[@type='family']", Filters.element(), null, MODS_NAMESPACE);
 
-    protected String getRealNameFromNameElement(Element nameElement, MCRUser mcrUser) {
+    protected Optional<String> buildPersonNameFromMODS(Element nameElement) {
         Element givenName = XPATH_TO_GET_GIVEN_NAME.evaluateFirst(nameElement);
         Element familyName = XPATH_TO_GET_FAMILY_NAME.evaluateFirst(nameElement);
 
-        if((givenName != null) && (familyName != null)) {
-            return familyName.getText() + ", " + givenName.getText();
+        if ( (givenName != null) && (familyName != null)) {
+            return Optional.of( familyName.getText() + ", " + givenName.getText() );
         } else {
-            return mcrUser.getUserID();
+            return Optional.empty();
         }
     }
 }
