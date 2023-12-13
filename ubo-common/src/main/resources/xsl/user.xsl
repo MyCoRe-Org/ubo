@@ -76,7 +76,7 @@
     </div>
   </article>
 
-  <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and $isCurrentUser and $MCR.ORCID2.Client.V3.APIMode = 'member'">
+  <xsl:if test="not(orcidUtils:isCurrentUserTransient() = 'true') and string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and $isCurrentUser and $MCR.ORCID2.Client.V3.APIMode = 'member'">
     <xsl:call-template name="orcid" />
   </xsl:if>
   <xsl:call-template name="publications" />

@@ -11,6 +11,8 @@ import org.mycore.orcid2.user.MCRORCIDSessionUtils;
 import org.mycore.orcid2.user.MCRORCIDUser;
 import org.mycore.orcid2.v3.client.MCRORCIDClientHelper;
 import org.mycore.orcid2.v3.client.MCRORCIDSectionImpl;
+import org.mycore.user2.MCRTransientUser;
+import org.mycore.user2.MCRUserManager;
 import org.orcid.jaxb.model.v3.release.record.summary.Works;
 
 import java.util.Map;
@@ -103,7 +105,7 @@ public class DozBibORCIDUtils {
     }
 
     public static boolean weAreTrustedParty() {
-        if (MCRXMLFunctions.isCurrentUserGuestUser()) {
+        if (MCRXMLFunctions.isCurrentUserGuestUser() || DozBibORCIDUtils.isCurrentUserTransient()) {
             return false;
         }
         Map<String, MCRORCIDCredential> credentials;
@@ -120,5 +122,9 @@ public class DozBibORCIDUtils {
 
     public static boolean isConnected(String orcid) {
         return MCRORCIDSessionUtils.getCurrentUser().getCredentialByORCID(orcid) != null;
+    }
+
+    public static boolean isCurrentUserTransient() {
+        return MCRUserManager.getCurrentUser() instanceof MCRTransientUser;
     }
 }
