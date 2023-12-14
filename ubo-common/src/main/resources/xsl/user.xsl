@@ -76,12 +76,18 @@
     </div>
   </article>
 
-  <xsl:if test="not(orcidUtils:isCurrentUserTransient() = 'true') and string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and $isCurrentUser and $MCR.ORCID2.Client.V3.APIMode = 'member'">
-    <xsl:call-template name="orcid" />
+  <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and $isCurrentUser and $MCR.ORCID2.Client.V3.APIMode = 'member'">
+    <xsl:choose>
+      <xsl:when test="not(orcidUtils:isCurrentUserTransient() = 'true')">
+        <xsl:call-template name="orcid" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="orcid-require-publication-notice" />
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:if>
   <xsl:call-template name="publications" />
-
-</xsl:template>
+ </xsl:template>
 
   <xsl:template name="steps">
     <xsl:if test="$step = 'confirmDelete'">
@@ -244,6 +250,16 @@
     </div>
   </article>
 </xsl:template>
+
+  <xsl:template name="orcid-require-publication-notice">
+    <article class="card mb-3">
+      <div class="card-body">
+        <p>
+          <xsl:value-of select="i18n:translate('ubo.orcid.require.publication')"/>
+        </p>
+      </div>
+    </article>
+  </xsl:template>
 
 <xsl:template name="orcidIntegrationConfirmed">
   <h3>
