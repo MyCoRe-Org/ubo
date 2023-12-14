@@ -108,6 +108,9 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     /** A chain of implemented user matchers */
     private List<MCRUserMatcher> chainOfUserMatchers;
     
+    /** The configured connection strategy to "connect" publications to MCRUsers */
+    private String connectionStrategy;
+
     public PublicationEventHandler() {
         super();
                 
@@ -116,6 +119,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
         this.leadIDName = MCRConfiguration2.getString(CONFIG_LEAD_ID).orElse("");
         this.localMatcher = new MCRUserMatcherLocal();
         this.chainOfUserMatchers = loadMatcherImplementationChain();
+        this.connectionStrategy = MCRConfiguration2.getString(CONFIG_CONNECTION_STRATEGY).orElse("");
     }
 
     private List<MCRUserMatcher> loadMatcherImplementationChain() {
@@ -135,14 +139,6 @@ public class PublicationEventHandler extends MCREventHandlerBase {
             }
         }
         return matchers;
-    }
-
-    /**
-     * Returns the configured connection strategy to "connect" publications to MCRUsers
-     * @return String, null if no connection strategy has been set
-     */
-    private String loadConnectionStrategyConfig() {
-        return MCRConfiguration2.getString(CONFIG_CONNECTION_STRATEGY).get();
     }
 
     @Override
@@ -257,33 +253,32 @@ public class PublicationEventHandler extends MCREventHandlerBase {
             .filter(a -> StringUtils.isNotEmpty(a.getValue())).findFirst();
     }
 
-    private void addNameIdentifierTo(Element modsName, String type, String value) {
-        modsName.addContent(new Element("nameIdentifier", MODS_NAMESPACE).setAttribute("type", type).setText(value));
-    }
-
-    /**
-     *
-     * @param modsNameElement
-     * @param mcrUser
-     */
     private void connectModsNameElementWithMCRUser(Element modsNameElement, MCRUser mcrUser) {
-        String connectionStrategy = loadConnectionStrategyConfig();
-        if(StringUtils.isNotEmpty(connectionStrategy) && connectionStrategy.equals("uuid")) {
-            // check if MCRUser already has a "connection" UUID
-            String uuid = mcrUser.getUserAttribute(CONNECTION_TYPE_NAME);
-            String modsTypeName = CONNECTION_TYPE_NAME.replace("id_", "");
-            if(uuid == null) {
-                // create new UUID and persist it for mcrUser
-                uuid = UUID.randomUUID().toString();
-                mcrUser.getAttributes().add(new MCRUserAttribute(CONNECTION_TYPE_NAME, uuid));
-            }
+        if("uuid".equals(connectionStrategy)) {
+            String connectionID = getOrAddConnectionID(mcrUser);
             // if not already present, persist connection in mods:name - nameIdentifier-Element
-            if(!MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, modsTypeName)) {
+            String connectionIDType = CONNECTION_TYPE_NAME.replace("id_", "");
+            if(!MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, connectionIDType)) {
                 LOGGER.info("Connecting publication with MCRUser: {}, via nameIdentifier of type: {} " +
-                        "and value: {}", mcrUser.getUserName(), modsTypeName, uuid);
-                addNameIdentifierTo(modsNameElement, modsTypeName, uuid);
+                        "and value: {}", mcrUser.getUserName(), connectionIDType, connectionID);
+                addNameIdentifierTo(modsNameElement, connectionIDType, connectionID);
             }
         }
+    }
+
+    private String getOrAddConnectionID(MCRUser mcrUser) {
+        // check if MCRUser already has a "connection" UUID
+        String uuid = mcrUser.getUserAttribute(CONNECTION_TYPE_NAME);
+        if(uuid == null) {
+            // create new UUID and persist it for mcrUser
+            uuid = UUID.randomUUID().toString();
+            mcrUser.getAttributes().add(new MCRUserAttribute(CONNECTION_TYPE_NAME, uuid));
+        }
+        return uuid;
+    }
+
+    private void addNameIdentifierTo(Element modsName, String type, String value) {
+        modsName.addContent(new Element("nameIdentifier", MODS_NAMESPACE).setAttribute("type", type).setText(value));
     }
 
     private final static XPathExpression<Element> XPATH_TO_GET_GIVEN_NAME
