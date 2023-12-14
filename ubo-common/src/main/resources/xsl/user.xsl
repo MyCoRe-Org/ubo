@@ -252,7 +252,7 @@
 </xsl:template>
 
   <xsl:template name="orcid-require-publication-notice">
-    <article class="card mb-3">
+    <article class="card mb-3" xml:lang="de">
       <div class="card-body">
         <p>
           <xsl:value-of select="i18n:translate('ubo.orcid.require.publication')"/>
