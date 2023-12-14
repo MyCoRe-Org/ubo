@@ -1,10 +1,5 @@
 package org.mycore.ubo.importer.orcid;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
@@ -21,7 +16,13 @@ import org.orcid.jaxb.model.v3.release.record.summary.WorkGroup;
 import org.orcid.jaxb.model.v3.release.record.summary.WorkSummary;
 import org.orcid.jaxb.model.v3.release.record.summary.Works;
 
-public class Orcid2WorksTransformer extends MCRContentTransformer {
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+
+public class Orcid2WorksTransformer extends MCRContentTransformer implements Comparator<WorkSummary> {
 
     protected Logger LOGGER = LogManager.getLogger(Orcid2WorksTransformer.class);
 
@@ -32,17 +33,26 @@ public class Orcid2WorksTransformer extends MCRContentTransformer {
             .filter(orcid -> orcid.trim().length() > 0)
             .forEach(orcid -> {
                 try {
-                    Works works = MCRORCIDClientHelper.getClientFactory().createReadClient().fetch(orcid,
-                        MCRORCIDSectionImpl.WORKS, Works.class);
+                    Works works = MCRORCIDClientHelper
+                        .getClientFactory()
+                        .createReadClient()
+                        .fetch(orcid, MCRORCIDSectionImpl.WORKS, Works.class);
 
-                    for (WorkGroup wg : works.getWorkGroup()) {
-                        WorkSummary ws = wg.getWorkSummary().stream()
-                            .filter(workSummary -> workSummary.getDisplayIndex().equals("1")).findFirst().get();
+                    works.getWorkGroup()
+                        .stream()
+                        .map(WorkGroup::getWorkSummary)
+                        .filter(wg -> wg.size() > 0)
+                        .forEach(workSummaries -> {
+                            workSummaries.sort(this);
+                            WorkSummary workSummary = workSummaries.get(0);
 
-                        Work work = MCRORCIDClientHelper.getClientFactory().createReadClient().fetch(orcid,
-                            MCRORCIDSectionImpl.WORK, Work.class, ws.getPutCode());
-                        workList.add(work);
-                    }
+                            Work work = MCRORCIDClientHelper
+                                .getClientFactory()
+                                .createReadClient()
+                                .fetch(orcid, MCRORCIDSectionImpl.WORK, Work.class, workSummary.getPutCode());
+
+                            workList.add(work);
+                        });
                 } catch (MCRORCIDRequestException e) {
                     LOGGER.warn("Could not get works for ORCID {}. {}", orcid, e.getMessage());
                 }
@@ -52,5 +62,17 @@ public class Orcid2WorksTransformer extends MCRContentTransformer {
         Element modsCollection = MCRORCIDUtils.buildMODSCollection(workElements);
 
         return new MCRJDOMContent(modsCollection);
+    }
+
+    @Override
+    public int compare(WorkSummary ws1, WorkSummary ws2) {
+        int v = 0;
+        try {
+            v = Integer.parseInt(ws1.getDisplayIndex()) - Integer.parseInt(
+                ws2.getDisplayIndex());
+        } catch (Exception e) {
+            LOGGER.error("Could not compare WorkSummaries", e);
+        }
+        return v;
     }
 }
