@@ -1,9 +1,5 @@
 package org.mycore.ubo.orcid;
 
-import java.io.IOException;
-import java.util.Set;
-import java.util.SortedSet;
-
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,6 +14,10 @@ import org.mycore.orcid2.user.MCRORCIDUserUtils;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
+
+import java.io.IOException;
+import java.util.Set;
+import java.util.SortedSet;
 
 /**
  * Servlet removes all orcid access tokens of the current user. If you want to remove a single access token for
@@ -41,9 +41,16 @@ public class DozBibORCIDUserServlet extends MCRServlet {
             return;
         }
 
-        MCRORCIDUser orcidUser = MCRORCIDSessionUtils.getCurrentUser();
-        Set<String> orcidIdentifiers = orcidUser.getORCIDs();
+        MCRORCIDUser orcidUser;
+        try {
+            orcidUser = MCRORCIDSessionUtils.getCurrentUser();
+        }catch(Exception e){
+            LOGGER.error("Could not get orcid user for user {}", MCRUserManager.getCurrentUser(), e);
+            redirectToProfile(job);
+            return;
+        }
 
+        Set<String> orcidIdentifiers = orcidUser.getORCIDs();
         if (orcidIdentifiers.isEmpty()) {
             redirectToProfile(job);
             return;
