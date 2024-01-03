@@ -10,6 +10,8 @@
 
   <xsl:output method="xml" />
 
+  <xsl:param name="WebApplicationBaseURL"/>
+
   <xsl:template match="/entry[error]">
     <error>
       <xsl:value-of select="message" />
@@ -38,39 +40,39 @@
   </xsl:template>
 
   <xsl:template match="genre[.='book-chapter']">
-    <mods:genre>chapter</mods:genre>
+    <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#chapter')}" />
   </xsl:template>
 
   <xsl:template match="genre[.='book-section']">
-    <mods:genre>chapter</mods:genre>
+    <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#chapter')}" />
   </xsl:template>
 
   <xsl:template match="genre[.='journal-article']">
-    <mods:genre>article</mods:genre>
+    <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#article')}" />
   </xsl:template>
 
   <xsl:template match="genre[.='dissertation']">
-    <mods:genre>dissertation</mods:genre>
+    <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#dissertation')}" />
   </xsl:template>
 
   <xsl:template match="genre[.='book']">
-    <mods:genre>book</mods:genre>
+    <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#book')}" />
   </xsl:template>
 
   <xsl:template match="genre[.='journal-article']" mode="host">
-    <mods:genre>journal</mods:genre>
+    <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#journal')}" />
   </xsl:template>
 
   <xsl:template match="genre[.='proceedings-article']" mode="host">
-    <mods:genre>proceedings</mods:genre>
+    <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#proceedings')}" />
   </xsl:template>
 
   <xsl:template match="genre[.='book-chapter']" mode="host">
-    <mods:genre>collection</mods:genre>
+    <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#collection')}" />
   </xsl:template>
 
   <xsl:template match="genre[.='book-section']" mode="host">
-    <mods:genre>collection</mods:genre>
+    <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#collection')}" />
   </xsl:template>
 
   <xsl:template match="best_oa_location">
