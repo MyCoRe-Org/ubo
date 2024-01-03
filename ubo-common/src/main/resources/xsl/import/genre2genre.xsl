@@ -7,6 +7,8 @@
 
   <xsl:include href="copynodes.xsl" />
 
+  <xsl:param name="WebApplicationBaseURL"/>
+
   <xsl:template match="mods:mods|mods:relatedItem">
     <xsl:copy>
       <xsl:apply-templates select="@*" />
@@ -16,30 +18,42 @@
   </xsl:template>
   
   <xsl:template name="genres2genreIntern">
-    <mods:genre type="intern">
-      <xsl:choose>
-        <xsl:when test="mods:genre[@type='intern']">
-          <xsl:value-of select="mods:genre[@type='intern'][1]" />
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:variable name="mappedGenreIDs">
-            <xsl:apply-templates select="mods:genre" />
-            <xsl:text> </xsl:text>
-          </xsl:variable>
-          <xsl:variable name="firstGenre" select="normalize-space(substring-before($mappedGenreIDs,' '))" />
-          <xsl:choose>
-            <xsl:when test="string-length($firstGenre) &gt; 0">
-              <xsl:value-of select="$firstGenre" />
-            </xsl:when>
-            <xsl:when test="@type='series'">series</xsl:when>
-            <xsl:when test="mods:identifier[@type='issn']">journal</xsl:when>
-            <xsl:when test="mods:identifier[@type='isbn']">collection</xsl:when>
-            <xsl:when test="local-name()='relatedItem'">journal</xsl:when>
-            <xsl:otherwise>article</xsl:otherwise>
-          </xsl:choose>
-        </xsl:otherwise>
-      </xsl:choose>
-    </mods:genre>
+    <xsl:choose>
+      <xsl:when test="mods:genre[@type='intern']">
+        <xsl:copy-of select="mods:genre[@type='intern'][1]"/>
+      </xsl:when>
+      <xsl:otherwise>
+
+        <xsl:variable name="mappedGenreIDs">
+          <xsl:apply-templates select="mods:genre" />
+          <xsl:text> </xsl:text>
+        </xsl:variable>
+
+        <xsl:variable name="firstGenre" select="normalize-space(substring-before($mappedGenreIDs, ' '))" />
+
+        <xsl:choose>
+          <xsl:when test="string-length($firstGenre) &gt; 0">
+            <xsl:value-of select="$firstGenre" />
+            <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#', $firstGenre)}" />
+          </xsl:when>
+          <xsl:when test="@type='series'">
+            <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#series')}" />
+          </xsl:when>
+          <xsl:when test="mods:identifier[@type = 'issn']">
+            <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#journal')}" />
+          </xsl:when>
+          <xsl:when test="mods:identifier[@type = 'isbn']">
+            <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#collection')}" />
+          </xsl:when>
+          <xsl:when test="local-name() = 'relatedItem'">
+            <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#journal')}" />
+          </xsl:when>
+          <xsl:otherwise>
+            <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#article')}" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="mods:mods/mods:genre">
