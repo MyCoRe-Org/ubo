@@ -10,9 +10,7 @@
   exclude-result-prefixes="xsl mods xalan">
 
   <xsl:output method="xml" encoding="UTF-8" indent="yes" xalan:indent-amount="2" />
-
-  <xsl:param name="WebApplicationBaseURL"/>
-
+  
   <xsl:template match="/responseWrapper">
     <xsl:apply-templates />
   </xsl:template>
@@ -95,7 +93,7 @@
   
   <xsl:template match="journalInfo">
     <mods:relatedItem type="host">
-      <mods:genre authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#journal')}" />
+      <mods:genre>journal</mods:genre>
       <xsl:apply-templates />
       <mods:part>
         <xsl:apply-templates select="volume|issue|../pageInfo" mode="part" />
@@ -188,7 +186,9 @@
   </xsl:template>
   
   <xsl:template match="pubType">
-    <mods:genre authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#', .)}" />
+    <mods:genre>
+      <xsl:value-of select="." />
+    </mods:genre>
   </xsl:template>
   
   <xsl:template match="subsetList|chemicalList" />
