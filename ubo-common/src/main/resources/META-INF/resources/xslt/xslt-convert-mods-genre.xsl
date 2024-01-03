@@ -10,12 +10,6 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="mods:mods">
-    <xsl:copy>
-      <xsl:apply-templates select='@*|node()'/>
-    </xsl:copy>
-  </xsl:template>
-
   <xsl:template match="mods:genre">
     <xsl:copy>
       <xsl:attribute name="authorityURI">

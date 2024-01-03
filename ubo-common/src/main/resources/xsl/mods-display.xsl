@@ -944,9 +944,9 @@
     </xsl:if>
   </xsl:template>
 
-
   <xsl:template match="mods:genre[@type='intern']">
-    <xsl:value-of select="$genres//category[@ID=current()]/label[lang($CurrentLang)]/@text" />
+    <xsl:variable name="categId" select="substring-after(@valueURI, '#')"/>
+    <xsl:value-of select="$genres//category[@ID = $categId]/label[lang($CurrentLang)]/@text" />
   </xsl:template>
 
   <!-- ========== Notiz, Kommentar ========== -->
