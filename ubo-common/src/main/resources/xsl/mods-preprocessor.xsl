@@ -2,12 +2,11 @@
 
 <!-- Pre-processor for editor forms reading MODS -->
 
-<xsl:stylesheet version="1.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  xmlns:mods="http://www.loc.gov/mods/v3"
-  xmlns:xlink="http://www.w3.org/1999/xlink" 
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  exclude-result-prefixes="xsl i18n">
+<xsl:stylesheet version="1.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:mods="http://www.loc.gov/mods/v3"
+                xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+                exclude-result-prefixes="xsl i18n">
 
   <xsl:include href="copynodes.xsl" />
 
@@ -104,4 +103,9 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="mods:genre[@type = 'intern']" >
+    <mods:genre type="intern">
+      <xsl:value-of select="substring-after(@valueURI,'#')"/>
+    </mods:genre>
+  </xsl:template>
 </xsl:stylesheet>
