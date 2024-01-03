@@ -9,7 +9,9 @@
 >
 
   <xsl:output method="xml" encoding="UTF-8" indent="yes" xalan:indent-amount="2" />
-  
+
+  <xsl:param name="WebApplicationBaseURL"/>
+
   <xsl:template match="/interface">
     <xsl:apply-templates select="response[@type='publications']" />
   </xsl:template>
@@ -59,7 +61,7 @@
   </xsl:template>
 
   <xsl:template match="citation/@type">
-    <mods:genre type="intern">article</mods:genre>
+    <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#article')}" />
   </xsl:template>
 
   <xsl:template match="title">
@@ -149,7 +151,7 @@
   <xsl:template match="journal">
     <xsl:apply-templates select="year" />
     <mods:relatedItem type="host">
-      <mods:genre type="intern">journal</mods:genre>
+      <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#journal')}" />
       <xsl:apply-templates select="abbreviation" />
       <xsl:apply-templates select="issn|essn" />
       <mods:part>
