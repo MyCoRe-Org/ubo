@@ -48,7 +48,7 @@
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'peerreviewed')]" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'mediaType')]" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:titleInfo[not(@type)]" mode="solrField.host" />
-    <xsl:apply-templates select="mods:relatedItem[@type='host'][mods:genre='journal']/mods:titleInfo" mode="solrField" />
+    <xsl:apply-templates select="mods:relatedItem[@type='host'][substring-after(mods:genre/@valueURI, '#') = 'journal']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:part" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:originInfo" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:relatedItem[@type='series']/mods:titleInfo" mode="solrField" />
@@ -96,13 +96,13 @@
     <xsl:call-template name="buildTitleField">
       <xsl:with-param name="name">title</xsl:with-param>
     </xsl:call-template>
-    <xsl:if test="position() = 1"> <!-- sort by first title only, not multi-valued -->
+    <xsl:if test="position() = 1"> <!-- sort by first title only, not multivalued -->
       <field name="sortby_title">
         <xsl:apply-templates select="mods:title"    mode="solrField" />
         <xsl:apply-templates select="mods:subTitle" mode="solrField" />
       </field>
     </xsl:if>
-    <xsl:if test="../mods:genre='journal'">
+    <xsl:if test="substring-after(../mods:genre/@valueURI, '#') = 'journal'">
       <xsl:call-template name="buildTitleField">
         <xsl:with-param name="name">journal</xsl:with-param>
       </xsl:call-template>
@@ -115,7 +115,7 @@
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template match="mods:relatedItem[@type='host'][mods:genre='journal']/mods:titleInfo" mode="solrField">
+  <xsl:template match="mods:relatedItem[@type='host'][substring-after(../mods:genre/@valueURI, '#') = 'journal']/mods:titleInfo" mode="solrField">
     <xsl:call-template name="buildTitleField">
       <xsl:with-param name="name">journal</xsl:with-param>
     </xsl:call-template>
@@ -236,7 +236,7 @@
 
   <xsl:template match="mods:mods/mods:genre[@type='intern']" mode="solrField">
     <field name="genre">
-      <xsl:value-of select="text()" />
+      <xsl:value-of select="substring-after(@valueURI, '#')" />
     </field>
   </xsl:template>
 
@@ -248,7 +248,7 @@
 
   <xsl:template match="mods:relatedItem[@type='host']/mods:genre[@type='intern']" mode="solrField">
     <field name="host_genre">
-      <xsl:value-of select="text()" />
+      <xsl:value-of select="substring-after(@valueURI, '#')" />
     </field>
   </xsl:template>
 
