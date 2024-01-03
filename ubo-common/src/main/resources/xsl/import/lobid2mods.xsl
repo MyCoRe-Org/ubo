@@ -10,6 +10,8 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   exclude-result-prefixes="xsl xalan java oai mab">
 
+  <xsl:param name="WebApplicationBaseURL"/>
+
   <xsl:template match="/oai:OAI-PMH">
     <xsl:apply-templates select="oai:ListRecords/oai:record[1]/oai:metadata/mab:record" />
   </xsl:template>
@@ -196,7 +198,7 @@
           </mods:detail>
         </mods:part>
       </xsl:if>
-      <mods:genre type="intern">series</mods:genre>
+      <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#series')}" />
     </mods:relatedItem>
   </xsl:template>
   
