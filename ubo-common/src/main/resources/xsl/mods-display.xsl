@@ -337,7 +337,7 @@
     <xsl:apply-templates select="." mode="cite.title.name">
       <xsl:with-param name="mode" select="$mode" />
     </xsl:apply-templates>
-    <xsl:if test="not(mods:genre='journal')">
+    <xsl:if test="not(substring-after(mods:genre/@valueURI, '#') = 'journal')">
       <xsl:call-template name="output.line">
         <xsl:with-param name="selected" select="mods:name[@type='conference']" />
         <xsl:with-param name="before"> - </xsl:with-param>
@@ -482,7 +482,7 @@
     <xsl:apply-templates select="." mode="cite" />
 
     <!-- journal article without volume: display year directly behind title, otherwise later behind volume number -->
-    <xsl:if test="(mods:genre[@type='intern']='journal') and not(mods:part/mods:detail[@type='volume']/mods:number)">
+    <xsl:if test="(substring-after(mods:genre[@type='intern']/@valueURI, '#') = 'journal') and not(mods:part/mods:detail[@type='volume']/mods:number)">
       <xsl:for-each select="ancestor::mods:mods/descendant::mods:dateIssued[1]">
         <xsl:value-of select="concat(' (',.,')')" />
       </xsl:for-each>
@@ -785,7 +785,7 @@
   </xsl:template>
 
   <!-- ========== Land bei Patent ========== -->
-  <xsl:template match="mods:place[../../mods:genre='patent']" mode="details">
+  <xsl:template match="mods:place[substring-after(../../mods:genre/@valueURI, '#') = 'patent']" mode="details">
     <div class="row">
       <div class="col-3">
         <xsl:value-of select="i18n:translate('ubo.place.country')" />
@@ -810,7 +810,7 @@
   </xsl:template>
 
   <!-- ========== Sender bei Audio/Video ========== -->
-  <xsl:template match="mods:publisher[(../../mods:genre='audio') or (../../mods:genre='video') or (../../mods:genre='broadcasting')]" mode="details">
+  <xsl:template match="mods:publisher[(substring-after(../../mods:genre/@valueURI, '#') = 'audio') or (substring-after(../../mods:genre/@valueURI, '#') = 'video') or (substring-after(../../mods:genre/@valueURI, '#') = 'broadcasting')]" mode="details">
     <div class="row">
       <div class="col-3">
         <xsl:value-of select="i18n:translate('ubo.publisher.station')" />
@@ -850,7 +850,7 @@
 
 
   <!-- ========== Sendedatum ========== -->
-  <xsl:template match="mods:dateIssued[(../../mods:genre='audio') or (../../mods:genre='video') or (../../mods:genre='broadcasting')]" mode="details">
+  <xsl:template match="mods:dateIssued[(substring-after(../../mods:genre/@valueURI, '#') = 'audio') or (substring-after(../../mods:genre/@valueURI, '#') = 'video') or (substring-after(../../mods:genre/@valueURI, '#') = 'broadcasting')]" mode="details">
     <div class="row">
       <div class="col-3">
         <xsl:value-of select="i18n:translate('ubo.date.broadcasted')" />
@@ -1561,16 +1561,18 @@
     </span>
     <xsl:text> </xsl:text>
 
-
     <xsl:value-of select="mods:number" />
 
     <xsl:variable name="volume.number" select="mods:number" />
     <xsl:variable name="year.issued" select="ancestor::mods:mods/descendant::mods:dateIssued[not(ancestor::mods:relatedItem[@type='host'])][1]" />
 
-    <xsl:if test="ancestor::mods:relatedItem/mods:genre[@type='intern']='journal'"> <!-- if it is a journal -->
-      <xsl:if test="(string-length($year.issued) &gt; 0) and translate($year.issued,'0123456789','jjjjjjjjjj') = 'jjjj'"> <!-- and there is a year -->
+    <!-- if it is a journal -->
+    <xsl:if test="substring-after(ancestor::mods:relatedItem/mods:genre[@type='intern']/@valueURI, '#') = 'journal'">
+      <!-- and there is a year -->
+      <xsl:if test="(string-length($year.issued) &gt; 0) and translate($year.issued,'0123456789','jjjjjjjjjj') = 'jjjj'">
         <xsl:if test="not($volume.number = $year.issued)"> <!-- and the year is not same as the volume number -->
-          <xsl:text> (</xsl:text> <!-- then output "volume (year)" -->
+          <xsl:text> (</xsl:text>
+          <!-- then output "volume (year)" -->
           <xsl:value-of select="$year.issued" />
           <xsl:text>)</xsl:text>
         </xsl:if>
