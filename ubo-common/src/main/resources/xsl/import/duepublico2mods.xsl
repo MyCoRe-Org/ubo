@@ -9,13 +9,15 @@
   xmlns:mods="http://www.loc.gov/mods/v3"
   exclude-result-prefixes="xsl mods">
 
+  <xsl:param name="WebApplicationBaseURL"/>
+
   <xsl:template match="/mycoreobject">
     <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" />
   </xsl:template>
   
   <xsl:template match="mods:mods">
     <xsl:copy>
-      <mods:genre type="intern">dissertation</mods:genre>
+      <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#dissertation')}" />
       <xsl:copy-of select="mods:classification[contains(@valueURI,'classifications/ORIGIN#')]" />
       <xsl:apply-templates select="mods:name[contains(@authorityURI,'mir_institutes')]" />
       <xsl:apply-templates select="mods:titleInfo" />
