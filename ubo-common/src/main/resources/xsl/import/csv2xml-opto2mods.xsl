@@ -11,6 +11,8 @@
 
 <xsl:output method="xml" encoding="UTF-8" indent="yes" />
 
+<xsl:param name="WebApplicationBaseURL"/>
+
 <xsl:template match="/csv2xml">
   <mods:modsCollection>
     <xsl:apply-templates select="row" />
@@ -29,9 +31,8 @@
   <xsl:variable name="hasHost" select="Zeitschrift or Buch or Ausgabe or Nummer or Seiten or Issn" />
   
   <mods:mods>
-    <mods:genre type="intern">
-      <xsl:value-of select="substring-before($genres,' ')" />
-    </mods:genre>
+    <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#', substring-before($genres,' '))}" />
+
     <xsl:apply-templates select="Titel1" />
     <xsl:apply-templates select="Autor1|Autor2|Autor3|Autor4|Autor5|Autor6|Autor7|Autor8|Autor9|Autor10" />
     <xsl:if test="starts-with($genres,'article') and Jahr">
@@ -41,9 +42,7 @@
     </xsl:if>
     <xsl:if test="$hasHost">
       <mods:relatedItem type="host">
-        <mods:genre type="intern">
-          <xsl:value-of select="substring-after($genres,' ')" />
-        </mods:genre>
+        <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#', substring-after($genres,' '))}" />
         <xsl:apply-templates select="Zeitschrift|Buch" />
         <xsl:apply-templates select="Konferenz" />
         <xsl:apply-templates select="Issn" />
