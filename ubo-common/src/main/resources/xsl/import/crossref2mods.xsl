@@ -10,7 +10,9 @@
   exclude-result-prefixes="xsl xsi xalan">
 
   <xsl:output method="xml" encoding="UTF-8" indent="yes" xalan:indent-amount="2" />
-		
+
+  <xsl:param name="WebApplicationBaseURL"/>
+
   <xsl:template match="/entry">
     <xsl:apply-templates select="message" />
   </xsl:template>
@@ -86,9 +88,7 @@
   </xsl:template>
   
   <xsl:template match="type">
-    <mods:genre>
-      <xsl:value-of select="text()" />
-    </mods:genre>
+    <mods:genre authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#', text())}" />
   </xsl:template>
   
   <xsl:template match="container-title" mode="container">

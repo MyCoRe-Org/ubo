@@ -11,7 +11,9 @@
   exclude-result-prefixes="xsl xalan atom arxiv">
 
   <xsl:output method="xml" encoding="UTF-8" indent="yes" xalan:indent-amount="2" />
-		
+
+  <xsl:param name="WebApplicationBaseURL"/>
+
   <xsl:template match="atom:feed">
     <xsl:apply-templates select="atom:entry[1]" />
   </xsl:template>
@@ -98,7 +100,7 @@
   
   <xsl:template match="arxiv:journal_ref">
     <mods:relatedItem type="host">
-      <mods:genre>journal</mods:genre>
+      <mods:genre authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#journal')}" />
       <mods:titleInfo>
         <mods:title>
           <xsl:value-of select="text()" />
