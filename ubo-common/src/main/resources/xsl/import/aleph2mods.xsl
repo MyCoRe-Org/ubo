@@ -13,11 +13,11 @@
  ================================================== -->
 
 <xsl:stylesheet version="1.0"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:mods="http://www.loc.gov/mods/v3"
-                xmlns:xalan="http://xml.apache.org/xalan"
-                xmlns:java="http://xml.apache.org/xalan/java"
-                exclude-result-prefixes="xsl xalan java">
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:mods="http://www.loc.gov/mods/v3"
+  xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:java="http://xml.apache.org/xalan/java"
+  exclude-result-prefixes="xsl xalan java">
 
   <xsl:param name="WebApplicationBaseURL"/>
 
