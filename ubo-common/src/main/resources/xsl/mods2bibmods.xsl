@@ -10,25 +10,25 @@
 
   <!--  may be this helps: https://github.com/jayvdb/bibutils-archive/blob/master/lib/bltypes.c -->
   
-  <xsl:template match="mods:genre[@type='intern'][.='proceedings']">
+  <xsl:template match="mods:genre[@type='intern'][substring-after(@valueURI, '#') = 'proceedings']">
     <mods:genre>conference publication</mods:genre>
   </xsl:template>
 
-  <xsl:template match="mods:genre[@type='intern'][.='festschrift']">
+  <xsl:template match="mods:genre[@type='intern'][substring-after(@valueURI, '#') = 'festschrift']">
     <mods:genre>collection</mods:genre>
   </xsl:template>
 
-  <xsl:template match="mods:genre[@type='intern'][.='journal']">
+  <xsl:template match="mods:genre[@type='intern'][substring-after(@valueURI, '#') = 'journal']">
     <mods:genre>academic journal</mods:genre>
   </xsl:template>
 
-  <xsl:template match="mods:genre[@type='intern'][.='dissertation']">
+  <xsl:template match="mods:genre[@type='intern'][substring-after(@valueURI, '#') = 'dissertation']">
     <mods:genre>thesis</mods:genre>
   </xsl:template>
 
   <xsl:template match="mods:name[@type='conference']" />
 
-  <xsl:template match="mods:genre[@type='intern'][contains('poster speech',.)][not(../mods:relatedItem[@type='host'])]">
+  <xsl:template match="mods:genre[@type='intern'][contains('poster speech', substring-after(@valueURI, '#'))][not(../mods:relatedItem[@type='host'])]">
     <mods:genre>conference</mods:genre>
     <mods:relatedItem type="host">
       <mods:genre>conference publication</mods:genre>
