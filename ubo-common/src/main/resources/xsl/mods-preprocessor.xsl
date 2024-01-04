@@ -103,9 +103,16 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="mods:genre[@type = 'intern']" >
+  <xsl:template match="mods:genre[@type = 'intern'][@valueURI]" >
     <mods:genre type="intern">
       <xsl:value-of select="substring-after(@valueURI,'#')"/>
     </mods:genre>
   </xsl:template>
+
+  <xsl:template match="mods:genre[@type = 'intern'][not(@valueURI)]" >
+    <mods:genre type="intern">
+      <xsl:value-of select="."/>
+    </mods:genre>
+  </xsl:template>
+
 </xsl:stylesheet>
