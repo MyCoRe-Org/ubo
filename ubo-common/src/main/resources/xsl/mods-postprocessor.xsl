@@ -32,6 +32,8 @@
       <xsl:attribute name="valueURI">
         <xsl:value-of select="concat($WebApplicationBaseURL, 'classifications/ubogenre#', .)"/>
       </xsl:attribute>
+
+      <xsl:copy-of select="@*"/>
     </xsl:copy>
   </xsl:template>
 
