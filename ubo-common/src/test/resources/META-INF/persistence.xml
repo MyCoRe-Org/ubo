@@ -13,14 +13,13 @@
     <properties>
       <property name="jakarta.persistence.jdbc.driver" value="org.h2.Driver"/>
       <property name="jakarta.persistence.jdbc.url" value="jdbc:h2:mem:ubotest"/>
-      <property name="hibernate.dialect" value=" org.hibernate.dialect.H2Dialect"/>
       <property name="hibernate.auto_quote_keyword" value="true"/>
 
       <property name="jakarta.persistence.jdbc.user" value="sa"/>
       <property name="jakarta.persistence.jdbc.password" value=""/>
 
-      <property name="hibernate.cache.use_second_level_cache" value="false"/>
       <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <property name="hibernate.cache.use_second_level_cache" value="false"/>
       <property name="hibernate.jdbc.batch_size" value="0"/>
       <property name="hibernate.show_sql" value="false"/>
 
