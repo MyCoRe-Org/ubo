@@ -69,7 +69,7 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
 
     private final static Logger LOGGER = LogManager.getLogger(MCRUserMatcherLDAP.class);
 
-    private final static String CONFIG_LDAP_LOGIN_ATTRIBUTENAME = "MCR.user2.LDAP.Login.AttributeName";
+    protected final static String CONFIG_LDAP_LOGIN_ATTRIBUTENAME = "MCR.user2.LDAP.Login.AttributeName";
 
     // all members regarding configuration of explicit mods/mycore nameIdentifier mapping
     private final static String CONFIG_EXPLICIT_NAMEIDENTIFIER_MAPPING = "MCR.user2.LDAP.Mapping.explicit";
