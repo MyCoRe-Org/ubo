@@ -60,7 +60,7 @@
   </xsl:template>
 
   <xsl:template match="citation/@type">
-    <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#article')}" />
+    <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#article" />
   </xsl:template>
 
   <xsl:template match="title">
@@ -150,7 +150,7 @@
   <xsl:template match="journal">
     <xsl:apply-templates select="year" />
     <mods:relatedItem type="host">
-      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#journal')}" />
+      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#journal" />
       <xsl:apply-templates select="abbreviation" />
       <xsl:apply-templates select="issn|essn" />
       <mods:part>

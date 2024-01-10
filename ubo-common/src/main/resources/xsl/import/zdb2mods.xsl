@@ -17,7 +17,7 @@
   
   <xsl:template match="marc:record">
     <mods:mods>
-      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#journal')}" />
+      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#journal" />
       <xsl:apply-templates select="marc:datafield[@tag='245']" />
       <xsl:apply-templates select="marc:datafield[@tag='210']" />
       <xsl:apply-templates select="marc:datafield[@tag='264'][@ind1='3']" />
