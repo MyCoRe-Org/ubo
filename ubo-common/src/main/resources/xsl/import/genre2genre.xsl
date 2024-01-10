@@ -33,26 +33,14 @@
 
         <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre">
           <xsl:attribute name="valueURI">
+            <xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#')" />
             <xsl:choose>
-              <xsl:when test="string-length($firstGenre) &gt; 0">
-                <xsl:value-of select="$firstGenre" />
-                <xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#', $firstGenre)" />
-              </xsl:when>
-              <xsl:when test="@type='series'">
-                <xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#series')" />
-              </xsl:when>
-              <xsl:when test="mods:identifier[@type = 'issn']">
-                <xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#journal')" />
-              </xsl:when>
-              <xsl:when test="mods:identifier[@type = 'isbn']">
-                <xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#collection')" />
-              </xsl:when>
-              <xsl:when test="local-name() = 'relatedItem'">
-                <xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#journal')" />
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#article')" />
-              </xsl:otherwise>
+              <xsl:when test="string-length($firstGenre) &gt; 0"><xsl:value-of select="$firstGenre" /></xsl:when>
+              <xsl:when test="@type='series'">series</xsl:when>
+              <xsl:when test="mods:identifier[@type = 'issn']">journal</xsl:when>
+              <xsl:when test="mods:identifier[@type = 'isbn']">collection</xsl:when>
+              <xsl:when test="local-name() = 'relatedItem'">journal</xsl:when>
+              <xsl:otherwise>article</xsl:otherwise>
             </xsl:choose>
           </xsl:attribute>
         </mods:genre>
