@@ -1,12 +1,5 @@
 package org.mycore.ubo.publication;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,7 +24,14 @@ import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
 
-import static org.mycore.common.MCRConstants.XPATH_FACTORY;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static org.mycore.common.MCRConstants.*;
 import static org.mycore.ubo.matcher.MCRUserMatcherUtils.MODS_NAMESPACE;
 
 /**
@@ -294,7 +294,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
             Filters.element(), null, MODS_NAMESPACE).evaluateFirst(nameElement);
 
         if((givenName != null) && (familyName != null)) {
-            return givenName.getText() + " " + familyName.getText();
+            return familyName.getText() + ", " + givenName.getText();
         }
 
         return mcrUser.getUserID();
