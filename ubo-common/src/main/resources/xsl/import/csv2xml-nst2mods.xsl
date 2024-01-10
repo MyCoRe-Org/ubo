@@ -19,11 +19,11 @@
 
 <xsl:template match="row">
   <mods:mods>
-    <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#article')}" />
+    <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#article')}" />
     <xsl:apply-templates select="Titel" />
     <xsl:apply-templates select="Autoren" />
     <mods:relatedItem type="host">
-      <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#journal')}" />
+      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#journal')}" />
       <xsl:apply-templates select="Quelle" />
       <xsl:call-template name="originInfo" />
       <xsl:apply-templates select="ISBN" />

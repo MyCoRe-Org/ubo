@@ -103,7 +103,7 @@
 
 <xsl:template match="typ">
 
-  <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}">
+  <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre">
     <xsl:attribute name="valueURI">
       <xsl:choose>
         <xsl:when test="contains(.,'Rezension')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#article')"/></xsl:when>
@@ -126,7 +126,7 @@
 </xsl:template>
 
 <xsl:template match="typ" mode="host">
-  <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}">
+  <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre">
     <xsl:attribute name="valueURI">
       <xsl:choose>
         <xsl:when test="contains(.,'Rezension')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#journal')"/></xsl:when>
