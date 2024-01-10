@@ -242,7 +242,7 @@
           </mods:detail>
         </mods:part>
       </xsl:if>
-      <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL, 'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL, 'classifications/ubogenre#series')}" />
+      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#series" />
     </mods:relatedItem>
   </xsl:template>
 
