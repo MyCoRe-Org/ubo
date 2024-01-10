@@ -138,7 +138,7 @@
 
         <xsl:if test="string-length($type) &gt; 0">
             <!-- todo: maybe need mapping -->
-            <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL, 'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL, 'classifications/ubogenre#', $type)}" />
+            <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#{$type}" />
         </xsl:if>
     </xsl:template>
 
