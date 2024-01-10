@@ -51,7 +51,7 @@
   
   <xsl:template match="/present">
     <xsl:for-each select="record/metadata/oai_marc">
-      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#dissertation'" />
+      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#dissertation" />
       <mods:titleInfo>
         <xsl:apply-templates select="varfield[@id='331']" />
         <xsl:apply-templates select="varfield[@id='335']" />
