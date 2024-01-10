@@ -31,7 +31,7 @@
   <xsl:variable name="hasHost" select="Zeitschrift or Buch or Ausgabe or Nummer or Seiten or Issn" />
   
   <mods:mods>
-    <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#', substring-before($genres,' '))}" />
+    <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#{substring-before($genres,' ')}" />
 
     <xsl:apply-templates select="Titel1" />
     <xsl:apply-templates select="Autor1|Autor2|Autor3|Autor4|Autor5|Autor6|Autor7|Autor8|Autor9|Autor10" />
@@ -42,7 +42,7 @@
     </xsl:if>
     <xsl:if test="$hasHost">
       <mods:relatedItem type="host">
-        <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#', substring-after($genres,' '))}" />
+        <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#{substring-after($genres,' ')}" />
         <xsl:apply-templates select="Zeitschrift|Buch" />
         <xsl:apply-templates select="Konferenz" />
         <xsl:apply-templates select="Issn" />
