@@ -31,7 +31,7 @@
 
         <xsl:variable name="firstGenre" select="normalize-space(substring-before($mappedGenreIDs, ' '))" />
 
-        <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}">
+        <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre">
           <xsl:attribute name="valueURI">
             <xsl:choose>
               <xsl:when test="string-length($firstGenre) &gt; 0">

@@ -51,7 +51,7 @@
   
   <xsl:template match="/present">
     <xsl:for-each select="record/metadata/oai_marc">
-      <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#dissertation')}" />
+      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#dissertation')}" />
       <mods:titleInfo>
         <xsl:apply-templates select="varfield[@id='331']" />
         <xsl:apply-templates select="varfield[@id='335']" />
@@ -207,7 +207,7 @@
           </mods:detail>
         </mods:part>
       </xsl:if>
-      <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#series')}" />
+      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#series')}" />
     </mods:relatedItem>
   </xsl:template>
   

@@ -14,7 +14,7 @@
 
   <xsl:template match="/bib">
     <mods:mods>
-      <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#dissertation')}" />
+      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#dissertation')}" />
       <xsl:apply-templates select="record/datafield[@tag='245']" />
       <xsl:apply-templates select="record/datafield[@tag='100']" />
       <xsl:apply-templates select="record/datafield[@tag='264']" />

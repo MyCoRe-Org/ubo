@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<xsl:stylesheet version="1.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  xmlns:mods="http://www.loc.gov/mods/v3"
-  xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:java="http://xml.apache.org/xalan/java"
-  xmlns:oai="http://www.openarchives.org/OAI/2.0/"
-  xmlns:mab="http://www.ddb.de/professionell/mabxml/mabxml-1.xsd"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  exclude-result-prefixes="xsl xalan java oai mab">
+<xsl:stylesheet version="1.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:mods="http://www.loc.gov/mods/v3"
+                xmlns:xalan="http://xml.apache.org/xalan"
+                xmlns:java="http://xml.apache.org/xalan/java"
+                xmlns:oai="http://www.openarchives.org/OAI/2.0/"
+                xmlns:mab="http://www.ddb.de/professionell/mabxml/mabxml-1.xsd"
+                exclude-result-prefixes="xsl xalan java oai mab">
 
   <xsl:param name="WebApplicationBaseURL"/>
 
@@ -198,7 +197,7 @@
           </mods:detail>
         </mods:part>
       </xsl:if>
-      <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#series')}" />
+      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#series')}" />
     </mods:relatedItem>
   </xsl:template>
   

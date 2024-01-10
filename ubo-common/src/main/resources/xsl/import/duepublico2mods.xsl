@@ -17,7 +17,7 @@
   
   <xsl:template match="mods:mods">
     <xsl:copy>
-      <mods:genre type="intern" authorityURI="{concat($WebApplicationBaseURL,'classifications/ubogenre')}" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#dissertation')}" />
+      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{concat($WebApplicationBaseURL,'classifications/ubogenre#dissertation')}" />
       <xsl:copy-of select="mods:classification[contains(@valueURI,'classifications/ORIGIN#')]" />
       <xsl:apply-templates select="mods:name[contains(@authorityURI,'mir_institutes')]" />
       <xsl:apply-templates select="mods:titleInfo" />
