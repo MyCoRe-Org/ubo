@@ -105,21 +105,22 @@
 
   <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre">
     <xsl:attribute name="valueURI">
+      <xsl:value-of select="concat($WebApplicationBaseURL, 'classifications/ubogenre#')"/>
       <xsl:choose>
-        <xsl:when test="contains(.,'Rezension')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#article')"/></xsl:when>
-        <xsl:when test="contains(.,'Zeitschriftenaufsatz')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#article')"/></xsl:when>
-        <xsl:when test="contains(.,'Internet-Dokument')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#article')"/></xsl:when>
-        <xsl:when test="contains(.,'Dissertation')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#dissertation')"/></xsl:when>
-        <xsl:when test="contains(.,'IAQ-Reihe')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#series')"/></xsl:when>
-        <xsl:when test="contains(.,'Monografie')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#book')"/></xsl:when>
-        <xsl:when test="contains(.,'monografie')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#book')"/></xsl:when>
-        <xsl:when test="contains(.,'Sammelband')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#collection')"/></xsl:when>
-        <xsl:when test="contains(.,'Sammelwerk')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#collection')"/></xsl:when>
-        <xsl:when test="contains(.,'Tagungsdokumentation')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#proceedings')"/></xsl:when>
-        <xsl:when test="contains(.,'Buchaufsatz-Tagung')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#chapter')"/></xsl:when>
-        <xsl:when test="contains(.,'Buchaufsatz')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#chapter')"/></xsl:when>
-        <xsl:when test="contains(.,'Lexikoneintrag')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#entry')"/></xsl:when>
-        <xsl:otherwise><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#article')"/></xsl:otherwise>
+        <xsl:when test="contains(.,'Rezension')">article</xsl:when>
+        <xsl:when test="contains(.,'Zeitschriftenaufsatz')">article</xsl:when>
+        <xsl:when test="contains(.,'Internet-Dokument')">article</xsl:when>
+        <xsl:when test="contains(.,'Dissertation')">dissertation</xsl:when>
+        <xsl:when test="contains(.,'IAQ-Reihe')">series</xsl:when>
+        <xsl:when test="contains(.,'Monografie')">book</xsl:when>
+        <xsl:when test="contains(.,'monografie')">book</xsl:when>
+        <xsl:when test="contains(.,'Sammelband')">collection</xsl:when>
+        <xsl:when test="contains(.,'Sammelwerk')">collection</xsl:when>
+        <xsl:when test="contains(.,'Tagungsdokumentation')">proceedings</xsl:when>
+        <xsl:when test="contains(.,'Buchaufsatz-Tagung')">chapter</xsl:when>
+        <xsl:when test="contains(.,'Buchaufsatz')">chapter</xsl:when>
+        <xsl:when test="contains(.,'Lexikoneintrag')">entry</xsl:when>
+        <xsl:otherwise>article</xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
   </mods:genre>
@@ -128,14 +129,15 @@
 <xsl:template match="typ" mode="host">
   <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre">
     <xsl:attribute name="valueURI">
+      <xsl:value-of select="concat($WebApplicationBaseURL, 'classifications/ubogenre#')"/>
       <xsl:choose>
-        <xsl:when test="contains(.,'Rezension')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#journal')"/></xsl:when>
-        <xsl:when test="contains(.,'Zeitschriftenaufsatz')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#journal')"/></xsl:when>
-        <xsl:when test="contains(.,'Buchaufsatz-Tagung')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#proceedings')"/></xsl:when>
-        <xsl:when test="contains(.,'Buchaufsatz')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#collection')"/></xsl:when>
-        <xsl:when test="contains(.,'Lexikoneintrag')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#lexicon')"/></xsl:when>
-        <xsl:when test="contains(.,'Internet-Dokument')"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#article')"/></xsl:when>
-        <xsl:otherwise><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/ubogenre#collection')"/></xsl:otherwise>
+        <xsl:when test="contains(.,'Rezension')">journal</xsl:when>
+        <xsl:when test="contains(.,'Zeitschriftenaufsatz')">journal</xsl:when>
+        <xsl:when test="contains(.,'Buchaufsatz-Tagung')">proceedings</xsl:when>
+        <xsl:when test="contains(.,'Buchaufsatz')">collection</xsl:when>
+        <xsl:when test="contains(.,'Lexikoneintrag')">lexicon</xsl:when>
+        <xsl:when test="contains(.,'Internet-Dokument')">article</xsl:when>
+        <xsl:otherwise>collection</xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
   </mods:genre>
