@@ -236,6 +236,9 @@
       <xsl:when test="$type='fundingType'">
         <xsl:value-of select="mcrxml:getDisplayName('fundingType', $value)"/>
       </xsl:when>
+      <xsl:when test="$type='peerreviewed'">
+          <xsl:value-of select="$peerreviewed//category[@ID=$value]/label[lang($DefaultLang)]/@text"/>
+        </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$value"/>
       </xsl:otherwise>
