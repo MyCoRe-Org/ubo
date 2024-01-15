@@ -32,7 +32,7 @@
 <!-- ============ Katalogsuche Basis-URLs ============ -->
   <xsl:param name="UBO.Primo.Search.Link" />
   <xsl:param name="UBO.ISBN.Search.Link" />
-  <xsl:param name="MCR.ORCID.LinkURL"/>
+  <xsl:param name="MCR.ORCID2.LinkURL"/>
 
   <xsl:variable name="genres"                select="document('classification:metadata:-1:children:ubogenre')/mycoreclass/categories" />
   <xsl:variable name="origin"                select="document('classification:metadata:-1:children:ORIGIN')/mycoreclass/categories" />
@@ -200,6 +200,31 @@
         <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
       </div>
     </div>
+  </xsl:template>
+
+  <xsl:template match="mods:classification[contains(@authorityURI,'fundingType')][1]" mode="details">
+    <xsl:variable name="fundingType" select="document('notnull:classification:metadata:-1:children:fundingType')/mycoreclass/categories"/>
+
+    <xsl:if test="$fundingType">
+      <div class="row">
+        <div class="col-3">
+          <xsl:value-of select="concat(i18n:translate('ubo.fundingType'), ':')" />
+        </div>
+        <div class="col-9">
+            <xsl:for-each select="../mods:classification[contains(@authorityURI,'fundingType')]">
+              <xsl:if test="position() > 1">
+                <xsl:text>, </xsl:text>
+              </xsl:if>
+
+              <xsl:variable name="category" select="$fundingType//category[@ID=substring-after(current()/@valueURI,'#')]" />
+
+              <a href="{$WebApplicationBaseURL}servlets/solr/select?q={encoder:encode('+objectType:mods')}&amp;fq={encoder:encode(concat('+fundingType:', $category/@ID))}">
+                <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
+              </a>
+            </xsl:for-each>
+        </div>
+      </div>
+    </xsl:if>
   </xsl:template>
 
   <!-- ========== Ausgabe Datenträgertyp ========== -->
@@ -474,6 +499,7 @@
   <xsl:template match="mods:name[@type='personal' or @type='corporate']" mode="details">
     <xsl:variable name="role" select="mods:role/mods:roleTerm[@type='code']" />
     <xsl:variable name="list" select="../mods:name[mods:role/mods:roleTerm[@type='code']=$role]" />
+
     <xsl:if test="count($list[1]|.)=1">
 
       <div class="row">
@@ -483,6 +509,10 @@
         </div>
         <div class="col-9">
           <xsl:for-each select="$list">
+            <xsl:variable name="is-corresponding-author" select="contains(mods:role/mods:roleTerm/@valueURI, 'author_roles#corresponding_author')" />
+            <xsl:variable name="is-connected-author" select="count(mods:nameIdentifier[@type='connection']) &gt; 0" />
+            <xsl:variable name="popId" select="generate-id()"/>
+
             <span>
               <xsl:attribute name="class">
                 <xsl:choose>
@@ -501,36 +531,80 @@
                 </xsl:attribute>
               </xsl:if>
 
-              <xsl:if test="position() &gt; 1">
-                <xsl:text>; </xsl:text>
-              </xsl:if>
-
               <xsl:apply-templates select="." />
 
-              <xsl:choose>
-                <xsl:when test="count(mods:nameIdentifier[@type='connection']) &gt;0">
-                  <xsl:apply-templates select="mods:nameIdentifier[@type='connection']" />
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:apply-templates select="mods:nameIdentifier[@type='orcid']" />
-                  <xsl:apply-templates select="mods:nameIdentifier[not(@type='orcid')]" />
-                </xsl:otherwise>
-              </xsl:choose>
+              <xsl:if test="mods:nameIdentifier or $is-corresponding-author = true()">
+                <span id="{$popId}" title="{i18n:translate('person.information')}">
+                  <xsl:attribute name="class">
+                    <xsl:text>ubo-person-popover ml-1 fas fa-user</xsl:text>
+                    <xsl:if test="$is-corresponding-author = true()">
+                      <xsl:text>-edit</xsl:text>
+                    </xsl:if>
+                    <xsl:if test="$is-connected-author = true()">
+                      <xsl:text> ubo-person-connected</xsl:text>
+                    </xsl:if>
+                  </xsl:attribute>
+                </span>
+
+                <xsl:if test="$is-connected-author = true()">
+                  <sup><xsl:value-of select="i18n:translate('ubo.person.connected.sup')" /></sup>
+                </xsl:if>
+
+                <span id="{$popId}-content" class="d-none">
+                  <dl>
+                    <xsl:choose>
+                      <xsl:when test="count(mods:nameIdentifier[@type='connection']) &gt;0">
+                        <xsl:apply-templates select="mods:nameIdentifier[@type='connection']" />
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:apply-templates select="mods:nameIdentifier[not(@type='connection')]" />
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:if test="mods:affiliation and check:currentUserIsAdmin()">
+                      <dt>
+                        <xsl:value-of select="i18n:translate('ubo.person.affiliation')" />
+                      </dt>
+                      <dd>
+                        <xsl:apply-templates select="mods:affiliation" mode="details" />
+                      </dd>
+                    </xsl:if>
+                    <xsl:if test="$is-connected-author = true() or $is-corresponding-author = true()">
+                      <dt>
+                        <xsl:value-of select="i18n:translate('ubo.person.other')" />
+                      </dt>
+                      <dd>
+                        <xsl:if test="$is-connected-author = true()">
+                          <xsl:value-of select="i18n:translate('ubo.person.connected')" />
+                        </xsl:if>
+                        <xsl:if test="$is-connected-author = true() and $is-corresponding-author = true()">
+                          <br />
+                        </xsl:if>
+                        <xsl:if test="$is-corresponding-author = true()">
+                          <xsl:value-of select="i18n:translate('ubo.person.corresponding')" />
+                        </xsl:if>
+                      </dd>
+                    </xsl:if>
+                  </dl>
+                </span>
+              </xsl:if>
+              <xsl:if test="not(position() = last())">
+                <xsl:text>;</xsl:text>
+              </xsl:if>
             </span>
           </xsl:for-each>
-
-          <xsl:variable name="hideable-count" select="count($list) - $UBO.Initially.Visible.Authors - 1"/>
-          <xsl:if test="count($list) &gt; $UBO.Initially.Visible.Authors and $hideable-count &gt; 0">
-            <div class="row">
-              <div class="col">
-                <a href="javascript:void(0)" onclick="ModsDisplayUtils.expand(this)" data-hideable-count="{$hideable-count}">
-                  <xsl:value-of select="i18n:translate('button.view.all.authors', $hideable-count)" />
-                </a>
-              </div>
-            </div>
-          </xsl:if>
         </div>
       </div>
+
+      <xsl:variable name="hideable-count" select="count($list) - $UBO.Initially.Visible.Authors - 1"/>
+      <xsl:if test="count($list) &gt; $UBO.Initially.Visible.Authors and $hideable-count &gt; 0">
+        <div class="row">
+          <div class="col offset-3">
+            <a href="javascript:void(0)" onclick="ModsDisplayUtils.expand(this)" data-hideable-count="{$hideable-count}">
+              <xsl:value-of select="i18n:translate('button.view.all.authors', $hideable-count)" />
+            </a>
+          </div>
+        </div>
+      </xsl:if>
     </xsl:if>
   </xsl:template>
 
@@ -539,117 +613,98 @@
     <xsl:if test="position() != last()"> / </xsl:if>
   </xsl:template>
 
-  <xsl:param name="UBO.LSF.Link"/>
-
   <xsl:template match="mods:nameIdentifier[@type='connection']">
     <xsl:variable name="userXML" select="document(concat('userconnection:', text()))"/>
-    <xsl:variable name="userAttributeClassification"
-                  select="document('classification:metadata:-1:children:user_attributes')"/>
-    <xsl:variable name="popId" select="generate-id()"/>
-    <span class="fas fa-user ubo-person-popover ml-1" id="{$popId}" title="{i18n:translate('person.search.information')}">
-    </span>
-    <div id="{$popId}-content" class="d-none">
-      <dl>
-        <xsl:if test="count($userXML/user/attributes/attribute) &gt; 0">
-          <xsl:for-each select="$userXML/user/attributes/attribute">
-            <xsl:variable name="attrName" select="@name"/>
-            <xsl:variable name="classNode" select="$userAttributeClassification/.//category[@ID=$attrName]"/>
-            <xsl:if test="count($classNode)&gt;0 and count($classNode/label[@xml:lang='x-display' and @text='true'])&gt;0">
-              <dt>
-                <xsl:value-of select="$classNode/label[lang($CurrentLang)]/@text"/>
-              </dt>
-              <dd>
-                <xsl:choose>
-                  <xsl:when test="$attrName='id_orcid'">
-                    <!-- special display code for orcid -->
-                    <xsl:variable name="url" select="concat($MCR.ORCID.LinkURL,@value)" />
-                    <a href="{$url}" title="ORCID iD: {@value}">
-                      <xsl:value-of select="@value" />
-                      <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
-                    </a>
-                  </xsl:when>
-                  <xsl:when test="count($classNode/label[@xml:lang='x-uri'])  &gt;0">
-                    <!-- display as link -->
-                    <a href="{$classNode/label[@xml:lang='x-uri']/@text}{@value}" title="{$classNode/label[lang($CurrentLang)]/@text}: {@value}">
-                      <xsl:value-of select="@value" />
-                    </a>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <!-- display as text -->
-                    <xsl:value-of select="@value" />
-                  </xsl:otherwise>
-                </xsl:choose>
-              </dd>
-            </xsl:if>
-          </xsl:for-each>
+    <xsl:variable name="userAttributeClassification" select="document('xslStyle:nameIDs2UserAttr:classification:metadata:-1:children:nameIdentifier')"/>
+
+    <xsl:if test="count($userXML/user/attributes/attribute) &gt; 0">
+      <xsl:for-each select="$userXML/user/attributes/attribute">
+        <xsl:variable name="attrName" select="@name"/>
+        <xsl:variable name="classNode" select="$userAttributeClassification/.//category[@ID=$attrName]"/>
+        <xsl:if test="count($classNode)&gt;0 and count($classNode/label[@xml:lang='x-display' and @text='true'])&gt;0">
+          <dt>
+            <xsl:value-of select="$classNode/label[lang($CurrentLang)]/@text"/>
+          </dt>
+          <dd>
+            <xsl:choose>
+              <xsl:when test="$attrName='id_orcid'">
+                <!-- special display code for orcid -->
+                <xsl:variable name="url" select="concat($MCR.ORCID2.LinkURL,@value)" />
+                <a href="{$url}" title="ORCID iD: {@value}">
+                  <xsl:value-of select="@value" />
+                  <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
+                </a>
+              </xsl:when>
+              <xsl:when test="count($classNode/label[@xml:lang='x-uri'])  &gt;0">
+                <!-- display as link -->
+                <a href="{$classNode/label[@xml:lang='x-uri']/@text}{@value}" title="{$classNode/label[lang($CurrentLang)]/@text}: {@value}">
+                  <xsl:value-of select="@value" />
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                <!-- display as text -->
+                <xsl:value-of select="@value" />
+              </xsl:otherwise>
+            </xsl:choose>
+          </dd>
         </xsl:if>
-      </dl>
-    </div>
+      </xsl:for-each>
+    </xsl:if>
   </xsl:template>
 
-  <xsl:template match="mods:nameIdentifier[@type='lsf']">
-    <span class="nameIdentifier lsf" title="LSF ID: {.}">
-      <a href="{$UBO.LSF.Link}{.}">LSF</a>
-    </span>
-  </xsl:template>
-
-  <xsl:template match="mods:nameIdentifier[@type='orcid']">
-    <xsl:variable name="url" select="concat($MCR.ORCID.LinkURL,text())" />
-    <a href="{$url}" title="ORCID iD: {text()}">
-      <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
-    </a>
-  </xsl:template>
-
-  <xsl:template match="mods:nameIdentifier[@type='researcherid']">
-    <span class="nameIdentifier researcherid" title="ResearcherID: {.}">
-      <a href="http://www.researcherid.com/rid/{.}">ResearcherID</a>
-    </span>
-  </xsl:template>
-
-  <xsl:template match="mods:nameIdentifier[@type='gnd']">
-    <span class="nameIdentifier gnd" title="GND: {.}">
-      <a href="http://d-nb.info/gnd/{.}">GND</a>
-    </span>
-  </xsl:template>
-
-  <xsl:param name="UBO.Scopus.Author.Link" />
-
-  <xsl:template match="mods:nameIdentifier[@type='scopus']">
-    <span class="nameIdentifier scopus" title="SCOPUS Author ID: {.}">
-      <a href="{$UBO.Scopus.Author.Link}{.}">SCOPUS</a>
-    </span>
-  </xsl:template>
-
-  <xsl:param name="UBO.Local.Author.Link" />
-
-  <xsl:template match="mods:nameIdentifier[@type='local']">
-    <span class="nameIdentifier local" title="{i18n:translate('ubo.authorlink.local.title')}: {.}">
-      <xsl:choose>
-        <xsl:when test="string-length($UBO.Local.Author.Link) &gt; 0">
-          <a href="{$UBO.Local.Author.Link}{.}"><xsl:value-of select="i18n:translate('ubo.authorlink.local.text')" /></a>
-        </xsl:when>
-        <xsl:otherwise><xsl:value-of select="i18n:translate('ubo.authorlink.local.text')" /></xsl:otherwise>
-      </xsl:choose>
-    </span>
-  </xsl:template>
+  <xsl:variable name="nameIdentifierClassification" select="document('classification:metadata:-1:children:nameIdentifier')"/>
 
   <xsl:template match="mods:nameIdentifier">
-    <xsl:variable name="badge.label">
-      <xsl:choose>
-        <xsl:when test="i18n:exists(concat('badge.nameIdentifier.', @type))">
-          <xsl:value-of select="i18n:translate(concat('badge.nameIdentifier.', @type))"/>
+    <xsl:variable name="identifierType" select="@type" />
+    <xsl:variable name="classNode" select="$nameIdentifierClassification/.//category[@ID=$identifierType]"/>
+    <xsl:choose>
+        <xsl:when test="$classNode/label[@xml:lang='x-display']/@text='false'"></xsl:when>
+        <xsl:when test="count($classNode)&gt;0 and $classNode/label[@xml:lang='x-display']/@text='true'">
+          <dt>
+            <xsl:value-of select="$classNode/label[lang($CurrentLang)]/@text"/>
+          </dt>
+          <dd>
+            <xsl:choose>
+              <xsl:when test="@type='orcid'">
+                <!-- special display code for orcid -->
+                <xsl:variable name="url" select="concat($MCR.ORCID2.LinkURL, .)" />
+                <a href="{$url}" title="ORCID iD: {.}">
+                  <xsl:value-of select="." />
+                  <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
+                </a>
+              </xsl:when>
+              <xsl:when test="count($classNode/label[@xml:lang='x-uri']) &gt;0">
+                <!-- display as link -->
+                <a href="{$classNode/label[@xml:lang='x-uri']/@text}{.}" title="{$classNode/label[lang($CurrentLang)]/@text}: {.}">
+                  <xsl:value-of select="." />
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                <!-- display as text -->
+                <xsl:value-of select="." />
+              </xsl:otherwise>
+            </xsl:choose>
+          </dd>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="@type"/>
+          <xsl:variable name="identifier.label">
+            <xsl:choose>
+              <xsl:when test="i18n:exists(concat('badge.nameIdentifier.', @type))">
+                <xsl:value-of select="i18n:translate(concat('badge.nameIdentifier.', @type))"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="@type"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <dt>
+            <xsl:value-of select="$identifier.label" />
+          </dt>
+          <dd>
+            <xsl:value-of select="." />
+          </dd>
         </xsl:otherwise>
       </xsl:choose>
-    </xsl:variable>
-
-    <span class="nameIdentifier genericid" title="{@type}: '{.}'">
-      <a href="javascript:void(0)">
-        <xsl:value-of select="$badge.label" />
-      </a>
-    </span>
   </xsl:template>
 
   <!-- ========== Konferenz ========== -->
@@ -1080,6 +1135,7 @@
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'partner')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'category')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'partOf')]" mode="details" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fundingType')]" mode="details" />
     <xsl:apply-templates select="mods:abstract/@xlink:href" mode="details" />
     <xsl:apply-templates select="mods:abstract[string-length(.) &gt; 0]" mode="details" />
   </xsl:template>
@@ -1188,6 +1244,12 @@
     <xsl:apply-templates select="document($uri)/mycoreclass/categories/category[1]" />
   </xsl:template>
 
+  <xsl:template match="mods:roleTerm" mode="corresponding-author">
+    <xsl:if test="contains(@valueURI, 'author_roles#corresponding_author')" >
+      <i class="fas fa-user-edit" title="{i18n:translate('ubo.corresponding_author')}"/>
+    </xsl:if>
+  </xsl:template>
+
   <xsl:template match="category">
     <xsl:choose>
       <xsl:when test="label[lang($CurrentLang)]">
@@ -1255,7 +1317,7 @@
     <a href="{$UBO.JOP.URL}?{$parameters}" title="{i18n:translate('ubo.jop')}">
       <xsl:value-of select="text()" />
       <xsl:text> </xsl:text>
-      <img style="float:none" loading="lazy" data-src="https://services.dnb.de/fize-service/gvr/icon?{$parameters}" alt="{i18n:translate('ubo.jop')}" />
+      <img class="ubo-jopservice-img" loading="lazy" data-src="https://services.dnb.de/fize-service/gvr/icon?{$parameters}" alt="{i18n:translate('ubo.jop')}" />
     </a>
   </xsl:template>
 
@@ -1494,7 +1556,7 @@
       </xsl:choose>
     </span>
     <xsl:text> </xsl:text>
-    
+
 
     <xsl:value-of select="mods:number" />
 
@@ -1595,7 +1657,7 @@
 
   <!-- ========== Sprache der Publikation ========== -->
   <xsl:template match="mods:languageTerm[@type='code']">
-    <xsl:value-of select="document(concat('language:',.))/language/label[@xml:lang=$CurrentLang]" />
+    <xsl:value-of select="document(concat('notnull:language:',.))/language/label[@xml:lang=$CurrentLang]" />
     <xsl:if test="position() != last()">
       <xsl:text>, </xsl:text>
     </xsl:if>

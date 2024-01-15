@@ -5,9 +5,9 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.SortedSet;
+import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +21,7 @@ import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.mods.MCRMODSWrapper;
-import org.mycore.orcid.user.MCRORCIDUser;
+import org.mycore.orcid2.user.MCRORCIDUser;
 import org.mycore.ubo.ldap.LDAPObject;
 import org.mycore.user2.MCRRealmFactory;
 import org.mycore.user2.MCRUser;
@@ -115,31 +115,11 @@ public class MCRUserMatcherUtils {
     }
 
     public static MCRUser createNewMCRUserFromModsNameElement(Element modsNameElement, String realmID) {
-        String userName = getUserNameFromModsNameElement(modsNameElement);
+        String userName = UUID.randomUUID().toString();
         Map<String, String> nameIdentifiers = MCRUserMatcherUtils.getNameIdentifiers(modsNameElement);
         MCRUser mcrUser = new MCRUser(userName, realmID);
         enrichUserWithGivenNameIdentifiers(mcrUser, nameIdentifiers);
         return mcrUser;
-    }
-
-    private static String getUserNameFromModsNameElement(Element modsNameElement) {
-
-        XPathFactory xFactory = XPathFactory.instance();
-
-        XPathExpression<Element> givenNameExpr = xFactory.compile("mods:namePart[@type='given']",
-                Filters.element(), null, MODS_NAMESPACE);
-        Element givenNameElem = givenNameExpr.evaluateFirst(modsNameElement);
-        XPathExpression<Element> familyNameExpr = xFactory.compile("mods:namePart[@type='family']",
-                Filters.element(), null, MODS_NAMESPACE);
-        Element familyNameElem = familyNameExpr.evaluateFirst(modsNameElement);
-
-        String userName = "";
-
-        if((givenNameElem != null) && (familyNameElem != null)) {
-            userName = (givenNameElem.getText() + "_" + familyNameElem.getText()).toLowerCase(Locale.ROOT);
-        }
-
-        return userName;
     }
 
     public static String getAttributesAsURLString(List<Element> modsNameElements) {

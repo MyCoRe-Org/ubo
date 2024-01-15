@@ -6,18 +6,42 @@
     <category ID="scopus">
       <label xml:lang="de" text="SCOPUS" />
       <label xml:lang="en" text="SCOPUS" />
+      <label xml:lang="x-display" text="true" />
+      <label xml:lang="x-uri" text="https://www.scopus.com/authid/detail.url?partnerID=HzOxMe3b&amp;origin=inward&amp;authorId=" />
     </category>
     <category ID="gnd">
       <label xml:lang="de" text="GND" />
       <label xml:lang="en" text="GND" />
+      <label xml:lang="x-display" text="true" />
+      <label xml:lang="x-uri" text="https://d-nb.info/gnd/" />
     </category>
     <category ID="researcherid">
       <label xml:lang="de" text="ResearcherID" />
       <label xml:lang="en" text="ResearcherID" />
+      <label xml:lang="x-display" text="true" />
+      <label xml:lang="x-uri" text="http://www.researcherid.com/rid/" />
     </category>
     <category ID="orcid">
       <label xml:lang="de" text="ORCID" />
       <label xml:lang="en" text="ORCID" />
+      <label xml:lang="x-display" text="true" />
+      <label xml:lang="x-uri" text="https://orcid.org/" />
+    </category>
+    <category ID="lsf">
+      <label xml:lang="de" text="LSF ID" />
+      <label xml:lang="en" text="LSF ID" />
+      <label xml:lang="x-display" text="true" />
+      <label xml:lang="x-uri" text="https://www.uni-due.de/zim/services/suchdienste/mitarbeiter.php?id=" />
+    </category>
+    <category ID="local">
+      <label xml:lang="de" text="Lokale ID" />
+      <label xml:lang="en" text="Local ID" />
+      <label xml:lang="x-display" text="false" />
+    </category>
+    <category ID="connection">
+      <label xml:lang="de" text="Connection ID" />
+      <label xml:lang="en" text="Connection ID" />
+      <label xml:lang="x-display" text="false" />
     </category>
   </categories>
 </mycoreclass>

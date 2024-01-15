@@ -1,11 +1,5 @@
 package org.mycore.ubo.publication;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,6 +13,7 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.ubo.matcher.MCRUserMatcher;
 import org.mycore.ubo.matcher.MCRUserMatcherDTO;
@@ -29,7 +24,14 @@ import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
 
-import static org.mycore.common.MCRConstants.XPATH_FACTORY;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static org.mycore.common.MCRConstants.*;
 import static org.mycore.ubo.matcher.MCRUserMatcherUtils.MODS_NAMESPACE;
 
 /**
@@ -130,13 +132,22 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     }
 
     @Override
-    protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {
-        // TODO: remove this, since this EventHandler should only work for "ObjectCreated" events!
-        handleObjectCreated(evt, obj);
+    protected void handleObjectCreated(MCREvent evt, MCRObject obj) {
+        handlePublication(obj);
     }
 
     @Override
-    protected void handleObjectCreated(MCREvent evt, MCRObject obj) {
+    protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {
+        handlePublication(obj);
+    }
+
+    @Override
+    protected void handleObjectRepaired(MCREvent evt, MCRObject obj) {
+        handlePublication(obj);
+        MCRXMLMetadataManager.instance().update(obj.getId(), obj.createXML(), new Date());
+    }
+
+    protected void handlePublication(MCRObject obj) {
         // get default role for new users
         String defaultRole = loadDefaultRoleConfig();
 
@@ -176,21 +187,21 @@ public class PublicationEventHandler extends MCREventHandlerBase {
             if (localMatcherDTO.wasMatchedOrEnriched()) {
                 MCRUser mcrUserFinal = localMatcherDTO.getMCRUser();
                 mcrUserFinal.assignRole(defaultRole);
-                MCRUserManager.updateUser(mcrUserFinal);
                 enrichModsNameElementByLeadID(modsNameElement, leadIDName, mcrUserFinal);
                 connectModsNameElementWithMCRUser(modsNameElement, mcrUserFinal);
+                MCRUserManager.updateUser(mcrUserFinal);
             } else {
                 if(MCRUserMatcherUtils.checkAffiliation(modsNameElement) &&
                         (MCRUserMatcherUtils.getNameIdentifiers(modsNameElement).size() > 0)) {
                     MCRUser affiliatedUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement, UNVALIDATED_REALM);
                     affiliatedUser.assignRole(defaultRole);
-                    MCRUserManager.updateUser(affiliatedUser);
                     enrichModsNameElementByLeadID(modsNameElement, leadIDName, affiliatedUser);
                     connectModsNameElementWithMCRUser(modsNameElement, affiliatedUser);
+                    MCRUserManager.updateUser(affiliatedUser);
                 } else {
                     Optional<Element> leadId = modsNameElement.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
                         .stream()
-                        .filter(element -> element.getAttributeValue("type").equals(leadIDName))
+                        .filter(element -> leadIDName.equals(element.getAttributeValue("type")))
                         .findFirst();
 
                     if(leadId.isPresent()) {
@@ -198,6 +209,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
                             modsNameElement, MCRRealmFactory.getLocalRealm().getID());
                         newLocalUser.setRealName(getRealNameFromNameElement(modsNameElement, newLocalUser));
                         connectModsNameElementWithMCRUser(modsNameElement, newLocalUser);
+                        MCRUserManager.updateUser(newLocalUser);
                     }
                 }
             }
@@ -218,24 +230,25 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     /**
      * Enriches the mods:name-element that corresponds to the given MCRUser with a mods:nameIdentifier-element if the
      * given MCRUser has an attribute with the name of the so called "lead_id" that is configured in the
-     * mycore.properties and given as parameter "leadIDmods".
+     * mycore.properties and given as parameter "leadID".
      * A new mods:nameIdentifier-element with type "lead_id" and its value will only be created if no other
      * mods:nameIdentifier-element with the same ID/type exists as a sub-element of the given modsNameElement.
 
      * @param modsNameElement the mods:name-element which will be enriched
-     * @param leadIDmods the "lead_id" (as configured in the mycore.properties) in mods format (no prefix "id_")
+     * @param leadID the "lead_id" (as configured in the mycore.properties) in mods format (no prefix "id_")
      * @param mcrUser the MCRUser corresponding to the modsNameElement
      */
-    private void enrichModsNameElementByLeadID(Element modsNameElement, String leadIDmods, MCRUser mcrUser) {
-        String leadIDmycore = "id_" + leadIDmods;
-        if(StringUtils.isNotEmpty(mcrUser.getUserAttribute(leadIDmycore))) {
-            String leadIDValue = mcrUser.getUserAttribute(leadIDmycore);
-            if(StringUtils.isNotEmpty(leadIDValue)) {
-                if(!MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, leadIDmods)) {
-                    LOGGER.info("Enriched publication for MCRUser: {}, with nameIdentifier of type: {} (lead_id) " +
-                            "and value: {}", mcrUser.getUserName(), leadIDmods, leadIDValue);
-                    enrichModsNameElementByNameIdentifierElement(modsNameElement, leadIDmods, leadIDValue);
-                }
+    private void enrichModsNameElementByLeadID(Element modsNameElement, String leadID, MCRUser mcrUser) {
+        String attributeName = "id_" + leadID;
+        Optional<MCRUserAttribute> leadIDAttribute = mcrUser.getAttributes().stream()
+            .filter(a -> a.getName().equals(attributeName) && StringUtils.isNotEmpty(a.getValue())).findFirst();
+
+        if (leadIDAttribute.isPresent()) {
+            String leadIDValue = leadIDAttribute.get().getValue();
+            if (!MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, leadID)) {
+                LOGGER.info("Enriched publication for MCRUser: {}, with nameIdentifier of type: {} (lead_id) " +
+                    "and value: {}", mcrUser.getUserName(), leadID, leadIDValue);
+                enrichModsNameElementByNameIdentifierElement(modsNameElement, leadID, leadIDValue);
             }
         }
     }
@@ -263,7 +276,6 @@ public class PublicationEventHandler extends MCREventHandlerBase {
                 // create new UUID and persist it for mcrUser
                 uuid = UUID.randomUUID().toString();
                 mcrUser.getAttributes().add(new MCRUserAttribute(CONNECTION_TYPE_NAME, uuid));
-                MCRUserManager.updateUser(mcrUser);
             }
             // if not already present, persist connection in mods:name - nameIdentifier-Element
             if(!MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, modsTypeName)) {
@@ -282,7 +294,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
             Filters.element(), null, MODS_NAMESPACE).evaluateFirst(nameElement);
 
         if((givenName != null) && (familyName != null)) {
-            return givenName.getText() + " " + familyName.getText();
+            return familyName.getText() + ", " + givenName.getText();
         }
 
         return mcrUser.getUserID();

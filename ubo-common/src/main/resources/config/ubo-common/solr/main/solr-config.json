@@ -16,11 +16,14 @@
 				"facet.mincount": "1",
 				"facet.field": [
 					"status",
+					"partOf",
 					"importID",
 					"year",
+					"connection_nid_text",
 					"facet_person",
 					"subject",
 					"genre",
+					"origin_exact",
 					"facet_host_title",
 					"oa"
 				],

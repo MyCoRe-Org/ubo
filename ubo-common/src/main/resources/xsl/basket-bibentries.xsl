@@ -5,9 +5,10 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:java="http://xml.apache.org/xalan/java"
-  exclude-result-prefixes="xsl xalan i18n mods java"
+  exclude-result-prefixes="xsl xalan i18n mcrxml mods java"
 >
 
 <xsl:include href="mods-display.xsl" />
@@ -21,7 +22,10 @@
   <html id="basket">
     <head>
       <title>Merkliste</title>
-      <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
+      <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
+        <script src="{$WebApplicationBaseURL}modules/orcid2/js/orcid-auth.js"/>
+        <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
+      </xsl:if>
     </head>
     <body>
       <xsl:call-template name="actions" />

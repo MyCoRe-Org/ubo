@@ -14,7 +14,6 @@
 <xsl:param name="CurrentLang" />
 <xsl:param name="WebApplicationBaseURL" />
 <xsl:param name="UBO.Build.TimeStamp" select="''" />
-<xsl:param name="MCR.ORCID.LinkURL" />
 
 <xsl:output method="html" encoding="UTF-8" media-type="text/html" indent="yes" xalan:indent-amount="2" />
 

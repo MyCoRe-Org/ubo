@@ -43,6 +43,7 @@
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'project')]" mode="solrField" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fundingType')]" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:titleInfo[not(@type)]" mode="solrField.host" />
     <xsl:apply-templates select="mods:relatedItem[@type='host'][mods:genre='journal']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:part" mode="solrField" />
@@ -174,6 +175,13 @@
     <field name="nid_{@type}">
       <xsl:value-of select="text()" />
     </field>
+
+    <field name="{@type}_nid_text">
+      <xsl:value-of select="../mods:namePart[@type='family']" />
+      <xsl:for-each select="../mods:namePart[@type='given'][1]">
+        <xsl:value-of select="concat(', ',text())" />
+      </xsl:for-each>
+    </field>
   </xsl:template>
 
   <xsl:template match="mods:name[mods:nameIdentifier[@type='lsf']]" mode="solrField.lsf">
@@ -293,6 +301,12 @@
 
   <xsl:template match="mods:classification[contains(@authorityURI,'project')]" mode="solrField">
     <field name="project">
+      <xsl:value-of select="substring-after(@valueURI,'#')" />
+    </field>
+  </xsl:template>
+
+  <xsl:template match="mods:classification[contains(@authorityURI,'fundingType')]" mode="solrField">
+    <field name="fundingType">
       <xsl:value-of select="substring-after(@valueURI,'#')" />
     </field>
   </xsl:template>

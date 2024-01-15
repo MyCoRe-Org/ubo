@@ -13,8 +13,9 @@
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   xmlns:mcr="http://www.mycore.org/"
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
   xmlns:encoder="xalan://java.net.URLEncoder"
-  exclude-result-prefixes="xsl xalan ubo mods xlink i18n dc mcr encoder"
+  exclude-result-prefixes="xsl xalan ubo mods xlink i18n dc mcr mcrxml encoder"
 >
 
 <xsl:include href="mods-dc-meta.xsl" />
@@ -58,7 +59,11 @@
 <xsl:template name="head.additional">
   <xsl:apply-templates select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods" mode="dc-meta" />
   <xsl:apply-templates select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods" mode="highwire" />
-  <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
+
+  <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
+    <script src="{$WebApplicationBaseURL}modules/orcid2/js/orcid-auth.js"/>
+    <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
+  </xsl:if>
 </xsl:template>
 
 <!-- ========== Navigation ========== -->

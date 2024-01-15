@@ -143,12 +143,39 @@
     cursor: pointer;
   }
 
+  .ubo-person-popover-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .popover-header {
+    padding-right: 3rem;
+  }
+
+  .ubo-person-connected {
+    // color: $warning;
+  }
+
+  .personalName {
+    white-space: nowrap;
+    display: inline-block;
+    margin-right: .5em;
+  }
+
   .ubo-mandatory::before {
     content: "* \00A0";
   }
 
   .ubo-duplicateid-link::after {
     content: " ";
+  }
+
+  .ubo-jopservice-img {
+    float:none;
+    height: 1rem;
+    vertical-align: baseline;
+    padding-left: 5px;
   }
 
 // Large devices (desktops) and below: <= 1200px

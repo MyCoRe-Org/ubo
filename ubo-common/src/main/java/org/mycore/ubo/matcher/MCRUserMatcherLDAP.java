@@ -1,23 +1,5 @@
 package org.mycore.ubo.matcher;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.text.Normalizer;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import javax.naming.NamingException;
-import javax.naming.ldap.LdapContext;
-
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -34,6 +16,23 @@ import org.mycore.ubo.ldap.LDAPSearcher;
 import org.mycore.user2.MCRRealmFactory;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
+
+import javax.naming.NamingException;
+import javax.naming.ldap.LdapContext;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Given a MCRUser match against the users of a LDAP-Server, enriching the attributes of the MCRUser by any matched
@@ -70,7 +69,7 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
 
     private final static Logger LOGGER = LogManager.getLogger(MCRUserMatcherLDAP.class);
 
-    private final static String CONFIG_LDAP_LOGIN_ATTRIBUTENAME = "MCR.user2.LDAP.Login.AttributeName";
+    protected final static String CONFIG_LDAP_LOGIN_ATTRIBUTENAME = "MCR.user2.LDAP.Login.AttributeName";
 
     // all members regarding configuration of explicit mods/mycore nameIdentifier mapping
     private final static String CONFIG_EXPLICIT_NAMEIDENTIFIER_MAPPING = "MCR.user2.LDAP.Mapping.explicit";
@@ -230,7 +229,7 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
         return matcherDTO;
     }
 
-    private String getUserNameFromLDAPUser(LDAPObject ldapUser) {
+    protected String getUserNameFromLDAPUser(LDAPObject ldapUser) {
         String userName = "";
         String ldapLoginAttributeName = MCRConfiguration2.getString(CONFIG_LDAP_LOGIN_ATTRIBUTENAME).orElse("");
         if (StringUtils.isEmpty(ldapLoginAttributeName)) {
