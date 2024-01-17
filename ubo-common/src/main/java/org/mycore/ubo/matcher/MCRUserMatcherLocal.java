@@ -29,7 +29,7 @@ public class MCRUserMatcherLocal implements MCRUserMatcher {
 
         MCRUser mcrUser = matcherDTO.getMCRUser();
         List<MCRUser> matchingUsers = new ArrayList<>(getUsersForGivenAttributes(mcrUser.getAttributes()));
-        if(matchingUsers.size() == 1) {
+        if(matchingUsers.size() >= 1) {
             MCRUser matchingUser = matchingUsers.get(0);
 
             LOGGER.info("Found local matching user! Matched user: {} and attributes: {} with local user: {} and attributes: {}",
