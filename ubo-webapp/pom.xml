@@ -80,5 +80,11 @@
       <artifactId>ubo-common</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>org.mycore.ubo</groupId>
+      <artifactId>ubo-modsperson</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
 </project>

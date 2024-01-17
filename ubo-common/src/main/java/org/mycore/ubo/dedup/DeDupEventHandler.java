@@ -28,6 +28,10 @@ public class DeDupEventHandler extends MCREventHandlerBase {
     }
 
     private void updateDeDupCriteria(MCRObject obj) {
+        if (!"mods".equals(obj.getId().getTypeId())) {
+            return;
+        }
+
         LOGGER.info("updating deduplication keys for object " + obj.getId().toString());
         Element mods = new MCRMODSWrapper(obj).getMODS();
         new DeDupCriteriaBuilder().updateDeDupCriteria(mods);
