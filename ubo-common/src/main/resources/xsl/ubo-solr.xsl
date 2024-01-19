@@ -50,7 +50,6 @@
     <xsl:apply-templates select="descendant::mods:originInfo" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:relatedItem[@type='series']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:name[@type='conference'][not(ancestor::mods:relatedItem[@type='references'])][1]" mode="solrField" />
-    <xsl:apply-templates select="mods:originInfo/mods:dateIssued[1][translate(text(),'1234567890','YYYYYYYYYY')='YYYY']" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:originInfo/mods:dateIssued[1][translate(text(),'1234567890','YYYYYYYYYY')='YYYY']" mode="solrField.host" />
     <xsl:apply-templates select="descendant::mods:identifier[@type]" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:shelfLocator" mode="solrField" />
@@ -63,6 +62,7 @@
     <xsl:call-template name="sortby_person" />
     <xsl:call-template name="oa" />
     <xsl:call-template name="partOf" />
+    <xsl:call-template name="year" />
   </xsl:template>
 
   <xsl:template name="sortby_person">
@@ -334,6 +334,21 @@
     <field name="year">
       <xsl:value-of select="text()" />
     </field>
+  </xsl:template>
+
+  <xsl:template name="year">
+    <xsl:choose>
+      <xsl:when test="mods:originInfo/mods:dateIssued[translate(text(),'1234567890','YYYYYYYYYY')='YYYY']">
+        <field name="year">
+          <xsl:value-of select="mods:originInfo/mods:dateIssued[translate(text(),'1234567890','YYYYYYYYYY')='YYYY'][1]/text()" />
+        </field>
+      </xsl:when>
+      <xsl:when test="mods:relatedItem/mods:originInfo/mods:dateIssued[translate(text(),'1234567890','YYYYYYYYYY')='YYYY']">
+        <field name="year">
+          <xsl:value-of select="mods:relatedItem/mods:originInfo/mods:dateIssued[translate(text(),'1234567890','YYYYYYYYYY')='YYYY'][translate(text(),'1234567890','YYYYYYYYYY')='YYYY'][1]/text()" />
+        </field>
+      </xsl:when>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="mods:relatedItem[@type='host']/mods:originInfo/mods:dateIssued" mode="solrField.host">
