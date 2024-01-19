@@ -344,10 +344,9 @@
         </field>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:for-each select="descendant::mods:relatedItem[@type='host']/mods:originInfo/mods:dateIssued[translate(text(),'1234567890','YYYYYYYYYY')='YYYY'][1]">
-          <field name="year">
-            <xsl:value-of select="text()" />
-          </field>
+        <xsl:for-each select="mods:relatedItem[@type='host'][1]">
+          <xsl:call-template name="year" />
+        <xsl:for-each>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
