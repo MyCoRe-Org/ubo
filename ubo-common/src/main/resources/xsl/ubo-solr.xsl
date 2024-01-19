@@ -343,11 +343,12 @@
           <xsl:value-of select="mods:originInfo/mods:dateIssued[translate(text(),'1234567890','YYYYYYYYYY')='YYYY'][1]/text()" />
         </field>
       </xsl:when>
-      <xsl:when test="mods:relatedItem/mods:originInfo/mods:dateIssued[translate(text(),'1234567890','YYYYYYYYYY')='YYYY']">
-        <field name="year">
-          <xsl:value-of select="mods:relatedItem/mods:originInfo/mods:dateIssued[translate(text(),'1234567890','YYYYYYYYYY')='YYYY'][translate(text(),'1234567890','YYYYYYYYYY')='YYYY'][1]/text()" />
-        </field>
-      </xsl:when>
+      <xsl:otherwise>
+        <xsl:for-each select="descendant::mods:relatedItem[@type='host']/mods:originInfo/mods:dateIssued[translate(text(),'1234567890','YYYYYYYYYY')='YYYY'][1]">
+          <field name="year">
+            <xsl:value-of select="text()" />
+          </field>
+      </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
