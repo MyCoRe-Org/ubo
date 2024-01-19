@@ -346,7 +346,7 @@
       <xsl:otherwise>
         <xsl:for-each select="mods:relatedItem[@type='host'][1]">
           <xsl:call-template name="year" />
-        <xsl:for-each>
+        </xsl:for-each>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
