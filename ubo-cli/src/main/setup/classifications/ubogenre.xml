@@ -179,6 +179,7 @@
       <label xml:lang="x-hosts" text="standalone" />
       <label xml:lang="de" text="Forschungsdaten" />
       <label xml:lang="en" text="research data" />
+      <label xml:lang="x-marcgt" text="database" />
   </category>
   </categories>
 </mycoreclass>
