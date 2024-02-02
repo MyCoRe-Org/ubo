@@ -265,7 +265,6 @@
     <dependency>
       <groupId>jaxen</groupId>
       <artifactId>jaxen</artifactId>
-      <scope>runtime</scope>
       <exclusions>
         <exclusion>
           <groupId>jdom</groupId>
