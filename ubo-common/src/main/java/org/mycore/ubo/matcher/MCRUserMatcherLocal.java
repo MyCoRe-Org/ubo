@@ -32,7 +32,7 @@ public class MCRUserMatcherLocal implements MCRUserMatcher {
 
     private final static String CONNECTION_TYPE_NAME = "id_connection";
 
-    private static final String XPATH_TO_BUILD_MODSNAME = "mods:name[@type='personal'][mods:namePart='%s']";
+    private static final String XPATH_TO_BUILD_MODSNAME = "mods:name[@type='personal']";
 
     @Override
     public MCRUserMatcherDTO matchUser(MCRUserMatcherDTO matcherDTO) {
@@ -77,8 +77,8 @@ public class MCRUserMatcherLocal implements MCRUserMatcher {
 
     private MCRMerger buildNameMergerFrom(MCRUser user) {
         try {
-            Element modsName = new MCRNodeBuilder().buildElement(String.format(
-                    XPATH_TO_BUILD_MODSNAME, user.getRealName()), null, null);
+            Element modsName = new MCRNodeBuilder().buildElement(XPATH_TO_BUILD_MODSNAME
+                    + "[mods:namePart='" + user.getRealName() + "']", null, null);
             return MCRMergerFactory.buildFrom(modsName);
         } catch (Exception shouldNeverOccur) {
             throw new MCRException(shouldNeverOccur);
