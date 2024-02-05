@@ -81,7 +81,7 @@ public class MCRUserMatcherLocal implements MCRUserMatcher {
     private MCRMerger buildNameMergerFrom(MCRUser user) {
         try {
             Element modsName = new MCRNodeBuilder().buildElement(XPATH_TO_BUILD_MODSNAME
-                + "[mods:namePart='" + user.getRealName() + "']", null, null);
+                + "[mods:namePart=\"" + user.getRealName() + "\"]", null, null);
             return MCRMergerFactory.buildFrom(modsName);
         } catch (Exception shouldNeverOccur) {
             throw new MCRException(shouldNeverOccur);

@@ -63,8 +63,6 @@ public class PublicationEventHandlerTest extends MCRStoreTestCase {
         MCRMetadataManager.fireRepairEvent(obj2);
 
         // Assert
-        Assert.assertEquals(2, MCRUserManager.countUsers(null, null, null, null));
-
         List<MCRUser> users = MCRUserManager.listUsers(null, null, null, null);
         Assert.assertEquals(2, users.size());
 
@@ -90,7 +88,26 @@ public class PublicationEventHandlerTest extends MCRStoreTestCase {
 
         MCRUserAttribute scopus = assertSingleAttribute(attributesUserMeyer, "id_scopus");
         Assert.assertEquals(scopus.getValue(), "1112222444");
+    }
 
+    /**
+     * Tests if author names with an apostrophe in them are correctly processed
+     * by the {@link PublicationEventHandler#handleObjectRepaired(MCREvent, MCRObject) repair-event}
+     * @throws SAXParseException in case of error
+     * @throws MCRAccessException in case of error
+     */
+    @Test
+    public void testHandleObjectRepairedApostrophe() throws SAXParseException, MCRAccessException {
+        URL url = MCRObjectMetadataTest.class.getResource("/PublicationEventHandlerTest/junit_mods_00000004.xml");
+        Document doc = MCRXMLParserFactory.getValidatingParser().parseXML(new MCRURLContent(url));
+        MCRObject obj = new MCRObject(doc);
+
+        MCRMetadataManager.create(obj);
+        MCRMetadataManager.fireRepairEvent(obj);
+
+        List<MCRUser> users = MCRUserManager.listUsers(null, null, null, null);
+        Assert.assertEquals(1, users.size());
+        Assert.assertEquals("O'Reilly, Lisa", users.get(0).getRealName());
     }
 
     /**
