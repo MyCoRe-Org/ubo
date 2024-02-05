@@ -9,7 +9,6 @@
           </mods:titleInfo>
           <mods:name type="personal">
             <mods:namePart type="family">O'Reilly</mods:namePart>
-            <mods:namePart type="given">Lisa</mods:namePart>
             <mods:nameIdentifier type="lsf">22222</mods:nameIdentifier>
           </mods:name>
         </mods:mods>

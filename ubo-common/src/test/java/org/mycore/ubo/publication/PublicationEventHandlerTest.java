@@ -1,6 +1,7 @@
 package org.mycore.ubo.publication;
 
 import org.jdom2.Document;
+import org.jdom2.JDOMException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,13 +9,14 @@ import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRStoreTestCase;
 import org.mycore.common.content.MCRURLContent;
 import org.mycore.common.events.MCREvent;
-import org.mycore.common.xml.MCRXMLParserFactory;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectMetadataTest;
 import org.mycore.user2.*;
+import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import java.io.IOException;
 import java.net.URL;
 
 import java.util.HashSet;
@@ -40,18 +42,18 @@ public class PublicationEventHandlerTest extends MCRStoreTestCase {
      * @throws MCRAccessException in case of error
      */
     @Test
-    public void testHandleObjectRepaired() throws SAXParseException, MCRAccessException {
+    public void testHandleObjectRepaired() throws SAXException, MCRAccessException, IOException, JDOMException {
         // Arrange
         URL url1 = MCRObjectMetadataTest.class.getResource("/PublicationEventHandlerTest/junit_mods_00000001.xml");
-        Document doc1 = MCRXMLParserFactory.getValidatingParser().parseXML(new MCRURLContent(url1));
+        Document doc1 = new MCRURLContent(url1).asXML();
         MCRObject obj1 = new MCRObject(doc1);
 
         URL url2 = MCRObjectMetadataTest.class.getResource("/PublicationEventHandlerTest/junit_mods_00000002.xml");
-        Document doc2 = MCRXMLParserFactory.getValidatingParser().parseXML(new MCRURLContent(url2));
+        Document doc2 = new MCRURLContent(url2).asXML();
         MCRObject obj2 = new MCRObject(doc2);
 
         URL url3 = MCRObjectMetadataTest.class.getResource("/PublicationEventHandlerTest/junit_mods_00000003.xml");
-        Document doc3 = MCRXMLParserFactory.getValidatingParser().parseXML(new MCRURLContent(url3));
+        Document doc3 = new MCRURLContent(url3).asXML();
         MCRObject obj3 = new MCRObject(doc3);
 
         MCRMetadataManager.create(obj1);
@@ -91,15 +93,16 @@ public class PublicationEventHandlerTest extends MCRStoreTestCase {
     }
 
     /**
-     * Tests if author names with an apostrophe in them are correctly processed
+     * Tests if author names with only the namePart-field "family" are correctly processed
      * by the {@link PublicationEventHandler#handleObjectRepaired(MCREvent, MCRObject) repair-event}
      * @throws SAXParseException in case of error
      * @throws MCRAccessException in case of error
      */
     @Test
-    public void testHandleObjectRepairedApostrophe() throws SAXParseException, MCRAccessException {
+    public void testHandleObjectRepairedOnlyFamilyName()
+        throws SAXException, MCRAccessException, IOException, JDOMException {
         URL url = MCRObjectMetadataTest.class.getResource("/PublicationEventHandlerTest/junit_mods_00000004.xml");
-        Document doc = MCRXMLParserFactory.getValidatingParser().parseXML(new MCRURLContent(url));
+        Document doc = new MCRURLContent(url).asXML();
         MCRObject obj = new MCRObject(doc);
 
         MCRMetadataManager.create(obj);
@@ -107,7 +110,7 @@ public class PublicationEventHandlerTest extends MCRStoreTestCase {
 
         List<MCRUser> users = MCRUserManager.listUsers(null, null, null, null);
         Assert.assertEquals(1, users.size());
-        Assert.assertEquals("O'Reilly, Lisa", users.get(0).getRealName());
+        Assert.assertEquals("O'Reilly", users.get(0).getRealName());
     }
 
     /**

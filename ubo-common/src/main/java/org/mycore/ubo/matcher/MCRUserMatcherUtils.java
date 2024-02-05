@@ -81,8 +81,8 @@ public class MCRUserMatcherUtils {
     /**
      * Extracts the real name from the given MODS-Element
      * @param modsNameElement the given MODS "name"-Element
-     * @return the real name in the format "family-name, given-name", or null if real
-     * name could not be determined
+     * @return the real name in the format "family-name, given-name", or only the family name,
+     * or null if real name could not be determined
      */
     public static String getRealName(Element modsNameElement) {
         Element givenName = XPATH_FACTORY.compile("mods:namePart[@type='given']",
@@ -93,6 +93,8 @@ public class MCRUserMatcherUtils {
 
         if ((givenName != null) && (familyName != null)) {
             return familyName.getText() + ", " + givenName.getText();
+        } else if ((familyName != null)) {
+            return familyName.getText();
         }
         return null;
     }

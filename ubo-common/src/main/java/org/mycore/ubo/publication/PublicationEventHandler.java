@@ -87,7 +87,8 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     private final static String CONFIG_LEAD_ID = "MCR.user2.matching.lead_id";
     private final static String CONFIG_CONNECTION_STRATEGY = "MCR.user2.matching.publication.connection.strategy";
     private final static String CONFIG_DEFAULT_ROLE = "MCR.user2.IdentityManagement.UserCreation.DefaultRole";
-    private final static String CONFIG_UNVALIDATED_REALM = "MCR.user2.IdentityManagement.UserCreation.Unvalidated.Realm";
+    private final static String CONFIG_UNVALIDATED_REALM
+        = "MCR.user2.IdentityManagement.UserCreation.Unvalidated.Realm";
 
     private final static String CONFIG_SKIP_LEAD_ID = "MCR.user2.matching.lead_id.skip";
 
@@ -95,7 +96,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
 
     /** The default Role that is assigned to newly created users **/
     private String defaultRoleForNewlyCreatedUsers;
-    
+
     /** The ID of the realm for newly created unvalidated MCRUsers **/
     private String unvalidatedRealmID;
 
@@ -107,13 +108,13 @@ public class PublicationEventHandler extends MCREventHandlerBase {
 
     /** A chain of implemented user matchers */
     private List<MCRUserMatcher> chainOfUserMatchers;
-    
+
     /** The configured connection strategy to "connect" publications to MCRUsers */
     private String connectionStrategy;
 
     public PublicationEventHandler() {
         super();
-                
+
         this.defaultRoleForNewlyCreatedUsers = MCRConfiguration2.getString(CONFIG_DEFAULT_ROLE).orElse("submitter");
         this.unvalidatedRealmID = MCRConfiguration2.getString(CONFIG_UNVALIDATED_REALM).get();
         this.leadIDName = MCRConfiguration2.getString(CONFIG_LEAD_ID).orElse("");
@@ -126,13 +127,14 @@ public class PublicationEventHandler extends MCREventHandlerBase {
         List<MCRUserMatcher> matchers = new ArrayList<>();
 
         Optional<String> matcherConfig = MCRConfiguration2.getString(CONFIG_MATCHERS);
-        if(matcherConfig.isPresent()) {
+        if (matcherConfig.isPresent()) {
             String[] matcherClasses = matcherConfig.get().split(",");
             for (int i = 0; i < matcherClasses.length; i++) {
                 String matcherClass = matcherClasses[i];
                 try {
-                    
-                    matchers.add((MCRUserMatcher) MCRClassTools.forName(matcherClass).getDeclaredConstructor().newInstance());
+
+                    matchers.add(
+                        (MCRUserMatcher) MCRClassTools.forName(matcherClass).getDeclaredConstructor().newInstance());
                 } catch (Exception e) {
                     throw new MCRConfigurationException("Property key " + CONFIG_MATCHERS + " not valid.", e);
                 }
@@ -165,7 +167,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     }
 
     private void handleName(Element modsNameElement) {
-        MCRUser userFromModsName = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement); 
+        MCRUser userFromModsName = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement);
         MCRUserMatcherDTO matcherDTO = new MCRUserMatcherDTO(userFromModsName);
 
         // call our configured Implementation(s) of MCRUserMatcher
@@ -195,7 +197,8 @@ public class PublicationEventHandler extends MCREventHandlerBase {
         MCRConfiguration2.getBoolean(CONFIG_SKIP_LEAD_ID)
             .filter(Boolean::booleanValue)
             .ifPresent(trueValue -> {
-                List<Element> elementsToRemove = modsNameElement.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
+                List<Element> elementsToRemove
+                    = modsNameElement.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
                         .stream()
                         .filter(element -> element.getAttributeValue("type").equals(leadIDName))
                         .collect(Collectors.toList());
@@ -231,7 +234,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
      * mycore.properties and given as parameter "leadID".
      * A new mods:nameIdentifier-element with type "lead_id" and its value will only be created if no other
      * mods:nameIdentifier-element with the same ID/type exists as a sub-element of the given modsNameElement.
-
+    
      * @param modsNameElement the mods:name-element which will be enriched
      * @param mcrUser the MCRUser corresponding to the modsNameElement
      */
@@ -254,13 +257,13 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     }
 
     private void connectModsNameElementWithMCRUser(Element modsNameElement, MCRUser mcrUser) {
-        if("uuid".equals(connectionStrategy)) {
+        if ("uuid".equals(connectionStrategy)) {
             String connectionID = getOrAddConnectionID(mcrUser);
             // if not already present, persist connection in mods:name - nameIdentifier-Element
             String connectionIDType = CONNECTION_TYPE_NAME.replace("id_", "");
-            if(!MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, connectionIDType)) {
+            if (!MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, connectionIDType)) {
                 LOGGER.info("Connecting publication with MCRUser: {}, via nameIdentifier of type: {} " +
-                        "and value: {}", mcrUser.getUserName(), connectionIDType, connectionID);
+                    "and value: {}", mcrUser.getUserName(), connectionIDType, connectionID);
                 addNameIdentifierTo(modsNameElement, connectionIDType, connectionID);
             }
         }
@@ -269,7 +272,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     private String getOrAddConnectionID(MCRUser mcrUser) {
         // check if MCRUser already has a "connection" UUID
         String uuid = mcrUser.getUserAttribute(CONNECTION_TYPE_NAME);
-        if(uuid == null) {
+        if (uuid == null) {
             // create new UUID and persist it for mcrUser
             uuid = UUID.randomUUID().toString();
             mcrUser.getAttributes().add(new MCRUserAttribute(CONNECTION_TYPE_NAME, uuid));
@@ -290,8 +293,10 @@ public class PublicationEventHandler extends MCREventHandlerBase {
         Element givenName = XPATH_TO_GET_GIVEN_NAME.evaluateFirst(nameElement);
         Element familyName = XPATH_TO_GET_FAMILY_NAME.evaluateFirst(nameElement);
 
-        if ( (givenName != null) && (familyName != null)) {
-            return Optional.of( familyName.getText() + ", " + givenName.getText() );
+        if ((givenName != null) && (familyName != null)) {
+            return Optional.of(familyName.getText() + ", " + givenName.getText());
+        } else if (familyName != null) {
+            return Optional.of(familyName.getText());
         } else {
             return Optional.empty();
         }
