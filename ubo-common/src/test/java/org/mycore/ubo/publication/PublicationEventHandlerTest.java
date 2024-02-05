@@ -9,36 +9,27 @@ import org.mycore.common.MCRStoreTestCase;
 import org.mycore.common.content.MCRURLContent;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.xml.MCRXMLParserFactory;
-import org.mycore.datamodel.classifications2.MCRCategory;
-import org.mycore.datamodel.classifications2.MCRCategoryDAO;
-import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
-import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImplTest;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectMetadataTest;
-import org.mycore.user2.MCRUser;
-import org.mycore.user2.MCRUserAttribute;
-import org.mycore.user2.MCRUserManager;
+import org.mycore.user2.*;
 import org.xml.sax.SAXParseException;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
 import static org.junit.Assert.fail;
 
-
 public class PublicationEventHandlerTest extends MCRStoreTestCase {
 
     @Before
-    public void before() throws SAXParseException, IOException, URISyntaxException {
-        MCRCategory groupsCategory = MCRCategoryDAOImplTest.loadClassificationResource("/mcr-roles.xml");
-        MCRCategoryDAO DAO = MCRCategoryDAOFactory.getInstance();
-        DAO.addCategory(null, groupsCategory);
+    public void before() {
+        MCRRoleManager.addRole(new MCRRole("admin", new HashSet<>()));
+        MCRRoleManager.addRole(new MCRRole("submitter", new HashSet<>()));
     }
 
     /**
@@ -77,19 +68,18 @@ public class PublicationEventHandlerTest extends MCRStoreTestCase {
         List<MCRUser> users = MCRUserManager.listUsers(null, null, null, null);
         Assert.assertEquals(2, users.size());
 
+        SortedSet<MCRUserAttribute> attributesUserMueller = users.get(0).getRealName().contains("Müller")
+            ? users.get(0).getAttributes() : users.get(1).getAttributes();
 
-        SortedSet<MCRUserAttribute> attributesUserMueller = users.get(0).getRealName().contains("Müller") ?
-                users.get(0).getAttributes() :  users.get(1).getAttributes();
-
-        SortedSet<MCRUserAttribute> attributesUserMeyer = users.get(0).getRealName().contains("Meyer") ?
-                users.get(0).getAttributes() :  users.get(1).getAttributes();
+        SortedSet<MCRUserAttribute> attributesUserMeyer = users.get(0).getRealName().contains("Meyer")
+            ? users.get(0).getAttributes() : users.get(1).getAttributes();
 
         Assert.assertEquals(4, attributesUserMueller.size());
         assertSingleAttribute(attributesUserMueller, "id_connection");
         MCRUserAttribute lsf = assertSingleAttribute(attributesUserMueller, "id_lsf");
         Assert.assertEquals(lsf.getValue(), "11111");
         Assert.assertEquals(2, attributesUserMueller.stream()
-                .filter(attr -> attr.getName().equals("id_scopus")).toList().size());
+            .filter(attr -> attr.getName().equals("id_scopus")).toList().size());
 
         Assert.assertEquals(3, attributesUserMeyer.size());
 
@@ -114,11 +104,10 @@ public class PublicationEventHandlerTest extends MCRStoreTestCase {
      */
     private MCRUserAttribute assertSingleAttribute(Set<MCRUserAttribute> attributes, String attrName) {
         return attributes.stream()
-                .filter(attr -> attr.getName().equals(attrName))
-                .reduce((a, b) -> {
-                    fail("multiple IDs of type " + attrName + ": " + a.getValue() + ", " + b.getValue());
-                    return null;
-                }).get();
+            .filter(attr -> attr.getName().equals(attrName))
+            .reduce((a, b) -> {
+                fail("multiple IDs of type " + attrName + ": " + a.getValue() + ", " + b.getValue());
+                return null;
+            }).get();
     }
 }
-

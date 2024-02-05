@@ -10,7 +10,7 @@
           <mods:name type="personal">
             <mods:namePart type="family">Meyer</mods:namePart>
             <mods:namePart type="given">Lena</mods:namePart>
-			<mods:nameIdentifier type="lsf">12345</mods:nameIdentifier>
+            <mods:nameIdentifier type="lsf">12345</mods:nameIdentifier>
             <mods:nameIdentifier type="scopus">1112222444</mods:nameIdentifier>
           </mods:name>
         </mods:mods>

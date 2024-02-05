@@ -30,7 +30,6 @@ import org.mycore.user2.MCRUserAttribute;
 
 import static org.mycore.common.MCRConstants.XPATH_FACTORY;
 
-
 /**
  * Utility class for everything related to matching users of publications in MODS-format with MCRUsers and other
  * applications/servers/APIs.
@@ -87,12 +86,12 @@ public class MCRUserMatcherUtils {
      */
     public static String getRealName(Element modsNameElement) {
         Element givenName = XPATH_FACTORY.compile("mods:namePart[@type='given']",
-                Filters.element(), null, MODS_NAMESPACE).evaluateFirst(modsNameElement);
+            Filters.element(), null, MODS_NAMESPACE).evaluateFirst(modsNameElement);
 
         Element familyName = XPATH_FACTORY.compile("mods:namePart[@type='family']",
-                Filters.element(), null, MODS_NAMESPACE).evaluateFirst(modsNameElement);
+            Filters.element(), null, MODS_NAMESPACE).evaluateFirst(modsNameElement);
 
-        if((givenName != null) && (familyName != null)) {
+        if ((givenName != null) && (familyName != null)) {
             return familyName.getText() + ", " + givenName.getText();
         }
         return null;
@@ -154,10 +153,10 @@ public class MCRUserMatcherUtils {
             XPathFactory xFactory = XPathFactory.instance();
 
             XPathExpression<Element> givenNameExpr = xFactory.compile("mods:namePart[@type='given']",
-                    Filters.element(), null, MODS_NAMESPACE);
+                Filters.element(), null, MODS_NAMESPACE);
             Element givenNameElem = givenNameExpr.evaluateFirst(modsNameElement);
             XPathExpression<Element> familyNameExpr = xFactory.compile("mods:namePart[@type='family']",
-                    Filters.element(), null, MODS_NAMESPACE);
+                Filters.element(), null, MODS_NAMESPACE);
             Element familyNameElem = familyNameExpr.evaluateFirst(modsNameElement);
 
             if (familyNameElem != null) {
@@ -190,7 +189,8 @@ public class MCRUserMatcherUtils {
     }
 
     public static boolean checkAffiliation(Element modsNameElement) {
-        String affiliation = MCRConfiguration2.getString("MCR.user2.IdentityManagement.UserCreation.Affiliation").orElse(null);
+        String affiliation
+            = MCRConfiguration2.getString("MCR.user2.IdentityManagement.UserCreation.Affiliation").orElse(null);
         if (affiliation == null) {
             return false;
         }
@@ -202,7 +202,7 @@ public class MCRUserMatcherUtils {
 
         XPathFactory xFactory = XPathFactory.instance();
         XPathExpression<Element> affiliationExpr = xFactory.compile("mods:affiliation",
-                Filters.element(), null, MODS_NAMESPACE);
+            Filters.element(), null, MODS_NAMESPACE);
         Element affiliationElem = affiliationExpr.evaluateFirst(modsNameElement);
         if (affiliationElem != null) {
             String modsNameAffiliation = affiliationElem.getText();
