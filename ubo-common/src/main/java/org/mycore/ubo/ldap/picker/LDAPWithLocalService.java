@@ -1,5 +1,6 @@
 package org.mycore.ubo.ldap.picker;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.naming.OperationNotSupportedException;
@@ -19,6 +20,7 @@ public class LDAPWithLocalService extends LDAPService {
         PersonSearchResult results = super.searchPerson(query);
         LocalService localService = new LocalService();
         PersonSearchResult personSearchResult = localService.searchPerson(query);
+        flipNameParts(personSearchResult.personList);
         results.join(personSearchResult, 0);
 
         if (LDAP_REALM != null) {
@@ -27,5 +29,22 @@ public class LDAPWithLocalService extends LDAPService {
         }
 
         return results;
+    }
+
+    protected void flipNameParts(List<PersonSearchResult.PersonResult> list) {
+        for (PersonSearchResult.PersonResult p : list) {
+            // split at ',' and remove leading and trailing spaces
+            String[] parts = p.displayName.split("\\s*,\\s*");
+
+            if (parts.length > 1) {
+                String firstName = parts[1];
+                String lastName = parts[0];
+
+                // set name parts with new values
+                p.firstName = firstName;
+                p.lastName = lastName;
+                p.displayName = p.firstName + " " + p.lastName;
+            }
+        }
     }
 }

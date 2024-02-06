@@ -18,7 +18,7 @@
       <mods:genre type="intern">journal</mods:genre>
       <xsl:apply-templates select="marc:datafield[@tag='245']" />
       <xsl:apply-templates select="marc:datafield[@tag='210']" />
-      <xsl:apply-templates select="marc:datafield[@tag='264']" />
+      <xsl:apply-templates select="marc:datafield[@tag='264'][@ind1='3']" />
       <xsl:apply-templates select="marc:datafield[@tag='022']" />
       <xsl:apply-templates select="marc:datafield[@tag='041']" />
     </mods:mods>
