@@ -1,6 +1,5 @@
 package org.mycore.ubo.publication;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
@@ -51,20 +50,10 @@ import static org.mycore.ubo.matcher.MCRUserMatcherUtils.MODS_NAMESPACE;
  *
  * 4. Persist all new MCRUsers ONLY if they where matched/enriched in 2.1. or in 3.
  *
- * 5. Extend the mods:name -&gt; mods:nameIdentifier element of the publication with the configured "lead-ID" if it is
- * not present but available in the matched MCRUsers attributes.
- *
- * 6. If no MCRUser was created because there was neither Match found nor attributes enriched (2.1. or 3.), check each
- * person in the publication for affiliation. If an affiliation is found, create a new MCRUser in a special realm and
- * persist it.
- *
  * The following properties in the mycore.properties are used:
  *
  * # Default Role that is assigned to newly created users
  * MCR.user2.IdentityManagement.UserCreation.DefaultRole=submitter
- *
- * # Realm of unvalidated MCRUsers
- * MCR.user2.IdentityManagement.UserCreation.Unvalidated.Realm=unvalidated
  *
  * MCR.user2.matching.chain (Multiple implementations separated by ",")
  * Example:
@@ -87,18 +76,11 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     private final static String CONFIG_LEAD_ID = "MCR.user2.matching.lead_id";
     private final static String CONFIG_CONNECTION_STRATEGY = "MCR.user2.matching.publication.connection.strategy";
     private final static String CONFIG_DEFAULT_ROLE = "MCR.user2.IdentityManagement.UserCreation.DefaultRole";
-    private final static String CONFIG_UNVALIDATED_REALM
-        = "MCR.user2.IdentityManagement.UserCreation.Unvalidated.Realm";
-
     private final static String CONFIG_SKIP_LEAD_ID = "MCR.user2.matching.lead_id.skip";
-
     private final static String CONNECTION_TYPE_NAME = "id_connection";
 
     /** The default Role that is assigned to newly created users **/
     private String defaultRoleForNewlyCreatedUsers;
-
-    /** The ID of the realm for newly created unvalidated MCRUsers **/
-    private String unvalidatedRealmID;
 
     /** If the matched MCRUser has this ID set in its attributes, enrich the publication with it */
     private String leadIDName;
@@ -116,7 +98,6 @@ public class PublicationEventHandler extends MCREventHandlerBase {
         super();
 
         this.defaultRoleForNewlyCreatedUsers = MCRConfiguration2.getString(CONFIG_DEFAULT_ROLE).orElse("submitter");
-        this.unvalidatedRealmID = MCRConfiguration2.getString(CONFIG_UNVALIDATED_REALM).get();
         this.leadIDName = MCRConfiguration2.getString(CONFIG_LEAD_ID).orElse("");
         this.localMatcher = new MCRUserMatcherLocal();
         this.chainOfUserMatchers = loadMatcherImplementationChain();
@@ -181,11 +162,6 @@ public class PublicationEventHandler extends MCREventHandlerBase {
         MCRUserMatcherDTO localMatcherDTO = localMatcher.matchUser(matcherDTO);
         if (localMatcherDTO.wasMatchedOrEnriched()) {
             handleUser(modsNameElement, localMatcherDTO.getMCRUser());
-        } else if (MCRUserMatcherUtils.checkAffiliation(modsNameElement) &&
-            (!MCRUserMatcherUtils.getNameIdentifiers(modsNameElement).isEmpty())) {
-            MCRUser affiliatedUser
-                = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement, unvalidatedRealmID);
-            handleUser(modsNameElement, affiliatedUser);
         } else if (containsLeadID(modsNameElement)) {
             MCRUser newLocalUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(
                 modsNameElement, MCRRealmFactory.getLocalRealm().getID());
@@ -212,7 +188,6 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     }
 
     private void handleUser(Element modsName, MCRUser user) {
-        enrichModsNameElementByLeadID(modsName, user);
         connectModsNameElementWithMCRUser(modsName, user);
         user.assignRole(defaultRoleForNewlyCreatedUsers);
         MCRUserManager.updateUser(user);
@@ -226,34 +201,6 @@ public class PublicationEventHandler extends MCREventHandlerBase {
             mcrUser.getAttributes().stream().map(a -> a.getName() + "=" + a.getValue())
                 .collect(Collectors.joining(" | ")),
             matcher.getClass());
-    }
-
-    /**
-     * Enriches the mods:name-element that corresponds to the given MCRUser with a mods:nameIdentifier-element if the
-     * given MCRUser has an attribute with the name of the so called "lead_id" that is configured in the
-     * mycore.properties and given as parameter "leadID".
-     * A new mods:nameIdentifier-element with type "lead_id" and its value will only be created if no other
-     * mods:nameIdentifier-element with the same ID/type exists as a sub-element of the given modsNameElement.
-    
-     * @param modsNameElement the mods:name-element which will be enriched
-     * @param mcrUser the MCRUser corresponding to the modsNameElement
-     */
-    private void enrichModsNameElementByLeadID(Element modsNameElement, MCRUser mcrUser) {
-        if (!MCRUserMatcherUtils.containsNameIdentifierWithType(modsNameElement, leadIDName)) {
-            getLeadIDAttributeFromUser(mcrUser).ifPresent(leadIDAttribute -> {
-                String leadIDValue = leadIDAttribute.getValue();
-                LOGGER.info("Enriched publication for MCRUser: {}, with nameIdentifier of type: {} (lead_id) " +
-                    "and value: {}", mcrUser.getUserName(), leadIDName, leadIDValue);
-                addNameIdentifierTo(modsNameElement, leadIDName, leadIDValue);
-            });
-        }
-    }
-
-    private Optional<MCRUserAttribute> getLeadIDAttributeFromUser(MCRUser mcrUser) {
-        String attributeName = "id_" + leadIDName;
-        return mcrUser.getAttributes().stream()
-            .filter(a -> a.getName().equals(attributeName))
-            .filter(a -> StringUtils.isNotEmpty(a.getValue())).findFirst();
     }
 
     private void connectModsNameElementWithMCRUser(Element modsNameElement, MCRUser mcrUser) {
