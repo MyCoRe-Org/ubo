@@ -517,10 +517,10 @@
               <xsl:attribute name="class">
                 <xsl:choose>
                   <xsl:when test="position() &lt;= $UBO.Initially.Visible.Authors or (position() = last())">
-                    <xsl:value-of select="'personalName'" />
+                    <xsl:value-of select="'text-wrap personalName'" />
                   </xsl:when>
                   <xsl:otherwise>
-                    <xsl:value-of select="'personalName d-none'" />
+                    <xsl:value-of select="'text-wrap personalName d-none'" />
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:attribute>
