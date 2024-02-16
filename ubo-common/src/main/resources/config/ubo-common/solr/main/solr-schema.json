@@ -479,7 +479,7 @@
       "name": "place",
       "type": "ubo_text",
       "multiValued": true,
-      "indexed": false,
+      "indexed": true,
       "stored": true
     }
   },
@@ -740,6 +740,18 @@
   {
     "add-copy-field": {
       "source": "note",
+      "dest": "all"
+    }
+  },
+  {
+    "add-copy-field": {
+      "source": "place",
+      "dest": "all"
+    }
+  },
+  {
+    "add-copy-field": {
+      "source": "publisher",
       "dest": "all"
     }
   },
