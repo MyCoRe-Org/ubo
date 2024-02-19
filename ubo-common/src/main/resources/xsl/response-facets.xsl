@@ -10,6 +10,8 @@
   xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
   exclude-result-prefixes="xsl xalan i18n encoder mcrxml str">
 
+<xsl:include href="resource:xsl/response-get-handler.xsl"/>
+
 <xsl:param name="RequestURL" />
 <xsl:param name="ServletsBaseURL" />
 
@@ -39,7 +41,8 @@
             <xsl:variable name="fq" select="text()" />
 
             <xsl:variable name="removeURL">
-              <xsl:text>select?</xsl:text>
+              <xsl:value-of select="$solrRequestHandler"/>
+
               <xsl:for-each select="/response/lst[@name='responseHeader']/lst[@name='params']/*">
                 <xsl:variable name="param_name" select="@name" />
                 <xsl:for-each select="descendant-or-self::str"> <!-- may be an array: arr/str or ./str -->
@@ -145,7 +148,8 @@
 
 <!-- URL to build links to add a facet filter query -->
 <xsl:variable name="baseURL">
-  <xsl:text>select?</xsl:text>
+  <xsl:value-of select="$solrRequestHandler"/>
+
   <xsl:for-each select="/response/lst[@name='responseHeader']/lst[@name='params']/*">
     <xsl:variable name="name" select="@name" />
     <xsl:for-each select="descendant-or-self::str"> <!-- may be an array: arr/str or ./str -->
