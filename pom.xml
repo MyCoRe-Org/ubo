@@ -53,7 +53,7 @@
     <java.target.version>17</java.target.version>
     <jquery.ui.version>1.13.2</jquery.ui.version>
     <jquery.version>3.5.1</jquery.version>
-    <mycore.version>2023.06.1-SNAPSHOT</mycore.version>
+    <mycore.version>2023.06.2-SNAPSHOT</mycore.version>
     <node.version>v16.0.0</node.version>
     <pica2mods.version>2.10</pica2mods.version>
     <sortpom.sortDeps>scope,groupId,artifactId</sortpom.sortDeps>
