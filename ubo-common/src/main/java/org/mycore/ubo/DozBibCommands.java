@@ -57,6 +57,20 @@ import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.ubo.importer.scopus.ScopusInitialImporter;
 import org.xml.sax.SAXException;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.zip.Deflater;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
 import static org.mycore.common.MCRConstants.MODS_NAMESPACE;
 import static org.mycore.common.MCRConstants.XPATH_FACTORY;
 
@@ -266,7 +280,7 @@ public class DozBibCommands extends MCRAbstractCommands {
             wrapper.setMODS(mods.clone());
             MCRObject obj = wrapper.getMCRObject();
 
-            obj.setId(MCRObjectID.getNextFreeId(PROJECT_ID + "_mods"));
+            obj.setId(MCRMetadataManager.getMCRObjectIDGenerator().getNextFreeId(PROJECT_ID + "_mods"));
             MCRMetadataManager.create(obj);
         }
     }
