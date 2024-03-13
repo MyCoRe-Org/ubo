@@ -109,7 +109,8 @@ public abstract class ImportJob {
             }
 
             MCRObject obj = new MCRObject(publication);
-            MCRObjectID oid = MCRObjectID.getNextFreeId(PROJECT_ID + "_mods");
+            MCRObjectID oid = MCRMetadataManager.getMCRObjectIDGenerator().getNextFreeId(PROJECT_ID + "_mods");
+
             obj.setId(oid);
             obj.getService().addFlag("importID", id);
 

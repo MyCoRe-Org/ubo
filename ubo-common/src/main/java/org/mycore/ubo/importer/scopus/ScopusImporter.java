@@ -1,13 +1,5 @@
 package org.mycore.ubo.importer.scopus;
 
-import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -30,6 +22,14 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.MCRSolrUtils;
+
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 class ScopusImporter {
 
@@ -114,7 +114,7 @@ class ScopusImporter {
         MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
         wrapper.setServiceFlag("status", STATUS);
         wrapper.setServiceFlag("importID","SCOPUS-" + getImportID());
-        MCRObjectID oid = MCRObjectID.getNextFreeId(PROJECT_ID, "mods");
+        MCRObjectID oid = MCRMetadataManager.getMCRObjectIDGenerator().getNextFreeId(PROJECT_ID, "mods");
         obj.setId(oid);
         return obj;
     }
