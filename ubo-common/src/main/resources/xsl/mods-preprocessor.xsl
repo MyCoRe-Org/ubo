@@ -85,8 +85,11 @@
       <mods:identifier type="ppn">
         <xsl:attribute name="transliteration">
           <xsl:choose>
-            <xsl:when test="contains(., ':ppn:')">
-              <xsl:value-of select="substring-after(substring-before(., ':ppn:'),'http://uri.gbv.de/document/')"/>
+            <xsl:when test="contains(., ':ppn:') and contains(., 'https://')">
+              <xsl:value-of select="substring-after(substring-before(., ':ppn:'), 'https://uri.gbv.de/document/')"/>
+            </xsl:when>
+            <xsl:when test="contains(., ':ppn:') and contains(., 'http://')">
+              <xsl:value-of select="substring-after(substring-before(., ':ppn:'), 'http://uri.gbv.de/document/')"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="$MCR.PICA2MODS.DATABASE"/>
