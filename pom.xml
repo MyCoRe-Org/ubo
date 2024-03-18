@@ -357,6 +357,11 @@
         <version>1.4.01</version>
       </dependency>
       <dependency>
+        <groupId>com.bucket4j</groupId>
+        <artifactId>bucket4j-core</artifactId>
+        <version>8.9.0</version>
+      </dependency>
+      <dependency>
         <groupId>com.sun.activation</groupId>
         <artifactId>jakarta.activation</artifactId>
         <version>${jakarta.activation.version}</version>

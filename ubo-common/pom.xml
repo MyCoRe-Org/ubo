@@ -283,6 +283,10 @@
       <artifactId>xml-apis</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.bucket4j</groupId>
+      <artifactId>bucket4j-core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>commons-discovery</groupId>
       <artifactId>commons-discovery</artifactId>
       <scope>runtime</scope>
