@@ -78,7 +78,7 @@
 
   <xsl:template match="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info">
     <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.department')}"
-          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+origin: &quot;', substring-after(@valueURI,'#'), '&quot;'))}')">
+          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+origin:&quot;', substring-after(@valueURI,'#'), '&quot;'))}')">
       <xsl:call-template name="output.category">
         <xsl:with-param name="classID" select="'ORIGIN'" />
         <xsl:with-param name="categID" select="substring-after(@valueURI,'#')" />
