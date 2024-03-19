@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * MCR.RateLimitResolver.Scopus.Behavior=error<p>
  * MCR.RateLimitResolver.Scopus.Limits=6/s
  * <p>
- * Available time units are: M=months, D=days, h=hours, min=minutes, s=seconds
+ * Available time units are: M=months, w=weeks, D=days, h=hours, min=minutes, s=seconds
  * More than one time limit can be configured separated by comma.
  * The behavior defines if a downstream URI access should:
  * <ol>
@@ -97,6 +97,9 @@ public class MCRRateLimitBuckets {
         switch (unit.toLowerCase(Locale.ROOT)) {
             case "m" -> {
                 return Duration.ofDays(30);
+            }
+            case "w" -> {
+                return Duration.ofDays(7);
             }
             case "d" -> {
                 return Duration.ofDays(1);
