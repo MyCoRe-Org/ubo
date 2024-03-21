@@ -80,6 +80,16 @@ public class MCRRateLimitResolverTest extends MCRTestCase {
     }
 
     /**
+     * Tests, if configured factored time units are resolved without error.
+     */
+    @Test
+    public void testResolveFactoredUnit() throws TransformerException {
+        MCRConfiguration2.set("MCR.RateLimitResolver.Test.Behavior", "error");
+        MCRConfiguration2.set("MCR.RateLimitResolver.Test.Limits", "100/5m");
+        MCRURIResolver.instance().resolve(RATE_LIMIT_CALL, null);
+    }
+
+    /**
      * Tests the behavior of the {@link MCRRateLimitResolver} and {@link MCRRateLimitBuckets} in case
      * of missing or wrong config.
      */
@@ -120,11 +130,19 @@ public class MCRRateLimitResolverTest extends MCRTestCase {
             = Assert.assertThrows(NumberFormatException.class, () -> MCRRateLimitBuckets.getOrCreateBucket("Test3"));
         assertTrue(numberFormatException.getMessage().contains("abc"));
 
+        // Test negative value for time unit factor
+        MCRConfiguration2.set("MCR.RateLimitResolver.Test4.Behavior", "block");
+        MCRConfiguration2.set("MCR.RateLimitResolver.Test4.Limits", "100/-5s");
+        IllegalArgumentException illegalArgumentException2
+            = Assert.assertThrows(IllegalArgumentException.class, () -> MCRRateLimitBuckets.getOrCreateBucket("Test4"));
+        assertTrue(illegalArgumentException2.getMessage().contains("-5"));
+        assertTrue(illegalArgumentException2.getMessage().contains("period should be positive"));
+
         // Test missing config
         MCRConfigurationException mcrConfigurationException2 = Assert.assertThrows(MCRConfigurationException.class,
-            () -> MCRRateLimitBuckets.getOrCreateBucket("Test4"));
+            () -> MCRRateLimitBuckets.getOrCreateBucket("Test5"));
         assertTrue(mcrConfigurationException2.getMessage()
-            .contains("Configuration property MCR.RateLimitResolver.Test4."));
+            .contains("Configuration property MCR.RateLimitResolver.Test5."));
     }
 
 }

@@ -17,11 +17,13 @@ import java.util.concurrent.ConcurrentHashMap;
  * A configuration for a bucket and specific configuration ID looks like this:
  * <pre>
  * MCR.RateLimitResolver.&lt;configID&gt;.Behavior=[block/error/empty]
- * MCR.RateLimitResolver.&lt;configID&gt;.Limits=&lt;limit&gt;/&lt;timeunit&gt;
+ * MCR.RateLimitResolver.&lt;configID&gt;.Limits=&lt;limit&gt;/&lt;optional factor&gt;&lt;timeunit&gt;
  * </pre>
  * Ex:<p>
  * MCR.RateLimitResolver.Scopus.Behavior=error<p>
- * MCR.RateLimitResolver.Scopus.Limits=6/s
+ * MCR.RateLimitResolver.Scopus.Limits=6/2s
+ * <p>
+ * read: allow consumption of 6 tokens every two seconds and throw an error if limit is reached.
  * <p>
  * Available time units are: M=months, w=weeks, D=days, h=hours, min=minutes, s=seconds
  * More than one time limit can be configured separated by comma.
@@ -80,9 +82,16 @@ public class MCRRateLimitBuckets {
     private static Bucket createNewBucket(HashMap<String, Long> limitMap) {
         final LocalBucketBuilder builder = Bucket.builder();
         for (Map.Entry<String, Long> entry : limitMap.entrySet()) {
-            final String unit = entry.getKey();
+            final String unprocessedUnit = entry.getKey();
             final Long amount = entry.getValue();
-            builder.addLimit(limit -> limit.capacity(amount).refillIntervally(amount, getDuration(unit, amount)));
+
+            // If a number preceeds the time unit, it is added into the array, else the array has size 1
+            String[] parts = unprocessedUnit.split("(?<=\\d)(?=\\p{Alpha})");
+            final int factor = parts.length > 1 ? Integer.parseInt(parts[0]) : 1;
+            final String unit = parts.length > 1 ? parts[1] : parts[0];
+
+            builder
+                .addLimit(limit -> limit.capacity(amount).refillIntervally(amount, getDuration(unit, factor, amount)));
         }
         return builder.build();
     }
@@ -90,31 +99,33 @@ public class MCRRateLimitBuckets {
     /**
      * Helper method to determine the duration until a bucket refill for a given time unit.
      * @param unit the time unit in String-format
+     * @param factor factor for the time unit
      * @param amount amount of tokens for a bucket
      * @return the duration until a bucket refill should happen
      */
-    private static Duration getDuration(String unit, long amount) {
+    private static Duration getDuration(String unit, int factor, long amount) {
         switch (unit.toLowerCase(Locale.ROOT)) {
             case "m" -> {
-                return Duration.ofDays(30);
+                return Duration.ofDays(30L * factor);
             }
             case "w" -> {
-                return Duration.ofDays(7);
+                return Duration.ofDays(7L * factor);
             }
             case "d" -> {
-                return Duration.ofDays(1);
+                return Duration.ofDays(factor);
             }
             case "h" -> {
-                return Duration.ofHours(1);
+                return Duration.ofHours(factor);
             }
             case "min" -> {
-                return Duration.ofMinutes(1);
+                return Duration.ofMinutes(factor);
             }
             case "s" -> {
-                return Duration.ofSeconds(1);
+                return Duration.ofSeconds(factor);
             }
-            default -> throw new MCRConfigurationException("The configuration \"" + amount + " tokens per " + unit +
-                "\" for the ID \"" + CONFIG_ID + "\" is malformed. No time unit could be identified.");
+            default -> throw new MCRConfigurationException("The configuration \"" + amount + " tokens per "
+                + (factor != 1 ? factor : "") + unit + "\" for the ID \"" + CONFIG_ID +
+                "\" is malformed. No time unit could be identified.");
         }
     }
 }
