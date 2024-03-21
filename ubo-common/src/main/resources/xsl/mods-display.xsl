@@ -52,8 +52,9 @@
   <!-- ============ Ausgabe Publikationsart ============ -->
 
   <xsl:template name="pubtype">
-    <span class="label-info badge badge-secondary mr-1">
-      <xsl:apply-templates select="mods:genre[@type='intern']" />
+    <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.genre')}"
+          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+genre:&quot;', mods:genre[@type='intern'], '&quot;'))}')">
+      <xsl:apply-templates select="mods:genre[@type='intern']"/>
       <xsl:for-each select="mods:relatedItem[@type='host']/mods:genre[@type='intern']">
         <xsl:text> in </xsl:text>
         <xsl:apply-templates select="." />
@@ -65,7 +66,7 @@
 
   <xsl:template match="mods:mods/mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info">
     <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('facets.facet.subject')}"
-          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+subject:', substring-after(@valueURI,'#')))}')">
+          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+subject:&quot;', substring-after(@valueURI,'#'),'&quot;'))}')">
       <xsl:call-template name="output.category">
         <xsl:with-param name="classID" select="'fachreferate'" />
         <xsl:with-param name="categID" select="substring-after(@valueURI,'#')" />
@@ -77,7 +78,7 @@
 
   <xsl:template match="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info">
     <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.department')}"
-          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+origin:', substring-after(@valueURI,'#')))}')">
+          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+origin:&quot;', substring-after(@valueURI,'#'), '&quot;'))}')">
       <xsl:call-template name="output.category">
         <xsl:with-param name="classID" select="'ORIGIN'" />
         <xsl:with-param name="categID" select="substring-after(@valueURI,'#')" />
@@ -98,7 +99,9 @@
         </xsl:variable>
 
         <xsl:for-each select="xalan:nodeset($destatis-categories)/token">
-          <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('facets.facet.subject')}">
+          <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer"
+                title="{i18n:translate('facets.facet.subject')}"
+                onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+subject:&quot;',  ., '&quot;'))}')">
             <xsl:call-template name="output.category">
               <xsl:with-param name="classID" select="'fachreferate'" />
               <xsl:with-param name="categID" select="." />
