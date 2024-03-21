@@ -10,8 +10,6 @@
   xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
   exclude-result-prefixes="xsl xalan i18n encoder mcrxml str">
 
-<xsl:include href="resource:xsl/response-get-handler.xsl"/>
-
 <xsl:param name="RequestURL" />
 <xsl:param name="ServletsBaseURL" />
 

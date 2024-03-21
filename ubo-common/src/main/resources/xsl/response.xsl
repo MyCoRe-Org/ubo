@@ -16,6 +16,7 @@
         exclude-result-prefixes="xsl xalan i18n mods mcr mcrxml encoder str basket">
 
 <xsl:include href="mods-display.xsl" />
+<xsl:include href="resource:xsl/response-get-handler.xsl"/>
 <xsl:include href="response-facets.xsl" />
 <xsl:include href="ubo-dialog.xsl" />
 <xsl:include href="coreFunctions.xsl" />
@@ -174,7 +175,7 @@
 <!-- ==================== Anzeige Navigation in Trefferliste ==================== -->
 
 <xsl:variable name="resultsPageURL">
-  <xsl:text>select?</xsl:text>
+  <xsl:value-of select="$solrRequestHandler"/>
   <xsl:for-each select="/response/lst[@name='responseHeader']/lst[@name='params']/*[not(@name='start')]">
     <xsl:variable name="name" select="@name" />
     <xsl:for-each select="descendant-or-self::str"> <!-- may be an array: arr/str or ./str -->
