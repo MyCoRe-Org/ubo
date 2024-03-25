@@ -583,6 +583,22 @@
   },
   {
     "add-field": {
+      "name": "accessrights",
+      "type": "ubo_id",
+      "indexed": true,
+      "stored": true
+    }
+  },
+  {
+    "add-field": {
+      "name": "peerreviewed",
+      "type": "ubo_id",
+      "indexed": true,
+      "stored": true
+    }
+  },
+  {
+    "add-field": {
       "name": "tag",
       "type": "ubo_id",
       "multiValued": true,
