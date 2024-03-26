@@ -599,6 +599,14 @@
   },
   {
     "add-field": {
+      "name": "mediaType",
+      "type": "ubo_id",
+      "indexed": true,
+      "stored": true
+    }
+  },
+  {
+    "add-field": {
       "name": "tag",
       "type": "ubo_id",
       "multiValued": true,

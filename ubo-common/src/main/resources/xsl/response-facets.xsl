@@ -257,6 +257,9 @@
       <xsl:when test="$type='accessrights'">
           <xsl:value-of select="$accessrights//category[@ID=$value]/label[lang($CurrentLang)]/@text"/>
       </xsl:when>
+      <xsl:when test="$type='mediaType'">
+          <xsl:value-of select="$mediaType//category[@ID=$value]/label[lang($CurrentLang)]/@text"/>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$value"/>
       </xsl:otherwise>
