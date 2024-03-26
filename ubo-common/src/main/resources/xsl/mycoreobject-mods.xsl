@@ -28,7 +28,8 @@
 
 <!-- Map internal mods:genre to standard marcgt -->
 <xsl:template match="mods:genre[@type='intern']" mode="copy-mods">
-  <xsl:variable name="genre" select="$genres//category[@ID=current()]" />
+  <xsl:variable name="categId" select="substring-after(@valueURI, '#')"/>
+  <xsl:variable name="genre" select="$genres//category[@ID = $categId]" />
   <mods:genre authority="marcgt">
     <xsl:variable name="marcgt" select="$genre/label[lang('x-marcgt')]/@text" />
     <xsl:choose>
@@ -40,10 +41,12 @@
       </xsl:otherwise>
     </xsl:choose>
   </mods:genre>
-  <xsl:if test=".='chapter'">
+  <xsl:if test="$categId = 'chapter'">
     <mods:genre authority="local">Contribution</mods:genre>
   </xsl:if>
+
   <xsl:copy-of select="." />
+
   <mods:genre xml:lang="de">
     <xsl:value-of select="$genre/label[lang('de')]/@text" />
   </mods:genre>

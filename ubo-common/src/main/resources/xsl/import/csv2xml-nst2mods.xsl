@@ -9,6 +9,8 @@
 
 <xsl:output method="xml" encoding="UTF-8" indent="yes" />
 
+<xsl:param name="WebApplicationBaseURL"/>
+
 <xsl:template match="/csv2xml">
   <mods:modsCollection>
     <xsl:apply-templates select="row" />
@@ -17,11 +19,11 @@
 
 <xsl:template match="row">
   <mods:mods>
-    <mods:genre type="intern">article</mods:genre>
+    <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#article" />
     <xsl:apply-templates select="Titel" />
     <xsl:apply-templates select="Autoren" />
     <mods:relatedItem type="host">
-      <mods:genre type="intern">journal</mods:genre>
+      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#journal" />
       <xsl:apply-templates select="Quelle" />
       <xsl:call-template name="originInfo" />
       <xsl:apply-templates select="ISBN" />

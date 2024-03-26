@@ -135,11 +135,10 @@
     <xsl:template match="mods:genre">
         <xsl:variable name="uri" select="@valueURI"/>
         <xsl:variable name="type" select="substring-after($uri, '#')"/>
-        <xsl:if test="string-length($type)&gt;0">
+
+        <xsl:if test="string-length($type) &gt; 0">
             <!-- todo: maybe need mapping -->
-            <mods:genre type="intern">
-                <xsl:value-of select="$type"/>
-            </mods:genre>
+            <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#{$type}" />
         </xsl:if>
     </xsl:template>
 

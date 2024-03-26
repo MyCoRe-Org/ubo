@@ -12,6 +12,7 @@ package org.mycore.ubo;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.Filters;
+import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.XMLReaders;
 import org.mycore.access.MCRAccessException;
@@ -52,6 +54,7 @@ import org.mycore.frontend.cli.MCRCommand;
 import org.mycore.mods.MCRMODSCommands;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.ubo.importer.scopus.ScopusInitialImporter;
+import org.xml.sax.SAXException;
 
 import static org.mycore.common.MCRConstants.MODS_NAMESPACE;
 import static org.mycore.common.MCRConstants.XPATH_FACTORY;
@@ -98,6 +101,40 @@ public class DozBibCommands extends MCRAbstractCommands {
                 "Migrates http protocol of uris to https if they match the pattern given in {0} "
                     + "(xpath will be '//mods:identifier[@type = 'uri'][contains(text(), {0})]'). "
                     + "The mycore object id must be provided in {1}"));
+        addCommand(new MCRCommand("ubo migrate mods:genre for object {0}",
+            "org.mycore.ubo.DozBibCommands.migrateGenre String",
+            "Migrates mods:genre to mods:genre with authorityURI and valueURI"));
+    }
+
+    /**
+     * Migrates the mods:genre element for the given object id.
+     *
+     * @param objId the id of the {@link MCRObject} for which the mods:genre element should be migrated
+     *
+     * @return true if the migration was successful, false otherwise
+     * */
+    public static boolean migrateGenre(String objId) {
+        if (!MCRObjectID.isValid(objId)) {
+            LOGGER.error("ID {} is not a valid {} ", objId, MCRObjectID.class.getSimpleName());
+            return false;
+        }
+
+        MCRObjectID mcrObjectID = MCRObjectID.getInstance(objId);
+        if (!MCRMetadataManager.exists(mcrObjectID)) {
+            LOGGER.warn("{} does not exist", objId);
+            return false;
+        }
+
+        MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(mcrObjectID);
+        try {
+            MCRXSLTransformer transformer = new MCRXSLTransformer("xsl/migration/migrate-mods-genre.xsl");
+            MCRContent transformed = transformer.transform(new MCRJDOMContent(mcrObject.createXML()));
+            MCRMetadataManager.update(new MCRObject(transformed.asXML()));
+            return true;
+        } catch (IOException | JDOMException | SAXException | MCRAccessException exception) {
+            LOGGER.error("Could not migrate mods:genre for object {}", objId);
+            return false;
+        }
     }
 
     /** Exports all entries as MODS dump to a zipped xml file in the given directory */
@@ -155,7 +192,7 @@ public class DozBibCommands extends MCRAbstractCommands {
 
     public static void migrate2mcrobject() throws Exception {
         MCRMetadataStore store = MCRStoreManager.createStore("ubo", MCRMetadataStore.class);
-        for (Iterator<Integer> IDs = store.listIDs(MCRStore.ASCENDING); IDs.hasNext();) {
+        for (Iterator<Integer> IDs = store.listIDs(MCRStore.ASCENDING); IDs.hasNext(); ) {
             int id = IDs.next();
             LOGGER.info("Migrating <bibentry> " + id + " to <mycoreobject>...");
 

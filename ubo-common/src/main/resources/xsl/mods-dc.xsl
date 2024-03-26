@@ -68,7 +68,7 @@
 
   <xsl:template match="mods:genre[@type='intern']" mode="dc">
     <dc:type>
-      <xsl:value-of select="." />
+      <xsl:value-of select="substring-after(@valueURI, '#')" />
     </dc:type>
     <dc:type>
       <xsl:apply-templates select="." />
