@@ -479,7 +479,7 @@
       "name": "place",
       "type": "ubo_text",
       "multiValued": true,
-      "indexed": false,
+      "indexed": true,
       "stored": true
     }
   },
@@ -577,6 +577,30 @@
       "name": "fundingType",
       "type": "ubo_id",
       "multiValued": true,
+      "indexed": true,
+      "stored": true
+    }
+  },
+  {
+    "add-field": {
+      "name": "accessrights",
+      "type": "ubo_id",
+      "indexed": true,
+      "stored": true
+    }
+  },
+  {
+    "add-field": {
+      "name": "peerreviewed",
+      "type": "ubo_id",
+      "indexed": true,
+      "stored": true
+    }
+  },
+  {
+    "add-field": {
+      "name": "mediaType",
+      "type": "ubo_id",
       "indexed": true,
       "stored": true
     }
@@ -740,6 +764,18 @@
   {
     "add-copy-field": {
       "source": "note",
+      "dest": "all"
+    }
+  },
+  {
+    "add-copy-field": {
+      "source": "place",
+      "dest": "all"
+    }
+  },
+  {
+    "add-copy-field": {
+      "source": "publisher",
       "dest": "all"
     }
   },

@@ -39,7 +39,8 @@
             <xsl:variable name="fq" select="text()" />
 
             <xsl:variable name="removeURL">
-              <xsl:text>select?</xsl:text>
+              <xsl:value-of select="$solrRequestHandler"/>
+
               <xsl:for-each select="/response/lst[@name='responseHeader']/lst[@name='params']/*">
                 <xsl:variable name="param_name" select="@name" />
                 <xsl:for-each select="descendant-or-self::str"> <!-- may be an array: arr/str or ./str -->
@@ -113,7 +114,20 @@
   <article class="card mb-3">
     <div class="card-body">
       <hgroup>
-        <h3><xsl:value-of select="i18n:translate(concat('facets.facet.',str:replaceAll(str:new(@name),'facet_','')))" /></h3>
+        <xsl:variable name="facetName" select="str:replaceAll(str:new(@name),'facet_', '')"/>
+        <h3>
+          <xsl:choose>
+            <xsl:when test="i18n:exists(concat('facets.facet.', $facetName))">
+              <xsl:value-of select="i18n:translate(concat('facets.facet.', $facetName))"/>
+            </xsl:when>
+            <xsl:when test="not(document(concat('notnull:classification:metadata:all:children:', $facetName))/null)">
+              <xsl:value-of select="document(concat('notnull:classification:metadata:all:children:', $facetName))/mycoreclass/label[@xml:lang=$CurrentLang]/@text"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="i18n:translate(concat('facets.facet.', $facetName))"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </h3>
       </hgroup>
       <ul id="{generate-id(.)}" class="list-group counter-length-{$max}">
         <xsl:choose>
@@ -145,7 +159,8 @@
 
 <!-- URL to build links to add a facet filter query -->
 <xsl:variable name="baseURL">
-  <xsl:text>select?</xsl:text>
+  <xsl:value-of select="$solrRequestHandler"/>
+
   <xsl:for-each select="/response/lst[@name='responseHeader']/lst[@name='params']/*">
     <xsl:variable name="name" select="@name" />
     <xsl:for-each select="descendant-or-self::str"> <!-- may be an array: arr/str or ./str -->
@@ -238,7 +253,13 @@
       </xsl:when>
       <xsl:when test="$type='peerreviewed'">
           <xsl:value-of select="$peerreviewed//category[@ID=$value]/label[lang($DefaultLang)]/@text"/>
-        </xsl:when>
+      </xsl:when>
+      <xsl:when test="$type='accessrights'">
+          <xsl:value-of select="$accessrights//category[@ID=$value]/label[lang($CurrentLang)]/@text"/>
+      </xsl:when>
+      <xsl:when test="$type='mediaType'">
+          <xsl:value-of select="$mediaType//category[@ID=$value]/label[lang($CurrentLang)]/@text"/>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$value"/>
       </xsl:otherwise>

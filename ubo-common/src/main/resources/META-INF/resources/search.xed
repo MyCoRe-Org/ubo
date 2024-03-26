@@ -7,6 +7,8 @@
  <article class="card mb-1">
    <div class="card-body">
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
+    
+      <xed:include uri="webapp:import-search.xed" ref="submit_enter" />
 
       <xed:cancel url="servlets/XEditor?_xed_submit_return_cancel=&amp;_xed_session={$_xed_subselect_session}" />
       <xed:cancel url="index.xed" />
