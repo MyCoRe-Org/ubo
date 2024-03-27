@@ -100,6 +100,15 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
 
     private String realm;
 
+    /**
+     * The default filter applied to LDAP searches
+     *
+     * TODO: take into consideration the member-status of the (email?) of the LDAP-users
+     * */
+    protected final String SEARCH_FILTER_TEMPLATE = MCRConfiguration2
+        .getString("MCR.user2.LDAP.searchFilter.base")
+        .orElse("(&(objectClass=eduPerson)(|%s))");
+
     public MCRUserMatcherLDAP() {
         loadLDAPMappingConfiguration();
         orcid_resolver = MCRConfiguration2.getString(CONFIG_ORCID_NORMALIZATION_RESOLVER).orElse("");
@@ -492,9 +501,6 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
      * @return A LDAP-searchfilter of the form (&(objectClass=eduPerson)(|(%a1=%v1)(%a2=%v2)...(%aN=%vN)))
      */
     private String createLDAPSearchFilter(Multimap<String, String> ldapAttributes, String innerTemplate) {
-        // TODO: take into consideration the member-status of the (email?) of the LDAP-users
-        String searchFilterBaseTemplate = "(&(objectClass=eduPerson)(|%s))";
-
         StringBuilder searchFilterInner = new StringBuilder();
         for (Map.Entry<String, Collection<String>> ldapAttribute : ldapAttributes.asMap().entrySet()) {
             String attributeName = ldapAttribute.getKey();
@@ -521,7 +527,7 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
                 searchFilterInner.append(")");
             }
         }
-        return String.format(Locale.ROOT, searchFilterBaseTemplate, searchFilterInner);
+        return String.format(Locale.ROOT, SEARCH_FILTER_TEMPLATE, searchFilterInner);
     }
 
     /**

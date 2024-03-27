@@ -29,8 +29,10 @@ import org.jdom2.Attribute;
 import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.XMLReaders;
+import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration2;
@@ -50,6 +52,9 @@ import org.mycore.frontend.cli.MCRCommand;
 import org.mycore.mods.MCRMODSCommands;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.ubo.importer.scopus.ScopusInitialImporter;
+
+import static org.mycore.common.MCRConstants.MODS_NAMESPACE;
+import static org.mycore.common.MCRConstants.XPATH_FACTORY;
 
 public class DozBibCommands extends MCRAbstractCommands {
 
@@ -85,8 +90,14 @@ public class DozBibCommands extends MCRAbstractCommands {
                 "org.mycore.ubo.importer.scopus.ScopusInitialImporter.initialImport String int",
                 "Queries all affiliation IDs and imports all documents {0} = afid {1} = start point should be 0"));
         addCommand(new MCRCommand(ScopusInitialImporter.IMPORT_SINGLE_COMMAND,
-                "org.mycore.ubo.importer.scopus.ScopusInitialImporter.doImport String",
-                "{0] = ID of object"));
+            "org.mycore.ubo.importer.scopus.ScopusInitialImporter.doImport String",
+            "{0] = ID of object"));
+        addCommand(
+            new MCRCommand("migrate http uris matching {0} to https in {1}",
+                "org.mycore.ubo.DozBibCommands.migrateURItoHttps String String",
+                "Migrates http protocol of uris to https if they match the pattern given in {0} "
+                    + "(xpath will be '//mods:identifier[@type = 'uri'][contains(text(), {0})]'). "
+                    + "The mycore object id must be provided in {1}"));
     }
 
     /** Exports all entries as MODS dump to a zipped xml file in the given directory */
@@ -219,6 +230,34 @@ public class DozBibCommands extends MCRAbstractCommands {
 
             obj.setId(MCRObjectID.getNextFreeId(PROJECT_ID + "_mods"));
             MCRMetadataManager.create(obj);
+        }
+    }
+
+    public static void migrateURItoHttps(String uriContains, String id) {
+        MCRObjectID mcrObjectID = MCRObjectID.getInstance(id);
+        if (!MCRMetadataManager.exists(mcrObjectID)) {
+            LOGGER.error("{} does not exist", id);
+            return;
+        }
+
+        Document xml = MCRMetadataManager.retrieveMCRObject(mcrObjectID).createXML();
+        List<Element> elements = XPATH_FACTORY.compile(
+            "//mods:identifier[@type = 'uri'][contains(text(), '" + uriContains + "')]",
+            Filters.element(), null, MODS_NAMESPACE).evaluate(xml);
+
+        if (elements.isEmpty()) {
+            return;
+        }
+
+        elements.forEach(element -> {
+            String uri = element.getText();
+            element.setText(uri.replace("http:", "https:"));
+        });
+
+        try {
+            MCRMetadataManager.update(new MCRObject(xml));
+        } catch (MCRAccessException e) {
+            LOGGER.error("Could not replace URI protocol in ", id);
         }
     }
 }

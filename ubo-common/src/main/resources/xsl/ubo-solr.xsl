@@ -44,6 +44,9 @@
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'project')]" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fundingType')]" mode="solrField" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'accessrights')]" mode="solrField" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'peerreviewed')]" mode="solrField" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'mediaType')]" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:titleInfo[not(@type)]" mode="solrField.host" />
     <xsl:apply-templates select="mods:relatedItem[@type='host'][mods:genre='journal']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:part" mode="solrField" />
@@ -308,6 +311,24 @@
   <xsl:template match="mods:classification[contains(@authorityURI,'fundingType')]" mode="solrField">
     <field name="fundingType">
       <xsl:value-of select="substring-after(@valueURI,'#')" />
+    </field>
+  </xsl:template>
+
+  <xsl:template match="mods:classification[contains(@authorityURI,'accessrights')]" mode="solrField">
+    <field name="accessrights">
+      <xsl:value-of select="substring-after(@valueURI,'#')"/>
+    </field>
+  </xsl:template>
+
+  <xsl:template match="mods:classification[contains(@authorityURI,'peerreviewed')]" mode="solrField">
+    <field name="peerreviewed">
+      <xsl:value-of select="substring-after(@valueURI,'#')"/>
+    </field>
+  </xsl:template>
+
+  <xsl:template match="mods:classification[contains(@authorityURI,'mediaType')]" mode="solrField">
+    <field name="mediaType">
+      <xsl:value-of select="substring-after(@valueURI,'#')"/>
     </field>
   </xsl:template>
 
