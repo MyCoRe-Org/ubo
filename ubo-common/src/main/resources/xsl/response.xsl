@@ -234,7 +234,7 @@
 
    <div class="col-2 text-right">
     <span class="pageLink">
-      <a class="btn btn-sm btn-secondary" href="statistics?{$exportParams}&amp;XSL.Style=statistics"><xsl:value-of select="i18n:translate('button.statistics')" /></a>
+      <a class="btn btn-sm btn-secondary" href="{$solrStatisticRequestHandler}{$exportParams}&amp;XSL.Style=statistics"><xsl:value-of select="i18n:translate('button.statistics')" /></a>
     </span>
    </div>
 
