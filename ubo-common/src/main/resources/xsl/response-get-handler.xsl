@@ -6,4 +6,8 @@
     <text>select?</text>
   </xsl:variable>
 
+  <xsl:variable name="solrStatisticRequestHandler">
+    <text>statistics?</text>
+  </xsl:variable>
+
 </xsl:stylesheet>
