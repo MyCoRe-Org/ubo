@@ -203,10 +203,10 @@
               </a>
             </span>
             <span class="pageLink pl-1 d-inline">
-              <a id="result-copy-to-clipboard" class="btn btn-sm btn-secondary" href="" title="{i18n:translate('result.copy.link.to.clipboard')}"
+              <button id="result-copy-to-clipboard" class="btn btn-sm btn-secondary" title="{i18n:translate('result.copy.link.to.clipboard')}"
                  onclick="navigator.clipboard.writeText(window.location.href);$('#result-copy-to-clipboard').fadeOut(500);$('#result-copy-to-clipboard').fadeIn(500);">
                 <i class="far fa-copy"/>
-              </a>
+              </button>
             </span>
           </div>
         </xsl:if>
