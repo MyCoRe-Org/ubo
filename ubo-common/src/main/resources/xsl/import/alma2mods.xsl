@@ -135,7 +135,7 @@
   <!-- Language -->
   <xsl:template match="datafield[@tag='041']/subfield[@code='a']">
     <mods:language>
-      <mods:languageTerm authority="rfc4646" type="code">
+      <mods:languageTerm authority="rfc5646" type="code">
         <xsl:value-of select="document(concat('language:',.))/language/@xmlCode" />
       </mods:languageTerm>
     </mods:language>

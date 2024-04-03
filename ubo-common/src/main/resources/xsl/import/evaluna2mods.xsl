@@ -219,9 +219,9 @@
   <xsl:template match="language">
     <!-- Find language with matching label in any language, or with matching ID in any supported code schema -->
     <xsl:variable name="given" select="translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')" />
-    <xsl:for-each select="document('classification:metadata:-1:children:rfc4646')/mycoreclass/categories/category[@ID=$given or label[translate(@text,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')=$given]][1]">
+    <xsl:for-each select="document('classification:metadata:-1:children:rfc5646')/mycoreclass/categories/category[@ID=$given or label[translate(@text,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')=$given]][1]">
       <mods:language>
-        <mods:languageTerm authority="rfc4646" type="code">
+        <mods:languageTerm authority="rfc5646" type="code">
           <xsl:value-of select="@ID" />
         </mods:languageTerm>
       </mods:language>
