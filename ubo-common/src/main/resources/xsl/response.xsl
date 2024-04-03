@@ -193,17 +193,24 @@
  <xsl:if test="$numFound &gt; 1">
   <div class="resultsNavigation row">
 
-    <div class="col-2">
+    <div class="col">
       <xsl:if test="basket:hasSpace()">
         <span class="pageLink">
           <a class="btn btn-sm btn-secondary" href="{$ServletsBaseURL}Results2Basket?rh={$requestHandler}&amp;solr={encoder:encode($exportParams,'UTF-8')}">
             <xsl:value-of select="i18n:translate('button.basketAdd')" />
           </a>
         </span>
+        <span class="pageLink pl-1 d-inline">
+          <button id="result-copy-to-clipboard" class="btn btn-sm btn-secondary"
+                  title="{i18n:translate('result.copy.link.to.clipboard')}"
+                  onclick="navigator.clipboard.writeText(window.location.href);$('#result-copy-to-clipboard').fadeOut(500);$('#result-copy-to-clipboard').fadeIn(500);">
+            <i class="far fa-copy"/>
+          </button>
+        </span>
       </xsl:if>
     </div>
 
-    <div class="col-8 text-center align-self-center">
+    <div class="col text-center align-self-center">
       <nav>
         <ul class="pagination justify-content-center pagination-sm mb-0">
           <xsl:if test="$numFound &gt; $rows">
@@ -235,7 +242,7 @@
       </nav>
     </div>
 
-   <div class="col-2 text-right">
+   <div class="col text-right">
     <span class="pageLink">
       <a class="btn btn-sm btn-secondary" href="{$solrStatisticRequestHandler}{$exportParams}&amp;XSL.Style=statistics"><xsl:value-of select="i18n:translate('button.statistics')" /></a>
     </span>
