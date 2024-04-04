@@ -267,7 +267,10 @@ public class LDAPService implements IdentityService {
             String attributeValue = attributeEntry.getValue();
             identityString = identityString.replace("{" + attributeName + "}", attributeValue);
         }
-        parent.addContent(new Element("identity").setText(identityString));
+        String placeholdersRemoved = identityString.replaceAll("\\{.*\\}","");
+        if (!placeholdersRemoved.isEmpty()) {
+            parent.addContent(new Element("identity").setText(placeholdersRemoved));
+        }
     }
 
     /**
