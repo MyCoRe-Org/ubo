@@ -159,6 +159,18 @@
     <field name="person_{text()}">
       <xsl:apply-templates select="../.." mode="solrField" />
     </field>
+
+    <xsl:if test="../mods:roleTerm/text() = 'corresponding_author'">
+      <field name="person_aut_corresp">
+        <xsl:apply-templates select="../.." mode="solrField"/>
+      </field>
+
+      <xsl:for-each select="../../mods:nameIdentifier">
+        <field name="person_aut_corresp_id">
+          <xsl:value-of select="."/>
+        </field>
+      </xsl:for-each>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="mods:name[@type='personal']" mode="solrField">
