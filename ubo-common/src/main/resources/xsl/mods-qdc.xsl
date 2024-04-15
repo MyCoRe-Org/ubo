@@ -105,8 +105,8 @@
 
   <!-- language -->
 
-  <xsl:template match="mods:languageTerm[@authority='rfc4646'][@type='code']" mode="qdc">
-    <dcterms:language scheme="dcterms:RFC4646">
+  <xsl:template match="mods:languageTerm[@authority='rfc5646'][@type='code']" mode="qdc">
+    <dcterms:language scheme="dcterms:RFC5646">
       <xsl:value-of select="text()" />
     </dcterms:language>
   </xsl:template>

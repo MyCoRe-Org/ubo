@@ -160,7 +160,7 @@
 
   <!-- DC.Language -->
 
-  <xsl:template match="mods:languageTerm[@authority='rfc4646'][@type='code']" mode="dc">
+  <xsl:template match="mods:languageTerm[@authority='rfc5646'][@type='code']" mode="dc">
     <dc:language>
       <xsl:value-of select="document(concat('language:',.))/language/@termCode" />
     </dc:language>
