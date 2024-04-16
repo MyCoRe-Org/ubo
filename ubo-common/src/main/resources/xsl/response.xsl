@@ -149,7 +149,9 @@
 <xsl:template match="result[@name='response']">
 
   <!-- Seitennavigation oben -->
-  <xsl:call-template name="navigation" />
+  <xsl:call-template name="navigation">
+    <xsl:with-param name="position" select="'top'"/>
+  </xsl:call-template>
 
   <!-- Trefferliste -->
   <div>
@@ -169,7 +171,9 @@
   <div class="clear"></div>
 
   <!-- Seitennavigation unten -->
-  <xsl:call-template name="navigation" />
+  <xsl:call-template name="navigation">
+    <xsl:with-param name="position" select="'bottom'"/>
+  </xsl:call-template>
 
 </xsl:template>
 
@@ -190,6 +194,7 @@
 </xsl:variable>
 
 <xsl:template name="navigation">
+ <xsl:param name="position"/>
  <xsl:if test="$numFound &gt; 1">
   <div class="resultsNavigation row">
 
@@ -201,9 +206,10 @@
           </a>
         </span>
         <span class="pageLink pl-1 d-inline">
-          <button id="result-copy-to-clipboard" class="btn btn-sm btn-secondary"
+          <xsl:variable name="result-copy-to-clipboard-id" select="concat('result-copy-to-clipboard-', $position)"/>
+          <button id="{$result-copy-to-clipboard-id}" class="btn btn-sm btn-secondary"
                   title="{i18n:translate('result.copy.link.to.clipboard')}"
-                  onclick="navigator.clipboard.writeText(window.location.href);$('#result-copy-to-clipboard').fadeOut(500);$('#result-copy-to-clipboard').fadeIn(500);">
+                  onclick="navigator.clipboard.writeText(window.location.href);$('#{$result-copy-to-clipboard-id}').fadeOut(500);$('#{$result-copy-to-clipboard-id}').fadeIn(500);">
             <i class="far fa-copy"/>
           </button>
         </span>
