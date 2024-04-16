@@ -8,7 +8,8 @@
   xmlns:encoder="xalan://java.net.URLEncoder"
   xmlns:str="xalan://java.lang.String"
   xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  exclude-result-prefixes="xsl xalan i18n encoder mcrxml str">
+  xmlns:dozbib="xalan://org.mycore.ubo.DozBibCommands"
+  exclude-result-prefixes="dozbib xsl xalan i18n encoder mcrxml str">
 
 <xsl:param name="RequestURL" />
 <xsl:param name="ServletsBaseURL" />
@@ -62,26 +63,29 @@
             <xsl:variable name="fq_without_quotes" select="str:replaceAll(str:new($fq),$quotes,'')" />
 
             <li class="mycore-list-item">
-              <a class="mycore-facet-remove" href="{$removeURL}">
+              <xsl:variable name="facet-remove-display-text">
+              <xsl:choose>
+                <xsl:when test="starts-with($fq_without_quotes,$fq_not)">
+                  <xsl:variable name="fq_without_not" select="substring-after($fq_without_quotes,'-')" />
+                  <xsl:call-template name="output.facet.value">
+                    <xsl:with-param name="prefix" select="concat(i18n:translate('facets.filters.not'),' ')" />
+                    <xsl:with-param name="type"  select="substring-before($fq_without_not,':')" />
+                    <xsl:with-param name="value" select="substring-after($fq_without_not,':')" />
+                  </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:call-template name="output.facet.value">
+                    <xsl:with-param name="type"  select="substring-before($fq_without_quotes,':')" />
+                    <xsl:with-param name="value" select="substring-after($fq_without_quotes,':')" />
+                  </xsl:call-template>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+              <a class="mycore-facet-remove" href="{$removeURL}" title="{$facet-remove-display-text} {i18n:translate('edit.remove')}">
                 <span class="far fa-times-circle" aria-hidden="true" />
               </a>
               <span class="mycore-facet-filter">
-                <xsl:choose>
-                  <xsl:when test="starts-with($fq_without_quotes,$fq_not)">
-                    <xsl:variable name="fq_without_not" select="substring-after($fq_without_quotes,'-')" />
-                    <xsl:call-template name="output.facet.value">
-                      <xsl:with-param name="prefix" select="concat(i18n:translate('facets.filters.not'),' ')" />
-                      <xsl:with-param name="type"  select="substring-before($fq_without_not,':')" />
-                      <xsl:with-param name="value" select="substring-after($fq_without_not,':')" />
-                    </xsl:call-template>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:call-template name="output.facet.value">
-                      <xsl:with-param name="type"  select="substring-before($fq_without_quotes,':')" />
-                      <xsl:with-param name="value" select="substring-after($fq_without_quotes,':')" />
-                    </xsl:call-template>
-                  </xsl:otherwise>
-                </xsl:choose>
+                <xsl:value-of select="$facet-remove-display-text"/>
               </span>
             </li>
           </xsl:for-each>
@@ -114,19 +118,10 @@
   <article class="card mb-3">
     <div class="card-body">
       <hgroup>
-        <xsl:variable name="facetName" select="str:replaceAll(str:new(@name),'facet_', '')"/>
         <h3>
-          <xsl:choose>
-            <xsl:when test="i18n:exists(concat('facets.facet.', $facetName))">
-              <xsl:value-of select="i18n:translate(concat('facets.facet.', $facetName))"/>
-            </xsl:when>
-            <xsl:when test="not(document(concat('notnull:classification:metadata:all:children:', $facetName))/null)">
-              <xsl:value-of select="document(concat('notnull:classification:metadata:all:children:', $facetName))/mycoreclass/label[@xml:lang=$CurrentLang]/@text"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="i18n:translate(concat('facets.facet.', $facetName))"/>
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:call-template name="get-facet-name">
+            <xsl:with-param name="facetName" select="str:replaceAll(str:new(@name),'facet_', '')"/>
+          </xsl:call-template>
         </h3>
       </hgroup>
       <ul id="{generate-id(.)}" class="list-group counter-length-{$max}">
@@ -145,13 +140,25 @@
       </ul>
       <xsl:variable name="numMore" select="count(int) - number($maxFacetValuesDisplayed)" />
       <xsl:if test="$numMore &gt; 0">
-	<div class="float-right mycore-slidetoggle">
-          <a class="mycore-facets-toggle" id="tg{generate-id(.)}" onclick="$('ul#{generate-id(.)} li:gt({$maxFacetValuesDisplayed - 1})').slideToggle(); $('a#tg{generate-id(.)} span').toggle();">
-            <span><xsl:value-of select="concat($numMore,' ',i18n:translate('facets.toggle.more'))" /></span>
-            <span style="display:none;"><xsl:value-of select="i18n:translate('facets.toggle.less')" /></span>
+        <xsl:variable name="facet-human-readable">
+          <xsl:call-template name="get-facet-name">
+            <xsl:with-param name="facetName" select="str:replaceAll(str:new(@name), 'facet_', '')"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="facets-toggle-more-link-text" select="concat($numMore,' ',i18n:translate('facets.toggle.more'))"/>
+
+        <div class="float-right mycore-slidetoggle">
+          <a class="mycore-facets-toggle" id="tg{generate-id(.)}" title="{$facet-human-readable}: {$facets-toggle-more-link-text}" role="button"
+             onclick="$('ul#{generate-id(.)} li:gt({$maxFacetValuesDisplayed - 1})').slideToggle(); $('a#tg{generate-id(.)} span').toggle();">
+            <span>
+              <xsl:value-of select="$facets-toggle-more-link-text"/>
+            </span>
+            <span style="display:none;" title="{i18n:translate('facets.toggle.less')}">
+              <xsl:value-of select="i18n:translate('facets.toggle.less')"/>
+            </span>
             <xsl:text>...</xsl:text>
           </a>
-	</div>
+        </div>
       </xsl:if>
     </div>
   </article>
@@ -188,27 +195,36 @@
       <xsl:value-of select="text()" />
     </span>
     <xsl:variable name="fq" select="encoder:encode(concat(../@name,':',$quotes,@name,$quotes),'UTF-8')" />
+    <xsl:variable name="facet-human-readable">
+      <xsl:call-template name="get-facet-name">
+        <xsl:with-param name="facetName" select="str:replaceAll(str:new(../@name),'facet_', '')"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="facet-value">
+      <xsl:call-template name="output.facet.value">
+        <xsl:with-param name="type" select="../@name"/>
+        <xsl:with-param name="value" select="@name"/>
+      </xsl:call-template>
+    </xsl:variable>
+
     <xsl:choose>
       <xsl:when test="number(text()) &lt; number($numFound)"> <!-- When count = 100%, filtering makes no sense -->
-        <a class="mycore-facet-exclude" href="{$baseURL}{encoder:encode($fq_not)}{$fq}"> <!-- Link to exclude this facet value -->
+        <xsl:variable name="title-exclude-facet-value" select="dozbib:translate('facets.results.exclude', concat($facet-human-readable, ',' , $facet-value))"/>
+        <xsl:variable name="title-include-facet-value" select="dozbib:translate('facets.results.include', concat($facet-human-readable, ',' , $facet-value))"/>
+
+        <a class="mycore-facet-exclude" href="{$baseURL}{encoder:encode($fq_not)}{$fq}" title="{$title-exclude-facet-value}"> <!-- Link to exclude this facet value -->
           <span class="far fa-times-circle" aria-hidden="true" />
         </a>
-        <a class="mycore-facet-add" href="{$baseURL}{$fq}">
+        <a class="mycore-facet-add" href="{$baseURL}{$fq}" title="{$title-include-facet-value}">
           <span class="mycore-facet-value">
-            <xsl:call-template name="output.facet.value">
-              <xsl:with-param name="type"  select="../@name" />
-              <xsl:with-param name="value" select="@name"/>
-            </xsl:call-template>
+            <xsl:value-of select="$facet-value"/>
           </span>
         </a>
       </xsl:when>
       <xsl:otherwise>
         <span class="mycore-facet-exclude" />
         <span class="mycore-facet-value">
-          <xsl:call-template name="output.facet.value">
-            <xsl:with-param name="type"  select="../@name" />
-            <xsl:with-param name="value" select="@name"/>
-          </xsl:call-template>
+          <xsl:value-of select="$facet-value"/>
         </span>
       </xsl:otherwise>
     </xsl:choose>
@@ -307,4 +323,20 @@
   </span>
 </xsl:template>
 
+  <xsl:template name="get-facet-name">
+    <xsl:param name="facetName"/>
+
+    <xsl:choose>
+      <xsl:when test="i18n:exists(concat('facets.facet.', $facetName))">
+        <xsl:value-of select="i18n:translate(concat('facets.facet.', $facetName))"/>
+      </xsl:when>
+      <xsl:when test="not(document(concat('notnull:classification:metadata:all:children:', $facetName))/null)">
+        <xsl:value-of
+          select="document(concat('notnull:classification:metadata:all:children:', $facetName))/mycoreclass/label[@xml:lang=$CurrentLang]/@text"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="i18n:translate(concat('facets.facet.', $facetName))"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 </xsl:stylesheet>
