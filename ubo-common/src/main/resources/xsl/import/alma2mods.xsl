@@ -10,9 +10,11 @@
   xmlns:java="http://xml.apache.org/xalan/java"
   exclude-result-prefixes="xsl xalan java">
 
+  <xsl:param name="WebApplicationBaseURL"/>
+
   <xsl:template match="/bib">
     <mods:mods>
-      <mods:genre type="intern">dissertation</mods:genre>
+      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#dissertation" />
       <xsl:apply-templates select="record/datafield[@tag='245']" />
       <xsl:apply-templates select="record/datafield[@tag='100']" />
       <xsl:apply-templates select="record/datafield[@tag='264']" />
@@ -240,7 +242,7 @@
           </mods:detail>
         </mods:part>
       </xsl:if>
-      <mods:genre type="intern">series</mods:genre>
+      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#series" />
     </mods:relatedItem>
   </xsl:template>
 

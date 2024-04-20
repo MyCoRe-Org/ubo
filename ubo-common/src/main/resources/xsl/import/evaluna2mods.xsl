@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xsl:stylesheet version="1.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  xmlns:mods="http://www.loc.gov/mods/v3"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:xalan="http://xml.apache.org/xalan"
-  exclude-result-prefixes="xsl xalan"  
+<xsl:stylesheet version="1.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:mods="http://www.loc.gov/mods/v3"
+                xmlns:xalan="http://xml.apache.org/xalan"
+                exclude-result-prefixes="xsl xalan"
 >
 
   <xsl:output method="xml" encoding="UTF-8" indent="yes" xalan:indent-amount="2" />
-  
+
+  <xsl:param name="WebApplicationBaseURL"/>
+
   <xsl:template match="/interface">
     <xsl:apply-templates select="response[@type='publications']" />
   </xsl:template>
@@ -59,7 +60,7 @@
   </xsl:template>
 
   <xsl:template match="citation/@type">
-    <mods:genre type="intern">article</mods:genre>
+    <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#article" />
   </xsl:template>
 
   <xsl:template match="title">
@@ -149,7 +150,7 @@
   <xsl:template match="journal">
     <xsl:apply-templates select="year" />
     <mods:relatedItem type="host">
-      <mods:genre type="intern">journal</mods:genre>
+      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#journal" />
       <xsl:apply-templates select="abbreviation" />
       <xsl:apply-templates select="issn|essn" />
       <mods:part>
