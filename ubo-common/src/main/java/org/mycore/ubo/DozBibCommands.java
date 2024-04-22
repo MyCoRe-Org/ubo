@@ -146,7 +146,7 @@ public class DozBibCommands extends MCRAbstractCommands {
             MCRContent transformed = transformer.transform(new MCRJDOMContent(mcrObject.createXML()));
             MCRMetadataManager.update(new MCRObject(transformed.asXML()));
             return true;
-        } catch (IOException | JDOMException | SAXException | MCRAccessException exception) {
+        } catch (IOException | JDOMException | MCRAccessException exception) {
             LOGGER.error("Could not migrate mods:genre for object {}", objId);
             return false;
         }
