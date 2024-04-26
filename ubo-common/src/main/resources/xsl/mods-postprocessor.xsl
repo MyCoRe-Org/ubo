@@ -49,6 +49,10 @@
     <mods:classification authorityURI="{$WebApplicationBaseURL}classifications/{@classID}" valueURI="{$WebApplicationBaseURL}classifications/{@classID}#{text()}" />
   </xsl:template>
 
+  <xsl:template match="mods:accessCondition[@classID]">
+    <mods:accessCondition type="use and reproduction" xlink:href="{$WebApplicationBaseURL}classifications/licenses#{.}"/>
+  </xsl:template>
+
   <xsl:template match="mods:roleTerm[@classID]">
     <mods:roleTerm type="text" authorityURI="{$WebApplicationBaseURL}classifications/{@classID}" valueURI="{$WebApplicationBaseURL}classifications/{@classID}#{text()}">
       <xsl:value-of select="text()" />

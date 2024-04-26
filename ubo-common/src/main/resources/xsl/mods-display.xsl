@@ -259,13 +259,13 @@
 
   <!-- ========== Ausgabe Lizenz ========== -->
 
-  <xsl:template match="mods:accessCondition[@classID='licenses']" mode="details">
+  <xsl:template match="mods:accessCondition[@type = 'use and reproduction']" mode="details">
     <div class="row">
       <div class="col-3">
         <xsl:value-of select="concat(i18n:translate('ubo.licenses'), ':')" />
       </div>
       <div class="col-9">
-        <xsl:value-of select="mcrxsl:getDisplayName('licenses', current()/text())"/>
+        <xsl:value-of select="mcrxsl:getDisplayName('licenses', substring-after(@xlink:href, '#'))"/>
       </div>
     </div>
   </xsl:template>
@@ -1132,7 +1132,7 @@
     <xsl:call-template name="subject.topic" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'mediaType')]" mode="details" />
     <xsl:apply-templates select="mods:typeOfResource" mode="details" />
-    <xsl:apply-templates select="mods:accessCondition[@classID]" mode="details" />
+    <xsl:apply-templates select="mods:accessCondition[@type='use and reproduction'][@xlink:href]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'republication')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'accessrights')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'peerreviewed')]" mode="details" />
