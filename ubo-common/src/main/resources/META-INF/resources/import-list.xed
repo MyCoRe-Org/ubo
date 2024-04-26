@@ -58,10 +58,7 @@
               <div class="form-group form-inline">
                 <label for="{generate-id()}" class="mycore-form-label">Quell-Format:</label>
                 <select id="{generate-id()}" class="form-control col-7 mr-1 custom-select" onchange="toggleEnrichment(this)">
-                  <option value="BibTeX">BibTeX Quellcode</option>
-                  <option value="ORCID">Publikationen aus dem ORCID Profil</option>
-                  <option value="PPNList">Literaturliste im PPN-Listenformat</option>
-                  <option value="DOIList">Literaturliste im DOI-Listenformat</option>
+                  <xed:include uri="xslStyle:items2options:classification:editor:-1:children:importSourceType" />
                 </select>
               </div>
             </xed:bind>
