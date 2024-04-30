@@ -3,11 +3,7 @@
 <xsl:stylesheet version="1.0" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 exclude-result-prefixes="xsl">
 
-  <xsl:template match="@*|node()">
-    <xsl:copy>
-      <xsl:apply-templates select='@*|node()'/>
-    </xsl:copy>
-  </xsl:template>
+  <xsl:include href="copynodes.xsl"/>
 
   <xsl:template match="mods:languageTerm[@authority = 'rfc4646'][@type = 'code']">
     <mods:languageTerm authority="rfc5646" type="code">
