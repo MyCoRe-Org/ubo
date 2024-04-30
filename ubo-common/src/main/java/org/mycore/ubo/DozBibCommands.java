@@ -53,6 +53,7 @@ import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.MCRCommand;
 import org.mycore.mods.MCRMODSCommands;
 import org.mycore.mods.MCRMODSWrapper;
+import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.ubo.importer.scopus.ScopusInitialImporter;
 import org.xml.sax.SAXException;
 
@@ -296,5 +297,15 @@ public class DozBibCommands extends MCRAbstractCommands {
         } catch (MCRAccessException e) {
             LOGGER.error("Could not replace URI protocol in ", id);
         }
+    }
+
+    /**
+     * Delegate method for {@link MCRTranslation#translateToLocale(String, Locale, Object...)}
+     *
+     * @param i18n the i18n key
+     * @param arguments a comma-separated list of arguments
+     * */
+    public static String translate(String i18n, String arguments) {
+        return MCRTranslation.translateToLocale(i18n, MCRTranslation.getCurrentLocale(), arguments.split(","));
     }
 }

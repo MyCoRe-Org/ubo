@@ -250,7 +250,9 @@
 
    <div class="col text-right">
     <span class="pageLink">
-      <a class="btn btn-sm btn-secondary" href="{$solrStatisticRequestHandler}{$exportParams}&amp;XSL.Style=statistics"><xsl:value-of select="i18n:translate('button.statistics')" /></a>
+      <a class="btn btn-sm btn-secondary" href="{$solrStatisticRequestHandler}{$exportParams}&amp;XSL.Style=statistics" title="{i18n:translate('')}">
+        <xsl:value-of select="i18n:translate('button.statistics')"/>
+      </a>
     </span>
    </div>
 
@@ -263,26 +265,27 @@
   <xsl:param name="start" />
   <xsl:param name="icon" />
   <xsl:param name="text" />
+  <xsl:param name="title" select="i18n:translate(concat('result.results.pagination.', $icon))"/>
 
   <xsl:choose>
     <xsl:when test="string-length($text) &gt; 0">
       <li class="page-item disabled">
-        <a class="page-link" href="#">
+        <a class="page-link" href="#" title="{$title}">
           <xsl:value-of select="concat('&#160;',$text,'&#160;')" />
         </a>
       </li>
     </xsl:when>
     <xsl:when test="$condition">
       <li class="page-item">
-        <a class="page-link" href="{$resultsPageURL}{$start}">
-          <span class="fas fa-{$icon}" aria-hidden="true"></span>
+        <a class="page-link" href="{$resultsPageURL}{$start}" title="{$title}">
+          <span class="fas fa-{$icon}" aria-hidden="true"/>
         </a>
       </li>
     </xsl:when>
     <xsl:otherwise>
-      <li class="page-item disabled">
+      <li class="page-item disabled" aria-hidden="true">
         <a class="page-link" href="#">
-          <span class="fas fa-{$icon}" aria-hidden="true"></span>
+          <span class="fas fa-{$icon}"/>
         </a>
       </li>
     </xsl:otherwise>
