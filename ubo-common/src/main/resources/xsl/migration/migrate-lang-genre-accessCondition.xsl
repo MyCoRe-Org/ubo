@@ -30,6 +30,10 @@
                           xlink:href="{$MCR.baseurl}classifications/licenses#{.}"/>
   </xsl:template>
 
+  <xsl:template match="mods:accessCondition[@type = 'use and reproduction'][@classID = 'mir_licenses']">
+    <!-- do nothing, delete accidentally imported license information with non existent classID -->
+  </xsl:template>
+
   <xsl:template match="mods:languageTerm[@authority = 'rfc4646'][@type = 'code']">
     <mods:languageTerm authority="rfc5646" type="code">
       <xsl:choose>
