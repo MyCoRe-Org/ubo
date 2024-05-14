@@ -163,9 +163,15 @@
       </xsl:variable>
 
       <xsl:if test="$allowed = 'true'">
+        <xsl:if test="@display-divider = 'top'">
+          <div class="dropdown-divider"/>
+        </xsl:if>
         <a href="{$WebApplicationBaseURL}{@ref}" class="dropdown-item">
           <xsl:call-template name="output.label.for.lang" />
         </a>
+        <xsl:if test="@display-divider = 'bottom'">
+          <div class="dropdown-divider"/>
+        </xsl:if>
       </xsl:if>
     </xsl:for-each>
   </xsl:template>
