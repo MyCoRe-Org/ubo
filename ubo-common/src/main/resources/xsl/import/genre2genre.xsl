@@ -77,10 +77,10 @@
       <xsl:when test="$genre='book chapter'">chapter</xsl:when>
       <xsl:when test="$genre='book-chapter'">chapter</xsl:when>
       <xsl:when test="$genre='book-part'">chapter</xsl:when>
-      <xsl:when test="$genre='letter'">article</xsl:when>
-      <xsl:when test="$genre='note'">article</xsl:when>
+      <xsl:when test="$genre='letter'">comment</xsl:when>
+      <xsl:when test="$genre='note'">comment</xsl:when>
       <xsl:when test="$genre='short survey'">article</xsl:when>
-      <xsl:when test="$genre='erratum'">article</xsl:when>
+      <xsl:when test="$genre='erratum'">erratum</xsl:when>
       <xsl:when test="$genre='press release'">article</xsl:when>
       <xsl:when test="$genre='biography'">interview</xsl:when>
       <xsl:when test="$genre='case reports'">article</xsl:when>
@@ -99,7 +99,7 @@
       <xsl:when test="$genre='multicenter study'">article</xsl:when>
       <xsl:when test="$genre='newspaper article'">article</xsl:when>
       <xsl:when test="$genre='observational study'">article</xsl:when>
-      <xsl:when test="$genre='published erratum'">article</xsl:when>
+      <xsl:when test="$genre='published erratum'">erratum</xsl:when>
       <xsl:when test="$genre='randomized controlled trial'">article</xsl:when>
       <xsl:when test="$genre='study characteristics'">article</xsl:when>
       <xsl:when test="$genre='technical report'">report</xsl:when>
@@ -116,6 +116,7 @@
       <xsl:when test="$genre='unpublished'">book</xsl:when>
       <xsl:when test="$genre='dataset'">research_data</xsl:when>
       <xsl:when test="$genre='other'">book</xsl:when>
+      <xsl:when test="$genre='preprint'">preprint</xsl:when>
     </xsl:choose>
     <xsl:text> </xsl:text>
   </xsl:template>
