@@ -9,6 +9,8 @@
 
 <xsl:output method="xml" encoding="UTF-8" indent="yes" />
 
+<xsl:param name="WebApplicationBaseURL"/>
+
 <xsl:template match="/csv2xml">
   <mods:modsCollection>
     <xsl:apply-templates select="row" />
@@ -100,37 +102,44 @@
 </xsl:template>
 
 <xsl:template match="typ">
-  <mods:genre type="intern">
-    <xsl:choose>
-      <xsl:when test="contains(.,'Rezension')">article</xsl:when>
-      <xsl:when test="contains(.,'Zeitschriftenaufsatz')">article</xsl:when>
-      <xsl:when test="contains(.,'Internet-Dokument')">article</xsl:when>
-      <xsl:when test="contains(.,'Dissertation')">dissertation</xsl:when>
-      <xsl:when test="contains(.,'IAQ-Reihe')">series</xsl:when>
-      <xsl:when test="contains(.,'Monografie')">book</xsl:when>
-      <xsl:when test="contains(.,'monografie')">book</xsl:when>
-      <xsl:when test="contains(.,'Sammelband')">collection</xsl:when>
-      <xsl:when test="contains(.,'Sammelwerk')">collection</xsl:when>
-      <xsl:when test="contains(.,'Tagungsdokumentation')">proceedings</xsl:when>
-      <xsl:when test="contains(.,'Buchaufsatz-Tagung')">chapter</xsl:when>
-      <xsl:when test="contains(.,'Buchaufsatz')">chapter</xsl:when>
-      <xsl:when test="contains(.,'Lexikoneintrag')">entry</xsl:when>
-      <xsl:otherwise>article</xsl:otherwise>
-    </xsl:choose>
+
+  <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre">
+    <xsl:attribute name="valueURI">
+      <xsl:value-of select="concat($WebApplicationBaseURL, 'classifications/ubogenre#')"/>
+      <xsl:choose>
+        <xsl:when test="contains(.,'Rezension')">article</xsl:when>
+        <xsl:when test="contains(.,'Zeitschriftenaufsatz')">article</xsl:when>
+        <xsl:when test="contains(.,'Internet-Dokument')">article</xsl:when>
+        <xsl:when test="contains(.,'Dissertation')">dissertation</xsl:when>
+        <xsl:when test="contains(.,'IAQ-Reihe')">series</xsl:when>
+        <xsl:when test="contains(.,'Monografie')">book</xsl:when>
+        <xsl:when test="contains(.,'monografie')">book</xsl:when>
+        <xsl:when test="contains(.,'Sammelband')">collection</xsl:when>
+        <xsl:when test="contains(.,'Sammelwerk')">collection</xsl:when>
+        <xsl:when test="contains(.,'Tagungsdokumentation')">proceedings</xsl:when>
+        <xsl:when test="contains(.,'Buchaufsatz-Tagung')">chapter</xsl:when>
+        <xsl:when test="contains(.,'Buchaufsatz')">chapter</xsl:when>
+        <xsl:when test="contains(.,'Lexikoneintrag')">entry</xsl:when>
+        <xsl:otherwise>article</xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
   </mods:genre>
 </xsl:template>
 
 <xsl:template match="typ" mode="host">
-  <mods:genre type="intern">
-    <xsl:choose>
-      <xsl:when test="contains(.,'Rezension')">journal</xsl:when>
-      <xsl:when test="contains(.,'Zeitschriftenaufsatz')">journal</xsl:when>
-      <xsl:when test="contains(.,'Buchaufsatz-Tagung')">proceedings</xsl:when>
-      <xsl:when test="contains(.,'Buchaufsatz')">collection</xsl:when>
-      <xsl:when test="contains(.,'Lexikoneintrag')">lexicon</xsl:when>
-      <xsl:when test="contains(.,'Internet-Dokument')">article</xsl:when>
-      <xsl:otherwise>collection</xsl:otherwise>
-    </xsl:choose>
+  <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre">
+    <xsl:attribute name="valueURI">
+      <xsl:value-of select="concat($WebApplicationBaseURL, 'classifications/ubogenre#')"/>
+      <xsl:choose>
+        <xsl:when test="contains(.,'Rezension')">journal</xsl:when>
+        <xsl:when test="contains(.,'Zeitschriftenaufsatz')">journal</xsl:when>
+        <xsl:when test="contains(.,'Buchaufsatz-Tagung')">proceedings</xsl:when>
+        <xsl:when test="contains(.,'Buchaufsatz')">collection</xsl:when>
+        <xsl:when test="contains(.,'Lexikoneintrag')">lexicon</xsl:when>
+        <xsl:when test="contains(.,'Internet-Dokument')">article</xsl:when>
+        <xsl:otherwise>collection</xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
   </mods:genre>
 </xsl:template>
 
@@ -230,7 +239,7 @@
 
 <xsl:template match="sprache">
   <mods:language>
-    <mods:languageTerm type="code" authority="rfc4646">
+    <mods:languageTerm type="code" authority="rfc5646">
       <xsl:value-of select="text()" />
     </mods:languageTerm>
   </mods:language>

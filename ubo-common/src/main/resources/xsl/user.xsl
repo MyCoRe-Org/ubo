@@ -46,7 +46,14 @@
       <title>
         <xsl:value-of select="i18n:translate('user.profile')" />
         <xsl:text>: </xsl:text>
-        <xsl:value-of select="/user/@name" />
+        <xsl:choose>
+          <xsl:when test="/user/realName">
+            <xsl:value-of select="/user/realName" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="/user/@name" />
+          </xsl:otherwise>
+        </xsl:choose>
       </title>
     </head>
     <body>

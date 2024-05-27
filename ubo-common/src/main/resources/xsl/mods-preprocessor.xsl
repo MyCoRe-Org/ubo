@@ -2,12 +2,12 @@
 
 <!-- Pre-processor for editor forms reading MODS -->
 
-<xsl:stylesheet version="1.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  xmlns:mods="http://www.loc.gov/mods/v3"
-  xmlns:xlink="http://www.w3.org/1999/xlink" 
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  exclude-result-prefixes="xsl i18n">
+<xsl:stylesheet version="1.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:mods="http://www.loc.gov/mods/v3"
+                xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                exclude-result-prefixes="i18n xlink xsl">
 
   <xsl:include href="copynodes.xsl" />
 
@@ -20,7 +20,13 @@
       <xsl:value-of select="substring-after(@valueURI,'#')" />
     </mods:classification>
   </xsl:template>
-  
+
+  <xsl:template match="mods:accessCondition[@type='use and reproduction']">
+    <mods:accessCondition type="use and reproduction" classID="licenses">
+      <xsl:value-of select="substring-after(@xlink:href, '#')"/>
+    </mods:accessCondition>
+  </xsl:template>
+
   <xsl:template match="mods:roleTerm[@valueURI]">
     <mods:roleTerm type="text" classID="{substring-after(@authorityURI,'classifications/')}">
       <xsl:value-of select="substring-after(@valueURI,'#')" />
@@ -102,6 +108,18 @@
         </xsl:choose>
       </mods:identifier>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="mods:genre[@type = 'intern'][@valueURI]" >
+    <mods:genre type="intern">
+      <xsl:value-of select="substring-after(@valueURI,'#')"/>
+    </mods:genre>
+  </xsl:template>
+
+  <xsl:template match="mods:genre[@type = 'intern'][not(@valueURI)]" >
+    <mods:genre type="intern">
+      <xsl:value-of select="."/>
+    </mods:genre>
   </xsl:template>
 
 </xsl:stylesheet>

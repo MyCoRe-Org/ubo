@@ -12,13 +12,14 @@
    <mods:mods ... />  
  ================================================== -->
 
-<xsl:stylesheet version="1.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:java="http://xml.apache.org/xalan/java"
-  xmlns:encoder="xalan://java.net.URLEncoder"
   exclude-result-prefixes="xsl xalan java">
+
+  <xsl:param name="WebApplicationBaseURL"/>
 
   <xsl:template name="call-aleph">
     <xsl:param name="request" />
@@ -50,7 +51,7 @@
   
   <xsl:template match="/present">
     <xsl:for-each select="record/metadata/oai_marc">
-      <mods:genre type="intern">dissertation</mods:genre>
+      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#dissertation" />
       <mods:titleInfo>
         <xsl:apply-templates select="varfield[@id='331']" />
         <xsl:apply-templates select="varfield[@id='335']" />
@@ -206,13 +207,13 @@
           </mods:detail>
         </mods:part>
       </xsl:if>
-      <mods:genre type="intern">series</mods:genre>
+      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#series" />
     </mods:relatedItem>
   </xsl:template>
   
   <xsl:template match="varfield[@id='037']/subfield[@label='a']">
     <mods:language>
-      <mods:languageTerm authority="rfc4646" type="code">
+      <mods:languageTerm authority="rfc5646" type="code">
         <xsl:value-of select="document(concat('language:',.))/language/@xmlCode" />
       </mods:languageTerm>
     </mods:language>
