@@ -17,6 +17,13 @@
         <label xml:lang="x-marcgt" text="abstract_or_summary" /> 
         <label xml:lang="x-color" text="#92A8CD" />
       </category>
+      <category ID="poster_abstract">
+        <label xml:lang="de" text="Poster Abstract" />
+        <label xml:lang="en" text="poster abstract" />
+        <label xml:lang="x-hosts" text="journal proceedings" />
+        <label xml:lang="x-marcgt" text="abstract_or_summary" /> 
+        <label xml:lang="x-color" text="#1368f8" />        
+      </category>      
       <category ID="chapter">
         <label xml:lang="de" text="Buchaufsatz/Kapitel" />
         <label xml:lang="en" text="book article/chapter" />
@@ -44,7 +51,7 @@
       </category>
        <category ID="review">
         <label xml:lang="en" text="Review/recension" />
-        <label xml:lang="x-hosts" text="journal collection" />
+        <label xml:lang="x-hosts" text="journal collection standalone" />
         <label xml:lang="de" text="Rezension" />
         <label xml:lang="x-marcgt" text="review" />
         <label xml:lang="x-color" text="#DB843D" />
@@ -56,6 +63,27 @@
         <label xml:lang="x-marcgt" text="article" />
         <label xml:lang="x-color" text="#B5CA92" />
       </category>
+      <category ID="erratum">
+        <label xml:lang="x-hosts" text="journal" />
+        <label xml:lang="de" text="Errata" />
+        <label xml:lang="en" text="errata/correction" />
+        <label xml:lang="x-marcgt" text="article" />
+        <label xml:lang="x-color" text="#f1c232" />
+      </category>  
+      <category ID="comment">
+        <label xml:lang="x-hosts" text="journal" />
+        <label xml:lang="de" text="Comment" />
+        <label xml:lang="en" text="Comment" />
+        <label xml:lang="x-marcgt" text="article" />
+        <label xml:lang="x-color" text="#fce5cd" />
+      </category>
+      <category ID="preprint">
+        <label xml:lang="x-hosts" text="standalone" />
+        <label xml:lang="de" text="Preprint" />
+        <label xml:lang="en" text="Preprint" />
+        <label xml:lang="x-marcgt" text="offprint" />
+        <label xml:lang="x-color" text="#facdfc" />
+      </category>                 
     </category>
     <category ID="thesis">
       <label xml:lang="de" text="Hochschulschrift" />
@@ -140,11 +168,11 @@
     <category ID="poster">
       <label xml:lang="en" text="Poster" />
       <label xml:lang="de" text="Poster" />
-      <label xml:lang="x-hosts" text="proceedings standalone" />
+      <label xml:lang="x-hosts" text="standalone" />
       <label xml:lang="x-color" text="#DB843D" />
     </category>
     <category ID="interview">
-      <label xml:lang="x-hosts" text="journal newspaper standalone" />
+      <label xml:lang="x-hosts" text="journal blog newspaper standalone" />
       <label xml:lang="en" text="Interview" />
       <label xml:lang="de" text="Interview" />
       <label xml:lang="x-color" text="#A47D7C" />
