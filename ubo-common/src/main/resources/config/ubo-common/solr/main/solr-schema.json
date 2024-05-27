@@ -272,7 +272,7 @@
       "type": "ubo_text",
       "multiValued": true,
       "indexed": true,
-      "stored": false
+      "stored": true
     }
   },
   {
