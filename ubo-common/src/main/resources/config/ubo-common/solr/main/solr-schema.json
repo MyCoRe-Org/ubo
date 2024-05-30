@@ -835,7 +835,7 @@
   },
   {
     "add-copy-field": {
-      "source": "person_???",
+      "source": "person_*",
       "dest": "facet_person"
     }
   },
