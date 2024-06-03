@@ -161,12 +161,12 @@
     </field>
 
     <xsl:if test="../mods:roleTerm/text() = 'corresponding_author'">
-      <field name="person_aut_corresp">
+      <field name="corresponding_aut">
         <xsl:apply-templates select="../.." mode="solrField"/>
       </field>
 
       <xsl:for-each select="../../mods:nameIdentifier">
-        <field name="person_aut_corresp_id">
+        <field name="corresponding_aut_id">
           <xsl:value-of select="."/>
         </field>
       </xsl:for-each>
