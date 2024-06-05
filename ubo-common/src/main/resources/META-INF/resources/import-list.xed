@@ -86,7 +86,7 @@
                 <label for="{generate-id()}" class="mycore-form-label text-nowrap">
                   <xed:output i18n="ubo.import.list.label.sourceFormat" />:
                 </label>
-                <select id="{generate-id()}" class="form-control col-7 mr-1 custom-select" onchange="toggleEnrichment(this)">
+                <select id="{generate-id()}" class="form-control col-7 mr-1 custom-select" onchange="UBOImportList.toggleEnrichment(this)">
                   <xed:include uri="xslStyle:items2options:classification:editor:-1:children:importSourceType" />
                 </select>
               </div>
@@ -119,7 +119,7 @@
               <div class="form-group form-inline">
                 <textarea id="{xed:generate-id()}" class="{$xed-validation-marker} form-control col" type="text"
                           placeholder="BibTeX Quellcode bzw. ORCID bzw. PPN/CSV-Literaturliste hierhin kopieren" rows="10"
-                          oninput="toggleSubmit()"/>
+                          oninput="UBOImportList.toggleSubmit()"/>
               </div>
               <xed:validate required="true" display="global" />
             </xed:bind>
@@ -131,7 +131,7 @@
 
               <xed:bind xpath="@async" initially="false">
                 <div class="form-group form-inline ml-3" title="{i18n:ubo.import.list.tooltip.async}">
-                  <input type="checkbox" value="true" class="form-check-input my-auto" id="async-yes" onchange="toggleSelect('import-list-output-format-select', 'import')"/>
+                  <input type="checkbox" value="true" class="form-check-input my-auto" id="async-yes" onchange="UBOImportList.toggleSelect('import-list-output-format-select', 'import')"/>
                   <label class="my-auto">
                     <xed:output i18n="ubo.import.list.label.async" />
                   </label>
