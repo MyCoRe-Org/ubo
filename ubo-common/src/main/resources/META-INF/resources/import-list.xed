@@ -118,7 +118,7 @@
             <xed:bind xpath="source">
               <div class="form-group form-inline">
                 <textarea id="{xed:generate-id()}" class="{$xed-validation-marker} form-control col" type="text"
-                          placeholder="BibTeX Quellcode bzw. ORCID bzw. PPN/CSV-Literaturliste hierhin kopieren" rows="10"
+                          placeholder="{i18n:ubo.import.list.textarea.placeholder}" rows="10"
                           oninput="UBOImportList.toggleSubmit()"/>
               </div>
               <xed:validate required="true" display="global" />
