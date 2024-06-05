@@ -19,7 +19,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -89,10 +88,8 @@ public class ImportListJobAction extends MCRJobAction {
             return;
         }
 
-        if (eMailAddress != null) {
-            String subject = MCRTranslation.translate("ubo.import.list.email.subject", importJob.getID());
-            MCRMailer.send(DEFAULT_EMAIL_FROM.get(), eMailAddress, subject, getBody(importJob));
-        }
+        String subject = MCRTranslation.translate("ubo.import.list.email.subject", importJob.getID());
+        MCRMailer.send(DEFAULT_EMAIL_FROM.get(), eMailAddress, subject, getBody(importJob));
     }
 
     private String getBody(ImportJob importJob) {
