@@ -130,7 +130,7 @@
               </button>
 
               <xed:bind xpath="@async" initially="false">
-                <div class="form-group form-inline ml-3">
+                <div class="form-group form-inline ml-3" title="{i18n:ubo.import.list.tooltip.async}">
                   <input type="checkbox" value="true" class="form-check-input my-auto" id="async-yes" onchange="toggleSelect('import-list-output-format-select', 'import')"/>
                   <label class="my-auto">
                     <xed:output i18n="ubo.import.list.label.async" />
