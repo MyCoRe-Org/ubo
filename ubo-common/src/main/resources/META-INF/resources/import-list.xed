@@ -10,6 +10,16 @@
     </i18n:en>
   </title>
 
+  <xed:form xmlns:xed="http://www.mycore.de/xeditor">
+    <xed:if test="$list-submitted = 'true'" xmlns:xed="http://www.mycore.de/xeditor">
+      <article class="card mb-3">
+        <div class="card-body">
+          <xed:output i18n="ubo.import.list.submission.success" />
+        </div>
+      </article>
+    </xed:if>
+  </xed:form>
+
   <article class="card">
     <div class="card-body">
       <p>

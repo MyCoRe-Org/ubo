@@ -32,6 +32,7 @@ public class ImportListJobAction extends MCRJobAction {
 
     public static String EDITOR_SUBMISSION_PARAMETER = "xEditorSubmission";
     public static String USER_ID_PARAMETER = "userName";
+    public static String IMPORT_JOB_ID_PARAMETER = "importJobId";
 
     protected static final Logger LOGGER = LogManager.getLogger(ImportListJobAction.class);
 
@@ -46,8 +47,7 @@ public class ImportListJobAction extends MCRJobAction {
 
     @Override
     public void execute() throws ExecutionException {
-        Map<String, String> parameters = super.job.getParameters();
-        String xEditorSubmission = parameters.get(ImportListJobAction.EDITOR_SUBMISSION_PARAMETER);
+        String xEditorSubmission = job.getParameter(ImportListJobAction.EDITOR_SUBMISSION_PARAMETER);
 
         if (xEditorSubmission == null) {
             LOGGER.error("No {} parameter provided", ImportListJobAction.EDITOR_SUBMISSION_PARAMETER);
@@ -61,6 +61,7 @@ public class ImportListJobAction extends MCRJobAction {
             String sourceType = formInput.getAttributeValue("sourceType");
             ImportJob importJob = "Evaluna".equals(sourceType) ? new EvalunaImportJob() : new ListImportJob(sourceType);
             importJob.transform(formInput);
+            job.setParameter(IMPORT_JOB_ID_PARAMETER, importJob.getID());
 
             if ("true".equals(formInput.getAttributeValue("enrich"))) {
                 importJob.enrich();

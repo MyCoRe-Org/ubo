@@ -16,6 +16,7 @@ import org.jdom2.Element;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.services.queuedjob.MCRJob;
@@ -56,6 +57,13 @@ public class DozBibImportServlet extends MCRServlet {
             job.setParameter(ImportListJobAction.EDITOR_SUBMISSION_PARAMETER, new XMLOutputter().outputString(doc));
             job.setParameter(ImportListJobAction.USER_ID_PARAMETER, MCRUserManager.getCurrentUser().getUserName());
             MCRJobQueue.getInstance(ImportListJobAction.class).offer(job);
+
+            String referer = req.getHeader("Referer");
+            if (referer != null) {
+                res.sendRedirect(referer+"&list-submitted=true");
+            } else {
+                res.sendRedirect(MCRFrontendUtil.getBaseURL());
+            }
             return;
         }
 
