@@ -15,8 +15,8 @@ import org.mycore.ubo.importer.evaluna.EvalunaImportJob;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserManager;
 
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
@@ -53,8 +53,8 @@ public class ImportListJobAction extends MCRJobAction {
             return;
         }
 
-        try (Reader reader = new StringReader(xEditorSubmission)) {
-            Document doc = new SAXBuilder().build(reader);
+        try (InputStream inputStream = new ByteArrayInputStream(xEditorSubmission.getBytes(StandardCharsets.UTF_8))) {
+            Document doc = new SAXBuilder().build(inputStream);
             Element formInput = doc.detachRootElement();
 
             String sourceType = formInput.getAttributeValue("sourceType");
