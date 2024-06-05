@@ -29,7 +29,7 @@
 
             <xed:repeat xpath="subject" max="5">
               <div class="form-group form-inline">
-                <label for="subject" class="mycore-form-label">
+                <label for="subject" class="mycore-form-label text-nowrap">
                   <xed:output i18n="ubo.subject" />:
                 </label>
                 <select class="autocomplete {$xed-validation-marker} col-7 form-control custom-select">
@@ -44,7 +44,7 @@
 
             <xed:bind xpath="origin">
               <div class="form-group form-inline">
-                <label for="{generate-id()}" class="mycore-form-label">
+                <label for="{generate-id()}" class="mycore-form-label text-nowrap">
                   <xed:output i18n="ubo.department" />:
                 </label>
                 <select id="{generate-id()}" class="autocomplete {$xed-validation-marker} col-7 form-control custom-select">
@@ -56,7 +56,9 @@
 
             <xed:bind xpath="@sourceType">
               <div class="form-group form-inline">
-                <label for="{generate-id()}" class="mycore-form-label">Quell-Format:</label>
+                <label for="{generate-id()}" class="mycore-form-label text-nowrap">
+                  <xed:output i18n="ubo.import.list.label.sourceFormat" />:
+                </label>
                 <select id="{generate-id()}" class="form-control col-7 mr-1 custom-select" onchange="toggleEnrichment(this)">
                   <xed:include uri="xslStyle:items2options:classification:editor:-1:children:importSourceType" />
                 </select>
@@ -65,7 +67,9 @@
 
             <xed:bind xpath="@targetType">
               <div class="form-group form-inline">
-                <label for="{generate-id()}" class="mycore-form-label">Ausgabe-Format:</label>
+                <label for="{generate-id()}" class="mycore-form-label text-nowrap">
+                  <xed:output i18n="ubo.import.list.label.outputFormat" />:
+                </label>
                 <select id="{generate-id()}" class="form-control col custom-select">
                   <option value="preview-html">Vorschau (HTML)</option>
                   <option value="preview-mods-raw">Vorschau (MODS)</option>
@@ -76,7 +80,9 @@
 
             <xed:bind xpath="@enrich" initially="false">
               <div class="form-group form-inline">
-                <label class="mycore-form-label">aus externen Datenquellen anreichern:</label>
+                <label class="mycore-form-label text-nowrap">
+                  <xed:output i18n="ubo.import.list.label.enrich" />:
+                </label>
                 <input type="radio" value="true"  class="form-control ml-2 mr-2" id="enrich-yes" /><label for="enrich-yes">Ja</label>
                 <input type="radio" value="false" class="form-control ml-4 mr-2" id="enrich-no"  /><label for="enrich-no" >Nein</label>
               </div>
@@ -91,14 +97,21 @@
               <xed:validate required="true" display="global" />
             </xed:bind>
 
-            <div>
+            <div class="form-group form-inline">
               <button id="submitBtn" class="btn btn-sm btn-primary" disabled="disabled" type="submit" xed:target="servlet" xed:href="DozBibImportServlet">
                 <xed:output i18n="button.submit" />
               </button>
+
+              <xed:bind xpath="@async" initially="false">
+                <div class="form-group form-inline ml-3">
+                  <input type="checkbox" value="true" class="form-check-input my-auto" id="async-yes"/>
+                  <label class="my-auto">
+                    <xed:output i18n="ubo.inport.list.label.async" />
+                  </label>
+                </div>
+              </xed:bind>
             </div>
-
           </fieldset>
-
         </xed:bind>
       </xed:form>
 
