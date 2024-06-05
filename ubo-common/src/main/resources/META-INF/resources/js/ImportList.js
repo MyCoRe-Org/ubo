@@ -11,6 +11,18 @@ function toggleEnrichment(select) {
     }
 }
 
+function toggleSelect(elementId, value) {
+    let element = document.getElementById(elementId);
+
+    if (element.getAttribute("disabled") == null) {
+        element.setAttribute("disabled", "disabled");
+        element.value = value;
+    } else {
+        element.removeAttribute("disabled");
+        element.selectedIndex = 0;
+    }
+}
+
 function toggleSubmit() {
     let v = $("textarea").val();
 

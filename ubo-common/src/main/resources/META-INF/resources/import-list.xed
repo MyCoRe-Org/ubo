@@ -87,7 +87,7 @@
                 <label for="{generate-id()}" class="mycore-form-label text-nowrap">
                   <xed:output i18n="ubo.import.list.label.outputFormat" />:
                 </label>
-                <select id="{generate-id()}" class="form-control col custom-select">
+                <select id="import-list-output-format-select" class="form-control col-7 custom-select">
                   <option value="preview-html">Vorschau (HTML)</option>
                   <option value="preview-mods-raw">Vorschau (MODS)</option>
                   <option value="import">direkt importieren</option>
@@ -121,7 +121,7 @@
 
               <xed:bind xpath="@async" initially="false">
                 <div class="form-group form-inline ml-3">
-                  <input type="checkbox" value="true" class="form-check-input my-auto" id="async-yes"/>
+                  <input type="checkbox" value="true" class="form-check-input my-auto" id="async-yes" onchange="toggleSelect('import-list-output-format-select', 'import')"/>
                   <label class="my-auto">
                     <xed:output i18n="ubo.import.list.label.async" />
                   </label>
