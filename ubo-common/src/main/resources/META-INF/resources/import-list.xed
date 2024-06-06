@@ -1,15 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<webpage lastModified="$Date: 2009-07-09 12:25:56 +0200 (Do, 09 Jul 2009) $" id="dozbib.import.list">
-  <title xml:lang="de">Literaturliste importieren</title>
+<webpage lastModified="$Date: 2009-07-09 12:25:56 +0200 (Do, 09 Jul 2009) $" id="dozbib.import.list" xmlns:i18n="http://www.mycore.org/i18n">
+  <title>
+    <i18n:de>
+      Literaturliste importieren
+    </i18n:de>
+    <i18n:en>
+      Import bibliography
+    </i18n:en>
+  </title>
+
+  <xed:form xmlns:xed="http://www.mycore.de/xeditor">
+    <xed:if test="$list-submitted = 'true'" xmlns:xed="http://www.mycore.de/xeditor">
+      <article class="card mb-3">
+        <div class="card-body">
+          <xed:output i18n="ubo.import.list.submission.success" />
+        </div>
+      </article>
+    </xed:if>
+  </xed:form>
 
   <article class="card">
     <div class="card-body">
       <p>
-        Über dieses Formular können Sie eine Literaturliste im
-        <a href="http://artis.imag.fr/~Xavier.Decoret/resources/xdkbibtex/bibtex_summary.html">BibTeX Format</a>,
-        alle Publikationen einer gegebenen ORCID oder eine CSV-Datei importieren.
+        <i18n:de>
+          Über dieses Formular können Sie eine Literaturliste im
+          <a href="http://artis.imag.fr/~Xavier.Decoret/resources/xdkbibtex/bibtex_summary.html">BibTeX Format</a>,
+          alle Publikationen einer gegebenen ORCID oder eine CSV-Datei importieren.
+        </i18n:de>
+        <i18n:en>
+          Using this form you can import a bibliography in
+          <a href="http://artis.imag.fr/~Xavier.Decoret/resources/xdkbibtex/bibtex_summary.html">BibTeX format</a>,
+          all publications of a given ORCID or a CSV file.
+        </i18n:en>
       </p>
+
       <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
         <xed:bind xpath="/import">
 
@@ -25,11 +50,13 @@
           </xed:if>
 
           <fieldset>
-            <legend>Literaturliste importieren</legend>
+            <legend>
+              <xed:output i18n="ubo.import.list.form.headline" />:
+            </legend>
 
             <xed:repeat xpath="subject" max="5">
               <div class="form-group form-inline">
-                <label for="subject" class="mycore-form-label">
+                <label for="subject" class="mycore-form-label text-nowrap">
                   <xed:output i18n="ubo.subject" />:
                 </label>
                 <select class="autocomplete {$xed-validation-marker} col-7 form-control custom-select">
@@ -44,7 +71,7 @@
 
             <xed:bind xpath="origin">
               <div class="form-group form-inline">
-                <label for="{generate-id()}" class="mycore-form-label">
+                <label for="{generate-id()}" class="mycore-form-label text-nowrap">
                   <xed:output i18n="ubo.department" />:
                 </label>
                 <select id="{generate-id()}" class="autocomplete {$xed-validation-marker} col-7 form-control custom-select">
@@ -56,8 +83,10 @@
 
             <xed:bind xpath="@sourceType">
               <div class="form-group form-inline">
-                <label for="{generate-id()}" class="mycore-form-label">Quell-Format:</label>
-                <select id="{generate-id()}" class="form-control col-7 mr-1 custom-select" onchange="toggleEnrichment(this)">
+                <label for="{generate-id()}" class="mycore-form-label text-nowrap">
+                  <xed:output i18n="ubo.import.list.label.sourceFormat" />:
+                </label>
+                <select id="{generate-id()}" class="form-control col-7 mr-1 custom-select" onchange="UBOImportList.toggleEnrichment(this)">
                   <xed:include uri="xslStyle:items2options:classification:editor:-1:children:importSourceType" />
                 </select>
               </div>
@@ -65,8 +94,10 @@
 
             <xed:bind xpath="@targetType">
               <div class="form-group form-inline">
-                <label for="{generate-id()}" class="mycore-form-label">Ausgabe-Format:</label>
-                <select id="{generate-id()}" class="form-control col custom-select">
+                <label for="{generate-id()}" class="mycore-form-label text-nowrap">
+                  <xed:output i18n="ubo.import.list.label.outputFormat" />:
+                </label>
+                <select id="import-list-output-format-select" class="form-control col-7 custom-select">
                   <option value="preview-html">Vorschau (HTML)</option>
                   <option value="preview-mods-raw">Vorschau (MODS)</option>
                   <option value="import">direkt importieren</option>
@@ -76,7 +107,9 @@
 
             <xed:bind xpath="@enrich" initially="false">
               <div class="form-group form-inline">
-                <label class="mycore-form-label">aus externen Datenquellen anreichern:</label>
+                <label class="mycore-form-label text-nowrap">
+                  <xed:output i18n="ubo.import.list.label.enrich" />:
+                </label>
                 <input type="radio" value="true"  class="form-control ml-2 mr-2" id="enrich-yes" /><label for="enrich-yes">Ja</label>
                 <input type="radio" value="false" class="form-control ml-4 mr-2" id="enrich-no"  /><label for="enrich-no" >Nein</label>
               </div>
@@ -85,20 +118,27 @@
             <xed:bind xpath="source">
               <div class="form-group form-inline">
                 <textarea id="{xed:generate-id()}" class="{$xed-validation-marker} form-control col" type="text"
-                          placeholder="BibTeX Quellcode bzw. ORCID bzw. PPN/CSV-Literaturliste hierhin kopieren" rows="10"
-                          oninput="toggleSubmit()"/>
+                          placeholder="{i18n:ubo.import.list.textarea.placeholder}" rows="10"
+                          oninput="UBOImportList.toggleSubmit()"/>
               </div>
               <xed:validate required="true" display="global" />
             </xed:bind>
 
-            <div>
+            <div class="form-group form-inline">
               <button id="submitBtn" class="btn btn-sm btn-primary" disabled="disabled" type="submit" xed:target="servlet" xed:href="DozBibImportServlet">
                 <xed:output i18n="button.submit" />
               </button>
+
+              <xed:bind xpath="@async" initially="false">
+                <div class="form-group form-inline ml-3" title="{i18n:ubo.import.list.tooltip.async}">
+                  <input type="checkbox" value="true" class="form-check-input my-auto" id="async-yes" onchange="UBOImportList.toggleSelect('import-list-output-format-select', 'import')"/>
+                  <label class="my-auto">
+                    <xed:output i18n="ubo.import.list.label.async" />
+                  </label>
+                </div>
+              </xed:bind>
             </div>
-
           </fieldset>
-
         </xed:bind>
       </xed:form>
 
