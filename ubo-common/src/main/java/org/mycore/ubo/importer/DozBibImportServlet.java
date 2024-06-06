@@ -20,7 +20,7 @@ import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.services.queuedjob.MCRJob;
-import org.mycore.services.queuedjob.MCRJobQueue;
+import org.mycore.services.queuedjob.MCRJobQueueManager;
 import org.mycore.ubo.AccessControl;
 import org.mycore.ubo.DozBibEntryServlet;
 import org.mycore.ubo.importer.evaluna.EvalunaImportJob;
@@ -56,11 +56,11 @@ public class DozBibImportServlet extends MCRServlet {
             MCRJob job = new MCRJob(ImportListJobAction.class);
             job.setParameter(ImportListJobAction.EDITOR_SUBMISSION_PARAMETER, new XMLOutputter().outputString(doc));
             job.setParameter(ImportListJobAction.USER_ID_PARAMETER, MCRUserManager.getCurrentUser().getUserName());
-            MCRJobQueue.getInstance(ImportListJobAction.class).offer(job);
+            MCRJobQueueManager.getInstance().getJobQueue(ImportListJobAction.class).offer(job);
 
             String referer = req.getHeader("Referer");
             if (referer != null) {
-                res.sendRedirect(referer+"&list-submitted=true");
+                res.sendRedirect(referer + "&list-submitted=true");
             } else {
                 res.sendRedirect(MCRFrontendUtil.getBaseURL());
             }
