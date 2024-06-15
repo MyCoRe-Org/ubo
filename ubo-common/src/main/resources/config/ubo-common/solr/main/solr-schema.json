@@ -232,7 +232,7 @@
   },
   {
     "add-field": {
-      "name": "person_aut_corresp",
+      "name": "corresponding_aut",
       "type": "ubo_name",
       "multiValued": true,
       "indexed": true,
@@ -241,7 +241,7 @@
   },
   {
     "add-field": {
-      "name": "person_aut_corresp_id",
+      "name": "corresponding_aut_id",
       "type": "ubo_id",
       "multiValued": true,
       "indexed": true,

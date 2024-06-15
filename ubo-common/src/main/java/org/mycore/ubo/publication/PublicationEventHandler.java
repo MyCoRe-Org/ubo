@@ -175,9 +175,9 @@ public class PublicationEventHandler extends MCREventHandlerBase {
             .ifPresent(trueValue -> {
                 List<Element> elementsToRemove
                     = modsNameElement.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
-                        .stream()
-                        .filter(element -> element.getAttributeValue("type").equals(leadIDName))
-                        .collect(Collectors.toList());
+                    .stream()
+                    .filter(element -> leadIDName.equals(element.getAttributeValue("type")))
+                    .collect(Collectors.toList());
                 elementsToRemove.forEach(modsNameElement::removeContent);
             });
     }
