@@ -126,8 +126,13 @@ public class NewPublicationWizard extends MCRServlet {
             query.append("dedup:").append(MCRSolrUtils.escapeSearchValue(criterion.getKey())).append(" OR ");
         }
 
-        query.append("(title:\"").append(getByXPath(mods, "mods:titleInfo/mods:title")).append('"');
-        query.append(" AND person:\"").append(getByXPath(mods, "mods:name/mods:namePart")).append("\"))");
+        query.append("(title:\"")
+            .append(MCRSolrUtils.escapeSearchValue(getByXPath(mods, "mods:titleInfo/mods:title")))
+            .append('"');
+
+        query.append(" AND person:\"")
+            .append(MCRSolrUtils.escapeSearchValue(getByXPath(mods, "mods:name/mods:namePart")))
+            .append("\"))");
 
         return query.toString();
     }
