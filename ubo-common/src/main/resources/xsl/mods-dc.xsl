@@ -162,7 +162,7 @@
 
   <xsl:template match="mods:languageTerm[@authority='rfc5646'][@type='code']" mode="dc">
     <dc:language>
-      <xsl:value-of select="document(concat('language:',.))/language/@termCode" />
+      <xsl:value-of select="document(concat('notnull:language:',.))/language/@termCode" />
     </dc:language>
   </xsl:template>
 
