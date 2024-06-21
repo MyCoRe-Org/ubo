@@ -9,7 +9,8 @@
   xmlns:str="xalan://java.lang.String"
   xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
   xmlns:dozbib="xalan://org.mycore.ubo.DozBibCommands"
-  exclude-result-prefixes="dozbib xsl xalan i18n encoder mcrxml str">
+  xmlns:solrUtil="xalan://org.mycore.solr.MCRSolrUtils"
+  exclude-result-prefixes="dozbib xsl xalan i18n encoder mcrxml str solrUtil">
 
 <xsl:param name="RequestURL" />
 <xsl:param name="ServletsBaseURL" />
@@ -81,11 +82,11 @@
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:variable>
-              <a class="mycore-facet-remove" href="{$removeURL}" title="{$facet-remove-display-text} {i18n:translate('edit.remove')}">
+              <a class="mycore-facet-remove" href="{$removeURL}" title="{translate($facet-remove-display-text, '\', '')} {i18n:translate('edit.remove')}">
                 <span class="far fa-times-circle" aria-hidden="true" />
               </a>
               <span class="mycore-facet-filter">
-                <xsl:value-of select="$facet-remove-display-text"/>
+                <xsl:value-of select="translate($facet-remove-display-text, '\', '')"/>
               </span>
             </li>
           </xsl:for-each>
@@ -194,7 +195,7 @@
     <span class="mycore-facet-count">
       <xsl:value-of select="text()" />
     </span>
-    <xsl:variable name="fq" select="encoder:encode(concat(../@name,':',$quotes,@name,$quotes),'UTF-8')" />
+    <xsl:variable name="fq" select="encoder:encode(concat(../@name,':', $quotes, solrUtil:escapeSearchValue(@name), $quotes), 'UTF-8')" />
     <xsl:variable name="facet-human-readable">
       <xsl:call-template name="get-facet-name">
         <xsl:with-param name="facetName" select="str:replaceAll(str:new(../@name),'facet_', '')"/>
