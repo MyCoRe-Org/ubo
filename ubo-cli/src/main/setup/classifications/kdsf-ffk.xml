@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="kdsf-ffk">
+  <label text="Interdisziplinäre Forschungsfeldklassifikation" xml:lang="de" description="Klassifikation für interdisziplinäre Forschungsfelder im Rahmen des Kerndatensatz Forschung (Version 1.0.0)" />
+  <label text="Interdisciplinary research field classification" xml:lang="en" description="Classification for interdisciplinary research fields as part of the KDSF - Standard for research information in Germany (Version 1.0.0)" />
+  <categories>
+    <category ID="ArbeitUndWirtschaft">
+      <label text="Arbeit und Wirtschaft" xml:lang="de" />
+      <label text="Work and Economy" xml:lang="en" />
+      <category ID="139">
+        <label text="Arbeit und Wirtschaft - Allgemein" xml:lang="de" />
+        <label text="Work and economy - general" xml:lang="en" />
+      </category>
+      <category ID="111">
+        <label text="Arbeitswelt und -gestaltung" xml:lang="de" description="Arbeitsbedingungen, Home Office, Bedingungsloses Grundeinkommen, Beschäftigung, Work-Life-Balance" />
+        <label text="Workplace and workplace design" xml:lang="en" description="Working conditions, working from home, unconditional basic income, employment, work-life balance" />
+      </category>
+      <category ID="067">
+        <label text="Digitale Wirtschaft" xml:lang="de" description="Internetwirtschaft, Digitale Güter, Globales digitales Wirtschaftssystem, Neue Märkte, Digitaler Wirtschaftssektor, Digitale Geschäftsmodelle, Neue Unternehmensformen" />
+        <label text="Digital economy" xml:lang="en" description="Internet economy, digital goods, global digital economy, new markets, digital business sector, digital business models, new types of business organisations" />
+      </category>
+    </category>
+    <category ID="ErdeUndKosmos">
+      <label text="Erde und Kosmos" xml:lang="de" />
+      <label text="Earth and space" xml:lang="en" />
+      <category ID="172">
+        <label text="Erde und Kosmos - Allgemein" xml:lang="de" />
+        <label text="Earth and cosmos - general" xml:lang="en" />
+      </category>
+      <category ID="366">
+        <label text="Materie" xml:lang="de" description="Photonische Kristalle, Kerne, Felder, Hochenergetische Neutrinos, Dunkle Materie" />
+        <label text="Matter" xml:lang="en" description="Photonic crystals, nuclei, fields, high-energy neutrinos, dark matter" />
+      </category>
+      <category ID="400">
+        <label text="Planet Erde" xml:lang="de" description="Wettervorhersagen, Nährstoffzyklus innerhalb eines Ökosystems, (messbare) Zustände der Atmosphäre bzw. Troposphäre" />
+        <label text="Planet Earth" xml:lang="en" description="Weather forecasts, nutrient cycle within an ecosystem, (measurable) states of the atmosphere or troposphere" />
+      </category>
+      <category ID="512">
+        <label text="Regionen der Erde" xml:lang="de" description="Küstenforschung, Meeresforschung, Polarforschung, Tiefseeforschung, Bergforschung, Wüstenforschung" />
+        <label text="Regions of the Earth" xml:lang="en" description="Coastal research, marine research, polar research, deep-sea research, mountain research, desert research" />
+      </category>
+      <category ID="417">
+        <label text="Weltraum" xml:lang="de" description="Weltraumforschung, Weltraumtechnik, Forschung unter Weltraumbedingungen; Raumfahrt" />
+        <label text="Space" xml:lang="en" description="Space research, space technology, research under space conditions; space travel" />
+      </category>
+    </category>
+    <category ID="GlobalisierungUndNachhaltigkeit">
+      <label text="Globalisierung und Nachhaltigkeit" xml:lang="de" />
+      <label text="Globalisation and sustainability" xml:lang="en" />
+      <category ID="007">
+        <label text="Globalisierung und Nachhaltigkeit - Allgemein" xml:lang="de" />
+        <label text="Globalisation and sustainability - general" xml:lang="en" />
+      </category>
+      <category ID="728">
+        <label text="Entwicklungszusammenarbeit" xml:lang="de" description="Ländliche Entwicklung, Entwicklungsländerforschung, Development Studies, Entwicklungstheorie, Regionalstudien, Entwicklungsökonomie, Situation und Sicherstellung der Welternährung in Krisen-/Konfliktregionen" />
+        <label text="Development cooperation" xml:lang="en" description="Rural development, research on developing countries, development studies, development theory, regional studies, development economics, situation and security of the global food supply in crisis and conflict regions" />
+      </category>
+      <category ID="771">
+        <label text="Migration" xml:lang="de" description="Migrationstheorie, Migrationsforschung, Immigration, Geflüchtete, Flüchtlinge, Asylrecht, Räumliche Mobilität, Soziale Bewegungen, Wanderungsbewegung, Integration" />
+        <label text="Migration" xml:lang="en" description="Migration theory, migration research, immigration, refugees, asylum law, spatial mobility, social movements, migratory movements, integration" />
+      </category>
+      <category ID="544">
+        <label text="Nachhaltigkeit" xml:lang="de" description="Nachhaltige Entwicklung, Langfristige Entwicklung, Sustainable Development, Dauerhafte Entwicklung, Zukunftsfähige Entwicklung, Zukunftsfähige Wirtschaft, Umweltverträgliche Entwicklung, Qualitatives Wachstum, Nachhaltiges Wirtschaften, Nachhaltiges Wachstum" />
+        <label text="Sustainability" xml:lang="en" description="Sustainable development, long-term development, permanent development, sustainable economy, environmentally friendly development, qualitative growth, sustainable economic activities/operations, sustainable growth" />
+      </category>
+    </category>
+    <category ID="Industrie">
+      <label text="Industrie" xml:lang="de" />
+      <label text="Industry" xml:lang="en" />
+      <category ID="515">
+        <label text="Industrie - Allgemein" xml:lang="de" />
+        <label text="Industry - general" xml:lang="en" />
+      </category>
+      <category ID="783">
+        <label text="Entsorgung und Recycling" xml:lang="de" description="Abfallbeseitigung, Altlastensanierung, Gefahrstoff, Sonderabfall, Abfallverwertung, Abfallvermeidung, Abfallwirtschaft, Abfallreduzierung, Kreislaufwirtschaft" />
+        <label text="Waste disposal and recycling" xml:lang="en" description="Waste disposal, restoration of contaminated sites, hazardous substances, hazardous waste, waste recycling, waste prevention, waste management, waste reduction, circular economy" />
+      </category>
+      <category ID="091">
+        <label text="Intelligente Produktion" xml:lang="de" description="Vierte industrielle Revolution, Intelligente Fertigung, Digitale Fabrik, Automatisierte Produktion, Industrielle Automatisierung" />
+        <label text="Intelligent manufacturing" xml:lang="en" description="Fourth industrial revolution, intelligent manufacturing, digital factory, automated manufacturing, industrial automation" />
+      </category>
+      <category ID="093">
+        <label text="Robotik" xml:lang="de" description="Intelligente Roboter, Industrieroboter, Autonome Roboter, Prozessautomation" />
+        <label text="Robotics" xml:lang="en" description="Intelligent robots, industrial robots, autonomous robots, process automation" />
+      </category>
+    </category>
+    <category ID="Informationstechnologie">
+      <label text="Informationstechnologie" xml:lang="de" />
+      <label text="Information technology" xml:lang="en" />
+      <category ID="080">
+        <label text="Informationstechnologie - Allgemein" xml:lang="de" />
+        <label text="Information technology - general" xml:lang="en" />
+      </category>
+      <category ID="837">
+        <label text="Informationssicherheit" xml:lang="de" description="Datensicherung, Sicherheitssysteme, Datenverschlüsselung, Computersicherheit, Kryptoverfahren, Kryptosysteme, Datenschutz" />
+        <label text="Information security" xml:lang="en" description="Data security, security systems, data encryption, computer security, encryption methods, cryptosystems, data protection" />
+      </category>
+      <category ID="586">
+        <label text="Informationssysteme" xml:lang="de" description="Datenverarbeitung, Kommunikationssysteme, Datenstrukturen, Algorithmen, Benutzerschnittstelle, Mensch-Maschine-Interaktion, Wissenstechnologien, Softwaresysteme" />
+        <label text="Information systems" xml:lang="en" description="Data processing, communication systems, data structures, algorithms, user interface, human-machine interaction, knowledge technologies, software systems" />
+      </category>
+      <category ID="434">
+        <label text="Informationstechnik" xml:lang="de" description="IuK-Technologie, Kommunikationstechnik, Informations- und Kommunikationstechnik, Informationstechnik" />
+        <label text="Information technology engineering" xml:lang="en" description="ICT technology, communications systems, information and communication systems, information technology" />
+      </category>
+      <category ID="524">
+        <label text="Internet der Dinge" xml:lang="de" description="Internet der Dienste, Internet der Energie, Autonome Agenten, Multiagenten Systeme, Allgegenwärtige Datenverarbeitung" />
+        <label text="Internet of things" xml:lang="en" description="Internet of services, internet of energy, autonomous agents, multi-agent systems, ubiquitous computing" />
+      </category>
+      <category ID="073">
+        <label text="Künstliche Intelligenz und Big Data" xml:lang="de" description="Expertensystem, Maschinelles Lernen, Datenanalyse, Deep Learning, Neuronale Netze, Datenintensive Wissenschaft, Automatisierung intelligenten Verhaltens, Massendaten, Text- und Data Mining, Recommender-Systeme" />
+        <label text="Artificial intelligence and big data" xml:lang="en" description="Expert systems, machine learning, data analysis, deep learning, neural networks, data-intensive science, automation of intelligent behaviour, mass data, text and data mining, recommender systems" />
+      </category>
+      <category ID="336">
+        <label text="Simulationsforschung" xml:lang="de" description="Digitale Computersimulation, Simulationstechnik, Systemsimulation, Digitale Simulation, Computermodell, Rechnersimulation, Klimasimulation, multikriterielle Optimierungsmodelle" />
+        <label text="Simulation research" xml:lang="en" description="Digital computer simulation, simulation technology, system simulation, digital simulation, computer model, computer simulation, climate simulation, multi-criteria optimisation models" />
+      </category>
+    </category>
+    <category ID="Infrastruktur">
+      <label text="Infrastruktur" xml:lang="de" />
+      <label text="Infrastructure" xml:lang="en" />
+      <category ID="407">
+        <label text="Infrastruktur - Allgemein" xml:lang="de" />
+        <label text="Infrastructure - general" xml:lang="en" />
+      </category>
+      <category ID="991">
+        <label text="Ballungsräume und Stadtentwicklung" xml:lang="de" description="Stadtplanung, Stadtentwicklungspolitik, Stadtentwicklungsplanung, Stadtentwicklungskonzept, Kommunalplanung, Urbane Räume, Verdichtungsraum, Verdichtungsgebiet, Stadtregion, Metropolregion, Agglomerationsraum" />
+        <label text="Metropolitan areas and urban development" xml:lang="en" description="Urban planning, urban development policy, urban development planning, urban development concept, municipal planning, urban spaces, conurbation, high-density areas, urban region, metropolitan region, agglomeration area" />
+      </category>
+      <category ID="360">
+        <label text="Bauen und Wohnen" xml:lang="de" description="Energieeffizientes Bauen und Wohnen, Robuste Gebäude, Zukunftsverträgliches Wohnen, Energieoptimierte Verbesserung der Bausubstanz, Multifunktionale Gebäude und Komplexe" />
+        <label text="Building and living" xml:lang="en" description="Energy efficient building and living, robust buildings, sustainable living, energy-optimised improvement of the fabric of buildings, multifunctional buildings and building complexes" />
+      </category>
+      <category ID="851">
+        <label text="Infrastruktur und Netze" xml:lang="de" description="Mobile Kommunikationsnetze, Gasnetzwerke, Intelligentes Energienetz, Netzinfrastruktur, Versorgungsnetz" />
+        <label text="Infrastructure and networks" xml:lang="en" description="Mobile communication networks, gas networks, intelligent energy network, network infrastructure, supply network" />
+      </category>
+      <category ID="940">
+        <label text="Mobilität, Transport und Verkehr" xml:lang="de" description="Intermodaler Verkehr, Logistik, Transportketten, Verkehrstechnologien, Fahrzeugtechnologien, Raumfahrtgestützte Anwendungen für den Verkehr, Assistenzsysteme" />
+        <label text="Mobility, transport and traffic" xml:lang="en" description="Intermodal traffic, logistics, transport chains, transport technologies, vehicle technologies, space-based applications for transport, assistance systems" />
+      </category>
+    </category>
+    <category ID="KognitionUndWissen">
+      <label text="Kognition und Wissen" xml:lang="de" />
+      <label text="Cognition and knowledge" xml:lang="en" />
+      <category ID="558">
+        <label text="Kognition und Wissen - Allgemein" xml:lang="de" />
+        <label text="Cognition and knowledge - general" xml:lang="en" />
+      </category>
+      <category ID="006">
+        <label text="Innovation" xml:lang="de" description="Innovationsforschung, Innovationstreiber, Innovationsförderung, Innovationsbegleitung, Fortschritt, Entstehung von Ideen, Entstehung von Erfindungen, Innovationsprozess" />
+        <label text="Innovation" xml:lang="en" description="Innovation research, drivers of innovation, promotion of innovation, innovation support, progress, generation of ideas, generation of inventions, innovation process" />
+      </category>
+      <category ID="391">
+        <label text="Lernen und Lernprozesse" xml:lang="de" description="Digitales Lernen, Lebenslanges Lernen, Aus- und Weiterbildung, Lernen in formalen und nicht-formalen Umgebungen, Digitalkompetenz, Game-based Learning" />
+        <label text="Learning and learning processes" xml:lang="en" description="Digital learning, lifelong learning, education and training, learning in formal and non-formal environments, digital competence, game-based learning" />
+      </category>
+      <category ID="444">
+        <label text="Menschliches Gehirn" xml:lang="de" description="Gehirnfunktion, Neurokognition, Neuronale Informationsverarbeitung, Kognitives Verhalten" />
+        <label text="Human brain" xml:lang="en" description="Brain function, neurocognition, neural information processing, cognitive behaviour" />
+      </category>
+      <category ID="132">
+        <label text="Sprache und Spracherlernen" xml:lang="de" description="Menschliche Sprache, Künstliche Sprache, Sprachsysteme, Sprachverstehen, Spracherkennung, Sprachübersetzung" />
+        <label text="Language and language learning" xml:lang="en" description="Human language, artificial language, language systems, speech comprehension, voice recognition, language translation" />
+      </category>
+      <category ID="470">
+        <label text="Wissenstransfer und Wissensrepräsentation" xml:lang="de" description="Wissenstransfer, Wissensrepräsentation, Reasoning, Wissenserwerb, Erkenntnis, Wissensbewahrung" />
+        <label text="Knowledge transfer and knowledge representation" xml:lang="en" description="Knowledge transfer, knowledge representation, reasoning, knowledge acquisition, recognition, knowledge preservation" />
+      </category>
+    </category>
+    <category ID="Kultur">
+      <label text="Kultur" xml:lang="de" />
+      <label text="Culture" xml:lang="en" />
+      <category ID="592">
+        <label text="Kultur - Allgemein" xml:lang="de" />
+        <label text="Culture - general" xml:lang="en" />
+      </category>
+      <category ID="209">
+        <label text="Kreativität und Darbietung" xml:lang="de" description="Schöpferische Darbietung, Schöpferische Leistung, Kreativitätstechnik, Produktionsästhetik, Künstlerisches Schaffen, Darstellende Kunst" />
+        <label text="Creativity and performance" xml:lang="en" description="Creative performance, creative achievement, creative techniques, production aesthetics, artistic creation, performing arts" />
+      </category>
+      <category ID="743">
+        <label text="Kulturgüter und kulturelles Erbe" xml:lang="de" description="Kulturgüterschutz, Denkmalpflege, Bewahrung in Bibliothek, Archiv und Museum, Kulturelles Erbe" />
+        <label text="Cultural heritage objects and cultural heritage" xml:lang="en" description="Protection of cultural assets, monument preservation, preservation in libraries, archives, museums, cultural heritage" />
+      </category>
+      <category ID="548">
+        <label text="Medien" xml:lang="de" description="Analoge Medien, Digitale Medien, Multimedia, Interaktive Medien, Presserzeugnis, Rundfunk, Journalismus, Computerunterstützte Kommunikation, Audiovisuelle Medien, Massenmedien, Neue Medien, Soziale Medien" />
+        <label text="Media" xml:lang="en" description="Analogue media, digital media, multimedia, interactive media, print media, radio, journalism, computer-supported communication, audio-visual media, mass media, new media, social media" />
+      </category>
+    </category>
+    <category ID="LebenUndWohlergehen">
+      <label text="Leben und Wohlergehen" xml:lang="de" />
+      <label text="Life and well-being" xml:lang="en" />
+      <category ID="910">
+        <label text="Leben und Wohlergehen - Allgemein" xml:lang="de" />
+        <label text="Life and well-being - general" xml:lang="en" />
+      </category>
+      <category ID="169">
+        <label text="Künstliches oder synthetisches Leben" xml:lang="de" description="Künstliche Photosynthese, Synthetische Zelle, Synthetischer Organismus, Synthetischer Schaltkreis, Biologisches System" />
+        <label text="Artificial and synthetic life" xml:lang="en" description="Artificial photosynthesis, synthetic cells, synthetic organisms, synthetic circuit, biological system" />
+      </category>
+      <category ID="521">
+        <label text="Lebewesen" xml:lang="de" description="Eukaryoten, Pilze, Pflanzen, Tiere, Menschen, Molekulare Physiologie von Lebewesen oder Organismen, Gefährdete Arten, Biochemische Evolution" />
+        <label text="Living beings" xml:lang="en" description="Eukaryotes, fungi, plants, animals, humans, molecular physiology of living creatures or organisms, endangered species, biochemical evolution" />
+      </category>
+      <category ID="841">
+        <label text="Prävention von Krankheiten" xml:lang="de" description="Gesundes Altern, Impfstoff, Präventionsforschung, Verbesserung des Gesundheitszustandes, Untersuchung von Einflussfaktoren, Gesundheitsbewusstsein, Public-Health-Forschung, Lebensqualität" />
+        <label text="Disease prevention" xml:lang="en" description="Healthy aging, vaccine, prevention research, improving the state of health, examination of influencing factors, health awareness, public health research, quality of life" />
+      </category>
+      <category ID="530">
+        <label text="Therapie und Heilung" xml:lang="de" description="Behandlung von Krankheit, Bekämpfung von Krankheit, Medizinische Therapie, Medizinische Behandlung, Krankenbehandlung" />
+        <label text="Therapy and healing" xml:lang="en" description="Treatment of disease, combating/controlling disease, medical therapy, medical treatment, treatment" />
+      </category>
+      <category ID="213">
+        <label text="Zellen und Gene" xml:lang="de" description="Genomforschung, Zellfunktion, Zellentstehung, Zelltherapie, Genomforschung" />
+        <label text="Cells and genes" xml:lang="en" description="Genome research, cellular function, cell formation, cell therapy" />
+      </category>
+    </category>
+    <category ID="Materialien">
+      <label text="Materialien" xml:lang="de" />
+      <label text="Materials" xml:lang="en" />
+      <category ID="051">
+        <label text="Materialien - Allgemein" xml:lang="de" />
+        <label text="Materials - general" xml:lang="en" />
+      </category>
+      <category ID="539">
+        <label text="Oberflächen und Grenzflächen" xml:lang="de" description="Legierung, Biofilm, Antifouling, Beschichtung, Vorbehandlung von Oberflächen, Schichttechnologie, Beschichtung, Verbundwerkstoff, Oberflächentechnik, Grenzflächentechnik" />
+        <label text="Surfaces and interfaces" xml:lang="en" description="Alloy, biofilm, antifouling, coating, pre-treatment of surfaces, layer technology, coating, composite material, surface technology, interface technology" />
+      </category>
+      <category ID="508">
+        <label text="Polymere" xml:lang="de" description="Synthetische Polymere, Biopolymere, Chemisch funktionalisierte Polymere, Physikalisch funktionalisierte Polymere, Biologisch funktionalisierte Polymere" />
+        <label text="Polymers" xml:lang="en" description="Synthetic polymers, biopolymers, chemically functionalised polymers, physically functionalised polymers, biologically functionalised polymers" />
+      </category>
+      <category ID="426">
+        <label text="Werkstoffe" xml:lang="de" description="Werkstück, Neues Material, Baumaterial, Bauteil, Industriematerial, Werkstoffwissenschaft, Werkstofftechnologie, Werkstofftechnik, Werkstoffkunde, Materials Engineering, Feuerungstechnik, Trenntechnik, Materialprozess, Werkstoffprozess, Werkstofftechnik, Intelligente Werkstoffe" />
+        <label text="Engineering materials" xml:lang="en" description="Workpiece, new material, building material, component, industrial material, materials science, materials engineering, materials technology, materials, combustion technology, separation technology, material process, materials technology, intelligent materials" />
+      </category>
+    </category>
+    <category ID="MenschUndGesellschaft">
+      <label text="Mensch und Gesellschaft" xml:lang="de" />
+      <label text="People and society" xml:lang="en" />
+      <category ID="101">
+        <label text="Mensch und Gesellschaft - Allgemein" xml:lang="de" />
+        <label text="People and society - general" xml:lang="en" />
+      </category>
+      <category ID="660">
+        <label text="Demographischer Wandel" xml:lang="de" description="Demographie und ihre (zukünftigen) Folgen, Bevölkerungsentwicklung, Bevölkerungswissenschaft, Bevölkerungslehre, Bevölkerungsgeographie, Altersstruktur" />
+        <label text="Demographic change" xml:lang="en" description="Demography and its (future) consequences, population development, population science, population theory, population geography, age structure" />
+      </category>
+      <category ID="147">
+        <label text="Gewalt, Konflikte und Gefahrenabwehr" xml:lang="de" description="Organisierte Kriminalität, Schutz vor Gewalt, Aufklärung und Überwachung, Resilienz und Schutz kritischer Infrastrukturen, Terrorismus, Zivile Sicherheit" />
+        <label text="Violence, conflicts and crisis prevention" xml:lang="en" description="Organised crime, protection from violence, reconnaissance and surveillance, resilience and protection of critical infrastructures, terrorism, civil security" />
+      </category>
+      <category ID="687">
+        <label text="Gleichstellung, Diversität und Inklusion" xml:lang="de" description="Inklusive Bildung, Vielfalt, Gleichberechtigung, Chancengleichheit, Frauenförderung, Gleichheit" />
+        <label text="Equality, diversity and inclusion" xml:lang="en" description="Inclusive education, diversity, equal rights, equal opportunities, promotion of women, equality" />
+      </category>
+      <category ID="307">
+        <label text="Politische Ordnung" xml:lang="de" description="Demokratie, Demokratisierung, Reformprozess, Rechtspraxis, Recht und Gesellschaft und sozio-juristische Forschung, Politisches System" />
+        <label text="Political order" xml:lang="en" description="Democracy, democratisation, reform process, legal practice, law and society and socio-legal research, political system" />
+      </category>
+      <category ID="283">
+        <label text="Transparenz und Verantwortung" xml:lang="de" description="Fairness, Verantwortlichkeit, Vertrauen, Transparenz in Verknüpfung mit einem Anwendungsgebiet, z.B. neue Technologien, Computersysteme, Biomedizin, Normative Bioethik, Globale Ethik" />
+        <label text="Transparency and responsibility" xml:lang="en" description="Fairness, responsibility, trust, transparency in connection with a field of application, e.g. new technologies, computer systems, biomedicine, normative bioethics, global ethics" />
+      </category>
+      <category ID="488">
+        <label text="Werte und Wandel" xml:lang="de" description="Familie im Digitalen Wandel, Sozialer Wandel, Kinderrecht, Gleichgeschlechtliche Lebensweise, Geschlechtliche Vielfalt, Gerechtigkeit, Soziale Norm" />
+        <label text="Values and change" xml:lang="en" description="Family in the digital transformation, social change, children's rights, same-sex lifestyle, gender diversity, justice, social norm" />
+      </category>
+    </category>
+    <category ID="NaturUndUmwelt">
+      <label text="Natur und Umwelt" xml:lang="de" />
+      <label text="Nature and environment" xml:lang="en" />
+      <category ID="663">
+        <label text="Natur und Umwelt - Allgemein" xml:lang="de" />
+        <label text="Nature and environment - general" xml:lang="en" />
+      </category>
+      <category ID="197">
+        <label text="Klimaveränderung" xml:lang="de" description="Klimaänderung, Klimaauswirkung, Umweltverträglichkeit, Ökologische Auswirkung des Klimawandels, Ökologische Anpassung durch den Klimawandel, Umweltschutz" />
+        <label text="Climate change" xml:lang="en" description="Climate change, climate impact, environmental sustainability, ecological impact of climate change, ecological adaptation because of climate change, protection of the environment" />
+      </category>
+      <category ID="240">
+        <label text="Nahrung und Versorgung" xml:lang="de" description="Sicherung der weltweiten Ernährung, Unterversorgung, Unterernährung, Ernährungswissenschaftliche Fragestellungen, Massenproduktion" />
+        <label text="Food and supply" xml:lang="en" description="Global food security, food shortage, malnutrition, nutritional research questions, mass production" />
+      </category>
+      <category ID="231">
+        <label text="Natürliche Ressourcen" xml:lang="de" description="Nutzung von Biomasse, Rohstoffe der Tiefsee, Wasserressourcenmanagement, Erneuerbare Treibstoffe, Biomasse, Neuer Umgang mit Rohstoffen, Ressourceneffizienz, Rohstoffalternativen" />
+        <label text="Natural resources" xml:lang="en" description="Use of biomass, raw materials of the deep sea, water resource management, renewable fuels, biomass, new approaches to raw materials, resource efficiency, raw material alternatives" />
+      </category>
+      <category ID="847">
+        <label text="Nutzung und Pflege von Naturräumen und Landschaften" xml:lang="de" description="Nachhaltige Nutzung von Landschaft und Naturraum, Waldschadenforschung, Landschaftsschutz, Naturlandschaft, Kulturlandschaft" />
+        <label text="Use and management of natural spaces and landscapes" xml:lang="en" description="Sustainable use of landscape and natural space, forest damage research, landscape protection, natural landscape, cultural landscape" />
+      </category>
+      <category ID="196">
+        <label text="Ökosysteme und Biodiversität" xml:lang="de" description="Erhaltung der menschlichen Lebensgrundlagen, Waldbiodiversität, Komplexes Biosystem, Ökologisches System, Biotop, Artenvielfalt, Artenschutz, Biosystem, Umweltbelastung in Ökosystemen" />
+        <label text="Ecosystems and biodiversity" xml:lang="en" description="Preservation of the essential bases of human life, forest biodiversity, complex biosystem, ecological system, biotope, biodiversity, protection of species, biosystem, ecological damage in ecosystems" />
+      </category>
+      <category ID="697">
+        <label text="Schutz und Sicherheit vor Naturgefahren und Reaktorsicherheit" xml:lang="de" description="Risikominimierungsstrategie, Naturgefahr, Katastrophenvorsorge, Sicherheitsforschung für Kernreaktoren" />
+        <label text="Protection and hazard safety, reactor security" xml:lang="en" description="Risk minimisation strategy, natural hazard, disaster preparedness, safety research for nuclear reactors" />
+      </category>
+    </category>
+    <category ID="Technologie">
+      <label text="Technologie" xml:lang="de" />
+      <label text="Technology" xml:lang="en" />
+      <category ID="578">
+        <label text="Technologie - Allgemein" xml:lang="de" />
+        <label text="Technology - general" xml:lang="en" />
+      </category>
+      <category ID="070">
+        <label text="Energieerzeugung und Energieumwandlung" xml:lang="de" description="Windenergie, Sonnenergie, Wasserenergie, Alternative Kraftstoffe, Biologische Energiegewinnung, Energiewende, Energieeffizienz, Energieverwendung, Wasserstoffumwandlung, Wasserstoffspeicherung, Wasserstoffenergietechnik, Energiespeichertechnologien, Sektorkopplung, Fahrzeugantrieb, Maschinenantrieb, Hyperschall-Antrieb, Alternative Antriebstechnologie, Emissionsarmer Treibstoff, Antriebssystem,  Antriebstechnologie" />
+        <label text="Energy generation and energy conversion" xml:lang="en" description="Wind energy, solar energy, hydroelectric power, alternative fuels, biological energy generation, energy transition, energy efficiency, energy use, hydrogen conversion, hydrogen storage, hydrogen energy technology, energy storage technologies, integrated energy management, vehicle drive, machine drive, alternative drive technology, low-emission fuel, drive system, drive technology" />
+      </category>
+      <category ID="092">
+        <label text="Halbleitertechnologie" xml:lang="de" description="Photonische Kristalle, Quantenstrukturbauelemente, Verbindungshalbleiter, Organische Halbleiter, Mikroprozessor, Mikrochip, Integrierter Schaltkreis, Integrierte Schaltung, Computer Chips, Intelligente Sensoren" />
+        <label text="Semiconductor technology" xml:lang="en" description="Photonic crystals, components based on quantum structures, compound semiconductors, organic semiconductors, microprocessor, microchip, integrated circuit, computer chips, intelligent sensors" />
+      </category>
+      <category ID="476">
+        <label text="Mikro- und Nanosysteme" xml:lang="de" description="Mikrotechnik, Mikrosystemlösungen, Mikrosystemtechnik, Mikroelektronik, Mikrofertigung, Nanostruktur, Nanomedizin, Nanosicherheit, Nanoskaliges System, Nanowerkstoff, Nanotechnik, Nanomaterials, Submikrometertechnik, Submikron-Technologie, Nanostrukturtechnik" />
+        <label text="Micro- and nanosystems" xml:lang="en" description="Microtechnology, microsystem solutions, microsystem technology, microelectronics, micromanufacturing, nanostructure, nanomedicine, nano safety, nanoscale system, nanomaterial, nanotechnology, submicrometer technology, submicron technology, nanostructure technology" />
+      </category>
+      <category ID="179">
+        <label text="Optik und Photonik" xml:lang="de" description="Optoelektronik, Quantenoptik, Integrierte Optik, Optronik, Optotronik, Optische Elektronik, Mikrooptik" />
+        <label text="Optics and photonics" xml:lang="en" description="Optoelectronics, quantum optics, integrated optics, optronics, optotronics, optical electronics, microoptics" />
+      </category>
+      <category ID="772">
+        <label text="Quantentechnologien" xml:lang="de" description="Quanteneffekte, Quantenmechanik, Quantencomputing, Quantenprozessor, Quantenkommunikation, Quanteninformatik, Quantensensor, Quantenkryptologie" />
+        <label text="Quantum technologies" xml:lang="en" description="Quantum effects, quantum mechanics, quantum computing, quantum processor, quantum communication, quantum computer science, quantum sensor, quantum cryptology" />
+      </category>
+    </category>
+    <category ID="Wissenschaft">
+      <label text="Wissenschaft" xml:lang="de" />
+      <label text="Science" xml:lang="en" />
+      <category ID="605">
+        <label text="Wissenschaft - Allgemein" xml:lang="de" />
+        <label text="Science - general" xml:lang="en" />
+      </category>
+      <category ID="981">
+        <label text="Infrastrukturen der Wissenschaft" xml:lang="de" description="Forschungswerkzeug, Volltextdatenbank, (Digitale) Bibliothek, Forschungsinfrastruktur, Informationsinfrastruktur, Literaturversorgung, Forschungsinformationssysteme" />
+        <label text="Research infrastructures" xml:lang="en" description="Research tool, full-text database, (digital) library, research infrastructure, information infrastructure, literature supply, research information systems" />
+      </category>
+      <category ID="459">
+        <label text="Open Science" xml:lang="de" description="Offene Wissenschaft, Open Data, Open Educational Resources, Open Methodology, Open Peer Review, Open Source, Open Access, Citizen Science" />
+        <label text="Open science" xml:lang="en" description="Open science, open data, open educational resources, open methodology, open peer review, open source, open access, citizen science" />
+      </category>
+      <category ID="266">
+        <label text="Wissenschaftsforschung" xml:lang="de" description="Wissenschaftstheorie, Hochschulforschung" />
+        <label text="Science studies" xml:lang="en" description="Theory of science, higher education research" />
+      </category>
+    </category>
+    <category ID="KeinesDerGelistetenForschungsfelder">
+      <label text="Keines der gelisteten Forschungsfelder" xml:lang="de" />
+      <label text="None of the listed research fields" xml:lang="en" />
+      <category ID="001">
+        <label text="Anderes Forschungsfeld" xml:lang="de" />
+        <label text="Other research field" xml:lang="en" />
+      </category>
+      <category ID="002">
+        <label text="Disziplinäre Forschung" xml:lang="de" />
+        <label text="Disciplinary research" xml:lang="en" />
+      </category>
+    </category>
+  </categories>
+  <categories />
+</mycoreclass>
