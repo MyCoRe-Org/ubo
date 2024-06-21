@@ -161,9 +161,13 @@
   <!-- DC.Language -->
 
   <xsl:template match="mods:languageTerm[@authority='rfc5646'][@type='code']" mode="dc">
-    <dc:language>
-      <xsl:value-of select="document(concat('language:',.))/language/@termCode" />
-    </dc:language>
+    <xsl:variable name="lang" select="document(concat('notnull:language:',.))/language/@termCode"/>
+
+    <xsl:if test="string-length($lang) &gt; 0 and not($lang = 'null')">
+      <dc:language>
+        <xsl:value-of select="$lang"/>
+      </dc:language>
+    </xsl:if>
   </xsl:template>
 
   <!-- DC.Identifier -->
