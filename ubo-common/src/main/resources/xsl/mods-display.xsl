@@ -1663,7 +1663,17 @@
 
   <!-- ========== Sprache der Publikation ========== -->
   <xsl:template match="mods:languageTerm[@type='code']">
-    <xsl:value-of select="document(concat('notnull:language:',.))/language/label[@xml:lang=$CurrentLang]" />
+    <xsl:variable name="lang" select="document(concat('notnull:language:', .))/language/label[@xml:lang=$CurrentLang]" />
+
+    <xsl:choose>
+      <xsl:when test="string-length($lang) &gt; 0">
+        <xsl:value-of select="$lang"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="."/>
+      </xsl:otherwise>
+    </xsl:choose>
+
     <xsl:if test="position() != last()">
       <xsl:text>, </xsl:text>
     </xsl:if>
