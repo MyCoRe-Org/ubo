@@ -218,14 +218,24 @@
         </a>
         <a class="mycore-facet-add" href="{$baseURL}{$fq}" title="{$title-include-facet-value}">
           <span class="mycore-facet-value">
-            <xsl:value-of select="$facet-value"/>
+            <span>
+              <xsl:if test="string-length($facet-value) &gt; 20">
+                <xsl:attribute name="class">scroll-on-hover</xsl:attribute>
+              </xsl:if>
+              <xsl:value-of select="$facet-value"/>
+            </span>
           </span>
         </a>
       </xsl:when>
       <xsl:otherwise>
         <span class="mycore-facet-exclude" />
         <span class="mycore-facet-value">
-          <xsl:value-of select="$facet-value"/>
+          <span>
+            <xsl:if test="string-length($facet-value) &gt; 20">
+              <xsl:attribute name="class">scroll-on-hover</xsl:attribute>
+            </xsl:if>
+            <xsl:value-of select="$facet-value"/>
+          </span>
         </span>
       </xsl:otherwise>
     </xsl:choose>
