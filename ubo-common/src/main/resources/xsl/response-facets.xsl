@@ -316,23 +316,15 @@
     </xsl:if>
   </xsl:variable>
 
-  <span>
     <xsl:choose>
-      <xsl:when test="string-length($label) ">
-        <xsl:if test="string-length($label) &gt; 20">
-          <xsl:attribute name="class">scroll-on-hover</xsl:attribute>
-        </xsl:if>
+      <xsl:when test="string-length($label) &gt; 0">
         <xsl:value-of select="$label"/>
       </xsl:when>
-      <xsl:when test="$label">
-        <xsl:if test="string-length($fallback-label) &gt; 20">
-          <xsl:attribute name="class">scroll-on-hover</xsl:attribute>
-        </xsl:if>
+      <xsl:when test="string-length($fallback-label) &gt; 0">
         <xsl:value-of select="$fallback-label"/>
       </xsl:when>
     </xsl:choose>
-  </span>
-</xsl:template>
+  </xsl:template>
 
   <xsl:template name="get-facet-name">
     <xsl:param name="facetName"/>
