@@ -53,8 +53,10 @@
   <!-- ============ Ausgabe Publikationsart ============ -->
 
   <xsl:template name="pubtype">
+    <xsl:variable name="genre" select="substring-after(mods:genre[@type='intern']/@valueURI, '#')"/>
+
     <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.genre')}"
-          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+genre:&quot;', mods:genre[@type='intern'], '&quot;'))}')">
+          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+genre:&quot;', $genre, '&quot;'))}')">
       <xsl:apply-templates select="mods:genre[@type='intern']"/>
       <xsl:for-each select="mods:relatedItem[@type='host']/mods:genre[@type='intern']">
         <xsl:text> in </xsl:text>
