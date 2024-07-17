@@ -160,7 +160,7 @@
       <xsl:apply-templates select="../.." mode="solrField" />
     </field>
 
-    <xsl:if test="../mods:roleTerm/text() = 'corresponding_author'">
+    <xsl:if test="../mods:roleTerm/text() = 'corresponding_author' or ../../mods:role/mods:roleTerm/text() = 'corresponding_author'">
       <field name="corresponding_aut">
         <xsl:apply-templates select="../.." mode="solrField"/>
       </field>
