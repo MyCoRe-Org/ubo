@@ -8,11 +8,13 @@ import org.jdom2.input.SAXBuilder;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRMailer;
 import org.mycore.common.MCRPersistenceException;
+import org.mycore.common.MCRTransactionHelper;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
+import org.mycore.frontend.cli.MCRObjectCommands;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.services.queuedjob.MCRJob;
 import org.mycore.services.queuedjob.MCRJobAction;
@@ -90,7 +92,14 @@ public class ImportListJobAction extends MCRJobAction {
             obj.setId(oid);
             obj.getService().addFlag("importID", importJob.getID());
 
-            MCRMetadataManager.create(obj);
+            try {
+                MCRTransactionHelper.beginTransaction();
+                MCRMetadataManager.create(obj);
+                MCRTransactionHelper.commitTransaction();
+            } catch (Exception e) {
+                LOGGER.error("Error while saving publication", e);
+                MCRTransactionHelper.rollbackTransaction();
+            }
         }
     }
 
