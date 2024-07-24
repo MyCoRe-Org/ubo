@@ -135,7 +135,7 @@ public abstract class ImportJob {
         return filterTransformer;
     }
 
-    private Document applyFilterTransformer(Document publication, MCRContentTransformer transformer) {
+    Document applyFilterTransformer(Document publication, MCRContentTransformer transformer) {
         try {
             return transformer.transform(new MCRJDOMContent(publication)).asXML();
         } catch (JDOMException | IOException | SAXException e) {

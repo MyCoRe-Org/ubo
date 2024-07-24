@@ -5,8 +5,13 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;
+import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRMailer;
+import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.config.MCRConfiguration2;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.services.queuedjob.MCRJob;
@@ -29,9 +34,11 @@ import java.util.concurrent.ExecutionException;
  * */
 public class ImportListJobAction extends MCRJobAction {
 
-    public static String EDITOR_SUBMISSION_PARAMETER = "xEditorSubmission";
-    public static String USER_ID_PARAMETER = "userName";
-    public static String IMPORT_JOB_ID_PARAMETER = "importJobId";
+    private static final String PROJECT_ID = MCRConfiguration2.getString("UBO.projectid.default").get();
+
+    public static final String EDITOR_SUBMISSION_PARAMETER = "xEditorSubmission";
+    public static final String IMPORT_JOB_ID_PARAMETER = "importJobId";
+    public static final String USER_ID_PARAMETER = "userName";
 
     protected static final Logger LOGGER = LogManager.getLogger(ImportListJobAction.class);
 
@@ -65,11 +72,25 @@ public class ImportListJobAction extends MCRJobAction {
             if ("true".equals(formInput.getAttributeValue("enrich"))) {
                 importJob.enrich();
             }
-
-            importJob.saveAndIndex();
+            savePublications(importJob);
             sendMail(importJob);
         } catch (Exception e) {
             LOGGER.error("Could not transform form input", e);
+        }
+    }
+
+    private void savePublications(ImportJob importJob) throws MCRPersistenceException, MCRAccessException {
+        for (Document publication : importJob.getPublications()) {
+            if (importJob.getFilterTransformer().isPresent()) {
+                publication = importJob.applyFilterTransformer(publication, importJob.getFilterTransformer().get());
+            }
+
+            MCRObject obj = new MCRObject(publication);
+            MCRObjectID oid = MCRObjectID.getNextFreeId(PROJECT_ID + "_mods");
+            obj.setId(oid);
+            obj.getService().addFlag("importID", importJob.getID());
+
+            MCRMetadataManager.create(obj);
         }
     }
 
