@@ -9,6 +9,15 @@
 
 package org.mycore.ubo.importer;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -32,15 +41,6 @@ import org.mycore.mods.enrichment.MCREnricher;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.MCRSolrUtils;
 import org.xml.sax.SAXException;
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 public abstract class ImportJob {
 
@@ -135,7 +135,7 @@ public abstract class ImportJob {
         return filterTransformer;
     }
 
-    Document applyFilterTransformer(Document publication, MCRContentTransformer transformer) {
+    private Document applyFilterTransformer(Document publication, MCRContentTransformer transformer) {
         try {
             return transformer.transform(new MCRJDOMContent(publication)).asXML();
         } catch (JDOMException | IOException | SAXException e) {
