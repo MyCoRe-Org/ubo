@@ -29,6 +29,14 @@
 <xsl:param name="UBO.System.ReadOnly" />
 <xsl:param name="UBO.Mail.Feedback" />
 
+<xsl:param name="UBO.SubjectClassifications.1.ClassID" />
+<xsl:param name="UBO.SubjectClassifications.2.ClassID" />
+<xsl:param name="UBO.SubjectClassifications.3.ClassID" />
+
+<xsl:param name="UBO.SubjectClassifications.1.Badge" />
+<xsl:param name="UBO.SubjectClassifications.2.Badge" />
+<xsl:param name="UBO.SubjectClassifications.3.Badge" />
+
 <!-- ============ Bearbeitungsrechte ========== -->
 
 <xsl:variable name="permission.admin" xmlns:check="xalan://org.mycore.ubo.AccessControl" select="check:currentUserIsAdmin()" />
@@ -199,7 +207,17 @@
         </div>
         <div class="row">
           <div class="col">
-            <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info" />
+          
+            <xsl:if test="$UBO.SubjectClassifications.1.Badge='true'">
+              <xsl:apply-templates select="mods:classification[contains(@authorityURI,$UBO.SubjectClassifications.1.ClassID)]" mode="label-info-subject" />
+            </xsl:if>
+            <xsl:if test="$UBO.SubjectClassifications.2.Badge='true'">
+              <xsl:apply-templates select="mods:classification[contains(@authorityURI,$UBO.SubjectClassifications.2.ClassID)]" mode="label-info-subject" />
+            </xsl:if>
+            <xsl:if test="$UBO.SubjectClassifications.3.Badge='true'">
+              <xsl:apply-templates select="mods:classification[contains(@authorityURI,$UBO.SubjectClassifications.3.ClassID)]" mode="label-info-subject" />
+            </xsl:if>
+            
             <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info-destatis" />
             <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info" />
           </div>

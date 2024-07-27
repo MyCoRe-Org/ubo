@@ -124,24 +124,30 @@
   </xsl:copy>
 </xsl:template>
 
-<xsl:template match="mods:classification[contains(@authorityURI,'fachreferate')]" mode="copy-mods">
-  <xsl:copy>
-    <xsl:copy-of select="@*" />
-    <xsl:variable name="categoryID" select="substring-after(@valueURI,'#')" />
-    <xsl:variable name="uri" select="concat('classification:editor:0:parents:fachreferate:',$categoryID)" />
-    <xsl:value-of select="document($uri)/items/item/label[lang($CurrentLang)]" />
-  </xsl:copy>
-</xsl:template>
+<xsl:param name="UBO.SubjectClassifications.1.ClassID" />
+<xsl:param name="UBO.SubjectClassifications.2.ClassID" />
+<xsl:param name="UBO.SubjectClassifications.3.ClassID" />
 
-<xsl:template match="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="copy-mods">
-  <xsl:copy>
-    <xsl:copy-of select="@*" />
-    <xsl:variable name="categoryID" select="substring-after(@valueURI,'#')" />
-    <xsl:call-template name="output.category">
-      <xsl:with-param name="classID" select="'ORIGIN'" />
-      <xsl:with-param name="categID" select="$categoryID" />
-    </xsl:call-template>
-  </xsl:copy>
+<xsl:template match="mods:classification" mode="copy-mods">
+  <xsl:variable name="classID" select="substring-after(@authorityURI,'/classifications/')" />
+  <xsl:if test="($classID='ORIGIN') or ($classID=$UBO.SubjectClassifications.1.ClassID) or ($classID=$UBO.SubjectClassifications.2.ClassID) or ($classID=$UBO.SubjectClassifications.3.ClassID)">
+    <xsl:copy>
+      <xsl:copy-of select="@*" />
+      <xsl:variable name="categoryID" select="substring-after(@valueURI,'#')" />
+      <xsl:choose>
+        <xsl:when test="$classID='ORIGIN'">
+          <xsl:call-template name="output.category">
+            <xsl:with-param name="classID" select="$classID" />
+            <xsl:with-param name="categID" select="$categoryID" />
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:variable name="uri" select="concat('classification:editor:0:parents:',$classID,':',$categoryID)" />
+          <xsl:value-of select="document($uri)/items/item/label[lang($CurrentLang)]" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:copy>  
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="mods:extension[not(tag)]" mode="copy-mods" />

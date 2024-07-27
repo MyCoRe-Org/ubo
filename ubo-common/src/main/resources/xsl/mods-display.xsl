@@ -65,11 +65,12 @@
 
   <!-- ============ Ausgabe Fach ============ -->
 
-  <xsl:template match="mods:mods/mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info">
-    <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('facets.facet.subject')}"
-          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+subject:&quot;', substring-after(@valueURI,'#'),'&quot;'))}')">
+  <xsl:template match="mods:mods/mods:classification" mode="label-info-subject">
+    <xsl:variable name="classID" select="substring-after(@authorityURI,'/classifications/')" />
+    <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate(concat('facets.facet.subject.',$classID))}"
+          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+subject_',$classID,':&quot;', substring-after(@valueURI,'#'),'&quot;'))}')">
       <xsl:call-template name="output.category">
-        <xsl:with-param name="classID" select="'fachreferate'" />
+        <xsl:with-param name="classID" select="$classID" />
         <xsl:with-param name="categID" select="substring-after(@valueURI,'#')" />
       </xsl:call-template>
     </span>

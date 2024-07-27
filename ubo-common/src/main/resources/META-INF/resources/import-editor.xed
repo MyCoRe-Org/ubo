@@ -5,7 +5,6 @@
   <xed:template id="validation">
     <xed:include uri="webapp:import-editor.xed" ref="displayValidationMessages" />
    
-    <xed:validate xpath="//mods:classification[@classID='fachreferate']" required="true" i18n="condition.subject" display="global" />
     <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:titleInfo/mods:title" required="true" i18n="ubo.title.validation" display="global" />
     <xed:validate xpath="//mods:mods[not(mods:genre='journal' or mods:genre='series' or mods:genre='blog' or mods:genre='newspaper') and string-length(mods:name[@type='corporate']/mods:namePart/text())=0]/mods:name[@type='personal'][1]" test="string-length(mods:namePart[@type='family']) &gt; 0" i18n="ubo.role.author.validation" display="global" />
     <xed:validate xpath="//mods:nameIdentifier[@type='orcid']" matches="\d{4}\-\d{4}\-\d{4}\-\d{3}[0-9X]" i18n="ubo.nameIdentifier.orcid.validation" display="global" />
@@ -112,20 +111,16 @@
   </xed:template>
 
   <xed:template id="subject">
-    <xed:repeat xpath="mods:classification[@classID='fachreferate']" max="5">
-      <div class="form-inline form-group ubo-repeat-group {$xed-validation-marker}">
-        <label for="{xed:generate-id()}" class="mycore-form-label ubo-mandatory">
-          <xed:output value="concat(i18n:translate('ubo.subject'), ': ')" />
-        </label>
-        <select id="{xed:generate-id()}" class="autocomplete mycore-form-input">
-          <option value="">
-            <xed:output i18n="search.select.autocomplete" />
-          </option>
-          <xed:include uri="xslStyle:items2options:classification:editor:-1:children:fachreferate" />
-        </select>
-        <xed:controls />
-      </div>
-    </xed:repeat>
+    <!-- No way to use a loop here, at least not without much extra code -->
+    <xed:if test="$UBO.SubjectClassifications.1.Editable='true'">
+      <xed:include uri="xslStyle:import-subject-classification?classID={$UBO.SubjectClassifications.1.ClassID}&amp;required={$UBO.SubjectClassifications.1.Required}&amp;max={$UBO.SubjectClassifications.1.Max}:webapp:import-subject-classification.xed" ref="subject.{$UBO.SubjectClassifications.1.ClassID}" />
+    </xed:if>
+    <xed:if test="$UBO.SubjectClassifications.2.Editable='true'">
+      <xed:include uri="xslStyle:import-subject-classification?classID={$UBO.SubjectClassifications.2.ClassID}&amp;required={$UBO.SubjectClassifications.2.Required}&amp;max={$UBO.SubjectClassifications.2.Max}:webapp:import-subject-classification.xed" ref="subject.{$UBO.SubjectClassifications.2.ClassID}" />
+    </xed:if>
+    <xed:if test="$UBO.SubjectClassifications.3.Editable='true'">
+      <xed:include uri="xslStyle:import-subject-classification?classID={$UBO.SubjectClassifications.3.ClassID}&amp;required={$UBO.SubjectClassifications.3.Required}&amp;max={$UBO.SubjectClassifications.3.Max}:webapp:import-subject-classification.xed" ref="subject.{$UBO.SubjectClassifications.3.ClassID}" />
+    </xed:if>
   </xed:template>
 
   <xed:template id="origin">
