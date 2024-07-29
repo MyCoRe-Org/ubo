@@ -65,9 +65,7 @@ public class ImportListJobAction extends MCRJobAction {
             }
 
             try {
-                MCRTransactionHelper.beginTransaction();
                 importJob.savePublications();
-                MCRTransactionHelper.commitTransaction();
                 sendMail(importJob);
             } catch (Exception e) {
                 LOGGER.error("Error while saving publications", e);
