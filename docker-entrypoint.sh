@@ -136,12 +136,13 @@ function setUpMyCoRe {
     sed -ri "s/<mapping-file>META-INF\/mycore-ifs-mappings.xml<\/mapping-file>//" "${PERSISTENCE_XML}"
     /opt/ubo/ubo-cli/target/bin/ubo.sh init superuser
     /opt/ubo/ubo-cli/target/bin/ubo.sh update all classifications from directory /opt/ubo/ubo-cli/src/main/setup/classifications
-    /opt/ubo/ubo-cli/target/bin/ubo.sh update permission update permission create-mods for id POOLPRIVILEGE with rulefile /opt/ubo/ubo-cli/src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
-    /opt/ubo/ubo-cli/target/bin/ubo.sh update permission update permission create-users for id POOLPRIVILEGE with rulefile /opt/ubo/ubo-cli/src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
-    /opt/ubo/ubo-cli/target/bin/ubo.sh update permission update permission administrate-users for id POOLPRIVILEGE with rulefile /opt/ubo/ubo-cli/src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
-    /opt/ubo/ubo-cli/target/bin/ubo.sh update permission update permission read for id default with rulefile /opt/ubo/ubo-cli/src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
-    /opt/ubo/ubo-cli/target/bin/ubo.sh update permission update permission writedb for id default with rulefile /opt/ubo/ubo-cli/src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
-    /opt/ubo/ubo-cli/target/bin/ubo.sh update permission update permission read for id restapi:/ with rulefile /opt/ubo/ubo-cli/src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
+    /opt/ubo/ubo-cli/target/bin/ubo.sh update permission create-mods for id POOLPRIVILEGE with rulefile /opt/ubo/ubo-cli/src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
+    /opt/ubo/ubo-cli/target/bin/ubo.sh update permission create-users for id POOLPRIVILEGE with rulefile /opt/ubo/ubo-cli/src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
+    /opt/ubo/ubo-cli/target/bin/ubo.sh update permission administrate-users for id POOLPRIVILEGE with rulefile /opt/ubo/ubo-cli/src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
+    /opt/ubo/ubo-cli/target/bin/ubo.sh update permission read for id default with rulefile /opt/ubo/ubo-cli/src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
+    /opt/ubo/ubo-cli/target/bin/ubo.sh update permission writedb for id default with rulefile /opt/ubo/ubo-cli/src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
+    /opt/ubo/ubo-cli/target/bin/ubo.sh update permission read for id restapi:/ with rulefile /opt/ubo/ubo-cli/src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
+    /opt/ubo/ubo-cli/target/bin/ubo.sh update permission read for id restapi:/classifications with rulefile /opt/ubo/ubo-cli/src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
     /opt/ubo/ubo-cli/target/bin/ubo.sh update permission deletedb for id default with rulefile /opt/ubo/ubo-cli/src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
     /opt/ubo/ubo-cli/target/bin/ubo.sh reload solr configuration main in core main
 }
