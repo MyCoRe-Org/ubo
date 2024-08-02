@@ -75,6 +75,14 @@ class LanguageSearchInput {
      * @type {Array<string>}
      */
     preferredLanguages;
+    /**
+     * Sometimes the labelIdMap and idLabelMap are not yet available. This promise will resolve once they are.
+     * @type {Promise<{
+     *  labelIdMap: Map<string, string>,
+     *  idLabelMap: Map<string, string>,
+     * }>}
+     */
+    static mapPromise;
 
     /**
      * Creates a search input for languages.
@@ -148,6 +156,18 @@ class LanguageSearchInput {
             LanguageSearchInput.dataList = document.createElement('datalist');
             LanguageSearchInput.dataList.id = 'language-search-list';
 
+            /**
+             * Used to queue up the resolvers for the mapPromise
+             * @type {Array<Function<{
+             *  labelIdMap: Map<string, string>,
+             *  idLabelMap: Map<string, string>,
+             * }>>}
+             */
+            const resolverList = [];
+
+            LanguageSearchInput.mapPromise = new Promise(async (resolve, reject) => {
+                    resolverList.push(resolve);
+            });
 
             const baseURL = window['webApplicationBaseURL'];
             const response = await fetch(baseURL + 'api/v2/classifications/rfc5646', {
@@ -185,6 +205,13 @@ class LanguageSearchInput {
                 }
             });
 
+            resolverList.forEach((resolve) => {
+                resolve({
+                    labelIdMap: LanguageSearchInput.labelIdMap,
+                    idLabelMap: LanguageSearchInput.idLabelMap
+                });
+            });
+
             prependLater.sort((a,b) => {
                 return this.preferredLanguages.indexOf(b.category.ID) - this.preferredLanguages.indexOf(a.category.ID);
             }).forEach((el) => {
@@ -194,7 +221,7 @@ class LanguageSearchInput {
             this.root.append(LanguageSearchInput.dataList);
         }
 
-       this.searchInput = document.createElement('input');
+        this.searchInput = document.createElement('input');
         this.searchInput.type = 'text';
         this.searchInput.classList.add('form-control');
         this.searchInput.classList.add('language-search-input');
@@ -209,8 +236,13 @@ class LanguageSearchInput {
 
 
         if(this.hiddenInput.value != null && this.hiddenInput.value.trim().length > 0) {
-            if(LanguageSearchInput.idLabelMap.has(this.hiddenInput.value)) {
-                this.searchInput.value = LanguageSearchInput.idLabelMap.get(this.hiddenInput.value.trim());
+            let idLabelMap = LanguageSearchInput.idLabelMap;
+            if(!LanguageSearchInput.idLabelMap){
+                const maps = await LanguageSearchInput.mapPromise;
+                idLabelMap = maps.idLabelMap;
+            }
+            if(idLabelMap.has(this.hiddenInput.value)) {
+                this.searchInput.value = idLabelMap.get(this.hiddenInput.value.trim());
             }
         }
 
