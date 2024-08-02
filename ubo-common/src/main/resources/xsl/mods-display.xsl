@@ -11,7 +11,8 @@
   xmlns:mcr="http://www.mycore.org/"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  exclude-result-prefixes="xsl xalan xlink i18n encoder mcr mcrxsl check cerif">
+  xmlns:dozbib="xalan://org.mycore.ubo.DozBibXMLFunctions"
+  exclude-result-prefixes="dozbib xsl xalan xlink i18n encoder mcr mcrxsl check cerif">
 
   <xsl:include href="shelfmark-normalization.xsl" />
   <xsl:include href="output-category.xsl" />
@@ -90,27 +91,24 @@
   </xsl:template>
 
   <!-- Derive destatis from origin if fachreferate is not set -->
-  <xsl:template match="mods:classification[contains(@authorityURI,'ORIGIN') and not (../mods:classification[contains(@authorityURI,'fachreferate')])]" mode="label-info-destatis">
-    <xsl:variable name="origin-value" select="substring-after(@valueURI, '#')"/>
-    <xsl:variable name="destatis-attr" select="$origin//category[@ID = $origin-value]/label[@xml:lang = 'x-destatis']/@text"/>
+  <xsl:template name="label-info-destatis">
+    <xsl:if test="not (//mods:mods/mods:classification[contains(@authorityURI,'fachreferate')])">
+      <xsl:variable name="destatis-categories">
+        <xsl:call-template name="Tokenizer">
+          <xsl:with-param name="string" select="dozbib:getUniqueDestatisCategories(//mycoreobject/@ID)" />
+        </xsl:call-template>
+      </xsl:variable>
 
-    <xsl:if test="string-length($destatis-attr) &gt; 0">
-        <xsl:variable name="destatis-categories">
-          <xsl:call-template name="Tokenizer">
-            <xsl:with-param name="string" select="$destatis-attr" />
+      <xsl:for-each select="xalan:nodeset($destatis-categories)/token">
+        <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer"
+              title="{i18n:translate('facets.facet.subject')}"
+              onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+subject:&quot;',  ., '&quot;'))}')">
+          <xsl:call-template name="output.category">
+            <xsl:with-param name="classID" select="'fachreferate'" />
+            <xsl:with-param name="categID" select="." />
           </xsl:call-template>
-        </xsl:variable>
-
-        <xsl:for-each select="xalan:nodeset($destatis-categories)/token">
-          <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer"
-                title="{i18n:translate('facets.facet.subject')}"
-                onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+subject:&quot;',  ., '&quot;'))}')">
-            <xsl:call-template name="output.category">
-              <xsl:with-param name="classID" select="'fachreferate'" />
-              <xsl:with-param name="categID" select="." />
-            </xsl:call-template>
-          </span>
-        </xsl:for-each>
+        </span>
+      </xsl:for-each>
     </xsl:if>
   </xsl:template>
 
