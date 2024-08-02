@@ -141,6 +141,9 @@ class LanguageSearchInput {
     }
 
     async initializeForm() {
+        const baseURL = window['webApplicationBaseURL'];
+        const currentLang = window["currentLang"];
+
         if (!LanguageSearchInput.dataList) {
             LanguageSearchInput.dataList = document.createElement('datalist');
             LanguageSearchInput.dataList.id = 'language-search-list';
@@ -191,33 +194,40 @@ class LanguageSearchInput {
             this.root.append(LanguageSearchInput.dataList);
         }
 
-        const searchInput = document.createElement('input');
-        searchInput.type = 'text';
-        searchInput.classList.add('form-control');
-        searchInput.classList.add('language-search-input');
-        searchInput.setAttribute('list', 'language-search-list');
-        this.root.append(searchInput);
+       this.searchInput = document.createElement('input');
+        this.searchInput.type = 'text';
+        this.searchInput.classList.add('form-control');
+        this.searchInput.classList.add('language-search-input');
+        this.searchInput.setAttribute('list', 'language-search-list');
+        this.root.append(this.searchInput);
+
+        fetch(`${baseURL}rsc/locale/translate/${currentLang}/edit.language.placeholder`)
+            .then(response => response.text())
+            .then(translation => {
+                this.searchInput.placeholder = translation;
+            });
+
 
         if(this.hiddenInput.value != null && this.hiddenInput.value.trim().length > 0) {
             if(LanguageSearchInput.idLabelMap.has(this.hiddenInput.value)) {
-                searchInput.value = LanguageSearchInput.idLabelMap.get(this.hiddenInput.value.trim());
+                this.searchInput.value = LanguageSearchInput.idLabelMap.get(this.hiddenInput.value.trim());
             }
         }
 
-        searchInput.addEventListener('change', () => {
-            if (searchInput.value.trim().length === 0) {
+        this.searchInput.addEventListener('change', () => {
+            if (this.searchInput.value.trim().length === 0) {
                 this.hiddenInput.value = '';
-                LanguageSearchInput.setInputValidation(searchInput, true);
+                LanguageSearchInput.setInputValidation(this.searchInput, true);
                 return;
             }
 
-            if (LanguageSearchInput.isValidInput(searchInput)) {
-                this.hiddenInput.value = LanguageSearchInput.labelIdMap.get(searchInput.value);
-                LanguageSearchInput.setInputValidation(searchInput, true);
+            if (LanguageSearchInput.isValidInput(this.searchInput)) {
+                this.hiddenInput.value = LanguageSearchInput.labelIdMap.get(this.searchInput.value);
+                LanguageSearchInput.setInputValidation(this.searchInput, true);
                 return;
             }
 
-            LanguageSearchInput.setInputValidation(searchInput, false);
+            LanguageSearchInput.setInputValidation(this.searchInput, false);
         });
     }
 }
