@@ -166,6 +166,13 @@ class LanguageSearchInput {
             const resolverList = [];
 
             LanguageSearchInput.mapPromise = new Promise(async (resolve, reject) => {
+                    if(LanguageSearchInput.labelIdMap && LanguageSearchInput.idLabelMap){
+                        resolve({
+                            labelIdMap: LanguageSearchInput.labelIdMap,
+                            idLabelMap: LanguageSearchInput.idLabelMap
+                        });
+                        return;
+                    }
                     resolverList.push(resolve);
             });
 
