@@ -76,6 +76,7 @@ ubo-cli/target/bin/ubo.sh update permission read for id default with rulefile ub
 ubo-cli/target/bin/ubo.sh update permission writedb for id default with rulefile ubo-cli/src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
 ubo-cli/target/bin/ubo.sh update permission deletedb for id default with rulefile ubo-cli/src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
 ubo-cli/target/bin/ubo.sh update permission read for id restapi:/ with rulefile ubo-cli/src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
+ubo-cli/target/bin/ubo.sh update permission read for id restapi:/classifications with rulefile ubo-cli/src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
 ```
 
 ## MyCoRe-Solr-Configuration

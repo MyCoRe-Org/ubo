@@ -53,8 +53,10 @@
   <!-- ============ Ausgabe Publikationsart ============ -->
 
   <xsl:template name="pubtype">
+    <xsl:variable name="genre" select="substring-after(mods:genre[@type='intern']/@valueURI, '#')"/>
+
     <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.genre')}"
-          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+genre:&quot;', mods:genre[@type='intern'], '&quot;'))}')">
+          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+genre:&quot;', $genre, '&quot;'))}')">
       <xsl:apply-templates select="mods:genre[@type='intern']"/>
       <xsl:for-each select="mods:relatedItem[@type='host']/mods:genre[@type='intern']">
         <xsl:text> in </xsl:text>
@@ -1663,7 +1665,17 @@
 
   <!-- ========== Sprache der Publikation ========== -->
   <xsl:template match="mods:languageTerm[@type='code']">
-    <xsl:value-of select="document(concat('notnull:language:',.))/language/label[@xml:lang=$CurrentLang]" />
+    <xsl:variable name="lang" select="document(concat('notnull:language:', .))/language/label[@xml:lang=$CurrentLang]" />
+
+    <xsl:choose>
+      <xsl:when test="string-length($lang) &gt; 0">
+        <xsl:value-of select="$lang"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="."/>
+      </xsl:otherwise>
+    </xsl:choose>
+
     <xsl:if test="position() != last()">
       <xsl:text>, </xsl:text>
     </xsl:if>

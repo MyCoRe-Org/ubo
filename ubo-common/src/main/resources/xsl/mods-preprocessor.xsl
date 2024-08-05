@@ -15,7 +15,7 @@
 
   <!-- In editor, categories are coded as <mods:classification classID="CLASSIFICATION">CATEGORYID</mods:classification> -->
   <!-- In persistent store, authorityURI and valueURI attributes instead are used-->
-  <xsl:template match="mods:classification[@valueURI]">
+  <xsl:template match="mods:classification[@valueURI][not(@generator)]">
     <mods:classification classID="{substring-after(@authorityURI,'classifications/')}">
       <xsl:value-of select="substring-after(@valueURI,'#')" />
     </mods:classification>

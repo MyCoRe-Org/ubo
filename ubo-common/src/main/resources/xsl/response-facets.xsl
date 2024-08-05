@@ -9,7 +9,8 @@
   xmlns:str="xalan://java.lang.String"
   xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
   xmlns:dozbib="xalan://org.mycore.ubo.DozBibCommands"
-  exclude-result-prefixes="dozbib xsl xalan i18n encoder mcrxml str">
+  xmlns:solrUtil="xalan://org.mycore.solr.MCRSolrUtils"
+  exclude-result-prefixes="dozbib xsl xalan i18n encoder mcrxml str solrUtil">
 
 <xsl:param name="RequestURL" />
 <xsl:param name="ServletsBaseURL" />
@@ -81,11 +82,11 @@
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:variable>
-              <a class="mycore-facet-remove" href="{$removeURL}" title="{$facet-remove-display-text} {i18n:translate('edit.remove')}">
+              <a class="mycore-facet-remove" href="{$removeURL}" title="{translate($facet-remove-display-text, '\', '')} {i18n:translate('edit.remove')}">
                 <span class="far fa-times-circle" aria-hidden="true" />
               </a>
               <span class="mycore-facet-filter">
-                <xsl:value-of select="$facet-remove-display-text"/>
+                <xsl:value-of select="translate($facet-remove-display-text, '\', '')"/>
               </span>
             </li>
           </xsl:for-each>
@@ -194,7 +195,7 @@
     <span class="mycore-facet-count">
       <xsl:value-of select="text()" />
     </span>
-    <xsl:variable name="fq" select="encoder:encode(concat(../@name,':',$quotes,@name,$quotes),'UTF-8')" />
+    <xsl:variable name="fq" select="encoder:encode(concat(../@name,':', $quotes, solrUtil:escapeSearchValue(@name), $quotes), 'UTF-8')" />
     <xsl:variable name="facet-human-readable">
       <xsl:call-template name="get-facet-name">
         <xsl:with-param name="facetName" select="str:replaceAll(str:new(../@name),'facet_', '')"/>
@@ -217,14 +218,24 @@
         </a>
         <a class="mycore-facet-add" href="{$baseURL}{$fq}" title="{$title-include-facet-value}">
           <span class="mycore-facet-value">
-            <xsl:value-of select="$facet-value"/>
+            <span>
+              <xsl:if test="string-length($facet-value) &gt; 20">
+                <xsl:attribute name="class">scroll-on-hover</xsl:attribute>
+              </xsl:if>
+              <xsl:value-of select="$facet-value"/>
+            </span>
           </span>
         </a>
       </xsl:when>
       <xsl:otherwise>
         <span class="mycore-facet-exclude" />
         <span class="mycore-facet-value">
-          <xsl:value-of select="$facet-value"/>
+          <span>
+            <xsl:if test="string-length($facet-value) &gt; 20">
+              <xsl:attribute name="class">scroll-on-hover</xsl:attribute>
+            </xsl:if>
+            <xsl:value-of select="$facet-value"/>
+          </span>
         </span>
       </xsl:otherwise>
     </xsl:choose>
@@ -305,23 +316,15 @@
     </xsl:if>
   </xsl:variable>
 
-  <span>
     <xsl:choose>
-      <xsl:when test="string-length($label) ">
-        <xsl:if test="string-length($label) &gt; 20">
-          <xsl:attribute name="class">scroll-on-hover</xsl:attribute>
-        </xsl:if>
+      <xsl:when test="string-length($label) &gt; 0">
         <xsl:value-of select="$label"/>
       </xsl:when>
-      <xsl:when test="$label">
-        <xsl:if test="string-length($fallback-label) &gt; 20">
-          <xsl:attribute name="class">scroll-on-hover</xsl:attribute>
-        </xsl:if>
+      <xsl:when test="string-length($fallback-label) &gt; 0">
         <xsl:value-of select="$fallback-label"/>
       </xsl:when>
     </xsl:choose>
-  </span>
-</xsl:template>
+  </xsl:template>
 
   <xsl:template name="get-facet-name">
     <xsl:param name="facetName"/>
