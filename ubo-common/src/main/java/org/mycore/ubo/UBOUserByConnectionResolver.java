@@ -18,13 +18,6 @@
 
 package org.mycore.ubo;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.URIResolver;
-
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.util.JAXBSource;
 import org.apache.logging.log4j.LogManager;
@@ -34,6 +27,12 @@ import org.jdom2.transform.JDOMSource;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserManager;
 import org.mycore.user2.utils.MCRUserTransformer;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Resolves a User by connection id
@@ -46,10 +45,18 @@ public class UBOUserByConnectionResolver implements URIResolver {
     public Source resolve(String href, String base) throws TransformerException {
         String connection_id = href.split(":", 2)[1];
         final List<MCRUser> users = MCRUserManager.getUsers("id_connection", connection_id).collect(Collectors.toList());
-        if(users.size()!=1){
-            LOGGER.warn("There is a connection ID which has no User in DB {}", connection_id);
+
+        int size = users.size();
+        if (size != 1) {
+            if (size == 0) {
+                LOGGER.warn("Connection ID {} has no user in DB", connection_id);
+            }
+            if (size > 1) {
+                LOGGER.warn("Connection ID {} appears multiple times but for different users in DB", connection_id);
+            }
             return new JDOMSource(new Element("null"));
         }
+
         final MCRUser user = users.get(0);
 
         try {
@@ -58,5 +65,4 @@ public class UBOUserByConnectionResolver implements URIResolver {
             throw new TransformerException(e);
         }
     }
-
 }
