@@ -18,7 +18,17 @@
     <xsl:apply-templates select="mods:titleInfo[position() &gt; 1]" mode="qdc" />
     <xsl:apply-templates select="mods:name[@type='personal']" mode="dc" />
     <xsl:apply-templates select="mods:genre[@type='intern']" mode="dc" />
-    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="dc" />
+    
+    <xsl:if test="$UBO.SubjectClassifications.1.DC='true'">
+      <xsl:apply-templates select="mods:classification[contains(@authorityURI,$UBO.SubjectClassifications.1.ClassID)]" mode="dc" />
+    </xsl:if>
+    <xsl:if test="$UBO.SubjectClassifications.2.DC='true'">
+      <xsl:apply-templates select="mods:classification[contains(@authorityURI,$UBO.SubjectClassifications.2.ClassID)]" mode="dc" />
+    </xsl:if>
+    <xsl:if test="$UBO.SubjectClassifications.3.DC='true'">
+      <xsl:apply-templates select="mods:classification[contains(@authorityURI,$UBO.SubjectClassifications.3.ClassID)]" mode="dc" />
+    </xsl:if>
+    
     <xsl:apply-templates select="descendant-or-self::mods:dateIssued[not(ancestor::mods:relatedItem[not(@type='host')])][1]" mode="qdc" />
     <xsl:apply-templates select="mods:originInfo/mods:dateOther" mode="qdc" />
     <xsl:apply-templates select="mods:originInfo[mods:edition|mods:place|mods:publisher]" mode="dc" />

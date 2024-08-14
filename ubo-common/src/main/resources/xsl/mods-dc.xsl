@@ -12,12 +12,30 @@
 >
 
   <xsl:param name="ServletsBaseURL" />
+  
+  <xsl:param name="UBO.SubjectClassifications.1.DC" />
+  <xsl:param name="UBO.SubjectClassifications.2.DC" />
+  <xsl:param name="UBO.SubjectClassifications.3.DC" />
+
+  <xsl:param name="UBO.SubjectClassifications.1.ClassID" />
+  <xsl:param name="UBO.SubjectClassifications.2.ClassID" />
+  <xsl:param name="UBO.SubjectClassifications.3.ClassID" />
 
   <xsl:template match="mods:mods" mode="dc">
     <xsl:apply-templates select="mods:titleInfo" mode="dc" />
     <xsl:apply-templates select="mods:name[@type='personal']" mode="dc" />
     <xsl:apply-templates select="mods:genre[@type='intern']" mode="dc" />
-    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="dc" />
+    
+    <xsl:if test="$UBO.SubjectClassifications.1.DC='true'">
+      <xsl:apply-templates select="mods:classification[contains(@authorityURI,$UBO.SubjectClassifications.1.ClassID)]" mode="dc" />
+    </xsl:if>
+    <xsl:if test="$UBO.SubjectClassifications.2.DC='true'">
+      <xsl:apply-templates select="mods:classification[contains(@authorityURI,$UBO.SubjectClassifications.2.ClassID)]" mode="dc" />
+    </xsl:if>
+    <xsl:if test="$UBO.SubjectClassifications.3.DC='true'">
+      <xsl:apply-templates select="mods:classification[contains(@authorityURI,$UBO.SubjectClassifications.3.ClassID)]" mode="dc" />
+    </xsl:if>
+    
     <xsl:apply-templates select="descendant-or-self::mods:dateIssued[not(ancestor::mods:relatedItem[not(@type='host')])][1]" mode="dc" />
     <xsl:apply-templates select="mods:originInfo[mods:edition|mods:place|mods:publisher]" mode="dc" />
     <xsl:apply-templates select="mods:relatedItem[(@type='host') or (@type='series')]" mode="dc" />
@@ -27,10 +45,11 @@
     <xsl:apply-templates select="mods:language/mods:languageTerm" mode="dc" />
   </xsl:template>
 
-  <xsl:template match="mods:classification[contains(@authorityURI,'fachreferate')]" mode="dc">
+  <xsl:template match="mods:classification" mode="dc">
     <dc:subject>
-      <xsl:variable name="categoryID" select="substring-after(current()/@valueURI,'#')" />
-      <xsl:variable name="uri" select="concat('classification:editor:0:parents:fachreferate:',encoder:encode($categoryID,'UTF-8'))" />
+      <xsl:variable name="classID" select="substring-after(@authorityURI,'/classifications/')" />
+      <xsl:variable name="categoryID" select="substring-after(@valueURI,'#')" />
+      <xsl:variable name="uri" select="concat('classification:editor:0:parents:',$classID,':',encoder:encode($categoryID,'UTF-8'))" />
       <xsl:value-of select="document($uri)/items/item/label[lang($CurrentLang)]" />
     </dc:subject>
   </xsl:template>

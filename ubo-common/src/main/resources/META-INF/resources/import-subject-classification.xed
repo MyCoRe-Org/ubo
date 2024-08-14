@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xed:template xmlns:xed="http://www.mycore.de/xeditor">
+
+  <xed:template id="subject.__classID__">
+    <xed:validate xpath="//mods:classification[@classID='__classID__']" required="true" i18n="condition.subject.__classID__" display="global" />
+    
+    <xed:repeat xpath="mods:classification[@classID='__classID__']" max="">
+      <div class="form-inline form-group ubo-repeat-group {$xed-validation-marker}">
+        <label for="{xed:generate-id()}" class="mycore-form-label">
+          <xed:output value="concat(i18n:translate('ubo.subject.__classID__'), ': ')" />
+        </label>
+        <select id="{xed:generate-id()}" class="autocomplete mycore-form-input">
+          <option value="">
+            <xed:output i18n="search.select.autocomplete" />
+          </option>
+          <xed:include uri="xslStyle:items2options:classification:editor:-1:children:__classID__" />
+        </select>
+        <xed:controls />
+      </div>
+    </xed:repeat>
+      
+  </xed:template>
+
+</xed:template>
