@@ -21,12 +21,9 @@ ubo-cli/target/bin/ubo.sh create configuration directory
 create database ubo;
 grant all privileges on ubo.* to ubo@localhost identified by 'ubo';
 ```
-- setup your database and JDBC configuration in persistence.xml and **REMOVE** the following lines
+- setup your database and JDBC configuration in persistence.xml, update mappings with:
 ```
-<mapping-file>META-INF/mycore-iview2-mappings.xml</mapping-file>
-<mapping-file>META-INF/mycore-viewer-mappings.xml</mapping-file>
-<mapping-file>META-INF/mycore-ifs-mappings.xml</mapping-file>
-
+ubo-cli/target/bin/ubo.sh reload mappings in jpa configuration file
 ```
 ```
 vi ~/.mycore/ubo/resources/META-INF/persistence.xml
@@ -35,7 +32,7 @@ vi ~/.mycore/ubo/resources/META-INF/persistence.xml
 - copy jdbc driver to ~/.mycore/ubo/lib, eg. for h2
 ```
 cd ~/.mycore/ubo/lib
-wget https://repo1.maven.org/maven2/com/h2database/h2/1.4.200/h2-1.4.200.jar
+wget https://repo1.maven.org/maven2/com/h2database/h2/2.2.224/h2-2.2.224.jar
 cd -
 ```
 ## Solr 

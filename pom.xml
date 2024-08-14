@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.mycore</groupId>
     <artifactId>mycore-parent</artifactId>
-    <version>53</version>
+    <version>55</version>
   </parent>
 
   <groupId>org.mycore.ubo</groupId>
@@ -60,6 +60,7 @@
     <sortpom.sortFile>https://gist.githubusercontent.com/yagee-de/dfd3698c1b49173dbf251f74eb6a9297/raw/406460c088ff3cb6354e4ae6b40535e6f841607d/mycore_sort.xml</sortpom.sortFile>
     <sortpom.sortProps>true</sortpom.sortProps>
     <timestamp>${maven.build.timestamp}</timestamp>
+    <tomcat.version>10.1.11</tomcat.version>
     <yarn.version>v1.22.10</yarn.version>
   </properties>
 
@@ -204,7 +205,7 @@
         </property>
       </activation>
       <properties>
-        <cargo.container>jetty9x</cargo.container>
+        <cargo.container>jetty12x</cargo.container>
       </properties>
       <build>
         <pluginManagement>
