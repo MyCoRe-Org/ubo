@@ -36,6 +36,7 @@
     <xsl:apply-templates select="descendant::mods:name[mods:nameIdentifier[@type='lsf']]" mode="solrField.lsf" />
     <xsl:apply-templates select="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][contains('aut cre tch pht prg edt',text())]]/mods:nameIdentifier[@type='lsf']" mode="solrField.ae" />
     <xsl:apply-templates select="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][contains('aut cre tch pht prg edt',text())]]/mods:nameIdentifier[@type='orcid']" mode="solrField.ae" />
+    <xsl:apply-templates select="mods:name[@type='personal'][mods:role/mods:roleTerm[contains(@authorityURI,'author_roles')]]" mode="solrField.ar" />
     <xsl:apply-templates select="descendant::mods:name[@type='personal']" mode="child" />
     <xsl:apply-templates select="mods:genre[@type='intern']" mode="solrField" />
     <xsl:apply-templates select="mods:accessCondition[@xlink:href]" mode="solrField" />
@@ -159,18 +160,18 @@
     <field name="person_{text()}">
       <xsl:apply-templates select="../.." mode="solrField" />
     </field>
+  </xsl:template>
 
-    <xsl:if test="../mods:roleTerm/text() = 'corresponding_author'">
-      <field name="corresponding_aut">
-        <xsl:apply-templates select="../.." mode="solrField"/>
+  <xsl:template match="mods:name[@type='personal'][mods:role/mods:roleTerm[contains(@authorityURI,'author_roles')]]" mode="solrField.ar">
+    <field name="corresponding_aut">
+      <xsl:apply-templates select="." mode="solrField"/>
+    </field>
+
+    <xsl:for-each select="mods:nameIdentifier"><!-- TODO: besser nur connection-ID bzw. 2 Suchfelder? -->
+      <field name="corresponding_aut_id">
+        <xsl:value-of select="."/>
       </field>
-
-      <xsl:for-each select="../../mods:nameIdentifier">
-        <field name="corresponding_aut_id">
-          <xsl:value-of select="."/>
-        </field>
-      </xsl:for-each>
-    </xsl:if>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="mods:name[@type='personal']" mode="solrField">
