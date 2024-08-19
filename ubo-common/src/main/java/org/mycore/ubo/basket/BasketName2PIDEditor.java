@@ -9,10 +9,6 @@
 
 package org.mycore.ubo.basket;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.mycore.common.MCRConstants;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.frontend.basket.MCRBasket;
@@ -28,6 +25,10 @@ import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.ubo.AccessControl;
 import org.mycore.ubo.DozBibEntryServlet;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Servlet invoked by edit-contributors.xml to
@@ -99,6 +100,12 @@ public class BasketName2PIDEditor extends MCRServlet {
         contributor.removeChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE);
 
         for (Element child : nameEntryEdited.getModsName().getChildren()) {
+            // retain all nameIdentifier elements, except of type 'connection'
+            String typeAttr = child.getAttributeValue("type");
+            if ("nameIdentifier".equals(child.getName()) && "connection".equals(typeAttr)) {
+                continue;
+            }
+
             if ("namePart".equals(child.getName()) || "nameIdentifier".equals(child.getName())) {
                 if (!child.getTextTrim().isEmpty()) {
                     contributor.addContent(child.clone());
