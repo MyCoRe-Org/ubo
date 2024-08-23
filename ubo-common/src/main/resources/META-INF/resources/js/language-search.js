@@ -179,6 +179,7 @@ class LanguageSearchInput {
             const baseURL = window['webApplicationBaseURL'];
             const response = await fetch(baseURL + 'api/v2/classifications/rfc5646', {
                 method: 'GET',
+                credentials: 'omit',
                 headers: {
                     'Accept': 'application/json'
                 }

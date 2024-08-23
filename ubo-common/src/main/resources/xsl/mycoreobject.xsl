@@ -247,12 +247,8 @@
 
   <xsl:if test="$numlinks &gt; 0">
   <span class="badge badge-alternative mr-1">
-    <xsl:value-of select="i18n:translate('ubo.relatedItem.link')"/>
-    <xsl:text>: </xsl:text>
     <a href="solr/select?q=link:{/mycoreobject/@ID}&amp;sort=year+desc">
-      <xsl:value-of select="$numlinks" />
-      <xsl:text> </xsl:text>
-      <xsl:value-of select="i18n:translate('ubo.relatedItem.host.contains.publications')"/>
+      <xsl:value-of select="concat(i18n:translate('ubo.relatedItem.link'),': ', $numlinks, ' ', i18n:translate('ubo.relatedItem.host.contains.publications'))"/>
     </a>
   </span>
   </xsl:if>
@@ -285,16 +281,19 @@
   
   <xsl:if test="$numDuplicates &gt; 0">
     <span class="badge badge-alternative ml-1 mr-1">
-      <xsl:text>Es gibt eventuell </xsl:text>
       <a href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.Style=structure">
-        <xsl:choose>
-          <xsl:when test="$numDuplicates = 1">eine Dublette</xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="concat($numDuplicates,' Dubletten')" />
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:variable name="extro">
+          <xsl:choose>
+            <xsl:when test="$numDuplicates = 1">
+              <xsl:value-of select="i18n:translate('ubo.badge.duplicate.singular')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="i18n:translate('ubo.badge.duplicate.plural', $numDuplicates)"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:value-of select="concat(i18n:translate('ubo.badge.duplicate.start'), ' ', $extro, '.')"/>
       </a>
-      <xsl:text>.</xsl:text>
     </span>
   </xsl:if>
   

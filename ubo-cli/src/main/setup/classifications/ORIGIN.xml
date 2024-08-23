@@ -11,1473 +11,2260 @@
 		<category ID="03">
 			<label xml:lang="de" text="Fakultät für Geisteswissenschaften" />
 			<label xml:lang="en" text="Faculty of Humanities"/>
+			<label xml:lang="x-mapping" text="destatis:0100" />
 			<category ID="03.01">
 				<label xml:lang="de" text="Institut für Anglophone Studien" />
 				<label xml:lang="en" text="Department of Anglophone Studies" />
+				<label xml:lang="x-mapping" text="destatis:110" />
 				<category ID="03.01.40">
 					<label xml:lang="de" text="EFL Education" />
+					<label xml:lang="x-mapping" text="destatis:1120" />
 				</category>
 				<category ID="03.01.50">
 					<label xml:lang="de" text="English Linguistics" />
+					<label xml:lang="x-mapping" text="destatis:1100" />
 				</category>
 				<category ID="03.01.60">
 					<label xml:lang="de" text="Literary and Cultural Studies" />
+					<label xml:lang="x-mapping" text="destatis:110" />
 					<category ID="03.01.60.01">
 						<label xml:lang="de" text="American Studies" />
+						<label xml:lang="x-mapping" text="destatis:1110" />
 					</category>
 					<category ID="03.01.60.02">
 						<label xml:lang="de" text="British and Anglophone Literature and Culture" />
+						<label xml:lang="x-mapping" text="destatis:110" />
 					</category>
 					<category ID="03.01.60.03">
 						<label xml:lang="de" text="British Literature and Culture" />
+						<label xml:lang="x-mapping" text="destatis:1100" />
 					</category>
 					<category ID="03.01.60.04">
 						<label xml:lang="de" text="Postcolonial Studies" />
+						<label xml:lang="x-mapping" text="destatis:110" />
 					</category>
 				</category>
 				<category ID="03.01.70">
 					<label xml:lang="de" text="Language Practice Team" />
+					<label xml:lang="x-mapping" text="destatis:1120" />
 				</category>
 			</category>
 			<category ID="03.03">
-				<label xml:lang="de" text="Deutsch als Zweit-und Fremdsprache" />				
+				<label xml:lang="de" text="Deutsch als Zweit-und Fremdsprache" />
+				<label xml:lang="x-mapping" text="destatis:1040" />				
 			</category>
 			<category ID="09.02">
 				<label xml:lang="de" text="Institut für Geografie" />
+				<label xml:lang="x-mapping" text="destatis:4200" />
 				<category ID="09.02.04">
 					<label xml:lang="de" text="Wirtschaftsgeographie, insb. Verkehr und Logistik" />
+					<label xml:lang="x-mapping" text="destatis:4215" />
 				</category>
 				<category ID="09.02.08">
 					<label xml:lang="de" text="Geographische Landeskunde von Altindustrieländern" />
+					<label xml:lang="x-mapping" text="destatis:4230" />
 				</category>
 				<category ID="09.02.10">
 					<label xml:lang="de" text="Didaktik der Geographie" />
+					<label xml:lang="x-mapping" text="destatis:4250" />
 				</category>
 			</category>
 			<category ID="03.02">
-				<label xml:lang="de" text="Germanistik" />
+				<label xml:lang="de" text="Institut für Germanistik" />
+				<label xml:lang="x-mapping" text="destatis:1000" />
 				<category ID="03.02.01">
 					<label xml:lang="de" text="Linguistik und Sprachdidaktik" />
+					<label xml:lang="x-mapping" text="destatis:1090" />
 				</category>
 				<category ID="03.02.03">
 					<label xml:lang="de" text="Literaturwissenschaft und Literaturdidaktik" />
+					<label xml:lang="x-mapping" text="destatis:1080" />
 				</category>
 				<category ID="03.02.05">
 					<label xml:lang="de" text="Mediävistik" />
+					<label xml:lang="x-mapping" text="destatis:1000" />
 				</category>
 				<category ID="03.02.04">
 					<label xml:lang="de" text="Niederländische Sprache und Kultur" />
+					<label xml:lang="x-mapping" text="destatis:1030" />
 				</category>
 			</category>
 			<category ID="01.01">
 				<label xml:lang="de" text="Historisches Institut" />
+				<label xml:lang="x-mapping" text="destatis:0500" />
 				<category ID="01.01.20">
 					<label xml:lang="de" text="Alte Geschichte" />
+					<label xml:lang="x-mapping" text="destatis:0520" />
 				</category>
 				<category ID="01.01.21">
 					<label xml:lang="de" text="Mittelalterliche Geschichte" />
+					<label xml:lang="x-mapping" text="destatis:0530" />
 				</category>
 				<category ID="01.01.22">
 					<label xml:lang="de" text="Geschichte des Spätmittelalters und der frühen Neuzeit" />
+					<label xml:lang="x-mapping" text="destatis:0500" />
 				</category>
 				<category ID="01.01.23">
 					<label xml:lang="de" text="Geschichte der frühen Neuzeit" />
+					<label xml:lang="x-mapping" text="destatis:0500" />
 				</category>
 				<category ID="01.01.24">
 					<label xml:lang="de" text="Neuere und Neueste Geschichte" />
+					<label xml:lang="x-mapping" text="destatis:0540" />
 				</category>
 				<category ID="01.01.29">
 					<label xml:lang="de" text="Geschichte der modernen Türkei" />
+					<label xml:lang="x-mapping" text="destatis:0550" />
 				</category>
 				<category ID="01.01.25">
 					<label xml:lang="de" text="Sozial- und Wirtschaftsgeschichte" />
+					<label xml:lang="x-mapping" text="destatis:0560" />
 				</category>
 				<category ID="01.01.26">
 					<label xml:lang="de" text="Außereuropäische Geschichte" />
+					<label xml:lang="x-mapping" text="destatis:0550" />
 				</category>
 				<category ID="01.01.27">
 					<label xml:lang="de" text="Landesgeschichte Rhein-Maas" />
+					<label xml:lang="x-mapping" text="destatis:0550" />
 				</category>
 				<category ID="01.01.28">
 					<label xml:lang="de" text="Didaktik der Geschichte" />
+					<label xml:lang="x-mapping" text="destatis:0580" />
+				</category>
+				<category ID="01.01.30">
+					<label xml:lang="de" text="Abteilung für Globale Mobilität vom 18. bis zum 20. Jahrhundert" />
+	 				<label xml:lang="x-mapping" text="destatis:0540" />
+				</category>
+				<category ID="01.01.31">
+					<label xml:lang="de" text="Abteilung für deutsch-jüdische Geschichte" />
+					<label xml:lang="x-mapping" text="destatis:0500" />
 				</category>
 				<category ID="01.01.01">
 					<label xml:lang="de" text="Institut für niederrheinische Kulturgeschichte und Regionalentwicklung (INKUR)" />
+					<label xml:lang="x-mapping" text="destatis:0585" />
 				</category>
 			</category>
 			<category ID="03.07">
 				<label xml:lang="de" text="Institut für Kommunikationswissenschaft" />
+				<label xml:lang="x-mapping" text="destatis:2240" />
 			</category>
 			<category ID="01.02">
 				<label xml:lang="de" text="Institut für Philosophie" />
+				<label xml:lang="x-mapping" text="destatis:0400" />
 			</category>
 			<category ID="03.22">
 				<label xml:lang="de" text="Institut für Romanische Sprachen und Literaturen" />
+				<label xml:lang="x-mapping" text="destatis:1200" />
 				<category ID="03.22.01">
 					<label xml:lang="de" text="Französisch" />
+					<label xml:lang="x-mapping" text="destatis:1210" />
 				</category>
 				<category ID="03.22.04">
 					<label xml:lang="de" text="Spanisch" />
+					<label xml:lang="x-mapping" text="destatis:1230" />
 				</category>
 			</category>
 			<category ID="04">
 				<label xml:lang="de" text="Institut für Kunst und Kunstwissenschaft" />
+				<label xml:lang="x-mapping" text="destatis:7800" />
 				<category ID="04.04">
 					<label xml:lang="de" text="Institut für Kunst- und Designwissenschaften (IKUD)" />
+					<label xml:lang="x-mapping" text="destatis:7800" />
 				</category>
 			</category>
 			<category ID="01.10">
 				<label xml:lang="de" text="Institut für Evangelische Theologie" />
+				<label xml:lang="x-mapping" text="destatis:0200" />
 			</category>
 			<category ID="01.09">
 				<label xml:lang="de" text="Institut für Katholische Theologie" />
+				<label xml:lang="x-mapping" text="destatis:0300" />
 			</category>
 			<category ID="03.10">
 				<label xml:lang="de" text=" Institut für Turkistik" />
+				<label xml:lang="x-mapping" text="destatis:1510" />
 			</category>
 			<category ID="03.04">
 				<label xml:lang="de" text="Institut für Sachunterricht" />
+				<label xml:lang="x-mapping" text="destatis:1800" />
 			</category>
 		</category>
 		<category ID="16">
 			<label xml:lang="de" text="Fakultät für Gesellschaftswissenschaften" />
 			<label xml:lang="en" text="Faculty of Social Sciences"/> 
+			<label xml:lang="x-mapping" text="destatis:2200" />
 			<category ID="16.01">
 				<label xml:lang="de" text="Institut für Politikwissenschaft (IfP)" />
 				<label xml:lang="en" text="Institute of Political Science (IfP)"/>
+				<label xml:lang="x-mapping" text="destatis:2300" />
 			</category>
 			<category ID="16.03">
 				<label xml:lang="de" text="Institut für Soziologie (IfS)" />
 				<label xml:lang="en" text="Department of Sociology (IfS)"/>
+				<label xml:lang="x-mapping" text="destatis:2350" />
 			</category>
 			<category ID="16.04">
 				<label xml:lang="de" text="Institut für Sozioökonomie (IfSO)" />
+				<label xml:lang="x-mapping" text="destatis:2350" />
 			</category>
 			<category ID="16.07">
 				<label xml:lang="de" text="Institut Arbeit und Qualifikation (IAQ)" />
 				<label xml:lang="en" text="Institute for Work, Skills and Training (IAQ)"/>
+				<label xml:lang="x-mapping" text="destatis:2350" />
 				<category ID="AIM">
 					<label xml:lang="de" text="Arbeitsmarkt - Integration - Mobilität (AIM)" />
 					<label xml:lang="en" text="Employment - Integration - Mobility (AIM)"/>
+					<label xml:lang="x-mapping" text="destatis:2350" />
 				</category>
 				<category ID="AZAO">
 					<label xml:lang="de" text="Arbeitszeit und Arbeitsorganisation (AZAO)" />
 					<label xml:lang="en" text="Working Time and Work Organisation (AZAO)"/>
+					<label xml:lang="x-mapping" text="destatis:2350" />
 				</category>
 				<category ID="BEST">
-					<label xml:lang="de" text="Bildung und Erziehung im Strukturwandel (BEST)" />
-					<label xml:lang="en" text="Learning and Education in Structural Change (BEST)"/>
+					<label xml:lang="de" text="Bildung, Entwicklung, Soziale Teilhabe (BEST)" />
+					<label xml:lang="en" text="Education, Development, Social Participation  (BEST)"/>
+					<label xml:lang="x-mapping" text="destatis:2350" />
 				</category>
 				<category ID="FLEX">
 					<label xml:lang="de" text="Flexibilität und Sicherheit (FLEX)" />
 					<label xml:lang="en" text="Flexibility and Security (FLEX)"/>
+					<label xml:lang="x-mapping" text="destatis:2350" />
 				</category>
 			</category>
 			<category ID="16.02">
 				<label xml:lang="de" text="Institut für Entwicklung und Frieden (INEF)" />
 				<label xml:lang="en" text="The Institute for Development and Peace (INEF)"/>
+				<label xml:lang="x-mapping" text="destatis:2300" />
 			</category>
 			<category ID="16.10">
 				<label xml:lang="de" text="Fachgebiet Kulturgeographie / Regionale Geographie Ostasiens " />
+				<label xml:lang="x-mapping" text="destatis:2270" />
 			</category>
 			<category ID="16.11">
 				<label xml:lang="de" text="Rhein-Ruhr-Institut für Sozialforschung und Politikberatung e.V. (RISP)" />
+				<label xml:lang="x-mapping" text="destatis:2350" />
 			</category>
 			<category ID="16.12">
 				<label xml:lang="de" text="NRW School of Governance" />
+				<label xml:lang="x-mapping" text="destatis:2300" />
 			</category>
 			<category ID="16.06">
 				<label xml:lang="de" text="CIVES School of Civic Education" />
-			</category>
-			<category ID="16.08">
-				<label xml:lang="de" text="Profilschwerpunkt &quot;Wandel von Gegenwartsgesellschaften&quot;" />
-				<label xml:lang="en" text="Main Research Area Transformation of contemporary societies" />
-			</category>
+				<label xml:lang="x-mapping" text="destatis:2350" />
+			</category>			
 		</category>
 		<category ID="02">
 			<label xml:lang="de" text="Fakultät für Bildungswissenschaften" />
 			<label xml:lang="en" text="Faculty of Educational Sciences"/>
+			<label xml:lang="x-mapping" text="destatis:1800" />
 			<category ID="16.05">
 				<label xml:lang="de" text="Institut für Berufs- und Weiterbildung (IBW)" />
 				<label xml:lang="en" text="The Institute of Vocational and Further Education"/>
+				<label xml:lang="x-mapping" text="destatis:1805" />
 			</category>
 			<category ID="01.11">
 				<label xml:lang="de" text="Institut für Stadtteilentwicklung, Sozialraumorientierte Arbeit und Beratung  (ISSAB)" />
+				<label xml:lang="x-mapping" text="destatis:2400" />
 			</category>
 			<category ID="02.01">
 				<label xml:lang="de" text="Institut für Erziehungswissenschaft" />
 				<label xml:lang="en" text="The Institute of Education" />
+				<label xml:lang="x-mapping" text="destatis:1800" />
 				<category ID="02.01.10">
 					<label xml:lang="de" text="Allgemeine Didaktik" />
+					<label xml:lang="x-mapping" text="destatis:1801" />
 				</category>
 				<category ID="02.01.01">
 					<label xml:lang="de" text="Allgemeine Pädagogik" />
+					<label xml:lang="x-mapping" text="destatis:1800" />
 				</category>
 				<category ID="02.01.02">
 					<label xml:lang="de" text="Bildungsforschung" />
+					<label xml:lang="x-mapping" text="destatis:1802" />
 				</category>
 				<category ID="02.01.03">
-					<label xml:lang="de" text="Educational Research and Schooling (Allgemeine Didaktik)" />
+					<label xml:lang="de" text="Educational Research and Schooling (Schulpädagogik)" />
+					<label xml:lang="x-mapping" text="destatis:1827" />
 				</category>
 				<category ID="02.01.05">
 					<label xml:lang="de" text="Interkulturelle Pädagogik" />
+					<label xml:lang="x-mapping" text="destatis:1829" />
 				</category>
 				<category ID="02.01.06">
 					<label xml:lang="de" text="Mobilität und Verkehr" />
+					<label xml:lang="x-mapping" text="destatis:1800" />
 				</category>
 				<category ID="02.01.20">
 					<label xml:lang="de" text="Schulforschung K-7" />
 					<label xml:lang="en" text="School Research K-7"/>
+					<label xml:lang="x-mapping" text="destatis:1803" />
 				</category>
 				<category ID="02.01.21">
-					<label xml:lang="de" text="Jugend- und Schulforschung" />					
+					<label xml:lang="de" text="Jugend- und Schulforschung" />
+					<label xml:lang="x-mapping" text="destatis:1800" />
 				</category>
 				<category ID="02.01.22">
 					<label xml:lang="de" text="Sozialisationsforschung" />
+					<label xml:lang="x-mapping" text="destatis:1800" />
 				</category>
 				<category ID="02.01.23">
 					<label xml:lang="de" text="Kindheitsforschung" />
 					<label xml:lang="en" text="Childhood Research" />
+					<label xml:lang="x-mapping" text="destatis:1800" />
 				</category>
 				<category ID="02.01.24">
 					<label xml:lang="de" text="Pädagogische Professionsforschung" />
+					<label xml:lang="x-mapping" text="destatis:1800" />
 				</category>
 				<category ID="02.01.25">
 					<label xml:lang="de" text="Unterrichtsentwicklung" />
+					<label xml:lang="x-mapping" text="destatis:1827" />
 				</category>
 				<category ID="02.01.19">
 					<label xml:lang="de" text="Unterrichtsforschung" />
+					<label xml:lang="x-mapping" text="destatis:1827" />
 				</category>
 				<category ID="02.01.26">
 					<label xml:lang="de" text="Schule und Jugendhilfe" />
+					<label xml:lang="x-mapping" text="destatis:1800" />
 				</category>
 				<category ID="02.01.27">
 					<label xml:lang="de" text=" Migrations- und Ungleichheitsforschung" />
+					<label xml:lang="x-mapping" text="destatis:1800" />
 				</category>
 			</category>
 			<category ID="02.02">
 				<label xml:lang="de" text="Institut für Psychologie" />
+				<label xml:lang="x-mapping" text="destatis:1700" />
 				<category ID="02.02.02">
 					<label xml:lang="de" text="Allgemeine Psychologie und Sozialpsychologie " />
+					<label xml:lang="x-mapping" text="destatis:1700" />
 				</category>
 				<category ID="02.02.13">
 					<label xml:lang="de" text="Allgemeine Psychologie I: Sprache und Kognition" />
+					<label xml:lang="x-mapping" text="destatis:1750" />
 				</category>
 				<category ID="02.02.03">
 					<label xml:lang="de" text="Arbeits- und Organisationspsychologie " />
 					<label xml:lang="en" text="Work and Organizational Psychology" />
+					<label xml:lang="x-mapping" text="destatis:1715" />
 				</category>
 				<category ID="02.02.14">
 					<label xml:lang="de" text="Arbeits- und Organisationspsychologie mit dem Schwerpunkt Belastung und Beanspruchung im Lehrerberuf" />
 					<label xml:lang="en" text="Work and Organizational Psychology: Stress and Strain in the Teaching Profession" />
+					<label xml:lang="x-mapping" text="destatis:1715" />
 				</category>
 				<category ID="02.02.10">
 					<label xml:lang="de" text="Differentielle Psychologie " />
+					<label xml:lang="x-mapping" text="destatis:1710" />
 				</category>
 				<category ID="02.02.04">
 					<label xml:lang="de" text="Entwicklungspsychologie" />
+					<label xml:lang="x-mapping" text="destatis:1720" />
 				</category>
 				<category ID="02.02.15">
 					<label xml:lang="de" text="Interkulturelle Psychologie - Migration und Integration" />
 					<label xml:lang="en" text="Intercultural Psychology - Migration and Integration" />
+					<label xml:lang="x-mapping" text="destatis:1700" />
 				</category>
 				<category ID="02.02.16">
-					<label xml:lang="de" text="Klinische Psychologie" />
+					<label xml:lang="de" text="Klinische Psychologie und Psychotherapie" />
+					<label xml:lang="x-mapping" text="destatis:1740" />
 				</category>
 				<category ID="02.02.01">
 					<label xml:lang="de" text="Lehr-Lernpsychologie" />
 					<label xml:lang="en" text="Department of Instructional Psychology" />
+					<label xml:lang="x-mapping" text="destatis:1700" />
 				</category>
 				<category ID="02.02.17">
 					<label xml:lang="de" text="Lern- und Leistungsstörungen des Kindes- und Jugendalter" />
+					<label xml:lang="x-mapping" text="destatis:1700" />
 				</category>
 				<category ID="02.02.11">
 					<label xml:lang="de" text="Pädagogische Psychologie" />
 					<label xml:lang="en" text="Educational Psychology" />
+					<label xml:lang="x-mapping" text="destatis:1725" />
+				</category>
+				<category ID="02.02.20">
+					<label xml:lang="de" text="Klinisch-Psychologische Intervention" />	
+					<label xml:lang="x-mapping" text="destatis:1740" />
 				</category>
 				<category ID="02.02.12">
-					<label xml:lang="de" text="Pädagogische und psychologische Diagnostik" />
+					<label xml:lang="de" text="Psychologische Diagnostik und Methodik" />
+					<label xml:lang="x-mapping" text="destatis:1740" />
 				</category>
 			</category>
 			<category ID="02.05">
 				<label xml:lang="de" text="Institut für Soziale Arbeit und Sozialpolitik" />
+				<label xml:lang="x-mapping" text="destatis:2410" />
 				<category ID="01.05">
 					<label xml:lang="de" text="Sozialverwaltung" />
+					<label xml:lang="x-mapping" text="destatis:2820" />
 				</category>
 				<category ID="01.15">
 					<label xml:lang="de" text="Sozialrecht" />
+					<label xml:lang="x-mapping" text="destatis:2680" />
+				</category>
+				<category ID="01.22">
+					<label xml:lang="de" text="Sozialrecht und Bürgerliches Recht " />
+					<label xml:lang="x-mapping" text="destatis:2680" />
 				</category>
 				<category ID="01.13">
-					<label xml:lang="de" text="Methoden der quantitativen Sozialforschung" />
+					<label xml:lang="de" text="Quantitative Methoden der empirischen Sozialforschung" />
+					<label xml:lang="x-mapping" text="destatis:2355" />
+				</category>
+				<category ID="01.20">
+					<label xml:lang="de" text="Sozialpädagogik" />
+					<label xml:lang="x-mapping" text="destatis:2420" />
 				</category>
 				<category ID="01.08">
 					<label xml:lang="de" text="Sozialmedizin" />
+					<label xml:lang="x-mapping" text="destatis:4776" />
 				</category>
 				<category ID="01.12">
 					<label xml:lang="de" text="Theorie und Methoden Sozialer Arbeit" />
+					<label xml:lang="x-mapping" text="destatis:2410" />
 				</category>
 				<category ID="01.14">
 					<label xml:lang="de" text="Wohlfahrtstaatliche Transformationsforschung/Soziale Arbeit" />
+					<label xml:lang="x-mapping" text="destatis:2410" />
 				</category>
 				<category ID="01.03">
 					<label xml:lang="de" text="Sozialpolitik" />
+					<label xml:lang="x-mapping" text="destatis:2230" />
 				</category>
 				<category ID="01.04">
 					<label xml:lang="de" text="Soziologie" />
+					<label xml:lang="x-mapping" text="destatis:2320" />
 				</category>
 				<category ID="01.01.17">
 					<label xml:lang="de" text="Sozialplanung" />
+					<label xml:lang="x-mapping" text="destatis:2320" />
 				</category>
 				<category ID="01.07">
 					<label xml:lang="de" text="Empirische Sozialforschung" />
+					<label xml:lang="x-mapping" text="destatis:2355" />
 				</category>
 				<category ID="01.01.18">
 					<label xml:lang="de" text=" Bürgerliches Recht" />
+					<label xml:lang="x-mapping" text="destatis:2670" />
 				</category>
 				<category ID="01.01.15">
 					<label xml:lang="de" text=" Öffentliches Recht" />
+					<label xml:lang="x-mapping" text="destatis:2560" />
 				</category>
 				<category ID="01.01.19">
 					<label xml:lang="de" text="Soziologie und Qualitative Forschungsmethoden" />
+					<label xml:lang="x-mapping" text="destatis:2320" />
 				</category>
 			</category>
 			<category ID="02.03">
 				<label xml:lang="de" text="Institut für Sport- und Bewegungswissenschaften" />
+				<label xml:lang="x-mapping" text="destatis:2000" />
 			</category>
 		</category>
 		<category ID="05">
 			<label xml:lang="de" text="Fakultät für Wirtschaftswissenschaften" />
 			<label xml:lang="en" text="Faculty of Business Administration and Economics" />
+			<label xml:lang="x-mapping" text="destatis:2900" />
 			<category ID="05.01">
 				<label xml:lang="de" text="Fachgebiet Betriebswirtschaftslehre" />
 				<label xml:lang="en" text="Business Administration" />
+				<label xml:lang="x-mapping" text="destatis:2960" />
 				<category ID="05.01.08">
 					<label xml:lang="de" text="Arbeit, Personal und Organisation" />
 					<label xml:lang="en" text="Work, personnel and organization" />
+					<label xml:lang="x-mapping" text="destatis:3010" />
 				</category>
 				<category ID="05.01.14">
 					<label xml:lang="de" text="Didaktik der Wirtschaftslehre" />
 					<label xml:lang="en" text="Economic Education" />
+					<label xml:lang="x-mapping" text="destatis:2910" />
 				</category>
 				<category ID="05.01.20">
 					<label xml:lang="de" text="Energiehandel und Finanzdienstleistungen" />
 					<label xml:lang="en" text="Energy trading and Finance" />
+					<label xml:lang="x-mapping" text="destatis:2960" />
 				</category>
 				<category ID="05.01.04">
 					<label xml:lang="de" text="Energiewirtschaft" />
 					<label xml:lang="en" text="Energy Economics" />
+					<label xml:lang="x-mapping" text="destatis:2960" />
 				</category>
 				<category ID="05.01.05">
 					<label xml:lang="de" text="Finanzierung" />
 					<label xml:lang="en" text="Financing" />
+					<label xml:lang="x-mapping" text="destatis:2960" />
 				</category>
 				<category ID="05.01.21">
 					<label xml:lang="de" text="Internationale Rechnungslegung" />
 					<label xml:lang="en" text="International Accounting" />
+					<label xml:lang="x-mapping" text="destatis:2966" />
 				</category>
 				<category ID="05.01.06">
 					<label xml:lang="de" text="Marketing und Handel" />
 					<label xml:lang="en" text="Marketing and Trade" />
+					<label xml:lang="x-mapping" text="destatis:2960" />
 				</category>
 				<category ID="05.03.03">
 					<label xml:lang="de" text="Medizinmanagement" />
 					<label xml:lang="en" text="Health Care Management" />
+					<label xml:lang="x-mapping" text="destatis:4453" />
 				</category>
 				<category ID="05.01.09">
 					<label xml:lang="de" text="Produktion und Industrielles Informationsmanagement" />
 					<label xml:lang="en" text="Production and Industrial Information Management" />
+					<label xml:lang="x-mapping" text="destatis:2960" />
 				</category>
 				<category ID="05.01.10">
 					<label xml:lang="de" text="Betriebswirtschaftslehre, insb. Umweltwirtschaft und Controlling" />
+					<label xml:lang="x-mapping" text="destatis:2905" />
 				</category>
 				<category ID="05.01.22">
 					<label xml:lang="de" text="Unternehmensbesteuerung" />
 					<label xml:lang="en" text="Corporate taxation" />
+					<label xml:lang="x-mapping" text="destatis:2960" />
 				</category>
 				<category ID="05.01.01">
 					<label xml:lang="de" text="Wirtschaftsprüfung, Unternehmensrechnung und Controlling" />
 					<label xml:lang="en" text="Auditing, Corporate Accounting and Controlling" />
+					<label xml:lang="x-mapping" text="destatis:2960" />
+				</category>
+				<category ID="05.01.23">
+				    <label xml:lang="de" text="Umweltökonomik, insbes. Ökonomik erneuerbarer Energien" />   
+					<label xml:lang="en" text="Environmental Economics, esp. Economics of Renewable Energy" />
+					<label xml:lang="x-mapping" text="destatis:2905" />
 				</category>
 			</category>
 			<category ID="05.05">
 				<label xml:lang="de" text="Fachgebiet Informatik" />
 				<label xml:lang="en" text="Computer Science" />
+				<label xml:lang="x-mapping" text="destatis:3500" />
 				<category ID="05.05.04">
 					<label xml:lang="de" text="Modellierung adaptiver Systeme" />
 					<label xml:lang="en" text="Modelling of adaptive systems" />
+					<label xml:lang="x-mapping" text="destatis:3520" />
 				</category>
 				<category ID="05.04.13">
 					<label xml:lang="de" text="Datenverwaltungssysteme und Wissensrepräsentation" />
 					<label xml:lang="en" text="Data Management Systems and Knowledge Representation" />
+					<label xml:lang="x-mapping" text="destatis:3520" />
 				</category>
 				<category ID="05.05.01">
 					<label xml:lang="de" text="Pervasive Computing" />
+					<label xml:lang="x-mapping" text="destatis:3500" />
 				</category>
 				<category ID="05.05.03">
 					<label xml:lang="de" text="Software Engineering" />
+					<label xml:lang="x-mapping" text="destatis:3570" />
 				</category>
 				<category ID="05.04.10">
-					<label xml:lang="de" text="Software Engineering Systems" />
+					<label xml:lang="de" text="Software Systems Engineering" />
+					<label xml:lang="x-mapping" text="destatis:3570" />
 				</category>
 				<category ID="05.04.11">
-					<label xml:lang="de" text="Specification of Software Systems" />
+                    <label xml:lang="de" text="Spezifikation von Softwaresystemen" />
+					<label xml:lang="en" text="Specification of Software Systems" />
+					<label xml:lang="x-mapping" text="destatis:3570" />
 				</category>
 				<category ID="05.04.12">
 					<label xml:lang="de" text="Systemmodellierung" />
+					<label xml:lang="x-mapping" text="destatis:3520" />
 				</category>
 				<category ID="05.04.08">
 					<label xml:lang="de" text="Technik der Rechnernetze" />
 					<label xml:lang="en" text="Computer Networking Technology" />
+					<label xml:lang="x-mapping" text="destatis:3550" />
 				</category>
 				<category ID="05.04.09">
 					<label xml:lang="de" text="Verlässlichkeit von Rechensystemen" />
 					<label xml:lang="en" text="Reliability of Computer Systems" />
+					<label xml:lang="x-mapping" text="destatis:3550" />
 				</category>
 				<category ID="05.05.02">
 					<label xml:lang="de" text="Didaktik der Informatik" />
 					<label xml:lang="en" text="Didactics of Informatics" />
+					<label xml:lang="x-mapping" text="destatis:3500" />
 				</category>
+				<category ID="05.05.06">
+					<label xml:lang="de" text="Fachgebiet Kommunikationsnetze und -systeme" /> 
+					<label xml:lang="en" text="Networks and Communication Systems Group" />
+					<label xml:lang="x-mapping" text="destatis:3550" />
+				</category>
+				<category ID="18.01.16">
+						<label xml:lang="de" text="Networked Embedded Systems" />
+						<label xml:lang="x-mapping" text="destatis:3550" />
+					</category>
+				<category ID="05.05.07">
+					<label xml:lang="de" text="Sichere Software Systeme" /> 
+					<label xml:lang="en" text="Secure Software Systems" />
+					<label xml:lang="x-mapping" text="destatis:3570" />
+				</category>
+                <category ID="05.05.08">
+                    <label xml:lang="de" text="Mensch-Computer Interaktion" />
+                    <label xml:lang="en" text="Human-Computer Interaction" />
+					<label xml:lang="x-mapping" text="destatis:3520" />
+                 </category>
 			</category>
 			<category ID="05.03">
 				<label xml:lang="de" text="Fachgebiet Rechtswissenschaft" />
 				<label xml:lang="en" text="Law" />
+				<label xml:lang="x-mapping" text="destatis:2500" />
 				<category ID="05.03.02">
 					<label xml:lang="de" text="Wirtschaftsprivat- und Arbeitsrecht" />
 					<label xml:lang="en" text="Private Business and employment law" />
+					<label xml:lang="x-mapping" text="destatis:2500" />
 				</category>
 			</category>
 			<category ID="05.02">
 				<label xml:lang="de" text="Fachgebiet Volkswirtschaftslehre" />
 				<label xml:lang="en" text="Economics" />
+				<label xml:lang="x-mapping" text="destatis:2930" />
 				<category ID="05.02.02">
 					<label xml:lang="de" text="Finanzwissenschaften" />
 					<label xml:lang="en" text="Finance" />
+					<label xml:lang="x-mapping" text="destatis:2980" />
 				</category>
 				<category ID="05.02.20">
 					<label xml:lang="de" text="Gesundheitsökonomik" />
 					<label xml:lang="en" text="Health Economics" />
+					<label xml:lang="x-mapping" text="destatis:4459" />
 				</category>
 				<category ID="05.02.03">
 					<label xml:lang="de" text="Internationale Wirtschaftsbeziehungen" />
 					<label xml:lang="en" text="International Economic Relations" />
+					<label xml:lang="x-mapping" text="destatis:2966" />
 				</category>
 				<category ID="05.02.04">
 					<label xml:lang="de" text="Makroökonomik" />
 					<label xml:lang="en" text="Macroeconomics" />
+					<label xml:lang="x-mapping" text="destatis:2940" />
 				</category>
 				<category ID="05.02.06">
 					<label xml:lang="de" text="Mikroökonomik" />
 					<label xml:lang="en" text="Microeconomics" />
+					<label xml:lang="x-mapping" text="destatis:2940" />
 				</category>
 				<category ID="05.02.09">
 					<label xml:lang="de" text="Ökonometrie" />
 					<label xml:lang="en" text="Econometrics" />
+					<label xml:lang="x-mapping" text="destatis:2940" />
 				</category>
 				<category ID="05.02.11">
 					<label xml:lang="de" text="Quantitative Wirtschaftspolitik" />
 					<label xml:lang="en" text="Quantitative economic policy" />
+					<label xml:lang="x-mapping" text="destatis:2230" />
 				</category>
 				<category ID="05.02.08">
 					<label xml:lang="de" text="Statistik" />
 					<label xml:lang="en" text="Statistics" />
+					<label xml:lang="x-mapping" text="destatis:2915" />
 				</category>
 			</category>
 			<category ID="05.04">
 				<label xml:lang="de" text="Fachgebiet Wirtschaftsinformatik" />
 				<label xml:lang="en" text="Business Information Systems" />
+				<label xml:lang="x-mapping" text="destatis:2990" />
 				<category ID="05.04.01">
 					<label xml:lang="de" text="Beschaffung, Logistik und Informationsmanagement" />
+					<label xml:lang="x-mapping" text="destatis:2920" />
 				</category>
 				<category ID="05.04.21">
-					<label xml:lang="de" text="E-Business und E-Entrepreneurship" />
+					<label xml:lang="de" text="Digital Business und Digital Entrepreneurship" />
+					<label xml:lang="x-mapping" text="destatis:2990" />
 				</category>
 				<category ID="05.04.06">
 					<label xml:lang="de" text="Wirtschaftsinformatik und integrierte Informationssysteme" />
 					<label xml:lang="en" text="Business Informatics and Integrated Information Systems" />
+					<label xml:lang="x-mapping" text="destatis:2990" />
 				</category>
 				<category ID="05.04.30">
 					<label xml:lang="de" text="Wirtschaftsinformatik und Strategisches IT-Management" />
 					<label xml:lang="en" text="Information Systems and Strategic IT Management" />
+					<label xml:lang="x-mapping" text="destatis:2990" />
 				</category>
 				<category ID="05.04.05">
 					<label xml:lang="de" text="Wirtschaftsinformatik und Softwaretechnik" />
 					<label xml:lang="en" text="Business Informatics and Software Engineering" />
+					<label xml:lang="x-mapping" text="destatis:2990" />
 				</category>
 				<category ID="05.04.20">
 					<label xml:lang="de" text="Wirtschaftsinformatik und Unternehmensmodellierung" />
 					<label xml:lang="en" text="Information Systems and Enterprise Modelling" />
+					<label xml:lang="x-mapping" text="destatis:2990" />
 				</category>
 			</category>
 		</category>
 		<category ID="15">
 			<label xml:lang="de" text="Mercator School of Management - Fakultät für Betriebswirtschaftslehre" />
-			<label xml:lang="en" text="Mercator School of Management - Faculty of Business Administration"/>		
+			<label xml:lang="en" text="Mercator School of Management - Faculty of Business Administration"/>
+			<label xml:lang="x-mapping" text="destatis:2960" />
 				<category ID="15.01.01">
 					<label xml:lang="de" text="Rechnungswesen, Wirtschaftsprüfung und Controlling" />
 					<label xml:lang="en" text="Accounting and Auditing"/>
+					<label xml:lang="x-mapping" text="destatis:2960" />
 				</category>
 				<category ID="15.01.02">
 					<label xml:lang="de" text="Betriebswirtschaftliche Steuerlehre" />
 					<label xml:lang="en" text="Taxation"/>
+					<label xml:lang="x-mapping" text="destatis:2960" />
 				</category>
 				<category ID="15.01.03">
 					<label xml:lang="de" text="Banken und Betriebliche Finanzwirtschaft" />
 					<label xml:lang="en" text="Banking and Finance"/>
+					<label xml:lang="x-mapping" text="destatis:2960" />
 				</category>
 				<category ID="15.01.04">
 					<label xml:lang="de" text="Versicherungsbetriebslehre und Risikomanagement" />
 					<label xml:lang="en" text="Insurance and Risk Management"/> 
+					<label xml:lang="x-mapping" text="destatis:2835" />
 				</category>
 				<category ID="15.01.05">
 					<label xml:lang="de" text="Interne Revision und Corporate Governance" />
 					<label xml:lang="en" text="Internal Auditing and Corporate Governance"/>
+					<label xml:lang="x-mapping" text="destatis:2960" />
 				</category>			
 				<category ID="15.02.03">
 					<label xml:lang="de" text="Produktionswirtschaft und Supply Chain Management" />
 					<label xml:lang="en" text="Production and Supply Chain Management"/>
+					<label xml:lang="x-mapping" text="destatis:2960" />
+				</category>
+				<category ID="15.02.06">
+					<label xml:lang="de" text="Produktions- und Logistikplanung" />  
+					<label xml:lang="en" text="Production and Logistics Planning"/>
+					<label xml:lang="x-mapping" text="destatis:2960" />
 				</category>
 				<category ID="15.02.04">
 					<label xml:lang="de" text="Logistik und Operations Research" />
 					<label xml:lang="en" text="Logistics and Operations Research"/>
+					<label xml:lang="x-mapping" text="destatis:2960" />
+				</category>
+				<category ID="15.02.05">
+					<label xml:lang="de" text="Betriebswirtschaftslehre - Service Operations" />  
+					<label xml:lang="en" text="Business Administration - Service Operations"/>
+					<label xml:lang="x-mapping" text="destatis:2960" />
 				</category>
 				<category ID="15.02.01">
 					<label xml:lang="de" text="Unternehmens- und Technologieplanung / Telekommunikationswirtschaft" />
 					<label xml:lang="en" text="Strategic and Telecommunications Management"/>
+					<label xml:lang="x-mapping" text="destatis:2960" />
 				</category>
 				<category ID="15.02.02">
 					<label xml:lang="de" text="Wirtschaftsinformatik insbes. Business Intelligence" />
 					<label xml:lang="en" text="Information Systems and Business Intelligence"/>
+					<label xml:lang="x-mapping" text="destatis:2935" />
 				</category>			
 				<category ID="15.03.02">
 					<label xml:lang="de" text="Marketing" />
+					<label xml:lang="x-mapping" text="destatis:2960" />
 				</category>
 				<category ID="15.03.03">
 					<label xml:lang="de" text="Dienstleistungsmanagement und Handel" />
 					<label xml:lang="en" text="Service Management and Retailing"/>
+					<label xml:lang="x-mapping" text="destatis:2960" />
 				</category>
 				<category ID="15.03.01">
 					<label xml:lang="de" text="Personal und Unternehmensführung" />
 					<label xml:lang="en" text="Human Resource Management"/>
+					<label xml:lang="x-mapping" text="destatis:2960" />
 				</category>
 				<category ID="15.03.04">
 					<label xml:lang="de" text="Organisations- und Personalökonomie" />
+					<label xml:lang="x-mapping" text="destatis:2960" />
 				</category>						
 				<category ID="15.04.07">
 					<label xml:lang="de" text="Mikroökonomik und Außenwirtschaft" />
 					<label xml:lang="en" text="Microeconomics an International Economics"/>
+					<label xml:lang="x-mapping" text="destatis:2960" />
 				</category>
 				<category ID="15.04.01">
 					<label xml:lang="de" text="Monetäre Ökonomik und Internationale Kapitalmärkte" />
 					<label xml:lang="en" text="Monetary Economics and International Capital"/>
+					<label xml:lang="x-mapping" text="destatis:2960" />
 				</category>
 				<category ID="15.04.03">
 					<label xml:lang="de" text="Methodenlehre und Finanzwissenschaft" />
+					<label xml:lang="x-mapping" text="destatis:2980" />
 				</category>
 				<category ID="15.04.05">
 					<label xml:lang="de" text="East Asian Economic Studies China" />
+					<label xml:lang="x-mapping" text="destatis:2966" />
 				</category>
 				<category ID="15.04.04">
 					<label xml:lang="de" text="East Asian Economic Studies Japan/Korea" />
+					<label xml:lang="x-mapping" text="destatis:2966" />
 				</category>
 				<category ID="15.04.09">
-					<label xml:lang="de" text=" Wirtschaftspädagokik und Wirtschaftsdidaktik" />
+					<label xml:lang="de" text=" Wirtschaftspädagogik und Wirtschaftsdidaktik" />
+					<label xml:lang="x-mapping" text="destatis:2910" />
 				</category>
 				<category ID="15.04.08">
 					<label xml:lang="de" text="Quantitative Methoden in den Wirtschaftswissenschaften" />
 					<label xml:lang="en" text="Applied Econometrics"/>
+					<label xml:lang="x-mapping" text="destatis:2900" />
 				</category>
 				<category ID="15.04.06">
 					<label xml:lang="de" text="Allgemeine Betriebswirtschaftslehre" />
 					<label xml:lang="en" text="General Business Administration"/>
+					<label xml:lang="x-mapping" text="destatis:2960" />
 				</category>
 				<category ID="15.04.11">
 					<label xml:lang="de" text="Volkswirtschaftslehre" />
 					<label xml:lang="en" text="Economics"/>
+					<label xml:lang="x-mapping" text="destatis:2930" />
 				</category>			
 		</category>
 		<category ID="06">
 			<label xml:lang="de" text="Fakultät für Mathematik" />
 			<label xml:lang="en" text="Faculty of Mathematics" />
+			<label xml:lang="x-mapping" text="destatis:3400" />
 			<category ID="06.08">
 				<label xml:lang="de" text="Algebra" />
+				<label xml:lang="x-mapping" text="destatis:3440" />
 			</category>
 			<category ID="06.13">
 				<label xml:lang="de" text="Analysis" />
+				<label xml:lang="x-mapping" text="destatis:3445" />
 			</category>
 			<category ID="06.09">
 				<label xml:lang="de" text="Algebraische Geometrie und Zahlentheorie" />
 				<label xml:lang="en" text="Algebraic Geometry and Number Theory" />
+				<label xml:lang="x-mapping" text="destatis:3460" />
 			</category>
 			<category ID="06.03">
 				<label xml:lang="de" text="Didaktik der Mathematik" />
 				<label xml:lang="en" text="Didactics of Mathematics" />
+				<label xml:lang="x-mapping" text="destatis:3450" />
 			</category>
 			<category ID="06.01">
 				<label xml:lang="de" text="Ingenieurmathematik" />
 				<label xml:lang="en" text="Engineering Mathematics" />
+				<label xml:lang="x-mapping" text="destatis:3470" />
 			</category>
 			<category ID="06.18">
 				<label xml:lang="de" text="Mathematische Informatik" />
 				<label xml:lang="en" text="Mathematical Informatics" />
+				<label xml:lang="x-mapping" text="destatis:3400" />
 			</category>
 			<category ID="06.06">
 				<label xml:lang="de" text="Numerische Mathematik" />
 				<label xml:lang="en" text="Numerical Mathematics" />
+				<label xml:lang="x-mapping" text="destatis:3490" />
 			</category>
 			<category ID="06.16">
 				<label xml:lang="de" text="Optimierung" />
 				<label xml:lang="en" text="Optimization" />
+				<label xml:lang="x-mapping" text="destatis:3490" />
 			</category>
 			<category ID="06.04">
 				<label xml:lang="de" text="Stochastik" />
 				<label xml:lang="en" text="Stochastics" />
+				<label xml:lang="x-mapping" text="destatis:3480" />
 			</category>
 			<category ID="06.07">
 				<label xml:lang="de" text="International Graduate School of Mathematics" />
+				<label xml:lang="x-mapping" text="destatis:3400" />
 			</category>
 		</category>
 		<category ID="07">
 			<label xml:lang="de" text="Fakultät für Physik" />
 			<label xml:lang="en" text="Faculty of Physics"/>
+			<label xml:lang="x-mapping" text="destatis:3600" />
 			<category ID="07.01">
 				<label xml:lang="de" text="Experimentalphysik" />
 				<label xml:lang="en" text="Experimental Physics"/>
+				<label xml:lang="x-mapping" text="destatis:3600" />
 			</category>
 			<category ID="07.03">
 				<label xml:lang="de" text="Theoretische Physik" />
 				<label xml:lang="en" text="Theoretical Physics"/>
+				<label xml:lang="x-mapping" text="destatis:3600" />
 			</category>
 			<category ID="07.02">
 				<label xml:lang="de" text="Technische Physik" />
 				<label xml:lang="en" text="Technical Physics"/>
+				<label xml:lang="x-mapping" text="destatis:3600" />
 			</category>
 			<category ID="07.04">
 				<label xml:lang="de" text="Didaktik der Physik" />
 				<label xml:lang="en" text="Didactic of Physics"/>
+				<label xml:lang="x-mapping" text="destatis:3650" />
 			</category>
 		</category>
 		<category ID="08">
 			<label xml:lang="de" text="Fakultät für Chemie" />
 			<label xml:lang="en" text="Faculty of Chemistry"/>
+			<label xml:lang="x-mapping" text="destatis:3700" />
 			<category ID="08.06">
 				<label xml:lang="de" text="Analytische Chemie" />
+				<label xml:lang="x-mapping" text="destatis:3750" />
 			</category>
 			<category ID="08.01">
 				<label xml:lang="de" text="Anorganische Chemie" />
+				<label xml:lang="x-mapping" text="destatis:3710" />
 			</category>
 			<category ID="08.07">
 				<label xml:lang="de" text="Biofilm Center" />
+				<label xml:lang="x-mapping" text="destatis:3850" />
 			</category>
 			<category ID="08.02">
 				<label xml:lang="de" text="Didaktik der Chemie" />
+				<label xml:lang="x-mapping" text="destatis:3800" />
 			</category>
 			<category ID="08.03">
 				<label xml:lang="de" text="Organische Chemie" />
+				<label xml:lang="x-mapping" text="destatis:3720" />
 			</category>
 			<category ID="08.04">
 				<label xml:lang="de" text="Physikalische Chemie" />
+				<label xml:lang="x-mapping" text="destatis:3730" />
 			</category>
+			<category ID="08.09">
+                <label xml:lang="de" text="Umweltmikrobiologie und Biotechnologie (UMB)"/> 
+                <label xml:lang="en" text="Environmental Microbiology and Biotechnology" /> 
+				<label xml:lang="x-mapping" text="destatis:3850" />
+            </category>
 			<category ID="08.05">
 				<label xml:lang="de" text="Technische Chemie" />
+				<label xml:lang="x-mapping" text="destatis:3740" />
 			</category>
 			<category ID="08.08">
 				<label xml:lang="de" text="Theoretische Chemie" />
+				<label xml:lang="x-mapping" text="destatis:3790" />
+			</category>
+			<category ID="08.10">
+				<label xml:lang="de" text="Environmental Metagenomics" />
+				<label xml:lang="x-mapping" text="destatis:3850" />
 			</category>
 		</category>
 		<category ID="09.01">
 			<label xml:lang="de" text="Fakultät für Biologie" />
 			<label xml:lang="en" text="Faculty of Biology" />
+			<label xml:lang="x-mapping" text="destatis:4000" />
 			<category ID="09.01.13">
 				<label xml:lang="de" text="Biodiversität" />
+				<label xml:lang="x-mapping" text="destatis:4000" />
 			</category>
 			<category ID="09.01.10">
 				<label xml:lang="de" text="Allgemeine Zoologie" />
 				<label xml:lang="en" text="General Zoology" />
+				<label xml:lang="x-mapping" text="destatis:4050" />
 			</category>
 			<category ID="09.01.01">
 				<label xml:lang="de" text="Angewandte Botanik und Vulkanbiologie" />
+				<label xml:lang="x-mapping" text="destatis:4040" />
 			</category>
 			<category ID="09.02.06">
 				<label xml:lang="de" text="Angewandte Klimatologie und Landschaftsökologie" />
 				<label xml:lang="en" text="Applied Climatology and Landscape Ecology" />
+				<label xml:lang="x-mapping" text="destatis:4000" />
 			</category>
 			<category ID="09.01.08">
 				<label xml:lang="de" text="Aquatische Ökologie" />
-				<label xml:lang="en" text="Aquatic Ecology" />				
+				<label xml:lang="en" text="Aquatic Ecology" />	
+				<label xml:lang="x-mapping" text="destatis:4090" />
 			</category>	
 			<category ID="09.01.17">
 				<label xml:lang="de" text="Aquatische Ökosystemforschung"/>
 				<label xml:lang="en" text="Aquatic Ecosystem Research"/> 
+				<label xml:lang="x-mapping" text="destatis:4000" />
 			  </category>		
 			<category ID="09.01.21">
 				<label xml:lang="de" text="Bioinformatics and Computational Biophysics" />
+				<label xml:lang="x-mapping" text="destatis:3540" />
 			</category>
 			<category ID="09.01.22">
 				<label xml:lang="de" text="Bionanotechnologie"/>
 				<label xml:lang="en" text="Bionanotechnology"/>
+				<label xml:lang="x-mapping" text="destatis:4035" />
 			</category>
 			<category ID="09.01.05">
 				<label xml:lang="de" text="Chemische Biologie" />
+				<label xml:lang="x-mapping" text="destatis:4065" />
 			</category>
 			<category ID="09.01.23">
 				<label xml:lang="en" text="Computational Biochemistry"/>
+				<label xml:lang="x-mapping" text="destatis:4065" />
 			</category>
 			<category ID="09.01.04">
 				<label xml:lang="de" text="Didaktik der Biologie" />
+				<label xml:lang="x-mapping" text="destatis:4070" />
 			</category>
 			<category ID="09.01.14">
 				<label xml:lang="de" text="Entwicklungsbiologie" />
+				<label xml:lang="x-mapping" text="destatis:4000" />
 			</category>
 			<category ID="09.01.24">
 				<label xml:lang="de" text="Eukaryotische Mikrobiologie"/>
 				<label xml:lang="en" text="Eukaryotic Microbiology"/>
+				<label xml:lang="x-mapping" text="destatis:4020" />
 			</category>
 			<category ID="09.01.25">
 				<label xml:lang="de" text="Fluss- und Auenökologie"/>
+				<label xml:lang="x-mapping" text="destatis:4090" />
 			</category>
 			<category ID="09.01.06">
 				<label xml:lang="de" text="Genetik" />
+				<label xml:lang="x-mapping" text="destatis:4010" />
 			</category>
 			<category ID="09.02.03">
 				<label xml:lang="de" text="Geologie" />
 				<label xml:lang="en" text="Geology" />
+				<label xml:lang="x-mapping" text="destatis:4110" />
 			</category>
 			<category ID="09.02.26">
 				<label xml:lang="de" text="Interdisziplinärer Umweltschutz"/>
+				<label xml:lang="x-mapping" text="destatis:4090" />
 			</category>
 			<category ID="09.02.27">
 				<label xml:lang="de" text="Mechanistische Zellbiologie"/>
 				<label xml:lang="en" text="Mechanistic Cell Biology"/>
+				<label xml:lang="x-mapping" text="destatis:4000" />
 			</category>
 			<category ID="09.01.09">
 				<label xml:lang="de" text="Mikrobiologie" />
+				<label xml:lang="x-mapping" text="destatis:4020" />
 			</category>
 			<category ID="09.01.12">
 				<label xml:lang="de" text="Molekularbiologie" />
+				<label xml:lang="x-mapping" text="destatis:4000" />
 			</category>
 			<category ID="09.01.16">
 				<label xml:lang="de" text="Molekulare Genetik" />
+				<label xml:lang="x-mapping" text="destatis:4010" />
 			</category>
 			<category ID="09.01.15">
 				<label xml:lang="de" text="Molekulare Zellbiologie" />
+				<label xml:lang="x-mapping" text="destatis:4000" />
 			</category>
 			<category ID="09.02.28">
 				<label xml:lang="de" text="Phykologie"/>
+				<label xml:lang="x-mapping" text="destatis:4040" />
+			</category>
+			<category ID="09.02.29">
+				<label xml:lang="de" text="Ökologische Modellierung"/>
+				<label xml:lang="en" text="Ecological Modelling"/>
+				<label xml:lang="x-mapping" text="destatis:4090" />
 			</category>
 			<category ID="09.01.11">
 				<label xml:lang="de" text="Strukturelle und Medizinische Biochemie" />
+				<label xml:lang="x-mapping" text="destatis:4065" />
 			</category>
 		</category>
 		<category ID="12">
 			<label xml:lang="de" text="Fakultät für Ingenieurwissenschaften" />
 			<label xml:lang="en" text="Faculty of Engineering"/>
+			<label xml:lang="x-mapping" text="destatis6700:" />
 			<category ID="10">
 				<label xml:lang="de" text="Bauwissenschaften" />
+				<label xml:lang="x-mapping" text="destatis:7500" />
 				<category ID="10.00">
 					<label xml:lang="de" text="Bauingenieurwesen" />
+					<label xml:lang="x-mapping" text="destatis:7500" />
 					<category ID="10.12">
 						<label xml:lang="de" text="Baubetrieb und Baumanagement" />
+						<label xml:lang="x-mapping" text="destatis:7540" />
 					</category>
 					<category ID="10.33">
 						<label xml:lang="de" text="Fachdidaktik Bautechnik"/> 
+						<label xml:lang="x-mapping" text="destatis:7550" />
 					</category>
 					<category ID="10.03">
 						<label xml:lang="de" text="Baustatik und Baukonstruktion" />
+						<label xml:lang="x-mapping" text="destatis:7550" />
+					</category>
+					<category ID="10.21">
+						<label xml:lang="de" text="Digitalisierung im Bauwesen" /> 
+						<label xml:lang="x-mapping" text="destatis:7500" />
 					</category>
 					<category ID="10.20">
 						<label xml:lang="de" text="Computational Mechanics" />
+						<label xml:lang="x-mapping" text="destatis:7550" />
 					</category>
 					<category ID="10.11">
 						<label xml:lang="de" text="Geotechnik" />
 						<label xml:lang="en" text="Geotechnical Engineering"/>
+						<label xml:lang="x-mapping" text="destatis:7550" />
 					</category>
 					<category ID="10.06">
 						<label xml:lang="de" text="Ingenieurmathematik" />
+						<label xml:lang="x-mapping" text="destatis:6700" />
 					</category>
 					<category ID="10.08">
 						<label xml:lang="de" text="Massivbau" />
+						<label xml:lang="x-mapping" text="destatis:7550" />
 					</category>
 					<category ID="10.02">
 						<label xml:lang="de" text="Materialwissenschaft" />
+						<label xml:lang="x-mapping" text="destatis:7700" />
 					</category>
 					<category ID="10.01">
 						<label xml:lang="de" text="Mechanik" />
+						<label xml:lang="x-mapping" text="destatis:7550" />
 					</category>
 					<category ID="10.09">
 						<label xml:lang="de" text="Metall- und Leichtbau" />
+						<label xml:lang="x-mapping" text="destatis:7550" />
 					</category>
 					<category ID="10.13">
 						<label xml:lang="de" text="Siedlungswasserwirtschaft und Abfallwirtschaft" />
+						<label xml:lang="x-mapping" text="destatis:7520" />
 					</category>
 					<category ID="10.16">
 						<label xml:lang="de" text="Stadtplanung und Städtebau" />
+						<label xml:lang="x-mapping" text="destatis:7420" />
+					</category>
+					<category ID="10.17">
+						<label xml:lang="de" text="Mobilitäts- und Stadtplanung" /> 
+						<label xml:lang="x-mapping" text="destatis:7420" />
 					</category>
 					<category ID="10.50">
-						<label xml:lang="de" text="Statik und Dynamik der Flächentragwerke" />
+						<label xml:lang="de" text="Statik und Dynamik der Tragwerke" />
 						<label xml:lang="en" text="Structural Analysis of Plates and Shells"/>
+						<label xml:lang="x-mapping" text="destatis:7550" />
 					</category>
 					<category ID="10.15">
 						<label xml:lang="de" text="Straßenbau und Verkehrswesen" />
+						<label xml:lang="x-mapping" text="destatis:7530" />
 					</category>
 					<category ID="10.14">
 						<label xml:lang="de" text="Wasserbau und Wasserwirtschaft" />
 						<label xml:lang="en" text="Hydraulic Engineering and Water Resources Management"/>
+						<label xml:lang="x-mapping" text="destatis:7520" />
 					</category>
 					<category ID="10.34">
 						<label xml:lang="de" text=" Center for Information Technology (CITE)"/>
+						<label xml:lang="x-mapping" text="destatis:3550" />
 					</category>
 				</category>
 				<category ID="10.30">
 					<label xml:lang="de" text="Lehramt Technik" />
+					<label xml:lang="x-mapping" text="destatis:7550" />
 					<category ID="10.31">
 						<label xml:lang="de" text="Technologie und Didaktik der Technik" />
-					</category>
-					<category ID="10.32">
-						<label xml:lang="de" text="Virtuelle Produktentwicklung" />
+						<label xml:lang="x-mapping" text="destatis:7550" />
 					</category>
 				</category>
 				<category ID="LEKIB">
 					<label xml:lang="de" text="Projekt LE-KIB: Lernergänzung konstruktiver Ingenieurbau" />
+					<label xml:lang="x-mapping" text="destatis:7510" />
 				</category>
 			</category>
 			<category ID="18.02">
 				<label xml:lang="de" text="Elektrotechnik und Informationstechnik" />
 				<label xml:lang="en" text="Engineering and Information Technology"/> 
+				<label xml:lang="x-mapping" text="destatis:7100" />
 				<category ID="18.02.08">
 					<label xml:lang="de" text="Allgemeine und Theoretische Elektrotechnik" />
 					<label xml:lang="en" text="General and Theoretical Electrical Engineering"/>
+					<label xml:lang="x-mapping" text="destatis:7110" />
 				</category>
 				<category ID="18.02.03">
 					<label xml:lang="de" text="Automatisierungstechnik und komplexe Systeme" />
 					<label xml:lang="en" text="Automatic Control and Complex Systems"/>
+					<label xml:lang="x-mapping" text="destatis:7100" />
 				</category>
 				<category ID="18.02.14">
 					<label xml:lang="de" text="Bauelemente der Höchstfrequenzelektronik"/>
+					<label xml:lang="x-mapping" text="destatis:7100" />
 				</category>
 				<category ID="18.02.20">
 					<label xml:lang="de" text="Digitale Signalverarbeitung" />
 					<label xml:lang="en" text="Digital Signal Processing"/>
+					<label xml:lang="x-mapping" text="destatis:7100" />
 				</category>
 				<category ID="18.02.04">
 					<label xml:lang="de" text="Elektrische Anlagen und Netze" />
 					<label xml:lang="en" text="Electrical Power Systems"/>
+					<label xml:lang="x-mapping" text="destatis:7120" />
+				</category>
+				<category ID="18.02.15">
+					<label xml:lang="de" text="Elektrische Energiesysteme" /> 	
+					<label xml:lang="en" text="Electrical Energy Systems"/>
+					<label xml:lang="x-mapping" text="destatis:7120" />
 				</category>
 				<category ID="18.02.12">
 					<label xml:lang="de" text="Elektronische Bauelemente und Schaltungen" />
+					<label xml:lang="x-mapping" text="destatis:7100" />
 				</category>
 				<category ID="18.02.11">
 					<label xml:lang="de" text="Energietransport und -speicherung" />
+					<label xml:lang="x-mapping" text="destatis:7100" />
 				</category>
 				<category ID="18.02.05">
 					<label xml:lang="de" text="Halbleitertechnik" />
+					<label xml:lang="x-mapping" text="destatis:7100" />
 				</category>
 				<category ID="18.02.02">
 					<label xml:lang="de" text="Hochfrequenztechnik" />
+					<label xml:lang="x-mapping" text="destatis:7100" />
 				</category>
 				<category ID="18.02.10">
 					<label xml:lang="de" text="Kommunikationstechnik" />
 					<label xml:lang="en" text="Communication Technologies"/>
+					<label xml:lang="x-mapping" text="destatis:7130" />
 				</category>
 				<category ID="18.02.09">
 					<label xml:lang="de" text="Nachrichtentechnische Systeme" />
 					<label xml:lang="en" text="Communication Systems"/>
+					<label xml:lang="x-mapping" text="destatis:7130" />
 				</category>
 				<category ID="18.02.06">
 					<label xml:lang="de" text="Nanostrukturtechnik" />
 					<label xml:lang="en" text="Technology for Nanostructures"/>
+					<label xml:lang="x-mapping" text="destatis:7160" />
 				</category>
 				<category ID="18.02.07">
 					<label xml:lang="de" text="Optoelektronik" />
 					<label xml:lang="en" text="Optoelectronics"/>
+					<label xml:lang="x-mapping" text="destatis:7150" />
+				</category>
+				<category ID="18.02.21">
+					<label xml:lang="de" text="Systeme der Medizintechnik" />
+					<label xml:lang="en" text="Medical Technology Systems"/>
+					<label xml:lang="x-mapping" text="destatis:7010" />
 				</category>
 				<category ID="18.02.13">
 					<label xml:lang="de" text="Technische Informatik" />
 					<label xml:lang="en" text="Computer Engineering"/>
+					<label xml:lang="x-mapping" text="destatis:3530" />
 				</category>
 				<category ID="18.02.01">
 					<label xml:lang="de" text="Werkstoffe der Elektrotechnik" />
 					<label xml:lang="en" text="Electronic Materials and Nanostructures"/>
+					<label xml:lang="x-mapping" text="destatis:7100" />
 				</category>
 			</category>
 			<category ID="18.01">
 				<label xml:lang="de" text="Informatik und Angewandte Kognitionswissenschaft" />
 				<label xml:lang="en" text="Computer Science and Applied Cognitive Science"/>
+				<label xml:lang="x-mapping" text="destatis:3500" />
 				<category ID="18.01.30">
 					<label xml:lang="de" text="Informatik" />
 					<label xml:lang="en" text="Computer Science"/>
+					<label xml:lang="x-mapping" text="destatis:3500" />
 					<category ID="18.01.04">
 						<label xml:lang="de" text="Computergraphik und Wissenschaftliches Rechnen" />
+						<label xml:lang="x-mapping" text="destatis:3520" />
 					</category>
 					<category ID="18.01.17">
 						<label xml:lang="de" text="Eingebettete Systeme der Informatik" />
 						<label xml:lang="en" text="Embedded Systems of Computer Science" />
+						<label xml:lang="x-mapping" text="destatis:3530" />
 					</category>
 					<category ID="18.01.18">
 						<label xml:lang="de" text="Formale Methoden der Informatik" />
 						<label xml:lang="en" text="Formal Methods in Computer Science" />
+						<label xml:lang="x-mapping" text="destatis:3500" />
 					</category>
 					<category ID="18.01.20">
 						<label xml:lang="de" text="Hochleistungsrechnen" />
 						<label xml:lang="en" text="High Performance Computing"/>
+						<label xml:lang="x-mapping" text="destatis:3550" />
 					</category>
 					<category ID="18.01.06">
 						<label xml:lang="de" text="Informationssysteme" />
 						<label xml:lang="en" text="Information Engineering"/>
+						<label xml:lang="x-mapping" text="destatis:2990" />
+					</category>
+					<category ID="18.01.23">
+						<label xml:lang="de" text="Informatische Methoden in der Modellierung und Analyse von Lernprozessen" />     
+						<label xml:lang="en" text="Computational Methods in Modeling and Analysis of Learning Processes (colaps)"/>
+						<label xml:lang="x-mapping" text="destatis:1750" />
 					</category>
 					<category ID="18.01.07">
 						<label xml:lang="de" text="Intelligente Systeme" />
+						<label xml:lang="x-mapping" text="destatis:3530" />
 					</category>
 					<category ID="18.01.01">
 						<label xml:lang="de" text="Interaktive Systeme / Interaktionsdesign" />
 						<label xml:lang="en" text="Interactive Systems"/>
+						<label xml:lang="x-mapping" text="destatis:3530" />
 					</category>
 					<category ID="18.01.03">
 						<label xml:lang="de" text="Kooperative und lernunterstützende Systeme (COLLIDE)" />
 						<label xml:lang="en" text="Colloborative Learning in Intelligent Distributed Environements (COLLIDE)"/>
+						<label xml:lang="x-mapping" text="destatis:3520" />
 					</category>
 					<category ID="18.01.19">
 						<label xml:lang="de" text="Social Computing" />
+						<label xml:lang="x-mapping" text="destatis:3560" />
 					</category>
 					<category ID="18.01.08">
 						<label xml:lang="de" text="Mathematische Methoden der Datenübertragung" />
+						<label xml:lang="x-mapping" text="destatis:3470" />
 					</category>
 					<category ID="18.01.15">
 						<label xml:lang="de" text="Medieninformatik - Entertainment Computing" />
-					</category>
-					<category ID="18.01.16">
-						<label xml:lang="de" text="Networked Embedded Systems" />
+						<label xml:lang="x-mapping" text="destatis:0130" />
 					</category>
 					<category ID="18.01.09">
 						<label xml:lang="de" text="Software Engineering" />
+						<label xml:lang="x-mapping" text="destatis:3570" />
 					</category>
 					<category ID="18.01.11">
 						<label xml:lang="de" text="Theoretische Informatik" />
 						<label xml:lang="en" text="Theoretical Computer Science"/>
+						<label xml:lang="x-mapping" text="destatis:3510" />
 					</category>
 					<category ID="18.01.22">
 						<label xml:lang="de" text="Sprachtechnologie" />
 						<label xml:lang="en" text="Language Technology Lab" />
+						<label xml:lang="x-mapping" text="destatis:0835" />
 					</category>
 					<category ID="18.01.12">
 						<label xml:lang="de" text="Verteilte Systeme" />
+						<label xml:lang="x-mapping" text="destatis:3550" />
 					</category>
 					<category ID="18.01.13">
 						<label xml:lang="de" text="Wissensbasierte und Natürlichsprachliche Systeme" />
+						<label xml:lang="x-mapping" text="destatis:3560" />
 					</category>
 				</category>
 				<category ID="18.01.40">
 					<label xml:lang="de" text="Angewandte Kognitions- und Medienwissenschaft" />
+					<label xml:lang="x-mapping" text="destatis:0130" />
 					<category ID="18.01.02">
 						<label xml:lang="de" text="Allgemeine Psychologie: Kognition" />
 						<label xml:lang="en" text="General Psychology: Cognition"/>
+						<label xml:lang="x-mapping" text="destatis:1750" />
+					</category>
+					<category ID="18.01.05">
+						<label xml:lang="de" text="Digitale Kommunikation und Transformation" />  
+						<label xml:lang="en" text="Digital Communication and Transformation"/>
+						<label xml:lang="x-mapping" text="destatis:0130" />
 					</category>
 					<category ID="18.01.99">
 						<label xml:lang="de" text="Professionelle Kommunikation in elektronischen Medien / Social Media" />
 						<label xml:lang="en" text="Professional Communication in Electronic Media / Social Media"/>
+						<label xml:lang="x-mapping" text="destatis:0130" />
 					</category>
 					<category ID="18.01.21">
 						<label xml:lang="de" text="Psychologische Forschungsmethoden: Medienbasierte Wissenskonstruktion" />
 						<label xml:lang="en" text="Research Methods in Psychology - Media-based Knowledge Construction"/>
+						<label xml:lang="x-mapping" text="destatis:1750" />
+					</category>
+					<category ID="18.01.24">
+						<label xml:lang="de" text="Psychologische Prozesse der Bildung in sozialen Medien" />
+						<label xml:lang="en" text="Psychological Processes of Education in Social Media"/> 
+						<label xml:lang="x-mapping" text="destatis:0130" />
 					</category>
 					<category ID="18.01.10">
 						<label xml:lang="de" text="Sozialpsychologie: Medien und Kommunikation" />
 						<label xml:lang="en" text="Social Psychology - Media and Communication"/>
+						<label xml:lang="x-mapping" text="destatis:1730" />
 					</category>
 					<category ID="18.01.14">
 						<label xml:lang="de" text="Wirtschaftspsychologie" />
+						<label xml:lang="x-mapping" text="destatis:1715" />
 					</category>
 				</category>
 			</category>
 			<category ID="18.03">
 				<label xml:lang="de" text="Maschinenbau und Verfahrenstechnik" />
+				<label xml:lang="x-mapping" text="destatis:6900" />
 				<category ID="18.03.03">
-					<label xml:lang="de" text="Institut für Mechatronik und Systemdynamik" />
+				  <label xml:lang="de" text="Institut für Mechatronik und Systemdynamik" />
+				  <label xml:lang="x-mapping" text="destatis:670" />
+				  <category ID="18.03.26">
+            		<label xml:lang="de" text="Mechanik und Robotik" />
+                    <label xml:lang="en" text="Mechanics and Robotics" />
+					<label xml:lang="x-mapping" text="destatis:6750" />
+                  </category>
+                  <category ID="18.03.27">
+                    <label xml:lang="de" text="Mechatronik" />
+                    <label xml:lang="en" text="Mechatronics" />
+					<label xml:lang="x-mapping" text="destatis:6750" />
+                  </category>
+                  <category ID="18.03.28">
+                    <label xml:lang="de" text="Steuerung, Regelung und Systemdynamik" />
+                    <label xml:lang="en" text="Dynamics and Control" />
+					<label xml:lang="x-mapping" text="destatis:6970" />
+                  </category>
 				</category>
 				<category ID="18.03.01">
-					<label xml:lang="de" text="Institut für Verbrennung und Gasdynamik" />
-					<label xml:lang="en" text="Institute for Combustion and Gas Dynamics"/>
+					<label xml:lang="de" text=" Institut für Energie- und Material-Prozesse (EMPI)" />
+					<label xml:lang="en" text="Institute for Energy and Materials Processes (EMPI)"/>
+					<label xml:lang="x-mapping" text="destatis:6930" />
+					<category ID="18.03.21">
+						<label xml:lang="de" text="Fluiddynamik" />
+						<label xml:lang="en" text="Fluid Dynamics" />
+						<label xml:lang="x-mapping" text="destatis:6930" />
+		  			</category>
+		  			<category ID="18.03.40">
+						<label xml:lang="de" text="Angewandte Quantenmaterialien" />
+						<label xml:lang="en" text="Applied Quantum Materials" />
+						<label xml:lang="x-mapping" text="destatis:6930" />
+		  			</category>
+		  			<category ID="18.03.22">
+		   			 	<label xml:lang="de" text="Nanopartikel Prozesstechnik"/>
+		    			<label xml:lang="en" text="Nanoparticle Process Technology (NPPT)" />
+						<label xml:lang="x-mapping" text="destatis:6930" />
+		  			</category>
+		  			<category ID="18.03.23">
+						<label xml:lang="de" text="Particle Science and Technology"/>
+						<label xml:lang="en" text="Particle Science and Technology"/>
+						<label xml:lang="x-mapping" text="destatis:6930" />
+		  			</category>
+		  			<category ID="18.03.24">
+						<label xml:lang="de" text="Reaktive Fluide"/>
+						<label xml:lang="en" text="Reactive Fluids"/>
+						<label xml:lang="x-mapping" text="destatis:6955" />
+		  			</category>
+		  			<category ID="18.03.25">
+						<label xml:lang="de" text="Thermodynamik"/>
+						<label xml:lang="en" text="Thermodynamics"/>
+						<label xml:lang="x-mapping" text="destatis:6995" />
+		  			</category>
 				</category>
 				<category ID="18.03.04">
 					<label xml:lang="de" text="Institut für Energie- und Umweltverfahrenstechnik" />
+					<label xml:lang="x-mapping" text="destatis:6985" />
+					<category ID="18.03.06">
+					<label xml:lang="de" text="Energietechnik" />
+					<label xml:lang="x-mapping" text="destatis:6930" />
+					</category>
+					<category ID="18.03.07">
+					<label xml:lang="de" text="Mechanische Verfahrenstechnik mit dem Schwerpunkt Wassertechnik" />     
+					<label xml:lang="en" text="Mechanical Process Engineering / Water Technology" />
+					<label xml:lang="x-mapping" text="destatis:6900" />
+					</category>
+					<category ID="18.03.08">
+					<label xml:lang="de" text="Strömungsmaschinen" />												 	
+					<label xml:lang="en" text="Turbomachinery" />	
+					<label xml:lang="x-mapping" text="destatis:6900" />
+					</category>
+					<category ID="18.03.09">
+					<label xml:lang="de" text="Thermische Verfahrenstechnik" />											
+					<label xml:lang="en" text="Thermal Process Engineering" />
+					<label xml:lang="x-mapping" text="destatis:6995" />
+					</category>
+					<category ID="18.03.16">
+					<label xml:lang="de" text="Umweltverfahrenstechnik und Anlagentechnik" />							
+					<label xml:lang="en" text="Environmental Process Engineering and Plant Design" />
+					<label xml:lang="x-mapping" text="destatis:6985" />
+					</category>
 				</category>
 				<category ID="18.03.02">
 					<label xml:lang="de" text="Institut für Produkt Engineering" />
 					<label xml:lang="en" text="Institute of Product Engineering"/>
+					<label xml:lang="x-mapping" text="destatis:6940" />
+					<category ID="18.03.29">
+					<label xml:lang="de" text="Fertigungstechnik" />
+					<label xml:lang="x-mapping" text="destatis:6940" />
+					</category>
+					<category ID="18.03.30">
+					<label xml:lang="de" text="Konstruktion der Kunststoffmaschinen" />					
+					<label xml:lang="en" text="Engineering Design and Plastics Machinery" />
+					<label xml:lang="x-mapping" text="destatis:7030" />
+					</category>
+					<category ID="18.03.31">
+					<label xml:lang="de" text="Produktentstehungsprozesse und Datenmanagement" />	
+					<label xml:lang="x-mapping" text="destatis:6940" />
+					</category>
+					<category ID="18.03.20">
+					<label xml:lang="de" text="Transportsysteme und -logistik" />
+					<label xml:lang="en" text="Transport Systems and Logistics"/>
+					<label xml:lang="x-mapping" text="destatis:6950" />
+					</category>
+					<category ID="10.32">
+					<label xml:lang="de" text="Virtuelle Produktentwicklung" /> 
+					<label xml:lang="x-mapping" text="destatis:6940" />
+					</category>
 				</category>
 				<category ID="18.04">
-					<label xml:lang="de" text="Institut für Metallurgie und Umformtechnik" />
-				</category>
+					<label xml:lang="de" text="Institut für Technologien der Metalle" /> 
+					<label xml:lang="x-mapping" text="destatis:6855" />
+					<category ID="18.04.01">
+					<label xml:lang="de" text="Mathematik für Ingenieure" />			
+					<label xml:lang="en" text="Mathematics for Engineers" />
+					<label xml:lang="x-mapping" text="destatis:3470" />
+					</category>	
+					<category ID="18.04.02">
+					<label xml:lang="de" text="Metallurgie" />	
+					<label xml:lang="x-mapping" text="destatis:6855" />
+					</category>	
+					<category ID="18.04.03">
+					<label xml:lang="de" text="Umformtechnik" />						
+					<label xml:lang="en" text="Metal Forming" />
+					<label xml:lang="x-mapping" text="destatis:6855" />
+					</category>	
+					<category ID="18.04.04">
+					<label xml:lang="de" text="Werkstofftechnik" />						
+					<label xml:lang="en" text="Materials Science and Engineering" />
+					<label xml:lang="x-mapping" text="destatis:6996" />
+					</category>	
+				</category>				
 				<category ID="18.03.11">
 					<label xml:lang="de" text="Gießerei-Institut" />
+					<label xml:lang="x-mapping" text="destatis:6850" />
 				</category>
 				<category ID="18.03.05">
-					<label xml:lang="de" text="Institut für Schiffstechnik" />
-					<label xml:lang="en" text="Institute of Ship Technology"/>
+					<label xml:lang="de" text="Institut für Schiffstechnik, Meerestechnik und Transportsysteme (ISMT)" />   
+					<label xml:lang="en" text="Institute of Ship Technology, Ocean Engineering and Transport Systems "/>
+					<label xml:lang="x-mapping" text="destatis:7220" />
 				</category>
 				<category ID="18.03.10">
-					<label xml:lang="de" text="Institut für Wirtschaftsingenieurswesen" />
+					<label xml:lang="de" text="Institut für Wirtschaftsingenieurwesen" />
+					<label xml:lang="x-mapping" text="destatis:6755" />
+					<category ID="18.03.12">
+					<label xml:lang="de" text="Allgemeine Betriebswirtschaftslehre und Mobilität" /> 
+					<label xml:lang="x-mapping" text="destatis:6755" />
+					</category>
+					<category ID="18.03.13"> 
+					<label xml:lang="de" text="Allgemeine Betriebswirtschaftslehre und Controlling" />
+					<label xml:lang="x-mapping" text="destatis:6755" />
+					</category>
+					<category ID="18.03.14">
+					<label xml:lang="de" text="Allgemeine Betriebswirtschaftslehre und Internationales Automobilmanagement" />
+					<label xml:lang="x-mapping" text="destatis:6755" />
+                    </category>
+					<category ID="18.03.15">
+					<label xml:lang="de" text="Allgemeine Betriebswirtschaftslehre und Produktionsmanagement" />  
+				    <label xml:lang="en" text="Business Administration and Production Management"/>
+					<label xml:lang="x-mapping" text="destatis:6755" />
 				</category>
 			</category>
 		</category>
+    </category>
 		<category ID="14">
 			<label xml:lang="de" text="Medizinische Fakultät" />
 			<label xml:lang="en" text="Faculty of Medicine"/>
+			<label xml:lang="x-mapping" text="destatis:4400" />
 			<category ID="14.01">
 				<label xml:lang="de" text="Universitätsklinikum Essen" />
 				<label xml:lang="en" text="Essen University Hospital"/>
+				<label xml:lang="x-mapping" text="destatis:4400" />
 				<category ID="14.08.01">
 					<label xml:lang="de" text="Klinik für Allgemeinchirurgie, Viszeral- und Transplantationschirurgie" />
 					<label xml:lang="en" text="Surgical Clinic"/>
 					<label xml:lang="x-eva" text="26" />
+					<label xml:lang="x-mapping" text="destatis:4980" />
 				</category>
 				<category ID="14.01.08">
 					<label xml:lang="x-eva" text="28" />
 					<label xml:lang="de" text="Klinik für Anästhesiologie und Intensivmedizin" />
 					<label xml:lang="en" text="Clinic for Anesthesiology and Intensive Care"/>
+					<label xml:lang="x-mapping" text="destatis:5070" />
 				</category>
 				<category ID="14.01.16">
 					<label xml:lang="de" text="Klinik für Angiologie" />
 					<label xml:lang="x-eva" text="24" />
+					<label xml:lang="x-mapping" text="destatis:4940" />
 				</category>
 				<category ID="14.01.15">
 					<label xml:lang="de" text="Klinik für Dermatologie" />
 					<label xml:lang="en" text="Clinic for Dermatology"/>
 					<label xml:lang="x-eva" text="29" />
+					<label xml:lang="x-mapping" text="destatis:4960" />
 				</category>
 				<category ID="14.04.01">
 					<label xml:lang="de" text="Klinik für Endokrinologie, Diabetologie und Stoffwechsel" />
 					<label xml:lang="en" text="Clinic for Endocrinology"/>
 					<label xml:lang="x-eva" text="30" />
+					<label xml:lang="x-mapping" text="destatis:4940" />
 				</category>
 				<category ID="14.10">
 					<label xml:lang="de" text="Klinik für Augenheilkunde"/>
 					<label xml:lang="x-eva" text="69" />
+					<label xml:lang="x-mapping" text="destatis:5020" />
 				</category>
 				<category ID="14.10.02">
 					<label xml:lang="de" text="Klinik für Erkrankungen des hinteren Augenabschnittes" />
 					<label xml:lang="x-eva" text="31" />
+					<label xml:lang="x-mapping" text="destatis:5020" />
 				</category>
 				<category ID="14.10.01">
 					<label xml:lang="de" text="Klinik für Erkrankungen des vorderen Augenabschnittes" />
 					<label xml:lang="x-eva" text="32" />
+					<label xml:lang="x-mapping" text="destatis:5020" />
 				</category>
 				<category ID="14.09">
 					<label xml:lang="de" text="Klinik für Frauenheilkunde und Geburtshilfe" />
 					<label xml:lang="en" text="Clinic for Obstetrics and Gynecology"/>
 					<label xml:lang="x-eva" text="33" />
+					<label xml:lang="x-mapping" text="destatis:4990" />
 				</category>
 				<category ID="14.04.02">
-					<label xml:lang="de" text="Klinik für Gastroenterologie und Hepatologie" />
+					<label xml:lang="de" text="Klinik für Gastroenterologie und Hepatologie und Transplantationsmedizin" />
 					<label xml:lang="en" text="Clinic for Gastroenterology and Hepatology"/>
 					<label xml:lang="x-eva" text="34" />
+					<label xml:lang="x-mapping" text="destatis:4940" />
 				</category>
 				<category ID="14.01.17">
 					<label xml:lang="x-eva" text="35" />
 					<label xml:lang="de" text="Klinik für Hals-Nasen-Ohrenheilkunde" />
 					<label xml:lang="en" text="Ear, Nose, and Throat Clinic"/>
+					<label xml:lang="x-mapping" text="destatis:5030" />
 				</category>
 				<category ID="14.04.03">
 					<label xml:lang="x-eva" text="36" />
-					<label xml:lang="de" text="Klinik für Hämatologie" />
+					<label xml:lang="de" text="Klinik für Hämatologie und Stammzelltransplantation" />
 					<label xml:lang="en" text="Clinic for Hematology"/>
+					<label xml:lang="x-mapping" text="destatis:4730" />
 				</category>
 				<category ID="14.05.01">
 					<label xml:lang="x-eva" text="2" />
 					<label xml:lang="de" text="Innere Klinik (Tumorforschung)" />
 					<label xml:lang="en" text="Clinic for Internal Medicine (Tumor Research)"/>
+					<label xml:lang="x-mapping" text="destatis:4936" />
 				</category>
 				<category ID="14.07">
 					<label xml:lang="de" text="Klinik für Infektiologie"/>
 					<label xml:lang="en" text="Clinic for Infectious Diseases"/>
 					<label xml:lang="x-eva" text="68" />
+					<label xml:lang="x-mapping" text="destatis:4940" />
 				</category>
 				<category ID="14.04.04">
 					<label xml:lang="x-eva" text="37" />
-					<label xml:lang="de" text="Klinik für Kardiologie" />
+					<label xml:lang="de" text="Klinik für Kardiologie und Angiologie" />
+					<label xml:lang="x-mapping" text="destatis:4940" />
 				</category>
 				<category ID="14.06">
 					<label xml:lang="de" text="Zentrum für Kinder- und Jugendmedizin" />
+					<label xml:lang="x-mapping" text="destatis:4950" />
 					<category ID="14.06.01">
 						<label xml:lang="x-eva" text="60" />
 						<label xml:lang="de" text="Klinik für Kinderheilkunde I/Perinatalzentrum" />
+						<label xml:lang="x-mapping" text="destatis:4950" />
 					</category>
 					<category ID="14.06.03">
 						<label xml:lang="x-eva" text="61" />
 						<label xml:lang="de" text="Klinik für Kinderheilkunde II" />
+						<label xml:lang="x-mapping" text="destatis:4950" />
 					</category>
 					<category ID="14.06.04">
 						<label xml:lang="de" text="Klinik für Kinderheilkunde III" />
 						<label xml:lang="x-eva" text="62" />
+						<label xml:lang="x-mapping" text="destatis:4950" />
+						<category ID="14.06.07">
+							<label xml:lang="x-eva" text="46" />
+							<label xml:lang="de" text="Klinik für Pädiatrische Kardiologie" /> 
+							<label xml:lang="x-mapping" text="destatis:4950" />
+						</category>
 					</category>
 					<category ID="14.06.05">
 						<label xml:lang="x-eva" text="27" />
 						<label xml:lang="de" text="Klinik für Allgemeine Pädiatrie mit Schwerpunkt Neuropädiatrie" />
+						<label xml:lang="x-mapping" text="destatis:4950" />
 					</category>
 					<category ID="14.06.06">
 						<label xml:lang="x-eva" text="45" />
 						<label xml:lang="de" text="Klinik für Pädiatrische Hämatologie, Onkologie und Endokrinologie" />
-					</category>
-					<category ID="14.06.07">
-						<label xml:lang="x-eva" text="46" />
-						<label xml:lang="de" text="Klinik für Pädiatrische Kardiologie" />
+						<label xml:lang="x-mapping" text="destatis:4950" />
 					</category>
 					<category ID="14.06.08">
 						<label xml:lang="de" text="Klinik für Pädiatrische Nephrologie" />
 						<label xml:lang="x-eva" text="47" />
+						<label xml:lang="x-mapping" text="destatis:4950" />
 					</category>
 				</category>
 				<category ID="14.05.02">
 					<label xml:lang="de" text="Klinik für Knochenmarktransplantation" />
 					<label xml:lang="en" text="Clinic for Bone Marrow Transplants"/>
 					<label xml:lang="x-eva" text="38" />
+					<label xml:lang="x-mapping" text="destatis:4730" />
 				</category>
 				<category ID="14.04.06">
 					<label xml:lang="de" text="Klinik für Nephrologie" />
 					<label xml:lang="en" text="Clinic for Nephrology"/>
 					<label xml:lang="x-eva" text="42" />
+					<label xml:lang="x-mapping" text="destatis:4940" />
 				</category>
 				<category ID="14.01.13">
-					<label xml:lang="de" text="Klinik für Neurochirurgie" />
+					<label xml:lang="de" text="Klinik für Neurochirurgie Wirbelsäulenchirurgie" />
 					<label xml:lang="en" text="Clinic for Neurosurgery"/>
 					<label xml:lang="x-eva" text="40" />
+					<label xml:lang="x-mapping" text="destatis:4980" />
 				</category>
 				<category ID="14.01.14">
 					<label xml:lang="de" text="Klinik für Neurologie" />
 					<label xml:lang="en" text="Clinic for Neurology"/>
 					<label xml:lang="x-eva" text="41" />
+					<label xml:lang="x-mapping" text="destatis:5040" />
 				</category>
 				<category ID="14.01.20">
 					<label xml:lang="de" text="Klinik für Nuklearmedizin" />
 					<label xml:lang="en" text="Clinic for Nuclear Medicine"/>
 					<label xml:lang="x-eva" text="43" />
+					<label xml:lang="x-mapping" text="destatis:5150" />
+				</category>
+				<category ID="14.03">
+				<label xml:lang="de" text="Zentrum für Orthopädie und Unfallchirurgie"/>
+				<label xml:lang="x-mapping" text="destatis:5010" />
+				<category ID="14.03.02">
+				<label xml:lang="de" text="Klinik für Unfall-, Hand- und Wiederherstellungschirurgie"/>
+				<label xml:lang="x-mapping" text="destatis:4980" />
+				</category>
+				<category ID="14.03.04">
+				<label xml:lang="de" text="Klinik für Tumororthopädie und Sarkomchirurgie"/>
+				<label xml:lang="x-mapping" text="destatis:5010" />
+				</category>
+				<category ID="14.03.05">
+				<label xml:lang="de" text="Kinderorthopädie"/>
+				<label xml:lang="x-mapping" text="destatis:4950" />
 				</category>
 				<category ID="14.01.11">
 					<label xml:lang="de" text="Klinik für Orthopädie und Unfallchirurgie" />
 					<label xml:lang="x-eva" text="44" />
+					<label xml:lang="x-mapping" text="destatis:5010" />
 				</category>
+				</category>	
 				<category ID="14.01.19">
 					<label xml:lang="de" text="Klinik für Strahlentherapie" />
 					<label xml:lang="en" text="Radiation and Tumor Clinic "/>
 					<label xml:lang="x-eva" text="51" />
+					<label xml:lang="x-mapping" text="destatis:5150" />
 				</category>
 				<category ID="14.08.02">
 					<label xml:lang="x-eva" text="52" />
 					<label xml:lang="de" text="Klinik für Thorax- und Kardiovaskuläre Chirurgie" />
+					<label xml:lang="x-mapping" text="destatis:4980" />
 				</category>
 				<category ID="14.08.03">
 					<label xml:lang="de" text="Klinik für Unfallchirurgie" />
 					<label xml:lang="x-eva" text="53" />
+					<label xml:lang="x-mapping" text="destatis:4980" />
 				</category>
 				<category ID="14.01.10">
 					<label xml:lang="de" text="Klinik für Urologie" />
 					<label xml:lang="en" text="Clinic for Urology"/>
 					<label xml:lang="x-eva" text="54" />
+					<label xml:lang="x-mapping" text="destatis:4970" />
+				</category>
+				<category ID="14.07.10">
+					<label xml:lang="de" text="Zentrum für Notfallmedizin"/>
+					<label xml:lang="en" text="Center for Emergency Medicine"/>
+					<label xml:lang="x-mapping" text="destatis:4900" />
 				</category>
 				<category ID="14.01.24">
 					<label xml:lang="x-eva" text="55" />
 					<label xml:lang="de" text="Institut für Allgemeinmedizin" />
 					<label xml:lang="en" text="Institute of General Medicine"/>
+					<label xml:lang="x-mapping" text="destatis:4910" />
 				</category>
 				<category ID="14.01.01">
 					<label xml:lang="x-eva" text="59" />
 					<label xml:lang="de" text="Institut für Anatomie" />
 					<label xml:lang="en" text="Institute of Anatomy"/>
+					<label xml:lang="x-mapping" text="destatis:4560" />
 				</category>
 				<category ID="14.01.21">
 					<label xml:lang="de" text="Institut für Diagnostische und Interventionelle Radiologie und Neuroradiologie" />
 					<label xml:lang="en" text="Institute of Diagnostic and Interventional Radiology and Neuroradiology"/>
 					<label xml:lang="x-eva" text="4" />
+					<label xml:lang="x-mapping" text="destatis:4595" />
 				</category>
 				<category ID="14.01.30">
 					<label xml:lang="de" text="Institut für Experimentelle Immunologie und Bildgebung" />
 					<label xml:lang="en" text="Institute of Experimental Immunology and Imaging"/>
 					<label xml:lang="x-eva" text="64" />
+					<label xml:lang="x-mapping" text="destatis:4810" />
 				</category>
 				<category ID="14.05.08">
 					<label xml:lang="x-eva" text="67" />
-					<label xml:lang="de" text="Institut für HIV-Forschung" />
+					<label xml:lang="de" text="Institut für translationale HIV-Forschung" />
 					<label xml:lang="en" text="Institute for HIV Research"/>
+					<label xml:lang="x-mapping" text="destatis:4790" />
 				</category>
 				<category ID="14.01.07">
 					<label xml:lang="x-eva" text="6" />
 					<label xml:lang="de" text="Institut für Humangenetik" />
 					<label xml:lang="en" text="Institute of Human Genetics"/>
+					<label xml:lang="x-mapping" text="destatis:4750" />
 				</category>
 				<category ID="14.02.01">
 					<label xml:lang="x-eva" text="7" />
 					<label xml:lang="de" text="Institut für Hygiene und Arbeitsmedizin" />
+					<label xml:lang="x-mapping" text="destatis:4780" />
 				</category>
 				<category ID="14.02.02">
 					<label xml:lang="x-eva" text="8" />
 					<label xml:lang="de" text="Institut für Immunologie" />
 					<label xml:lang="en" text="Institute of Immunology"/>
+					<label xml:lang="x-mapping" text="destatis:4810" />
+				</category>
+				<category ID="14.02.06">					
+					<label xml:lang="de" text="Institut für KI in der Medizin (IKIM)" />
+					<label xml:lang="en" text="Institute for Artificial Intelligence in Medicine (IKIM)"/>
+					<label xml:lang="x-mapping" text="destatis:4525" />
 				</category>
 				<category ID="14.01.05">
 					<label xml:lang="x-eva" text="9" />
 					<label xml:lang="de" text="Institut für Medizinische Informatik, Biometrie und Epidemiologie" />
 					<label xml:lang="en" text="Institute of Computer Science in Medicine, Biostatistics, and Epidemiology"/>
+					<label xml:lang="x-mapping" text="destatis:4525" />
 				</category>
 				<category ID="14.02.03">
 					<label xml:lang="de" text="Institut für Medizinische Mikrobiologie" />
 					<label xml:lang="en" text="Institute of Medical Microbiology"/>
 					<label xml:lang="x-eva" text="10" />
+					<label xml:lang="x-mapping" text="destatis:4780" />
 				</category>
 				<category ID="14.01.04">
 					<label xml:lang="de" text="Institut für Medizinische Psychologie und Verhaltensimmunbiologie" />
 					<label xml:lang="en" text="Institute of Medical Psychology"/>
 					<label xml:lang="x-eva" text="11" />
+					<label xml:lang="x-mapping" text="destatis:4580" />
 				</category>
 				<category ID="14.01.22">
 					<label xml:lang="de" text="Institut für Medizinische Strahlenbiologie" />
 					<label xml:lang="en" text="Institute of Medical Radiation Biology"/>
 					<label xml:lang="x-eva" text="12" />
+					<label xml:lang="x-mapping" text="destatis:4595" />
 				</category>
 				<category ID="14.05.03">
 					<label xml:lang="de" text="Institut für Molekularbiologie (Tumorforschung)" />
 					<label xml:lang="en" text="Institute of Molecular Biology (Tumor Research)"/>
 					<label xml:lang="x-eva" text="13" />
+					<label xml:lang="x-mapping" text="destatis:4732" />
 				</category>
 				<category ID="14.03.01">
 					<label xml:lang="x-eva" text="14" />
 					<label xml:lang="de" text="Institut für Pathologie und Neuropathologie" />
+					<label xml:lang="x-mapping" text="destatis:4710" />
 				</category>
+				<category ID="14.03.06">
+					<label xml:lang="de" text="Institut für Neuropathologie"/>
+					<label xml:lang="x-mapping" text="destatis:4710" />
+					</category>
+				<category ID="14.03.07">
+					<label xml:lang="de" text="Institut für Pathologie"/>
+					<label xml:lang="x-mapping" text="destatis:4710" />
+					</category>
 				<category ID="14.04.07">
 					<label xml:lang="de" text="Institut für Pathophysiologie" />
 					<label xml:lang="en" text="Institute of Pathophysiology"/>					
 					<label xml:lang="x-eva" text="15" />
+					<label xml:lang="x-mapping" text="destatis:4710" />
 				</category>
 				<category ID="14.01.31">
 					<label xml:lang="de" text="Institut für Pharmakogenetik" />
 					<label xml:lang="en" text="Institute of Pharmacogenetics"/>
 					<label xml:lang="x-eva" text="16" />
+					<label xml:lang="x-mapping" text="destatis:4715" />
 				</category>
 				<category ID="14.01.06">
 					<label xml:lang="x-eva" text="17" />
 					<label xml:lang="de" text="Institut für Pharmakologie" />
 					<label xml:lang="en" text="Institute of Pharmacology"/>
+					<label xml:lang="x-mapping" text="destatis:4715" />
 				</category>
 				<category ID="14.01.02">
 					<label xml:lang="de" text="Institut für Physiologie" />
 					<label xml:lang="en" text="Institute of Physiology"/>
 					<label xml:lang="x-eva" text="18" />
+					<label xml:lang="x-mapping" text="destatis:4540" />
 				</category>
 				<category ID="14.01.03">
 					<label xml:lang="x-eva" text="19" />
 					<label xml:lang="de" text="Institut für Physiologische Chemie" />
 					<label xml:lang="en" text="Institute of Physiological Chemistry"/>
+					<label xml:lang="x-mapping" text="destatis:4550" />
 				</category>
 				<category ID="14.03.03">
 					<label xml:lang="de" text="Institut für Rechtsmedizin" />
 					<label xml:lang="en" text="Institute of Forensic Medicine"/>
 					<label xml:lang="x-eva" text="20" />
+					<label xml:lang="x-mapping" text="destatis:4770" />
 				</category>
 				<category ID="14.02.05">
 					<label xml:lang="de" text="Institut für Transfusionsmedizin" />
 					<label xml:lang="en" text="Institute of Transfusion Medicine"/>
 					<label xml:lang="x-eva" text="21" />
+					<label xml:lang="x-mapping" text="destatis:4936" />
 				</category>
 				<category ID="14.02.04">
 					<label xml:lang="de" text="Institut für Virologie" />
 					<label xml:lang="en" text="Institute of Virology"/>
 					<label xml:lang="x-eva" text="22" />
+					<label xml:lang="x-mapping" text="destatis:4790" />
 				</category>
 				<category ID="14.05.04">
 					<label xml:lang="x-eva" text="23" />
 					<label xml:lang="de" text="Institut für Zellbiologie (Tumorforschung)" />
 					<label xml:lang="en" text="Institute of Cell Biology (Tumor Research)"/>
+					<label xml:lang="x-mapping" text="destatis:4732" />
 				</category>
 				<category ID="14.05.07">
 					<label xml:lang="de" text="Institut für Zelltherapeutische Forschung" />
 					<label xml:lang="en" text="Institute for Experimental Cellular Therapy"/>
 					<label xml:lang="x-eva" text="66" />
+					<label xml:lang="x-mapping" text="destatis:4732" />
 				</category>
+				<category ID="14.05.09">
+					<label xml:lang="de" text="Institut für Urban Public Health (InUPH)" /> 
+					<label xml:lang="en" text="Institute for Urban Public Health"/>
+					<label xml:lang="x-mapping" text="destatis:4700" />
+				</category>	
 				<category ID="14.05.05">
-					<label xml:lang="de" text="Westdeutsches Tumorzentrum Essen e.V. (WTZE)" />
+					<label xml:lang="de" text="Westdeutsches Tumorzentrum Essen (WTZ)" />
 					<label xml:lang="x-eva" text="72" />
+					<label xml:lang="x-mapping" text="destatis:4936" />
 					<category ID="14.05.55">
 					  <label xml:lang="de" text="Pädiatrische Hämatologie/Onkologie"/> 
+					  <label xml:lang="x-mapping" text="destatis:4950" />
 					</category>
+					<category ID="14.05.56">
+					  <label xml:lang="de" text="Brustzentrum I am WTZ "/>
+					  <label xml:lang="x-mapping" text="destatis:4936" />
+					</category>
+					<category ID="14.05.57">
+					  <label xml:lang="de" text="Lungenkrebszentrum am WTZ"/>
+					  <label xml:lang="x-mapping" text="destatis:4936" />
+					</category>
+					<category ID="14.05.58">
+					  <label xml:lang="de" text="Westdeutsches Magen- und Darmzentrum "/>
+					  <label xml:lang="x-mapping" text="destatis:4936" />
+					</category>
+				</category>
+				<category ID="14.05.13">
+					<label xml:lang="de" text="Essener Zentrum für seltene Erkrankungen (EZSE)" /> 
+					<label xml:lang="x-mapping" text="destatis:4700" />
+				</category>
+				<category ID="14.05.14">
+					<label xml:lang="de" text="Geriatrie-Zentrum Haus Berge" />
+                    <label xml:lang="x-mapping" text="destatis:5120" />
+				</category>
+				<category ID="14.05.15">
+					<label xml:lang="de" text="Zentrum für Universitäre Schmerzmedizin" />  
+					<label xml:lang="x-mapping" text="destatis:4700" />
+				</category>
+				<category ID="14.05.16">
+					<label xml:lang="de" text="Palliativmedizin" />
+					<label xml:lang="x-mapping" text="destatis:4700" />
 				</category>
 				<category ID="14.05.06">
 					<label xml:lang="de" text="Westdeutsches Protonentherapiezentrum (WPE)" />
+					<label xml:lang="x-mapping" text="destatis:5150" />
 					<label xml:lang="x-eva" text="65" />
 				</category>
+				<category ID="14.05.10">
+					<label xml:lang="de" text="Westdeutsches Zentrum für Organtransplantation (WZO)" /> 
+					<label xml:lang="x-mapping" text="destatis:4900" />	
+				</category>
+				<category ID="14.05.11">
+					<label xml:lang="de" text="Westdeutsche Zentrum für Infektiologie (WZI)" />
+ 					<label xml:lang="x-mapping" text="destatis:4400" />
+				</category>
+				<category ID="14.05.12">
+					<label xml:lang="de" text="Zentrum für klinische Studien Essen (ZKSE)" /> 
+					<label xml:lang="x-mapping" text="destatis:4400" />
+				</category>
+				<category ID="14.05.17">
+				<label xml:lang="de" text="Center for Translational Neuro- and Behavioral Science (C-TNBS)" /> 
+				<label xml:lang="x-mapping" text="destatis:4400" />
+                </category>						
 				<category ID="14.11">
 					<label xml:lang="de" text="LVR-Klinikum Essen" />
+					<label xml:lang="x-mapping" text="destatis:4900" />
 					<category ID="14.11.01">
 						<label xml:lang="de" text="Klinik für Psychiatrie und Psychotherapie" />
+						<label xml:lang="x-mapping" text="destatis:5050" />
 						<label xml:lang="x-eva" text="48" />
 					</category>
 					<category ID="14.11.05">
 						<label xml:lang="x-eva" text="25" />
 						<label xml:lang="de" text="Klinik für Abhängiges Verhalten und Suchtmedizin" />
+						<label xml:lang="x-mapping" text="destatis:5050" />
 					</category>
 					<category ID="14.11.03">
 						<label xml:lang="x-eva" text="50" />
 						<label xml:lang="de" text="Klinik für Psychosomatische Medizin und Psychotherapie" />
+						<label xml:lang="x-mapping" text="destatis:5060" />
 					</category>
 					<category ID="14.11.02">
 						<label xml:lang="x-eva" text="49" />
 						<label xml:lang="de" text="Klinik für Psychiatrie, Psychosomatik und Psychotherapie des Kindes- und Jugendalters" />
+						<label xml:lang="x-mapping" text="destatis:5160" />
 					</category>
+					<category ID="14.11.06">
+						<label xml:lang="de" text="Klinik für Forensische Psychiatrie Essen"/>
+						<label xml:lang="x-mapping" text="destatis:5050" />
+						</category>
 					<category ID="14.11.04">
 						<label xml:lang="x-eva" text="5" />
-						<label xml:lang="de" text="Institut für Forensische Psychiatrie" />
+						<label xml:lang="de" text="Institut für Forensische Psychiatrie und Sexualforschung" />
+						<label xml:lang="x-mapping" text="destatis:5050" />
 					</category>
 				</category>
 				<category ID="14.30">
 					<label xml:lang="de" text="Ruhrlandklinik Essen – Universitätsklinik" />
 					<label xml:lang="x-eva" text="1" />
+					<label xml:lang="x-mapping" text="destatis:4900" />
 				</category>
 				<category ID="14.31">
 					<label xml:lang="de" text="Herzchirurgie Huttrop"/>
+					<label xml:lang="x-mapping" text="destatis:4980" />
 				</category>
 				<category ID="14.20">
 					<label xml:lang="de" text="Kliniken Essen-Mitte" />
+					<label xml:lang="x-mapping" text="destatis:4900" />
 					<category ID="14.01.18">
 						<label xml:lang="x-eva" text="56" />
 						<label xml:lang="de" text="Universitätsklinik für Mund-, Kiefer- und Gesichtschirurgie" />
+						<label xml:lang="x-mapping" text="destatis:4980" />
 					</category>
 					<category ID="14.20.01">
 						<label xml:lang="x-eva" text="39" />
 						<label xml:lang="de" text="Klinik für Naturheilkunde und Integrative Medizin" />
+						<label xml:lang="x-mapping" text="destatis:4900" />
 					</category>
 				</category>
 				<category ID="14.32">
 					<label xml:lang="de" text="St. Josef Krankenhaus Essen-Werden"/>
+					<label xml:lang="x-mapping" text="destatis:4900" />
 				</category>
 				<category ID="14.51">
 					<label xml:lang="de" text="Krankenhaushygiene"/>
+					<label xml:lang="x-mapping" text="destatis:4780" />
 				</category>
 				<category ID="14.40">
 					<label xml:lang="x-eva" text="57" />
 					<label xml:lang="de" text="Zentrales Tierlaboratorium" />
+					<label xml:lang="x-mapping" text="destatis:9240" />
 				</category>
 				<category ID="14.50">
 					<label xml:lang="x-eva" text="58" />
 					<label xml:lang="de" text="Zentrallabor" />
+					<label xml:lang="x-mapping" text="destatis:8950" />
 				</category>
 			</category>
 		</category>
 		<category ID="LV">
 			<label xml:lang="de" text="Rektorat und Verwaltung" />
+			<label xml:lang="x-mapping" text="destatis:880" />
 			<category ID="REKT">
 				<label xml:lang="de" text="Rektorat" />
+				<label xml:lang="x-mapping" text="destatis:8805" />
 			</category>
 			<category ID="LV.02">
 				<label xml:lang="de" text="Verwaltung" />
+				<label xml:lang="x-mapping" text="destatis:8800" />
 			</category>
 			<category ID="PRESSE">
 				<label xml:lang="de" text="Pressestelle" />
+				<label xml:lang="x-mapping" text="destatis:880" />
 			</category>
 		</category>
 		<category ID="ZE">
 			<label xml:lang="de" text="Zentrale Serviceeinrichtungen" />
 			<label xml:lang="en" text="Service facilities" />
+			<label xml:lang="x-mapping" text="destatis:8700" />
 			<category ID="UB">
 				<label xml:lang="de" text="Universitätsbibliothek (UB)" />
 				<label xml:lang="en" text="University Library (UB)" />
+				<label xml:lang="x-mapping" text="destatis:900" />
 			</category>
 			<category ID="ZIM">
 				<label xml:lang="de" text="Zentrum für Informations- und Mediendienste (ZIM)" />
 				<label xml:lang="en" text="Centre for information and media services (CIM)" />
+				<label xml:lang="x-mapping" text="destatis:9100" />
 			</category>
 			<category ID="FETWW">
 				<label xml:lang="de" text="Science Support Centre (SSC)" />
+				<label xml:lang="x-mapping" text="destatis:9280" />
 			</category>
 			<category ID="ABZ">
 				<label xml:lang="de" text="Akademisches Beratungszentrum Studium und Beruf (ABZ)" />
 				<label xml:lang="en" text="Academic counseling centre for study and career development (ABZ)"/>
+				<label xml:lang="x-mapping" text="destatis:8830" />
 			</category>
 			<category ID="ZWW">
 				<label xml:lang="de" text="Zentrale Wissenschaftliche Werkstätten (ZWW)" />
 				<label xml:lang="en" text="Central scientific workshops"/>
+				<label xml:lang="x-mapping" text="destatis:9330" />
 			</category>
 			<category ID="ZFH">
 				<label xml:lang="de" text="Zentrum für Hochschulqualitätsentwicklung (ZHQE)" />
 				<label xml:lang="en" text="Centre for Higher Education Development and Quality Enhencement (CHEDQE)"/>
+				<label xml:lang="x-mapping" text="destatis:9200" />
 			</category>
 			<category ID="FGF">
 				<label xml:lang="de" text="Koordinations- und Forschungsstelle des Netzwerks Frauen- und Geschlechterforschung NRW" />
 				<label xml:lang="en" text="Coordination Office of Women's and Gender Research Network NRW"/>
+				<label xml:lang="x-mapping" text="destatis:9280" />
 			</category>
 			<category ID="HS">
 				<label xml:lang="de" text="Hochschulsport (HSP)"/>
 				<label xml:lang="en" text="University sports (HSP)"/>
+				<label xml:lang="x-mapping" text="destatis:2000" />
 			</category>
 		</category>
 		<category ID="ZWE">
 			<label xml:lang="de" text="Forschungszentren" />
 			<label xml:lang="en" text="Scientific institutes" />
+			<label xml:lang="x-mapping" text="destatis:9200" />
+			<category ID="AREA">
+			<label xml:lang="de" text="Alliance for Research on East Asia (AREA) Ruhr"/> 
+			<label xml:lang="x-mapping" text="destatis:9280" />
+			</category>
 			<category ID="CCSS">
 				<label xml:lang="de" text="Center for Computational Sciences and Simulation (CCSS)"/>
+				<label xml:lang="x-mapping" text="destatis:9280" />
 			</category>
 			<category ID="CEN">
 				<label xml:lang="de" text="Center for Nanointegration Duisburg-Essen (CENIDE)" />
+				<label xml:lang="x-mapping" text="destatis:9280" />
 				 <category ID="ICAN">
 					<label xml:lang="de" text="ICAN - Interdisciplinary Center for Analytics on the Nanoscale"/>
+					<label xml:lang="x-mapping" text="destatis:9280" />
 				</category>
 				<category ID="NETZ">
 					<label xml:lang="de" text="NanoEnergieTechnikZentrum (NETZ)"/>
+					<label xml:lang="x-mapping" text="destatis:9280" />
 				</category>
 			</category>
 			<category ID="CINCH">
        			<label xml:lang="de" text="Nationales Forschungszentrum für Gesundheitsökonomik (CINCH)"/>
 				<label xml:lang="en" text="Health Economics Research Center (CINCH)"/>
+				<label xml:lang="x-mapping" text="destatis:4459" />
 			</category>
 			<category ID="PLN">
 				<label xml:lang="de" text="paluno - The Ruhr Institute for Software Technology"/>
+				<label xml:lang="x-mapping" text="destatis:3570" />
 			</category>
 			<category ID="ZLV">
 				<label xml:lang="de" text="Zentrum für Logistik und Verkehr (ZLV)" />
 				<label xml:lang="en" text="Centre for Logistics and Traffic (ZLV)"/>
+				<label xml:lang="x-mapping" text="destatis:9280" />
 			</category>
 			<category ID="ZWU">
 				<label xml:lang="de" text="Zentrum für Wasser- und Umweltforschung (ZWU)" />
 				<label xml:lang="en" text="Centre for Water and Environmental Research (ZWU)"/>
+				<label xml:lang="x-mapping" text="destatis:9280" />
 			</category>
 			<category ID="09.03">
 				<label xml:lang="de" text="Zentrum für Medizinische Biotechnologie (ZMB)" />
 				<label xml:lang="en" text="Center of Medical Biotechnology (ZMB) "/>
+				<label xml:lang="x-mapping" text="destatis:9280" />
 			</category>
 			<category ID="KWI">
 				<label xml:lang="de" text="Kulturwissenschaftliches Institut Essen (KWI)" />
 				<label xml:lang="en" text="Institute for Advanced Study in the Humanities (KWI)"/>
+				<label xml:lang="x-mapping" text="destatis:9280" />
 			</category>
 			<category ID="KHK">
 				<label xml:lang="de" text="Käte Hamburger Kolleg / Centre for Global Cooperation Research (KHK/GCR21)" />
+				<label xml:lang="x-mapping" text="destatis:9280" />
 			</category>
 			<category ID="ELH">
-				<label xml:lang="de" text="Erwin L. Hahn Institute for Resonance Imaging" />
+				<label xml:lang="de" text="Erwin L. Hahn Institute for Magnetic  Resonance Imaging (ELH)" />
+				<label xml:lang="x-mapping" text="destatis:9280" />
 			</category>
 			<category ID="IOAW">
 				<label xml:lang="de" text="Institut für Ostasienwissenschaften (IN-EAST)" />
 				<label xml:lang="en" text="Institute of East Asian Studies (IN-EAST)"/>
+				<label xml:lang="x-mapping" text="destatis:9280" />
+			</category>
+			<category ID="PA">
+				<label xml:lang="de" text="Kompetenzzentrum Personal Analytics" />
+				<label xml:lang="en" text="Personal Analytics Centre of Competence"/>
+				<label xml:lang="x-mapping" text="destatis:9280" />
 			</category>
 			<category ID="ZLB">
-				<label xml:lang="de" text="Zentrum für Lehrerbildung (ZLB)" />
+				<label xml:lang="de" text="Zentrum für Lehrkräftebildung (ZLB)" />
 				<label xml:lang="en" text="Centre for teacher education (ZLB)"/>
+				<label xml:lang="x-mapping" text="destatis:9280" />
 			</category>
 			<category ID="EKG">
 				<label xml:lang="de" text="Essener Kolleg für Geschlechterforschung" />
 				<label xml:lang="en" text="Essen College of Gender Research"/>
+				<label xml:lang="x-mapping" text="destatis:9280" />
 			</category>
+			<category ID="IZIM">
+                <label xml:lang="de" text="Interdisziplinäres Zentrum für Integrations- und Migrationsforschung (InZentIM)"/>
+				<label xml:lang="x-mapping" text="destatis:9280" />
+            </category>
 			<category ID="ZEB">
 				<label xml:lang="de" text="Interdisziplinäres Zentrum für Bildungsforschung" />
 				<label xml:lang="en" text="Interdisciplinary Centre for Educational Research"/>
+				<label xml:lang="x-mapping" text="destatis:9280" />
 			</category>
 			<category ID="IOS">
 				<label xml:lang="de" text="Institut für Optionale Studien" />
 				<label xml:lang="en" text="Institute for optional studies (IOS)"/>
+				<label xml:lang="x-mapping" text="destatis:9200" />
 			</category>
 			<category ID="06.02">
 				<label xml:lang="de" text="Institut für Experimentelle Mathematik (IEM) Essen" />
 				<label xml:lang="en" text="Institute for Experimental Mathematics (IEM) Essen"/>
+				<label xml:lang="x-mapping" text="destatis:9280" />
 			</category>
 		</category>
-		<category ID="SE">
-			<label xml:lang="de" text="Sonstige Einrichtungen / Externe" />
-			<label xml:lang="en" text="Other institutions / External"/>
+		<category ID="PS">
+			<label xml:lang="de" text="Forschungsprofil &amp; -schwerpunkte" />				
+			<label xml:lang="en" text="Forschungsprofil &amp; -schwerpunkte" />
+			<label xml:lang="x-mapping" text="destatis:9280" />
+	        <category ID="WF">
+			  <label xml:lang="de" text="Wasserforschung" />
+			  <label xml:lang="en" text="Water Research" />
+			  <label xml:lang="x-mapping" text="destatis:9280" />
+			</category>
+			<category ID="BM">
+			  <label xml:lang="de" text="Biomedizinische Wissenschaften" />
+			  <label xml:lang="en" text="Biomedical Sciences" />
+			  <label xml:lang="x-mapping" text="destatis:9280" />
+			</category>
+			<category ID="NANO">
+			  <label xml:lang="de" text="Nanowissenschaften" />
+			  <label xml:lang="en" text="Nanoscience" />
+			  <label xml:lang="x-mapping" text="destatis:9280" />
+			</category>
+			<category ID="US">
+			  <label xml:lang="de" text="Urbane Systeme" />
+			  <label xml:lang="en" text="Joint Center Urban Systems" />
+			  <label xml:lang="x-mapping" text="destatis:9280" />
+			</category>
+			<category ID="16.08">
+			  <label xml:lang="de" text="Profilschwerpunkt &quot;Wandel von Gegenwartsgesellschaften&quot;" />
+			  <label xml:lang="en" text="Main Research Area Transformation of contemporary societies" />
+			  <label xml:lang="x-mapping" text="destatis:9280" />
+			</category>
+		</category>
+		<category ID="EXT">
+			<label xml:lang="de" text="Externe" />
+			<label xml:lang="en" text="External" />
+			<label xml:lang="x-mapping" text="destatis:9600" />
+			<category ID="HSNR">
+				<label xml:lang="de" text="Hochschule Niederrhein" />
+				<label xml:lang="x-mapping" text="destatis:9280" />
+			</category>
+			<category ID="HRW">
+				<label xml:lang="de" text="Hochschule Ruhr West" />
+				<label xml:lang="x-mapping" text="destatis:9280" />
+			</category>
+			<category ID="HSRW">
+				<label xml:lang="de" text="Hochschule Rhein-Waal" />
+				<label xml:lang="x-mapping" text="destatis:9280" />
+			</category>
+			<category ID="RUB">
+				<label xml:lang="de" text="Ruhr-Universität Bochum" />
+				<label xml:lang="x-mapping" text="destatis:9280" />
+			</category>
+			<category ID="TUD">
+				<label xml:lang="de" text="Technische Universität Dortmund" />
+				<label xml:lang="x-mapping" text="destatis:9280" />
+			</category>
+            <category ID="UK">
+                <label xml:lang="de" text="Universität zu Köln" />
+				<label xml:lang="x-mapping" text="destatis:9280" />
+            </category>
+            <category ID="UW">
+                <label xml:lang="de" text="Universität Wien" />
+				<label xml:lang="x-mapping" text="destatis:9280" />
+            </category>
+            <category ID="GUF">
+                <label xml:lang="de" text="Goethe-Universität Frankfurt am Main" />
+				<label xml:lang="x-mapping" text="destatis:9280" />
+            </category>
+			<category ID="SE">
+				<label xml:lang="de" text="Sonstige Einrichtungen" />
+				<label xml:lang="en" text="Other institutions" />
+				<label xml:lang="x-mapping" text="destatis:9280" />
+			</category>
 		</category>
 	</categories>
 </mycoreclass>
