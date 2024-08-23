@@ -476,6 +476,15 @@
   },
   {
     "add-field": {
+      "name": "origin_text",
+      "type": "string",
+      "multiValued": true,
+      "indexed": true,
+      "stored": true
+    }
+  },
+  {
+    "add-field": {
       "name": "pages",
       "type": "ubo_text",
       "multiValued": false,
@@ -680,6 +689,15 @@
   {
     "add-field": {
       "name": "license",
+      "type": "ubo_id",
+      "multiValued": true,
+      "indexed": true,
+      "stored": true
+    }
+  },
+  {
+    "add-field": {
+      "name": "destatis",
       "type": "ubo_id",
       "multiValued": true,
       "indexed": true,
