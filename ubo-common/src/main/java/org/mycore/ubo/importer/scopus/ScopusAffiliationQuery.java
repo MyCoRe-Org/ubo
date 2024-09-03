@@ -1,5 +1,12 @@
 package org.mycore.ubo.importer.scopus;
 
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.mycore.common.MCRException;
+import org.mycore.common.content.MCRURLContent;
+import org.xml.sax.SAXException;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -7,13 +14,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.mycore.common.MCRException;
-import org.mycore.common.content.MCRURLContent;
-import org.xml.sax.SAXException;
 
 public class ScopusAffiliationQuery extends AbstractScopusQuery{
 
@@ -103,7 +103,7 @@ public class ScopusAffiliationQuery extends AbstractScopusQuery{
                 this.setStart(getStart()+getCount());
             } while (getStart()<totalAvailable);
 
-        } catch (JDOMException|IOException|SAXException e) {
+        } catch (JDOMException|IOException e) {
             throw new MCRException("Error while Streaming all documents!");
         }
     }

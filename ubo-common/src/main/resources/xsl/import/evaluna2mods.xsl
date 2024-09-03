@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xsl:stylesheet version="1.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  xmlns:mods="http://www.loc.gov/mods/v3"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:xalan="http://xml.apache.org/xalan"
-  exclude-result-prefixes="xsl xalan"  
+<xsl:stylesheet version="1.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:mods="http://www.loc.gov/mods/v3"
+                xmlns:xalan="http://xml.apache.org/xalan"
+                exclude-result-prefixes="xsl xalan"
 >
 
   <xsl:output method="xml" encoding="UTF-8" indent="yes" xalan:indent-amount="2" />
-  
+
+  <xsl:param name="WebApplicationBaseURL"/>
+
   <xsl:template match="/interface">
     <xsl:apply-templates select="response[@type='publications']" />
   </xsl:template>
@@ -59,7 +60,7 @@
   </xsl:template>
 
   <xsl:template match="citation/@type">
-    <mods:genre type="intern">article</mods:genre>
+    <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#article" />
   </xsl:template>
 
   <xsl:template match="title">
@@ -149,7 +150,7 @@
   <xsl:template match="journal">
     <xsl:apply-templates select="year" />
     <mods:relatedItem type="host">
-      <mods:genre type="intern">journal</mods:genre>
+      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#journal" />
       <xsl:apply-templates select="abbreviation" />
       <xsl:apply-templates select="issn|essn" />
       <mods:part>
@@ -219,9 +220,9 @@
   <xsl:template match="language">
     <!-- Find language with matching label in any language, or with matching ID in any supported code schema -->
     <xsl:variable name="given" select="translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')" />
-    <xsl:for-each select="document('classification:metadata:-1:children:rfc4646')/mycoreclass/categories/category[@ID=$given or label[translate(@text,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')=$given]][1]">
+    <xsl:for-each select="document('classification:metadata:-1:children:rfc5646')/mycoreclass/categories/category[@ID=$given or label[translate(@text,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')=$given]][1]">
       <mods:language>
-        <mods:languageTerm authority="rfc4646" type="code">
+        <mods:languageTerm authority="rfc5646" type="code">
           <xsl:value-of select="@ID" />
         </mods:languageTerm>
       </mods:language>

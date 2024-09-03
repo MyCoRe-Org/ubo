@@ -232,6 +232,24 @@
   },
   {
     "add-field": {
+      "name": "corresponding_aut",
+      "type": "ubo_name",
+      "multiValued": true,
+      "indexed": true,
+      "stored": true
+    }
+  },
+  {
+    "add-field": {
+      "name": "corresponding_aut_id",
+      "type": "ubo_id",
+      "multiValued": true,
+      "indexed": true,
+      "stored": false
+    }
+  },
+  {
+    "add-field": {
       "name": "ae_lsf",
       "type": "ubo_id",
       "multiValued": true,
@@ -254,7 +272,7 @@
       "type": "ubo_text",
       "multiValued": true,
       "indexed": true,
-      "stored": false
+      "stored": true
     }
   },
   {
@@ -458,6 +476,15 @@
   },
   {
     "add-field": {
+      "name": "origin_text",
+      "type": "string",
+      "multiValued": true,
+      "indexed": true,
+      "stored": true
+    }
+  },
+  {
+    "add-field": {
       "name": "pages",
       "type": "ubo_text",
       "multiValued": false,
@@ -479,7 +506,7 @@
       "name": "place",
       "type": "ubo_text",
       "multiValued": true,
-      "indexed": false,
+      "indexed": true,
       "stored": true
     }
   },
@@ -583,6 +610,30 @@
   },
   {
     "add-field": {
+      "name": "accessrights",
+      "type": "ubo_id",
+      "indexed": true,
+      "stored": true
+    }
+  },
+  {
+    "add-field": {
+      "name": "peerreviewed",
+      "type": "ubo_id",
+      "indexed": true,
+      "stored": true
+    }
+  },
+  {
+    "add-field": {
+      "name": "mediaType",
+      "type": "ubo_id",
+      "indexed": true,
+      "stored": true
+    }
+  },
+  {
+    "add-field": {
       "name": "tag",
       "type": "ubo_id",
       "multiValued": true,
@@ -638,6 +689,15 @@
   {
     "add-field": {
       "name": "license",
+      "type": "ubo_id",
+      "multiValued": true,
+      "indexed": true,
+      "stored": true
+    }
+  },
+  {
+    "add-field": {
+      "name": "destatis",
       "type": "ubo_id",
       "multiValued": true,
       "indexed": true,
@@ -740,6 +800,18 @@
   {
     "add-copy-field": {
       "source": "note",
+      "dest": "all"
+    }
+  },
+  {
+    "add-copy-field": {
+      "source": "place",
+      "dest": "all"
+    }
+  },
+  {
+    "add-copy-field": {
+      "source": "publisher",
       "dest": "all"
     }
   },

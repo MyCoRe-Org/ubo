@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!-- Pre-processor for editor forms reading MODS -->
 
-<xsl:stylesheet version="1.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  xmlns:mods="http://www.loc.gov/mods/v3"
-  xmlns:xlink="http://www.w3.org/1999/xlink" 
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  exclude-result-prefixes="xsl i18n">
+<xsl:stylesheet version="1.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:mods="http://www.loc.gov/mods/v3"
+                xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                exclude-result-prefixes="i18n xlink xsl">
 
   <xsl:include href="copynodes.xsl" />
 
@@ -15,12 +15,18 @@
 
   <!-- In editor, categories are coded as <mods:classification classID="CLASSIFICATION">CATEGORYID</mods:classification> -->
   <!-- In persistent store, authorityURI and valueURI attributes instead are used-->
-  <xsl:template match="mods:classification[@valueURI]">
+  <xsl:template match="mods:classification[@valueURI][not(@generator)]">
     <mods:classification classID="{substring-after(@authorityURI,'classifications/')}">
       <xsl:value-of select="substring-after(@valueURI,'#')" />
     </mods:classification>
   </xsl:template>
-  
+
+  <xsl:template match="mods:accessCondition[@type='use and reproduction']">
+    <mods:accessCondition type="use and reproduction" classID="licenses">
+      <xsl:value-of select="substring-after(@xlink:href, '#')"/>
+    </mods:accessCondition>
+  </xsl:template>
+
   <xsl:template match="mods:roleTerm[@valueURI]">
     <mods:roleTerm type="text" classID="{substring-after(@authorityURI,'classifications/')}">
       <xsl:value-of select="substring-after(@valueURI,'#')" />
@@ -85,8 +91,11 @@
       <mods:identifier type="ppn">
         <xsl:attribute name="transliteration">
           <xsl:choose>
-            <xsl:when test="contains(., ':ppn:')">
-              <xsl:value-of select="substring-after(substring-before(., ':ppn:'),'http://uri.gbv.de/document/')"/>
+            <xsl:when test="contains(., ':ppn:') and contains(., 'https://')">
+              <xsl:value-of select="substring-after(substring-before(., ':ppn:'), 'https://uri.gbv.de/document/')"/>
+            </xsl:when>
+            <xsl:when test="contains(., ':ppn:') and contains(., 'http://')">
+              <xsl:value-of select="substring-after(substring-before(., ':ppn:'), 'http://uri.gbv.de/document/')"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="$MCR.PICA2MODS.DATABASE"/>
@@ -99,6 +108,18 @@
         </xsl:choose>
       </mods:identifier>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="mods:genre[@type = 'intern'][@valueURI]" >
+    <mods:genre type="intern">
+      <xsl:value-of select="substring-after(@valueURI,'#')"/>
+    </mods:genre>
+  </xsl:template>
+
+  <xsl:template match="mods:genre[@type = 'intern'][not(@valueURI)]" >
+    <mods:genre type="intern">
+      <xsl:value-of select="."/>
+    </mods:genre>
   </xsl:template>
 
 </xsl:stylesheet>

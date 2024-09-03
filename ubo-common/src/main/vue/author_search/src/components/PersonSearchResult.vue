@@ -49,9 +49,11 @@
                 <li v-for="aff in person.affiliation" :key="aff">
                   {{ aff }}
                 </li>
-                <li v-for="info in person.information" :key="info">
-                  {{ info }}
-                </li>
+                <template v-for="info in person.information">
+                  <li v-if="info!=null && info.length > 0" :key="info">
+                    {{ info }}
+                  </li>
+                </template>
               </ul>
             </td>
             <td class="align-top">

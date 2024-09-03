@@ -16,6 +16,7 @@
         exclude-result-prefixes="xsl xalan i18n mods mcr mcrxml encoder str basket">
 
 <xsl:include href="mods-display.xsl" />
+<xsl:include href="resource:xsl/response-get-handler.xsl"/>
 <xsl:include href="response-facets.xsl" />
 <xsl:include href="ubo-dialog.xsl" />
 <xsl:include href="coreFunctions.xsl" />
@@ -49,6 +50,7 @@
     <xsl:otherwise>10</xsl:otherwise> <!-- guess, no way to find out -->
   </xsl:choose>
 </xsl:variable>
+<xsl:variable name="requestHandler" select="substring-before(substring-after($RequestURL, '/servlets/solr/'), '?')"/>
 
 <!-- ==================== Anzeige Seitentitel ==================== -->
 
@@ -147,7 +149,9 @@
 <xsl:template match="result[@name='response']">
 
   <!-- Seitennavigation oben -->
-  <xsl:call-template name="navigation" />
+  <xsl:call-template name="navigation">
+    <xsl:with-param name="position" select="'top'"/>
+  </xsl:call-template>
 
   <!-- Trefferliste -->
   <div>
@@ -167,14 +171,16 @@
   <div class="clear"></div>
 
   <!-- Seitennavigation unten -->
-  <xsl:call-template name="navigation" />
+  <xsl:call-template name="navigation">
+    <xsl:with-param name="position" select="'bottom'"/>
+  </xsl:call-template>
 
 </xsl:template>
 
 <!-- ==================== Anzeige Navigation in Trefferliste ==================== -->
 
 <xsl:variable name="resultsPageURL">
-  <xsl:text>select?</xsl:text>
+  <xsl:value-of select="$solrRequestHandler"/>
   <xsl:for-each select="/response/lst[@name='responseHeader']/lst[@name='params']/*[not(@name='start')]">
     <xsl:variable name="name" select="@name" />
     <xsl:for-each select="descendant-or-self::str"> <!-- may be an array: arr/str or ./str -->
@@ -188,18 +194,29 @@
 </xsl:variable>
 
 <xsl:template name="navigation">
+ <xsl:param name="position"/>
  <xsl:if test="$numFound &gt; 1">
   <div class="resultsNavigation row">
 
-    <div class="col-2">
+    <div class="col">
       <xsl:if test="basket:hasSpace()">
         <span class="pageLink">
-          <a class="btn btn-sm btn-secondary" href="{$ServletsBaseURL}Results2Basket?solr={encoder:encode($exportParams,'UTF-8')}"><xsl:value-of select="i18n:translate('button.basketAdd')" /></a>
+          <a class="btn btn-sm btn-secondary" href="{$ServletsBaseURL}Results2Basket?rh={$requestHandler}&amp;solr={encoder:encode($exportParams,'UTF-8')}">
+            <xsl:value-of select="i18n:translate('button.basketAdd')" />
+          </a>
+        </span>
+        <span class="pageLink pl-1 d-inline">
+          <xsl:variable name="result-copy-to-clipboard-id" select="concat('result-copy-to-clipboard-', $position)"/>
+          <button id="{$result-copy-to-clipboard-id}" class="btn btn-sm btn-secondary"
+                  title="{i18n:translate('result.copy.link.to.clipboard')}"
+                  onclick="navigator.clipboard.writeText(window.location.href);$('#{$result-copy-to-clipboard-id}').fadeOut(500);$('#{$result-copy-to-clipboard-id}').fadeIn(500);">
+            <i class="far fa-copy"/>
+          </button>
         </span>
       </xsl:if>
     </div>
 
-    <div class="col-8 text-center align-self-center">
+    <div class="col text-center align-self-center">
       <nav>
         <ul class="pagination justify-content-center pagination-sm mb-0">
           <xsl:if test="$numFound &gt; $rows">
@@ -231,9 +248,11 @@
       </nav>
     </div>
 
-   <div class="col-2 text-right">
+   <div class="col text-right">
     <span class="pageLink">
-      <a class="btn btn-sm btn-secondary" href="statistics?{$exportParams}&amp;XSL.Style=statistics"><xsl:value-of select="i18n:translate('button.statistics')" /></a>
+      <a class="btn btn-sm btn-secondary" href="{$solrStatisticRequestHandler}{$exportParams}&amp;XSL.Style=statistics" title="{i18n:translate('button.statistics.tooltip')}">
+        <xsl:value-of select="i18n:translate('button.statistics')"/>
+      </a>
     </span>
    </div>
 
@@ -246,26 +265,27 @@
   <xsl:param name="start" />
   <xsl:param name="icon" />
   <xsl:param name="text" />
+  <xsl:param name="title" select="i18n:translate(concat('result.results.pagination.', $icon))"/>
 
   <xsl:choose>
     <xsl:when test="string-length($text) &gt; 0">
       <li class="page-item disabled">
-        <a class="page-link" href="#">
+        <a class="page-link" href="#" title="{$title}">
           <xsl:value-of select="concat('&#160;',$text,'&#160;')" />
         </a>
       </li>
     </xsl:when>
     <xsl:when test="$condition">
       <li class="page-item">
-        <a class="page-link" href="{$resultsPageURL}{$start}">
-          <span class="fas fa-{$icon}" aria-hidden="true"></span>
+        <a class="page-link" href="{$resultsPageURL}{$start}" title="{$title}">
+          <span class="fas fa-{$icon}" aria-hidden="true"/>
         </a>
       </li>
     </xsl:when>
     <xsl:otherwise>
-      <li class="page-item disabled">
+      <li class="page-item disabled" aria-hidden="true">
         <a class="page-link" href="#">
-          <span class="fas fa-{$icon}" aria-hidden="true"></span>
+          <span class="fas fa-{$icon}"/>
         </a>
       </li>
     </xsl:otherwise>

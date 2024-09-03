@@ -9,24 +9,28 @@
 
 package org.mycore.ubo.importer;
 
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-
-import javax.xml.transform.TransformerException;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.output.XMLOutputter;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
+import org.mycore.services.queuedjob.MCRJob;
+import org.mycore.services.queuedjob.MCRJobQueueManager;
 import org.mycore.ubo.AccessControl;
 import org.mycore.ubo.DozBibEntryServlet;
 import org.mycore.ubo.importer.evaluna.EvalunaImportJob;
+import org.mycore.user2.MCRUserManager;
 import org.xml.sax.SAXException;
+
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @SuppressWarnings("serial")
 public class DozBibImportServlet extends MCRServlet {
@@ -47,8 +51,23 @@ public class DozBibImportServlet extends MCRServlet {
 
     private void handleImportJob(HttpServletRequest req, HttpServletResponse res) throws Exception {
         Document doc = (Document) (req.getAttribute("MCRXEditorSubmission"));
-        Element formInput = doc.detachRootElement();
+        String doAsync = doc.getRootElement().getAttributeValue("async");
+        if ("true".equals(doAsync)) {
+            MCRJob job = new MCRJob(ImportListJobAction.class);
+            job.setParameter(ImportListJobAction.EDITOR_SUBMISSION_PARAMETER, new XMLOutputter().outputString(doc));
+            job.setParameter(ImportListJobAction.USER_ID_PARAMETER, MCRUserManager.getCurrentUser().getUserName());
+            MCRJobQueueManager.getInstance().getJobQueue(ImportListJobAction.class).offer(job);
 
+            String referer = req.getHeader("Referer");
+            if (referer != null) {
+                res.sendRedirect(referer + "&list-submitted=true");
+            } else {
+                res.sendRedirect(MCRFrontendUtil.getBaseURL());
+            }
+            return;
+        }
+
+        Element formInput = doc.detachRootElement();
         ImportJob importJob = buildImportJob(formInput);
         importJob.transform(formInput);
 

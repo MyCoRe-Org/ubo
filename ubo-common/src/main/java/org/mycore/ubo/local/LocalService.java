@@ -1,12 +1,7 @@
 package org.mycore.ubo.local;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.naming.OperationNotSupportedException;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.ubo.picker.IdentityService;
@@ -17,7 +12,14 @@ import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
 
+import javax.naming.OperationNotSupportedException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 public class LocalService implements IdentityService {
+    private final static Logger LOGGER = LogManager.getLogger(LocalService.class);
 
     private final String USER_FIRST_NAME_ATTR = "firstName";
 
@@ -51,7 +53,16 @@ public class LocalService implements IdentityService {
 
         List<PersonSearchResult.PersonResult> personResults = matchingUsers.stream().map(user -> {
                 PersonSearchResult.PersonResult personSearchResult = new PersonSearchResult.PersonResult(this);
-                personSearchResult.pid = user.getUserAttribute("id_" + LEAD_ID);
+                List<MCRUserAttribute> leadIdAttributes = user.getAttributes()
+                    .stream()
+                    .filter(attr -> ("id_" + LEAD_ID).equals(attr.getName()))
+                    .toList();
+
+                if (leadIdAttributes.size() > 1) {
+                    LOGGER.warn("Found more than one {} for user {}", ("id_" + LEAD_ID), user.getUserID());
+                }
+
+                personSearchResult.pid = leadIdAttributes.size() > 0 ? leadIdAttributes.get(0).getValue() : null;
                 personSearchResult.displayName = user.getRealName().length() > 0 ? user.getRealName() : user.getUserName();
 
                 user.getAttributes().stream()

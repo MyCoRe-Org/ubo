@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -25,7 +25,7 @@
   <xsl:call-template name="copy-and-apply" />
 </xsl:template>
 
-<xsl:template match="mods:genre[@type='intern'][1]|mods:genre/@type">
+<xsl:template match="mods:genre[@type='intern'][1]|mods:genre/@type|mods:genre/@authorityURI|mods:genre/@valueURI">
   <xsl:call-template name="copy-and-apply" />
 </xsl:template>
 
@@ -108,7 +108,7 @@
   <xsl:call-template name="copy-and-apply" />
 </xsl:template>
 
-<xsl:template match="mods:language|mods:languageTerm[@type='code'][@authority='rfc4646']|mods:languageTerm/@type|mods:languageTerm/@authority">
+<xsl:template match="mods:language|mods:languageTerm[@type='code'][@authority='rfc5646']|mods:languageTerm/@type|mods:languageTerm/@authority">
   <xsl:call-template name="copy-and-apply" />
 </xsl:template>
 

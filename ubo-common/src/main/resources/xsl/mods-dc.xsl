@@ -68,7 +68,7 @@
 
   <xsl:template match="mods:genre[@type='intern']" mode="dc">
     <dc:type>
-      <xsl:value-of select="." />
+      <xsl:value-of select="substring-after(@valueURI, '#')" />
     </dc:type>
     <dc:type>
       <xsl:apply-templates select="." />
@@ -160,10 +160,14 @@
 
   <!-- DC.Language -->
 
-  <xsl:template match="mods:languageTerm[@authority='rfc4646'][@type='code']" mode="dc">
-    <dc:language>
-      <xsl:value-of select="document(concat('language:',.))/language/@termCode" />
-    </dc:language>
+  <xsl:template match="mods:languageTerm[@authority='rfc5646'][@type='code']" mode="dc">
+    <xsl:variable name="lang" select="document(concat('notnull:language:',.))/language/@termCode"/>
+
+    <xsl:if test="string-length($lang) &gt; 0 and not($lang = 'null')">
+      <dc:language>
+        <xsl:value-of select="$lang"/>
+      </dc:language>
+    </xsl:if>
   </xsl:template>
 
   <!-- DC.Identifier -->

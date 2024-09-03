@@ -12,6 +12,7 @@ package org.mycore.ubo;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,8 +30,11 @@ import org.jdom2.Attribute;
 import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.filter.Filters;
+import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.XMLReaders;
+import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration2;
@@ -49,7 +53,26 @@ import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.MCRCommand;
 import org.mycore.mods.MCRMODSCommands;
 import org.mycore.mods.MCRMODSWrapper;
+import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.ubo.importer.scopus.ScopusInitialImporter;
+import org.xml.sax.SAXException;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.zip.Deflater;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import static org.mycore.common.MCRConstants.MODS_NAMESPACE;
+import static org.mycore.common.MCRConstants.XPATH_FACTORY;
 
 public class DozBibCommands extends MCRAbstractCommands {
 
@@ -85,8 +108,48 @@ public class DozBibCommands extends MCRAbstractCommands {
                 "org.mycore.ubo.importer.scopus.ScopusInitialImporter.initialImport String int",
                 "Queries all affiliation IDs and imports all documents {0} = afid {1} = start point should be 0"));
         addCommand(new MCRCommand(ScopusInitialImporter.IMPORT_SINGLE_COMMAND,
-                "org.mycore.ubo.importer.scopus.ScopusInitialImporter.doImport String",
-                "{0] = ID of object"));
+            "org.mycore.ubo.importer.scopus.ScopusInitialImporter.doImport String",
+            "{0] = ID of object"));
+        addCommand(
+            new MCRCommand("migrate http uris matching {0} to https in {1}",
+                "org.mycore.ubo.DozBibCommands.migrateURItoHttps String String",
+                "Migrates http protocol of uris to https if they match the pattern given in {0} "
+                    + "(xpath will be '//mods:identifier[@type = 'uri'][contains(text(), {0})]'). "
+                    + "The mycore object id must be provided in {1}"));
+        addCommand(new MCRCommand("ubo migrate mods:genre for object {0}",
+            "org.mycore.ubo.DozBibCommands.migrateGenre String",
+            "Migrates mods:genre to mods:genre with authorityURI and valueURI"));
+    }
+
+    /**
+     * Migrates the mods:genre element for the given object id.
+     *
+     * @param objId the id of the {@link MCRObject} for which the mods:genre element should be migrated
+     *
+     * @return true if the migration was successful, false otherwise
+     * */
+    public static boolean migrateGenre(String objId) {
+        if (!MCRObjectID.isValid(objId)) {
+            LOGGER.error("ID {} is not a valid {} ", objId, MCRObjectID.class.getSimpleName());
+            return false;
+        }
+
+        MCRObjectID mcrObjectID = MCRObjectID.getInstance(objId);
+        if (!MCRMetadataManager.exists(mcrObjectID)) {
+            LOGGER.warn("{} does not exist", objId);
+            return false;
+        }
+
+        MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(mcrObjectID);
+        try {
+            MCRXSLTransformer transformer = new MCRXSLTransformer("xsl/migration/migrate-mods-genre.xsl");
+            MCRContent transformed = transformer.transform(new MCRJDOMContent(mcrObject.createXML()));
+            MCRMetadataManager.update(new MCRObject(transformed.asXML()));
+            return true;
+        } catch (IOException | JDOMException | MCRAccessException exception) {
+            LOGGER.error("Could not migrate mods:genre for object {}", objId);
+            return false;
+        }
     }
 
     /** Exports all entries as MODS dump to a zipped xml file in the given directory */
@@ -144,7 +207,7 @@ public class DozBibCommands extends MCRAbstractCommands {
 
     public static void migrate2mcrobject() throws Exception {
         MCRMetadataStore store = MCRStoreManager.createStore("ubo", MCRMetadataStore.class);
-        for (Iterator<Integer> IDs = store.listIDs(MCRStore.ASCENDING); IDs.hasNext();) {
+        for (Iterator<Integer> IDs = store.listIDs(MCRStore.ASCENDING); IDs.hasNext(); ) {
             int id = IDs.next();
             LOGGER.info("Migrating <bibentry> " + id + " to <mycoreobject>...");
 
@@ -217,8 +280,46 @@ public class DozBibCommands extends MCRAbstractCommands {
             wrapper.setMODS(mods.clone());
             MCRObject obj = wrapper.getMCRObject();
 
-            obj.setId(MCRObjectID.getNextFreeId(PROJECT_ID + "_mods"));
+            obj.setId(MCRMetadataManager.getMCRObjectIDGenerator().getNextFreeId(PROJECT_ID + "_mods"));
             MCRMetadataManager.create(obj);
         }
+    }
+
+    public static void migrateURItoHttps(String uriContains, String id) {
+        MCRObjectID mcrObjectID = MCRObjectID.getInstance(id);
+        if (!MCRMetadataManager.exists(mcrObjectID)) {
+            LOGGER.error("{} does not exist", id);
+            return;
+        }
+
+        Document xml = MCRMetadataManager.retrieveMCRObject(mcrObjectID).createXML();
+        List<Element> elements = XPATH_FACTORY.compile(
+            "//mods:identifier[@type = 'uri'][contains(text(), '" + uriContains + "')]",
+            Filters.element(), null, MODS_NAMESPACE).evaluate(xml);
+
+        if (elements.isEmpty()) {
+            return;
+        }
+
+        elements.forEach(element -> {
+            String uri = element.getText();
+            element.setText(uri.replace("http:", "https:"));
+        });
+
+        try {
+            MCRMetadataManager.update(new MCRObject(xml));
+        } catch (MCRAccessException e) {
+            LOGGER.error("Could not replace URI protocol in ", id);
+        }
+    }
+
+    /**
+     * Delegate method for {@link MCRTranslation#translateToLocale(String, Locale, Object...)}
+     *
+     * @param i18n the i18n key
+     * @param arguments a comma-separated list of arguments
+     * */
+    public static String translate(String i18n, String arguments) {
+        return MCRTranslation.translateToLocale(i18n, MCRTranslation.getCurrentLocale(), arguments.split(","));
     }
 }

@@ -8,17 +8,19 @@
   xmlns:srw="http://www.loc.gov/zing/srw/"
   xmlns:marc="http://www.loc.gov/MARC21/slim"
   exclude-result-prefixes="xsl xalan java">
-  
+
+  <xsl:param name="WebApplicationBaseURL"/>
+
   <xsl:template match="srw:searchRetrieveResponse">
     <xsl:apply-templates select="srw:records/srw:record[1]/srw:recordData/marc:record" />
   </xsl:template>
   
   <xsl:template match="marc:record">
     <mods:mods>
-      <mods:genre type="intern">journal</mods:genre>
+      <mods:genre type="intern" authorityURI="{$WebApplicationBaseURL}classifications/ubogenre" valueURI="{$WebApplicationBaseURL}classifications/ubogenre#journal" />
       <xsl:apply-templates select="marc:datafield[@tag='245']" />
       <xsl:apply-templates select="marc:datafield[@tag='210']" />
-      <xsl:apply-templates select="marc:datafield[@tag='264']" />
+      <xsl:apply-templates select="marc:datafield[@tag='264'][@ind1='3']" />
       <xsl:apply-templates select="marc:datafield[@tag='022']" />
       <xsl:apply-templates select="marc:datafield[@tag='041']" />
     </mods:mods>
@@ -68,9 +70,9 @@
 
   <xsl:template match="marc:datafield[@tag='041']">
     <mods:language>
-      <mods:languageTerm type="code" authority="rfc4646">
+      <mods:languageTerm type="code" authority="rfc5646">
         <xsl:variable name="given" select="translate(marc:subfield[@code='a'],'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')" />
-        <xsl:value-of select="document('classification:metadata:-1:children:rfc4646')/mycoreclass/categories/category[@ID=$given or label[translate(@text,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')=$given]][1]/@ID" />
+        <xsl:value-of select="document('classification:metadata:-1:children:rfc5646')/mycoreclass/categories/category[@ID=$given or label[translate(@text,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')=$given]][1]/@ID" />
       </mods:languageTerm>
     </mods:language>
   </xsl:template>

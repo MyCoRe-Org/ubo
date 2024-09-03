@@ -50,12 +50,12 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 id="notification-dialog-h" class="modal-title">
+            <h5 id="notification-dialog-h-{$id}" class="modal-title">
               <xsl:value-of select="$title"/>
             </h5>
           </div>
           <div class="modal-body">
-            <p id="notification-dialog-message-p">
+            <p id="notification-dialog-message-p-{$id}">
               <xsl:value-of select="$message"/>
             </p>
           </div>

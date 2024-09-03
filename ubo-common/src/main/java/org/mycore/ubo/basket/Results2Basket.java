@@ -14,19 +14,24 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.frontend.basket.MCRBasket;
 import org.mycore.frontend.basket.MCRBasketEntry;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 
+import java.util.Optional;
+
 /**
  * Put all hits from result list into basket
- * 
- * @author Frank L\u00FCtzenkirchen
+ *
+ * @author Frank Lützenkirchen
  */
 @SuppressWarnings("serial")
 public class Results2Basket extends MCRServlet {
+
+    protected final String SELECT_PATH = MCRConfiguration2.getString("MCR.Solr.SelectPath").get().replace("/", "");
 
     private final static Logger LOGGER = LogManager.getLogger(Results2Basket.class);
 
@@ -34,8 +39,9 @@ public class Results2Basket extends MCRServlet {
         HttpServletRequest req = job.getRequest();
         HttpServletResponse res = job.getResponse();
 
-        String uri = "solr:" + req.getParameter("solr");
-        LOGGER.info("add SOLR results to basket:" + uri);
+        String requestHandler = Optional.ofNullable(req.getParameter("rh")).orElse(SELECT_PATH);
+        String uri = "solr:requestHandler:" + requestHandler + ":" + req.getParameter("solr");
+        LOGGER.info("Add SOLR results to basket: {}", uri);
 
         Element response = MCRURIResolver.instance().resolve(uri);
 

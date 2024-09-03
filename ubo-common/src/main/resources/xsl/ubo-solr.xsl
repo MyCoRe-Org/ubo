@@ -10,6 +10,9 @@
 
   <xsl:import href="xslImport:solr-document:ubo-solr.xsl" />
   <xsl:include href="coreFunctions.xsl"/>
+  
+  <xsl:key use="substring-after(@valueURI,'#')" name="destatisByCategory" match="//mods:mods/mods:classification[contains(@authorityURI,'destatis')]"></xsl:key>
+  <xsl:variable name="origin"                   select="document('classification:metadata:-1:children:ORIGIN')/mycoreclass/categories" />
 
   <xsl:template match="mycoreobject">
     <xsl:apply-templates select="." mode="baseFields" />
@@ -36,21 +39,24 @@
     <xsl:apply-templates select="descendant::mods:name[mods:nameIdentifier[@type='lsf']]" mode="solrField.lsf" />
     <xsl:apply-templates select="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][contains('aut cre tch pht prg edt',text())]]/mods:nameIdentifier[@type='lsf']" mode="solrField.ae" />
     <xsl:apply-templates select="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][contains('aut cre tch pht prg edt',text())]]/mods:nameIdentifier[@type='orcid']" mode="solrField.ae" />
+    <xsl:apply-templates select="mods:name[@type='personal'][mods:role/mods:roleTerm[contains(@authorityURI,'author_roles')]]" mode="solrField.ar" />
     <xsl:apply-templates select="descendant::mods:name[@type='personal']" mode="child" />
     <xsl:apply-templates select="mods:genre[@type='intern']" mode="solrField" />
-    <xsl:apply-templates select="mods:accessCondition[@classID='licenses']" mode="solrField" />
+    <xsl:apply-templates select="mods:accessCondition[@xlink:href]" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:genre[@type='intern']" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'project')]" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fundingType')]" mode="solrField" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'accessrights')]" mode="solrField" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'peerreviewed')]" mode="solrField" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'mediaType')]" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:titleInfo[not(@type)]" mode="solrField.host" />
-    <xsl:apply-templates select="mods:relatedItem[@type='host'][mods:genre='journal']/mods:titleInfo" mode="solrField" />
+    <xsl:apply-templates select="mods:relatedItem[@type='host'][substring-after(mods:genre/@valueURI, '#') = 'journal']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:part" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:originInfo" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:relatedItem[@type='series']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:name[@type='conference'][not(ancestor::mods:relatedItem[@type='references'])][1]" mode="solrField" />
-    <xsl:apply-templates select="descendant::mods:dateIssued[1][translate(text(),'1234567890','YYYYYYYYYY')='YYYY']" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:originInfo/mods:dateIssued[1][translate(text(),'1234567890','YYYYYYYYYY')='YYYY']" mode="solrField.host" />
     <xsl:apply-templates select="descendant::mods:identifier[@type]" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:shelfLocator" mode="solrField" />
@@ -63,6 +69,8 @@
     <xsl:call-template name="sortby_person" />
     <xsl:call-template name="oa" />
     <xsl:call-template name="partOf" />
+    <xsl:call-template name="year" />
+    <xsl:call-template name="destatis" />
   </xsl:template>
 
   <xsl:template name="sortby_person">
@@ -93,13 +101,13 @@
     <xsl:call-template name="buildTitleField">
       <xsl:with-param name="name">title</xsl:with-param>
     </xsl:call-template>
-    <xsl:if test="position() = 1"> <!-- sort by first title only, not multi-valued -->
+    <xsl:if test="position() = 1"> <!-- sort by first title only, not multivalued -->
       <field name="sortby_title">
         <xsl:apply-templates select="mods:title"    mode="solrField" />
         <xsl:apply-templates select="mods:subTitle" mode="solrField" />
       </field>
     </xsl:if>
-    <xsl:if test="../mods:genre='journal'">
+    <xsl:if test="substring-after(../mods:genre/@valueURI, '#') = 'journal'">
       <xsl:call-template name="buildTitleField">
         <xsl:with-param name="name">journal</xsl:with-param>
       </xsl:call-template>
@@ -112,7 +120,7 @@
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template match="mods:relatedItem[@type='host'][mods:genre='journal']/mods:titleInfo" mode="solrField">
+  <xsl:template match="mods:relatedItem[@type='host'][substring-after(../mods:genre/@valueURI, '#') = 'journal']/mods:titleInfo" mode="solrField">
     <xsl:call-template name="buildTitleField">
       <xsl:with-param name="name">journal</xsl:with-param>
     </xsl:call-template>
@@ -156,6 +164,18 @@
     <field name="person_{text()}">
       <xsl:apply-templates select="../.." mode="solrField" />
     </field>
+  </xsl:template>
+
+  <xsl:template match="mods:name[@type='personal'][mods:role/mods:roleTerm[contains(@authorityURI,'author_roles')]]" mode="solrField.ar">
+    <field name="corresponding_aut">
+      <xsl:apply-templates select="." mode="solrField"/>
+    </field>
+
+    <xsl:for-each select="mods:nameIdentifier"><!-- TODO: besser nur connection-ID bzw. 2 Suchfelder? -->
+      <field name="corresponding_aut_id">
+        <xsl:value-of select="."/>
+      </field>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="mods:name[@type='personal']" mode="solrField">
@@ -221,19 +241,19 @@
 
   <xsl:template match="mods:mods/mods:genre[@type='intern']" mode="solrField">
     <field name="genre">
-      <xsl:value-of select="text()" />
+      <xsl:value-of select="substring-after(@valueURI, '#')" />
     </field>
   </xsl:template>
 
-  <xsl:template match="mods:accessCondition[@classID='licenses']" mode="solrField">
+  <xsl:template match="mods:accessCondition[@xlink:href]" mode="solrField">
     <field name="license">
-      <xsl:value-of select="text()" />
+      <xsl:value-of select="substring-after(@xlink:href, '#')" />
     </field>
   </xsl:template>
 
   <xsl:template match="mods:relatedItem[@type='host']/mods:genre[@type='intern']" mode="solrField">
     <field name="host_genre">
-      <xsl:value-of select="text()" />
+      <xsl:value-of select="substring-after(@valueURI, '#')" />
     </field>
   </xsl:template>
 
@@ -246,6 +266,9 @@
     </xsl:for-each>
     <field name="origin_exact">
       <xsl:value-of select="$category" />
+    </field>
+    <field name="origin_text">
+       <xsl:value-of select="$origin//category[@ID=$category]/label[lang($DefaultLang)]/@text"/>
     </field>
 
     <!-- Derive destatis from origin if fachreferate is not set -->
@@ -311,6 +334,33 @@
     </field>
   </xsl:template>
 
+  <xsl:template match="mods:classification[contains(@authorityURI,'accessrights')]" mode="solrField">
+    <field name="accessrights">
+      <xsl:value-of select="substring-after(@valueURI,'#')"/>
+    </field>
+  </xsl:template>
+
+  <xsl:template match="mods:classification[contains(@authorityURI,'peerreviewed')]" mode="solrField">
+    <field name="peerreviewed">
+      <xsl:value-of select="substring-after(@valueURI,'#')"/>
+    </field>
+  </xsl:template>
+
+  <xsl:template match="mods:classification[contains(@authorityURI,'mediaType')]" mode="solrField">
+    <field name="mediaType">
+      <xsl:value-of select="substring-after(@valueURI,'#')"/>
+    </field>
+  </xsl:template>
+
+  <xsl:template name="destatis">
+    <!-- to avoid duplicates, only use first occurence of each destatis category -->
+     <xsl:for-each select="mods:classification[contains(@authorityURI,'destatis')][generate-id() = generate-id(key('destatisByCategory',substring-after(@valueURI,'#'))[1])]">
+       <field name="destatis">
+         <xsl:value-of select="substring-after(@valueURI,'#')"/>
+       </field>
+     </xsl:for-each>
+  </xsl:template>
+
   <xsl:template name="partOf">
     <xsl:choose>
       <xsl:when test="mods:classification[contains(@authorityURI,'partOf')]">
@@ -334,6 +384,21 @@
     <field name="year">
       <xsl:value-of select="text()" />
     </field>
+  </xsl:template>
+
+  <xsl:template name="year">
+    <xsl:choose>
+      <xsl:when test="mods:originInfo/mods:dateIssued[translate(text(),'1234567890','YYYYYYYYYY')='YYYY']">
+        <field name="year">
+          <xsl:value-of select="mods:originInfo/mods:dateIssued[translate(text(),'1234567890','YYYYYYYYYY')='YYYY'][1]/text()" />
+        </field>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:for-each select="mods:relatedItem[@type='host'][1]">
+          <xsl:call-template name="year" />
+        </xsl:for-each>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="mods:relatedItem[@type='host']/mods:originInfo/mods:dateIssued" mode="solrField.host">

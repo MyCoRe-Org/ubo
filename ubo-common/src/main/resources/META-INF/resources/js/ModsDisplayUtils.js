@@ -1,6 +1,6 @@
 const ModsDisplayUtils = {
   updateLabel: async function (target, i18n) {
-    let response = await fetch(webApplicationBaseURL + "rsc/locale/translate/" + i18n);
+    let response = await fetch(webApplicationBaseURL + "rsc/locale/translate/" + $("html").attr("lang") + "/" + i18n);
     let text = await response.text();
     $(target).text(text.replace("{0}", $(target).attr("data-hideable-count")));
   },

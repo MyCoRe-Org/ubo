@@ -28,22 +28,23 @@ import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUser2Constants;
 import org.mycore.user2.MCRUserAttribute;
 
+import static org.mycore.common.MCRConstants.XPATH_FACTORY;
 
 /**
  * Utility class for everything related to matching users of publications in MODS-format with MCRUsers and other
  * applications/servers/APIs.
- *
+ * <p>
  * The following properties in the mycore.properties are used:
- *
+ * <p>
  * # Used to check the affiliation of publication authors
  * MCR.user2.IdentityManagement.UserCreation.Affiliation=Uni Jena
- *
+ * <p>
  * # Mapping from LDAP attribute to real name of user
  * MCR.user2.LDAP.Mapping.Name=cn
- *
+ * <p>
  * # Mapping from LDAP attribute to E-Mail address of user
  * MCR.user2.LDAP.Mapping.E-Mail=mail
- *
+ * <p>
  * # Mapping of any attribute.value combination to group membership of user
  * # eduPersonScopedAffiliation may be faculty|staff|employee|student|alum|member|affiliate
  * MCR.user2.LDAP.Mapping.Group.eduPersonScopedAffiliation.staff@uni-duisburg-essen.de=submitter *
@@ -66,9 +67,9 @@ public class MCRUserMatcherUtils {
     public static Map<String, String> getNameIdentifiers(Element modsNameElement) {
         Map<String, String> nameIdentifiers = new HashMap<>(); // TODO: possible use of MultiMap for multiple attributes of the same type
         List<Element> identifiers = modsNameElement.getChildren("nameIdentifier", MODS_NAMESPACE);
-        for(Element identifierElement : identifiers) {
+        for (Element identifierElement : identifiers) {
             String type = identifierElement.getAttributeValue("type");
-            if(type!=null){
+            if (type != null) {
                 String identifier = identifierElement.getText();
                 nameIdentifiers.put(type, identifier);
             }
@@ -77,21 +78,43 @@ public class MCRUserMatcherUtils {
         return nameIdentifiers;
     }
 
+    /**
+     * Extracts the real name from the given MODS-Element
+     * @param modsNameElement the given MODS "name"-Element
+     * @return the real name in the format "family-name, given-name", or only the family name,
+     * or null if real name could not be determined
+     */
+    public static String getRealName(Element modsNameElement) {
+        Element givenName = XPATH_FACTORY.compile("mods:namePart[@type='given']",
+            Filters.element(), null, MODS_NAMESPACE).evaluateFirst(modsNameElement);
+
+        Element familyName = XPATH_FACTORY.compile("mods:namePart[@type='family']",
+            Filters.element(), null, MODS_NAMESPACE).evaluateFirst(modsNameElement);
+
+        if ((givenName != null) && (familyName != null)) {
+            return familyName.getText() + ", " + givenName.getText();
+        } else if ((familyName != null)) {
+            return familyName.getText();
+        }
+        return null;
+    }
+
     public static boolean containsNameIdentifierWithType(Element modsNameElement, String identifierType) {
         return MCRUserMatcherUtils.getNameIdentifiers(modsNameElement).containsKey(identifierType);
     }
 
     /**
      * Extend the MCRUsers attributes by the given mods:nameIdentifiers if the user does not already have these IDs
-     * @param user the MCRUser whose attributes will be enriched
+     *
+     * @param user            the MCRUser whose attributes will be enriched
      * @param nameIdentifiers the mods:nameIdentifiers that should be added, if they are not already present
      */
     public static void enrichUserWithGivenNameIdentifiers(MCRUser user, Map<String, String> nameIdentifiers) {
         SortedSet<MCRUserAttribute> userAttributes = user.getAttributes();
-        for(Map.Entry<String, String> nameIdentifier : nameIdentifiers.entrySet()) {
+        for (Map.Entry<String, String> nameIdentifier : nameIdentifiers.entrySet()) {
             String name = mapModsNameIdentifierTypeToMycore(nameIdentifier.getKey());
             String value = nameIdentifier.getValue();
-            if(user.getUserAttribute(name) == null) {
+            if (user.getUserAttribute(name) == null) {
                 LOGGER.debug("Enriching user: {} with attribute: {}, value: {}", user.getUserName(), name, value);
                 userAttributes.add(new MCRUserAttribute(name, value));
             }
@@ -107,6 +130,7 @@ public class MCRUserMatcherUtils {
      * Given a mods:name Element, create a new transient (not persisted) MCRUser where the mods:namePart and
      * mods:nameIdentifier child-elements are used for the user name and attributes of the new MCRUser. Does not set a
      * realm for the new MCRUser (the default one is the configured "local"-realm).
+     *
      * @param modsNameElement the mods:name-Element (xml) from which a new transient MCRUser shall be created
      * @return MCRUser, a transient MCRUser in the realm "local" (as configured)
      */
@@ -119,41 +143,42 @@ public class MCRUserMatcherUtils {
         Map<String, String> nameIdentifiers = MCRUserMatcherUtils.getNameIdentifiers(modsNameElement);
         MCRUser mcrUser = new MCRUser(userName, realmID);
         enrichUserWithGivenNameIdentifiers(mcrUser, nameIdentifiers);
+        mcrUser.setRealName(getRealName(modsNameElement));
         return mcrUser;
     }
 
     public static String getAttributesAsURLString(List<Element> modsNameElements) {
         String parameters = "";
-        for(Element modsNameElement : modsNameElements) {
+        for (Element modsNameElement : modsNameElements) {
             Map<String, String> parametersMap = getNameIdentifiers(modsNameElement);
 
             XPathFactory xFactory = XPathFactory.instance();
 
             XPathExpression<Element> givenNameExpr = xFactory.compile("mods:namePart[@type='given']",
-                    Filters.element(), null, MODS_NAMESPACE);
+                Filters.element(), null, MODS_NAMESPACE);
             Element givenNameElem = givenNameExpr.evaluateFirst(modsNameElement);
             XPathExpression<Element> familyNameExpr = xFactory.compile("mods:namePart[@type='family']",
-                    Filters.element(), null, MODS_NAMESPACE);
+                Filters.element(), null, MODS_NAMESPACE);
             Element familyNameElem = familyNameExpr.evaluateFirst(modsNameElement);
 
-            if(familyNameElem != null) {
+            if (familyNameElem != null) {
                 parametersMap.put("lastName", familyNameElem.getText());
             }
-            if(givenNameElem != null) {
+            if (givenNameElem != null) {
                 // the following is a compatibility preserving hack, the LSF-Search works with "firstname" WITHOUT CAMELCASE
                 parametersMap.put("firstname", givenNameElem.getText());
                 // the LDAP-Search works WITH CAMELCASE so at this point we just provide both parameters
                 parametersMap.put("firstName", givenNameElem.getText());
             }
             List<String> singleParameters = new ArrayList<>();
-            for(Map.Entry<String, String> parameter : parametersMap.entrySet()) {
+            for (Map.Entry<String, String> parameter : parametersMap.entrySet()) {
                 String encodedValue = null;
                 try {
                     encodedValue = URLEncoder.encode(parameter.getValue(), "UTF-8");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
-                if(!parameter.getKey().isEmpty()){
+                if (!parameter.getKey().isEmpty()) {
                     singleParameters.add(parameter.getKey() + '=' + encodedValue);
                 }
             }
@@ -166,8 +191,9 @@ public class MCRUserMatcherUtils {
     }
 
     public static boolean checkAffiliation(Element modsNameElement) {
-        String affiliation = MCRConfiguration2.getString("MCR.user2.IdentityManagement.UserCreation.Affiliation").orElse(null);
-        if(affiliation == null) {
+        String affiliation
+            = MCRConfiguration2.getString("MCR.user2.IdentityManagement.UserCreation.Affiliation").orElse(null);
+        if (affiliation == null) {
             return false;
         }
 
@@ -178,11 +204,11 @@ public class MCRUserMatcherUtils {
 
         XPathFactory xFactory = XPathFactory.instance();
         XPathExpression<Element> affiliationExpr = xFactory.compile("mods:affiliation",
-                Filters.element(), null, MODS_NAMESPACE);
+            Filters.element(), null, MODS_NAMESPACE);
         Element affiliationElem = affiliationExpr.evaluateFirst(modsNameElement);
-        if(affiliationElem != null) {
+        if (affiliationElem != null) {
             String modsNameAffiliation = affiliationElem.getText();
-            if(modsNameAffiliation.contains(affiliation)) {
+            if (modsNameAffiliation.contains(affiliation)) {
                 affiliated = true;
             }
         }
@@ -192,11 +218,12 @@ public class MCRUserMatcherUtils {
 
     /**
      * Method to set the static MCRUser-Attributes (RealName and Email)
-     * @param mcrUser the MCRUser whose static Attributes should be set
+     *
+     * @param mcrUser  the MCRUser whose static Attributes should be set
      * @param ldapUser the ldapUser whose Attributes are used to fill the static attributes of the MCRUser
      */
     public static void setStaticMCRUserAttributes(MCRUser mcrUser, LDAPObject ldapUser) {
-        for(Map.Entry<String, String> attributeEntry : ldapUser.getAttributes().entries()) {
+        for (Map.Entry<String, String> attributeEntry : ldapUser.getAttributes().entries()) {
             String attributeID = attributeEntry.getKey();
             String attributeValue = attributeEntry.getValue();
             setUserRealName(mcrUser, attributeID, attributeValue);
@@ -221,7 +248,9 @@ public class MCRUserMatcherUtils {
         }
     }
 
-    /** Formats a user name into "lastname, firstname" syntax. */
+    /**
+     * Formats a user name into "lastname, firstname" syntax.
+     */
     private static String formatName(String name) {
         name = name.replaceAll("\\s+", " ").trim();
         if (name.contains(",")) {
@@ -240,13 +269,14 @@ public class MCRUserMatcherUtils {
      * # Mapping of any attribute.value combination to group membership of user
      * # eduPersonScopedAffiliation may be faculty|staff|employee|student|alum|member|affiliate
      * MCR.user2.LDAP.Mapping.Group.eduPersonScopedAffiliation.staff@uni-duisburg-essen.de=submitter *
-     * @param mcrUser the MCRUser that shall be added to the configured groups/roles if the corresponding
-     *                LDAP-Attributes exist
+     *
+     * @param mcrUser  the MCRUser that shall be added to the configured groups/roles if the corresponding
+     *                 LDAP-Attributes exist
      * @param ldapUser the LDAPObject/User from which the LDAP-Attributes should be used to map against the configured
      *                 groups/roles for the MCRUser
      */
     public static void addMCRUserToDynamicGroups(MCRUser mcrUser, LDAPObject ldapUser) {
-        for(Map.Entry<String, String> attributeEntry : ldapUser.getAttributes().entries()) {
+        for (Map.Entry<String, String> attributeEntry : ldapUser.getAttributes().entries()) {
             String attributeID = attributeEntry.getKey();
             String attributeValue = attributeEntry.getValue();
             addToGroup(mcrUser, attributeID, attributeValue);

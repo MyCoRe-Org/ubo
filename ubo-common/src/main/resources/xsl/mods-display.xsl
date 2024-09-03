@@ -42,6 +42,7 @@
   <xsl:variable name="partner"               select="document('notnull:classification:metadata:-1:children:partner')/mycoreclass/categories" />
   <xsl:variable name="publication_category"  select="document('notnull:classification:metadata:-1:children:category')/mycoreclass/categories" />
   <xsl:variable name="partOf"                select="document('notnull:classification:metadata:-1:children:partOf')/mycoreclass/categories" />
+  <xsl:variable name="mediaType"             select="document('notnull:classification:metadata:-1:children:mediaType')/mycoreclass/categories" />
 
   <xsl:variable name="fq">
     <xsl:if test="not(check:currentUserIsAdmin())">
@@ -52,8 +53,11 @@
   <!-- ============ Ausgabe Publikationsart ============ -->
 
   <xsl:template name="pubtype">
-    <span class="label-info badge badge-secondary mr-1">
-      <xsl:apply-templates select="mods:genre[@type='intern']" />
+    <xsl:variable name="genre" select="substring-after(mods:genre[@type='intern']/@valueURI, '#')"/>
+
+    <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.genre')}"
+          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+genre:&quot;', $genre, '&quot;'))}')">
+      <xsl:apply-templates select="mods:genre[@type='intern']"/>
       <xsl:for-each select="mods:relatedItem[@type='host']/mods:genre[@type='intern']">
         <xsl:text> in </xsl:text>
         <xsl:apply-templates select="." />
@@ -65,7 +69,7 @@
 
   <xsl:template match="mods:mods/mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info">
     <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('facets.facet.subject')}"
-          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+subject:', substring-after(@valueURI,'#')))}')">
+          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+subject:&quot;', substring-after(@valueURI,'#'),'&quot;'))}')">
       <xsl:call-template name="output.category">
         <xsl:with-param name="classID" select="'fachreferate'" />
         <xsl:with-param name="categID" select="substring-after(@valueURI,'#')" />
@@ -77,7 +81,7 @@
 
   <xsl:template match="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info">
     <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.department')}"
-          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+origin:', substring-after(@valueURI,'#')))}')">
+          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+origin:&quot;', substring-after(@valueURI,'#'), '&quot;'))}')">
       <xsl:call-template name="output.category">
         <xsl:with-param name="classID" select="'ORIGIN'" />
         <xsl:with-param name="categID" select="substring-after(@valueURI,'#')" />
@@ -98,7 +102,9 @@
         </xsl:variable>
 
         <xsl:for-each select="xalan:nodeset($destatis-categories)/token">
-          <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('facets.facet.subject')}">
+          <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer"
+                title="{i18n:translate('facets.facet.subject')}"
+                onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+subject:&quot;',  ., '&quot;'))}')">
             <xsl:call-template name="output.category">
               <xsl:with-param name="classID" select="'fachreferate'" />
               <xsl:with-param name="categID" select="." />
@@ -255,13 +261,13 @@
 
   <!-- ========== Ausgabe Lizenz ========== -->
 
-  <xsl:template match="mods:accessCondition[@classID='licenses']" mode="details">
+  <xsl:template match="mods:accessCondition[@type = 'use and reproduction']" mode="details">
     <div class="row">
       <div class="col-3">
         <xsl:value-of select="concat(i18n:translate('ubo.licenses'), ':')" />
       </div>
       <div class="col-9">
-        <xsl:value-of select="mcrxsl:getDisplayName('licenses', current()/text())"/>
+        <xsl:value-of select="mcrxsl:getDisplayName('licenses', substring-after(@xlink:href, '#'))"/>
       </div>
     </div>
   </xsl:template>
@@ -333,7 +339,7 @@
     <xsl:apply-templates select="." mode="cite.title.name">
       <xsl:with-param name="mode" select="$mode" />
     </xsl:apply-templates>
-    <xsl:if test="not(mods:genre='journal')">
+    <xsl:if test="not(substring-after(mods:genre/@valueURI, '#') = 'journal')">
       <xsl:call-template name="output.line">
         <xsl:with-param name="selected" select="mods:name[@type='conference']" />
         <xsl:with-param name="before"> - </xsl:with-param>
@@ -478,7 +484,7 @@
     <xsl:apply-templates select="." mode="cite" />
 
     <!-- journal article without volume: display year directly behind title, otherwise later behind volume number -->
-    <xsl:if test="(mods:genre[@type='intern']='journal') and not(mods:part/mods:detail[@type='volume']/mods:number)">
+    <xsl:if test="(substring-after(mods:genre[@type='intern']/@valueURI, '#') = 'journal') and not(mods:part/mods:detail[@type='volume']/mods:number)">
       <xsl:for-each select="ancestor::mods:mods/descendant::mods:dateIssued[1]">
         <xsl:value-of select="concat(' (',.,')')" />
       </xsl:for-each>
@@ -517,10 +523,10 @@
               <xsl:attribute name="class">
                 <xsl:choose>
                   <xsl:when test="position() &lt;= $UBO.Initially.Visible.Authors or (position() = last())">
-                    <xsl:value-of select="'personalName'" />
+                    <xsl:value-of select="'text-wrap personalName'" />
                   </xsl:when>
                   <xsl:otherwise>
-                    <xsl:value-of select="'personalName d-none'" />
+                    <xsl:value-of select="'text-wrap personalName d-none'" />
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:attribute>
@@ -781,7 +787,7 @@
   </xsl:template>
 
   <!-- ========== Land bei Patent ========== -->
-  <xsl:template match="mods:place[../../mods:genre='patent']" mode="details">
+  <xsl:template match="mods:place[substring-after(../../mods:genre/@valueURI, '#') = 'patent']" mode="details">
     <div class="row">
       <div class="col-3">
         <xsl:value-of select="i18n:translate('ubo.place.country')" />
@@ -806,7 +812,7 @@
   </xsl:template>
 
   <!-- ========== Sender bei Audio/Video ========== -->
-  <xsl:template match="mods:publisher[(../../mods:genre='audio') or (../../mods:genre='video') or (../../mods:genre='broadcasting')]" mode="details">
+  <xsl:template match="mods:publisher[(substring-after(../../mods:genre/@valueURI, '#') = 'audio') or (substring-after(../../mods:genre/@valueURI, '#') = 'video') or (substring-after(../../mods:genre/@valueURI, '#') = 'broadcasting')]" mode="details">
     <div class="row">
       <div class="col-3">
         <xsl:value-of select="i18n:translate('ubo.publisher.station')" />
@@ -846,7 +852,7 @@
 
 
   <!-- ========== Sendedatum ========== -->
-  <xsl:template match="mods:dateIssued[(../../mods:genre='audio') or (../../mods:genre='video') or (../../mods:genre='broadcasting')]" mode="details">
+  <xsl:template match="mods:dateIssued[(substring-after(../../mods:genre/@valueURI, '#') = 'audio') or (substring-after(../../mods:genre/@valueURI, '#') = 'video') or (substring-after(../../mods:genre/@valueURI, '#') = 'broadcasting')]" mode="details">
     <div class="row">
       <div class="col-3">
         <xsl:value-of select="i18n:translate('ubo.date.broadcasted')" />
@@ -940,9 +946,9 @@
     </xsl:if>
   </xsl:template>
 
-
   <xsl:template match="mods:genre[@type='intern']">
-    <xsl:value-of select="$genres//category[@ID=current()]/label[lang($CurrentLang)]/@text" />
+    <xsl:variable name="categId" select="substring-after(@valueURI, '#')"/>
+    <xsl:value-of select="$genres//category[@ID = $categId]/label[lang($CurrentLang)]/@text" />
   </xsl:template>
 
   <!-- ========== Notiz, Kommentar ========== -->
@@ -1128,7 +1134,7 @@
     <xsl:call-template name="subject.topic" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'mediaType')]" mode="details" />
     <xsl:apply-templates select="mods:typeOfResource" mode="details" />
-    <xsl:apply-templates select="mods:accessCondition[@classID]" mode="details" />
+    <xsl:apply-templates select="mods:accessCondition[@type='use and reproduction'][@xlink:href]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'republication')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'accessrights')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'peerreviewed')]" mode="details" />
@@ -1557,16 +1563,18 @@
     </span>
     <xsl:text> </xsl:text>
 
-
     <xsl:value-of select="mods:number" />
 
     <xsl:variable name="volume.number" select="mods:number" />
     <xsl:variable name="year.issued" select="ancestor::mods:mods/descendant::mods:dateIssued[not(ancestor::mods:relatedItem[@type='host'])][1]" />
 
-    <xsl:if test="ancestor::mods:relatedItem/mods:genre[@type='intern']='journal'"> <!-- if it is a journal -->
-      <xsl:if test="(string-length($year.issued) &gt; 0) and translate($year.issued,'0123456789','jjjjjjjjjj') = 'jjjj'"> <!-- and there is a year -->
+    <!-- if it is a journal -->
+    <xsl:if test="substring-after(ancestor::mods:relatedItem/mods:genre[@type='intern']/@valueURI, '#') = 'journal'">
+      <!-- and there is a year -->
+      <xsl:if test="(string-length($year.issued) &gt; 0) and translate($year.issued,'0123456789','jjjjjjjjjj') = 'jjjj'">
         <xsl:if test="not($volume.number = $year.issued)"> <!-- and the year is not same as the volume number -->
-          <xsl:text> (</xsl:text> <!-- then output "volume (year)" -->
+          <xsl:text> (</xsl:text>
+          <!-- then output "volume (year)" -->
           <xsl:value-of select="$year.issued" />
           <xsl:text>)</xsl:text>
         </xsl:if>
@@ -1657,7 +1665,17 @@
 
   <!-- ========== Sprache der Publikation ========== -->
   <xsl:template match="mods:languageTerm[@type='code']">
-    <xsl:value-of select="document(concat('notnull:language:',.))/language/label[@xml:lang=$CurrentLang]" />
+    <xsl:variable name="lang" select="document(concat('notnull:language:', .))/language/label[@xml:lang=$CurrentLang]" />
+
+    <xsl:choose>
+      <xsl:when test="string-length($lang) &gt; 0">
+        <xsl:value-of select="$lang"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="."/>
+      </xsl:otherwise>
+    </xsl:choose>
+
     <xsl:if test="position() != last()">
       <xsl:text>, </xsl:text>
     </xsl:if>

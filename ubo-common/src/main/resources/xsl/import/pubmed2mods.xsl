@@ -175,7 +175,7 @@
   
   <xsl:template match="language/@xmlCode">
     <mods:language>
-      <mods:languageTerm authority="rfc4646" type="code">
+      <mods:languageTerm authority="rfc5646" type="code">
         <xsl:value-of select="." />
       </mods:languageTerm>
     </mods:language>
