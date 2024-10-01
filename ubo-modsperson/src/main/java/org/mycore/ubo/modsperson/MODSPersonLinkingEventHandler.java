@@ -8,6 +8,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
@@ -28,7 +30,7 @@ import org.mycore.mods.merger.MCRMergeTool;
 // TODO: Documentation
 // TODO: Wait for SOLR commit in batch mode? Or cache IDs in batch mode?
 
-public class MODSPersonLinker extends MCREventHandlerBase {
+public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
 
     private final static Logger LOGGER = LogManager.getLogger();
 
@@ -51,6 +53,7 @@ public class MODSPersonLinker extends MCREventHandlerBase {
         mycoreobject.addContent(new Element("service"));
 
         PERSON_TEMPLATE = mycoreobject;
+        System.out.println(new XMLOutputter(Format.getPrettyFormat()).outputString(mycoreobject));
     }
 
     @Override
@@ -90,7 +93,7 @@ public class MODSPersonLinker extends MCREventHandlerBase {
             if (person != null) {
                 mergeDataFromNameToPerson(modsName, person);
                 setReferencedPerson(modsName, person);
-                mergeDataFromPersonToName(person, modsName);
+                mergeDataFromPersonToName(modsName, person);
             }
         });
 
@@ -125,7 +128,14 @@ public class MODSPersonLinker extends MCREventHandlerBase {
     }
 
     private MCRObject findPersonMatching(Element modsName) {
-        return null; // TODO: Find via matching valid ID and matching name   
+        Element personElement = MODSPersonLookup.lookup(modsName);
+        if (personElement == null) {
+            return null;
+        }
+        MCRObject obj = new MCRObject(new Document(PERSON_TEMPLATE.clone()));
+        MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
+        wrapper.setMODS(personElement);
+        return obj;
     }
 
     private boolean leadIDExists(Element modsName) {
@@ -144,25 +154,27 @@ public class MODSPersonLinker extends MCREventHandlerBase {
         MCRMODSWrapper wrapper = new MCRMODSWrapper(person);
 
         Element personName = wrapper.getElement("mods:name[@type='personal']");
-        Element personOld = personName.clone();
+        if (personName != null) {
+            Element personOld = personName.clone();
 
-        MCRMergeTool.merge(personName, filterMODS(modsName));
-        
-        MCRMODSSorter.sort(wrapper.getMODS());
-        MCRMODSSorter.sort(personName);
+            MCRMergeTool.merge(personName, filterMODS(modsName));
 
-        if (!MCRXMLHelper.deepEqual(personName, personOld)) {
-            LOGGER.info("Person object is changed after merge, saving...");
-            try {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug(new MCRJDOMContent(personName.clone()).asString());
+            MCRMODSSorter.sort(wrapper.getMODS());
+            MCRMODSSorter.sort(personName);
+
+            if (!MCRXMLHelper.deepEqual(personName, personOld)) {
+                LOGGER.info("Person object is changed after merge, saving...");
+                try {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug(new MCRJDOMContent(personName.clone()).asString());
+                    }
+                    MCRMetadataManager.update(person);
+                } catch (MCRPersistenceException | MCRAccessException | IOException ex) {
+                    throw new MCRException(ex);
                 }
-                MCRMetadataManager.update(person);
-            } catch (MCRPersistenceException | MCRAccessException | IOException ex) {
-                throw new MCRException(ex);
+            } else {
+                LOGGER.info("Person object is unchanged after merge, nothing to do.");
             }
-        } else {
-            LOGGER.info("Person object is unchanged after merge, nothing to do.");
         }
     }
 
@@ -177,8 +189,14 @@ public class MODSPersonLinker extends MCREventHandlerBase {
         return cloned;
     }
 
-    private void mergeDataFromPersonToName(MCRObject person, Element modsName) {
-        LOGGER.info("Merging data from person object to mods:name in publication...");
-        // TODO
+    private void mergeDataFromPersonToName(Element modsName, MCRObject person) {
+        LOGGER.info("Merging data from person object into mods:name in publication...");
+        MCRMODSWrapper wrapper = new MCRMODSWrapper(person);
+        Element personNameElement = wrapper.getMODS() != null
+                                    ? wrapper.getMODS().getChild("name", MCRConstants.MODS_NAMESPACE)
+                                    : null;
+        if (personNameElement != null) {
+            MCRMergeTool.merge(modsName, personNameElement);
+        }
     }
 }
