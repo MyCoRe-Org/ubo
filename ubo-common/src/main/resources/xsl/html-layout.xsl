@@ -17,6 +17,7 @@
   <xsl:param name="UBO.Frontend.chosen.version" />
   <xsl:param name="UBO.Frontend.bootstrap.version" />
   <xsl:param name="UBO.Frontend.font-awesome.version" />
+  <xsl:param name="User-Agent"/>
 
   <!-- ==================== IMPORTS ==================== -->
   <!-- additional stylesheets -->
