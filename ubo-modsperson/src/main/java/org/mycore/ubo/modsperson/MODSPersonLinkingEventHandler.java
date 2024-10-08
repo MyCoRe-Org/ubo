@@ -2,6 +2,8 @@ package org.mycore.ubo.modsperson;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -86,14 +88,20 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
             if (person == null) {
                 person = findPersonMatching(modsName);
             }
+
+            boolean isNewPerson = false;
             if ((person == null) && leadIDExists(modsName)) {
                 person = buildNewPerson();
+                isNewPerson = true;
             }
 
             if (person != null) {
                 mergeDataFromNameToPerson(modsName, person);
                 setReferencedPerson(modsName, person);
                 mergeDataFromPersonToName(modsName, person);
+                if (isNewPerson) {
+                    MODSPersonLookup.add(person);
+                }
             }
         });
 
@@ -128,19 +136,24 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
     }
 
     private MCRObject findPersonMatching(Element modsName) {
-        Element personElement = MODSPersonLookup.lookup(modsName);
-        if (personElement == null) {
+        Set<MCRObject> personElements = MODSPersonLookup.lookup(modsName);
+        if (personElements == null || personElements.isEmpty()) {
             return null;
         }
-        MCRObject obj = new MCRObject(new Document(PERSON_TEMPLATE.clone()));
-        MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
-        wrapper.setMODS(personElement);
-        return obj;
+        MCRObject firstMatch = personElements.iterator().next();
+        if (personElements.size() > 1) {
+            String allIDs = personElements.stream()
+                .map(o -> o.getId().toString()).collect(Collectors.joining(", "));
+
+            LOGGER.warn("There are multiple modsperson-objects matching the person in publication: "
+                + "["+ allIDs +"]. Chosing " + firstMatch.getId().toString());
+        }
+        return firstMatch;
     }
 
     private boolean leadIDExists(Element modsName) {
         return modsName.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
-            .stream().anyMatch(ni -> "lsf".equals(ni.getAttributeValue("type")));
+            .stream().anyMatch(ni -> "lsf".equals(ni.getAttributeValue("type"))); // TODO: lsf generic?
     }
 
     private MCRObject buildNewPerson() {

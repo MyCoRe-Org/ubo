@@ -16,6 +16,8 @@ import org.mycore.mods.MCRMODSWrapper;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -23,15 +25,15 @@ public class MODSPersonLookupTest extends MCRTestCase {
 
     @Test
     public void testLookup() throws IOException, JDOMException {
-        URL url1 = MCRObjectMetadataTest.class.getResource("/MODSPersonLookupTest/junit_mods_00000001.xml");
+        URL url1 = MCRObjectMetadataTest.class.getResource("/MODSPersonLookupTest/junit_modsperson_00000010.xml");
         Document doc1 = new MCRURLContent(url1).asXML();
         MCRObject obj1 = new MCRObject(doc1);
 
-        URL url2 = MCRObjectMetadataTest.class.getResource("/MODSPersonLookupTest/junit_mods_00000002.xml");
+        URL url2 = MCRObjectMetadataTest.class.getResource("/MODSPersonLookupTest/junit_modsperson_00000011.xml");
         Document doc2 = new MCRURLContent(url2).asXML();
         MCRObject obj2 = new MCRObject(doc2);
 
-        URL url3 = MCRObjectMetadataTest.class.getResource("/MODSPersonLookupTest/junit_mods_00000003.xml");
+        URL url3 = MCRObjectMetadataTest.class.getResource("/MODSPersonLookupTest/junit_modsperson_00000012.xml");
         Document doc3 = new MCRURLContent(url3).asXML();
         MCRObject obj3 = new MCRObject(doc3);
 
@@ -39,24 +41,26 @@ public class MODSPersonLookupTest extends MCRTestCase {
         MODSPersonLookup.add(obj2);
 
         MCRMODSWrapper wrapper = new MCRMODSWrapper(obj1);
-        List<Element> names1 = wrapper.getElements("mods:name[@type='personal']");
+        Element name1 = wrapper.getElement("mods:name[@type='personal']");
 
-        Element person1 = MODSPersonLookup.lookup(names1.get(0));
-        System.out.println(new XMLOutputter(Format.getPrettyFormat()).outputString(person1));
+        MCRObject person1 = Objects.requireNonNull(MODSPersonLookup.lookup(name1)).iterator().next();
+        Element person1Element = new MCRMODSWrapper(person1).getMODS();
+        System.out.println(new XMLOutputter(Format.getPrettyFormat()).outputString(person1Element));
 
-        assertPersonElement(person1, "Müller", "Lisa", "11111", "1112222333");
+        assertPersonElement(person1Element, "Müller", "Adam", "98765", "2222222333");
 
         wrapper = new MCRMODSWrapper(obj2);
-        List<Element> names2 = wrapper.getElements("mods:name[@type='personal']");
-        Element person2 = MODSPersonLookup.lookup(names2.get(0));
-        System.out.println(new XMLOutputter(Format.getPrettyFormat()).outputString(person2));
+        Element name2 = wrapper.getElement("mods:name[@type='personal']");
+        MCRObject person2 = Objects.requireNonNull(MODSPersonLookup.lookup(name2)).iterator().next();
+        Element person2Element = new MCRMODSWrapper(person2).getMODS();
+        System.out.println(new XMLOutputter(Format.getPrettyFormat()).outputString(person2Element));
 
-        assertPersonElement(person2, "Meyer", "Lena", "12345", "1112222444");
+        assertPersonElement(person2Element, "Meyer", "Gustav", "112233", "2222222444");
 
         wrapper = new MCRMODSWrapper(obj3);
-        List<Element> names3 = wrapper.getElements("mods:name[@type='personal']");
-        Element person3 = MODSPersonLookup.lookup(names3.get(0));
-        assertNull(person3);
+        Element name3 = wrapper.getElement("mods:name[@type='personal']");
+        Set<MCRObject> persons3 = MODSPersonLookup.lookup(name3);
+        assertNull(persons3);
     }
 
     /**

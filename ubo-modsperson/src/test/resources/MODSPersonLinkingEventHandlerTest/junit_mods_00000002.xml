@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mycoreobject xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-mods.xsd" ID="junit_mods_00000001">
+<mycoreobject xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-mods.xsd" ID="junit_mods_00000005">
   <metadata>
     <def.modsContainer class="MCRMetaXML" heritable="false" notinherit="true">
       <modsContainer inherited="0">
@@ -8,10 +8,10 @@
             <mods:title>This is a test-publication</mods:title>
           </mods:titleInfo>
           <mods:name type="personal">
-            <mods:namePart type="family">Müller</mods:namePart>
-            <mods:namePart type="given">Lisa</mods:namePart>
-            <mods:nameIdentifier type="lsf">11111</mods:nameIdentifier>
-            <mods:nameIdentifier type="scopus">1112222333</mods:nameIdentifier>
+            <mods:namePart type="family">Meyer</mods:namePart>
+            <mods:namePart type="given">Lena</mods:namePart>
+            <mods:nameIdentifier type="lsf">44444</mods:nameIdentifier>
+            <mods:nameIdentifier type="scopus">1112222888</mods:nameIdentifier>
           </mods:name>
         </mods:mods>
       </modsContainer>

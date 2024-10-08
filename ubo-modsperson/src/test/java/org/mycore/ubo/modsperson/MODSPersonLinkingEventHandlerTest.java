@@ -3,8 +3,6 @@ package org.mycore.ubo.modsperson;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
@@ -25,78 +23,38 @@ import static org.junit.Assert.assertNotNull;
 
 public class MODSPersonLinkingEventHandlerTest extends MCRStoreTestCase {
 
-    private static boolean isInitialized = false;
-
-    @Before
-    public void init() throws IOException, JDOMException, MCRAccessException {
-        if (!isInitialized) {
-            URL url1 = MCRObjectMetadataTest.class.getResource("/MODSPersonLookupTest/junit_mods_00000001.xml");
-            Document doc1 = new MCRURLContent(url1).asXML();
-            MCRObject obj1 = new MCRObject(doc1);
-
-            URL url2 = MCRObjectMetadataTest.class.getResource("/MODSPersonLookupTest/junit_mods_00000002.xml");
-            Document doc2 = new MCRURLContent(url2).asXML();
-            MCRObject obj2 = new MCRObject(doc2);
-
-            URL url3 = MCRObjectMetadataTest.class.getResource("/MODSPersonLookupTest/junit_mods_00000003.xml");
-            Document doc3 = new MCRURLContent(url3).asXML();
-            MCRObject obj3 = new MCRObject(doc3);
-
-            MCRMetadataManager.create(obj1);
-            MCRMetadataManager.create(obj2);
-            MCRMetadataManager.create(obj3);
-            isInitialized = true;
-        }
-    }
-
     @Test
-    @Ignore
-    public void testHandleCreate() {
+    public void testHandleCreateWithoutLookup() throws IOException, JDOMException, MCRAccessException {
+        URL url1 = MCRObjectMetadataTest.class.getResource("/MODSPersonLinkingEventHandlerTest/junit_mods_00000001.xml");
+        Document doc1 = new MCRURLContent(url1).asXML();
+        MCRObject obj1 = new MCRObject(doc1);
 
-        MCRObject person1 = MCRMetadataManager.retrieveMCRObject(MCRObjectID
+        URL url2 = MCRObjectMetadataTest.class.getResource("/MODSPersonLinkingEventHandlerTest/junit_mods_00000002.xml");
+        Document doc2 = new MCRURLContent(url2).asXML();
+        MCRObject obj2 = new MCRObject(doc2);
+
+        URL url3 = MCRObjectMetadataTest.class.getResource("/MODSPersonLinkingEventHandlerTest/junit_mods_00000003.xml");
+        Document doc3 = new MCRURLContent(url3).asXML();
+        MCRObject obj3 = new MCRObject(doc3);
+
+        MCRMetadataManager.create(obj1);
+        MCRMetadataManager.create(obj2);
+        MCRMetadataManager.create(obj3);
+
+        MCRObject person4 = MCRMetadataManager.retrieveMCRObject(MCRObjectID
             .getInstance("junit_modsperson_00000001"));
-        assertNotNull(person1);
-        assertPerson(person1, "Müller", "Lisa", "11111", "1112222333");
+        assertNotNull(person4);
+        assertPerson(person4, "Müller", "Lisa", "77777", "1112222999");
 
-        MCRObject person2 = MCRMetadataManager.retrieveMCRObject(MCRObjectID
+        MCRObject person5 = MCRMetadataManager.retrieveMCRObject(MCRObjectID
             .getInstance("junit_modsperson_00000002"));
-        assertNotNull(person2);
-        assertPerson(person2, "Meyer", "Lena", "12345", "1112222444");
+        assertNotNull(person5);
+        assertPerson(person5, "Meyer", "Lena", "44444", "1112222888");
 
-        MCRObject person3 = MCRMetadataManager.retrieveMCRObject(MCRObjectID
+        MCRObject person6 = MCRMetadataManager.retrieveMCRObject(MCRObjectID
             .getInstance("junit_modsperson_00000003"));
-        assertNotNull(person3);
-        assertPerson(person3, "Müller", "Luisa", "22222", "444555666");
-    }
-
-    @Test
-    public void testHandleCreateWithLookup() {
-
-        MCRObject mods1 = MCRMetadataManager.retrieveMCRObject(MCRObjectID
-            .getInstance("junit_mods_00000001"));
-        MCRObject mods2 = MCRMetadataManager.retrieveMCRObject(MCRObjectID
-            .getInstance("junit_mods_00000001"));
-        MCRObject mods3 = MCRMetadataManager.retrieveMCRObject(MCRObjectID
-            .getInstance("junit_mods_00000001"));
-
-        MODSPersonLookup.add(mods1);
-        MODSPersonLookup.add(mods2);
-        MODSPersonLookup.add(mods3);
-
-        MCRObject person1 = MCRMetadataManager.retrieveMCRObject(MCRObjectID
-            .getInstance("junit_modsperson_00000001"));
-        assertNotNull(person1);
-        assertPerson(person1, "Müller", "Lisa", "11111", "1112222333");
-
-        MCRObject person2 = MCRMetadataManager.retrieveMCRObject(MCRObjectID
-            .getInstance("junit_modsperson_00000002"));
-        assertNotNull(person2);
-        assertPerson(person2, "Meyer", "Lena", "12345", "1112222444");
-
-        MCRObject person3 = MCRMetadataManager.retrieveMCRObject(MCRObjectID
-            .getInstance("junit_modsperson_00000003"));
-        assertNotNull(person3);
-        assertPerson(person3, "Müller", "Luisa", "22222", "444555666");
+        assertNotNull(person6);
+        assertPerson(person6, "Müller", "Luisa", "99999", "444555777");
     }
 
     /**
