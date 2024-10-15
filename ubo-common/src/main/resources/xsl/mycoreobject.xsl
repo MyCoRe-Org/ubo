@@ -200,7 +200,7 @@
         <div class="row">
           <div class="col">
             <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info" />
-            <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info-destatis" />
+            <xsl:call-template name="label-info-destatis"/>
             <xsl:apply-templates select="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info" />
           </div>
         </div>
