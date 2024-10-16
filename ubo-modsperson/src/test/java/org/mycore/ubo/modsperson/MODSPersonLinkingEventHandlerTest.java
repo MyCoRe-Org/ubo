@@ -12,28 +12,37 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectMetadataTest;
+import org.mycore.frontend.cli.MCRCommandUtils;
 import org.mycore.mods.MCRMODSWrapper;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class MODSPersonLinkingEventHandlerTest extends MCRStoreTestCase {
 
+    /**
+     * TODO
+     * @throws IOException in case of error
+     * @throws JDOMException in case of error
+     * @throws MCRAccessException in case of error
+     */
     @Test
-    public void testHandleCreateWithoutLookup() throws IOException, JDOMException, MCRAccessException {
-        URL url1 = MCRObjectMetadataTest.class.getResource("/MODSPersonLinkingEventHandlerTest/junit_mods_00000001.xml");
+    public void testHandleCreate() throws IOException, JDOMException, MCRAccessException {
+        URL url1 = MCRObjectMetadataTest.class.getResource(
+            "/MODSPersonLinkingEventHandlerTest/junit_mods_00000001.xml");
         Document doc1 = new MCRURLContent(url1).asXML();
         MCRObject obj1 = new MCRObject(doc1);
 
-        URL url2 = MCRObjectMetadataTest.class.getResource("/MODSPersonLinkingEventHandlerTest/junit_mods_00000002.xml");
+        URL url2 = MCRObjectMetadataTest.class.getResource(
+            "/MODSPersonLinkingEventHandlerTest/junit_mods_00000002.xml");
         Document doc2 = new MCRURLContent(url2).asXML();
         MCRObject obj2 = new MCRObject(doc2);
 
-        URL url3 = MCRObjectMetadataTest.class.getResource("/MODSPersonLinkingEventHandlerTest/junit_mods_00000003.xml");
+        URL url3 = MCRObjectMetadataTest.class.getResource(
+            "/MODSPersonLinkingEventHandlerTest/junit_mods_00000003.xml");
         Document doc3 = new MCRURLContent(url3).asXML();
         MCRObject obj3 = new MCRObject(doc3);
 
@@ -55,6 +64,74 @@ public class MODSPersonLinkingEventHandlerTest extends MCRStoreTestCase {
             .getInstance("junit_modsperson_00000003"));
         assertNotNull(person6);
         assertPerson(person6, "Müller", "Luisa", "99999", "444555777");
+    }
+
+    /**
+     * Tests the case that a lookup returns multiple person-objects. This needs a constellation of test data
+     * that is unlikely to occur in production.
+     * @throws IOException in case of error
+     * @throws JDOMException in case of error
+     * @throws MCRAccessException in case of error
+     */
+    @Test
+    public void testHandleCreateDuplicatePerson() throws IOException, JDOMException, MCRAccessException {
+        URL url1 = MCRObjectMetadataTest.class.getResource(
+            "/MODSPersonLinkingEventHandlerTest/junit_mods_00000004.xml");
+        Document doc1 = new MCRURLContent(url1).asXML();
+        MCRObject obj1 = new MCRObject(doc1);
+
+        URL url2 = MCRObjectMetadataTest.class.getResource(
+            "/MODSPersonLinkingEventHandlerTest/junit_mods_00000005.xml");
+        Document doc2 = new MCRURLContent(url2).asXML();
+        MCRObject obj2 = new MCRObject(doc2);
+
+        URL url3 = MCRObjectMetadataTest.class.getResource(
+            "/MODSPersonLinkingEventHandlerTest/junit_mods_00000006.xml");
+        Document doc3 = new MCRURLContent(url3).asXML();
+        MCRObject obj3 = new MCRObject(doc3);
+
+        MCRMetadataManager.create(obj1);
+        MCRMetadataManager.create(obj2);
+        MCRMetadataManager.create(obj3);
+
+        List<String> modspersons = MCRCommandUtils.getIdsForType("modsperson").toList();
+        assertEquals(2, modspersons.size());
+
+        MCRObject modsperson1 = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(modspersons.get(0)));
+        MCRMODSWrapper wrapper = new MCRMODSWrapper(modsperson1);
+        List<String> lsfs = wrapper.getMODS().getChild("name", MCRConstants.MODS_NAMESPACE)
+            .getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
+            .stream()
+            .filter(ni -> "lsf".equals(ni.getAttributeValue("type")))
+            .map(Element::getText).toList();
+
+        if (lsfs.size() == 1) {
+            assertTrue(lsfs.get(0).equals("77766") || lsfs.get(0).equals("10101"));
+        }
+        else if (lsfs.size() == 2) {
+            assertTrue(lsfs.get(0).equals("77788") || lsfs.get(1).equals("77788"));
+        }
+        else {
+            fail(modsperson1.getId().toString() + " is expected to have either one or two LSF-IDs");
+        }
+
+        MCRObject modsperson2 = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(modspersons.get(1)));
+        wrapper = new MCRMODSWrapper(modsperson2);
+        lsfs = wrapper.getMODS().getChild("name", MCRConstants.MODS_NAMESPACE)
+            .getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
+            .stream()
+            .filter(ni -> "lsf".equals(ni.getAttributeValue("type")))
+            .map(Element::getText).toList();
+
+        if (lsfs.size() == 1) {
+            assertTrue(lsfs.get(0).equals("77766") || lsfs.get(0).equals("10101"));
+        }
+        else if (lsfs.size() == 2) {
+            assertTrue(lsfs.get(0).equals("77788") || lsfs.get(1).equals("77788"));
+        }
+        else {
+            fail(modsperson2.getId().toString() + " is expected to have either one or two LSF-IDs");
+        }
     }
 
     /**

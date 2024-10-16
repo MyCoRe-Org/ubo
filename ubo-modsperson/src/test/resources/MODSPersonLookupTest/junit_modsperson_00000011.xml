@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mycoreobject xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-mods.xsd" ID="junit_modsperson_00000011">
+<mycoreobject xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-modsperson.xsd" ID="junit_modsperson_00000011">
   <metadata>
     <def.modsContainer class="MCRMetaXML" heritable="false" notinherit="true">
       <modsContainer inherited="0">

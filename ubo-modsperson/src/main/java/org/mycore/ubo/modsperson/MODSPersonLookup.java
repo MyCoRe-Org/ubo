@@ -72,8 +72,6 @@ public class MODSPersonLookup {
                     .getChild("name", MCRConstants.MODS_NAMESPACE);
                 return savedElement == null || !hasSameNames(modsName, savedElement);
             }).count() == nameId2person.get(s).size());
-
-        // TODO: If there are multiple objects, we need the one that has most IDs in common with keys2lookup
         return keys2lookup.isEmpty() ? null : nameId2person.get(keys2lookup.iterator().next());
     }
 

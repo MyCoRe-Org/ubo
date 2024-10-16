@@ -10,8 +10,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
@@ -38,6 +36,8 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
 
     private final static Element PERSON_TEMPLATE;
 
+    private String leadIDName;
+
     static {
         String projectID = MCRConfiguration2.getStringOrThrow("UBO.projectid.default");
         String defaultID = MCRObjectID.formatID(projectID, "modsperson", 0);
@@ -55,7 +55,11 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
         mycoreobject.addContent(new Element("service"));
 
         PERSON_TEMPLATE = mycoreobject;
-        System.out.println(new XMLOutputter(Format.getPrettyFormat()).outputString(mycoreobject));
+    }
+
+    public MODSPersonLinkingEventHandler() {
+        super();
+        this.leadIDName = MCRConfiguration2.getString("MCR.user2.matching.lead_id").orElse("");
     }
 
     @Override
@@ -82,11 +86,12 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
         }
 
         MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
+        final String publicationId = obj.getId().toString();
         wrapper.getElements("mods:name[@type='personal']").forEach(modsName -> {
 
             MCRObject person = getPersonReferencedIn(modsName);
             if (person == null) {
-                person = findPersonMatching(modsName);
+                person = findPersonMatching(modsName, publicationId);
             }
 
             boolean isNewPerson = false;
@@ -135,7 +140,7 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
         }
     }
 
-    private MCRObject findPersonMatching(Element modsName) {
+    private MCRObject findPersonMatching(Element modsName, String publicationID) {
         Set<MCRObject> personElements = MODSPersonLookup.lookup(modsName);
         if (personElements == null || personElements.isEmpty()) {
             return null;
@@ -145,15 +150,15 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
             String allIDs = personElements.stream()
                 .map(o -> o.getId().toString()).collect(Collectors.joining(", "));
 
-            LOGGER.warn("There are multiple modsperson-objects matching the person in publication: "
-                + "["+ allIDs +"]. Chosing " + firstMatch.getId().toString());
+            LOGGER.warn("There are multiple modsperson-objects matching the person in publication "
+                + publicationID + ": ["+ allIDs +"]. Chosing " + firstMatch.getId().toString() + ".");
         }
         return firstMatch;
     }
 
     private boolean leadIDExists(Element modsName) {
         return modsName.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
-            .stream().anyMatch(ni -> "lsf".equals(ni.getAttributeValue("type"))); // TODO: lsf generic?
+            .stream().anyMatch(ni -> leadIDName.equals(ni.getAttributeValue("type")));
     }
 
     private MCRObject buildNewPerson() {
