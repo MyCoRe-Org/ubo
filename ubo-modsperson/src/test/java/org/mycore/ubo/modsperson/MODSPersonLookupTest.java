@@ -42,25 +42,32 @@ public class MODSPersonLookupTest extends MCRTestCase {
 
         MCRMODSWrapper wrapper = new MCRMODSWrapper(obj1);
         Element name1 = wrapper.getElement("mods:name[@type='personal']");
-
-        MCRObject person1 = Objects.requireNonNull(MODSPersonLookup.lookup(name1)).iterator().next();
-        Element person1Element = new MCRMODSWrapper(person1).getMODS();
-        System.out.println(new XMLOutputter(Format.getPrettyFormat()).outputString(person1Element));
-
-        assertPersonElement(person1Element, "Müller", "Adam", "98765", "2222222333");
+        MODSPersonLookup.PersonCache person1 = Objects.requireNonNull(MODSPersonLookup.lookup(name1)).iterator().next();
+        assertPerson(person1,"Müller", "Adam", "98765", "2222222333");
 
         wrapper = new MCRMODSWrapper(obj2);
         Element name2 = wrapper.getElement("mods:name[@type='personal']");
-        MCRObject person2 = Objects.requireNonNull(MODSPersonLookup.lookup(name2)).iterator().next();
-        Element person2Element = new MCRMODSWrapper(person2).getMODS();
-        System.out.println(new XMLOutputter(Format.getPrettyFormat()).outputString(person2Element));
-
-        assertPersonElement(person2Element, "Meyer", "Gustav", "112233", "2222222444");
+        MODSPersonLookup.PersonCache person2 = Objects.requireNonNull(MODSPersonLookup.lookup(name2)).iterator().next();
+        assertPerson(person2, "Meyer", "Gustav", "112233", "2222222444");
 
         wrapper = new MCRMODSWrapper(obj3);
         Element name3 = wrapper.getElement("mods:name[@type='personal']");
-        Set<MCRObject> persons3 = MODSPersonLookup.lookup(name3);
+        Set<MODSPersonLookup.PersonCache> persons3 = MODSPersonLookup.lookup(name3);
         assertNull(persons3);
+    }
+
+    private void assertPerson(MODSPersonLookup.PersonCache assertPerson, String familyName,
+        String givenName, String lsfId, String scopusId) {
+        assertEquals(familyName, assertPerson.getFamilyName());
+        assertEquals(givenName, assertPerson.getGivenName());
+        assertEquals(2, assertPerson.getKeys().size());
+
+        String lsfIdKey = String.join("|", lsfId, "lsf");
+        String scopusIdKey = String.join("|", scopusId, "scopus");
+
+        assertPerson.getKeys().forEach(key -> {
+            assertTrue(key.equals(lsfIdKey) || key.equals(scopusIdKey));
+        });
     }
 
     /**

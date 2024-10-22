@@ -141,19 +141,19 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
     }
 
     private MCRObject findPersonMatching(Element modsName, String publicationID) {
-        Set<MCRObject> personElements = MODSPersonLookup.lookup(modsName);
-        if (personElements == null || personElements.isEmpty()) {
+        Set<MODSPersonLookup.PersonCache> cachedPersons = MODSPersonLookup.lookup(modsName);
+        if (cachedPersons == null || cachedPersons.isEmpty()) {
             return null;
         }
-        MCRObject firstMatch = personElements.iterator().next();
-        if (personElements.size() > 1) {
-            String allIDs = personElements.stream()
-                .map(o -> o.getId().toString()).collect(Collectors.joining(", "));
+        MODSPersonLookup.PersonCache firstMatch = cachedPersons.iterator().next();
+        if (cachedPersons.size() > 1) {
+            String allIDs = cachedPersons.stream()
+                .map(o -> o.getPersonmodsId().toString()).collect(Collectors.joining(", "));
 
             LOGGER.warn("There are multiple modsperson-objects matching the person in publication "
-                + publicationID + ": ["+ allIDs +"]. Chosing " + firstMatch.getId().toString() + ".");
+                + publicationID + ": ["+ allIDs +"]. Chosing " + firstMatch.getPersonmodsId().toString() + ".");
         }
-        return firstMatch;
+        return MCRMetadataManager.retrieveMCRObject(firstMatch.getPersonmodsId());
     }
 
     private boolean leadIDExists(Element modsName) {
