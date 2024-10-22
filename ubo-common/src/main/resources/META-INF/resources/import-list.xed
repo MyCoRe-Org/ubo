@@ -54,6 +54,36 @@
               <xed:output i18n="ubo.import.list.form.headline" />:
             </legend>
 
+            <xed:bind xpath="partOf">
+              <div class="form-group form-inline">
+                <label for="{generate-id()}" class="mycore-form-label text-nowrap">
+                  <xed:output i18n="ubo.partOf" />:
+                </label>
+                <select id="{generate-id()}" class="autocomplete {$xed-validation-marker} col-7 form-control custom-select">
+                  <option value="">
+                    <xed:output i18n="search.select"/>
+                  </option>
+                  <xed:include uri="xslStyle:items2options:classification:editor:-1:children:partOf" />
+                </select>
+              </div>
+            </xed:bind>
+
+            <xed:bind xpath="status">
+              <div class="form-group form-inline">
+                <label for="{generate-id()}" class="mycore-form-label text-nowrap">
+                  <xed:output i18n="search.dozbib.status" />:
+                </label>
+                <select id="{generate-id()}" class="autocomplete {$xed-validation-marker} col-7 form-control custom-select">
+                  <option value="">
+                    <xed:output i18n="search.select"/>
+                  </option>
+                  <xed:include uri="xslStyle:items2options:resource:status.xml"/>
+                </select>
+              </div>
+            </xed:bind>
+
+            <hr/>
+
             <xed:repeat xpath="subject" max="5">
               <div class="form-group form-inline">
                 <label for="subject" class="mycore-form-label text-nowrap">
@@ -104,6 +134,8 @@
                 </select>
               </div>
             </xed:bind>
+
+            <hr/>
 
             <xed:bind xpath="@enrich" initially="false">
               <div class="form-group form-inline">

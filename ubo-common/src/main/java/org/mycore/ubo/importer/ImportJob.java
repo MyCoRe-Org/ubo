@@ -99,6 +99,7 @@ public abstract class ImportJob {
         CategoryAdder adder = new CategoryAdder(formInput);
         for (Document publication : publications) {
             adder.addCategories(publication);
+            adder.setStatus(publication);
         }
     }
 
