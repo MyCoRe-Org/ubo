@@ -477,6 +477,9 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
         String ldapSearchFilter = createLDAPSearchFilter(ldapAttributes, searchTemplate);
         try {
             ctx = new LDAPAuthenticator().authenticate();
+            if (ctx == null) {
+                return new ArrayList<>();
+            }
             ldapUsers = new LDAPSearcher().searchWithGlobalDN(ctx, ldapSearchFilter);
         } catch (NamingException ex) {
             LOGGER.error("Exception occurred: " + ex);
