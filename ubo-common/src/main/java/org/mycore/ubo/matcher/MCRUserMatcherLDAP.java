@@ -482,13 +482,13 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
             }
             ldapUsers = new LDAPSearcher().searchWithGlobalDN(ctx, ldapSearchFilter);
         } catch (NamingException ex) {
-            LOGGER.error("Exception occurred: " + ex);
+            LOGGER.error("Exception occurred during getting LDAP users", ex);
         } finally {
             if (ctx != null) {
                 try {
                     ctx.close();
                 } catch (NamingException ex) {
-                    LOGGER.warn("could not close context " + ex);
+                    LOGGER.warn("Could not close LDAP context", ex);
                 }
             }
         }
