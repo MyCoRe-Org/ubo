@@ -14,7 +14,7 @@
   <xsl:key use="substring-after(@valueURI,'#')" name="destatisByCategory" match="//mods:mods/mods:classification[contains(@authorityURI,'destatis')]"></xsl:key>
   <xsl:variable name="origin"                   select="document('classification:metadata:-1:children:ORIGIN')/mycoreclass/categories" />
 
-  <xsl:template match="mycoreobject">
+  <xsl:template match="mycoreobject[contains(@ID,'_mods_')]">
     <xsl:apply-templates select="." mode="baseFields" />
     <xsl:apply-templates select="structure/parents/parent[@xlink:href]" mode="solrField" />
     <xsl:apply-templates select="service/servflags/servflag[@type='status']" mode="solrField" />
@@ -23,6 +23,26 @@
 
     <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
       <xsl:apply-templates select="mods:*[@authority or @authorityURI]|mods:typeOfResource|mods:accessCondition"  mode="category" />
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template match="mycoreobject[contains(@ID,'_modsperson_')]">
+    <xsl:apply-templates select="." mode="baseFields" />
+    
+    <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
+      <xsl:for-each select="mods:name[@type='personal']">
+      
+        <field name="name">
+          <xsl:apply-templates select="." mode="solrField" />
+        </field>
+      
+        <xsl:for-each select="mods:nameIdentifier">
+          <field name="nid_{@type}">
+            <xsl:value-of select="text()" />
+          </field>
+        </xsl:for-each>
+        
+      </xsl:for-each>
     </xsl:for-each>
   </xsl:template>
 
