@@ -477,15 +477,18 @@ public class MCRUserMatcherLDAP implements MCRUserMatcher {
         String ldapSearchFilter = createLDAPSearchFilter(ldapAttributes, searchTemplate);
         try {
             ctx = new LDAPAuthenticator().authenticate();
+            if (ctx == null) {
+                return new ArrayList<>();
+            }
             ldapUsers = new LDAPSearcher().searchWithGlobalDN(ctx, ldapSearchFilter);
         } catch (NamingException ex) {
-            LOGGER.error("Exception occurred: " + ex);
+            LOGGER.error("Exception occurred during getting LDAP users", ex);
         } finally {
             if (ctx != null) {
                 try {
                     ctx.close();
                 } catch (NamingException ex) {
-                    LOGGER.warn("could not close context " + ex);
+                    LOGGER.warn("Could not close LDAP context", ex);
                 }
             }
         }

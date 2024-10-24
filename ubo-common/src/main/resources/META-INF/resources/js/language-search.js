@@ -233,8 +233,14 @@ class LanguageSearchInput {
         this.searchInput.type = 'text';
         this.searchInput.classList.add('form-control');
         this.searchInput.classList.add('language-search-input');
+        this.searchInput.classList.add('mycore-form-input');
         this.searchInput.setAttribute('list', 'language-search-list');
         this.root.append(this.searchInput);
+
+        while (this.root.firstChild) {
+            this.root.parentNode.insertBefore(this.root.firstChild, this.root);
+        }
+        this.root.parentNode.removeChild(this.root);
 
         fetch(`${baseURL}rsc/locale/translate/${currentLang}/edit.language.placeholder`)
             .then(response => response.text())

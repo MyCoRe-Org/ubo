@@ -26,6 +26,8 @@
 <xsl:param name="MCR.ORCID2.OAuth.ClientSecret" select="''" />
 <xsl:param name="MCR.ORCID2.OAuth.Scope" select="''" />
 
+<xsl:decimal-format name="WesternEurope" decimal-separator="," grouping-separator="."/>
+
 <!-- ==================== Trefferliste Metadaten ==================== -->
 
 <xsl:variable name="numFound" select="/response/result[@name='response']/@numFound" />
@@ -60,7 +62,7 @@
   <xsl:text>: </xsl:text>
   <xsl:choose>
     <xsl:when test="$numFound > 1">
-      <xsl:value-of select="$numFound" />
+      <xsl:value-of select="format-number($numFound, '##.###', 'WesternEurope')" />
       <xsl:text> </xsl:text>
       <xsl:value-of select="i18n:translate('result.dozbib.publicationMany')"/>
     </xsl:when>

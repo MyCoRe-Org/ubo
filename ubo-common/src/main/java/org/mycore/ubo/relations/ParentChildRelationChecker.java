@@ -172,7 +172,7 @@ public class ParentChildRelationChecker {
 
     private void checkHasBothChildrenAndParent() {
         if ((parentID != null) && (!childLinks.isEmpty())) {
-            problemFound("has both parent and children", false);
+            LOGGER.warn("{} has both parent and children", oid);
         }
     }
 

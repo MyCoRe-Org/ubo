@@ -118,11 +118,11 @@ public class LDAPAuthenticator {
             return new InitialLdapContext(env, null);
         } catch (AuthenticationException ex) {
             if (ex.getMessage().contains(PATTERN_INVALID_CREDENTIALS)) {
-                LOGGER.info("Could not authenticate LDAP user " + uid + ": " + ex.getMessage());
-                return null;
+                LOGGER.error("Could not authenticate LDAP user {}:{}", uid, ex.getMessage());
             } else {
-                throw ex;
+                LOGGER.error("Error while creating {}", LdapContext.class.getSimpleName(), ex);
             }
+            return null;
         }
     }
 }
