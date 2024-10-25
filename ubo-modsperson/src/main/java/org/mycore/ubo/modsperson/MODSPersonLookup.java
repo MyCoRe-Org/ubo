@@ -33,6 +33,13 @@ public class MODSPersonLookup {
         });
     }
 
+    public static void add(PersonCache personCache) {
+        id2person.put(personCache.getPersonmodsId().toString(), personCache);
+        personCache.getKeys().forEach(key -> {
+            nameId2person.computeIfAbsent(key, k -> new HashSet<>()).add(personCache);
+        });
+    }
+
     public static void remove(MCRObject person) {
         Element mods = new MCRMODSWrapper(person).getMODS().clone();
         id2person.remove(person.getId().toString());

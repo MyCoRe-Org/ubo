@@ -2,16 +2,23 @@ package org.mycore.ubo.modsperson;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.mycore.common.events.MCRStartupHandler;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.frontend.cli.MCRCommandUtils;
+import org.mycore.solr.MCRSolrClientFactory;
 
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Loads all mpdsperson data into {@link MODSPersonLookup} on startup.
+ * Loads all modsperson data into {@link MODSPersonLookup} on startup.
  */
 public class MODSPersonCachingStartupHandler implements MCRStartupHandler.AutoExecutable {
 
@@ -27,14 +34,76 @@ public class MODSPersonCachingStartupHandler implements MCRStartupHandler.AutoEx
         return 0;
     }
 
+
     @Override
     public void startUp(jakarta.servlet.ServletContext servletContext) {
         AtomicInteger counter = new AtomicInteger(0);
-        MCRCommandUtils.getIdsForType("modsperson").forEach(idString -> {
-            MCRObject obj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(idString));
-            MODSPersonLookup.add(obj);
-            counter.incrementAndGet();
-        });
+        int offset = 0;
+        int blockSize = 1000;
+
+        final SolrQuery query = new SolrQuery("objectType:modsperson")
+            .setFields("*").setRows(blockSize).setParam("wt", "json");
+
+        try {
+            int resultsFound = fetchAndProcessResults(query, offset, counter);
+            if (resultsFound > blockSize) {
+                for (int i = 0; i < resultsFound / blockSize; i++) {
+                    offset += 1000;
+                    fetchAndProcessResults(query, offset, counter);
+                }
+            }
+        } catch (SolrServerException | IOException e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
         LOGGER.info("Loaded " + counter.get() + " modsperson-objects into the cache");
     }
+
+    private int fetchAndProcessResults(SolrQuery query, int offset, AtomicInteger counter)
+        throws SolrServerException, IOException {
+        query.setStart(offset);
+
+        QueryResponse queryResponse = MCRSolrClientFactory.getMainSolrClient().query(query);
+        SolrDocumentList results = queryResponse.getResults();
+
+        for (SolrDocument doc : results) {
+            addSolrDocToLookup(doc, counter);
+        }
+
+        return (int) results.getNumFound();
+    }
+
+    private void addSolrDocToLookup(SolrDocument doc, AtomicInteger counter) {
+        try {
+            MCRObjectID personmodsId = MCRObjectID.getInstance((String) doc.getFieldValue("id"));
+            String familyName;
+            String givenName;
+            Set<String> keys = new HashSet<>();
+            String personName = (String) doc.getFieldValue("name");
+            if (personName.contains(",")) {
+                String[] parts = personName.split(",");
+                familyName = parts[0].trim();
+                givenName = parts[1].trim();
+            }
+            else {
+                return;
+            }
+            for (String fieldName : doc.getFieldNames()) {
+                if (fieldName.startsWith("nid_") && !fieldName.equals("nid_connection")) {
+                    List<String> fieldValues = (List<String>) doc.getFieldValue(fieldName);
+                    for (String fieldValue : fieldValues) {
+                        String idType = fieldName.substring(4);
+                        keys.add(String.join("|", idType.trim(), fieldValue.trim()));
+                    }
+
+                }
+            }
+            MODSPersonLookup.add(new MODSPersonLookup.PersonCache(personmodsId, familyName, givenName, keys));
+            counter.incrementAndGet();
+        } catch (ClassCastException | NullPointerException | IndexOutOfBoundsException ex) {
+            // parsing a single faulty SolrDocument shouldn't interrupt the whole startup
+            LOGGER.warn("Error while loading modsperson " + doc.get("id") + " into cache", ex);
+        }
+    }
+
 }
