@@ -17,7 +17,7 @@
   <!-- Transform URLs containing DOI to identifier field of type DOI -->
   <xsl:template match="mods:mods">
     <xsl:copy>
-      <xsl:apply-templates />
+      <xsl:apply-templates select="@*|*" />
       <xsl:apply-templates select="mods:location/mods:url[contains(text(),'doi.org/10.')]" mode="url2doi" />
     </xsl:copy>
   </xsl:template>

@@ -8,7 +8,8 @@
     <div class="card-body">
       <xed:form class="inline-form" role="form" xmlns:xed="http://www.mycore.de/xeditor">
 
-        <xed:source uri="session:ubo.submission" />
+        <xed:source uri="xslStyle:mods-preprocessor:session:ubo.submission" />
+        <xed:post-processor xsl="mods-postprocessor.xsl" />
 
         <xed:bind xpath="/mods:mods">
 
