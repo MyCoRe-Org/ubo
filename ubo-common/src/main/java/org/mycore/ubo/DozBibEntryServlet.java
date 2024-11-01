@@ -9,10 +9,6 @@
 
 package org.mycore.ubo;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
@@ -31,6 +27,10 @@ import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.frontend.support.MCRObjectIDLockTable;
 import org.mycore.mods.MCRMODSWrapper;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
 public class DozBibEntryServlet extends MCRServlet {
 
@@ -154,7 +154,7 @@ public class DozBibEntryServlet extends MCRServlet {
         } else
         // New entry submitted
         {
-            oid = MCRObjectID.getNextFreeId(oid.getBase());
+            oid = MCRMetadataManager.getMCRObjectIDGenerator().getNextFreeId(oid.getBase());
             obj.setId(oid);
             MCRMetadataManager.create(obj);
             LOGGER.info("UBO saved entry with ID " + oid);

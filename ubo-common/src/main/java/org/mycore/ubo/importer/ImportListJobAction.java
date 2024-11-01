@@ -38,9 +38,6 @@ public class ImportListJobAction extends MCRJobAction {
 
     protected static final Optional<String> DEFAULT_EMAIL_FROM = MCRConfiguration2.getString("UBO.Mail.From");
 
-    public ImportListJobAction() {
-    }
-
     public ImportListJobAction(MCRJob mcrJob) {
         super(mcrJob);
     }
@@ -68,9 +65,7 @@ public class ImportListJobAction extends MCRJobAction {
             }
 
             try {
-                MCRTransactionHelper.beginTransaction();
                 importJob.savePublications();
-                MCRTransactionHelper.commitTransaction();
                 sendMail(importJob);
             } catch (Exception e) {
                 LOGGER.error("Error while saving publications", e);

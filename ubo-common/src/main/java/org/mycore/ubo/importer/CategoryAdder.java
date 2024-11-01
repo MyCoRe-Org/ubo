@@ -9,22 +9,28 @@
 
 package org.mycore.ubo.importer;
 
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.filter.Filters;
+import org.mycore.common.MCRConstants;
+import org.mycore.frontend.MCRFrontendUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.mycore.common.MCRConstants;
-import org.mycore.frontend.MCRFrontendUtil;
+import static org.mycore.common.MCRConstants.XPATH_FACTORY;
 
 class CategoryAdder {
 
     private List<Element> categories = new ArrayList<Element>();
+    private Element status;
 
     public CategoryAdder(Element parameters) {
+        buildClassificationElement(parameters, "partOf", "partOf");
         buildClassificationElement(parameters, "subject", "fachreferate");
         buildClassificationElement(parameters, "origin", "ORIGIN");
         buildClassificationElement(parameters, "project", "project");
+        status = parameters.getChild("status");
     }
 
     private void buildClassificationElement(Element parameters, String parameterName, String classificationID) {
@@ -34,6 +40,18 @@ class CategoryAdder {
             classification.setAttribute("authorityURI", authorityURI);
             classification.setAttribute("valueURI", authorityURI + "#" + categoryID.getTextTrim());
             categories.add(classification);
+        }
+    }
+
+    public void setStatus(Document publication) {
+        if (status == null || status.getText().isEmpty()) {
+            return;
+        }
+        Element statusElement = XPATH_FACTORY.compile("//service/servflags/servflag[@type='status']", Filters.element())
+            .evaluateFirst(publication);
+
+        if(statusElement != null) {
+            statusElement.setText(status.getText());
         }
     }
 
