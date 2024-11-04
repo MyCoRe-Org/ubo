@@ -20,7 +20,7 @@
 </xsl:template>
 
 <xsl:template match="mycoreobject/@ID[contains(.,'_modsperson_')]" mode="breadcrumb">
-  <xsl:text>Person </xsl:text>
+  <xsl:text>Person Nr.</xsl:text>
   <xsl:value-of select="number(substring-after(.,'_modsperson_'))" />
 </xsl:template>
 

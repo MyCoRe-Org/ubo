@@ -121,13 +121,18 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
 
     private MCRObject getPersonReferencedIn(Element modsName) {
         String personID = modsName.getAttributeValue("href", MCRConstants.XLINK_NAMESPACE);
-        if (StringUtils.isEmpty(personID)) {
-            return null;
-        } else {
+        if (!StringUtils.isEmpty(personID)) {
             LOGGER.debug("Retrieving person object already referenced in publication: " + personID);
             MCRObjectID oid = MCRObjectID.getInstance(personID);
-            return MCRMetadataManager.retrieveMCRObject(oid);
+
+            try {
+                return MCRMetadataManager.retrieveMCRObject(oid);
+            } catch (MCRPersistenceException ex) {
+                LOGGER.warn("Modsperson object " + personID + " not found, remove reference link: " + ex.getMessage());
+                modsName.removeAttribute("href", MCRConstants.XLINK_NAMESPACE);
+            }
         }
+        return null;
     }
 
     private void setReferencedPerson(Element modsName, MCRObject person) {
