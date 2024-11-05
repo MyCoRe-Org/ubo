@@ -11,11 +11,20 @@
       <div class="form-group form-inline">
         <div class="mycore-form-label">
           <xed:bind xpath="@field">
-            <select class="form-control w-100 custom-select">
+            <select id="ubo-search-person" class="form-control w-100 custom-select">
               <option value="person">Person</option>
-              <option value="person_aut"><xed:output i18n="search.dozbib.author" /></option>
-              <option value="person_edt"><xed:output i18n="search.dozbib.publisher" /></option>
-              <option value="person_ths"><xed:output i18n="search.dozbib.advisor" /></option>
+              <option value="person_aut">
+                <xed:output i18n="search.dozbib.author"/>
+              </option>
+              <option value="person_edt">
+                <xed:output i18n="search.dozbib.publisher"/>
+              </option>
+              <option value="person_ths">
+                <xed:output i18n="search.dozbib.advisor"/>
+              </option>
+              <option value="person_dgs">
+                <xed:output i18n="search.dozbib.degree.supervisor"/>
+              </option>
             </select>
           </xed:bind>
         </div>
