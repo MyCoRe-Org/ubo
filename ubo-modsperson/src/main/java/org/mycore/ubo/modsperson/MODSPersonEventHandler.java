@@ -7,8 +7,10 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
+import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -35,7 +37,7 @@ public class MODSPersonEventHandler extends MCREventHandlerBase {
             return;
         }
         MODSPersonLookup.update(obj);
-        LOGGER.info("Updated modsperson " + obj.getId().toString());
+        LOGGER.info("Updated modsperson " + obj.getId().toString() + " in cache");
     }
 
     @Override
@@ -50,7 +52,7 @@ public class MODSPersonEventHandler extends MCREventHandlerBase {
         } catch (SolrServerException | IOException e) {
             throw new MCRException("There was an error while removing references for " + obj.getId().toString(), e);
         }
-        LOGGER.info("Deleted modsperson " + obj.getId().toString());
+        LOGGER.info("Deleted modsperson " + obj.getId().toString() + " from cache");
     }
 
     /**
@@ -69,14 +71,23 @@ public class MODSPersonEventHandler extends MCREventHandlerBase {
 
         for (SolrDocument doc : results) {
             MCRObjectID modsId = MCRObjectID.getInstance((String) doc.getFieldValue("id"));
-            MCRObject obj = MCRMetadataManager.retrieveMCRObject(modsId);
-            MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
-            wrapper.getElements("mods:name[@type='personal']").forEach(modsName -> {
-                if (modsName.getAttribute("href", MCRConstants.XLINK_NAMESPACE) != null &&
-                    modspersonId.equals(modsName.getAttributeValue("href", MCRConstants.XLINK_NAMESPACE))) {
-                    modsName.removeAttribute("href", MCRConstants.XLINK_NAMESPACE);
-                }
-            });
+            try {
+                MCRObject obj = MCRMetadataManager.retrieveMCRObject(modsId);
+                MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
+                wrapper.getElements("mods:name[@type='personal']").forEach(modsName -> {
+                    if (modsName.getAttribute("href", MCRConstants.XLINK_NAMESPACE) != null &&
+                        modspersonId.equals(modsName.getAttributeValue("href", MCRConstants.XLINK_NAMESPACE))) {
+                        modsName.removeAttribute("href", MCRConstants.XLINK_NAMESPACE);
+                        try {
+                            MCRMetadataManager.update(obj);
+                        } catch (MCRPersistenceException | MCRAccessException e) {
+                            LOGGER.warn("Error while updating object " + modsId.toString(), e);
+                        }
+                    }
+                });
+            } catch (MCRPersistenceException e) {
+                LOGGER.warn("Error while trying to access object " + modsId.toString(), e);
+            }
         }
 
         return (int) results.getNumFound();

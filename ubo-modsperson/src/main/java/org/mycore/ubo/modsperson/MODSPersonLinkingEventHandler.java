@@ -30,6 +30,10 @@ import org.mycore.mods.merger.MCRMergeTool;
 // TODO: Documentation
 // TODO: Wait for SOLR commit in batch mode? Or cache IDs in batch mode?
 
+/**
+ * EventHandler to connect personal information in mods objects to the correspondend information in modsperson
+ * objects.
+ */
 public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
 
     private final static Logger LOGGER = LogManager.getLogger();
@@ -103,7 +107,6 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
             if (person != null) {
                 mergeDataFromNameToPerson(modsName, person);
                 setReferencedPerson(modsName, person);
-                mergeDataFromPersonToName(modsName, person);
                 if (isNewPerson) {
                     MODSPersonLookup.add(person);
                 }
@@ -171,6 +174,11 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
         return new MCRObject(new Document(PERSON_TEMPLATE.clone()));
     }
 
+    /**
+     * Writes additional data from mods name object into the modsperson object
+     * @param modsName the {@link Element} which contains information about the person
+     * @param person the modsperson object that should be enriched with additional data
+     */
     private void mergeDataFromNameToPerson(Element modsName, MCRObject person) {
         LOGGER.info("Merging data from mods:name in publication to person object...");
 
@@ -210,16 +218,5 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
         cloned.removeChildren("description", MCRConstants.MODS_NAMESPACE);
         cloned.removeChildren("etal", MCRConstants.MODS_NAMESPACE);
         return cloned;
-    }
-
-    private void mergeDataFromPersonToName(Element modsName, MCRObject person) {
-        LOGGER.info("Merging data from person object into mods:name in publication...");
-        MCRMODSWrapper wrapper = new MCRMODSWrapper(person);
-        Element personNameElement = wrapper.getMODS() != null
-                                    ? wrapper.getMODS().getChild("name", MCRConstants.MODS_NAMESPACE)
-                                    : null;
-        if (personNameElement != null) {
-            MCRMergeTool.merge(modsName, personNameElement);
-        }
     }
 }
