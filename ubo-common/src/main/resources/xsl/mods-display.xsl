@@ -13,8 +13,9 @@
   xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
   exclude-result-prefixes="xsl xalan xlink i18n encoder mcr mcrxsl check cerif">
 
-  <xsl:include href="shelfmark-normalization.xsl" />
   <xsl:include href="output-category.xsl" />
+  <xsl:include href="response-get-handler.xsl" />
+  <xsl:include href="shelfmark-normalization.xsl" />
 
   <xsl:param name="step" />
   <xsl:param name="RequestURL" />
@@ -91,13 +92,23 @@
   </xsl:template>
 
   <xsl:template match="mods:classification[contains(@authorityURI, 'destatis')]" mode="details">
-    <div class="row">
+    <xsl:variable name="category" select="$destatis//category[@ID=substring-after(current()/@valueURI,'#')]"/>
+    <xsl:variable name="destatis-hierarchy">
+      <xsl:call-template name="output.category">
+        <xsl:with-param name="classID" select="'destatis'" />
+        <xsl:with-param name="categID" select="$category/@ID" />
+      </xsl:call-template>
+    </xsl:variable>
+
+    <div class="row ubo-metadata-class-destatis ubo-metadata-class-destatis-{position()}">
       <div class="col-3">
         <xsl:value-of select="concat(i18n:translate('ubo.destatis'), ':')"/>
       </div>
       <div class="col-9">
-        <xsl:variable name="category" select="$destatis//category[@ID=substring-after(current()/@valueURI,'#')]"/>
-        <xsl:value-of select="$category/label[lang('de')]/@text"/>
+        <a href="{$WebApplicationBaseURL}servlets/solr/{$solrRequestHandler}fq={encoder:encode(concat('+destatis:', $category/@ID), 'UTF-8')}"
+           title="{$destatis-hierarchy}" aria-label="{i18n:translate('ubo.destatis.label.link')}">
+          <xsl:value-of select="$category/label[lang('de')]/@text"/>
+        </a>
       </div>
     </div>
   </xsl:template>
@@ -1130,7 +1141,9 @@
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'category')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'partOf')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fundingType')]" mode="details" />
-    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'destatis')]" mode="details" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'destatis')]" mode="details">
+      <xsl:sort select="@valueURI"/>
+    </xsl:apply-templates>
     <xsl:apply-templates select="mods:abstract/@xlink:href" mode="details" />
     <xsl:apply-templates select="mods:abstract[string-length(.) &gt; 0]" mode="details" />
   </xsl:template>
