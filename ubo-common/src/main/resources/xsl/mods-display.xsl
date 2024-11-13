@@ -13,9 +13,9 @@
   xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
   exclude-result-prefixes="xsl xalan xlink i18n encoder mcr mcrxsl check cerif">
 
-  <xsl:include href="output-category.xsl" />
-  <xsl:include href="response-get-handler.xsl" />
-  <xsl:include href="shelfmark-normalization.xsl" />
+  <xsl:include href="resource:xsl/output-category.xsl" />
+  <xsl:include href="resource:xsl/response-get-handler.xsl"/>
+  <xsl:include href="resource:xsl/shelfmark-normalization.xsl" />
 
   <xsl:param name="step" />
   <xsl:param name="RequestURL" />
