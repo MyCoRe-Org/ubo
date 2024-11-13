@@ -26,6 +26,7 @@
   <xsl:param name="UBO.JOP.URL" />
   <xsl:param name="UBO.URI.gbv.de.ppn.redirect" />
   <xsl:param name="UBO.CreatorRoles" select="'cre aut tch pht prg'" />   <!-- Rollen, die als DC.Creator betrachtet werden -->
+  <xsl:param name="UBO.DESTATIS.omit.ID"/>
 
   <!-- Expect one more author to be displayed as the last author is always getting displayed -->
   <xsl:param name="UBO.Initially.Visible.Authors" select="14" />
@@ -107,7 +108,15 @@
       <div class="col-9">
         <a href="{$WebApplicationBaseURL}servlets/solr/{$solrRequestHandler}fq={encoder:encode(concat('+destatis:', $category/@ID), 'UTF-8')}"
            title="{$destatis-hierarchy}" aria-label="{i18n:translate('ubo.destatis.label.link')}">
-          <xsl:value-of select="$category/label[lang('de')]/@text"/>
+
+          <xsl:choose>
+            <xsl:when test="$UBO.DESTATIS.omit.ID = 'true'">
+              <xsl:value-of select="substring-after($category/label[lang('de')]/@text, ' ')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$category/label[lang('de')]/@text"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </a>
       </div>
     </div>
