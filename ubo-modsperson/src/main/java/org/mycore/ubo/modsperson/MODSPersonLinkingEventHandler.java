@@ -26,12 +26,12 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mods.MCRMODSSorter;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.mods.merger.MCRMergeTool;
-
-// TODO: Documentation
-// TODO: Wait for SOLR commit in batch mode? Or cache IDs in batch mode?
+import org.mycore.mods.merger.MCRMerger;
+import org.mycore.mods.merger.MCRMergerFactory;
+import org.mycore.ubo.modsperson.merger.MCRNameMerger;
 
 /**
- * EventHandler to connect personal information in mods objects to the correspondend information in modsperson
+ * EventHandler to connect personal information in mods objects to the corresponding information in modsperson
  * objects.
  */
 public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
@@ -175,7 +175,7 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
     }
 
     /**
-     * Writes additional data from mods name object into the modsperson object
+     * Writes additional data from mods name object into the modsperson object.
      * @param modsName the {@link Element} which contains information about the person
      * @param person the modsperson object that should be enriched with additional data
      */
@@ -189,6 +189,13 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
             Element personOld = personName.clone();
 
             MCRMergeTool.merge(personName, filterMODS(modsName));
+
+            // build an alternativeName, if names are not exactly the same
+            MCRMerger mergeInto = MCRMergerFactory.buildFrom(personName);
+            MCRMerger mergeFrom = MCRMergerFactory.buildFrom(modsName);
+            if (mergeInto.isProbablySameAs(mergeFrom)) {
+                ((MCRNameMerger) mergeInto).mergeAsAlternativeName(mergeFrom);
+            }
 
             MCRMODSSorter.sort(wrapper.getMODS());
             MCRMODSSorter.sort(personName);

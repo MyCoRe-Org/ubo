@@ -3,9 +3,12 @@ package org.mycore.ubo.modsperson;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.junit.Test;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
+import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRStoreTestCase;
 import org.mycore.common.content.MCRURLContent;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -24,7 +27,7 @@ import static org.junit.Assert.*;
 public class MODSPersonLinkingEventHandlerTest extends MCRStoreTestCase {
 
     /**
-     * TODO
+     * Tests that for three similar but not identical person objects, three different modsperson objects are created.
      * @throws IOException in case of error
      * @throws JDOMException in case of error
      * @throws MCRAccessException in case of error
@@ -64,6 +67,45 @@ public class MODSPersonLinkingEventHandlerTest extends MCRStoreTestCase {
             .getInstance("junit_modsperson_00000003"));
         assertNotNull(person6);
         assertPerson(person6, "Müller", "Luisa", "99999", "444555777");
+    }
+
+    /**
+     * Tests if compound-names are recognized as alternativeNames of modsperson
+     * @throws IOException in case of error
+     * @throws JDOMException in case of error
+     * @throws MCRAccessException in case of error
+     */
+
+    @Test
+    public void testHandleCreateCompoundName() throws IOException, JDOMException, MCRAccessException {
+        URL url1 = MCRObjectMetadataTest.class.getResource(
+            "/MODSPersonLinkingEventHandlerTest/junit_mods_00000007.xml");
+        Document doc1 = new MCRURLContent(url1).asXML();
+        MCRObject obj1 = new MCRObject(doc1);
+
+        URL url2 = MCRObjectMetadataTest.class.getResource(
+            "/MODSPersonLinkingEventHandlerTest/junit_mods_00000008.xml");
+        Document doc2 = new MCRURLContent(url2).asXML();
+        MCRObject obj2 = new MCRObject(doc2);
+
+        MCRMetadataManager.create(obj1);
+        MCRMetadataManager.create(obj2);
+
+        List<String> modspersons = MCRCommandUtils.getIdsForType("modsperson").toList();
+        assertEquals(1, modspersons.size());
+
+        MCRObject person1 = MCRMetadataManager.retrieveMCRObject(MCRObjectID
+            .getInstance(modspersons.get(0)));
+        assertNotNull(person1);
+        assertPerson(person1, "Richter", "Hans Peter", "88888", "3332222999");
+
+        List<Element> altNameElements = new MCRMODSWrapper(person1).getMODS().getChild(
+            "name", MCRConstants.MODS_NAMESPACE).getChildren("alternativeName", MCRConstants.MODS_NAMESPACE);
+        assertEquals(1, altNameElements.size());
+        assertAlternativeName(person1, "Richter-Doppelname", "Hans Peter");
+
+        Element mods = new MCRMODSWrapper(person1).getMODS();
+        new XMLOutputter(Format.getPrettyFormat()).output(mods, System.out);
     }
 
     /**
@@ -107,11 +149,9 @@ public class MODSPersonLinkingEventHandlerTest extends MCRStoreTestCase {
 
         if (lsfs.size() == 1) {
             assertTrue(lsfs.get(0).equals("77766") || lsfs.get(0).equals("10101"));
-        }
-        else if (lsfs.size() == 2) {
+        } else if (lsfs.size() == 2) {
             assertTrue(lsfs.get(0).equals("77788") || lsfs.get(1).equals("77788"));
-        }
-        else {
+        } else {
             fail(modsperson1.getId().toString() + " is expected to have either one or two LSF-IDs");
         }
 
@@ -125,13 +165,35 @@ public class MODSPersonLinkingEventHandlerTest extends MCRStoreTestCase {
 
         if (lsfs.size() == 1) {
             assertTrue(lsfs.get(0).equals("77766") || lsfs.get(0).equals("10101"));
-        }
-        else if (lsfs.size() == 2) {
+        } else if (lsfs.size() == 2) {
             assertTrue(lsfs.get(0).equals("77788") || lsfs.get(1).equals("77788"));
-        }
-        else {
+        } else {
             fail(modsperson2.getId().toString() + " is expected to have either one or two LSF-IDs");
         }
+    }
+
+    /**
+     * Asserts that the first alternativeName found in the MODS of a person fits the expected given and family name
+     * @param person the {@link MCRObject person} tested for an alternative name
+     * @param familyName the expected family name
+     * @param givenName the expected given name
+     */
+    private void assertAlternativeName(MCRObject person,  String familyName, String givenName) {
+        MCRMODSWrapper wrapper = new MCRMODSWrapper(person);
+        List<Element> altNameElements = wrapper.getMODS().getChild("name", MCRConstants.MODS_NAMESPACE)
+            .getChild("alternativeName", MCRConstants.MODS_NAMESPACE).getChildren();
+        List<Element> familyNameElements = altNameElements.stream()
+            .filter(e -> "family".equals(e.getAttributeValue("type")))
+            .toList();
+        List<Element> givenNameElements = altNameElements.stream()
+            .filter(e -> "given".equals(e.getAttributeValue("type")))
+            .toList();
+
+        assertEquals(1, givenNameElements.size());
+        assertEquals(givenName, givenNameElements.get(0).getText());
+
+        assertEquals(1, familyNameElements.size());
+        assertEquals(familyName, familyNameElements.get(0).getText());
     }
 
     /**
