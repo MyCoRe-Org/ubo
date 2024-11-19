@@ -20,9 +20,9 @@ import org.mycore.ubo.modsperson.merger.MCRNameMerger;
 
 public class MODSPersonLookup {
 
-    private static Map<String, Set<PersonCache>> nameId2person = new HashMap<>();
+    private static final Map<String, Set<PersonCache>> nameId2person = new HashMap<>();
 
-    private static Map<String, PersonCache> id2person = new HashMap<>();
+    private static final Map<String, PersonCache> id2person = new HashMap<>();
 
     public static void add(MCRObject person) {
         Element mods = new MCRMODSWrapper(person).getMODS().clone();
@@ -55,6 +55,14 @@ public class MODSPersonLookup {
                 }
             }
         });
+    }
+
+    /**
+     * Fully empties the lookup. Use with caution!
+     */
+    public static void clear() {
+        id2person.clear();
+        nameId2person.clear();
     }
 
     public static void update(MCRObject person) {

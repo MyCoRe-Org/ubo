@@ -29,6 +29,7 @@ public class MODSPersonLookupTest extends MCRTestCase {
      */
     @Test
     public void testLookup() throws IOException, JDOMException {
+        MODSPersonLookup.clear();
         URL url1 = MCRObjectMetadataTest.class.getResource("/MODSPersonLookupTest/junit_modsperson_00000010.xml");
         Document doc1 = new MCRURLContent(url1).asXML();
         MCRObject obj1 = new MCRObject(doc1);
@@ -78,6 +79,7 @@ public class MODSPersonLookupTest extends MCRTestCase {
      */
     @Test
     public void testLookupAlternateName() throws IOException, JDOMException {
+        MODSPersonLookup.clear();
         URL url1 = MCRObjectMetadataTest.class.getResource("/MODSPersonLookupTest/junit_modsperson_00000012.xml");
         Document doc1 = new MCRURLContent(url1).asXML();
         MCRObject person1 = new MCRObject(doc1);
