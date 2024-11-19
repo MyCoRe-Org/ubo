@@ -277,27 +277,6 @@
     <field name="origin_text">
        <xsl:value-of select="$origin//category[@ID=$category]/label[lang($DefaultLang)]/@text"/>
     </field>
-
-    <!-- Derive destatis from origin if fachreferate is not set -->
-    <xsl:if test="not (../mods:classification[contains(@authorityURI,'fachreferate')])">
-      <xsl:variable name="origin" select="document('classification:metadata:-1:children:ORIGIN')/mycoreclass/categories" />
-      <xsl:variable name="destatis-attr" select="$origin//category[@ID = $category]/label[@xml:lang = 'x-destatis']/@text"/>
-
-      <xsl:if test="string-length($destatis-attr &gt; 0)">
-        <xsl:variable name="destatis-categories">
-          <xsl:call-template name="Tokenizer">
-            <xsl:with-param name="string" select="$destatis-attr"/>
-          </xsl:call-template>
-        </xsl:variable>
-
-        <xsl:for-each select="xalan:nodeset($destatis-categories)/token">
-          <field name="subject">
-            <xsl:value-of select="."/>
-          </field>
-        </xsl:for-each>
-      </xsl:if>
-
-    </xsl:if>
   </xsl:template>
 
   <xsl:template name="oa">

@@ -15,6 +15,8 @@
 <xsl:param name="RequestURL" />
 <xsl:param name="ServletsBaseURL" />
 
+<xsl:decimal-format name="WesternEurope" decimal-separator="," grouping-separator="."/>
+
 <xsl:variable name="maxFacetValuesDisplayed">5</xsl:variable>
 <xsl:variable name="quotes">"</xsl:variable>
 <xsl:variable name="fq_not">-</xsl:variable>
@@ -193,7 +195,7 @@
       <xsl:attribute name="style">display:none;</xsl:attribute>
     </xsl:if>
     <span class="mycore-facet-count">
-      <xsl:value-of select="text()" />
+      <xsl:value-of select="format-number(text(), '##.###', 'WesternEurope')" />
     </span>
     <xsl:variable name="fq" select="encoder:encode(concat(../@name,':', $quotes, solrUtil:escapeSearchValue(@name), $quotes), 'UTF-8')" />
     <xsl:variable name="facet-human-readable">
@@ -286,6 +288,9 @@
       </xsl:when>
       <xsl:when test="$type='mediaType'">
           <xsl:value-of select="$mediaType//category[@ID=$value]/label[lang($CurrentLang)]/@text"/>
+      </xsl:when>
+      <xsl:when test="$type='destatis'">
+        <xsl:value-of select="$destatis//category[@ID=$value]/label[lang('de')]/@text"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$value"/>

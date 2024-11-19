@@ -8,7 +8,8 @@
     <div class="card-body">
       <xed:form class="inline-form" role="form" xmlns:xed="http://www.mycore.de/xeditor">
 
-        <xed:source uri="session:ubo.submission" />
+        <xed:source uri="xslStyle:mods-preprocessor:session:ubo.submission" />
+        <xed:post-processor xsl="mods-postprocessor.xsl" />
 
         <xed:bind xpath="/mods:mods">
 
@@ -22,8 +23,8 @@
 
           <div class="form-inline form-group">
             <label class="mycore-form-label" for="publication">
-	      <xed:output i18n="ubo.publication" />:
-	    </label>
+              <xed:output i18n="ubo.publication" />:
+            </label>
             <div id="publication" class="col-sm-4 px-0">
               <xed:include uri="xslStyle:mods-wizard-display:session:ubo.submission" />
             </div>
@@ -32,8 +33,8 @@
           <xed:bind xpath="mods:genre[@type='intern']">
             <div class="form-inline form-group">
               <label class="mycore-form-label" for="genre">
-		<xed:output i18n="ubo.genre" />:
-	      </label>
+                <xed:output i18n="ubo.genre" />:
+              </label>
               <select class="mycore-form-input custom-select" id="genre" size="1">
                 <xed:include uri="xslStyle:genre-filter,items2options:classification:editor:-1:children:ubogenre" />
               </select>
@@ -52,15 +53,15 @@
 
           <xed:bind xpath="@form" default="edit-publication.xed">
             <xed:if test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
-	      <div class="form-inline form-group">
-		<label for="form" class="mycore-form-label">
-		  <xed:output i18n="ubo.newPublicationWizard.targetForm" />
-		</label>
-		<select id="form" class="mycore-form-input custom-select">
+              <div class="form-inline form-group">
+                <label for="form" class="mycore-form-label">
+                  <xed:output i18n="ubo.newPublicationWizard.targetForm" />
+                </label>
+                <select id="form" class="mycore-form-input custom-select">
                   <option value="edit-publication.xed"><xed:output i18n="ubo.newPublicationWizard.selectForm.standard" /></option>
                   <option value="edit-admin.xed"><xed:output i18n="ubo.newPublicationWizard.selectForm.admin" /></option>
-		</select>
-	      </div>
+                </select>
+              </div>
             </xed:if>
           </xed:bind>
 

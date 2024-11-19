@@ -13,8 +13,9 @@
   xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
   exclude-result-prefixes="xsl xalan xlink i18n encoder mcr mcrxsl check cerif">
 
-  <xsl:include href="shelfmark-normalization.xsl" />
-  <xsl:include href="output-category.xsl" />
+  <xsl:include href="resource:xsl/output-category.xsl" />
+  <xsl:include href="resource:xsl/response-get-handler.xsl"/>
+  <xsl:include href="resource:xsl/shelfmark-normalization.xsl" />
 
   <xsl:param name="step" />
   <xsl:param name="RequestURL" />
@@ -25,6 +26,7 @@
   <xsl:param name="UBO.JOP.URL" />
   <xsl:param name="UBO.URI.gbv.de.ppn.redirect" />
   <xsl:param name="UBO.CreatorRoles" select="'cre aut tch pht prg'" />   <!-- Rollen, die als DC.Creator betrachtet werden -->
+  <xsl:param name="UBO.DESTATIS.omit.ID"/>
 
   <!-- Expect one more author to be displayed as the last author is always getting displayed -->
   <xsl:param name="UBO.Initially.Visible.Authors" select="14" />
@@ -43,6 +45,7 @@
   <xsl:variable name="publication_category"  select="document('notnull:classification:metadata:-1:children:category')/mycoreclass/categories" />
   <xsl:variable name="partOf"                select="document('notnull:classification:metadata:-1:children:partOf')/mycoreclass/categories" />
   <xsl:variable name="mediaType"             select="document('notnull:classification:metadata:-1:children:mediaType')/mycoreclass/categories" />
+  <xsl:variable name="destatis"              select="document('notnull:classification:metadata:-1:children:destatis')/mycoreclass/categories" />
 
   <xsl:variable name="fq">
     <xsl:if test="not(check:currentUserIsAdmin())">
@@ -89,29 +92,34 @@
     </span>
   </xsl:template>
 
-  <!-- Derive destatis from origin if fachreferate is not set -->
-  <xsl:template match="mods:classification[contains(@authorityURI,'ORIGIN') and not (../mods:classification[contains(@authorityURI,'fachreferate')])]" mode="label-info-destatis">
-    <xsl:variable name="origin-value" select="substring-after(@valueURI, '#')"/>
-    <xsl:variable name="destatis-attr" select="$origin//category[@ID = $origin-value]/label[@xml:lang = 'x-destatis']/@text"/>
+  <xsl:template match="mods:classification[contains(@authorityURI, 'destatis')]" mode="details">
+    <xsl:variable name="category" select="$destatis//category[@ID=substring-after(current()/@valueURI,'#')]"/>
+    <xsl:variable name="destatis-hierarchy">
+      <xsl:call-template name="output.category">
+        <xsl:with-param name="classID" select="'destatis'" />
+        <xsl:with-param name="categID" select="$category/@ID" />
+      </xsl:call-template>
+    </xsl:variable>
 
-    <xsl:if test="string-length($destatis-attr) &gt; 0">
-        <xsl:variable name="destatis-categories">
-          <xsl:call-template name="Tokenizer">
-            <xsl:with-param name="string" select="$destatis-attr" />
-          </xsl:call-template>
-        </xsl:variable>
+    <div class="row ubo-metadata-class-destatis ubo-metadata-class-destatis-{position()}">
+      <div class="col-3">
+        <xsl:value-of select="concat(i18n:translate('ubo.destatis'), ':')"/>
+      </div>
+      <div class="col-9">
+        <a href="{$WebApplicationBaseURL}servlets/solr/{$solrRequestHandler}fq={encoder:encode(concat('+destatis:', $category/@ID), 'UTF-8')}"
+           title="{$destatis-hierarchy}" aria-label="{i18n:translate('ubo.destatis.label.link')}">
 
-        <xsl:for-each select="xalan:nodeset($destatis-categories)/token">
-          <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer"
-                title="{i18n:translate('facets.facet.subject')}"
-                onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+subject:&quot;',  ., '&quot;'))}')">
-            <xsl:call-template name="output.category">
-              <xsl:with-param name="classID" select="'fachreferate'" />
-              <xsl:with-param name="categID" select="." />
-            </xsl:call-template>
-          </span>
-        </xsl:for-each>
-    </xsl:if>
+          <xsl:choose>
+            <xsl:when test="$UBO.DESTATIS.omit.ID = 'true'">
+              <xsl:value-of select="substring-after($category/label[lang('de')]/@text, ' ')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$category/label[lang('de')]/@text"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </a>
+      </div>
+    </div>
   </xsl:template>
 
   <!-- ============ Ausgabe Open Access ============ -->
@@ -1150,6 +1158,9 @@
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'category')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'partOf')]" mode="details" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'fundingType')]" mode="details" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'destatis')]" mode="details">
+      <xsl:sort select="@valueURI"/>
+    </xsl:apply-templates>
     <xsl:apply-templates select="mods:abstract/@xlink:href" mode="details" />
     <xsl:apply-templates select="mods:abstract[string-length(.) &gt; 0]" mode="details" />
   </xsl:template>
