@@ -9,6 +9,14 @@
             <mods:namePart type="given">Adam</mods:namePart>
             <mods:nameIdentifier type="lsf">98765</mods:nameIdentifier>
             <mods:nameIdentifier type="scopus">2222222333</mods:nameIdentifier>
+            <mods:alternativeName>
+              <mods:namePart type="family">Müller</mods:namePart>
+              <mods:namePart type="given">A</mods:namePart>
+            </mods:alternativeName>
+            <mods:alternativeName>
+              <mods:namePart type="family">Müller Meyer</mods:namePart>
+              <mods:namePart type="given">Adam</mods:namePart>
+            </mods:alternativeName>
           </mods:name>
         </mods:mods>
       </modsContainer>

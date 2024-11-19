@@ -512,6 +512,15 @@
   },
   {
     "add-field": {
+      "name": "alternative_name",
+      "type": "ubo_string_ci",
+      "multiValued": true,
+      "indexed": true,
+      "stored": true
+    }
+  },
+  {
+    "add-field": {
       "name": "place",
       "type": "ubo_text",
       "multiValued": true,

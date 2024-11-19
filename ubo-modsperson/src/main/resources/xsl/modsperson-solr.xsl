@@ -17,6 +17,7 @@
       <xsl:for-each select="mods:name[@type='personal']">
         <xsl:apply-templates select="." mode="solrField" />
         <xsl:apply-templates select="mods:nameIdentifier" mode="solrField" />
+        <xsl:apply-templates select="mods:alternativeName" mode="solrField" />
       </xsl:for-each>
     </xsl:for-each>
     
@@ -37,6 +38,18 @@
   <xsl:template match="mods:nameIdentifier" mode="solrField">
     <field name="nid_{@type}">
       <xsl:value-of select="text()" />
+    </field>
+  </xsl:template>
+
+  <xsl:template match="mods:alternativeName" mode="solrField">
+    <field name="alternative_name">
+      <xsl:value-of select="mods:namePart[@type='family']" />
+      <xsl:if test="mods:namePart[@type='given']">
+        <xsl:text>,</xsl:text>
+        <xsl:for-each select="mods:namePart[@type='given']">
+          <xsl:value-of select="concat(' ',text())" />
+        </xsl:for-each>
+      </xsl:if>
     </field>
   </xsl:template>
 

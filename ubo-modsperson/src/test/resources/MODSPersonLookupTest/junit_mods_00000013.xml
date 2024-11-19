@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mycoreobject xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-modsperson.xsd" ID="junit_modsperson_00000012">
+<mycoreobject xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-mods.xsd" ID="junit_mods_00000013">
   <metadata>
     <def.modsContainer class="MCRMetaXML" heritable="false" notinherit="true">
       <modsContainer inherited="0">
         <mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+          <mods:titleInfo xml:lang="de">
+            <mods:title>This is a test-publication</mods:title>
+          </mods:titleInfo>
           <mods:name type="personal">
-            <mods:namePart type="family">Müller</mods:namePart>
-            <mods:namePart type="given">Gustavo</mods:namePart>
+            <mods:namePart type="family">Koch</mods:namePart>
+            <mods:namePart type="given">Heinz</mods:namePart>
             <mods:nameIdentifier type="lsf">77777</mods:nameIdentifier>
             <mods:nameIdentifier type="scopus">555555666</mods:nameIdentifier>
-            <mods:alternativeName>
-              <mods:namePart type="family">Koch</mods:namePart>
-              <mods:namePart type="given">Heinz</mods:namePart>
-            </mods:alternativeName>
           </mods:name>
         </mods:mods>
       </modsContainer>

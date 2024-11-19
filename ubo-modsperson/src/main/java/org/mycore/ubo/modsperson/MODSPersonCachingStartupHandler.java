@@ -15,8 +15,10 @@ import org.mycore.solr.MCRSolrClientFactory;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * Loads all modsperson data into {@link MODSPersonLookup} on startup.
@@ -98,7 +100,17 @@ public class MODSPersonCachingStartupHandler implements MCRStartupHandler.AutoEx
 
                 }
             }
-            MODSPersonLookup.add(new MODSPersonLookup.PersonCache(personmodsId, familyName, givenName, keys));
+
+            List<String> alternativeNamesString = (List<String>) doc.getFieldValue("alternative_name");
+            Set<Map.Entry<String, String>> alternativeNames = alternativeNamesString.stream()
+                .map(name -> {
+                    String[] parts = name.split(",\\s*");
+                    return parts.length > 1 ? Map.entry(parts[0], parts[1]) : Map.entry(parts[0], "");
+                }).collect(Collectors.toSet());
+
+
+            MODSPersonLookup.add(new MODSPersonLookup.PersonCache(personmodsId, familyName,
+                givenName, keys, alternativeNames));
             counter.incrementAndGet();
         } catch (ClassCastException | NullPointerException | IndexOutOfBoundsException ex) {
             // parsing a single faulty SolrDocument shouldn't interrupt the whole startup

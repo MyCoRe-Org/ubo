@@ -33,14 +33,10 @@ public class MCRNameMerger extends MCRMerger {
 
     private final Map<String, Set<String>> nameIds = new HashMap<>();
 
-    private final Map<String, Set<String>> alternativeNames = new HashMap<>();
-
     public void setElement(Element element) {
         super.setElement(element);
 
         setFromNameParts(element);
-
-        setFromAlternativeNames(element);
 
         if (familyName == null) {
             setFromDisplayForm(element);
@@ -54,37 +50,6 @@ public class MCRNameMerger extends MCRMerger {
         if (displayForm != null) {
             setFromCombinedName(displayForm.replaceAll("\\s+", " "));
         }
-    }
-
-    private void setFromAlternativeNames(Element modsName) {
-        modsName.getChildren("alternativeName", MCRConstants.MODS_NAMESPACE).forEach(alternativeName -> {
-            String altFamilyName = null;
-            Set<String> altGivenNames = new HashSet<>();
-            for (Element namePart : alternativeName.getChildren("namePart", MCRConstants.MODS_NAMESPACE)) {
-                String type = namePart.getAttributeValue("type");
-                String nameFragment = namePart.getText().replaceAll("\\p{Zs}+", " ");
-
-                if (Objects.equals(type, "family")) {
-                    if (isEmptyOrNull(nameFragment)) {
-                        return;
-                    }
-                    altFamilyName = normalize(nameFragment);
-                } else if (Objects.equals(type, "given")) {
-                    if (isEmptyOrNull(nameFragment)) {
-                        return;
-                    }
-                    for (String token : nameFragment.split("\\s")) {
-                        String normalizedToken = normalize(token);
-                        if (normalizedToken.length() > 1 && !isEmptyOrNull(normalizedToken)) {
-                            altGivenNames.add(normalizedToken);
-                        }
-                    }
-                }
-            }
-            if (altFamilyName != null) {
-                alternativeNames.put(altFamilyName, altGivenNames);
-            }
-        });
     }
 
     private void setFromNameParts(Element modsName) {
@@ -181,14 +146,21 @@ public class MCRNameMerger extends MCRMerger {
         return text.trim();
     }
 
-    public boolean hasAlternativeNameSameAs(MCRMerger e) {
-        if (!(e instanceof MCRNameMerger)) {
+    /**
+     * Checks if this merger has an alternativeName-element that is
+     * {@link MCRNameMerger#isProbablySameAs(MCRMerger) probably the same as} the other given merger.
+     * @param other the other merger
+     * @return returns true if the other merger is also a {@link MCRNameMerger} and if this merger has
+     * an alternative name that matches the other
+     */
+    public boolean hasAlternativeNameSameAs(MCRMerger other) {
+        if (!(other instanceof MCRNameMerger)) {
             return false;
         }
         return this.element.getChildren("alternativeName", MCRConstants.MODS_NAMESPACE)
             .stream()
             .map(MCRMergerFactory::buildFrom)
-            .anyMatch(altMerger -> altMerger.isProbablySameAs(e));
+            .anyMatch(altMerger -> altMerger.isProbablySameAs(other));
     }
 
     @Override

@@ -21,6 +21,12 @@ import static org.junit.Assert.*;
 
 public class MODSPersonLookupTest extends MCRTestCase {
 
+    /**
+     * Tests that only people added to the lookup can be found through that same lookup. Test that people
+     * that are returned contain all added data.
+     * @throws IOException in case of error
+     * @throws JDOMException in case of error
+     */
     @Test
     public void testLookup() throws IOException, JDOMException {
         URL url1 = MCRObjectMetadataTest.class.getResource("/MODSPersonLookupTest/junit_modsperson_00000010.xml");
@@ -41,7 +47,18 @@ public class MODSPersonLookupTest extends MCRTestCase {
         MCRMODSWrapper wrapper = new MCRMODSWrapper(obj1);
         Element name1 = wrapper.getElement("mods:name[@type='personal']");
         MODSPersonLookup.PersonCache person1 = Objects.requireNonNull(MODSPersonLookup.lookup(name1)).iterator().next();
-        assertPerson(person1,"Müller", "Adam", "98765", "2222222333");
+        assertPerson(person1, "Müller", "Adam", "98765", "2222222333");
+
+        assertEquals(2, person1.getAlternativeNames().size());
+        person1.getAlternativeNames().forEach(name -> {
+            if (name.getKey().equals("Müller")) {
+                assertEquals("A", name.getValue());
+            } else if (name.getKey().equals("Müller Meyer")) {
+                assertEquals("Adam", name.getValue());
+            } else {
+                fail("Unknown alternative name:" + name.getKey() + ", " + name.getValue());
+            }
+        });
 
         wrapper = new MCRMODSWrapper(obj2);
         Element name2 = wrapper.getElement("mods:name[@type='personal']");
@@ -53,6 +70,33 @@ public class MODSPersonLookupTest extends MCRTestCase {
         Set<MODSPersonLookup.PersonCache> persons3 = MODSPersonLookup.lookup(name3);
         assertNull(persons3);
     }
+
+    /**
+     * Tests if a widely different alternative name can be used to match a person.
+     * @throws IOException in case of error
+     * @throws JDOMException in case of error
+     */
+    @Test
+    public void testLookupAlternateName() throws IOException, JDOMException {
+        URL url1 = MCRObjectMetadataTest.class.getResource("/MODSPersonLookupTest/junit_modsperson_00000012.xml");
+        Document doc1 = new MCRURLContent(url1).asXML();
+        MCRObject person1 = new MCRObject(doc1);
+
+        MODSPersonLookup.add(person1);
+
+        URL url2 = MCRObjectMetadataTest.class.getResource("/MODSPersonLookupTest/junit_mods_00000013.xml");
+        Document doc2 = new MCRURLContent(url2).asXML();
+        MCRObject obj1 = new MCRObject(doc2);
+
+        MCRMODSWrapper wrapper = new MCRMODSWrapper(obj1);
+        Element name1 = wrapper.getElement("mods:name[@type='personal']");
+
+        MODSPersonLookup.PersonCache personAlt = Objects.requireNonNull(MODSPersonLookup.lookup(name1)).iterator().next();
+        assertNotNull(personAlt);
+        assertPerson(personAlt, "Müller", "Gustavo", "77777", "555555666");
+    }
+
+
 
     private void assertPerson(MODSPersonLookup.PersonCache assertPerson, String familyName,
         String givenName, String lsfId, String scopusId) {
