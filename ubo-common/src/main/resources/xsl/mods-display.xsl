@@ -560,7 +560,7 @@
                   </xsl:attribute>
                 </span>
 
-                <xsl:if test="$is-connected-author = true()">
+                <xsl:if test="$is-connected-author = true() and not(mods:affiliation[contains(@valueURI, 'classifications/isAffiliated#false')])">
                   <sup><xsl:value-of select="i18n:translate('ubo.person.connected.sup')" /></sup>
                 </xsl:if>
 
