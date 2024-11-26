@@ -47,10 +47,10 @@
                   </label>
                   <select class="autocomplete mycore-form-input custom-select">
                     <option value="14"><xed:output i18n="search.select" /></option>
-                    <xed:include uri="xslStyle:items2options:classification:editor:-1:children:ORIGIN:14" />
+                    <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:ORIGIN:14" />
                   </select>
                   <script type="text/javascript">
-                    $(document).ready(function() { $('select[class*="autocomplete"]').chosen({search_contains: true}); });
+                    $(document).ready(function() { $('select[class*="autocomplete"]').selectpicker({liveSearch:true, liveSearchNormalize:true, virtualScroll:true, showSubtext:true, size:10}); });
                   </script>
 		</div>
               </xed:bind>

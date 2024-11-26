@@ -8,7 +8,6 @@
 
   <article>
     <script type="text/javascript" src="external/jquery-ui-1.8.21.custom.min.js"></script>
-    <script type="text/javascript" src="external/chosen/chosen.jquery.min.js"></script>
 
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form" class="ubo-form">
 
@@ -40,13 +39,13 @@
               <span class="{$xed-validation-marker}">
                 <select id="{xed:generate-id()}" style="width:400px;" class="autocomplete {$xed-validation-marker}">
                   <option value=""><xed:output i18n="search.select" /></option>
-                  <xed:include uri="xslStyle:items2options:classification:editor:-1:children:ORIGIN:14" />
+                  <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:ORIGIN:14" />
                 </select>
               </span>
             </div>
           </xed:bind>
           <script type="text/javascript">
-            jQuery(document).ready(function() { jQuery('select[class*="autocomplete"]').chosen({search_contains: true}); });
+            jQuery(document).ready(function() { jQuery('select[class*="autocomplete"]').selectpicker({liveSearch:true, liveSearchNormalize:true, virtualScroll:true, showSubtext:true, size:10}); });
           </script>
 
         </fieldset>
