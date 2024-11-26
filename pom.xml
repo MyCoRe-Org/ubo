@@ -43,8 +43,8 @@
   <properties>
     <MCR.AppName>ubo</MCR.AppName>
     <axis1.version>1.4</axis1.version>
+    <bootstrap-select.version>1.13.18</bootstrap-select.version>
     <bootstrap.version>4.4.1</bootstrap.version>
-    <chosen.version>1.8.7</chosen.version>
     <font-awesome.version>5.13.0</font-awesome.version>
     <jakarta.activation.version>2.0.1</jakarta.activation.version>
     <jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
@@ -364,6 +364,11 @@
       </dependency>
       <dependency>
         <groupId>org.webjars</groupId>
+        <artifactId>bootstrap-select</artifactId>
+        <version>${bootstrap-select.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.webjars</groupId>
         <artifactId>font-awesome</artifactId>
         <version>${font-awesome.version}</version>
       </dependency>
@@ -381,11 +386,6 @@
         <groupId>org.webjars</groupId>
         <artifactId>jquery-ui</artifactId>
         <version>${jquery.ui.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.webjars.npm</groupId>
-        <artifactId>chosen-js</artifactId>
-        <version>${chosen.version}</version>
       </dependency>
       <dependency>
         <groupId>xml-apis</groupId>

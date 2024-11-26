@@ -122,6 +122,12 @@
     opacity: 0.4;
   }
 
+  .bootstrap-select .btn {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    padding: 0 !important;
+  }
+
 // Large devices (desktops) and below: <= 1200px
 @include media-breakpoint-down(lg) {
 // add/overwrite styles for responsive level lg and lower
