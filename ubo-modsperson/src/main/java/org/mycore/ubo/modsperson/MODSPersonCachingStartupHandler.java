@@ -102,16 +102,21 @@ public class MODSPersonCachingStartupHandler implements MCRStartupHandler.AutoEx
             }
 
             List<String> alternativeNamesString = (List<String>) doc.getFieldValue("alternative_name");
-            Set<Map.Entry<String, String>> alternativeNames = alternativeNamesString.stream()
-                .map(name -> {
-                    String[] parts = name.split(",\\s*");
-                    return parts.length > 1 ? Map.entry(parts[0], parts[1]) : Map.entry(parts[0], "");
-                }).collect(Collectors.toSet());
-
-
-            MODSPersonLookup.add(new MODSPersonLookup.PersonCache(personmodsId, familyName,
-                givenName, keys, alternativeNames));
+            if (alternativeNamesString != null) {
+                Set<Map.Entry<String, String>> alternativeNames = alternativeNamesString.stream()
+                    .map(name -> {
+                        String[] parts = name.split(",\\s*");
+                        return parts.length > 1 ? Map.entry(parts[0], parts[1]) : Map.entry(parts[0], "");
+                    }).collect(Collectors.toSet());
+                MODSPersonLookup.add(new MODSPersonLookup.PersonCache(personmodsId, familyName,
+                    givenName, keys, alternativeNames));
+            }
+            else {
+                MODSPersonLookup.add(new MODSPersonLookup.PersonCache(personmodsId, familyName,
+                    givenName, keys, new HashSet<>()));
+            }
             counter.incrementAndGet();
+
         } catch (ClassCastException | NullPointerException | IndexOutOfBoundsException ex) {
             // parsing a single faulty SolrDocument shouldn't interrupt the whole startup
             LOGGER.warn("Error while loading modsperson " + doc.get("id") + " into cache", ex);

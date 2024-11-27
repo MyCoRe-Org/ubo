@@ -15,15 +15,15 @@
     
     <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
       <xsl:for-each select="mods:name[@type='personal']">
-        <xsl:apply-templates select="." mode="solrField" />
-        <xsl:apply-templates select="mods:nameIdentifier" mode="solrField" />
-        <xsl:apply-templates select="mods:alternativeName" mode="solrField" />
+        <xsl:apply-templates select="." mode="modspersonField" />
+        <xsl:apply-templates select="mods:nameIdentifier" mode="modspersonField" />
+        <xsl:apply-templates select="mods:alternativeName" mode="modspersonField" />
       </xsl:for-each>
     </xsl:for-each>
     
   </xsl:template>
 
-  <xsl:template match="mods:name[@type='personal']" mode="solrField">
+  <xsl:template match="mods:name[@type='personal']" mode="modspersonField">
     <field name="name">
       <xsl:value-of select="mods:namePart[@type='family']" />
       <xsl:if test="mods:namePart[@type='given']">
@@ -35,13 +35,13 @@
     </field>
   </xsl:template>
 
-  <xsl:template match="mods:nameIdentifier" mode="solrField">
+  <xsl:template match="mods:nameIdentifier" mode="modspersonField">
     <field name="nid_{@type}">
       <xsl:value-of select="text()" />
     </field>
   </xsl:template>
 
-  <xsl:template match="mods:alternativeName" mode="solrField">
+  <xsl:template match="mods:alternativeName" mode="modspersonField">
     <field name="alternative_name">
       <xsl:value-of select="mods:namePart[@type='family']" />
       <xsl:if test="mods:namePart[@type='given']">
