@@ -481,6 +481,7 @@
   </developers>
   <modules>
     <module>ubo-common</module>
+    <module>ubo-modsperson</module>
     <module>ubo-webapp</module>
     <module>ubo-cli</module>
   </modules>
