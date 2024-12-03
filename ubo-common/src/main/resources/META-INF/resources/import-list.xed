@@ -143,7 +143,7 @@
               </label>
 
               <xed:bind xpath="DataSources[@type='provided']">
-                <select id="import-list-source-select" class="form-control col-7 custom-select">
+                <select id="datasource-source-select" class="form-control col-7" onchange="UBOImportList.toggleDataSources(this)">
                   <option value="">
                     <xed:output i18n="search.select"/>
                   </option>
@@ -164,7 +164,7 @@
 
               <label class="mycore-form-label text-nowrap pt-1"/>
               <xed:bind xpath="DataSources[@type='custom']">
-                <input id="import-list-source-custom-input" type="text" class="form-control col-7 mt-3" placeholder="{i18n:ubo.import.list.placeholder.dataSources.custom}"/>
+                <input id="datasource-input-custom" type="text" class="form-control col-7 mt-3" placeholder="{i18n:ubo.import.list.placeholder.dataSources.custom}" oninput="UBOImportList.toggleDataSources(this)"/>
               </xed:bind>
             </div>
 
