@@ -137,6 +137,37 @@
 
             <hr/>
 
+            <div class="form-group form-inline">
+              <label class="mycore-form-label text-nowrap">
+                <xed:output i18n="ubo.import.list.label.dataSources"/>:
+              </label>
+
+              <xed:bind xpath="DataSources[@type='provided']">
+                <select id="import-list-source-select" class="form-control col-7 custom-select">
+                  <option value="">
+                    <xed:output i18n="search.select"/>
+                  </option>
+                  <option value="GBV">
+                    GBV
+                  </option>
+                  <option value="{$MCR.MODS.EnrichmentResolver.DataSources.import}">
+                    <xed:output value="$MCR.MODS.EnrichmentResolver.DataSources.import"/>
+                  </option>
+                  <option value="{$MCR.MODS.EnrichmentResolver.DataSources.import-list}">
+                    <xed:output value="$MCR.MODS.EnrichmentResolver.DataSources.import-list"/>
+                  </option>
+                  <option value="{$MCR.MODS.EnrichmentResolver.DataSources.scopus-import}">
+                    <xed:output value="$MCR.MODS.EnrichmentResolver.DataSources.scopus-import"/>
+                  </option>
+                </select>
+              </xed:bind>
+
+              <label class="mycore-form-label text-nowrap pt-1"/>
+              <xed:bind xpath="DataSources[@type='custom']">
+                <input id="import-list-source-custom-input" type="text" class="form-control col-7 mt-3" placeholder="{i18n:ubo.import.list.placeholder.dataSources.custom}"/>
+              </xed:bind>
+            </div>
+
             <xed:bind xpath="@enrich" initially="false">
               <div class="form-group form-inline">
                 <label class="mycore-form-label text-nowrap">
