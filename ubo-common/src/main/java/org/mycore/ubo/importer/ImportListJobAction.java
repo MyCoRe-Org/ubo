@@ -61,9 +61,8 @@ public class ImportListJobAction extends MCRJobAction {
             job.setParameter(IMPORT_JOB_ID_PARAMETER, importJob.getID());
 
             if ("true".equals(formInput.getAttributeValue("enrich"))) {
-                String dataSources = EnrichmentConfigMgr.instance().getDataSource(formInput);
-                if (dataSources != null) {
-                    String enricherId = EnrichmentConfigMgr.instance().getOrCreateEnrichmentConfig(dataSources);
+                String enricherId = EnrichmentConfigMgr.getEnricherId(formInput);
+                if (enricherId != null) {
                     importJob.enrich(enricherId);
                 } else {
                     importJob.enrich();
