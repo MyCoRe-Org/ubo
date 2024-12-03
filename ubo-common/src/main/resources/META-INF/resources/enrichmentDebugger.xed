@@ -13,7 +13,7 @@
     <div class="card-body">
       <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
 
-        <xed:source uri="cache:enrichmentConfig:custom" />
+        <xed:source uri="enrichmentConfig:custom" />
 
         <xed:bind xpath="enrichmentDebugger">
         

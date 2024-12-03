@@ -3,69 +3,42 @@ package org.mycore.ubo.importer;
 import org.jdom2.Element;
 import org.mycore.common.config.MCRConfiguration2;
 
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Optional;
-import java.util.UUID;
 
 /**
- * Class handles dynamically created enrichment resolver configurations.
+ * Class handles retrieves the enricher id from the form input of import-list.xed.
  *
  * @author shermann (Silvio Hermann)
  */
 public class EnrichmentConfigMgr {
-
-    private final HashMap<String, String> dynamicEnrichmentConfigIds = new HashMap<>();
-
-    private static EnrichmentConfigMgr INSTANCE;
+    static final String DEFAULT_CONFIG_ID = "custom";
 
     private EnrichmentConfigMgr() {
     }
 
     /**
-     * Creates and returns a singleton instance of this class.
-     *
-     * @return the instance
-     */
-    public static EnrichmentConfigMgr instance() {
-        if (INSTANCE != null) {
-            return INSTANCE;
-        }
-        INSTANCE = new EnrichmentConfigMgr();
-        return INSTANCE;
-    }
-
-    /**
-     * Creates and registers an enrichment configuration id.
-     *
-     * @param dataSources the data source
-     *
-     * @return the enrichment configuration id for the given data source
-     * */
-    public String getOrCreateEnrichmentConfig(String dataSources) {
-        if (dynamicEnrichmentConfigIds.containsKey(dataSources)) {
-            return dynamicEnrichmentConfigIds.get(dataSources);
-        }
-
-        String id = UUID.nameUUIDFromBytes(dataSources.getBytes(StandardCharsets.UTF_8)).toString();
-        String property = "MCR.MODS.EnrichmentResolver.DataSources." + id;
-        MCRConfiguration2.set(property, dataSources);
-        dynamicEnrichmentConfigIds.put(dataSources, id);
-        return id;
-    }
-
-    /**
-     * Retrieves the first DataSource text content from the import list form element.
+     * Retrieves the enricher id from the import list form element.
      *
      * @param formInput the form input (usually provided by import-list.xed)
      *
-     * @return the first DataSource text or <code>null</code>
+     * @return the enricher id or <code>null</code>
      */
-    public String getDataSource(Element formInput) {
+    public static String getEnricherId(Element formInput) {
         Optional<Element> dataSource = formInput.getChildren("DataSources")
             .stream()
             .filter(element -> !element.getText().isEmpty())
             .findFirst();
-        return dataSource.isPresent() ? dataSource.get().getText() : null;
+
+        String enricherId = dataSource.isPresent() ? dataSource.get().getText() : null;
+        if (enricherId != null) {
+            if (MCRConfiguration2.getString("MCR.MODS.EnrichmentResolver.DataSources." + enricherId).isPresent()) {
+                return enricherId;
+            } else {
+                String property = "MCR.MODS.EnrichmentResolver.DataSources." + DEFAULT_CONFIG_ID;
+                MCRConfiguration2.set(property, dataSource.get().getText());
+                return DEFAULT_CONFIG_ID;
+            }
+        }
+        return null;
     }
 }
