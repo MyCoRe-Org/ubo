@@ -15,7 +15,6 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.access.MCRAccessException;
-import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
@@ -32,17 +31,9 @@ import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.UUID;
 
 @SuppressWarnings("serial")
 public class DozBibImportServlet extends MCRServlet {
-
-    /**
-     * Cache dynamically created enrichment
-     * */
-    protected static final HashMap<String, String> DYNAMIC_ENRICHMENT_CONFIG_IDS = new HashMap<>();
 
     @Override
     public void doGetPost(MCRServletJob job) throws Exception {
@@ -83,9 +74,9 @@ public class DozBibImportServlet extends MCRServlet {
 
         boolean enrich = "true".equals(formInput.getAttributeValue("enrich"));
         if (enrich) {
-            String dataSources = getDataSource(formInput);
+            String dataSources = EnrichmentConfigMgr.instance().getDataSource(formInput);
             if (dataSources != null) {
-                String enricherId = getOrCreateEnrichmentConfig(dataSources);
+                String enricherId = EnrichmentConfigMgr.instance().getOrCreateEnrichmentConfig(dataSources);
                 importJob.enrich(enricherId);
             } else {
                 importJob.enrich();
@@ -98,33 +89,6 @@ public class DozBibImportServlet extends MCRServlet {
         } else {
             doImport(req, res, importJob);
         }
-    }
-
-    /**
-     * Creates and registers an enrichment configuration id.
-     *
-     * @param dataSources the data source
-     *
-     * @return the enrichment configuration id for the given data source
-     * */
-    private String getOrCreateEnrichmentConfig(String dataSources) {
-        if (DYNAMIC_ENRICHMENT_CONFIG_IDS.containsKey(dataSources)) {
-            return DYNAMIC_ENRICHMENT_CONFIG_IDS.get(dataSources);
-        }
-
-        String id = UUID.nameUUIDFromBytes(dataSources.getBytes(StandardCharsets.UTF_8)).toString();
-        String property = "MCR.MODS.EnrichmentResolver.DataSources." + id;
-        MCRConfiguration2.set(property, dataSources);
-        DYNAMIC_ENRICHMENT_CONFIG_IDS.put(dataSources, id);
-        return id;
-    }
-
-    private String getDataSource(Element formInput) {
-        Optional<Element> dataSource = formInput.getChildren("DataSources")
-            .stream()
-            .filter(element -> !element.getText().isEmpty())
-            .findFirst();
-        return dataSource.isPresent() ? dataSource.get().getText() : null;
     }
 
     private ImportJob buildImportJob(Element formInput) {
