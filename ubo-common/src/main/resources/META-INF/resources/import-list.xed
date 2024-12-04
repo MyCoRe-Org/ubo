@@ -63,7 +63,7 @@
                   <option value="">
                     <xed:output i18n="search.select"/>
                   </option>
-                  <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:partOf" />
+                  <xed:include uri="xslStyle:mycoreclass-options?omitSubtext={$UBO.Editor.import-list.omitSubtext}:classification:metadata:-1:children:partOf" />
                 </select>
               </div>
             </xed:bind>
