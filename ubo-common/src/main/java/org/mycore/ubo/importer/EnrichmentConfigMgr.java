@@ -6,7 +6,7 @@ import org.mycore.common.config.MCRConfiguration2;
 import java.util.Optional;
 
 /**
- * Class handles retrieves the enricher id from the form input of import-list.xed.
+ * Class retrieves the enricher id from the form input of import-list.xed.
  *
  * @author shermann (Silvio Hermann)
  */
