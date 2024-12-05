@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('select[class*="autocomplete"]').chosen({search_contains: true});
+    $('select[class*="autocomplete"]').selectpicker({liveSearch:true, liveSearchNormalize:true, virtualScroll:true, showSubtext:true, size:10});
 });
 
 const UBOImportList = {
