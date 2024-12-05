@@ -55,7 +55,7 @@
             </legend>
 
             <xed:bind xpath="partOf">
-              <div class="form-group form-inline">
+              <div class="form-group form-inline ubo-import-list-select-partOf">
                 <label for="{generate-id()}" class="mycore-form-label text-nowrap">
                   <xed:output i18n="ubo.partOf" />:
                 </label>
@@ -69,7 +69,7 @@
             </xed:bind>
 
             <xed:bind xpath="status">
-              <div class="form-group form-inline">
+              <div class="form-group form-inline ubo-import-list-select-status">
                 <label for="{generate-id()}" class="mycore-form-label text-nowrap">
                   <xed:output i18n="search.dozbib.status" />:
                 </label>
@@ -85,7 +85,7 @@
             <hr/>
 
             <xed:repeat xpath="subject" max="5">
-              <div class="form-group form-inline">
+              <div class="form-group form-inline ubo-import-list-select-fachreferate">
                 <label for="subject" class="mycore-form-label text-nowrap">
                   <xed:output i18n="ubo.subject" />:
                 </label>
@@ -100,7 +100,7 @@
             </xed:repeat>
 
             <xed:bind xpath="origin">
-              <div class="form-group form-inline">
+              <div class="form-group form-inline ubo-import-list-select-origin">
                 <label for="{generate-id()}" class="mycore-form-label text-nowrap">
                   <xed:output i18n="ubo.department" />:
                 </label>
