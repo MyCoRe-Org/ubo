@@ -18,6 +18,9 @@ public class EnrichmentConfigMgr {
 
     /**
      * Retrieves the enricher id from the import list form element.
+     * If the value of the DataSource element is a valid enrichment config id that id is returned. Otherwise,
+     * it assumed a list of enrichment sources e.g. <em>GBV Unpaywall ...</em> is provided. In that case a new
+     * configuration with id <code>custom</code> is created and the returned id will be <code>custom</code>.
      *
      * @param formInput the form input (usually provided by import-list.xed)
      *
@@ -29,10 +32,12 @@ public class EnrichmentConfigMgr {
             .filter(element -> !element.getText().isEmpty())
             .findFirst();
 
-        String enricherId = dataSource.isPresent() ? dataSource.get().getText() : null;
-        if (enricherId != null) {
-            if (MCRConfiguration2.getString("MCR.MODS.EnrichmentResolver.DataSources." + enricherId).isPresent()) {
-                return enricherId;
+        String enrchrIdOrEnrchmntSrcs = dataSource.isPresent() ? dataSource.get().getText() : null;
+        if (enrchrIdOrEnrchmntSrcs != null) {
+            if (MCRConfiguration2
+                .getString("MCR.MODS.EnrichmentResolver.DataSources." + enrchrIdOrEnrchmntSrcs)
+                .isPresent()) {
+                return enrchrIdOrEnrchmntSrcs;
             } else {
                 String property = "MCR.MODS.EnrichmentResolver.DataSources." + DEFAULT_CONFIG_ID;
                 MCRConfiguration2.set(property, dataSource.get().getText());
