@@ -6,6 +6,7 @@
 
   <xsl:param name="CurrentLang" />
   <xsl:param name="DefaultLang" />
+  <xsl:param name="omitSubtext" select="'false'"/>
 
   <xsl:variable name="nbsp" select="'&#160;'" />
   <xsl:variable name="arrow" select="'&#187;'" />
@@ -27,14 +28,14 @@
     </xsl:variable>
     
     <xsl:variable name="title">
-      <xsl:if test="$level &gt; 1">
+      <xsl:if test="$level &gt; 1 and not($omitSubtext = 'true')">
         <xsl:value-of select="concat($parentTitle,$parentChildDelimiter)" />
       </xsl:if>
       <xsl:value-of select="$label" />
     </xsl:variable>
     
     <option value="{@ID}">
-      <xsl:if test="$level &gt; 1">
+      <xsl:if test="$level &gt; 1 and not($omitSubtext = 'true')">
         <xsl:attribute name="data-subtext">
           <xsl:value-of select="concat($nbsp,$nbsp,'in ',$parentTitle)" />
         </xsl:attribute>
