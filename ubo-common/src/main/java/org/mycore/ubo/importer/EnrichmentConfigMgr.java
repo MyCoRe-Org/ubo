@@ -32,18 +32,17 @@ public class EnrichmentConfigMgr {
             .filter(element -> !element.getText().isEmpty())
             .findFirst();
 
-        String enrchrIdOrEnrchmntSrcs = dataSource.isPresent() ? dataSource.get().getText() : null;
-        if (enrchrIdOrEnrchmntSrcs != null) {
-            if (MCRConfiguration2
-                .getString("MCR.MODS.EnrichmentResolver.DataSources." + enrchrIdOrEnrchmntSrcs)
-                .isPresent()) {
-                return enrchrIdOrEnrchmntSrcs;
-            } else {
-                String property = "MCR.MODS.EnrichmentResolver.DataSources." + DEFAULT_CONFIG_ID;
-                MCRConfiguration2.set(property, dataSource.get().getText());
-                return DEFAULT_CONFIG_ID;
-            }
+        if (dataSource.isEmpty()) {
+            return null;
         }
-        return null;
+
+        String dataSrcTxt = dataSource.get().getText();
+        if (MCRConfiguration2.getString("MCR.MODS.EnrichmentResolver.DataSources." + dataSrcTxt).isPresent()) {
+            return dataSrcTxt;
+        } else {
+            String property = "MCR.MODS.EnrichmentResolver.DataSources." + DEFAULT_CONFIG_ID;
+            MCRConfiguration2.set(property, dataSrcTxt);
+            return DEFAULT_CONFIG_ID;
+        }
     }
 }
