@@ -59,11 +59,11 @@
                 <label for="{generate-id()}" class="mycore-form-label text-nowrap">
                   <xed:output i18n="ubo.partOf" />:
                 </label>
-                <select id="{generate-id()}" class="autocomplete {$xed-validation-marker} col-7 custom-select">
+                <select id="{generate-id()}" class="{$xed-validation-marker} col-7 form-control custom-select">
                   <option value="">
                     <xed:output i18n="search.select"/>
                   </option>
-                  <xed:include uri="xslStyle:mycoreclass-options?omitSubtext={$UBO.Editor.import-list.omitSubtext}:classification:metadata:-1:children:partOf" />
+                  <xed:include uri="xslStyle:items2options:classification:editor:-1:children:partOf" />
                 </select>
               </div>
             </xed:bind>
@@ -73,7 +73,7 @@
                 <label for="{generate-id()}" class="mycore-form-label text-nowrap">
                   <xed:output i18n="search.dozbib.status" />:
                 </label>
-                <select id="{generate-id()}" class="autocomplete {$xed-validation-marker} col-7 custom-select">
+                <select id="{generate-id()}" class="{$xed-validation-marker} col-7 form-control custom-select">
                   <option value="">
                     <xed:output i18n="search.select"/>
                   </option>
@@ -89,7 +89,7 @@
                 <label for="subject" class="mycore-form-label text-nowrap">
                   <xed:output i18n="ubo.subject" />:
                 </label>
-                <select class="autocomplete {$xed-validation-marker} col-7 custom-select">
+                <select class="autocomplete {$xed-validation-marker} col-7 mycore-form-input">
                   <option value="">
                     <xed:output i18n="search.select" />
                   </option>
