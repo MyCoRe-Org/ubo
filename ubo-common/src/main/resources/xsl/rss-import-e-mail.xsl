@@ -29,12 +29,13 @@
 <xsl:param name="ServletsBaseURL" />
 <xsl:param name="MCR.Mail.Address" />
 <xsl:param name="UBO.Mail.From" />
+<xsl:param name="UBO.Scopus.Importer.Status" />
 
 
 <xsl:variable name="br"><xsl:text>
 </xsl:text></xsl:variable>
 
-<xsl:template match="/imported">
+<xsl:template match="/*[local-name() = 'imported' or local-name() = $UBO.Scopus.Importer.Status]">
   <email>
     <from><xsl:value-of select="$UBO.Mail.From" /></from>
     <xsl:if test="string-length($MCR.Mail.Address)&gt;0">
