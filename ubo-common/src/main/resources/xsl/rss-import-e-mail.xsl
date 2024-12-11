@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!-- ============================================== -->
 <!-- $Revision: 34514 $ $Date: 2016-02-04 19:27:24 +0100 (Do, 04 Feb 2016) $ -->
@@ -35,7 +35,7 @@
 <xsl:variable name="br"><xsl:text>
 </xsl:text></xsl:variable>
 
-<xsl:template match="/*[local-name() = 'imported' or local-name() = $UBO.Scopus.Importer.Status]">
+<xsl:template match="/*[contains(concat('imported ', $UBO.Scopus.Importer.Status), local-name())]">
   <email>
     <from><xsl:value-of select="$UBO.Mail.From" /></from>
     <xsl:if test="string-length($MCR.Mail.Address)&gt;0">
@@ -43,7 +43,7 @@
         <to> <xsl:value-of select="." /> </to>
       </xsl:for-each>
     </xsl:if>
-    <subject>Universitätsbibliographie: <xsl:value-of select="@source" /> RSS Feed Import</subject>
+    <subject>UniversitÃ¤tsbibliographie: <xsl:value-of select="@source" /> RSS Feed Import</subject>
     <body>
     <xsl:text>
 Liebe Kollegin, lieber Kollege,
@@ -67,9 +67,9 @@ die folgenden </xsl:text>
       </xsl:for-each> 
 <xsl:text>
 
-Mit freundlichen Grüßen
+Mit freundlichen GrÃ¼ÃŸen
 
-Ihre Universitätsbibliographie
+Ihre UniversitÃ¤tsbibliographie
 </xsl:text>
     </body>
   </email>
