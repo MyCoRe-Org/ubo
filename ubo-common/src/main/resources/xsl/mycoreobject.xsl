@@ -23,6 +23,8 @@
 <xsl:include href="mods-display.xsl" />
 <xsl:include href="coreFunctions.xsl" />
 
+<xsl:include href="xslInclude:mycoreobject-extensions" />
+
 <xsl:param name="Referer" select="concat($ServletsBaseURL,'DozBibEntryServlet?id=',/mycoreobject/@ID)" />
 <xsl:param name="CurrentUserPID" />
 <xsl:param name="step" />
@@ -37,6 +39,11 @@
 
 <xsl:template name="page.title">
  <title>
+  <xsl:apply-templates select="/mycoreobject" mode="pageTitle" />
+ </title>
+</xsl:template>
+
+<xsl:template match="mycoreobject[contains(@ID,'_mods_')]" mode="pageTitle">
   <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
     <xsl:for-each select="mods:name[@type='personal'][1]">
       <xsl:apply-templates select="mods:namePart[@type='family']"/>
@@ -45,7 +52,6 @@
     </xsl:for-each>
     <xsl:apply-templates select="mods:titleInfo[1]" />
   </xsl:for-each>
- </title>
 </xsl:template>
 
 <xsl:template name="pageLastModified">
@@ -57,12 +63,14 @@
 <!-- ========== Dublin Core and Highwire Press meta tags ========== -->
 
 <xsl:template name="head.additional">
-  <xsl:apply-templates select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods" mode="dc-meta" />
-  <xsl:apply-templates select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods" mode="highwire" />
-
-  <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
-    <script src="{$WebApplicationBaseURL}modules/orcid2/js/orcid-auth.js"/>
-    <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
+  <xsl:if test="contains(@ID,'_mods_')">
+    <xsl:apply-templates select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods" mode="dc-meta" />
+    <xsl:apply-templates select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods" mode="highwire" />
+  
+    <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
+      <script src="{$WebApplicationBaseURL}modules/orcid2/js/orcid-auth.js"/>
+      <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
+    </xsl:if>
   </xsl:if>
 </xsl:template>
 
@@ -77,11 +85,15 @@
     </xsl:if>
 
     <li>
-      <xsl:value-of select="i18n:translate('result.dozbib.entry')" />
-      <xsl:text> </xsl:text>
-      <xsl:value-of select="number(substring-after(/mycoreobject/@ID,'_mods_'))" />
+      <xsl:apply-templates select="/mycoreobject/@ID" mode="breadcrumb" />
     </li>
   </ul>
+</xsl:template>
+
+<xsl:template match="mycoreobject/@ID[contains(.,'_mods_')]" mode="breadcrumb">
+  <xsl:value-of select="i18n:translate('result.dozbib.entry')" />
+  <xsl:text> </xsl:text>
+  <xsl:value-of select="number(substring-after(/mycoreobject/@ID,'_mods_'))" />
 </xsl:template>
 
 <!-- ============ Aktionen ============ -->
@@ -175,7 +187,7 @@
 
 <!-- ============ Rechte Seite: Inhalte ============ -->
 
-<xsl:template match="mycoreobject">
+<xsl:template match="mycoreobject[contains(@ID,'_mods_')]">
   <script type="text/javascript" src="{$WebApplicationBaseURL}js/ModsDisplayUtils.js"/>
 
   <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">

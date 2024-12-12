@@ -678,26 +678,9 @@
             <xsl:value-of select="$classNode/label[lang($CurrentLang)]/@text"/>
           </dt>
           <dd>
-            <xsl:choose>
-              <xsl:when test="@type='orcid'">
-                <!-- special display code for orcid -->
-                <xsl:variable name="url" select="concat($MCR.ORCID2.LinkURL, .)" />
-                <a href="{$url}" title="ORCID iD: {.}">
-                  <xsl:value-of select="." />
-                  <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
-                </a>
-              </xsl:when>
-              <xsl:when test="count($classNode/label[@xml:lang='x-uri']) &gt;0">
-                <!-- display as link -->
-                <a href="{$classNode/label[@xml:lang='x-uri']/@text}{.}" title="{$classNode/label[lang($CurrentLang)]/@text}: {.}">
-                  <xsl:value-of select="." />
-                </a>
-              </xsl:when>
-              <xsl:otherwise>
-                <!-- display as text -->
-                <xsl:value-of select="." />
-              </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="." mode="value">
+              <xsl:with-param name="classNode" select="$classNode" />
+            </xsl:apply-templates>
           </dd>
         </xsl:when>
         <xsl:otherwise>
@@ -719,6 +702,31 @@
           </dd>
         </xsl:otherwise>
       </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template match="mods:nameIdentifier" mode="value">
+    <xsl:param name="classNode" />
+    
+    <xsl:choose>
+      <xsl:when test="@type='orcid'">
+        <!-- special display code for orcid -->
+        <xsl:variable name="url" select="concat($MCR.ORCID2.LinkURL, .)" />
+        <a href="{$url}" title="ORCID iD: {.}">
+          <xsl:value-of select="." />
+          <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
+        </a>
+      </xsl:when>
+      <xsl:when test="$classNode[label[@xml:lang='x-uri']]">
+        <!-- display as link -->
+        <a href="{$classNode/label[@xml:lang='x-uri']/@text}{.}" title="{$classNode/label[lang($CurrentLang)]/@text}: {.}">
+          <xsl:value-of select="." />
+        </a>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- display as text -->
+        <xsl:value-of select="." />
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!-- ========== Konferenz ========== -->

@@ -12,9 +12,9 @@
   <xsl:include href="coreFunctions.xsl"/>
   
   <xsl:key use="substring-after(@valueURI,'#')" name="destatisByCategory" match="//mods:mods/mods:classification[contains(@authorityURI,'destatis')]"></xsl:key>
-  <xsl:variable name="origin"                   select="document('classification:metadata:-1:children:ORIGIN')/mycoreclass/categories" />
+  <xsl:variable name="origin" select="document('classification:metadata:-1:children:ORIGIN')/mycoreclass/categories" />
 
-  <xsl:template match="mycoreobject">
+  <xsl:template match="mycoreobject[contains(@ID,'_mods_')]">
     <xsl:apply-templates select="." mode="baseFields" />
     <xsl:apply-templates select="structure/parents/parent[@xlink:href]" mode="solrField" />
     <xsl:apply-templates select="service/servflags/servflag[@type='status']" mode="solrField" />
@@ -66,6 +66,7 @@
     <xsl:apply-templates select="mods:language/mods:languageTerm[@type='code']" mode="solrField" />
     <xsl:apply-templates select="mods:extension/tag" mode="solrField" />
     <xsl:apply-templates select="mods:extension/dedup" mode="solrField" />
+    <xsl:apply-templates select="mods:name[@type='personal' and starts-with(@xlink:href, 'ubo_modsperson_')]" mode="solrField.ref" />
     <xsl:call-template name="sortby_person" />
     <xsl:call-template name="oa" />
     <xsl:call-template name="partOf" />
@@ -163,6 +164,12 @@
   <xsl:template match="mods:name[@type='personal']/mods:role/mods:roleTerm[@type='code']" mode="solrField">
     <field name="person_{text()}">
       <xsl:apply-templates select="../.." mode="solrField" />
+    </field>
+  </xsl:template>
+
+  <xsl:template match="mods:name[@xlink:href]" mode="solrField.ref">
+    <field name="ref_person">
+      <xsl:value-of select="@xlink:href" />
     </field>
   </xsl:template>
 
