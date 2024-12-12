@@ -37,7 +37,7 @@
             <div>
               <label for="{xed:generate-id()}">Institut / Klinik:</label>
               <span class="{$xed-validation-marker}">
-                <select id="{xed:generate-id()}" style="width:400px;" class="autocomplete {$xed-validation-marker}">
+                <select id="{xed:generate-id()}" style="width:400px;" class="autocomplete {$xed-validation-marker}" data-display="static">
                   <option value=""><xed:output i18n="search.select" /></option>
                   <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:ORIGIN:14" />
                 </select>
@@ -45,7 +45,18 @@
             </div>
           </xed:bind>
           <script type="text/javascript">
-            jQuery(document).ready(function() { jQuery('select[class*="autocomplete"]').selectpicker({liveSearch:true, liveSearchNormalize:true, virtualScroll:true, showSubtext:true, size:10}); });
+            jQuery(document).ready(function() {
+              jQuery('select[class*="autocomplete"]').selectpicker({
+              liveSearch:true, liveSearchNormalize:true, virtualScroll:true, showSubtext:true, size:10
+                liveSearch:true,
+                liveSearchNormalize:true,
+                virtualScroll:true,
+                showSubtext:true,
+                size:10,
+                width:'auto',
+                dropupAuto: false
+              });
+            });
           </script>
 
         </fieldset>
