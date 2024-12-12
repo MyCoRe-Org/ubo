@@ -73,11 +73,7 @@
                 <label for="{generate-id()}" class="mycore-form-label text-nowrap">
                   <xed:output i18n="search.dozbib.status" />:
                 </label>
-<<<<<<< Upstream, based on d012ad70a15c87b15a15cc412bef21baf4878dbf
                 <select id="{generate-id()}" class="{$xed-validation-marker}  mycore-form-input form-control custom-select">
-=======
-                <select id="{generate-id()}" class="{$xed-validation-marker} mycore-form-input form-control custom-select">
->>>>>>> 23de200 UBO-372 - add css for bootstrap-select
                   <option value="">
                     <xed:output i18n="search.select"/>
                   </option>
@@ -97,11 +93,7 @@
                   <option value="">
                     <xed:output i18n="search.select" />
                   </option>
-<<<<<<< Upstream, based on d012ad70a15c87b15a15cc412bef21baf4878dbf
                   <xed:include uri="xslStyle:mycoreclass-options?omitSubtext={$UBO.Editor.import-list.omitSubtext}:classification:metadata:-1:children:fachreferate" />
-=======
-                  <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:fachreferate" />
->>>>>>> 23de200 UBO-372 - add css for bootstrap-select
                 </select>
                 <xed:controls />
               </div>
@@ -114,7 +106,7 @@
                 </label>
                 <select id="{generate-id()}" class="autocomplete {$xed-validation-marker} mycore-form-input" data-container="form-group" data-display="static">
                   <option value=""><xed:output i18n="search.select" /></option>
-                  <xed:include uri="xslStyle:mycoreclass-options?omitSubtext={$UBO.Editor.import-list.omitSubtext}:classification:metadata:-1:children:ORIGIN" />
+                  <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:ORIGIN" />
                 </select>
               </div>
             </xed:bind>
