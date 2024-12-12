@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 
 <xsl:stylesheet version="3.0"
+                xmlns:fn="http://www.w3.org/2005/xpath-functions"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                exclude-result-prefixes="xsl">
+                exclude-result-prefixes="fn xsl">
 
   <xsl:param name="UBO.Export.Fields" />
   
-  <xsl:variable name="fields"
-                select="tokenize($UBO.Export.Fields, ',')" />
+  <xsl:variable name="fields" select="fn:tokenize($UBO.Export.Fields, ',')" />
 
   <xsl:variable name="col_seperator" select="';'"/>
   <xsl:variable name="line_seperator" select="'&#xa;'"/>
@@ -47,11 +47,9 @@
   </xsl:template>
 
   <xsl:template match="field|str">
-    <xsl:value-of select="replace(string(text()), $regex, '$1$1')"/>
+    <xsl:value-of select="fn:replace(string(text()), $regex, '$1$1')"/>
     <xsl:if test="position()!=last()">
       <xsl:text>,</xsl:text>
     </xsl:if>
   </xsl:template>
-
-
 </xsl:stylesheet>

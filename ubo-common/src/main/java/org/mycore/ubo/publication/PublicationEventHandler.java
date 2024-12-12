@@ -189,7 +189,16 @@ public class PublicationEventHandler extends MCREventHandlerBase {
 
     private void handleUser(Element modsName, MCRUser user) {
         connectModsNameElementWithMCRUser(modsName, user);
-        user.assignRole(defaultRoleForNewlyCreatedUsers);
+
+        MCRUser storedUser = MCRUserManager.getUser(user.getUserName() + "@" + user.getRealmID());
+        if (storedUser == null) {
+            user.assignRole(defaultRoleForNewlyCreatedUsers);
+        } else {
+            for (String role : storedUser.getSystemRoleIDs().stream().toList()) {
+                user.assignRole(role);
+            }
+        }
+
         MCRUserManager.updateUser(user);
     }
 
