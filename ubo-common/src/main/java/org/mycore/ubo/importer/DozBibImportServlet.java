@@ -74,7 +74,12 @@ public class DozBibImportServlet extends MCRServlet {
 
         boolean enrich = "true".equals(formInput.getAttributeValue("enrich"));
         if (enrich) {
-            importJob.enrich();
+            String enricherId = EnrichmentConfigMgr.getEnricherId(formInput);
+            if (enricherId != null) {
+                importJob.enrich(enricherId);
+            } else {
+                importJob.enrich();
+            }
         }
 
         String targetType = formInput.getAttributeValue("targetType");
