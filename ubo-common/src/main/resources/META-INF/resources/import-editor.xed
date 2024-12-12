@@ -22,9 +22,17 @@
     <script type="text/javascript">
       <![CDATA[
       $(document).ready(function() {
-      
-        $('select[class*="autocomplete"]').selectpicker({liveSearch:true, liveSearchNormalize:true, virtualScroll:true, showSubtext:true, size:10}); 
-      
+
+        $('select[class*="autocomplete"]').selectpicker({
+          liveSearch:true,
+          liveSearchNormalize:true,
+          virtualScroll:true,
+          showSubtext:true,
+          size:10,
+          width:'auto',
+          dropupAuto: false
+        });
+
         $(document).popover({
           selector: "[data-toggle=popover]",
           container: "body",
@@ -121,7 +129,7 @@
         <label for="{xed:generate-id()}" class="mycore-form-label ubo-mandatory">
           <xed:output value="concat(i18n:translate('ubo.subject'), ': ')" />
         </label>
-        <select id="{xed:generate-id()}" class="autocomplete mycore-form-input">
+        <select id="{xed:generate-id()}" class="autocomplete mycore-form-input" data-container="form-group" data-display="static">
           <option value="">
             <xed:output i18n="search.select.autocomplete" />
           </option>
@@ -135,20 +143,20 @@
   <xed:template id="origin">
     <xed:repeat xpath="mods:classification[@classID='ORIGIN']" max="10">
       <div class="form-inline form-group ubo-repeat-group">
-      <xed:choose>
-        <xed:when test="$genre_intern = 'dissertation'">
-          <label class="mycore-form-label ubo-mandatory" for="{xed:generate-id()}">
-            <xed:validate xpath="//mods:classification[@classID='ORIGIN']" required="true" i18n="condition.institution" display="global" />
-            <xed:output value="concat(i18n:translate('ubo.department'), ': ')" />
-          </label>
-        </xed:when>
-        <xed:otherwise>
-          <label class="mycore-form-label" for="{xed:generate-id()}">
-            <xed:output value="concat(i18n:translate('ubo.department'), ': ')" />
-          </label>
-        </xed:otherwise>
-      </xed:choose>
-        <select id="{xed:generate-id()}" class="autocomplete {$xed-validation-marker} mycore-form-input">
+        <xed:choose>
+          <xed:when test="$genre_intern = 'dissertation'">
+            <label class="mycore-form-label ubo-mandatory" for="{xed:generate-id()}">
+              <xed:validate xpath="//mods:classification[@classID='ORIGIN']" required="true" i18n="condition.institution" display="global" />
+              <xed:output value="concat(i18n:translate('ubo.department'), ': ')" />
+            </label>
+          </xed:when>
+          <xed:otherwise>
+            <label class="mycore-form-label" for="{xed:generate-id()}">
+              <xed:output value="concat(i18n:translate('ubo.department'), ': ')" />
+            </label>
+          </xed:otherwise>
+        </xed:choose>
+        <select id="{xed:generate-id()}" class="autocomplete {$xed-validation-marker} mycore-form-input" data-container="form-group" data-display="static">
           <option value=""><xed:output i18n="search.select.autocomplete" /></option>
           <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:ORIGIN" />
         </select>

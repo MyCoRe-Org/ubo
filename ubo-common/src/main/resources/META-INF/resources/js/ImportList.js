@@ -1,5 +1,14 @@
 $(document).ready(function () {
-    $('select[class*="autocomplete"]').selectpicker({liveSearch:true, liveSearchNormalize:true, virtualScroll:true, showSubtext:true, size:10});
+    $('select[class*="autocomplete"]').selectpicker({
+      liveSearch:true,
+      liveSearchNormalize:true,
+      virtualScroll:true,
+      showSubtext:true,
+      size:10,
+      width:'auto',
+      dropupAuto: false
+    });
+    
 });
 
 const UBOImportList = {

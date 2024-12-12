@@ -41,30 +41,42 @@
             <xed:bind xpath="conditions[@format='xml']/boolean[@operator='and']">
 
               <xed:bind xpath="condition6[@field='origin'][@operator='=']/@value" default="14">
-		<div class="form-group form-inline">
+                <div class="form-group form-inline">
                   <label class="mycore-form-label">
                     <xed:output i18n="search.dozbib.origin" />
                   </label>
-                  <select class="autocomplete mycore-form-input custom-select">
+                  <select class="autocomplete mycore-form-input custom-select" data-container="form-group" data-display="static">
                     <option value="14"><xed:output i18n="search.select" /></option>
                     <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:ORIGIN:14" />
                   </select>
                   <script type="text/javascript">
-                    $(document).ready(function() { $('select[class*="autocomplete"]').selectpicker({liveSearch:true, liveSearchNormalize:true, virtualScroll:true, showSubtext:true, size:10}); });
+                    $(document).ready(function() {
+    
+                      $('select[class*="autocomplete"]').selectpicker({
+                        liveSearch:true,
+                        liveSearchNormalize:true,
+                        virtualScroll:true,
+                        showSubtext:true,
+                        size:10,
+                        width:'auto',
+                        dropupAuto: false
+                      });
+    
+                    });
                   </script>
-		</div>
+                </div>
               </xed:bind>
 
               <xed:bind xpath="condition2[@operator='contains']/@field" initially="person_ths" />
               <xed:include uri="webapp:import-search.xed" ref="name" />
 
               <xed:bind xpath="condition4[@field='title'][@operator='contains']/@value">
-		<div class="form-group form-inline">
+                <div class="form-group form-inline">
                   <label class="mycore-form-label">
                     <xed:output i18n="search.title" />
                   </label>
                   <input type="text" class="mycore-form-input" />
-		</div>
+                </div>
               </xed:bind>
 
               <xed:include uri="webapp:import-search.xed" ref="year" />

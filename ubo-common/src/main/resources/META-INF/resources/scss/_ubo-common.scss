@@ -150,6 +150,12 @@
     padding-left: 5px;
   }
 
+  .bootstrap-select {
+    .dropdown-menu {
+      width: 100%;
+    }
+  }
+
 // Large devices (desktops) and below: <= 1200px
 @include media-breakpoint-down(lg) {
 // add/overwrite styles for responsive level lg and lower
