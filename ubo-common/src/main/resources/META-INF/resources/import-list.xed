@@ -137,7 +137,7 @@
 
             <hr/>
 
-            <div class="form-group form-inline">
+            <div class="form-inline">
               <label class="mycore-form-label text-nowrap">
                 <xed:output i18n="ubo.import.list.label.dataSources"/>:
               </label>
