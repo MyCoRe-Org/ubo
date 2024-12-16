@@ -55,7 +55,8 @@ public class DozBibImportServlet extends MCRServlet {
         if ("true".equals(doAsync)) {
             MCRJob job = new MCRJob(ImportListJobAction.class);
             job.setParameter(ImportListJobAction.EDITOR_SUBMISSION_PARAMETER, new XMLOutputter().outputString(doc));
-            job.setParameter(ImportListJobAction.USER_ID_PARAMETER, MCRUserManager.getCurrentUser().getUserName());
+            job.setParameter(ImportListJobAction.USER_ID_PARAMETER,
+                MCRUserManager.getCurrentUser().getUserName() + "@" + MCRUserManager.getCurrentUser().getRealmID());
             MCRJobQueueManager.getInstance().getJobQueue(ImportListJobAction.class).offer(job);
 
             String referer = req.getHeader("Referer");
@@ -73,7 +74,12 @@ public class DozBibImportServlet extends MCRServlet {
 
         boolean enrich = "true".equals(formInput.getAttributeValue("enrich"));
         if (enrich) {
-            importJob.enrich();
+            String enricherId = EnrichmentConfigMgr.getEnricherId(formInput);
+            if (enricherId != null) {
+                importJob.enrich(enricherId);
+            } else {
+                importJob.enrich();
+            }
         }
 
         String targetType = formInput.getAttributeValue("targetType");

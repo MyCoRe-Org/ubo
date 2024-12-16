@@ -1,5 +1,14 @@
 $(document).ready(function () {
-    $('select[class*="autocomplete"]').chosen({search_contains: true});
+    $('select[class*="autocomplete"]').selectpicker({
+      liveSearch:true,
+      liveSearchNormalize:true,
+      virtualScroll:true,
+      showSubtext:true,
+      size:10,
+      width:'auto',
+      dropupAuto: false
+    });
+
 });
 
 const UBOImportList = {
@@ -31,6 +40,22 @@ const UBOImportList = {
             $("#submitBtn").attr("disabled", "disabled");
         } else {
             $("#submitBtn").removeAttr("disabled");
+        }
+    },
+
+    toggleDataSources: function (element) {
+        switch (element.id) {
+            case "datasource-input-custom":
+                if (element.value != null && element.value.length > 0) {
+                    document.getElementById('datasource-source-select').selectedIndex = 0;
+                }
+                break;
+
+            case "datasource-source-select":
+                if (element.value != null && element.value.length > 0) {
+                    document.getElementById('datasource-input-custom').value = "";
+                }
+                break;
         }
     }
 }
