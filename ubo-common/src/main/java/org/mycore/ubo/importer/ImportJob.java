@@ -81,6 +81,13 @@ public abstract class ImportJob {
         }
     }
 
+    public void enrich(String configId){
+        for (Document publication : publications) {
+            MCREnricher enricher = new MCREnricher(configId);
+            enricher.enrich(getContainedMODS(publication));
+        }
+    }
+
     public void enrich() {
         for (Document publication : publications) {
             MCREnricher enricher = new MCREnricher(ENRICHER_CONFIG_ID);
