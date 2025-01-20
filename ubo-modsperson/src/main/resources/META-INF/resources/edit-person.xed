@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<webpage id="dozbib.edit.person">
+    <title xml:lang="de">Person erfassen</title>
+    <title xml:lang="en">Acquire person</title>
+
+    <article class="card mb-3" xml:lang="de">
+        <div class="card-body bg-alternative">
+            <p>
+                Die mit <strong>*</strong> gekennzeichneten Felder sind <strong>Pflichtfelder</strong>.
+                Durch klicken auf <strong>[+]</strong> können Sie ein <strong>Eingabefeld wiederholen</strong>!
+            </p>
+        </div>
+    </article>
+    <article class="card mb-3" xml:lang="en">
+        <div class="card-body bg-alternative">
+            <p>
+                Fields marked with <strong>*</strong>  are <strong>required fields</strong>.
+                By clicking on <strong>[+]</strong> you can repeat an input field!
+            </p>
+        </div>
+    </article>
+
+    <article class="card" id="form">
+        <div class="card-body">
+            <xed:form xmlns:xed="http://www.mycore.de/xeditor"
+                      xmlns:cerif="https://www.openaire.eu/cerif-profile/1.1/"
+                      method="post" role="form">
+
+                <xed:source uri="xslStyle:mods-preprocessor:mcrobject:{$id}"/>
+                <xed:source uri="xslStyle:mods2mycoreobject,mods-preprocessor:session:{$key}"/>
+
+                <xed:cancel
+                        url="servlets/MCRLockServlet?action=unlock&amp;id={$id}&amp;url=DozBibEntryServlet%3Fid={$id}"/>
+                <xed:cancel url="newPerson.xed"/>
+
+                <xed:post-processor xsl="mods-postprocessor.xsl"/>
+
+                <xed:bind xpath="/mycoreobject">
+                    <xed:include uri="webapp:import-editor.xed" ref="common.metafields"/>
+
+                    <input type="hidden" name="mode" value="save"/>
+
+                    <xed:include uri="webapp:import-editor.xed" ref="validation"/>
+
+                    <xed:bind
+                            xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer/mods:mods/mods:name[@type='personal']">
+
+                        <fieldset>
+                            <legend>
+                                <xed:include uri="webapp:import-editor.xed" ref="legend.ID"/>
+                            </legend>
+
+                            <xed:bind xpath="mods:namePart[@type='family']">
+                                <div class="form-group form-inline">
+                                    <label for="{xed:generate-id()}" class="mycore-form-label">
+                                        <xed:output value="concat(i18n:translate('edit.nameLast'), ': ')"/>
+                                    </label>
+                                    <input id="{xed:generate-id()}" class="{$xed-validation-marker} mycore-form-input"
+                                           type="text"/>
+                                </div>
+                            </xed:bind>
+
+                            <xed:bind xpath="mods:namePart[@type='given']">
+                                <div class="form-group form-inline">
+                                    <label for="{xed:generate-id()}" class="mycore-form-label">
+                                        <xed:output value="concat(i18n:translate('edit.nameFirst'), ': ')"/>
+                                    </label>
+                                    <input id="{xed:generate-id()}" class="{$xed-validation-marker} mycore-form-input"
+                                           type="text"/>
+                                </div>
+                            </xed:bind>
+
+                            <xed:repeat
+                                    xpath="mods:nameIdentifier[not(@type=$MCR.user2.matching.lead_id)][not(@type='connection')]">
+                                <div class="form-group form-inline col-12 px-0 mb-2 mt-2 ubo-repeat-group">
+                                    <label class="mycore-form-label">
+                                    </label>
+                                    <xed:bind xpath="@type">
+                                        <select class="form-control col-sm-2 custom-select">
+                                            <option value="">
+                                                <xed:output i18n="search.select"/>
+                                            </option>
+                                            <xed:include
+                                                    uri="xslStyle:filterOutLeadAndConnectionID,items2options:classification:editor:-1:children:nameIdentifier"/>
+                                        </select>
+                                    </xed:bind>
+                                    <input type="text" class="{$xed-validation-marker} form-control col-sm-4"
+                                           id="{xed:generate-id()}"/>
+                                    <xed:controls>insert remove</xed:controls>
+                                </div>
+                            </xed:repeat>
+
+                            <xed:repeat xpath="mods:alternativeName">
+                                <div class="form-group">
+                                    <xed:bind xpath="mods:namePart[@type='family']">
+                                        <div class="form-group form-inline">
+                                            <label for="{xed:generate-id()}" class="mycore-form-label">
+                                                <xed:output
+                                                        value="concat(i18n:translate('edit.nameLastAlternative'), ': ')"/>
+                                            </label>
+                                            <input id="{xed:generate-id()}"
+                                                   class="{$xed-validation-marker} mycore-form-input"
+                                                   type="text"/>
+                                        </div>
+                                    </xed:bind>
+
+                                    <xed:bind xpath="mods:namePart[@type='given']">
+                                        <div class="form-group form-inline">
+                                            <label for="{xed:generate-id()}" class="mycore-form-label">
+                                                <xed:output
+                                                        value="concat(i18n:translate('edit.nameFirstAlternative'), ': ')"/>
+                                            </label>
+                                            <input id="{xed:generate-id()}"
+                                                   class="{$xed-validation-marker} mycore-form-input"
+                                                   type="text"/>
+                                        </div>
+                                    </xed:bind>
+                                    <xed:controls>insert remove</xed:controls>
+                                </div>
+
+                            </xed:repeat>
+
+                            <xed:repeat xpath="mods:affiliation">
+                                <div class="form-group form-inline">
+                                    <label for="{xed:generate-id()}" class="mycore-form-label">
+                                        <xed:output value="concat(i18n:translate('ubo.person.affiliation'), ': ')"/>
+                                    </label>
+                                    <input id="{xed:generate-id()}" class="{$xed-validation-marker} mycore-form-input"
+                                           type="text"/>
+                                    <xed:controls>insert remove</xed:controls>
+                                </div>
+                            </xed:repeat>
+
+                        </fieldset>
+
+                    </xed:bind>
+
+                    <xed:include uri="webapp:import-editor.xed" ref="cleanup"/>
+                    <xed:include uri="webapp:import-editor.xed" ref="cancel.submit"/>
+                    <xed:include uri="webapp:import-editor.xed" ref="javascript"/>
+                </xed:bind>
+
+            </xed:form>
+        </div>
+    </article>
+</webpage>

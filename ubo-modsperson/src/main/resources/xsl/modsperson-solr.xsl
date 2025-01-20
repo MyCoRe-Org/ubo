@@ -24,7 +24,7 @@
   </xsl:template>
 
   <xsl:template match="mods:name[@type='personal']" mode="modspersonField">
-    <field name="name">
+    <field name="person">
       <xsl:value-of select="mods:namePart[@type='family']" />
       <xsl:if test="mods:namePart[@type='given']">
         <xsl:text>,</xsl:text> 

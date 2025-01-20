@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<webpage lastModified="$Date: 2017-02-21 12:09:23 +0100 (Di, 21 Feb 2017) $" id="dozbib.search-person">
+  <title xml:lang="de">Universitätsbibliographie Online: Personensuche</title>
+  <title xml:lang="en">University Bibliography Online: Person search</title>
+ 
+ <article class="card mb-1">
+   <div class="card-body">
+    <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
+
+      <xed:include uri="webapp:import-search.xed" ref="submit_enter" />
+
+      <xed:cancel url="servlets/XEditor?_xed_submit_return_cancel=&amp;_xed_session={$_xed_subselect_session}" />
+      <xed:cancel url="index.xed" />
+
+      <fieldset>
+        <legend>
+          <xed:output i18n="search.dozbib" />
+        </legend>
+
+        <xed:include uri="webapp:import-search.xed" ref="validation" />
+
+        <div class="mb-2">
+          <xed:multi-lang>
+            <xed:lang xml:lang="de">
+              Alle Bedingungen werden UND-verknüpft. Durch klicken auf
+              <img class="roundedButton" style="width:12px; margin:0 1ex; 0 1ex;" src="{$WebApplicationBaseURL}images/pmud-plus.png" />
+              können Sie ein <strong>Suchfeld wiederholen</strong>!
+            </xed:lang>
+            <xed:lang xml:lang="en">
+              All search terms are connected with AND. By clicking on
+              <img class="roundedButton" style="width:12px; margin:0 1ex; 0 1ex;" src="{$WebApplicationBaseURL}images/pmud-plus.png" />
+              you can <strong>repeat a  search field</strong>!
+            </xed:lang>
+          </xed:multi-lang>
+        </div>
+
+        <xed:bind xpath="/query">
+          <xed:choose>
+            <!-- Return from subselect to choose related item (host) in editor form -->
+            <xed:when test="string-length($_xed_subselect_session) &gt; 0">
+              <xed:bind xpath="@mask" set="_xed_subselect_session={$_xed_subselect_session}" />
+            </xed:when>
+            <xed:otherwise>
+              <xed:bind xpath="@mask" default="search-person.xed" />
+            </xed:otherwise>
+          </xed:choose>
+          <xed:bind xpath="conditions[@format='xml']/boolean[@operator='and']">
+            <xed:bind xpath="condition[@field='objectType'][@operator='='][@value='modsperson']" />
+            <xed:repeat xpath="condition2[@operator='phrase']">
+              <div class="form-group form-inline">
+                <div class="mycore-form-label">
+                  <xed:bind xpath="@field">
+                    <select id="ubo-search-person" class="form-control w-100 custom-select">
+                      <option value="person">Name</option>
+                    </select>
+                  </xed:bind>
+                </div>
+                <xed:bind xpath="@value">
+                  <input type="text" class="mycore-form-input"/>
+                </xed:bind>
+                <xed:controls>insert remove</xed:controls>
+              </div>
+            </xed:repeat>
+
+            <xed:repeat xpath="condition3[@operator='=']">
+              <div class="form-group form-inline">
+                <div class="mycore-form-label">
+                  <xed:bind xpath="@field">
+                    <select class="form-control w-100 custom-select">
+                      <option value="nid_lsf"          ><xed:output i18n="search.dozbib.pid" /></option>
+                      <option value="nid_orcid"        >ORCID:</option>
+                      <option value="nid_researcherid" >ResearcherID:</option>
+                      <option value="nid_scopus"       >Scopus ID:</option>
+                      <option value="nid_gnd"          >GND:</option>
+                    </select>
+                  </xed:bind>
+                </div>
+                <xed:bind xpath="@value">
+                  <input type="text" class="mycore-form-input"/>
+                </xed:bind>
+                <xed:controls>insert remove</xed:controls>
+              </div>
+            </xed:repeat>
+
+          </xed:bind>
+
+          <div id="sortby">
+            <div class="form-group form-inline pt-3">
+              <label class="mycore-form-label mb-lg-3">
+                <xed:output i18n="search.sort" />
+              </label>
+              <div class="col pl-0">
+                <xed:repeat xpath="sortBy/field" max="3">
+                  <div class="form-inline mb-lg-3 pt-0">
+                    <div class="align-self-center mr-sm-2">
+                      <xed:output i18n="search.sort.by" />
+                    </div>
+                    <xed:bind xpath="@name">
+                      <select class="form-control mr-sm-3 custom-select">
+                        <option value="sortby_person"><xed:output i18n="document.creators.one" /></option>
+                      </select>
+                    </xed:bind>
+                    <xed:bind xpath="@order">
+                      <select class="form-control custom-select">
+                        <option value="descending"><xed:output i18n="search.sort.desc" /></option>
+                        <option value="ascending" ><xed:output i18n="search.sort.asc" /></option>
+                      </select>
+                    </xed:bind>
+                    <xed:controls />
+                  </div>
+                </xed:repeat>
+              </div>
+            </div>
+          </div>
+
+          <xed:include uri="webapp:import-search.xed" ref="numPerPage" />
+
+          <div class="form-group form-inline">
+            <label for="{xed:generate-id()}" class="mycore-form-label">
+            </label>
+            <div class="cancel-submit">
+              <button class="btn btn-primary" type="submit" xed:target="servlet" xed:href="MCRQLSearchServlet">
+                <xed:output i18n="button.search" />
+              </button>
+              <button class="btn btn-danger" type="submit" xed:target="cancel">
+                <xed:output i18n="button.cancel" />
+              </button>
+              <button class="btn btn-secondary" type="reset">
+                <xed:output i18n="button.reset" />
+              </button>
+            </div>
+          </div>
+        </xed:bind>
+      </fieldset>
+
+      <xed:cleanup-rule xpath="//*[@field][@value]" relevant-if="string-length(@value) &gt; 0" />
+      <xed:cleanup-rule xpath="//*[@field][value]" relevant-if="value[string-length(text()) &gt; 0]" />
+
+    </xed:form>
+   </div>
+  </article>
+
+</webpage>

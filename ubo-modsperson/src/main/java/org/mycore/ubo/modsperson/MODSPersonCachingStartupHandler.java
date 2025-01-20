@@ -82,7 +82,7 @@ public class MODSPersonCachingStartupHandler implements MCRStartupHandler.AutoEx
             String givenName;
             Set<String> keys = new HashSet<>();
             String personName = (String) doc.getFieldValue("name");
-            if (personName.contains(",")) {
+            if (personName != null && personName.contains(",")) {
                 String[] parts = personName.split(",");
                 familyName = parts[0].trim();
                 givenName = parts[1].trim();

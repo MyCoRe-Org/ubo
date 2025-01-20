@@ -21,6 +21,7 @@
 <xsl:include href="ubo-dialog.xsl" />
 <xsl:include href="coreFunctions.xsl" />
 <xsl:include href="csl-export-gui.xsl" />
+<xsl:include href="response-person.xsl" />
 
 <xsl:param name="RequestURL" />
 <xsl:param name="MCR.ORCID2.OAuth.ClientSecret" select="''" />
@@ -53,6 +54,7 @@
   </xsl:choose>
 </xsl:variable>
 <xsl:variable name="requestHandler" select="substring-before(substring-after($RequestURL, '/servlets/solr/'), '?')"/>
+<xsl:variable name="query" select="/response/lst[@name='responseHeader']/lst[@name='params']/str[@name='q']" />
 
 <!-- ==================== Anzeige Seitentitel ==================== -->
 
@@ -136,7 +138,14 @@
     <body>
       <xsl:call-template name="breadcrumb" />
       <xsl:call-template name="exportLinks" />
-      <xsl:apply-templates select="response" />
+      <xsl:choose>
+        <xsl:when test="contains($query, 'objectType:&quot;mods&quot;') or contains($query, 'objectType:mods')">
+          <xsl:apply-templates select="response" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="response" mode="person" />
+        </xsl:otherwise>
+      </xsl:choose>
       <aside id="sidebar">
         <xsl:apply-templates select="/response/lst[@name='facet_counts'][lst[@name='facet_fields']/lst[int]]" />
       </aside>

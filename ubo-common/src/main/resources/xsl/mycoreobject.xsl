@@ -98,7 +98,13 @@
 
 <!-- ============ Aktionen ============ -->
 
+
 <xsl:template name="actions">
+  <xsl:apply-templates select="/mycoreobject/@ID" mode="actions" />
+</xsl:template>
+
+
+<xsl:template match="mycoreobject/@ID[contains(.,'_mods_')]" mode="actions">
   <div id="buttons" class="btn-group mb-3 flex-wrap">
     <xsl:if test="$permission.admin and not($UBO.System.ReadOnly = 'true')">
       <xsl:if test="(string-length($step) = 0) or contains($step,'merged')">

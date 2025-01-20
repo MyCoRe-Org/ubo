@@ -16,6 +16,10 @@
       <label xml:lang="de">Expertensuche</label>
       <label xml:lang="en">Expert search</label>
     </item>
+    <item id="dozbib.search-person" ref="search-person.xed" role="admin">
+      <label xml:lang="de">Personensuche</label>
+      <label xml:lang="en">Person search</label>
+    </item>
     <item ref="list-wizard.xed" id="dozbib.list-wizard">
       <label xml:lang="de">Persönliche Publikationsliste</label>
       <label xml:lang="en">Personal publication list</label>
