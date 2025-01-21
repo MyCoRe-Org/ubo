@@ -15,9 +15,9 @@
     color: $oa-closed-text;
     background-color: $oa-closed;
   }
-  &-platin  {
-    color: $oa-platin-text;
-    background-color: $oa-platin;
+  &-diamond  {
+    color: $oa-diamond-text;
+    background-color: $oa-diamond;
   }
   &-hybrid  {
     color: $oa-hybrid-text;
@@ -45,7 +45,7 @@
   &-oa      rect { fill: $oa; }
   &-green   rect { fill: $oa-green; }
   &-gold    rect { fill: $oa-gold; }
-  &-platin  rect { fill: $oa-platin; }
+  &-diamond rect { fill: $oa-diamond; }
   &-hybrid  rect { fill: $oa-hybrid; }
   &-bronze  rect { fill: $oa-bronze; }
   &-embargo rect { fill: $oa-embargo; }

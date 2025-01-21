@@ -43,8 +43,8 @@
   <properties>
     <MCR.AppName>ubo</MCR.AppName>
     <axis1.version>1.4</axis1.version>
+    <bootstrap-select.version>1.13.18</bootstrap-select.version>
     <bootstrap.version>4.4.1</bootstrap.version>
-    <chosen.version>1.8.7</chosen.version>
     <font-awesome.version>5.13.0</font-awesome.version>
     <jakarta.activation.version>2.0.1</jakarta.activation.version>
     <jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
@@ -55,7 +55,7 @@
     <jquery.version>3.5.1</jquery.version>
     <mycore.version>2023.06.3-SNAPSHOT</mycore.version>
     <node.version>v16.0.0</node.version>
-    <pica2mods.version>2.10</pica2mods.version>
+    <pica2mods.version>2.11</pica2mods.version>
     <sortpom.sortDeps>scope,groupId,artifactId</sortpom.sortDeps>
     <sortpom.sortFile>https://gist.githubusercontent.com/yagee-de/dfd3698c1b49173dbf251f74eb6a9297/raw/406460c088ff3cb6354e4ae6b40535e6f841607d/mycore_sort.xml</sortpom.sortFile>
     <sortpom.sortProps>true</sortpom.sortProps>
@@ -364,6 +364,11 @@
       </dependency>
       <dependency>
         <groupId>org.webjars</groupId>
+        <artifactId>bootstrap-select</artifactId>
+        <version>${bootstrap-select.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.webjars</groupId>
         <artifactId>font-awesome</artifactId>
         <version>${font-awesome.version}</version>
       </dependency>
@@ -381,11 +386,6 @@
         <groupId>org.webjars</groupId>
         <artifactId>jquery-ui</artifactId>
         <version>${jquery.ui.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.webjars.npm</groupId>
-        <artifactId>chosen-js</artifactId>
-        <version>${chosen.version}</version>
       </dependency>
       <dependency>
         <groupId>xml-apis</groupId>

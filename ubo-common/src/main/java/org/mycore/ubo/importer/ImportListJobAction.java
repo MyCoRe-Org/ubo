@@ -61,7 +61,12 @@ public class ImportListJobAction extends MCRJobAction {
             job.setParameter(IMPORT_JOB_ID_PARAMETER, importJob.getID());
 
             if ("true".equals(formInput.getAttributeValue("enrich"))) {
-                importJob.enrich();
+                String enricherId = EnrichmentConfigMgr.getEnricherId(formInput);
+                if (enricherId != null) {
+                    importJob.enrich(enricherId);
+                } else {
+                    importJob.enrich();
+                }
             }
 
             try {
@@ -79,6 +84,12 @@ public class ImportListJobAction extends MCRJobAction {
     private void sendMail(ImportJob importJob) {
         String userName = job.getParameter(ImportListJobAction.USER_ID_PARAMETER);
         MCRUser mcrUser = MCRUserManager.getUser(userName);
+
+        if (mcrUser == null) {
+            LOGGER.error("User {} not found", userName);
+            return;
+        }
+
         String eMailAddress = mcrUser.getEMailAddress();
 
         if (eMailAddress == null) {
