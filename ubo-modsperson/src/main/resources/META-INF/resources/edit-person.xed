@@ -41,7 +41,6 @@
 
                     <input type="hidden" name="mode" value="save"/>
 
-                    <xed:include uri="webapp:import-editor.xed" ref="validation"/>
 
                     <xed:bind
                             xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer/mods:mods/mods:name[@type='personal']">
@@ -114,9 +113,11 @@
                                             <input id="{xed:generate-id()}"
                                                    class="{$xed-validation-marker} mycore-form-input"
                                                    type="text"/>
+                                            <xed:controls>insert remove</xed:controls>
                                         </div>
+
                                     </xed:bind>
-                                    <xed:controls>insert remove</xed:controls>
+
                                 </div>
 
                             </xed:repeat>

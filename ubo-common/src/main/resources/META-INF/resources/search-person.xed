@@ -85,36 +85,9 @@
 
           </xed:bind>
 
-          <div id="sortby">
-            <div class="form-group form-inline pt-3">
-              <label class="mycore-form-label mb-lg-3">
-                <xed:output i18n="search.sort" />
-              </label>
-              <div class="col pl-0">
-                <xed:repeat xpath="sortBy/field" max="3">
-                  <div class="form-inline mb-lg-3 pt-0">
-                    <div class="align-self-center mr-sm-2">
-                      <xed:output i18n="search.sort.by" />
-                    </div>
-                    <xed:bind xpath="@name">
-                      <select class="form-control mr-sm-3 custom-select">
-                        <option value="sortby_person"><xed:output i18n="document.creators.one" /></option>
-                      </select>
-                    </xed:bind>
-                    <xed:bind xpath="@order">
-                      <select class="form-control custom-select">
-                        <option value="descending"><xed:output i18n="search.sort.desc" /></option>
-                        <option value="ascending" ><xed:output i18n="search.sort.asc" /></option>
-                      </select>
-                    </xed:bind>
-                    <xed:controls />
-                  </div>
-                </xed:repeat>
-              </div>
-            </div>
-          </div>
-
+          <!-- TODO  Fix auf 100 per Page? -->
           <xed:include uri="webapp:import-search.xed" ref="numPerPage" />
+
 
           <div class="form-group form-inline">
             <label for="{xed:generate-id()}" class="mycore-form-label">

@@ -1163,7 +1163,6 @@
     </xsl:apply-templates>
     <xsl:apply-templates select="mods:abstract/@xlink:href" mode="details" />
     <xsl:apply-templates select="mods:abstract[string-length(.) &gt; 0]" mode="details" />
-    <xsl:apply-templates select="mods:name[@type='personal']" mode="modsperson" />
   </xsl:template>
 
   <!-- =========== Schlagworte =========== -->
@@ -1717,16 +1716,6 @@
       <xsl:value-of select="mods:part/mods:detail[@type='volume']/mods:number" />
     </xsl:if>
     <xsl:text>)</xsl:text>
-  </xsl:template>
-
-
-  <!-- ========== Person (modsperson) ========== -->
-  <xsl:template match="mods:name" mode="modsperson">
-    <xsl:param name="mode">plain</xsl:param> <!-- plain: Als Fließtext formatieren, sonst mit <div>'s -->
-
-    <xsl:apply-templates select="." mode="cite.title.name">
-      <xsl:with-param name="mode" select="$mode" />
-    </xsl:apply-templates>
   </xsl:template>
 
 

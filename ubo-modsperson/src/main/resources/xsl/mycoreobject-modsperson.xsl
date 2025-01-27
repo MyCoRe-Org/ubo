@@ -39,6 +39,8 @@
                                 <xsl:for-each select="mods:name[@type='personal']">
                                     <xsl:apply-templates select="." mode="modsperson"/>
                                     <xsl:apply-templates select="mods:nameIdentifier" mode="modsperson"/>
+                                    <xsl:apply-templates select="mods:alternativeName" mode="modsperson"/>
+                                    <xsl:apply-templates select="mods:affiliation" mode="modsperson"/>
                                 </xsl:for-each>
                             </div>
                         </div>
@@ -93,7 +95,8 @@
     <xsl:template match="mods:name" mode="modsperson">
         <div class="row">
             <div class="col-3">
-                <xsl:text>Name:</xsl:text>
+                <xsl:value-of select="i18n:translate('result.dozbib.name')"/>
+                <xsl:text>:</xsl:text>
             </div>
             <div class="col-9">
                 <xsl:apply-templates select="."/>
@@ -114,6 +117,31 @@
                 <xsl:apply-templates select="." mode="value">
                     <xsl:with-param name="classNode" select="$classNode"/>
                 </xsl:apply-templates>
+            </div>
+        </div>
+    </xsl:template>
+
+    <xsl:template match="mods:alternativeName" mode="modsperson">
+        <div class="row">
+            <div class="col-3">
+                <xsl:value-of select="i18n:translate('result.dozbib.alternativeName')"/>
+                <xsl:text>:</xsl:text>
+            </div>
+            <div class="col-9">
+                <xsl:apply-templates select="mods:namePart[@type='family']" />
+                <xsl:apply-templates select="mods:namePart[@type='given']" />
+            </div>
+        </div>
+    </xsl:template>
+
+    <xsl:template match="mods:affiliation" mode="modsperson">
+        <div class="row">
+            <div class="col-3">
+                <xsl:value-of select="i18n:translate('ubo.person.affiliation')"/>
+                <xsl:text>:</xsl:text>
+            </div>
+            <div class="col-9">
+                <xsl:value-of select="text()" />
             </div>
         </div>
     </xsl:template>
