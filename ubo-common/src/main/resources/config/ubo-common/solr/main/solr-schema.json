@@ -259,6 +259,15 @@
   },
   {
     "add-field": {
+      "name": "aeplus_lsf",
+      "type": "ubo_id",
+      "multiValued": true,
+      "indexed": true,
+      "stored": false
+    }
+  },
+  {
+    "add-field": {
       "name": "all",
       "type": "ubo_text",
       "multiValued": true,
