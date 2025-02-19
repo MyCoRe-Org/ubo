@@ -165,7 +165,6 @@
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-      <version>1.10</version>
     </dependency>
     <dependency>
       <groupId>jakarta.servlet</groupId>
@@ -204,17 +203,14 @@
     <dependency>
       <groupId>org.apache.axis</groupId>
       <artifactId>axis</artifactId>
-      <version>${axis1.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.axis</groupId>
       <artifactId>axis-jaxrpc</artifactId>
-      <version>${axis1.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-csv</artifactId>
-      <version>1.5</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -264,6 +260,10 @@
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
+      <artifactId>mycore-classifications</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
       <artifactId>mycore-jobqueue</artifactId>
     </dependency>
     <dependency>
@@ -283,10 +283,6 @@
       <artifactId>mycore-user2</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>highlightjs</artifactId>
-    </dependency>
-    <dependency>
       <groupId>xml-apis</groupId>
       <artifactId>xml-apis</artifactId>
     </dependency>
@@ -298,7 +294,6 @@
     <dependency>
       <groupId>jakarta.xml.ws</groupId>
       <artifactId>jakarta.xml.ws-api</artifactId>
-      <version>2.3.2</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -385,6 +380,11 @@
     <dependency>
       <groupId>org.webjars</groupId>
       <artifactId>highcharts</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>highlightjs</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>

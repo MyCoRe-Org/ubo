@@ -46,9 +46,6 @@
     <bootstrap-select.version>1.13.18</bootstrap-select.version>
     <bootstrap.version>4.4.1</bootstrap.version>
     <font-awesome.version>5.13.0</font-awesome.version>
-    <jakarta.activation.version>2.0.1</jakarta.activation.version>
-    <jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
-    <jakarta.ws.rs-api.version>3.1.0</jakarta.ws.rs-api.version>
     <jakarta.xml.bind.version>3.0.1</jakarta.xml.bind.version>
     <java.target.version>17</java.target.version>
     <jquery.ui.version>1.13.2</jquery.ui.version>
@@ -147,13 +144,6 @@
     </pluginRepository>
   </pluginRepositories>
 
-  <dependencies>
-    <dependency>
-      <groupId>com.sun.activation</groupId>
-      <artifactId>jakarta.activation</artifactId>
-    </dependency>
-  </dependencies>
-
   <profiles>
     <profile>
       <id>windows</id>
@@ -223,8 +213,8 @@
                   </artifactInstaller>
                   <dependencies>
                     <dependency>
-                      <groupId>com.sun.activation</groupId>
-                      <artifactId>jakarta.activation</artifactId>
+                      <groupId>jakarta.activation</groupId>
+                      <artifactId>jakarta.activation-api</artifactId>
                     </dependency>
                   </dependencies>
                 </container>
@@ -270,6 +260,7 @@
                     <dependency>
                       <groupId>com.sun.activation</groupId>
                       <artifactId>jakarta.activation</artifactId>
+                      <scope>runtime</scope>
                     </dependency>
                   </dependencies>
                 </container>
@@ -308,19 +299,24 @@
         <version>8.9.0</version>
       </dependency>
       <dependency>
-        <groupId>com.h2database</groupId>
-        <artifactId>h2</artifactId>
-        <version>2.2.224</version>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>1.10</version>
       </dependency>
       <dependency>
-        <groupId>jakarta.servlet</groupId>
-        <artifactId>jakarta.servlet-api</artifactId>
-        <version>${jakarta.servlet-api.version}</version>
+        <groupId>commons-discovery</groupId>
+        <artifactId>commons-discovery</artifactId>
+        <version>0.5</version>
+        <exclusions>
+          <exclusion>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
-        <groupId>jakarta.ws.rs</groupId>
-        <artifactId>jakarta.ws.rs-api</artifactId>
-        <version>${jakarta.ws.rs-api.version}</version>
+        <groupId>jakarta.activation</groupId>
+        <artifactId>jakarta.activation-api</artifactId>
       </dependency>
       <dependency>
         <groupId>jakarta.xml.bind</groupId>
@@ -328,14 +324,29 @@
         <version>${jakarta.xml.bind.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-lang3</artifactId>
-        <version>3.10</version>
+        <groupId>jakarta.xml.ws</groupId>
+        <artifactId>jakarta.xml.ws-api</artifactId>
+        <version>2.3.2</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.axis</groupId>
+        <artifactId>axis</artifactId>
+        <version>${axis1.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.axis</groupId>
+        <artifactId>axis-jaxrpc</artifactId>
+        <version>${axis1.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
-        <artifactId>commons-text</artifactId>
-        <version>1.10.0</version>
+        <artifactId>commons-csv</artifactId>
+        <version>1.5</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mycore</groupId>
+        <artifactId>mycore-classifications</artifactId>
+        <version>1.2-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.mycore</groupId>
@@ -379,6 +390,11 @@
       </dependency>
       <dependency>
         <groupId>org.webjars</groupId>
+        <artifactId>highlightjs</artifactId>
+        <version>11.5.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.webjars</groupId>
         <artifactId>jquery</artifactId>
         <version>${jquery.version}</version>
       </dependency>
@@ -388,44 +404,14 @@
         <version>${jquery.ui.version}</version>
       </dependency>
       <dependency>
-        <groupId>xml-apis</groupId>
-        <artifactId>xml-apis</artifactId>
-        <version>1.4.01</version>
-      </dependency>
-      <dependency>
-        <groupId>com.sun.activation</groupId>
-        <artifactId>jakarta.activation</artifactId>
-        <version>${jakarta.activation.version}</version>
-        <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <groupId>commons-discovery</groupId>
-        <artifactId>commons-discovery</artifactId>
-        <version>0.5</version>
-        <scope>runtime</scope>
-        <exclusions>
-          <exclusion>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.mycore</groupId>
-        <artifactId>mycore-classifications</artifactId>
-        <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.webjars</groupId>
-        <artifactId>highlightjs</artifactId>
-        <version>11.5.0</version>
-        <scope>runtime</scope>
-      </dependency>
-      <dependency>
         <groupId>wsdl4j</groupId>
         <artifactId>wsdl4j</artifactId>
         <version>1.6.3</version>
-        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>xml-apis</groupId>
+        <artifactId>xml-apis</artifactId>
+        <version>1.4.01</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
