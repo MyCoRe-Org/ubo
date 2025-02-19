@@ -202,7 +202,7 @@
           <plugins>
             <plugin>
               <groupId>org.codehaus.cargo</groupId>
-              <artifactId>cargo-maven2-plugin</artifactId>
+              <artifactId>cargo-maven3-plugin</artifactId>
               <configuration>
                 <container>
                   <containerId>${cargo.container}</containerId>
@@ -219,9 +219,10 @@
                   </dependencies>
                 </container>
                 <configuration>
+                  <home>${project.build.directory}/jetty-home</home>
                   <properties>
                     <cargo.servlet.port>${cargo.servlet.port}</cargo.servlet.port>
-                    <cargo.runtime.args>-Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.JavaUtilLog</cargo.runtime.args>
+                    <cargo.jetty.modules>server,ext,http,http2c,ee10-annotations,ee10-plus,ee10-jsp,ee10-deploy,ee10-websocket-jakarta</cargo.jetty.modules>
                     <cargo.jetty.realm.name>Restricted</cargo.jetty.realm.name>
                   </properties>
                 </configuration>
@@ -246,7 +247,7 @@
           <plugins>
             <plugin>
               <groupId>org.codehaus.cargo</groupId>
-              <artifactId>cargo-maven2-plugin</artifactId>
+              <artifactId>cargo-maven3-plugin</artifactId>
               <configuration>
                 <container>
                   <containerId>${cargo.container}</containerId>
@@ -263,15 +264,16 @@
                     </dependency>
                   </dependencies>
                 </container>
-                <home>${project.build.directory}/catalina-base</home>
                 <configuration>
+                  <home>${project.build.directory}/catalina-base</home>
                   <properties>
                     <cargo.rmi.port>${cargo.rmi.port}</cargo.rmi.port>
                     <cargo.servlet.port>${cargo.servlet.port}</cargo.servlet.port>
                     <cargo.tomcat.ajp.port>${cargo.tomcat.ajp.port}</cargo.tomcat.ajp.port>
                     <cargo.tomcat.uriencoding>UTF-8</cargo.tomcat.uriencoding>
+                    <cargo.tomcat.connector.maxHttpHeaderSize>${cargo.tomcat.connector.maxHttpHeaderSize}</cargo.tomcat.connector.maxHttpHeaderSize>
                     <!-- fixes IIIF identifier encoding issues -->
-                    <cargo.start.jvmargs>-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true${cargo.start.jvmargs}</cargo.start.jvmargs>
+                    <cargo.start.jvmargs>-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true ${cargo.start.jvmargs}</cargo.start.jvmargs>
                   </properties>
                 </configuration>
               </configuration>
