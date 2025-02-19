@@ -260,7 +260,6 @@
                     <dependency>
                       <groupId>com.sun.activation</groupId>
                       <artifactId>jakarta.activation</artifactId>
-                      <scope>runtime</scope>
                     </dependency>
                   </dependencies>
                 </container>
