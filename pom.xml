@@ -211,12 +211,6 @@
                     <artifactId>jetty-distribution</artifactId>
                     <version>${jetty.version}</version>
                   </artifactInstaller>
-                  <dependencies>
-                    <dependency>
-                      <groupId>jakarta.activation</groupId>
-                      <artifactId>jakarta.activation-api</artifactId>
-                    </dependency>
-                  </dependencies>
                 </container>
                 <configuration>
                   <home>${project.build.directory}/jetty-home</home>
@@ -257,12 +251,6 @@
                     <version>${tomcat.version}</version>
                     <type>tar.gz</type>
                   </artifactInstaller>
-                  <dependencies>
-                    <dependency>
-                      <groupId>com.sun.activation</groupId>
-                      <artifactId>jakarta.activation</artifactId>
-                    </dependency>
-                  </dependencies>
                 </container>
                 <configuration>
                   <home>${project.build.directory}/catalina-base</home>
@@ -314,10 +302,6 @@
             <artifactId>commons-logging</artifactId>
           </exclusion>
         </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>jakarta.activation</groupId>
-        <artifactId>jakarta.activation-api</artifactId>
       </dependency>
       <dependency>
         <groupId>jakarta.xml.bind</groupId>
