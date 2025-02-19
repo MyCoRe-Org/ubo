@@ -83,7 +83,7 @@ ubo-cli/target/bin/ubo.sh reload solr configuration main in core main
 ```
 
 ## Run 
-- local web application on port 8080 with tomcat 9:
+- local web application on port 8080 with tomcat 10:
 ```
 mvn cargo:run -Dtomcat=9 -pl ubo-webapp
 ```
