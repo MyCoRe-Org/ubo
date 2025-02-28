@@ -9,22 +9,23 @@
 
 package org.mycore.ubo.dedup;
 
-import java.text.Normalizer;
-import java.text.Normalizer.Form;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRConstants;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mods.merger.MCRHyphenNormalizer;
+import org.mycore.ubo.dedup.jpa.DeduplicationKeyManager;
+
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 /**
  * Builds deduplication criteria from publication metadata fields or its MODS representation
@@ -39,42 +40,43 @@ public class DeDupCriteriaBuilder {
      *
      * @param entry a &lt;mycoreobject /&gt; document containing a &lt;mods:mods&gt; child element
      */
-    public void updateDeDupCriteria(Document entry) {
+    public void updateDeDupCriteria(Document entry, MCRObjectID id) {
         Element metadata = entry.getRootElement().getChild("metadata");
         Element mods = metadata.getChild("def.modsContainer").getChild("modsContainer").getChildren().get(0);
-        updateDeDupCriteria(mods);
+        updateDeDupCriteria(mods, id);
     }
 
-    public void updateDeDupCriteria(Element mods) {
+    public void updateDeDupCriteria(Element mods, MCRObjectID id) {
         // remove existion dedup keys
         for (Element extension : mods.getChildren("extension", MCRConstants.MODS_NAMESPACE)) {
             extension.removeChildren("dedup");
+            if(extension.getChildren().isEmpty()) {
+                extension.detach();
+            }
         }
 
-        // get first or create a new extension element
-        Element extension = mods.getChild("extension", MCRConstants.MODS_NAMESPACE);
-        if (extension == null) {
-            extension = new Element("extension", MCRConstants.MODS_NAMESPACE);
-            mods.addContent(extension);
+        DeduplicationKeyManager deduplicationKeyManager = DeduplicationKeyManager.getInstance();
+
+        if (mods.getName().equals("mods") || mods.getAttributeValue("href", MCRConstants.XLINK_NAMESPACE) != null) {
+            deduplicationKeyManager.clearDeduplicationKeys(id.toString());
         }
 
         // add new dedup keys, if any
-        for (DeDupCriterion criteria : buildFromMODS(mods)) {
-            extension.addContent(criteria.toXML());
+        for (DeDupCriterion criteria : getDeDupCriteria(mods)) {
+            deduplicationKeyManager.addDeduplicationKey(id.toString(), criteria.getType(), criteria.getKey());
         }
 
-        // remove all extension elements that are completely empty
-        for (Iterator<Element> children = mods.getChildren("extension", MCRConstants.MODS_NAMESPACE)
-            .iterator(); children.hasNext();) {
-            extension = children.next();
-            if (extension.getChildren().isEmpty())
-                children.remove();
-        }
-
-        // add dedup keys for the host, too
+        /* add dedup keys for the host, too or not???
         for (Element host : this.getNodes(mods, "mods:relatedItem[@type='host']")) {
-            updateDeDupCriteria(host);
-        }
+            MCRObjectID parentOrOwnID = Optional.ofNullable(host.getAttributeValue("href", MCRConstants.XLINK_NAMESPACE))
+                    .map(MCRObjectID::getInstance)
+                    .orElse(id);
+            updateDeDupCriteria(host, parentOrOwnID);
+        } */
+    }
+
+    private Set<DeDupCriterion> getDeDupCriteria(Element mods) {
+        return buildFromMODS(mods);
     }
 
     /**
@@ -106,9 +108,9 @@ public class DeDupCriteriaBuilder {
      * @param context the context node which is base for the given xPath
      * @param xPath the xPath expression selecting the nodes
      */
-    private List<Element> getNodes(Element context, String xPath) {
+    public List<Element> getNodes(Element context, String xPath) {
         XPathExpression<Element> xPathExpr = XPathFactory.instance().compile(xPath, Filters.element(), null,
-            MCRConstants.getStandardNamespaces());
+                MCRConstants.getStandardNamespaces());
         return xPathExpr.evaluate(context);
     }
 

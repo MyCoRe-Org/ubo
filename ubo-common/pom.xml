@@ -109,6 +109,28 @@
               <workingDirectory>src/main/vue/author_search/</workingDirectory>
             </configuration>
           </execution>
+          <execution>
+            <id>yarn-install-dedup</id>
+            <goals>
+              <goal>yarn</goal>
+            </goals>
+            <phase>process-resources</phase>
+            <configuration>
+              <arguments>install</arguments>
+              <workingDirectory>src/main/vue/dedup/</workingDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>yarn-build-dedup</id>
+            <goals>
+              <goal>yarn</goal>
+            </goals>
+            <phase>process-resources</phase>
+            <configuration>
+              <arguments>build</arguments>
+              <workingDirectory>src/main/vue/dedup/</workingDirectory>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -129,6 +151,33 @@
                   UBO.Frontend.bootstrap-select.version = ${bootstrap-select.version}
                   UBO.Frontend.font-awesome.version     = ${font-awesome.version}</echo>
               </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.bsc.maven</groupId>
+        <artifactId>maven-processor-plugin</artifactId>
+        <version>5.1</version>
+        <executions>
+          <execution>
+            <id>generate-jpa-model</id>
+            <goals>
+              <goal>process</goal>
+            </goals>
+            <phase>generate-sources</phase>
+            <configuration>
+              <annotationProcessorPaths>
+                <path>
+                  <groupId>org.hibernate.orm</groupId>
+                  <artifactId>hibernate-jpamodelgen</artifactId>
+                  <version>6.3.1.Final</version>
+                </path>
+              </annotationProcessorPaths>
+              <compilerArguments>-implicit:none -AaddGeneratedAnnotation=false</compilerArguments>
+              <processors>
+                <processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
+              </processors>
             </configuration>
           </execution>
         </executions>
@@ -279,6 +328,11 @@
       <artifactId>mycore-user2</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-webtools</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>xml-apis</groupId>
       <artifactId>xml-apis</artifactId>
     </dependency>
@@ -345,11 +399,6 @@
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-webcli</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-webtools</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>

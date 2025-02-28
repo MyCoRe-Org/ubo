@@ -72,15 +72,6 @@
     <url-pattern>/servlets/BasketName2PIDEditor</url-pattern>
   </servlet-mapping>
 
-  <servlet id="IdentityPicker">
-    <servlet-name>IdentityPicker</servlet-name>
-    <servlet-class>org.mycore.ubo.picker.IdentityPicker</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>IdentityPicker</servlet-name>
-    <url-pattern>/identitypicker.html</url-pattern>
-  </servlet-mapping>
-
   <servlet id="OAI">
     <servlet-name>OAI</servlet-name>
     <servlet-class>org.mycore.oai.MCROAIDataProvider</servlet-class>
@@ -125,5 +116,72 @@
     <welcome-file>index.xed</welcome-file>
     <welcome-file>index.xml</welcome-file>
   </welcome-file-list>
+
+  <servlet>
+    <servlet-name>Dedup</servlet-name>
+    <servlet-class>org.mycore.ubo.HeadingExtendedVueRootServlet</servlet-class>
+    <init-param>
+      <param-name>heading</param-name>
+      <param-value>ubo.duplicates.heading</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Dedup</servlet-name>
+    <url-pattern>/dedup/*</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet>
+    <servlet-name>ListWizard</servlet-name>
+    <servlet-class>org.mycore.ubo.HeadingExtendedVueRootServlet</servlet-class>
+    <init-param>
+      <param-name>heading</param-name>
+      <param-value>listWizard.description.title</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ListWizard</servlet-name>
+    <url-pattern>/list-wizard.xed</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>AuthorSearch</servlet-name>
+    <servlet-class>org.mycore.ubo.HeadingExtendedVueRootServlet</servlet-class>
+    <init-param>
+      <param-name>heading</param-name>
+      <param-value>lsf.heading</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AuthorSearch</servlet-name>
+    <url-pattern>/identitypicker.html</url-pattern>
+  </servlet-mapping>
+
+  
+  <servlet>
+    <servlet-name>ListWizardConfigHelper</servlet-name>
+    <servlet-class>org.mycore.frontend.servlets.MCRConfigHelperServlet</servlet-class>
+    <init-param>
+      <param-name>Properties</param-name>
+      <param-value>MCR.user2.matching.lead_id,UBO.Search.PersonalList.Roles,UBO.Editor.PartOf.Enabled,UBO.Search.PersonalList.Ids</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ListWizardConfigHelper</servlet-name>
+    <url-pattern>/wizard-config.json</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>AuthorSearchConfigHelper</servlet-name>
+    <servlet-class>org.mycore.frontend.servlets.MCRConfigHelperServlet</servlet-class>
+    <init-param>
+      <param-name>Properties</param-name>
+      <param-value>MCR.user2.matching.lead_id</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AuthorSearchConfigHelper</servlet-name>
+    <url-pattern>/author-search-config.json</url-pattern>
+  </servlet-mapping>
 
 </web-fragment>

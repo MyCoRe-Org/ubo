@@ -1,6 +1,7 @@
 package org.mycore.ubo.relations;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
@@ -22,6 +24,7 @@ import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.mods.merger.MCRMergeTool;
 import org.mycore.ubo.AccessControl;
 import org.mycore.ubo.DozBibEntryServlet;
+import org.mycore.ubo.dedup.jpa.DeduplicationKeyManager;
 
 public class RelationEditorServlet extends MCRServlet {
 
@@ -49,6 +52,8 @@ public class RelationEditorServlet extends MCRServlet {
                 linkHost(req, res);
             } else if ("unlinkHost".equals(action)) {
                 unlinkHost(req, res);
+            } else if ("markAsFalseDuplicate".equals(action)) {
+                markAsFalseDuplicate(req, res);
             } else if ("mergeMetadata".equals(action)) {
                 mergeMetadata(req, res);
             } else if ("adoptChildren".equals(action)) {
@@ -165,6 +170,17 @@ public class RelationEditorServlet extends MCRServlet {
         MCRMetadataManager.update(child);
         new ParentChildRelationChecker(childID, false).check();
     }
+
+    private void markAsFalseDuplicate(HttpServletRequest req, HttpServletResponse res) throws Exception {
+        MCRObjectID duplicateOf = getAndCheck(req, res, "duplicateOf");
+        MCRObjectID id = getAndCheck(req, res, "id");
+        LOGGER.info("UBO mark {} is not a duplicate of {}", id, duplicateOf);
+
+        String userID = MCRSessionMgr.getCurrentSession().getUserInformation().getUserID();
+
+        DeduplicationKeyManager.getInstance().addNoDuplicate(id.toString(), duplicateOf.toString(), userID, new Date());
+    }
+
 
     private void mergeMetadata(HttpServletRequest req, HttpServletResponse res) throws Exception {
         MCRObjectID intoID = getAndCheck(req, res, "into");
