@@ -8,7 +8,8 @@
           <i v-on:click="hint=!hint" role="button" class="fas fa-question ml-1 text-secondary"></i>
         </p>
         <div v-show="hint">
-          <p class="border-secondary border-top border-bottom pt-2 pb-2">{{ i18n["person.search.help1"] }}</p>
+          <p class="border-secondary border-top border-bottom pt-2 pb-2">
+            {{ i18n["person.search.help1"] }}</p>
         </div>
       </div>
       <form class="ubo-vue-form" role="form" v-on:submit.prevent="apply()">
@@ -17,8 +18,8 @@
             {{ i18n["lsf.nameFirst"] }}
           </label>
           <input class="mycore-form-input" type="text"
-                 :class="{ 'is-invalid': this.firstNameInvalid  }"
-                 v-model="person.firstName"
+                 :class="{ 'is-invalid': firstNameInvalid  }"
+                 v-model="internModel.person.firstName"
                  id="firstName">
           <div class="invalid-feedback">
             {{ i18n["person.search.invalid.firstName"] }}
@@ -29,8 +30,8 @@
             {{ i18n["lsf.name"] }}
           </label>
           <input class="mycore-form-input" type="text"
-                 :class="{ 'is-invalid': this.lastNameInvalid  }"
-                 v-model="person.lastName" id="lastName">
+                 :class="{ 'is-invalid': lastNameInvalid  }"
+                 v-model="internModel.person.lastName" id="lastName">
           <div class="invalid-feedback">
             {{ i18n["person.search.invalid.lastName"] }}
           </div>
@@ -39,8 +40,9 @@
           <label class="mycore-form-label" for="pid">
             {{ i18n["editor.identity.picker.lead_id"] }}:
           </label>
-          <input class="mycore-form-input" size="6" type="text" :readonly="isadmin==='false'" v-model="person.pid"
-                 id="pid" v-bind:placeholder="i18n['editor.identity.picker.lead_id']">
+          <input class="mycore-form-input" size="6" type="text" :readonly="!props.isAdmin"
+                 v-model="internModel.person.pid"
+                 id="pid" :placeholder="i18n['editor.identity.picker.lead_id']">
         </div>
         <div class="cancel-submit form-group form-inline">
           <label class="mycore-form-label"></label>
@@ -62,58 +64,72 @@
   </article>
 </template>
 
-<script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
+<script lang="ts" setup>
 import {resolveiI18N} from "@/components/I18N";
+import {onMounted, reactive, ref, watch} from "vue";
 
-@Component
-export default class PersonEditForm extends Vue {
+const props = defineProps<{
+  person: { firstName: string, lastName: string, pid: string },
+  baseurl: string,
+  isAdmin: boolean,
+  searched: boolean
+}>();
 
-  @Prop() person!: { firstName: string, lastName: string, pid: string };
-  @Prop({default: ""}) baseurl!: string;
-  @Prop({default: "false"}) isadmin!: string;
-  @Prop({default: false}) searched!: boolean;
+const emit = defineEmits<{
+  submit: [person: { firstName: string, lastName: string, pid: string }],
+  cancel: []
+}>();
 
-  i18n = {
-    "person.search.information": null,
-    "person.search.invalid.firstName": null,
-    "person.search.invalid.lastName": null,
-    "person.search.instruction1": null,
-    "person.search.help1": null,
-    "index.person.datatoeditor": null,
-    "lsf.name": null,
-    "lsf.nameFirst": null,
-    "editor.identity.picker.lead_id": null,
-    "button.cancel": null,
-    "lsf.selectPerson": null,
-    "index.person.datatoeditor.try.search": null
-  };
+watch(() => props.person, (newVal) => {
+  internModel.person = newVal;
+}, {deep: true});
 
-  firstNameInvalid = false;
-  lastNameInvalid = false;
-  hint = false;
+const internModel = reactive({
+  person: {firstName: "", lastName: "", pid: ""}
+});
 
-  mounted(){
-    resolveiI18N(this.baseurl, this.i18n);
+const i18n = reactive({
+  "person.search.information": "",
+  "person.search.invalid.firstName": "",
+  "person.search.invalid.lastName": "",
+  "person.search.instruction1": "",
+  "person.search.help1": "",
+  "index.person.datatoeditor": "",
+  "lsf.name": "",
+  "lsf.nameFirst": "",
+  "editor.identity.picker.lead_id": "",
+  "button.cancel": "",
+  "lsf.selectPerson": "",
+  "index.person.datatoeditor.try.search": ""
+});
+
+const firstNameInvalid = ref(false);
+const lastNameInvalid = ref(false);
+const hint = ref(false);
+
+onMounted(() => {
+  resolveiI18N(props.baseurl, i18n);
+});
+
+
+const apply = () => {
+  const firstName = internModel.person.firstName.trim();
+  const lastName = internModel.person.lastName.trim();
+
+  internModel.person.firstName = firstName;
+  internModel.person.lastName = lastName;
+  internModel.person.pid = internModel.person.pid.trim();
+
+  firstNameInvalid.value = firstName.length == 0;
+  lastNameInvalid.value = lastName.length == 0;
+
+  if (firstName.length > 0 && lastName.length > 0) {
+    emit('submit', internModel.person);
   }
-
-  public apply() {
-    let firstName = this.person.firstName.trim();
-    let lastName = this.person.lastName.trim();
-
-    this.person.firstName = firstName;
-    this.person.lastName = lastName;
-    this.person.pid = this.person.pid.trim();
-
-    this.firstNameInvalid = firstName.length == 0;
-    this.lastNameInvalid = lastName.length == 0;
-
-    if (firstName.length > 0 && lastName.length > 0) {
-      this.$emit("submit", this.person);
-    }
-  }
-
 }
+
+internModel.person = props.person;
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

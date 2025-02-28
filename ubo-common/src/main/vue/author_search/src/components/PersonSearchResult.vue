@@ -79,46 +79,52 @@
   </article>
 </template>
 
-<script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
-import {PersonResult, SearchResult} from "@/components/SearchResult";
+<script lang="ts" setup>
+import type {PersonResult, SearchResult} from "@/components/SearchResult";
 import {resolveiI18N} from "@/components/I18N";
+import {onMounted, reactive} from "vue";
 
-@Component
-export default class PersonSearchResult extends Vue {
-  @Prop({default: null}) searchresults!: SearchResult | null;
-  @Prop({default: false}) searching!: boolean;
-  @Prop({default: false}) error!: boolean;
-  @Prop({default: ""}) baseurl!: string;
+const props = defineProps<{
+  searchresults: SearchResult | null;
+  searching: boolean;
+  error: boolean;
+  baseurl: string;
+}>();
 
-  i18n = {
-    "error.occurred": null,
-    "index.person.found.0": null,
-    "index.person.datatoform": null,
-    "index.person.datatoeditor": null,
-    "index.person.idtoform": null,
-    "lsf.found": null,
-    "lsf.selectPerson": null,
-    "lsf.details": null,
-    "ubo.search.name": null
-  }
+const emit = defineEmits<{
+  person_submitted: [person: PersonResult],
+  person_applied: [person: PersonResult],
+  id_applied: [pid: string]
+}>()
 
-  mounted() {
-    resolveiI18N(this.baseurl, this.i18n);
-  }
+const i18n = reactive({
+  "error.occurred": "",
+  "index.person.found.0": "",
+  "index.person.datatoform": "",
+  "index.person.datatoeditor": "",
+  "index.person.idtoform": "",
+  "lsf.found": "",
+  "lsf.selectPerson": "",
+  "lsf.details": "",
+  "ubo.search.name": ""
+});
 
-  submit(person: PersonResult) {
-    this.$emit("person_submitted", person);
-  }
+onMounted(() => {
+  resolveiI18N(props.baseurl, i18n);
+})
 
-  apply(person: PersonResult) {
-    this.$emit("person_applied", person);
-  }
-
-  applyId(person: PersonResult) {
-    this.$emit("id_applied", person.pid);
-  }
+const submit = (person: PersonResult) => {
+  emit('person_submitted', person);
 }
+
+const apply = (person: PersonResult) => {
+  emit('person_applied', person);
+}
+
+const applyId = (person: PersonResult) => {
+  emit('id_applied', person.pid);
+}
+
 </script>
 
 <style scoped>

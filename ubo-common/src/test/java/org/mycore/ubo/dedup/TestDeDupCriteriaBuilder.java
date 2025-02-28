@@ -12,10 +12,14 @@ package org.mycore.ubo.dedup;
 import org.junit.Test;
 
 import junit.framework.TestCase;
+import org.mycore.common.MCRJPATestCase;
 import org.mycore.ubo.dedup.DeDupCriteriaBuilder;
 import org.mycore.ubo.dedup.DeDupCriterion;
 
-public class TestDeDupCriteriaBuilder extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
+public class TestDeDupCriteriaBuilder extends MCRJPATestCase {
 
     private static DeDupCriteriaBuilder builder = new DeDupCriteriaBuilder();
 
