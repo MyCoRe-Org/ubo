@@ -59,28 +59,6 @@ public class DeduplicationKeyManager {
         em.persist(deduplicationKey);
     }
 
-    /**
-     * SELECT
-     * dk1.MCR_ID AS MCR_ID_1,
-     * dk2.MCR_ID AS MCR_ID_2,
-     * dk1.DEDUPLICATION_TYPE,
-     * dk1.DEDUPLICATION_KEY
-     * FROM
-     * DEDUPLICATION_KEYS dk1
-     * JOIN DEDUPLICATION_KEYS dk2 ON dk1.DEDUPLICATION_KEY = dk2.DEDUPLICATION_KEY
-     * AND dk1.DEDUPLICATION_TYPE = dk2.DEDUPLICATION_TYPE
-     * AND dk1.MCR_ID != dk2.MCR_ID
-     * WHERE
-     * dk1.MCR_ID < dk2.MCR_ID
-     * AND NOT EXISTS (
-     * SELECT 1
-     * FROM DEDUPLICATION_FALSE_POSITIVES dfp
-     * WHERE (dfp.MCR_ID_1 = dk1.MCR_ID AND dfp.MCR_ID_2 = dk2.MCR_ID)
-     * OR (dfp.MCR_ID_1 = dk2.MCR_ID AND dfp.MCR_ID_2 = dk1.MCR_ID)
-     * )
-     * ORDER BY
-     * dk1.DEDUPLICATION_KEY, dk1.MCR_ID;
-     */
     public List<PossibleDuplicate> getDuplicates(SortOrder idSort, SortOrder typeSort, String duplicationTypeFilter) {
         EntityManager em = MCREntityManagerProvider.getCurrentEntityManager();
 
@@ -154,17 +132,6 @@ public class DeduplicationKeyManager {
         return resultList.stream().map(o -> new PossibleDuplicate((String) o[0], (String) o[1], (String) o[2], (String) o[3])).toList();
     }
 
-    /*
-     * select dk1.*
-     * from deduplication_keys dk1
-     * where dk1.deduplication_key = '0011c3286c08be429557b68dc64deba3'
-     *   and dk1.deduplication_type = 'identifier'
-     *   and dk1.mcr_id != 'bibthk_mods_00014054'
-     *   and dk1.mcr_id not in
-     *       (select dfp1.mcr_id_2 from deduplication_false_positives dfp1 where dfp1.mcr_id_1 = 'bibthk_mods_00014054')
-     *   and dk1.mcr_id not in
-     *       (select dfp2.mcr_id_1 from deduplication_false_positives dfp2 where dfp2.mcr_id_2 = 'bibthk_mods_00014054');
-     */
     public List<DeduplicationKey> getDuplicates(String mcrId, String type, String key) {
         EntityManager em = MCREntityManagerProvider.getCurrentEntityManager();
 
