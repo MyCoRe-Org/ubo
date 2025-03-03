@@ -714,6 +714,15 @@
     }
   },
   {
+    "add-field": {
+      "name": "kdsfPublicationType",
+      "type": "ubo_id",
+      "multiValued": true,
+      "indexed": true,
+      "stored": true
+    }
+  },
+  {
     "add-dynamic-field": {
       "name": "host_id_*",
       "type": "ubo_id",

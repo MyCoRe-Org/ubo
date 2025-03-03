@@ -1056,7 +1056,7 @@
 		<category ID="12">
 			<label xml:lang="de" text="Fakultät für Ingenieurwissenschaften" />
 			<label xml:lang="en" text="Faculty of Engineering"/>
-			<label xml:lang="x-mapping" text="destatis6700:" />
+			<label xml:lang="x-mapping" text="destatis:6700" />
 			<category ID="10">
 				<label xml:lang="de" text="Bauwissenschaften" />
 				<label xml:lang="x-mapping" text="destatis:7500" />

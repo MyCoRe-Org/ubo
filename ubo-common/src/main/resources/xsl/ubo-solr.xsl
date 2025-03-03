@@ -52,6 +52,7 @@
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'accessrights')]" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'peerreviewed')]" mode="solrField" />
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'mediaType')]" mode="solrField" />
+    <xsl:apply-templates select="mods:classification[contains(@authorityURI,'kdsfPublicationType')]" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:titleInfo[not(@type)]" mode="solrField.host" />
     <xsl:apply-templates select="mods:relatedItem[@type='host'][substring-after(mods:genre/@valueURI, '#') = 'journal']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:part" mode="solrField" />
@@ -334,6 +335,12 @@
 
   <xsl:template match="mods:classification[contains(@authorityURI,'mediaType')]" mode="solrField">
     <field name="mediaType">
+      <xsl:value-of select="substring-after(@valueURI,'#')"/>
+    </field>
+  </xsl:template>
+  
+  <xsl:template match="mods:classification[contains(@authorityURI,'kdsfPublicationType')]" mode="solrField">
+    <field name="kdsfPublicationType">
       <xsl:value-of select="substring-after(@valueURI,'#')"/>
     </field>
   </xsl:template>
