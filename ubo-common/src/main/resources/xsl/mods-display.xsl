@@ -395,7 +395,7 @@
     </xsl:call-template>
     <xsl:call-template name="output.line">
       <xsl:with-param name="selected" select="mods:name[mods:role/mods:roleTerm='ivr']" />
-      <xsl:with-param name="after" select="concat(' ',i18n:translate('ubo.interviewer.abbreviated'),': ')" />
+      <xsl:with-param name="after" select="concat(' (',i18n:translate('ubo.interviewer.abbreviated'),'):')" />
       <xsl:with-param name="mode" select="$mode" />
       <xsl:with-param name="class" select="'interviewer'" />
     </xsl:call-template>

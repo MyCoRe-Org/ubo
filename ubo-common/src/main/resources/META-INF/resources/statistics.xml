@@ -31,9 +31,9 @@
     </div>
   </article>
 
-  <xinclude uri="xslStyle:statistics-oa:solr:q=status%3Aconfirmed+AND+year%3A[2020+TO+2023]&amp;rows=0&amp;json.facet=%7Byear%3A%7Btype%3Aterms,field%3Ayear,sort%3A%7Bindex%3Aasc%7D,facet%3A%7Boa%3A%7Btype%3Aterms,field%3Aoa,sort%3A%7Bindex%3Aasc%7D%7D%7D%7D%7D" />
+  <xinclude uri="xslStyle:statistics-oa:solr:q=status%3Aconfirmed+AND+year%3A[2021+TO+2024]&amp;rows=0&amp;json.facet=%7Byear%3A%7Btype%3Aterms,field%3Ayear,sort%3A%7Bindex%3Aasc%7D,facet%3A%7Boa%3A%7Btype%3Aterms,field%3Aoa,sort%3A%7Bindex%3Aasc%7D%7D%7D%7D%7D" />
 
-  <xinclude uri="xslStyle:statistics:solr:q=status%3Aconfirmed+AND+year%3A%5B1980+TO+*%5D&amp;rows=0&amp;facet.field=year" />
+  <xinclude uri="xslStyle:statistics:solr:q=status%3Aconfirmed+AND+year%3A%5B2000+TO+*%5D&amp;rows=0&amp;facet.field=year" />
   <xinclude uri="xslStyle:statistics:solr:q=status%3Aconfirmed&amp;rows=0&amp;facet.field=subject" />
   <xinclude uri="xslStyle:statistics:solr:q=status%3Aconfirmed&amp;rows=0&amp;facet.field=genre" />
 

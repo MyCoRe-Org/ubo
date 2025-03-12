@@ -8,6 +8,8 @@ import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.ElementFilter;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathExpression;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
@@ -16,9 +18,11 @@ import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.xml.MCRURIResolver;
+import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.MCRSolrUtils;
@@ -30,6 +34,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+
+import static org.mycore.common.MCRConstants.MODS_NAMESPACE;
+import static org.mycore.common.MCRConstants.XPATH_FACTORY;
 
 class ScopusImporter {
 
@@ -49,6 +56,8 @@ class ScopusImporter {
 
     private static String MAIL_XSL;
 
+    private static XPathExpression<Element> MODS_XPATH = XPATH_FACTORY
+        .compile(".//mods:mods", Filters.element(), null, MODS_NAMESPACE);
     private List<MCRObject> importedObjects = new ArrayList<>();
 
     static {
@@ -57,7 +66,6 @@ class ScopusImporter {
         IMPORT_URI = MCRConfiguration2.getString(prefix + "ImportURI").get();
         PROJECT_ID = MCRConfiguration2.getString(prefix + "ProjectID").get();
         STATUS = MCRConfiguration2.getString(prefix + "Status").get();
-
         prefix += "Mail.";
         MAIL_TO = MCRConfiguration2.getString(prefix + "To").get();
         MAIL_PARAM = MCRConfiguration2.getString(prefix + "Param").get();
@@ -110,6 +118,8 @@ class ScopusImporter {
     private final static SimpleDateFormat ID_BUILDER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT);
 
     private MCRObject buildMCRObject(Element publicationXML) {
+        setPreconfiguredClasses(publicationXML);
+
         MCRObject obj = new MCRObject(new Document(publicationXML));
         MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
         wrapper.setServiceFlag("status", STATUS);
@@ -117,6 +127,28 @@ class ScopusImporter {
         MCRObjectID oid = MCRMetadataManager.getMCRObjectIDGenerator().getNextFreeId(PROJECT_ID, "mods");
         obj.setId(oid);
         return obj;
+    }
+
+    private void setPreconfiguredClasses(Element publicationXML) {
+        List<String> list = MCRConfiguration2.getString("UBO.Scopus.Importer.Default.Classifications")
+            .stream()
+            .flatMap(MCRConfiguration2::splitValue)
+            .toList();
+
+        list.forEach(classification -> {
+            String[] parts = classification.split(":");
+            if (parts.length == 2 && MCRXMLFunctions.isCategoryID(parts[0], parts[1])) {
+                Element e = MODS_XPATH.evaluateFirst(publicationXML);
+                if (e != null) {
+                    Element c = new Element("classification", MODS_NAMESPACE);
+                    c.setAttribute("valueURI",
+                        MCRFrontendUtil.getBaseURL() + "classifications/" + parts[0] + "#" + parts[1]);
+                    c.setAttribute("authorityURI",
+                        MCRFrontendUtil.getBaseURL() + "classifications/" + parts[0]);
+                    e.addContent(c);
+                }
+            }
+        });
     }
 
     private String getImportID() {

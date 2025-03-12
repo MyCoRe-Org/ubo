@@ -24,7 +24,7 @@
     <cargo.servlet.uriencoding>UTF-8</cargo.servlet.uriencoding>
     <cargo.start.jvmargs />
     <cargo.tomcat.ajp.port>8292</cargo.tomcat.ajp.port>
-    <cargo.version>1.7.8</cargo.version>
+    <cargo.version>1.10.15</cargo.version>
     <jetty.version>9.4.51.v20230217</jetty.version>
     <solr-runner.solrMirrorURL>https://archive.apache.org/dist/lucene/solr/</solr-runner.solrMirrorURL>
     <solr-runner.solrVersionString>8.6.2</solr-runner.solrVersionString>
@@ -35,7 +35,7 @@
     <plugins>
       <plugin>
         <groupId>org.codehaus.cargo</groupId>
-        <artifactId>cargo-maven2-plugin</artifactId>
+        <artifactId>cargo-maven3-plugin</artifactId>
         <version>${cargo.version}</version>
         <configuration>
           <configuration>
