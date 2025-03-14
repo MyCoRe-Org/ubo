@@ -94,6 +94,7 @@ public class DozBibCommands extends MCRAbstractCommands {
         addCommand(new MCRCommand("ubo build duplicates report to directory {0}",
             "org.mycore.ubo.dedup.DeDupCommands.buildDuplicatesReport String",
             "builds report on possibly duplicate entries and writes it as xml to file duplicates.xml in directory {0}"));
+        addCommand(new MCRCommand("print possible duplicates", "org.mycore.ubo.dedup.DeDupCommands.printDuplicates","Prints possible duplicate objects"));
         addCommand(new MCRCommand("ubo import mods collection from file {0}",
             "org.mycore.ubo.DozBibCommands.importMODSCollection String",
             "import mods:modsCollection from xml file {0}"));

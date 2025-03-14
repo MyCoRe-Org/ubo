@@ -45,6 +45,10 @@
         <label xml:lang="en">from EVALuna Biblio</label>
       </item>
     </item>
+    <item ref="dedup/" role="admin">
+        <label xml:lang="de">Dubletten</label>
+        <label xml:lang="en">Duplicates</label>
+    </item>
   </item>
 
   <item menu="user">
