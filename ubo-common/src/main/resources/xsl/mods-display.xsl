@@ -493,7 +493,7 @@
 
     <!-- journal article without volume: display year directly behind title, otherwise later behind volume number -->
     <xsl:if test="(substring-after(mods:genre[@type='intern']/@valueURI, '#') = 'journal') and not(mods:part/mods:detail[@type='volume']/mods:number)">
-      <xsl:for-each select="ancestor::mods:mods/descendant::mods:dateIssued[1]">
+      <xsl:for-each select="ancestor::mods:mods/descendant::mods:dateIssued[not(ancestor::mods:relatedItem)][1]">
         <xsl:value-of select="concat(' (',.,')')" />
       </xsl:for-each>
     </xsl:if>
