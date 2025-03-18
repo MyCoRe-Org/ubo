@@ -1,14 +1,13 @@
 package org.mycore.ubo.ldap.picker;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.naming.OperationNotSupportedException;
-
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.ubo.local.LocalService;
 import org.mycore.ubo.picker.PersonSearchResult;
 import org.mycore.user2.MCRRealmFactory;
+
+import javax.naming.OperationNotSupportedException;
+import java.util.List;
+import java.util.Optional;
 
 public class LDAPWithLocalService extends LDAPService {
 
@@ -25,7 +24,8 @@ public class LDAPWithLocalService extends LDAPService {
 
         if (LDAP_REALM != null) {
             Optional.ofNullable(MCRRealmFactory.getRealm(LDAP_REALM))
-                .ifPresent(realm -> results.join(localService.searchPerson(query, realm), 0));
+                .ifPresent(
+                    realm -> results.join(localService.searchPerson(modifyLocalQueryWithRealm(query), realm), 0));
         }
 
         return results;
@@ -46,5 +46,17 @@ public class LDAPWithLocalService extends LDAPService {
                 p.displayName = p.firstName + " " + p.lastName;
             }
         }
+    }
+
+    /**
+     * Allow to modify the query when the {@link LocalService} is used for searching but a realm (different to
+     * {@link MCRRealmFactory#getLocalRealm()}) is provided. This is useful when the name format of the stored users
+     * by MyCoRe differs from that one provided by ldap.
+     *
+     * @param query
+     * @return
+     */
+    protected String modifyLocalQueryWithRealm(String query) {
+        return query;
     }
 }
