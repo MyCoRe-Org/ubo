@@ -2,7 +2,7 @@
 
 <webpage id="dozbib.edit.person">
     <title xml:lang="de">Person erfassen</title>
-    <title xml:lang="en">Acquire person</title>
+    <title xml:lang="en">Register person</title>
 
     <article class="card mb-3" xml:lang="de">
         <div class="card-body bg-alternative">
@@ -32,12 +32,14 @@
 
                 <xed:cancel
                         url="servlets/MCRLockServlet?action=unlock&amp;id={$id}&amp;url=DozBibEntryServlet%3Fid={$id}"/>
-                <xed:cancel url="newPerson.xed"/>
 
                 <xed:post-processor xsl="mods-postprocessor.xsl"/>
 
                 <xed:bind xpath="/mycoreobject">
-                    <xed:include uri="webapp:import-editor.xed" ref="common.metafields"/>
+                    <xed:bind xpath="@ID" default="{$UBO.projectid.default}_modsperson_00000000" />
+                    <xed:bind xpath="@label" default="{$UBO.projectid.default}" />
+                    <xed:bind xpath="@xsi:noNamespaceSchemaLocation" default="datamodel-mods.xsd" />
+                    <xed:bind xpath="structure" />
 
                     <input type="hidden" name="mode" value="save"/>
 
