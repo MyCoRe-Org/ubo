@@ -38,28 +38,7 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
 
     private final static Logger LOGGER = LogManager.getLogger();
 
-    private final static Element PERSON_TEMPLATE;
-
     private String leadIDName;
-
-    static {
-        String projectID = MCRConfiguration2.getStringOrThrow("UBO.projectid.default");
-        String defaultID = MCRObjectID.formatID(projectID, "modsperson", 0);
-
-        Element modsName = new Element("name", MCRConstants.MODS_NAMESPACE).setAttribute("type", "personal");
-        Element mods = new Element("mods", MCRConstants.MODS_NAMESPACE).addContent(modsName);
-        Element mc = new Element("modsContainer").addContent(mods);
-        Element dmc = new Element("def.modsContainer").setAttribute("class", "MCRMetaXML").addContent(mc);
-
-        Element mycoreobject = new Element("mycoreobject");
-        mycoreobject.setAttribute("ID", defaultID);
-        mycoreobject.setAttribute("noNamespaceSchemaLocation", "datamodel-modsperson.xsd", MCRConstants.XSI_NAMESPACE);
-        mycoreobject.addContent(new Element("structure"));
-        mycoreobject.addContent(new Element("metadata").addContent(dmc));
-        mycoreobject.addContent(new Element("service"));
-
-        PERSON_TEMPLATE = mycoreobject;
-    }
 
     public MODSPersonLinkingEventHandler() {
         super();
@@ -171,7 +150,7 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
 
     private MCRObject buildNewPerson() {
         LOGGER.debug("Creating new person object...");
-        return new MCRObject(new Document(PERSON_TEMPLATE.clone()));
+        return new MCRObject(new Document(MODSPersonUtils.getMODSPersonTemplate().clone()));
     }
 
     /**
