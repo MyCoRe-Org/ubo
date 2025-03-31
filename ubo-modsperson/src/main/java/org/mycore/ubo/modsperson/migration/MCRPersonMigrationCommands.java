@@ -1,15 +1,16 @@
 package org.mycore.ubo.modsperson.migration;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 import org.mycore.access.MCRAccessException;
+import org.mycore.backend.jpa.MCREntityManagerProvider;
 import org.mycore.common.MCRConstants;
-import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.frontend.cli.annotation.MCRCommand;
@@ -20,39 +21,44 @@ import org.mycore.ubo.modsperson.MODSPersonUtils;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserManager;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @MCRCommandGroup(name = "UBO modsperson migration commands")
 public class MCRPersonMigrationCommands {
 
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final Pattern UUID_REGEX_PATTERN =
+        Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
 
     /**
-     * TODO
-     * Doesn't check for duplicates or existent modsperson objects
+     * Migrates all  {@link MCRUser users} except for the administrator to modsperson objects.
+     * Doesn't check for duplicates or existent modsperson objects.
      */
     @MCRCommand(
         syntax = "ubo migrate users to modsperson",
         help = "Creates modsperson objects for all database users. Command is part of a migration process and should "
             + "only be used once. Should only be used if no modsperson objects exist yet",
         order = 1)
-    public static void migrateAllModsperson() {
+    public static List<String> migrateAllModsperson() {
         List<MCRUser> users = MCRUserManager.listUsers(null, null, null, null);
+        List<String> commands = new ArrayList<>(users.size());
         for (MCRUser user : users) {
             if (user.getUserName().equals("administrator")) {
                 continue;
             }
-            final MCRObject modsperson = new MCRObject(new Document(MODSPersonUtils.getMODSPersonTemplate().clone()));
-            setData(modsperson, user);
-            try {
-                MCRMetadataManager.create(modsperson);
-            } catch (MCRPersistenceException | MCRAccessException ex) {
-                LOGGER.warn("Creation of modsperson for user {} failed: {}", user.getUserName(), ex.getMessage());
-            }
-            MODSPersonLookup.add(modsperson);
+            commands.add("ubo migrate user " + user.getUserName() + " in realm "
+                + user.getRealmID() + " to modsperson");
         }
+        return commands;
     }
 
+    /**
+     * Migrates a single {@link MCRUser} to a modsperson object using username and realm-id as keys.
+     * @param userName the username to search for
+     * @param realmId the realm to search in
+     */
     @MCRCommand(
         syntax = "ubo migrate user {0} in realm {1} to modsperson",
         help = "Creates a modsperson object for the specific database user {0} in realm {1} (user name, realm id). "
@@ -60,20 +66,29 @@ public class MCRPersonMigrationCommands {
             + "doesn't exist yet",
         order = 3)
     public static void migrateModsperson(String userName, String realmId) {
-        MCRUser user = MCRUserManager.getUser(userName, realmId);
-        final MCRObject modsperson = new MCRObject(new Document(MODSPersonUtils.getMODSPersonTemplate().clone()));
-        setData(modsperson, user);
+        MCRUser user = null;
         try {
-            MCRMetadataManager.create(modsperson);
-        } catch (MCRPersistenceException | MCRAccessException ex) {
-            LOGGER.warn("Creation of modsperson for user {} failed: {}", user.getUserName(), ex.getMessage());
+            user = MCRUserManager.getUser(userName, realmId);
+        } catch (Exception e) {
+            LOGGER.error("Error finding user {} in database: {}", userName, e.getMessage());
         }
-        Document xml = modsperson.createXML();
-        LOGGER.info("Generated MODSPERSON: " + new XMLOutputter(Format.getPrettyFormat()).outputString(xml));
-        MODSPersonLookup.add(modsperson);
+        if (user != null) {
+            final MCRObject modsperson = migrateData(user);
+            try {
+                MCRMetadataManager.create(modsperson);
+                MODSPersonLookup.add(modsperson);
+            } catch (MCRPersistenceException | MCRAccessException ex) {
+                LOGGER.warn("Creation of modsperson for user {} failed: {}", user.getUserName(), ex.getMessage());
+            }
+        }
     }
 
-    private static void setData(MCRObject modsperson, MCRUser user) throws MCRException {
+    /**
+     * Creates a modsperson-object using the data of a {@link MCRUser}-entity.
+     * @param user the user that contains the data that's migrated to a modsperson.
+     */
+    private static MCRObject migrateData(MCRUser user) {
+        MCRObject modsperson = new MCRObject(new Document(MODSPersonUtils.getMODSPersonTemplate().clone()));
         MCRMODSWrapper wrapper = new MCRMODSWrapper(modsperson);
         Element personName = wrapper.getElement("mods:name[@type='personal']");
 
@@ -102,10 +117,11 @@ public class MCRPersonMigrationCommands {
                 personName.addContent(nameIdentifier);
             }
         });
+        return modsperson;
     }
 
     /**
-     * TODO
+     * Deletes all artificially created users that work with the connection-id mechanism.
      * Should be executed after migration using {@link MCRPersonMigrationCommands#migrateAllModsperson()} first.
      */
     @MCRCommand(
@@ -114,7 +130,32 @@ public class MCRPersonMigrationCommands {
             + "and should only be used once",
         order = 2)
     public static void deleteUsersFromDatabase() {
+        EntityManager em = MCREntityManagerProvider.getCurrentEntityManager();
+        Query query = em.createQuery("SELECT u FROM MCRUser u "
+            + "WHERE realmID = 'local' AND lastLogin is null"); // TODO: is 'local' really hard-coded?
+        List<MCRUser> users;
+        try {
+            users = query.getResultList();
+        } catch (Exception e) {
+            LOGGER.error(e);
+            throw new MCRPersistenceException("Deletion of users failed: ", e);
+        }
 
+        final boolean isUuidStrategy = "uuid".equals(MCRConfiguration2.getString(
+            "MCR.user2.matching.publication.connection.strategy").orElse(""));
+
+        int count = 0;
+        LOGGER.info("Will delete {} users from database...", users.size());
+        for (MCRUser user : users) {
+            if (!isUuidStrategy || UUID_REGEX_PATTERN.matcher(user.getUserName()).matches()) {
+                MCRUserManager.deleteUser(user);
+                count++;
+                if (count % 1000 == 0) {
+                    LOGGER.info("Deleted {} users from database...", count);
+                }
+            }
+        }
+        LOGGER.info("Successfully deleted {} users from database", count);
     }
 
 }
