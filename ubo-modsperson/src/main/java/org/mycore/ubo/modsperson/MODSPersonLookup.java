@@ -136,6 +136,13 @@ public class MODSPersonLookup {
         return merger1.isProbablySameAs(merger2) || ((MCRNameMerger) merger2).hasAlternativeNameSameAs(merger1);
     }
 
+    /**
+     * @return gets number of modsperson-objects in cache by modsperson-ID
+     */
+    public static int getCacheSize() {
+        return id2person.size();
+    }
+
     public static class PersonCache {
 
         public PersonCache(MCRObjectID personmodsId, String familyName, String givenName, Set<String> keys,
@@ -161,11 +168,11 @@ public class MODSPersonLookup {
 
             String familyNameString = modsName
                 .getChildren().stream().filter(e -> "family".equals(e.getAttributeValue("type")))
-                .map(Element::getText).findFirst().orElse("");
+                .map(Element::getText).findFirst().orElse("").trim();
 
             String givenNameString = modsName
                 .getChildren().stream().filter(e -> "given".equals(e.getAttributeValue("type")))
-                .map(Element::getText).findFirst().orElse("");
+                .map(Element::getText).findFirst().orElse("").trim();
 
             Set<String> allKeys = modsName
                 .getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)

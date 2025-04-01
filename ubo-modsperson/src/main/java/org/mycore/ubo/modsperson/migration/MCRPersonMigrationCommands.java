@@ -9,10 +9,12 @@ import org.jdom2.Element;
 import org.mycore.access.MCRAccessException;
 import org.mycore.backend.jpa.MCREntityManagerProvider;
 import org.mycore.common.MCRConstants;
+import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.mods.MCRMODSWrapper;
@@ -31,6 +33,9 @@ public class MCRPersonMigrationCommands {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Pattern UUID_REGEX_PATTERN =
         Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
+    private static final boolean IS_UUID_STRATEGY = "uuid".equals(MCRConfiguration2.getString(
+        "MCR.user2.matching.publication.connection.strategy").orElse(""));
+    protected static final String MODSPERSON_ATTRIBUTE_NAME = "id_modsperson";
 
     /**
      * Migrates all  {@link MCRUser users} except for the administrator to modsperson objects.
@@ -77,8 +82,66 @@ public class MCRPersonMigrationCommands {
             try {
                 MCRMetadataManager.create(modsperson);
                 MODSPersonLookup.add(modsperson);
+                addModspersonAttribute(user, modsperson.getId());
             } catch (MCRPersistenceException | MCRAccessException ex) {
                 LOGGER.warn("Creation of modsperson for user {} failed: {}", user.getUserName(), ex.getMessage());
+            }
+        }
+        else {
+            LOGGER.warn("User {} not found in database", userName);
+        }
+    }
+
+    /**
+     * Deletes all artificially created users that work with the connection-id mechanism.
+     * Should be executed after migration using {@link MCRPersonMigrationCommands#migrateAllModsperson()} first.
+     */
+    @MCRCommand(
+        syntax = "ubo delete users from database",
+        help = "Deletes all users from database that have no user account. Command is part of a migration process "
+            + "and should only be used once",
+        order = 2)
+    public static void deleteUsersFromDatabase() {
+        EntityManager em = MCREntityManagerProvider.getCurrentEntityManager();
+        Query query = em.createQuery("SELECT u FROM MCRUser u "
+            + "WHERE realmID = 'local' AND lastLogin is null"); // TODO: is 'local' really hard-coded?
+        List<MCRUser> users;
+        try {
+            users = query.getResultList();
+        } catch (Exception e) {
+            LOGGER.error(e);
+            throw new MCRPersistenceException("Deletion of users failed: ", e);
+        }
+        int count = 0;
+        LOGGER.info("Will delete {} users from database...", users.size());
+        for (MCRUser user : users) {
+            if (isArtificialUser(user)) {
+                MCRUserManager.deleteUser(user);
+                count++;
+                if (count % 1000 == 0) {
+                    LOGGER.info("Deleted {} users from database...", count);
+                }
+            }
+        }
+        LOGGER.info("Successfully deleted {} users from database", count);
+    }
+
+    /**
+     * TODO: Use MCRUserCommands.setUserAttribute once mycore-user2 in 2024.06.x is used.
+     * Adds a new attribute {@link MCRPersonMigrationCommands#MODSPERSON_ATTRIBUTE_NAME} to the database user,
+     * if user is not artificial.
+     * @param user the database user
+     * @param modspersonId the ID to be added as a user attribute
+     */
+    private static void addModspersonAttribute(MCRUser user, MCRObjectID modspersonId) {
+        if (!isArtificialUser(user)) {
+            try {
+                user.setUserAttribute(MODSPERSON_ATTRIBUTE_NAME, modspersonId.toString());
+                MCRUserManager.updateUser(user);
+            } catch (Exception e) {
+                throw new MCRException(
+                    "Error while setting attribute " + MODSPERSON_ATTRIBUTE_NAME + " to " + modspersonId +
+                        " for user " + user.getUserID() + ": ", e);
             }
         }
     }
@@ -121,41 +184,18 @@ public class MCRPersonMigrationCommands {
     }
 
     /**
-     * Deletes all artificially created users that work with the connection-id mechanism.
-     * Should be executed after migration using {@link MCRPersonMigrationCommands#migrateAllModsperson()} first.
+     * Tests if a user was artificially added by the three criteria:
+     * <ol>
+     *     <li>UUID-like username (only if connection strategy is uuid)</li>
+     *     <li>local realm</li>
+     *     <li>has not logged in yet</li>
+     * </ol>
+     * @param user user to test
+     * @return true, if user was artificially added
      */
-    @MCRCommand(
-        syntax = "ubo delete users from database",
-        help = "Deletes all users from database that have no user account. Command is part of a migration process "
-            + "and should only be used once",
-        order = 2)
-    public static void deleteUsersFromDatabase() {
-        EntityManager em = MCREntityManagerProvider.getCurrentEntityManager();
-        Query query = em.createQuery("SELECT u FROM MCRUser u "
-            + "WHERE realmID = 'local' AND lastLogin is null"); // TODO: is 'local' really hard-coded?
-        List<MCRUser> users;
-        try {
-            users = query.getResultList();
-        } catch (Exception e) {
-            LOGGER.error(e);
-            throw new MCRPersistenceException("Deletion of users failed: ", e);
-        }
-
-        final boolean isUuidStrategy = "uuid".equals(MCRConfiguration2.getString(
-            "MCR.user2.matching.publication.connection.strategy").orElse(""));
-
-        int count = 0;
-        LOGGER.info("Will delete {} users from database...", users.size());
-        for (MCRUser user : users) {
-            if (!isUuidStrategy || UUID_REGEX_PATTERN.matcher(user.getUserName()).matches()) {
-                MCRUserManager.deleteUser(user);
-                count++;
-                if (count % 1000 == 0) {
-                    LOGGER.info("Deleted {} users from database...", count);
-                }
-            }
-        }
-        LOGGER.info("Successfully deleted {} users from database", count);
+    private static boolean isArtificialUser(MCRUser user) {
+        return (!IS_UUID_STRATEGY || UUID_REGEX_PATTERN.matcher(user.getUserName()).matches())
+            && user.getRealmID().equals("local") && user.getLastLogin() == null;
     }
 
 }
