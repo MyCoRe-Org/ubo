@@ -28,6 +28,7 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mods.MCRMODSWrapper;
+import org.mycore.ubo.dedup.jpa.DeduplicationKeyManager;
 
 public class DeDupCommands {
 
@@ -118,5 +119,12 @@ public class DeDupCommands {
             }
         }
         return otherGroups;
+    }
+
+    public static void printDuplicates(){
+        for (PossibleDuplicate duplicate : DeduplicationKeyManager.getInstance().getDuplicates(DeduplicationKeyManager.SortOrder.ASC, DeduplicationKeyManager.SortOrder.NONE, null)) {
+            LOGGER.info(duplicate);
+        }
+
     }
 }

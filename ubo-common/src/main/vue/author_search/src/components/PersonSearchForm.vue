@@ -15,7 +15,8 @@
         </div>
       </div>
 
-      <form class="ubo-vue-form" role="form" v-on:submit.prevent="search">
+      <form class="ubo-vue-form" role="form"
+            v-on:submit.prevent="emit('search', {term:searchModel.term})">
         <input name="_xed_subselect_session" type="hidden">
         <div class="form-group form-inline">
           <label class="mycore-form-label" for="lastName">
@@ -40,51 +41,59 @@
   </article>
 </template>
 
-<script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
-import {resolveiI18N} from "@/components/I18N";
+<script lang="ts" setup>
 
-@Component
-export default class PersonSearchForm extends Vue {
+import {onMounted, reactive, ref, watch} from "vue";
+import {resolveiI18N} from "@/components/I18N.ts";
 
-  @Prop({default: ""}) baseurl!: string;
-  @Prop({default: ""}) firstname!: string;
-  @Prop({default: ""}) lastname!: string;
+const props = defineProps<{
+  baseurl: string;
+  firstname: string;
+  lastname: string;
+}>();
 
-  i18n = {
-    "person.search": null,
-    "person.search.instruction2": null,
-    "person.search.help2": null,
-    "lsf.searchFor": null,
-    "person.search.invalid.search": null,
-    "button.search": null
-  };
-  hint = false;
+const emit = defineEmits<{
+  search: [term: { term: string }]
+}>();
 
-  private searchModel = {
-    term: "",
-    validated: true
-  };
+const i18n = reactive({
+  "person.search": "",
+  "person.search.instruction2": "",
+  "person.search.help2": "",
+  "lsf.searchFor": "",
+  "person.search.invalid.search": "",
+  "button.search": ""
+});
 
-  mounted() {
-    resolveiI18N(this.baseurl, this.i18n);
-    this.searchModel.term = [this.firstname, this.lastname]
-        .filter(s => s !== undefined && s.trim().length > 0).join(" ");
-    if (this.searchModel.term.trim() !== "") {
-      this.$emit("search", {term: this.searchModel.term});
-    }
+const hint = ref(false);
+
+const searchModel = reactive({
+  term: "",
+  validated: true
+});
+
+watch(() => props.firstname, () => {
+  applyNamesToTerm();
+});
+
+watch(() => props.lastname, () => {
+  applyNamesToTerm();
+});
+
+const applyNamesToTerm = () => {
+  searchModel.term = [props.firstname, props.lastname]
+    .filter(s => s !== undefined && s.trim().length > 0).join(" ");
+};
+
+onMounted(() => {
+  resolveiI18N(props.baseurl, i18n);
+  applyNamesToTerm();
+
+  if (searchModel.term.trim() !== "") {
+    emit("search", {term: searchModel.term});
   }
+});
 
-  search() {
-    if (this.searchModel.term.length == 0) {
-      this.searchModel.validated = false;
-      return;
-    }
-
-    this.$emit("search", {term: this.searchModel.term});
-  }
-
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
