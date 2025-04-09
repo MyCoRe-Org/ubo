@@ -199,6 +199,7 @@
           <div class="col">
             <xsl:call-template name="label-year" />
             <xsl:call-template name="pubtype" />
+            <xsl:call-template name="label-kdsf-pub-doc-type" />
             <xsl:call-template name="label-oa" />
             <xsl:call-template name="orcid-status" />
           </div>
