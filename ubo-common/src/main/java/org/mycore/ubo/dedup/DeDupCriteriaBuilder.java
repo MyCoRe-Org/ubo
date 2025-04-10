@@ -63,7 +63,8 @@ public class DeDupCriteriaBuilder {
 
         // add new dedup keys, if any
         for (DeDupCriterion criteria : getDeDupCriteria(mods)) {
-            deduplicationKeyManager.addDeduplicationKey(id.toString(), criteria.getType(), criteria.getKey());
+            deduplicationKeyManager.addDeduplicationKey(id.toString(),
+                DeduplicationKeyManager.DedupType.fromString(criteria.getType()), criteria.getKey());
         }
 
         /* add dedup keys for the host, too or not???
@@ -75,8 +76,32 @@ public class DeDupCriteriaBuilder {
         } */
     }
 
+    public void updateDeDupCriteriaPerson(Element modsperson, MCRObjectID id) {
+        // remove existion dedup keys
+        for (Element extension : modsperson.getChildren("extension", MCRConstants.MODS_NAMESPACE)) {
+            extension.removeChildren("dedup");
+            if(extension.getChildren().isEmpty()) {
+                extension.detach();
+            }
+        }
+        DeduplicationKeyManager deduplicationKeyManager = DeduplicationKeyManager.getInstance();
+
+        if (modsperson.getName().equals("mods")) {
+            deduplicationKeyManager.clearDeduplicationKeys(id.toString());
+        }
+        // add new dedup keys, if any
+        for (DeDupCriterion criteria : getDeDupCriteriaPerson(modsperson)) {
+            deduplicationKeyManager.addDeduplicationKey(id.toString(),
+                DeduplicationKeyManager.DedupType.fromString(criteria.getType()), criteria.getKey());
+        }
+    }
+
     private Set<DeDupCriterion> getDeDupCriteria(Element mods) {
         return buildFromMODS(mods);
+    }
+
+    private Set<DeDupCriterion> getDeDupCriteriaPerson(Element modsPerson) {
+        return buildFromMODSPerson(modsPerson);
     }
 
     /**
@@ -97,6 +122,31 @@ public class DeDupCriteriaBuilder {
 
         for (Element shelfmark : removeEmptyElements(getNodes(mods, "mods:location/mods:shelfLocator"))) {
             criteria.add(buildFromShelfmark(shelfmark));
+        }
+
+        return criteria;
+    }
+
+    /**
+     * Builds deduplication criteria from the given MODS person metadata
+     */
+    public Set<DeDupCriterion> buildFromMODSPerson(Element modsperson) {
+        Set<DeDupCriterion> criteria = new HashSet<>();
+
+        for (Element identifier : removeEmptyElements(getNodes(modsperson, "mods:name[@type='personal']/mods:nameIdentifier"))) {
+            criteria.add(buildFromNameIdentifier(identifier));
+        }
+
+        for (Element name : getNodes(modsperson, "mods:name[@type='personal']")) {
+            Element familyName = getNodes(name, "mods:namePart[@type='family']").get(0);
+            Element givenName = getNodes(name, "mods:namePart[@type='given']").get(0);
+            criteria.add(buildFromFullName(givenName, familyName));
+
+            for (Element alternativeName : getNodes(modsperson, "mods:alternativeName")) {
+                Element altFamilyName = getNodes(alternativeName, "mods:namePart[@type='family']").get(0);
+                Element altGivenName = getNodes(alternativeName, "mods:namePart[@type='given']").get(0);
+                criteria.add(buildFromFullName(altGivenName, altFamilyName));
+            }
         }
 
         return criteria;
@@ -148,6 +198,16 @@ public class DeDupCriteriaBuilder {
     }
 
     /**
+     * Builds a deduplication criterion from a mods:nameIdentifier element
+     */
+    public DeDupCriterion buildFromNameIdentifier(Element identifier) {
+        String type = identifier.getAttributeValue("type");
+        String value = identifier.getTextTrim();
+        value = value.replaceAll("-", "");
+        return new DeDupCriterion("nameidentifier", type + ":" + value);
+    }
+
+    /**
      * Builds a deduplication criterion for a given mods:shelflocator
      */
     public DeDupCriterion buildFromShelfmark(Element element) {
@@ -182,13 +242,23 @@ public class DeDupCriteriaBuilder {
     }
 
     /**
-     * Builds a combined deduplication criterion from a title and author elment.
+     * Builds a combined deduplication criterion from a title and author element.
      * That means both must match together to identify duplicates.
      */
     public DeDupCriterion buildFromTitleAuthor(String title, String author) {
         title = normalizeText(title);
         author = normalizeText(author);
         return new DeDupCriterion("ta", author + ": " + title);
+    }
+
+    /**
+     * Builds a combined deduplication criterion from a given and family name.
+     * That means both must match together to identify duplicates.
+     */
+    public DeDupCriterion buildFromFullName(Element givenNameModsPart, Element familyNameModsPart) {
+        String givenName = givenNameModsPart.getTextTrim();
+        String familyName = familyNameModsPart.getTextTrim();
+        return new DeDupCriterion("name", givenName + ":" + familyName);
     }
 
     /**

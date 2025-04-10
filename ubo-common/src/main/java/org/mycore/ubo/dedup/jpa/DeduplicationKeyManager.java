@@ -19,6 +19,9 @@ import java.util.stream.Stream;
 
 public class DeduplicationKeyManager {
 
+    public static final DedupType[] PUBLICATION_CATEGORY_GROUP = { DedupType.TA, DedupType.SHELFMARK, DedupType.IDENTIFIER};
+    public static final DedupType[] PERSON_CATEGORY_GROUP = { DedupType.NAME, DedupType.NAME_IDENTIFIER};
+
     public DeduplicationKeyManager() {
     }
 
@@ -50,16 +53,18 @@ public class DeduplicationKeyManager {
                 .executeUpdate();
     }
 
-    public void addDeduplicationKey(String mcrId, String type, String key) {
+    public void addDeduplicationKey(String mcrId, DedupType type, String key) {
         EntityManager em = MCREntityManagerProvider.getCurrentEntityManager();
         DeduplicationKey deduplicationKey = new DeduplicationKey();
         deduplicationKey.setMcrId(mcrId);
-        deduplicationKey.setDeduplicationType(type);
+        if (type != null) {
+            deduplicationKey.setDeduplicationType(type.getName());
+        }
         deduplicationKey.setDeduplicationKey(key);
         em.persist(deduplicationKey);
     }
 
-    public List<PossibleDuplicate> getDuplicates(SortOrder idSort, SortOrder typeSort, String duplicationTypeFilter) {
+    public List<PossibleDuplicate> getDuplicates(SortOrder idSort, SortOrder typeSort, DedupType[] duplicationTypeFilter) {
         EntityManager em = MCREntityManagerProvider.getCurrentEntityManager();
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -90,10 +95,16 @@ public class DeduplicationKeyManager {
         predicates.add(cb.lessThan(dk1.get(DeduplicationKey_.mcrId), dk2.get(DeduplicationKey_.mcrId)));
         predicates.add(cb.not(cb.exists(subquery)));
 
-        if (duplicationTypeFilter != null) {
-            predicates.add(cb.equal(dk1.get(DeduplicationKey_.deduplicationType), duplicationTypeFilter));
-        }
+        if (duplicationTypeFilter != null && duplicationTypeFilter.length > 0) {
+            Predicate orPredicate = cb.disjunction();
+            for (DedupType type : duplicationTypeFilter) {
+                Predicate singleEquals =
+                    cb.equal(dk1.get(DeduplicationKey_.deduplicationType), type.getName());
+                orPredicate = cb.or(orPredicate, singleEquals);
 
+            }
+            predicates.add(orPredicate);
+        }
 
         Predicate duplicateCondition = cb.and(predicates.toArray(new Predicate[0]));
 
@@ -132,7 +143,7 @@ public class DeduplicationKeyManager {
         return resultList.stream().map(o -> new PossibleDuplicate((String) o[0], (String) o[1], (String) o[2], (String) o[3])).toList();
     }
 
-    public List<DeduplicationKey> getDuplicates(String mcrId, String type, String key) {
+    public List<DeduplicationKey> getDuplicates(String mcrId, DedupType type, String key) {
         EntityManager em = MCREntityManagerProvider.getCurrentEntityManager();
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -158,7 +169,7 @@ public class DeduplicationKeyManager {
 
         Predicate duplicateCondition = cb.and(
                 cb.equal(dk1.get(DeduplicationKey_.deduplicationKey), key),
-                cb.equal(dk1.get(DeduplicationKey_.deduplicationType), type),
+                cb.equal(dk1.get(DeduplicationKey_.deduplicationType), type.getName()),
                 cb.notEqual(dk1.get(DeduplicationKey_.mcrId), mcrId),
                 cb.not(dk1.get(DeduplicationKey_.mcrId).in(subquery1)),
                 cb.not(dk1.get(DeduplicationKey_.mcrId).in(subquery2))
@@ -223,5 +234,35 @@ public class DeduplicationKeyManager {
     public enum DeduplicationNoDuplicateOrderFields {
         MCR_ID_1, MCR_ID_2, CREATOR, DATE;
     }
+
+    /**
+     * Lists all possible depublication key types
+     */
+        public enum DedupType {
+            TA("ta"),
+            SHELFMARK("shelfmark"),
+            IDENTIFIER("identifier"),
+            NAME("name"),
+            NAME_IDENTIFIER("nameidentifier");
+
+            private final String name;
+
+            DedupType(String name) {
+                this.name = name;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public static DedupType fromString(String text) {
+                for (DedupType d : DedupType.values()) {
+                    if (d.name.equalsIgnoreCase(text)) {
+                        return d;
+                    }
+                }
+                return null;
+            }
+        }
 
 }

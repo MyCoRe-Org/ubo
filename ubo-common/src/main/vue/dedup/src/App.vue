@@ -9,6 +9,9 @@
           <li class="nav-item">
             <router-link to="/no-duplicates" class="nav-link" active-class="active">{{ i18n["dedup.nav.noDoublettes"]}}</router-link>
           </li>
+          <li class="nav-item">
+            <router-link to="/person-duplicates" class="nav-link" active-class="active">{{ i18n["dedup.nav.person.doublettes"] }}</router-link>
+          </li>
         </ul>
       </div>
       <div class="card-body">
@@ -33,7 +36,8 @@ import {resolveiI18N} from "@/api/I18N.ts";
 
 const i18n = reactive({
   "dedup.nav.doublettes": "doublettes",
-  "dedup.nav.noDoublettes": "noDoublettes"
+  "dedup.nav.noDoublettes": "noDoublettes",
+  "dedup.nav.person.doublettes": "personDoublettes"
 });
 
 onMounted(()=> {

@@ -30,19 +30,22 @@ public class DeDupEventHandler extends MCREventHandlerBase {
 
     @Override
     protected void handleObjectDeleted(MCREvent evt, MCRObject obj) {
-        LOGGER.info("clearing deduplication keys and no duplicates for object " + obj.getId().toString());
+        LOGGER.info("clearing deduplication keys and no duplicates for object " + obj.getId());
         DeduplicationKeyManager.getInstance().clearDeduplicationKeys(obj.getId().toString());
         DeduplicationKeyManager.getInstance().clearNoDuplicates(obj.getId().toString());
 
     }
 
     private void updateDeDupCriteria(MCRObject obj) {
-        if (!"mods".equals(obj.getId().getTypeId())) {
+        if (!("mods".equals(obj.getId().getTypeId()) || "modsperson".equals(obj.getId().getTypeId()))) {
             return;
         }
-
-        LOGGER.info("updating deduplication keys for object " + obj.getId().toString());
+        LOGGER.info("updating deduplication keys for object " + obj.getId());
         Element mods = new MCRMODSWrapper(obj).getMODS();
-        new DeDupCriteriaBuilder().updateDeDupCriteria(mods, obj.getId());
+        if ("mods".equals(obj.getId().getTypeId())) {
+            new DeDupCriteriaBuilder().updateDeDupCriteria(mods, obj.getId());
+        } else {
+            new DeDupCriteriaBuilder().updateDeDupCriteriaPerson(mods, obj.getId());
+        }
     }
 }
