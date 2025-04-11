@@ -138,14 +138,22 @@ public class DeDupCriteriaBuilder {
         }
 
         for (Element name : getNodes(modsperson, "mods:name[@type='personal']")) {
-            Element familyName = getNodes(name, "mods:namePart[@type='family']").get(0);
-            Element givenName = getNodes(name, "mods:namePart[@type='given']").get(0);
-            criteria.add(buildFromFullName(givenName, familyName));
+            Element familyName = getNodes(name, "mods:namePart[@type='family']") == null ?
+                                 null : getNodes(name, "mods:namePart[@type='family']").get(0);
+            Element givenName = getNodes(name, "mods:namePart[@type='given']") == null ?
+                                null : getNodes(name, "mods:namePart[@type='given']").get(0);
+            if (givenName != null && familyName != null) {
+                criteria.add(buildFromFullName(givenName, familyName));
+            }
 
             for (Element alternativeName : getNodes(modsperson, "mods:alternativeName")) {
-                Element altFamilyName = getNodes(alternativeName, "mods:namePart[@type='family']").get(0);
-                Element altGivenName = getNodes(alternativeName, "mods:namePart[@type='given']").get(0);
-                criteria.add(buildFromFullName(altGivenName, altFamilyName));
+                Element altFamilyName = getNodes(alternativeName, "mods:namePart[@type='family']") == null ?
+                                        null : getNodes(alternativeName, "mods:namePart[@type='family']").get(0);
+                Element altGivenName = getNodes(alternativeName, "mods:namePart[@type='given']") == null ?
+                                       null : getNodes(alternativeName, "mods:namePart[@type='given']").get(0);
+                if (altGivenName != null && altFamilyName != null) {
+                    criteria.add(buildFromFullName(altGivenName, altFamilyName));
+                }
             }
         }
 
