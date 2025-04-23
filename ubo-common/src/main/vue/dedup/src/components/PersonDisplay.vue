@@ -15,7 +15,7 @@
       <span class="fas fa-file-alt d-inline-block ml-2"> </span>
     </a>
     <a
-      :href="getMCRApplicationBaseURL() + 'servlets/DozBibEntryServlet?mode=show&XSL.Style=structure&id=' + props.mcrId"
+      :href="getMCRApplicationBaseURL() + 'servlets/DozBibEntryServlet?mode=show&XSL.Style=modsperson-structure&id=' + props.mcrId"
       :aria-label="i18n['dedup.nav.DedupListView.go.stuctureEditor']">
       <span class="fas fa-project-diagram pointer d-inline-block d-inline-block ml-2"> </span>
     </a>

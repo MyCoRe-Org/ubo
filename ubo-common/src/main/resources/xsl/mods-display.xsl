@@ -377,6 +377,18 @@
     </xsl:if>
   </xsl:template>
 
+  <!-- ========== Zitierform Modsperson ========== -->
+
+  <xsl:template match="mods:mods" mode="showmodsperson">
+    <xsl:param name="mode">plain</xsl:param>
+    <xsl:call-template name="output.line">
+      <xsl:with-param name="selected" select="mods:name[@type='personal']" />
+      <xsl:with-param name="before"> - </xsl:with-param>
+      <xsl:with-param name="mode" select="$mode" />
+      <xsl:with-param name="class" select="'person'" />
+    </xsl:call-template>
+  </xsl:template>
+
   <!-- for typical publications: "Name: Title" -->
   <xsl:template match="mods:mods|mods:relatedItem" mode="cite.title.name">
     <xsl:param name="mode">plain</xsl:param>
@@ -1167,6 +1179,12 @@
     </xsl:apply-templates>
     <xsl:apply-templates select="mods:abstract/@xlink:href" mode="details" />
     <xsl:apply-templates select="mods:abstract[string-length(.) &gt; 0]" mode="details" />
+  </xsl:template>
+
+  <!-- ========== details_lines_modsperson ========== -->
+  <xsl:template match="mods:mods" mode="details_lines_modsperson">
+    <xsl:apply-templates select="mods:name[@type='personal']/mods:namePart[@type='family']" />
+    <xsl:apply-templates select="mods:name[@type='personal']/mods:namePart[@type='given']" />
   </xsl:template>
 
   <!-- =========== Schlagworte =========== -->

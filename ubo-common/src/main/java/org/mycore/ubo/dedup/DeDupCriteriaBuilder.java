@@ -138,9 +138,9 @@ public class DeDupCriteriaBuilder {
         }
 
         for (Element name : getNodes(modsperson, "mods:name[@type='personal']")) {
-            Element familyName = getNodes(name, "mods:namePart[@type='family']") == null ?
+            Element familyName = getNodes(name, "mods:namePart[@type='family']").isEmpty() ?
                                  null : getNodes(name, "mods:namePart[@type='family']").get(0);
-            Element givenName = getNodes(name, "mods:namePart[@type='given']") == null ?
+            Element givenName = getNodes(name, "mods:namePart[@type='given']").isEmpty() ?
                                 null : getNodes(name, "mods:namePart[@type='given']").get(0);
             if (givenName != null && familyName != null) {
                 criteria.add(buildFromFullName(givenName, familyName));
