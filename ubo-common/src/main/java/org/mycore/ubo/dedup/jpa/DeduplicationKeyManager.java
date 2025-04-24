@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Order;
+import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
@@ -96,14 +97,14 @@ public class DeduplicationKeyManager {
         predicates.add(cb.not(cb.exists(subquery)));
 
         if (duplicationTypeFilter != null && duplicationTypeFilter.length > 0) {
-            Predicate orPredicate = cb.disjunction();
-            for (DedupType type : duplicationTypeFilter) {
-                Predicate singleEquals =
-                    cb.equal(dk1.get(DeduplicationKey_.deduplicationType), type.getName());
-                orPredicate = cb.or(orPredicate, singleEquals);
+            Path<String> dedupTypePath = dk1.get(DeduplicationKey_.deduplicationType);
+            CriteriaBuilder.In<String> inClause = cb.in(dedupTypePath);
 
+            for (DedupType type : duplicationTypeFilter) {
+                inClause.value(type.getName());
             }
-            predicates.add(orPredicate);
+
+            predicates.add(inClause);
         }
 
         Predicate duplicateCondition = cb.and(predicates.toArray(new Predicate[0]));

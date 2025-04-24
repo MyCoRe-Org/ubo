@@ -218,7 +218,7 @@
             <xsl:value-of select="i18n:translate('button.delete')"/>
           </xsl:with-param>
           <xsl:with-param name="text">
-            <xsl:value-of select="concat(i18n:translate('button.deletePublication'), '{id=',@ID,'}')" />             
+            <xsl:value-of select="concat(i18n:translate('button.deletePerson'), '{id=',@ID,'}')" />
           </xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="button-with-confirm-dialog">
@@ -229,19 +229,19 @@
             <xsl:value-of select="i18n:translate('button.markAsFalseDuplicate')"/>
           </xsl:with-param>
           <xsl:with-param name="text">
-            <xsl:value-of select="concat(i18n:translate('structure.editor.markAsFalseDuplicate'), '{id=',@ID,'}', i18n:translate('structure.editor.markAsFalseDuplicateOf') , '{duplicateOf=',$duplicateOfID,'}', i18n:translate('structure.editor.markAsFalseDuplicateQMark'))" />
+            <xsl:value-of select="concat(i18n:translate('structure.editor.markAsFalseDuplicatePerson'), '{id=',@ID,'}', i18n:translate('structure.editor.markAsFalseDuplicateOf') , '{duplicateOf=',$duplicateOfID,'}', i18n:translate('structure.editor.markAsFalseDuplicateQMark'))" />
           </xsl:with-param>
           <xsl:with-param name="preview" select="false()" />
         </xsl:call-template>
         <xsl:call-template name="button-with-confirm-dialog">
-          <xsl:with-param name="if" select="($role='duplicate') and (($from='parent') or ($from='base'))" />
+          <xsl:with-param name="if" select="($role='duplicate') and ($from='person')" />
           <xsl:with-param name="action" select="'mergeMetadata'" />
           <xsl:with-param name="icon" select="'copy'" />
           <xsl:with-param name="button" >
             <xsl:value-of select="i18n:translate('button.merge')"/>
           </xsl:with-param>
           <xsl:with-param name="text" >
-            <xsl:value-of select="concat(i18n:translate('structure.editor.merge'), '{from=',@ID,'}', i18n:translate('structure.editor.mergeInto'), '{into=',$duplicateOfID,'}',i18n:translate('structure.editor.mergeQMark'))" /> 
+            <xsl:value-of select="concat(i18n:translate('structure.editor.mergePerson'), '{from=',@ID,'}', i18n:translate('structure.editor.mergeIntoPerson'), '{into=',$duplicateOfID,'}',i18n:translate('structure.editor.mergeQMark'))" />
           </xsl:with-param>
           <xsl:with-param name="preview" select="true()" />
         </xsl:call-template>

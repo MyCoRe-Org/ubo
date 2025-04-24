@@ -44,10 +44,12 @@
         <tbody>
         <tr v-for="entry in model.noDupList" :key="entry.id">
           <td>
-            <publication-display :mcr-id="entry.mcrId1"/>
+            <person-display v-if="entry.mcrId1.includes('modsperson')" :mcr-id="entry.mcrId1" />
+            <publication-display v-else :mcr-id="entry.mcrId1" />
           </td>
           <td>
-            <publication-display :mcr-id="entry.mcrId2"/>
+            <person-display v-if="entry.mcrId2.includes('modsperson')" :mcr-id="entry.mcrId2" />
+            <publication-display v-else :mcr-id="entry.mcrId2" />
           </td>
           <td>
             {{ entry.creator }}
@@ -101,6 +103,7 @@ import PublicationDisplay from "@/components/PublicationDisplay.vue";
 import SortArrow from "@/components/SortArrow.vue";
 import {resolveiI18N} from "@/api/I18N.ts";
 import Modal from "@/components/Modal.vue";
+import PersonDisplay from "@/components/PersonDisplay.vue";
 
 const deleteModal = useTemplateRef("deleteModalRef");
 

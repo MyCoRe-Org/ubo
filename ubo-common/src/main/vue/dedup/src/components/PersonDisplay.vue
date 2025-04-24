@@ -38,7 +38,6 @@ const i18n = reactive({
 
 onMounted(() => {
   resolveiI18N(getMCRApplicationBaseURL(), i18n);
-  console.log("Noch ein Test!");
 });
 
 const props = defineProps<{
