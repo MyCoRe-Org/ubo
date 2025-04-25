@@ -118,6 +118,8 @@
   <tr class="background2"><td>person_ths</td><td>Name</td><td>Doktorvater, BetreuerIn bei Dissertationen (Akademische Betreuung)</td><td>=, contains, like</td></tr>  
   <tr class="background1"><td>nid_lsf</td><td>ID</td><td>Personen-ID aus HIS LSF</td><td> =, contains * </td></tr>
   <tr class="background2"><td>ae_lsf</td><td>ID</td><td>Autoren- oder Herausgeber-ID aus HIS LSF</td><td> =, contains * </td></tr>
+  <tr class="background1"><td>aeplus_lsf</td><td>ID</td><td>Autoren-, Herausgeber-, Interview-, oder Gefeierte-Person-ID aus HIS LSF</td><td> =, contains * </td></tr>
+  <tr class="background2"><td>ae_connection</td><td>ID</td><td>Autor oder Herausgeber über interne Connection-ID</td><td> =, contains * </td></tr>
   <tr class="background1"><td>nid_orcid</td><td>ID</td><td>ORCID</td><td> =, contains *</td></tr>
   <tr class="background2"><td>nid_researcherid</td><td>ID</td><td>ResearcherID</td><td> =, contains * </td></tr>
   <tr class="background1"><td>nid_scopus</td><td>ID</td><td>ID der Person in SCOPUS</td><td> =, contains * </td></tr>
