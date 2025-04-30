@@ -12,6 +12,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.mycore.ubo.AccessControl;
 import org.mycore.ubo.dedup.jpa.DeduplicationKeyManager;
+import org.mycore.ubo.dedup.jpa.DeduplicationKeyManager.DedupType;
 import org.mycore.ubo.dedup.jpa.DeduplicationNoDuplicate;
 
 import java.util.List;
@@ -23,10 +24,10 @@ public class DeDupResource {
     @Path("list/duplicates")
     @Produces(MediaType.APPLICATION_JSON)
     public Response listDedup(@QueryParam("idSort") String idSortStr, @QueryParam("typeSort") String typeSortStr, @QueryParam("type") String type) {
-        DeduplicationKeyManager.DedupType[] filter = DeduplicationKeyManager.PUBLICATION_CATEGORY_GROUP;
+        DedupType[] filter = DeduplicationKeyManager.PUBLICATION_CATEGORY_GROUP;
         if (type != null) {
-            filter = new DeduplicationKeyManager.DedupType[] {
-                DeduplicationKeyManager.DedupType.fromString(type) };
+            filter = new DedupType[] {
+                DedupType.fromString(type) };
         }
         return listDedupIntern(idSortStr, typeSortStr, filter);
     }
@@ -35,10 +36,10 @@ public class DeDupResource {
     @Path("list/duplicates-person")
     @Produces(MediaType.APPLICATION_JSON)
     public Response listDedupPerson(@QueryParam("idSort") String idSortStr, @QueryParam("typeSort") String typeSortStr, @QueryParam("type") String type) {
-        DeduplicationKeyManager.DedupType[] filter = DeduplicationKeyManager.PERSON_CATEGORY_GROUP;
+        DedupType[] filter = DeduplicationKeyManager.PERSON_CATEGORY_GROUP;
         if (type != null) {
-            filter = new DeduplicationKeyManager.DedupType[] {
-                DeduplicationKeyManager.DedupType.fromString(type) };
+            filter = new DedupType[] {
+                DedupType.fromString(type) };
         }
         return listDedupIntern(idSortStr, typeSortStr, filter);
     }
@@ -50,7 +51,7 @@ public class DeDupResource {
      * @param dedupTypes all {@link DeduplicationKeyManager.DedupType dedup types} that should be searched for
      * @return the dedup list
      */
-    private Response listDedupIntern(String idSortStr, String typeSortStr, DeduplicationKeyManager.DedupType[] dedupTypes) {
+    private Response listDedupIntern(String idSortStr, String typeSortStr, DedupType[] dedupTypes) {
 
         if (!AccessControl.currentUserIsAdmin()) {
             return Response.status(Response.Status.FORBIDDEN).build();

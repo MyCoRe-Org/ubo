@@ -18,6 +18,7 @@ import org.mycore.common.MCRConstants;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mods.merger.MCRHyphenNormalizer;
 import org.mycore.ubo.dedup.jpa.DeduplicationKeyManager;
+import org.mycore.ubo.dedup.jpa.DeduplicationKeyManager.DedupType;
 
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
@@ -64,7 +65,7 @@ public class DeDupCriteriaBuilder {
         // add new dedup keys, if any
         for (DeDupCriterion criteria : getDeDupCriteria(mods)) {
             deduplicationKeyManager.addDeduplicationKey(id.toString(),
-                DeduplicationKeyManager.DedupType.fromString(criteria.getType()), criteria.getKey());
+                DedupType.fromString(criteria.getType()), criteria.getKey());
         }
 
         /* add dedup keys for the host, too or not???
@@ -92,7 +93,7 @@ public class DeDupCriteriaBuilder {
         // add new dedup keys, if any
         for (DeDupCriterion criteria : getDeDupCriteriaPerson(modsperson)) {
             deduplicationKeyManager.addDeduplicationKey(id.toString(),
-                DeduplicationKeyManager.DedupType.fromString(criteria.getType()), criteria.getKey());
+                DedupType.fromString(criteria.getType()), criteria.getKey());
         }
     }
 
@@ -133,8 +134,12 @@ public class DeDupCriteriaBuilder {
     public Set<DeDupCriterion> buildFromMODSPerson(Element modsperson) {
         Set<DeDupCriterion> criteria = new HashSet<>();
 
-        for (Element identifier : removeEmptyElements(getNodes(modsperson, "mods:name[@type='personal']/mods:nameIdentifier"))) {
-            criteria.add(buildFromNameIdentifier(identifier));
+        for (Element identifier : removeEmptyElements(getNodes(modsperson,
+            "mods:name[@type='personal']/mods:nameIdentifier"))) {
+            if (identifier.getAttributeValue("type") != null &&
+                !identifier.getAttributeValue("type").equals("connection")) {
+                criteria.add(buildFromNameIdentifier(identifier));
+            }
         }
 
         for (Element name : getNodes(modsperson, "mods:name[@type='personal']")) {
@@ -264,8 +269,8 @@ public class DeDupCriteriaBuilder {
      * That means both must match together to identify duplicates.
      */
     public DeDupCriterion buildFromFullName(Element givenNameModsPart, Element familyNameModsPart) {
-        String givenName = givenNameModsPart.getTextTrim();
-        String familyName = familyNameModsPart.getTextTrim();
+        String givenName = normalizeText(givenNameModsPart.getTextTrim());
+        String familyName = normalizeText(familyNameModsPart.getTextTrim());
         return new DeDupCriterion("name", givenName + ":" + familyName);
     }
 

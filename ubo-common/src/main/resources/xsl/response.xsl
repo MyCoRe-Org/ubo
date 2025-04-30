@@ -21,7 +21,7 @@
 <xsl:include href="ubo-dialog.xsl" />
 <xsl:include href="coreFunctions.xsl" />
 <xsl:include href="csl-export-gui.xsl" />
-<xsl:include href="../../../../../ubo-modsperson/src/main/resources/META-INF/resources/response-person.xsl" />
+<xsl:include href="response-person.xsl" />
 
 <xsl:param name="RequestURL" />
 <xsl:param name="MCR.ORCID2.OAuth.ClientSecret" select="''" />

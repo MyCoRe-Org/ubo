@@ -11,6 +11,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.ubo.dedup.DeDupCriteriaBuilder;
 import org.mycore.ubo.dedup.DeDupCriterion;
+import org.mycore.ubo.dedup.jpa.DeduplicationKeyManager.DedupType;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
@@ -81,7 +82,8 @@ public class DeduplicationCriterionResolver implements URIResolver {
         if(Objects.equals("base", relation) || Objects.equals("parent", relation)) {
             Set<DeDupCriterion> criteria = deDupCriteriaBuilder.buildFromMODS(mods);
             criteria.forEach(criterion -> {
-                possibleDuplicates.addAll(DeduplicationKeyManager.getInstance().getDuplicates(id.toString(), criterion.getType(), criterion.getKey()));
+                possibleDuplicates.addAll(DeduplicationKeyManager.getInstance().getDuplicates(id.toString(),
+                    Objects.requireNonNull(DedupType.fromString(criterion.getType())), criterion.getKey()));
             });
         } else if (Objects.equals("host", relation)) {
             for (Element host : deDupCriteriaBuilder.getNodes(mods, "mods:relatedItem[@type='host']")) {
@@ -91,13 +93,15 @@ public class DeduplicationCriterionResolver implements URIResolver {
                     continue;
                 }
                deDupCriteriaBuilder.buildFromMODS(host).forEach(criterion -> {
-                   possibleDuplicates.addAll(DeduplicationKeyManager.getInstance().getDuplicates(id.toString(), criterion.getType(), criterion.getKey()));
+                   possibleDuplicates.addAll(DeduplicationKeyManager.getInstance().getDuplicates(id.toString(),
+                       Objects.requireNonNull(DedupType.fromString(criterion.getType())), criterion.getKey()));
                });
             }
         } else {
             Set<DeDupCriterion> criteria = deDupCriteriaBuilder.buildFromMODSPerson(mods);
             criteria.forEach(criterion -> {
-                possibleDuplicates.addAll(DeduplicationKeyManager.getInstance().getDuplicates(id.toString(), criterion.getType(), criterion.getKey()));
+                possibleDuplicates.addAll(DeduplicationKeyManager.getInstance().getDuplicates(id.toString(),
+                    Objects.requireNonNull(DedupType.fromString(criterion.getType())), criterion.getKey()));
             });
         }
 
