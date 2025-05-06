@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.BaseHttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -55,7 +55,7 @@ public class MODSPersonCachingStartupHandler implements MCRStartupHandler.AutoEx
                     fetchAndProcessResults(query, offset, counter);
                 }
             }
-        } catch (SolrServerException | HttpSolrClient.RemoteSolrException | IOException e) {
+        } catch (SolrServerException | BaseHttpSolrClient.RemoteSolrException | IOException e) {
             LOGGER.error(e.getMessage());
         }
         LOGGER.info("Loaded " + counter.get() + " modsperson-objects into the cache");

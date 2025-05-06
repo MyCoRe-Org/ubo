@@ -52,11 +52,11 @@ public class MODSPersonEventHandler extends MCREventHandlerBase {
         } catch (SolrServerException | IOException e) {
             throw new MCRException("There was an error while removing references for " + obj.getId().toString(), e);
         }
-        LOGGER.info("Deleted modsperson " + obj.getId().toString() + " from cache");
+        LOGGER.info("Deleted modsperson " + obj.getId().toString() + " from cache and in mods references");
     }
 
     /**
-     * For a give modsperson-ID, remove references to this ID in all mods-Documents.
+     * For a given modsperson-ID, remove references to this ID in all mods-Documents.
      * @param modspersonId ID of modsperson that was deleted
      * @return number of references in mods-documents found and deleted
      * @throws SolrServerException In case of an error inside the SOLR-Server

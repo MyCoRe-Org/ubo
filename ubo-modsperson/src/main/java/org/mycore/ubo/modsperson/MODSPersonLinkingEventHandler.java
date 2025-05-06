@@ -2,6 +2,7 @@ package org.mycore.ubo.modsperson;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,7 +39,7 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
 
     private final static Logger LOGGER = LogManager.getLogger();
 
-    private String leadIDName;
+    private final String leadIDName;
 
     public MODSPersonLinkingEventHandler() {
         super();
@@ -86,6 +87,8 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
             if (person != null) {
                 mergeDataFromNameToPerson(modsName, person);
                 setReferencedPerson(modsName, person);
+                // once a modsperson is successfully created, lead-id will no longer be necessary
+                removeLeadId(modsName);
                 if (isNewPerson) {
                     MODSPersonLookup.add(person);
                 }
@@ -125,6 +128,13 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
             modsName.getParentElement().setAttribute("modified", "true");
             MCRMODSSorter.sort(modsName);
         }
+    }
+
+    private void removeLeadId(Element modsName) {
+        Optional<Element> leadIdOpt = modsName.getChildren("nameIdentifier", MCRConstants.MODS_NAMESPACE)
+            .stream().filter(ni -> leadIDName.equals(ni.getAttributeValue("type")))
+            .findFirst();
+        leadIdOpt.ifPresent(Element::detach);
     }
 
     private MCRObject findPersonMatching(Element modsName, String publicationID) {
