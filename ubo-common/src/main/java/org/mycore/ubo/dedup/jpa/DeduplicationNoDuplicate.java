@@ -43,9 +43,9 @@ public class DeduplicationNoDuplicate {
     @NotNull
     @Column(name = "MCR_ID_2", nullable = false, length = 128)
     private String mcrId2;
-    @Size(max = 32)
+    @Size(max = 128)
     @NotNull
-    @Column(name = "CREATOR", nullable = false, length = 32)
+    @Column(name = "CREATOR", nullable = false, length = 128)
     private String creator;
     @NotNull
     @Column(name = "CREATION_DATE", nullable = false)
