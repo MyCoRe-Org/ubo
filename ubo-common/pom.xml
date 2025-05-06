@@ -349,6 +349,12 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>org.mycore.ubo</groupId>
+      <artifactId>ubo-modsperson</artifactId>
+      <version>dev-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>xml-apis</groupId>
       <artifactId>xml-apis</artifactId>
     </dependency>

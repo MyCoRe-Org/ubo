@@ -12,6 +12,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.mycore.ubo.AccessControl;
 import org.mycore.ubo.dedup.jpa.DeduplicationKeyManager;
+import org.mycore.ubo.dedup.jpa.DeduplicationKeyManager.DedupType;
 import org.mycore.ubo.dedup.jpa.DeduplicationNoDuplicate;
 
 import java.util.List;
@@ -23,28 +24,56 @@ public class DeDupResource {
     @Path("list/duplicates")
     @Produces(MediaType.APPLICATION_JSON)
     public Response listDedup(@QueryParam("idSort") String idSortStr, @QueryParam("typeSort") String typeSortStr, @QueryParam("type") String type) {
+        DedupType[] filter = DeduplicationKeyManager.PUBLICATION_CATEGORY_GROUP;
+        if (type != null) {
+            filter = new DedupType[] {
+                DedupType.fromString(type) };
+        }
+        return listDedupIntern(idSortStr, typeSortStr, filter);
+    }
+
+    @GET
+    @Path("list/duplicates-person")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listDedupPerson(@QueryParam("idSort") String idSortStr, @QueryParam("typeSort") String typeSortStr, @QueryParam("type") String type) {
+        DedupType[] filter = DeduplicationKeyManager.PERSON_CATEGORY_GROUP;
+        if (type != null) {
+            filter = new DedupType[] {
+                DedupType.fromString(type) };
+        }
+        return listDedupIntern(idSortStr, typeSortStr, filter);
+    }
+
+    /**
+     * Returns a sorted list of all duplicates of the given deduplication types.
+     * @param idSortStr sort order of id field (asc, desc, none)
+     * @param typeSortStr sort order of type field (asc, desc, none)
+     * @param dedupTypes all {@link DeduplicationKeyManager.DedupType dedup types} that should be searched for
+     * @return the dedup list
+     */
+    private Response listDedupIntern(String idSortStr, String typeSortStr, DedupType[] dedupTypes) {
 
         if (!AccessControl.currentUserIsAdmin()) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
         DeduplicationKeyManager.SortOrder idSort = idSortStr == null ? DeduplicationKeyManager.SortOrder.NONE :
-                switch (idSortStr) {
-                    case "asc" -> DeduplicationKeyManager.SortOrder.ASC;
-                    case "desc" -> DeduplicationKeyManager.SortOrder.DESC;
-                    case "none" -> DeduplicationKeyManager.SortOrder.NONE;
-                    default -> throw new BadRequestException("Invalid sort order: " + idSortStr);
-                };
+                                                   switch (idSortStr) {
+                                                       case "asc" -> DeduplicationKeyManager.SortOrder.ASC;
+                                                       case "desc" -> DeduplicationKeyManager.SortOrder.DESC;
+                                                       case "none" -> DeduplicationKeyManager.SortOrder.NONE;
+                                                       default -> throw new BadRequestException("Invalid sort order: " + idSortStr);
+                                                   };
 
         DeduplicationKeyManager.SortOrder typeSort = typeSortStr == null ? DeduplicationKeyManager.SortOrder.NONE :
-                switch (typeSortStr) {
-                    case "asc" -> DeduplicationKeyManager.SortOrder.ASC;
-                    case "desc" -> DeduplicationKeyManager.SortOrder.DESC;
-                    case "none" -> DeduplicationKeyManager.SortOrder.NONE;
-                    default -> throw new BadRequestException("Invalid sort order: " + typeSortStr);
-                };
+                                                     switch (typeSortStr) {
+                                                         case "asc" -> DeduplicationKeyManager.SortOrder.ASC;
+                                                         case "desc" -> DeduplicationKeyManager.SortOrder.DESC;
+                                                         case "none" -> DeduplicationKeyManager.SortOrder.NONE;
+                                                         default -> throw new BadRequestException("Invalid sort order: " + typeSortStr);
+                                                     };
 
-        List<PossibleDuplicate> duplicates = DeduplicationKeyManager.getInstance().getDuplicates(idSort, typeSort, type);
+        List<PossibleDuplicate> duplicates = DeduplicationKeyManager.getInstance().getDuplicates(idSort, typeSort, dedupTypes);
         String json = new Gson().toJson(duplicates.toArray(), PossibleDuplicate[].class);
         return Response.ok(json)
                 .header("Access-Control-Allow-Origin", "*")

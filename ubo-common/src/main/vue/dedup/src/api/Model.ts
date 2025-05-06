@@ -3,7 +3,7 @@ export type DedupList = DedupListEntry[];
 export interface DedupListEntry {
   mcrId1: string;
   mcrId2: string;
-  deduplicationType: "ta" | "identifier";
+  deduplicationType: "ta" | "identifier" | "name" | "nameidentifier";
   deduplicationKey: string;
 }
 
