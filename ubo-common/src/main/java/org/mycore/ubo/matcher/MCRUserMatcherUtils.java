@@ -174,7 +174,7 @@ public class MCRUserMatcherUtils {
             for (Map.Entry<String, String> parameter : parametersMap.entrySet()) {
                 String encodedValue = null;
                 try {
-                    encodedValue = URLEncoder.encode(parameter.getValue(), "UTF-8");
+                    encodedValue = URLEncoder.encode(parameter.getValue(), "UTF-8").replace("+","%20");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
