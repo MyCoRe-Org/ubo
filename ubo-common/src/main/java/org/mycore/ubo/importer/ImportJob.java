@@ -49,15 +49,8 @@ public abstract class ImportJob {
 
     private List<Document> publications = new ArrayList<Document>();
 
-    private String id;
-
-    private final ImportIdProvider importIdProvider;
-
-    protected ImportJob(){
-        String className = MCRConfiguration2.getStringOrThrow("UBO.Importer.ImportIdProvider.ListImport");
-        importIdProvider = MCRConfiguration2.instantiateClass(className);
-        this.id = importIdProvider.getImportId();
-    }
+    private String id = ((ImportIdProvider) MCRConfiguration2.instantiateClass(
+        MCRConfiguration2.getStringOrThrow("UBO.Importer.ImportIdProvider.ListImport"))).getImportId();
 
     public String getID() {
         return id;
