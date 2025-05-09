@@ -26,7 +26,6 @@
 <xsl:param name="HttpSession" />
 <xsl:param name="RequestURL" />
 <xsl:param name="WebApplicationBaseURL" />
-<xsl:param name="ServletsBaseURL" />
 <xsl:param name="MCR.Mail.Address" />
 <xsl:param name="UBO.Mail.From" />
 <xsl:param name="UBO.Scopus.Importer.Status" />
