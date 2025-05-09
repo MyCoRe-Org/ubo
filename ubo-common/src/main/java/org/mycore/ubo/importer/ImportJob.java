@@ -54,7 +54,7 @@ public abstract class ImportJob {
     private final ImportIdProvider importIdProvider;
 
     protected ImportJob(){
-        String className = MCRConfiguration2.getStringOrThrow("UBO.List.Importer.ImportIdProvider");
+        String className = MCRConfiguration2.getStringOrThrow("UBO.Importer.ImportIdProvider.ListImport");
         importIdProvider = MCRConfiguration2.instantiateClass(className);
         this.id = importIdProvider.getImportId();
     }

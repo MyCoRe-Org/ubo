@@ -77,7 +77,7 @@ class ScopusImporter {
     protected final ImportIdProvider importIdProvider;
 
     public ScopusImporter() {
-        String className = MCRConfiguration2.getStringOrThrow("UBO.Scopus.Importer.ImportIdProvider");
+        String className = MCRConfiguration2.getStringOrThrow("UBO.Importer.ImportIdProvider.Scopus");
         importIdProvider = MCRConfiguration2.instantiateClass(className);
     }
 
