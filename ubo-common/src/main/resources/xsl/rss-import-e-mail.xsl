@@ -30,6 +30,7 @@
 <xsl:param name="MCR.Mail.Address" />
 <xsl:param name="UBO.Mail.From" />
 <xsl:param name="UBO.Scopus.Importer.Status" />
+<xsl:param name="UBO.Importer.email.subject.postfix" select="'RSS Feed Import'" />
 
 
 <xsl:variable name="br"><xsl:text>
@@ -43,7 +44,9 @@
         <to> <xsl:value-of select="." /> </to>
       </xsl:for-each>
     </xsl:if>
-    <subject>Universitätsbibliographie: <xsl:value-of select="@source" /> RSS Feed Import</subject>
+    <subject>
+      <xsl:value-of select="concat('Universitätsbibliographie: ', @source, ' ', $UBO.Importer.email.subject.postfix)"/>
+    </subject>
     <body>
     <xsl:text>
 Liebe Kollegin, lieber Kollege,
