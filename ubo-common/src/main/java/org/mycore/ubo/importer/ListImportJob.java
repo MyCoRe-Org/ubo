@@ -18,6 +18,7 @@ public class ListImportJob extends ImportJob {
     private String type;
 
     public ListImportJob(String type) {
+        super();
         this.type = type;
     }
 
