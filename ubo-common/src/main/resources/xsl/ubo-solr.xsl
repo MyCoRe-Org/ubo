@@ -72,6 +72,7 @@
     <xsl:call-template name="partOf" />
     <xsl:call-template name="year" />
     <xsl:call-template name="destatis" />
+    <xsl:call-template name="media-type-online-status" />
   </xsl:template>
 
   <xsl:template name="sortby_person">
@@ -288,6 +289,21 @@
         <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:classification[contains(@authorityURI,'oa')][1]" mode="solrField" />
       </xsl:otherwise>
     </xsl:choose>
+
+    <xsl:variable name="categId" select="substring-after(mods:classification[contains(@authorityURI,'oa')]/@valueURI,'#')" />
+    <field name="oa_status">
+      <xsl:choose>
+        <xsl:when test="$categId = 'closed'">
+          <xsl:value-of select="'closed'"/>
+        </xsl:when>
+        <xsl:when test="string-length($categId) &gt; 0">
+          <xsl:value-of select="'oa'"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="'unchecked'"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </field>
   </xsl:template>
 
   <xsl:template match="mods:classification[contains(@authorityURI,'oa')]" mode="solrField">
@@ -335,6 +351,21 @@
   <xsl:template match="mods:classification[contains(@authorityURI,'mediaType')]" mode="solrField">
     <field name="mediaType">
       <xsl:value-of select="substring-after(@valueURI,'#')"/>
+    </field>
+  </xsl:template>
+
+  <xsl:template name="media-type-online-status">
+    <xsl:variable name="categId" select="substring-after(mods:classification[contains(@authorityURI,'mediaType')]/@valueURI,'#')"/>
+
+    <field name="mediaType-online-status">
+      <xsl:choose>
+        <xsl:when test="$categId = 'online'">
+          <xsl:value-of select="'online'"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="'other'"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </field>
   </xsl:template>
 
