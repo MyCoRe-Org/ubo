@@ -285,25 +285,15 @@
       <xsl:when test="mods:classification[contains(@authorityURI,'oa')]">
         <xsl:apply-templates select="mods:classification[contains(@authorityURI,'oa')][1]" mode="solrField" />
       </xsl:when>
-      <xsl:otherwise>
+      <xsl:when test="mods:relatedItem[@type='host']/mods:classification[contains(@authorityURI,'oa')]">
         <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:classification[contains(@authorityURI,'oa')][1]" mode="solrField" />
+      </xsl:when>
+      <xsl:otherwise>
+        <field name="oa_status">
+          <xsl:value-of select="'unchecked'"/>
+        </field>
       </xsl:otherwise>
     </xsl:choose>
-
-    <xsl:variable name="categId" select="substring-after(mods:classification[contains(@authorityURI,'oa')]/@valueURI,'#')" />
-    <field name="oa_status">
-      <xsl:choose>
-        <xsl:when test="$categId = 'closed'">
-          <xsl:value-of select="'closed'"/>
-        </xsl:when>
-        <xsl:when test="string-length($categId) &gt; 0">
-          <xsl:value-of select="'oa'"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="'unchecked'"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </field>
   </xsl:template>
 
   <xsl:template match="mods:classification[contains(@authorityURI,'oa')]" mode="solrField">
@@ -311,6 +301,18 @@
     <field name="oa_exact">
       <xsl:value-of select="$category" />
     </field>
+
+    <field name="oa_status">
+      <xsl:choose>
+        <xsl:when test="$category = 'closed'">
+          <xsl:value-of select="'closed'"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="'oa'"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </field>
+
     <xsl:for-each select="document(concat('classification:editor:0:parents:oa:',$category))/descendant::item">
       <field name="oa">
         <xsl:value-of select="@value" />
