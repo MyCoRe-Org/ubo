@@ -212,11 +212,6 @@
       <artifactId>guava</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.zaxxer</groupId>
-      <artifactId>HikariCP</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
     </dependency>
@@ -307,11 +302,6 @@
       <artifactId>styles</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.hibernate.orm</groupId>
-      <artifactId>hibernate-hikaricp</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
       <groupId>org.jdom</groupId>
       <artifactId>jdom2</artifactId>
     </dependency>
@@ -355,6 +345,11 @@
       <artifactId>xml-apis</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>commons-discovery</groupId>
       <artifactId>commons-discovery</artifactId>
       <scope>runtime</scope>
@@ -372,6 +367,11 @@
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-slf4j-impl</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate.orm</groupId>
+      <artifactId>hibernate-hikaricp</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
