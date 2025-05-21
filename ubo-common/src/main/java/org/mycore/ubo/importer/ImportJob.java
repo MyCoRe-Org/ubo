@@ -34,11 +34,8 @@ import org.mycore.solr.MCRSolrUtils;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -46,15 +43,14 @@ public abstract class ImportJob {
 
     private static final Logger LOGGER = LogManager.getLogger(ImportJob.class);
 
-    private static final SimpleDateFormat ID_BUILDER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT);
-
     private static final String PROJECT_ID = MCRConfiguration2.getString("UBO.projectid.default").get();
 
     private static final String ENRICHER_CONFIG_ID = "import-list";
 
     private List<Document> publications = new ArrayList<Document>();
 
-    private String id = ID_BUILDER.format(new Date());
+    private String id = ((ImportIdProvider) MCRConfiguration2.instantiateClass(
+        MCRConfiguration2.getStringOrThrow("UBO.Importer.ImportIdProvider.ListImport"))).getImportId();
 
     public String getID() {
         return id;
