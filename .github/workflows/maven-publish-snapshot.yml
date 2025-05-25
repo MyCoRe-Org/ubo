@@ -24,16 +24,14 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Create .m2/settings.xml
-        uses: s4u/maven-settings-action@v3.1.0
-        with:
-          servers: |
-            [{
-                "id": "sonatype-central",
-                "username": "${{ secrets.OSSRH_USERNAME }}",
-                "password": "${{ secrets.OSSRH_TOKEN }}"
-            }]
+          # Maven Distribution Server (step creates .m2/settings.xml)
+          server-id: 'sonatype-central'
+          server-username: SONATYPE_USERNAME
+          server-password: SONATYPE_TOKEN
       - name: Publish SNAPSHOT to sonatype central with Apache Maven
+        env:
+          SONATYPE_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          SONATYPE_TOKEN:  ${{ secrets.OSSRH_TOKEN }}
         run: mvn --batch-mode deploy -P deploy-to-sonatype
       - name: Login to Docker Hub
         if: success()
