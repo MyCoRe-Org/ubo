@@ -29,7 +29,7 @@
 <xsl:param name="MCR.Mail.Address" />
 <xsl:param name="UBO.Mail.From" />
 <xsl:param name="UBO.Scopus.Importer.Status" />
-<xsl:param name="UBO.Importer.email.subject.postfix" select="'RSS Feed Import'" />
+<xsl:param name="UBO.Importer.email.subject.postfix" />
 
 
 <xsl:variable name="br"><xsl:text>
