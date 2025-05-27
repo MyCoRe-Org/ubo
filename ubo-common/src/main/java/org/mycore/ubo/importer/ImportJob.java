@@ -106,7 +106,13 @@ public abstract class ImportJob {
         }
     }
 
-    public void savePublications() throws MCRPersistenceException, MCRAccessException {
+    /**
+     * Saves the publications of this {@link ImportJob} and adds the <code>importID</code> service flag.
+     *
+     * @return the list of objects saved in this method
+     * */
+    public List<MCRObject> savePublications() throws MCRPersistenceException, MCRAccessException {
+        List<MCRObject> list = new ArrayList<>();
         for (Document publication : publications) {
             if (getFilterTransformer().isPresent()) {
                 publication = applyFilterTransformer(publication, getFilterTransformer().get());
@@ -119,7 +125,9 @@ public abstract class ImportJob {
             obj.getService().addFlag("importID", id);
 
             MCRMetadataManager.create(obj);
+            list.add(obj);
         }
+        return list;
     }
 
     protected Optional<MCRContentTransformer> getFilterTransformer() {
