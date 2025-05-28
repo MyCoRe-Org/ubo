@@ -30,11 +30,12 @@
 
     <xsl:template match="mycoreobject[contains(@ID,'_modsperson_')]">
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/ModsDisplayUtils.js"/>
+        <xsl:variable name="modsperson_id" select="@ID"/>
         <xsl:choose>
             <xsl:when test="$permission.admin">
                 <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
                     <div class="section">
-                        <div class="ubo_details card">
+                        <div class="ubo_details card mb-3">
                             <div class="card-body">
                                 <xsl:for-each select="mods:name[@type='personal']">
                                     <xsl:apply-templates select="." mode="modsperson"/>
@@ -42,6 +43,13 @@
                                     <xsl:apply-templates select="mods:alternativeName" mode="modsperson"/>
                                     <xsl:apply-templates select="mods:affiliation" mode="modsperson"/>
                                 </xsl:for-each>
+                            </div>
+                        </div>
+                        <div class="ubo_details card mb-3">
+                            <div class="card-body">
+                                <xsl:call-template name="publications">
+                                    <xsl:with-param name="modsperson_id" select="$modsperson_id" />
+                                </xsl:call-template>
                             </div>
                         </div>
                     </div>
@@ -144,6 +152,79 @@
                 <xsl:value-of select="text()" />
             </div>
         </div>
+    </xsl:template>
+
+    <xsl:template name="publications">
+        <xsl:param name="modsperson_id" />
+        <article class="card mb-3" xml:lang="de">
+            <div class="card-body">
+                <h3>
+                    <xsl:value-of select="i18n:translate('user.profile.publications')" />
+                </h3>
+                <ul>
+                    <xsl:call-template name="numPublicationsModsperson" >
+                        <xsl:with-param name="modsperson_id" select="$modsperson_id" />
+                    </xsl:call-template>
+
+<!--                    <xsl:if test="$isCurrentUser">-->
+<!--                        <xsl:apply-templates select="attributes/attribute[contains(@name, 'orcid_credential')]" mode="publications" />-->
+<!--                    </xsl:if>-->
+                </ul>
+            </div>
+        </article>
+    </xsl:template>
+
+    <xsl:template name="numPublicationsModsperson">
+        <xsl:param name="modsperson_id" />
+        <xsl:variable name="solr_query_confirmed" select="concat('q=status%3Aconfirmed+objectType%3Amods+ref_person%3A',$modsperson_id)" />
+        <xsl:variable name="solr_query_all" select="concat('q=objectType%3Amods+ref_person%3A',$modsperson_id)" />
+        <xsl:variable name="numFoundConfirmed" select="document(concat('solr:rows=0&amp;',$solr_query_confirmed))/response/result/@numFound"/>
+        <xsl:variable name="numFoundAll" select="document(concat('solr:rows=0&amp;',$solr_query_all))/response/result/@numFound"/>
+
+        <xsl:variable name="numPubsConfirmedText">
+            <xsl:call-template name="numPublications">
+                <xsl:with-param name="num" select="$numFoundConfirmed" />
+            </xsl:call-template>
+        </xsl:variable>
+
+        <xsl:variable name="numPubsAllText">
+            <xsl:call-template name="numPublications">
+                <xsl:with-param name="num" select="$numFoundAll" />
+            </xsl:call-template>
+        </xsl:variable>
+
+        <li>
+            <xsl:value-of select="concat(i18n:translate('user.profile.publications.ubo.intro'), ' ')" />
+            <a href="{$ServletsBaseURL}solr/select?{$solr_query_all}&amp;sort=year+desc">
+                <xsl:value-of select="$numPubsAllText"/>
+                <xsl:value-of select="concat(i18n:translate(concat('user.profile.publications.ubo.outro.plural.modsperson.', $numFoundAll &gt; 1)), '.')" />
+            </a>
+
+            <xsl:if test="$numFoundAll &gt; 1 and $numFoundConfirmed != $numFoundAll">
+                <xsl:variable name="isMulti" select="($numFoundConfirmed = 0 or $numFoundConfirmed &gt; 1)"/>
+
+                <xsl:value-of select="concat(' ', i18n:translate(concat('user.profile.publications.ubo.published.intro.plural.', $isMulti)), ' ')"/>
+                <a href="{$ServletsBaseURL}solr/select?{$solr_query_confirmed}&amp;sort=year+desc">
+                    <xsl:value-of select="$numPubsConfirmedText"/>
+                </a>
+                <xsl:value-of select="concat(' ', i18n:translate(concat('user.profile.publications.ubo.published.extro.plural.', $isMulti)))" disable-output-escaping="yes" />
+            </xsl:if>
+        </li>
+    </xsl:template>
+
+    <xsl:template name="numPublications">
+        <xsl:param name="num" />
+        <xsl:choose>
+            <xsl:when test="$num = 0">
+                <xsl:value-of select="i18n:translate('user.profile.publications.num.none')" />
+            </xsl:when>
+            <xsl:when test="$num = 1">
+                <xsl:value-of select="i18n:translate('user.profile.publications.num.one')" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="i18n:translate('user.profile.publications.num.multiple',$num)" />
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
 </xsl:stylesheet>
