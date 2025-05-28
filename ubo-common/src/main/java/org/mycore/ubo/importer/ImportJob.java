@@ -49,7 +49,7 @@ public abstract class ImportJob {
 
     private List<Document> publications = new ArrayList<Document>();
 
-    protected ImportIdProvider importIdProvider = ((ImportIdProvider) MCRConfiguration2
+    private ImportIdProvider importIdProvider = ((ImportIdProvider) MCRConfiguration2
         .instantiateClass(MCRConfiguration2.getStringOrThrow("UBO.Importer.ImportIdProvider.ListImport")));
 
     public String getID() {
@@ -197,6 +197,24 @@ public abstract class ImportJob {
         } catch (Exception ex) {
             LOGGER.warn(ex);
         }
+    }
+
+    /**
+     * Allows to set another {@link ImportIdProvider}.
+     *
+     * @param newImportIdProvider the new {@link ImportIdProvider} to set.
+     */
+    protected void setImportIdProvider(ImportIdProvider newImportIdProvider) {
+        this.importIdProvider = newImportIdProvider;
+    }
+
+    /**
+     * Retrieve the current {@link ImportIdProvider}.
+     *
+     * @return the current {link ImportIdProvider}
+     */
+    protected ImportIdProvider getImportIdProvider() {
+        return this.importIdProvider;
     }
 
     protected abstract String getTransformerID();
