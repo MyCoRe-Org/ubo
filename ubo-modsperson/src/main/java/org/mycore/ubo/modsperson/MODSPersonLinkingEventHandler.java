@@ -48,12 +48,18 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
 
     @Override
     protected void handleObjectCreated(MCREvent evt, MCRObject obj) {
-        handleObject(obj);
+        boolean wasModified = handleObject(obj);
+        if (wasModified) {
+            MCRXMLMetadataManager.instance().update(obj.getId(), obj.createXML(), new Date());
+        }
     }
 
     @Override
     protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {
-        handleObject(obj);
+        boolean wasModified = handleObject(obj);
+        if (wasModified) {
+            MCRXMLMetadataManager.instance().update(obj.getId(), obj.createXML(), new Date());
+        }
     }
 
     @Override

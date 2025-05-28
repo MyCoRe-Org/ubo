@@ -95,7 +95,7 @@ public class MODSPersonCachingStartupHandler implements MCRStartupHandler.AutoEx
                     List<String> fieldValues = (List<String>) doc.getFieldValue(fieldName);
                     for (String fieldValue : fieldValues) {
                         String idType = fieldName.substring(4);
-                        keys.add(String.join("|", idType.trim(), fieldValue.trim()));
+                        keys.add(String.join("|", fieldValue.trim(), idType.trim()));
                     }
 
                 }
