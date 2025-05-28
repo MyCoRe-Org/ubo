@@ -11,6 +11,7 @@ import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRStoreTestCase;
 import org.mycore.common.content.MCRURLContent;
+import org.mycore.datamodel.ifs2.MCRStore;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -53,18 +54,21 @@ public class MODSPersonLinkingEventHandlerTest extends MCRStoreTestCase {
         MCRMetadataManager.create(obj2);
         MCRMetadataManager.create(obj3);
 
+        List<String> modspersons = MCRCommandUtils.getIdsForType("modsperson").toList();
+        assertEquals(3, modspersons.size());
+
         MCRObject person4 = MCRMetadataManager.retrieveMCRObject(MCRObjectID
-            .getInstance("junit_modsperson_00000001"));
+            .getInstance(modspersons.get(0)));
         assertNotNull(person4);
         assertPerson(person4, "Müller", "Lisa", "77777", "1112222999");
 
         MCRObject person5 = MCRMetadataManager.retrieveMCRObject(MCRObjectID
-            .getInstance("junit_modsperson_00000002"));
+            .getInstance(modspersons.get(1)));
         assertNotNull(person5);
         assertPerson(person5, "Meyer", "Lena", "44444", "1112222888");
 
         MCRObject person6 = MCRMetadataManager.retrieveMCRObject(MCRObjectID
-            .getInstance("junit_modsperson_00000003"));
+            .getInstance(modspersons.get(2)));
         assertNotNull(person6);
         assertPerson(person6, "Müller", "Luisa", "99999", "444555777");
     }
