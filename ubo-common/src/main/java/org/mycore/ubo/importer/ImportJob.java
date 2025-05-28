@@ -49,11 +49,11 @@ public abstract class ImportJob {
 
     private List<Document> publications = new ArrayList<Document>();
 
-    private String id = ((ImportIdProvider) MCRConfiguration2.instantiateClass(
-        MCRConfiguration2.getStringOrThrow("UBO.Importer.ImportIdProvider.ListImport"))).getImportId();
+    protected ImportIdProvider importIdProvider = ((ImportIdProvider) MCRConfiguration2
+        .instantiateClass(MCRConfiguration2.getStringOrThrow("UBO.Importer.ImportIdProvider.ListImport")));
 
     public String getID() {
-        return id;
+        return importIdProvider.getImportId();
     }
 
     public List<Document> getPublications() {
@@ -122,7 +122,7 @@ public abstract class ImportJob {
             MCRObjectID oid = MCRMetadataManager.getMCRObjectIDGenerator().getNextFreeId(PROJECT_ID + "_mods");
 
             obj.setId(oid);
-            obj.getService().addFlag("importID", id);
+            obj.getService().addFlag("importID", this.getID());
 
             MCRMetadataManager.create(obj);
             list.add(obj);
@@ -172,7 +172,7 @@ public abstract class ImportJob {
     }
 
     public String getQueryString() {
-        return "importID:\"" + MCRSolrUtils.escapeSearchValue(this.id) + "\"";
+        return "importID:\"" + MCRSolrUtils.escapeSearchValue(this.getID()) + "\"";
     }
 
     private static final int MAX_SOLR_CHECKS = 10; // times
