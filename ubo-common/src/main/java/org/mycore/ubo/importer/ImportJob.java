@@ -49,11 +49,11 @@ public abstract class ImportJob {
 
     private List<Document> publications = new ArrayList<Document>();
 
-    private String id = ((ImportIdProvider) MCRConfiguration2.instantiateClass(
-        MCRConfiguration2.getStringOrThrow("UBO.Importer.ImportIdProvider.ListImport"))).getImportId();
+    private ImportIdProvider importIdProvider = ((ImportIdProvider) MCRConfiguration2
+        .instantiateClass(MCRConfiguration2.getStringOrThrow("UBO.Importer.ImportIdProvider.ListImport")));
 
     public String getID() {
-        return id;
+        return importIdProvider.getImportId();
     }
 
     public List<Document> getPublications() {
@@ -106,7 +106,13 @@ public abstract class ImportJob {
         }
     }
 
-    public void savePublications() throws MCRPersistenceException, MCRAccessException {
+    /**
+     * Saves the publications of this {@link ImportJob} and adds the <code>importID</code> service flag.
+     *
+     * @return the list of objects saved in this method
+     * */
+    public List<MCRObject> savePublications() throws MCRPersistenceException, MCRAccessException {
+        List<MCRObject> list = new ArrayList<>();
         for (Document publication : publications) {
             if (getFilterTransformer().isPresent()) {
                 publication = applyFilterTransformer(publication, getFilterTransformer().get());
@@ -116,10 +122,12 @@ public abstract class ImportJob {
             MCRObjectID oid = MCRMetadataManager.getMCRObjectIDGenerator().getNextFreeId(PROJECT_ID + "_mods");
 
             obj.setId(oid);
-            obj.getService().addFlag("importID", id);
+            obj.getService().addFlag("importID", this.getID());
 
             MCRMetadataManager.create(obj);
+            list.add(obj);
         }
+        return list;
     }
 
     protected Optional<MCRContentTransformer> getFilterTransformer() {
@@ -164,7 +172,7 @@ public abstract class ImportJob {
     }
 
     public String getQueryString() {
-        return "importID:\"" + MCRSolrUtils.escapeSearchValue(this.id) + "\"";
+        return "importID:\"" + MCRSolrUtils.escapeSearchValue(this.getID()) + "\"";
     }
 
     private static final int MAX_SOLR_CHECKS = 10; // times
@@ -189,6 +197,24 @@ public abstract class ImportJob {
         } catch (Exception ex) {
             LOGGER.warn(ex);
         }
+    }
+
+    /**
+     * Allows to set another {@link ImportIdProvider}.
+     *
+     * @param newImportIdProvider the new {@link ImportIdProvider} to set.
+     */
+    protected void setImportIdProvider(ImportIdProvider newImportIdProvider) {
+        this.importIdProvider = newImportIdProvider;
+    }
+
+    /**
+     * Retrieve the current {@link ImportIdProvider}.
+     *
+     * @return the current {link ImportIdProvider}
+     */
+    protected ImportIdProvider getImportIdProvider() {
+        return this.importIdProvider;
     }
 
     protected abstract String getTransformerID();
