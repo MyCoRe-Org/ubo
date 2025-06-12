@@ -56,8 +56,15 @@ public class MODSPersonSearchService implements IdentityService {
 
             for (SolrDocument doc : results) {
                 PersonSearchResult.PersonResult result = new PersonSearchResult.PersonResult(this);
-                result.displayName = ((List<String>) doc.getFieldValue("person")).get(0);
-                result.pid = ((List<String>) doc.getFieldValue("nid_" + LEAD_ID)).get(0);
+
+                List<String> persons = (List) doc.getFieldValue("person");
+                if (persons != null && !persons.isEmpty()) {
+                    result.displayName = persons.get(0);
+                }
+                List<String> pids = ((List<String>) doc.getFieldValue("nid_" + LEAD_ID));
+                if (pids != null && !pids.isEmpty()) {
+                    result.pid = pids.get(0);
+                }
                 personResults.add(result);
             }
 
