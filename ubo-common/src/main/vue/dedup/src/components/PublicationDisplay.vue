@@ -58,14 +58,22 @@ watch(() => visible.value, (newVal) => {
   }
 })
 
+async function fetchJWT() {
+  const response = await fetch(`${getMCRApplicationBaseURL()}rsc/jwt`);
+  const result = await response.json();
+  return result.access_token;
+}
+
 const loadData = async () => {
   if (!model.loadingData) {
     model.loadingData = true;
+    const jwt = await fetchJWT();
     const url = getMCRApplicationBaseURL() + "api/v2/objects/" + props.mcrId;
     const settings = {
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwt}`
       }
     }
 
