@@ -3,13 +3,11 @@
 ## Setup
 
 ### Checkout source code from GitHub
-```
-git clone https://github.com/MyCoRe-Org/ubo.git
-```
+```git clone https://github.com/MyCoRe-Org/ubo.git```
+
 ### Build the web application
-```
-mvn install
-```
+`mvn install`
+
 ### Create configuration directory
 ```
 ubo-cli/target/bin/ubo.sh create configuration directory
@@ -18,17 +16,12 @@ ubo-cli/target/bin/ubo.sh create configuration directory
 - TODO: Build a database and edit persistence.xml
 - For example, in MySQL, do
 ```
-create database ubo;
-grant all privileges on ubo.* to ubo@localhost identified by 'ubo';
+CREATE DATABASE ubo;
+GRANT ALL PRIVELEGES ON ubo.* to ubo@localhost IDENTIFIED BY 'ubo';
 ```
 - setup your database and JDBC configuration in persistence.xml, update mappings with:
-```
-ubo-cli/target/bin/ubo.sh reload mappings in jpa configuration file
-```
-```
-vi ~/.mycore/ubo/resources/META-INF/persistence.xml
-```
 
+```
 - copy jdbc driver to ~/.mycore/ubo/lib, eg. for h2
 ```
 cd ~/.mycore/ubo/lib
