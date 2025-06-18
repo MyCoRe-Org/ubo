@@ -27,6 +27,8 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -55,18 +57,18 @@ public class PaginatedScopusQuery extends ScopusQuery {
         this.start = start;
     }
 
-    private URL buildQueryURL() throws MalformedURLException {
+    private URL buildQueryURL() throws URISyntaxException, MalformedURLException {
         return buildQueryURL(getStart());
     }
 
-    private URL buildQueryURL(int start) throws MalformedURLException {
+    private URL buildQueryURL(int start) throws URISyntaxException, MalformedURLException {
         String encodedQuery = URLEncoder.encode(getQuery(), StandardCharsets.UTF_8);
         String queryString
             = String.format(Locale.ROOT, QUERY_PATTERN, encodedQuery, API_KEY, INST_TOKEN, getCount(), start);
-        return new URL(API_URL + queryString);
+        return new URI(API_URL + queryString).toURL();
     }
 
-    public List<String> resolveIDs() throws JDOMException, IOException, SAXException {
+    public List<String> resolveIDs() throws JDOMException, IOException, SAXException, URISyntaxException {
         List<String> ids = new ArrayList<>();
         int totalResults, startIndex, itemsPerPage, curStart;
 

@@ -7,6 +7,8 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -42,13 +44,13 @@ public class ScopusQuery extends AbstractScopusQuery{
         setCount(count);
     }
 
-    private URL buildQueryURL() throws MalformedURLException {
+    private URL buildQueryURL() throws MalformedURLException, URISyntaxException {
         String encodedQuery = URLEncoder.encode(getQuery(), StandardCharsets.UTF_8);
         String queryString = String.format(Locale.ROOT, QUERY_PATTERN, encodedQuery, API_KEY, INST_TOKEN, getCount());
-        return new URL(API_URL + queryString);
+        return new URI(API_URL + queryString).toURL();
     }
 
-    public List<String> resolveIDs() throws JDOMException, IOException, SAXException {
+    public List<String> resolveIDs() throws JDOMException, IOException, SAXException, URISyntaxException {
         Document response = new MCRURLContent(buildQueryURL()).asXML();
         return getEntryScopusIDs(response);
     }
