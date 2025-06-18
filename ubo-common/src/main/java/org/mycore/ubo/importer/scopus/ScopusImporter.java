@@ -15,7 +15,6 @@ import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRMailer;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.common.xml.MCRXMLFunctions;
@@ -24,14 +23,12 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mods.MCRMODSWrapper;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 import org.mycore.solr.MCRSolrUtils;
 import org.mycore.ubo.importer.ImportIdProvider;
 
 import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -104,7 +101,7 @@ class ScopusImporter {
     }
 
     private boolean isAlreadyStored(String scopusID) {
-        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+        SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
         SolrQuery query = new SolrQuery();
         query.setQuery(FIELD_TO_QUERY_ID + ":" + MCRSolrUtils.escapeSearchValue(scopusID));
         query.setRows(0);

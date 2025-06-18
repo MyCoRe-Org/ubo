@@ -1,14 +1,13 @@
 package org.mycore.ubo.ldap.picker;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.naming.OperationNotSupportedException;
-
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.ubo.local.LocalService;
 import org.mycore.ubo.picker.PersonSearchResult;
 import org.mycore.user2.MCRRealmFactory;
+
+import javax.naming.OperationNotSupportedException;
+import java.util.List;
+import java.util.Optional;
 
 public class LDAPWithLocalService extends LDAPService {
 

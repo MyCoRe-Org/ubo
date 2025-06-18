@@ -9,10 +9,6 @@
 
 package org.mycore.ubo;
 
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.URIResolver;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
@@ -20,6 +16,10 @@ import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRCache;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.xml.MCRURIResolver;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
 
 /**
  * Resolves XML content from a given URI and caches it for re-use.

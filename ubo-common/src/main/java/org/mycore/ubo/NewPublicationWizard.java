@@ -31,7 +31,7 @@ import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 import org.mycore.solr.MCRSolrUtils;
 import org.mycore.ubo.dedup.DeDupCriteriaBuilder;
 import org.mycore.ubo.dedup.DeDupCriterion;
@@ -152,7 +152,7 @@ public class NewPublicationWizard extends MCRServlet {
     }
 
     private boolean publicationMayAlreadyExist(String q) throws SolrServerException, IOException {
-        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+        SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
         SolrQuery query = new SolrQuery();
         query.setQuery(q);
         query.setRows(0);

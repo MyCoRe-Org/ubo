@@ -1,13 +1,5 @@
 package org.mycore.ubo.picker;
 
-import java.io.IOException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.xml.transform.TransformerException;
-
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,6 +14,13 @@ import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.services.i18n.MCRTranslation;
 import org.xml.sax.SAXException;
+
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.Optional;
 
 
 public class IdentityPicker extends MCRServlet {

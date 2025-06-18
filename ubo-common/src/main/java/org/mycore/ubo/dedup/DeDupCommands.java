@@ -9,16 +9,6 @@
 
 package org.mycore.ubo.dedup;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
@@ -29,6 +19,16 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.ubo.dedup.jpa.DeduplicationKeyManager;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class DeDupCommands {
 

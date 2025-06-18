@@ -9,29 +9,14 @@
 
 package org.mycore.ubo;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.zip.Deflater;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Attribute;
 import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.filter.Filters;
 import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.XMLReaders;
 import org.mycore.access.MCRAccessException;
@@ -55,11 +40,11 @@ import org.mycore.mods.MCRMODSCommands;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.ubo.importer.scopus.ScopusInitialImporter;
-import org.xml.sax.SAXException;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

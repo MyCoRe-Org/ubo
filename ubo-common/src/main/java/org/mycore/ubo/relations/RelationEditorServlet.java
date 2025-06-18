@@ -1,9 +1,5 @@
 package org.mycore.ubo.relations;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
@@ -25,6 +21,10 @@ import org.mycore.mods.merger.MCRMergeTool;
 import org.mycore.ubo.AccessControl;
 import org.mycore.ubo.DozBibEntryServlet;
 import org.mycore.ubo.dedup.jpa.DeduplicationKeyManager;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 public class RelationEditorServlet extends MCRServlet {
 

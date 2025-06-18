@@ -31,7 +31,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static org.mycore.common.MCRConstants.*;
+import static org.mycore.common.MCRConstants.XPATH_FACTORY;
 import static org.mycore.ubo.matcher.MCRUserMatcherUtils.MODS_NAMESPACE;
 
 /**

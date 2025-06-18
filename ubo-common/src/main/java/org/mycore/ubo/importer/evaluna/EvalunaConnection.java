@@ -9,10 +9,6 @@
 
 package org.mycore.ubo.importer.evaluna;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -31,6 +27,10 @@ import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.MCRStreamContent;
 import org.xml.sax.SAXException;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EvalunaConnection {
 

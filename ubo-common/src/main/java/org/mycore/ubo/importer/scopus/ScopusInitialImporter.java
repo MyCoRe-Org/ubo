@@ -1,17 +1,17 @@
 package org.mycore.ubo.importer.scopus;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.content.MCRURLContent;
 import org.xml.sax.SAXException;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ScopusInitialImporter {
 

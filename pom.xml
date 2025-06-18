@@ -46,12 +46,16 @@
     <bootstrap-select.version>1.13.18</bootstrap-select.version>
     <bootstrap.version>4.4.1</bootstrap.version>
     <font-awesome.version>5.13.0</font-awesome.version>
+    <httpclient.version>4.5.14</httpclient.version>
+    <httpcore.version>4.4.15</httpcore.version>
     <jakarta.xml.bind.version>3.0.1</jakarta.xml.bind.version>
     <java.target.version>17</java.target.version>
     <jquery.ui.version>1.13.2</jquery.ui.version>
     <jquery.version>3.5.1</jquery.version>
     <maven-dependency-plugin.version>3.5.0</maven-dependency-plugin.version>
-    <mycore.version>2023.06.3-SNAPSHOT</mycore.version>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+    <mycore.version>2024.06.1-SNAPSHOT</mycore.version>
     <node.version>v20.11.0</node.version>
     <pica2mods.version>2.12</pica2mods.version>
     <sortpom.sortDeps>scope,groupId,artifactId</sortpom.sortDeps>
@@ -263,7 +267,8 @@
                     <cargo.tomcat.uriencoding>UTF-8</cargo.tomcat.uriencoding>
                     <cargo.tomcat.connector.maxHttpHeaderSize>${cargo.tomcat.connector.maxHttpHeaderSize}</cargo.tomcat.connector.maxHttpHeaderSize>
                     <!-- fixes IIIF identifier encoding issues -->
-                    <cargo.start.jvmargs>-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true ${cargo.start.jvmargs}</cargo.start.jvmargs>
+                    <cargo.start.jvmargs>-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true
+                      ${cargo.start.jvmargs}</cargo.start.jvmargs>
                   </properties>
                 </configuration>
               </configuration>
@@ -310,7 +315,7 @@
       <dependency>
         <groupId>commons-codec</groupId>
         <artifactId>commons-codec</artifactId>
-        <version>1.10</version>
+        <version>1.18.0</version>
       </dependency>
       <dependency>
         <groupId>commons-discovery</groupId>
@@ -347,6 +352,16 @@
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-csv</artifactId>
         <version>1.5</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>${httpclient.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpcore</artifactId>
+        <version>${httpcore.version}</version>
       </dependency>
       <dependency>
         <groupId>org.mycore</groupId>

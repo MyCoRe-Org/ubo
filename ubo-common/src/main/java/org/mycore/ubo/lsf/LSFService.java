@@ -9,20 +9,6 @@
 
 package org.mycore.ubo.lsf;
 
-import java.io.StringReader;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.text.Normalizer;
-import java.text.Normalizer.Form;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -38,6 +24,20 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.mods.merger.MCRHyphenNormalizer;
 import org.mycore.ubo.picker.IdentityService;
 import org.mycore.ubo.picker.PersonSearchResult;
+
+import java.io.StringReader;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Implements a Web Services client for HIS LSF.
