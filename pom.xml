@@ -53,6 +53,7 @@
     <jquery.ui.version>1.13.2</jquery.ui.version>
     <jquery.version>3.5.1</jquery.version>
     <maven-dependency-plugin.version>3.5.0</maven-dependency-plugin.version>
+    <maven.compiler.release>21</maven.compiler.release>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
     <mycore.version>2024.06.1-SNAPSHOT</mycore.version>
