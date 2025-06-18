@@ -9,11 +9,6 @@
 
 package org.mycore.ubo;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
@@ -34,8 +29,13 @@ import org.mycore.parsers.bool.MCRSetCondition;
 import org.mycore.services.fieldquery.MCRQuery;
 import org.mycore.services.fieldquery.MCRQueryCondition;
 import org.mycore.services.fieldquery.MCRQueryParser;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 import org.mycore.solr.search.MCRSolrSearchUtils;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class DozBibServlet extends MCRServlet {
 
@@ -89,7 +89,7 @@ public class DozBibServlet extends MCRServlet {
 
         SolrQuery solrQuery = MCRSolrSearchUtils.getSolrQuery(q, doc, req);
         solrQuery.setRows(0);
-        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+        SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
         SolrDocumentList results = solrClient.query(solrQuery).getResults();
         long numFound = results.getNumFound();
 

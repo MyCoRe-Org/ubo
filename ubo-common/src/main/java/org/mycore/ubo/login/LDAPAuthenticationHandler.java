@@ -1,12 +1,5 @@
 package org.mycore.ubo.login;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.SortedSet;
-
-import javax.naming.NamingException;
-import javax.naming.ldap.LdapContext;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration2;
@@ -20,6 +13,12 @@ import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUser2Constants;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
+
+import javax.naming.NamingException;
+import javax.naming.ldap.LdapContext;
+import java.util.List;
+import java.util.Locale;
+import java.util.SortedSet;
 
 /**
  * Checks the given user ID and password combination against remote LDAP server

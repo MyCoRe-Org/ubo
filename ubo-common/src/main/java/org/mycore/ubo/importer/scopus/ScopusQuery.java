@@ -1,5 +1,10 @@
 package org.mycore.ubo.importer.scopus;
 
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.mycore.common.content.MCRURLContent;
+import org.xml.sax.SAXException;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -7,11 +12,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
-
-import org.jdom2.Document;
-import org.jdom2.JDOMException;
-import org.mycore.common.content.MCRURLContent;
-import org.xml.sax.SAXException;
 
 public class ScopusQuery extends AbstractScopusQuery{
 

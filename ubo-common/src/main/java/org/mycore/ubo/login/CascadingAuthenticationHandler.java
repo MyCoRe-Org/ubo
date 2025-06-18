@@ -1,10 +1,10 @@
 package org.mycore.ubo.login;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.user2.MCRUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Checks the given user ID and password combination against multiple other

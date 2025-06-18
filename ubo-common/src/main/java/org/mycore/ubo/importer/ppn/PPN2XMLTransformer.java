@@ -9,14 +9,14 @@
 
 package org.mycore.ubo.importer.ppn;
 
-import java.io.IOException;
-import java.util.Arrays;
-
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRContentTransformer;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 public class PPN2XMLTransformer extends MCRContentTransformer {
 

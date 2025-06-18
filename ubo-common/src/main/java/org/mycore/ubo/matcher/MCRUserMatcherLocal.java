@@ -1,13 +1,5 @@
 package org.mycore.ubo.matcher;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
@@ -18,6 +10,14 @@ import org.mycore.mods.merger.MCRMergerFactory;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserManager;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Given a MCRUser, match against the local MCRUsers, returning the given User or an existing local one if matched.

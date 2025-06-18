@@ -32,7 +32,7 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mods.enrichment.MCREnricher;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 import org.mycore.solr.MCRSolrUtils;
 import org.xml.sax.SAXException;
 
@@ -229,7 +229,7 @@ public abstract class ImportJob {
     private static final int SECONDS_TO_WAIT_BETWEEN_SOLR_CHECKS = 2;
 
     private void tryToWaitUntilSolrIndexingFinished() {
-        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+        SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
         SolrQuery query = new SolrQuery();
         query.setQuery(getQueryString());
         query.setRows(0);
