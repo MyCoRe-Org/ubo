@@ -86,7 +86,7 @@ public class MODSPersonLookupTest extends MCRTestCase {
 
         MODSPersonLookup.add(person1);
 
-        URL url2 = MCRObjectMetadataTest.class.getResource("/MODSPersonLookupTest/junit_mods_00000013.xml");
+        URL url2 = MCRObjectMetadataTest.class.getResource("/MODSPersonLookupTest/junit_mods_00000009.xml");
         Document doc2 = new MCRURLContent(url2).asXML();
         MCRObject obj1 = new MCRObject(doc2);
 

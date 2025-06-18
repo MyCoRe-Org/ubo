@@ -5,13 +5,12 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.junit.Before;
 import org.junit.Test;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
-import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRStoreTestCase;
 import org.mycore.common.content.MCRURLContent;
-import org.mycore.datamodel.ifs2.MCRStore;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -26,6 +25,14 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class MODSPersonLinkingEventHandlerTest extends MCRStoreTestCase {
+
+    private MODSPersonLinkingEventHandler handler;
+
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        handler = new MODSPersonLinkingEventHandler();
+    }
 
     /**
      * Tests that for three similar but not identical person objects, three different modsperson objects are created.
@@ -53,6 +60,10 @@ public class MODSPersonLinkingEventHandlerTest extends MCRStoreTestCase {
         MCRMetadataManager.create(obj1);
         MCRMetadataManager.create(obj2);
         MCRMetadataManager.create(obj3);
+
+        handler.handleObjectCreated(null, obj1);
+        handler.handleObjectCreated(null, obj2);
+        handler.handleObjectCreated(null, obj3);
 
         List<String> modspersons = MCRCommandUtils.getIdsForType("modsperson").toList();
         assertEquals(3, modspersons.size());
@@ -94,6 +105,9 @@ public class MODSPersonLinkingEventHandlerTest extends MCRStoreTestCase {
 
         MCRMetadataManager.create(obj1);
         MCRMetadataManager.create(obj2);
+
+        handler.handleObjectCreated(null, obj1);
+        handler.handleObjectCreated(null, obj2);
 
         List<String> modspersons = MCRCommandUtils.getIdsForType("modsperson").toList();
         assertEquals(1, modspersons.size());
@@ -139,6 +153,10 @@ public class MODSPersonLinkingEventHandlerTest extends MCRStoreTestCase {
         MCRMetadataManager.create(obj1);
         MCRMetadataManager.create(obj2);
         MCRMetadataManager.create(obj3);
+
+        handler.handleObjectCreated(null, obj1);
+        handler.handleObjectCreated(null, obj2);
+        handler.handleObjectCreated(null, obj3);
 
         List<String> modspersons = MCRCommandUtils.getIdsForType("modsperson").toList();
         assertEquals(2, modspersons.size());
