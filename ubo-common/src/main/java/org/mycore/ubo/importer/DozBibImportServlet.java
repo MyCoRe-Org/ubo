@@ -82,6 +82,9 @@ public class DozBibImportServlet extends MCRServlet {
             }
         }
 
+        // genre present after enrichment
+        importJob.setFixedGenre(formInput);
+
         String targetType = formInput.getAttributeValue("targetType");
         if (targetType.startsWith("preview")) {
             doPreview(req, res, importJob, targetType);

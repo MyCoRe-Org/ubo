@@ -64,20 +64,22 @@
 <!-- ============ Struktur-Ausgabe ============ -->
 
   <xsl:template match="mycoreobject">
-
+    <xsl:variable name="id" select="@ID"/>
     <xsl:apply-templates select="structure/parents/parent" />
 
     <xsl:if test="not(structure/parents/parent)">
       <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host'][not(@xlink:href)]">
-        <xsl:apply-templates select="mods:extension[dedup]">
+        <xsl:call-template name="duplicates">
+          <xsl:with-param name="id" select="$id"/>
           <xsl:with-param name="from">host</xsl:with-param>
-        </xsl:apply-templates>
+        </xsl:call-template>
       </xsl:for-each>
     </xsl:if>
 
-    <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods/mods:extension[dedup]">
+    <xsl:call-template name="duplicates">
+      <xsl:with-param name="id" select="$id"/>
       <xsl:with-param name="from">base</xsl:with-param>
-    </xsl:apply-templates>
+    </xsl:call-template>
 
     <xsl:apply-templates select="." mode="pub-info">
       <xsl:with-param name="role">base</xsl:with-param>
@@ -93,9 +95,10 @@
 
     <xsl:for-each select="document(concat('notnull:mcrobject:',$id))">
       <xsl:for-each select="mycoreobject">
-        <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods/mods:extension[dedup]">
+        <xsl:call-template name="duplicates">
+          <xsl:with-param name="id" select="$id"/>
           <xsl:with-param name="from">parent</xsl:with-param>
-        </xsl:apply-templates>
+        </xsl:call-template>
         <xsl:apply-templates select="." mode="pub-info">
           <xsl:with-param name="role">parent</xsl:with-param>
         </xsl:apply-templates>
@@ -165,26 +168,22 @@
     </div>
   </xsl:template>
 
-  <xsl:template match="mods:extension[dedup]">
-    <xsl:param name="from" />
 
-    <xsl:variable name="myID" select="ancestor::mycoreobject/@ID" />
+    <xsl:template name="duplicates">
+        <xsl:param name="from"/>
+        <xsl:param name="id"/>
 
-    <xsl:variable name="duplicatesURI">
-      <xsl:text>notnull:</xsl:text>
-      <xsl:call-template name="buildFindDuplicatesURI" />
-      <xsl:value-of select="concat('+AND+-id%3A',$myID,'&amp;sort=id+desc')" />
-    </xsl:variable>
+        <xsl:variable name="duplicates" select="document(concat('dedup:search:', $from ,':', $id))"/>
 
-    <xsl:for-each select="document($duplicatesURI)/response/result[@name='response']/doc">
-      <xsl:apply-templates select="document(concat('mcrobject:',str[@name='id']))/mycoreobject" mode="pub-info">
-        <xsl:with-param name="role">duplicate</xsl:with-param>
-        <xsl:with-param name="from" select="$from" />
-        <xsl:with-param name="duplicateOfID" select="$myID" />
-      </xsl:apply-templates>
-    </xsl:for-each>
+        <xsl:for-each select="document($duplicates)/result/duplicate">
+            <xsl:apply-templates select="document(concat('mcrobject:',@id))/mycoreobject" mode="pub-info">
+                <xsl:with-param name="role">duplicate</xsl:with-param>
+                <xsl:with-param name="from" select="$from"/>
+                <xsl:with-param name="duplicateOfID" select="$id"/>
+            </xsl:apply-templates>
+        </xsl:for-each>
 
-  </xsl:template>
+    </xsl:template>
 
   <xsl:template name="countOrphans">
     <xsl:if test="not(//mods:mods/mods:relatedItem[@type='host'])">
@@ -412,6 +411,18 @@
           <xsl:with-param name="text" >
             <xsl:value-of select="concat(i18n:translate('structure.editor.extractHost'), '{id=',@ID,'}', i18n:translate('structure.editor.extractHostLink'))" />
           </xsl:with-param> 
+        </xsl:call-template>
+        <xsl:call-template name="button-with-confirm-dialog">
+          <xsl:with-param name="if" select="($role='duplicate') and (($from='parent') or ($from='base'))" />
+          <xsl:with-param name="action" select="'markAsFalseDuplicate'" />
+          <xsl:with-param name="icon" select="'not-equal'" />
+          <xsl:with-param name="button">
+            <xsl:value-of select="i18n:translate('button.markAsFalseDuplicate')"/>
+          </xsl:with-param>
+          <xsl:with-param name="text">
+            <xsl:value-of select="concat(i18n:translate('structure.editor.markAsFalseDuplicate'), '{id=',@ID,'}', i18n:translate('structure.editor.markAsFalseDuplicateOf') , '{duplicateOf=',$duplicateOfID,'}', i18n:translate('structure.editor.markAsFalseDuplicateQMark'))" />
+          </xsl:with-param>
+          <xsl:with-param name="preview" select="false()" />
         </xsl:call-template>
         <xsl:call-template name="button-with-confirm-dialog">
           <xsl:with-param name="if" select="($role='duplicate') and (($from='parent') or ($from='base'))" />

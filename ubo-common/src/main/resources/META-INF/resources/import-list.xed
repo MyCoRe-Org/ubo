@@ -82,6 +82,20 @@
               </div>
             </xed:bind>
 
+            <xed:bind xpath="ubogenre">
+              <div class="form-group form-inline ubo-import-list-select-ubogenre">
+                <label for="{generate-id()}" class="mycore-form-label text-nowrap">
+                  <xed:output i18n="ubo.genre" />:
+                </label>
+                <select id="{generate-id()}" class="{$xed-validation-marker}  mycore-form-input form-control custom-select">
+                  <option value="">
+                    <xed:output i18n="search.select"/>
+                  </option>
+                  <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:ubogenre" />
+                </select>
+              </div>
+            </xed:bind>
+
             <hr/>
 
             <xed:repeat xpath="subject" max="5">

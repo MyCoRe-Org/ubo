@@ -177,8 +177,6 @@ function setDockerValues() {
     esac
 
     mkdir -p "${MCR_CONFIG_DIR}lib"
-
-    downloadDriver https://repo1.maven.org/maven2/com/zaxxer/HikariCP/5.1.0/HikariCP-5.1.0.jar
 }
 
 function setUpMyCoRe {

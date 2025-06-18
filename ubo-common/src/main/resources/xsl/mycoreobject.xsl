@@ -32,6 +32,7 @@
 <!-- ============ Bearbeitungsrechte ========== -->
 
 <xsl:variable name="permission.admin" xmlns:check="xalan://org.mycore.ubo.AccessControl" select="check:currentUserIsAdmin()" />
+<xsl:variable name="permission.isSuperuser" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" select="mcrxml:isCurrentUserSuperUser()" />
 
 <!-- ============ Seitentitel ============ -->
 
@@ -97,6 +98,11 @@
         <a class="action btn btn-sm btn-outline-primary mb-1"
            href="{$WebApplicationBaseURL}servlets/MCRLockServlet?url=../edit-admin.xed&amp;id={/mycoreobject/@ID}">Admin
         </a>
+        <xsl:if test="$permission.isSuperuser">
+          <a class="action btn btn-sm btn-outline-primary mb-1"
+             href="{$WebApplicationBaseURL}modules/webtools/texteditor/objects/{/mycoreobject/@ID}">XML
+          </a>
+        </xsl:if>
         <a class="action btn btn-sm btn-outline-primary mb-1"
            href="{$WebApplicationBaseURL}servlets/MCRLockServlet?url=../edit-mods.xed&amp;id={/mycoreobject/@ID}">MODS
         </a>
@@ -193,6 +199,7 @@
           <div class="col">
             <xsl:call-template name="label-year" />
             <xsl:call-template name="pubtype" />
+            <xsl:call-template name="label-kdsf-pub-doc-type" />
             <xsl:call-template name="label-oa" />
             <xsl:call-template name="orcid-status" />
           </div>
@@ -214,7 +221,7 @@
           <div class="col">
             <xsl:apply-templates select="/mycoreobject/service/servflags/servflag[@type='status']" />
             <xsl:call-template name="printRelatedItem" />
-            <xsl:if test="$permission.admin and mods:extension[dedup]">
+            <xsl:if test="$permission.admin">
               <xsl:call-template name="linkToDuplicates" />
             </xsl:if>
           </div>
@@ -267,16 +274,9 @@
 <!-- ============ Dubletten suchen ============ -->
 
 <xsl:template name="linkToDuplicates">
+  <xsl:variable name="duplicates" select="document(concat('dedup:search:base:', /mycoreobject/@ID))"/>
 
-  <xsl:variable name="duplicatesURI">
-    <xsl:text>notnull:</xsl:text>
-    <xsl:for-each select="mods:extension[dedup][1]">
-      <xsl:call-template name="buildFindDuplicatesURI" />
-    </xsl:for-each>
-    <xsl:value-of select="concat('+AND+-id%3A',/mycoreobject/@ID)" />
-  </xsl:variable>
-
-  <xsl:variable name="numDuplicates" select="count(document($duplicatesURI)/response/result[@name='response']/doc)" />
+  <xsl:variable name="numDuplicates" select="count(document($duplicates)/result/duplicate)" />
   
   <xsl:if test="$numDuplicates &gt; 0">
     <span class="badge badge-alternative ml-1 mr-1">

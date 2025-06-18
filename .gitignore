@@ -8,3 +8,4 @@ pom.xml.bak
 */target/
 .DS_Store
 /docker/
+/ubo-common/src/main/vue/dedup/.vscode/

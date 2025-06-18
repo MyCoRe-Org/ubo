@@ -9,13 +9,6 @@
 
 package org.mycore.ubo;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,6 +35,16 @@ import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.MCRSolrUtils;
 import org.mycore.ubo.dedup.DeDupCriteriaBuilder;
 import org.mycore.ubo.dedup.DeDupCriterion;
+import org.mycore.ubo.dedup.jpa.DeduplicationKey;
+import org.mycore.ubo.dedup.jpa.DeduplicationKeyManager;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("serial")
 public class NewPublicationWizard extends MCRServlet {
@@ -122,8 +125,19 @@ public class NewPublicationWizard extends MCRServlet {
         StringBuilder query = new StringBuilder("objectType:mods AND (");
 
         Set<DeDupCriterion> criteria = new DeDupCriteriaBuilder().buildFromMODS(mods);
-        for (DeDupCriterion criterion : criteria) {
-            query.append("dedup:").append(MCRSolrUtils.escapeSearchValue(criterion.getKey())).append(" OR ");
+
+        String[] keys = criteria.stream().map(DeDupCriterion::getKey).toArray(String[]::new);
+        List<DeduplicationKey> duplicates = DeduplicationKeyManager.getInstance().getDuplicates(keys);
+
+        if (!duplicates.isEmpty()) {
+            String ids = duplicates.stream()
+                    .map(DeduplicationKey::getMcrId)
+                    .distinct()
+                    .map(MCRSolrUtils::escapeSearchValue)
+                    .map(s -> "\"" + s + "\"")
+                    .limit(10) // limit to 10 ids to avoid long queries
+                    .collect(Collectors.joining(" OR "));
+            query.append("id:(").append(ids).append(") OR ");
         }
 
         query.append("(title:\"")

@@ -68,6 +68,26 @@
     </span>
   </xsl:template>
 
+  <xsl:template name="label-kdsf-pub-doc-type">
+    <xsl:if test="check:currentUserIsAdmin()">
+      <xsl:variable name="kdsf-pubtype" select="mods:classification[@generator='xpathmapping2kdsfPublicationType-mycore']"/>
+      <xsl:for-each select="$kdsf-pubtype">
+        <span class="label-info badge badge-warning text-white mr-1" title="{i18n:translate('ubo.publication.type.kdsf')}">
+          <xsl:variable name="categid" select="substring-after(@valueURI, '#')"/>
+          <xsl:value-of select="mcrxsl:getDisplayName('kdsfPublicationType', $categid)"/>
+        </span>
+      </xsl:for-each>
+
+      <xsl:variable name="kdsf-doctype" select="mods:classification[@generator='xpathmapping2kdsfDocumentType-mycore']"/>
+      <xsl:for-each select="$kdsf-doctype">
+        <span class="label-info badge badge-info text-white mr-1" title="{i18n:translate('ubo.document.type.kdsf')}">
+          <xsl:variable name="categid" select="substring-after(@valueURI, '#')"/>
+          <xsl:value-of select="mcrxsl:getDisplayName('kdsfDocumentType', $categid)"/>
+        </span>
+      </xsl:for-each>
+    </xsl:if>
+  </xsl:template>
+
   <!-- ============ Ausgabe Fach ============ -->
 
   <xsl:template match="mods:mods/mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info">
@@ -493,7 +513,7 @@
 
     <!-- journal article without volume: display year directly behind title, otherwise later behind volume number -->
     <xsl:if test="(substring-after(mods:genre[@type='intern']/@valueURI, '#') = 'journal') and not(mods:part/mods:detail[@type='volume']/mods:number)">
-      <xsl:for-each select="ancestor::mods:mods/descendant::mods:dateIssued[1]">
+      <xsl:for-each select="ancestor::mods:mods/mods:originInfo/mods:dateIssued[1]">
         <xsl:value-of select="concat(' (',.,')')" />
       </xsl:for-each>
     </xsl:if>

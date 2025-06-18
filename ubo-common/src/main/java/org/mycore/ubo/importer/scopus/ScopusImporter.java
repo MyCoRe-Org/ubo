@@ -26,6 +26,7 @@ import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.MCRSolrUtils;
+import org.mycore.ubo.importer.ImportIdProvider;
 
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
@@ -72,6 +73,14 @@ class ScopusImporter {
         MAIL_XSL = MCRConfiguration2.getString(prefix + "XSL").get();
     }
 
+
+    protected final ImportIdProvider importIdProvider;
+
+    public ScopusImporter() {
+        String className = MCRConfiguration2.getStringOrThrow("UBO.Importer.ImportIdProvider.Scopus");
+        importIdProvider = MCRConfiguration2.instantiateClass(className);
+    }
+
     public MCRObject doImport(String scopusID) throws MCRPersistenceException, MCRAccessException {
         if (isAlreadyStored(scopusID)) {
             LOGGER.info("publication with ID {} already existing, will not import.", scopusID);
@@ -115,15 +124,13 @@ class ScopusImporter {
         return !publication.getDescendants(new ElementFilter("genre", MCRConstants.MODS_NAMESPACE)).hasNext();
     }
 
-    private final static SimpleDateFormat ID_BUILDER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT);
-
     private MCRObject buildMCRObject(Element publicationXML) {
         setPreconfiguredClasses(publicationXML);
 
         MCRObject obj = new MCRObject(new Document(publicationXML));
         MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
         wrapper.setServiceFlag("status", STATUS);
-        wrapper.setServiceFlag("importID","SCOPUS-" + getImportID());
+        wrapper.setServiceFlag("importID", importIdProvider.getImportId());
         MCRObjectID oid = MCRMetadataManager.getMCRObjectIDGenerator().getNextFreeId(PROJECT_ID, "mods");
         obj.setId(oid);
         return obj;
@@ -149,10 +156,6 @@ class ScopusImporter {
                 }
             }
         });
-    }
-
-    private String getImportID() {
-        return ID_BUILDER.format(new Date(MCRSessionMgr.getCurrentSession().getLoginTime()));
     }
 
     public void sendNotification() throws Exception {

@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.mycore</groupId>
     <artifactId>mycore-parent</artifactId>
-    <version>53</version>
+    <version>57-SNAPSHOT</version>
   </parent>
 
   <groupId>org.mycore.ubo</groupId>
@@ -50,15 +50,16 @@
     <java.target.version>17</java.target.version>
     <jquery.ui.version>1.13.2</jquery.ui.version>
     <jquery.version>3.5.1</jquery.version>
+    <maven-dependency-plugin.version>3.5.0</maven-dependency-plugin.version>
     <mycore.version>2023.06.3-SNAPSHOT</mycore.version>
-    <node.version>v16.0.0</node.version>
+    <node.version>v20.11.0</node.version>
     <pica2mods.version>2.11</pica2mods.version>
     <sortpom.sortDeps>scope,groupId,artifactId</sortpom.sortDeps>
     <sortpom.sortFile>https://gist.githubusercontent.com/yagee-de/dfd3698c1b49173dbf251f74eb6a9297/raw/406460c088ff3cb6354e4ae6b40535e6f841607d/mycore_sort.xml</sortpom.sortFile>
     <sortpom.sortProps>true</sortpom.sortProps>
     <timestamp>${maven.build.timestamp}</timestamp>
     <tomcat.version>10.1.11</tomcat.version>
-    <yarn.version>v1.22.10</yarn.version>
+    <yarn.version>v1.22.19</yarn.version>
   </properties>
 
   <build>
@@ -115,8 +116,9 @@
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <id>central-portal-snapshots</id>
+      <name>Central Portal Snapshots</name>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
     </repository>
   </repositories>
 
@@ -270,7 +272,25 @@
         </pluginManagement>
       </build>
     </profile>
-
+    <profile>
+      <id>deploy-to-sonatype</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.7.0</version>
+            <extensions>true</extensions>
+            <configuration>
+              <centralSnapshotsUrl>https://central.sonatype.com/repository/maven-snapshots</centralSnapshotsUrl>
+              <publishingServerId>sonatype-central</publishingServerId>
+              <autoPublish>true</autoPublish>
+              <waitUntil>published</waitUntil>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 
   <dependencyManagement>
