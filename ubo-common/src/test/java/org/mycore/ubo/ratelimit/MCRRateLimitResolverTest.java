@@ -48,7 +48,7 @@ public class MCRRateLimitResolverTest extends MCRTestCase {
         MCRConfiguration2.set("MCR.RateLimitResolver.Test.Limits", "100/D, 12/h, 6/min");
         final Bucket bucket = MCRRateLimitBuckets.getOrCreateBucket("Test");
         bucket.tryConsumeAsMuchAsPossible();
-        Assert.assertThrows(MCRException.class, () -> MCRURIResolver.instance().resolve(RATE_LIMIT_CALL, null));
+        Assert.assertThrows(MCRException.class, () -> MCRURIResolver.obtainInstance().resolve(RATE_LIMIT_CALL, null));
     }
 
     /**
@@ -60,7 +60,7 @@ public class MCRRateLimitResolverTest extends MCRTestCase {
         MCRConfiguration2.set("MCR.RateLimitResolver.Test.Limits", "10/s");
         final Bucket bucket = MCRRateLimitBuckets.getOrCreateBucket("Test");
         bucket.tryConsumeAsMuchAsPossible();
-        MCRURIResolver.instance().resolve(RATE_LIMIT_CALL, null);
+        MCRURIResolver.obtainInstance().resolve(RATE_LIMIT_CALL, null);
     }
 
     /**
@@ -73,7 +73,7 @@ public class MCRRateLimitResolverTest extends MCRTestCase {
         MCRConfiguration2.set("MCR.RateLimitResolver.Test.Limits", "10/min");
         final Bucket bucket = MCRRateLimitBuckets.getOrCreateBucket("Test");
         bucket.tryConsumeAsMuchAsPossible();
-        Source emptySource = MCRURIResolver.instance().resolve(RATE_LIMIT_CALL, null);
+        Source emptySource = MCRURIResolver.obtainInstance().resolve(RATE_LIMIT_CALL, null);
         Assert.assertNotNull(emptySource);
         Assert.assertFalse(emptySource.isEmpty());
         Assert.assertEquals("", emptySource.getSystemId());
@@ -86,7 +86,7 @@ public class MCRRateLimitResolverTest extends MCRTestCase {
     public void testResolveFactoredUnit() throws TransformerException {
         MCRConfiguration2.set("MCR.RateLimitResolver.Test.Behavior", "error");
         MCRConfiguration2.set("MCR.RateLimitResolver.Test.Limits", "100/5m");
-        MCRURIResolver.instance().resolve(RATE_LIMIT_CALL, null);
+        MCRURIResolver.obtainInstance().resolve(RATE_LIMIT_CALL, null);
     }
 
     /**
@@ -100,7 +100,7 @@ public class MCRRateLimitResolverTest extends MCRTestCase {
         MCRConfiguration2.set("MCR.RateLimitResolver.Test.Limits", "10/s");
 
         MCRConfigurationException mcrConfigurationException = Assert.assertThrows(MCRConfigurationException.class,
-            () -> MCRURIResolver.instance().resolve(RATE_LIMIT_CALL, null));
+            () -> MCRURIResolver.obtainInstance().resolve(RATE_LIMIT_CALL, null));
 
         assertTrue(mcrConfigurationException.getMessage()
             .contains("The behavior for ID Test is not correctly configured"));

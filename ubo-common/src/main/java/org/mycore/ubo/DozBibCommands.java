@@ -48,6 +48,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -157,7 +158,7 @@ public class DozBibCommands extends MCRAbstractCommands {
         zip.putNextEntry(ze);
 
         LOGGER.info("Collecting object IDs...");
-        List<String> oids = MCRXMLMetadataManager.instance().listIDsOfType("mods");
+        List<String> oids = MCRXMLMetadataManager.getInstance().listIDsOfType("mods");
 
         LOGGER.info("Collecting all entries...");
         Element collection = new Element("modsCollection", MCRConstants.MODS_NAMESPACE);
@@ -185,7 +186,7 @@ public class DozBibCommands extends MCRAbstractCommands {
     /** Transforms existing entries using XSL stylesheet **/
     public static List<String> transformEntries(String xslFile) throws Exception {
         List<String> commands = new ArrayList<String>();
-        for (String oid : MCRXMLMetadataManager.instance().listIDsOfType("mods")) {
+        for (String oid : MCRXMLMetadataManager.getInstance().listIDsOfType("mods")) {
             commands.add("xslt " + oid + " with file " + xslFile);
         }
         return commands;
@@ -306,6 +307,7 @@ public class DozBibCommands extends MCRAbstractCommands {
      * @param arguments a comma-separated list of arguments
      * */
     public static String translate(String i18n, String arguments) {
-        return MCRTranslation.translateToLocale(i18n, MCRTranslation.getCurrentLocale(), arguments.split(","));
+        return MCRTranslation.translateToLocale(i18n, MCRTranslation.getCurrentLocale(),
+            Arrays.stream(arguments.split(",")).toArray());
     }
 }

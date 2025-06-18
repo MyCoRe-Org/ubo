@@ -38,7 +38,7 @@ public class ParentChildRelationChecker {
         help = "Checks parent-child relations in both structure and relatedItem[@type='host'], repair=[true|false]",
         order = 1)
     public static void checkAllRelations(String sRepair) {
-        for (String id : MCRXMLMetadataManager.instance().listIDs()) {
+        for (String id : MCRXMLMetadataManager.getInstance().listIDs()) {
             checkRelations(id, sRepair);
         }
     }

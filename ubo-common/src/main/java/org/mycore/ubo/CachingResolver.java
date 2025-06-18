@@ -54,7 +54,7 @@ public class CachingResolver implements URIResolver {
 
         if (resolvedXML == null) {
             LOGGER.debug(href + " not in cache, must resolve");
-            resolvedXML = MCRURIResolver.instance().resolve(href);
+            resolvedXML = MCRURIResolver.obtainInstance().resolve(href);
             cache.put(href, resolvedXML);
         } else
             LOGGER.debug(href + " already in cache");

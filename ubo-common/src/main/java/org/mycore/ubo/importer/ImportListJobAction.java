@@ -6,7 +6,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;
 import org.mycore.common.MCRMailer;
-import org.mycore.common.MCRTransactionHelper;
+import org.mycore.common.MCRTransactionManager;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.services.i18n.MCRTranslation;
@@ -74,7 +74,7 @@ public class ImportListJobAction extends MCRJobAction {
                 sendMail(importJob);
             } catch (Exception e) {
                 LOGGER.error("Error while saving publications", e);
-                MCRTransactionHelper.rollbackTransaction();
+                MCRTransactionManager.rollbackTransactions();
             }
         } catch (Exception e) {
             LOGGER.error("Could not transform form input", e);

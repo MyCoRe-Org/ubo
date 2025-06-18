@@ -137,7 +137,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     @Override
     protected void handleObjectRepaired(MCREvent evt, MCRObject obj) {
         handlePublication(obj);
-        MCRXMLMetadataManager.instance().update(obj.getId(), obj.createXML(), new Date());
+        MCRXMLMetadataManager.getInstance().update(obj.getId(), obj.createXML(), new Date());
     }
 
     protected void handlePublication(MCRObject obj) {

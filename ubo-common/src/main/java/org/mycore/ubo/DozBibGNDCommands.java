@@ -177,8 +177,8 @@ public class DozBibGNDCommands {
     private void readPublications() throws IOException, JDOMException, SAXException, Exception {
         LOGGER.info("Reading in all publications...");
 
-        for (String oid : MCRXMLMetadataManager.instance().listIDsOfType("mods")) {
-            Element publication = MCRURIResolver.instance().resolve("mcrobject:" + oid);
+        for (String oid : MCRXMLMetadataManager.getInstance().listIDsOfType("mods")) {
+            Element publication = MCRURIResolver.obtainInstance().resolve("mcrobject:" + oid);
             publications.add(publication);
         }
     }
@@ -333,7 +333,7 @@ public class DozBibGNDCommands {
 
         String url = XSERVER_BASE + opWithParameters;
         LOGGER.debug(url);
-        return MCRURIResolver.instance().resolve(url);
+        return MCRURIResolver.obtainInstance().resolve(url);
     }
 
     private boolean isPersonField(Element varfield) {
