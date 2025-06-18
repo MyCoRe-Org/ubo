@@ -20,7 +20,7 @@ import org.jdom2.filter.Filters;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.common.MCRTransactionHelper;
+import org.mycore.common.MCRTransactionManager;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
@@ -216,7 +216,7 @@ public abstract class ImportJob {
 
     public void saveAndIndex() throws MCRAccessException {
         savePublications();
-        MCRTransactionHelper.commitTransaction();
+        MCRTransactionManager.commitTransactions();
         tryToWaitUntilSolrIndexingFinished();
     }
 

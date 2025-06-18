@@ -121,7 +121,7 @@ class ScopusImporter {
 
     private Element retrieveAndConvertPublication(String externalID) {
         String uri = new MessageFormat(IMPORT_URI, Locale.ROOT).format(new Object[] { externalID });
-        return MCRURIResolver.instance().resolve(uri);
+        return MCRURIResolver.obtainInstance().resolve(uri);
     }
 
     /** If mods:genre was not mapped by conversion/import function, ignore this publication and do not import */

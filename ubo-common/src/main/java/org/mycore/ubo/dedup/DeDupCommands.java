@@ -41,7 +41,7 @@ public class DeDupCommands {
         DeDupCriteriaBuilder builder = new DeDupCriteriaBuilder();
         int numEntries = 0;
 
-        for (String id : MCRXMLMetadataManager.instance().listIDsOfType("mods")) {
+        for (String id : MCRXMLMetadataManager.getInstance().listIDsOfType("mods")) {
             try {
                 MCRObject obj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(id));
                 Element mods = new MCRMODSWrapper(obj).getMODS();

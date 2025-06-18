@@ -64,7 +64,7 @@ public class NewPublicationWizard extends MCRServlet {
                 if (hasEmptyTitle()) {
                     job.getRequest().setAttribute("XSL.Style", "wizard-notfound");
                     Element mods = getMODSfromSession();
-                    MCRLayoutService.instance().doLayout(job.getRequest(), job.getResponse(), new MCRJDOMContent(mods));
+                    MCRLayoutService.obtainInstance().doLayout(job.getRequest(), job.getResponse(), new MCRJDOMContent(mods));
                     return;
                 }
             }
@@ -92,7 +92,7 @@ public class NewPublicationWizard extends MCRServlet {
         Element mods = getMODSfromSession();
         mods.removeChildren("titleInfo", MCRConstants.MODS_NAMESPACE);
         mods.removeChildren("name", MCRConstants.MODS_NAMESPACE);
-        mods = MCRURIResolver.instance().resolve("xslStyle:" + FILTER_SUPPORTED + ":enrich:import:session:" + sessionKey);
+        mods = MCRURIResolver.obtainInstance().resolve("xslStyle:" + FILTER_SUPPORTED + ":enrich:import:session:" + sessionKey);
         MCRSessionMgr.getCurrentSession().put(sessionKey, mods);
     }
 

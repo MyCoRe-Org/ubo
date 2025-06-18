@@ -72,7 +72,7 @@ public class UBOExportResource {
 
         List<CSLEntry> result = new ArrayList<>(styles.length);
         for (String style : styles) {
-            Element element = MCRURIResolver.instance().resolve("resource:" + style + ".csl");
+            Element element = MCRURIResolver.obtainInstance().resolve("resource:" + style + ".csl");
 
             String title = Optional.ofNullable(element.getChild("info", CSL_NAMESPACE))
                 .map(el -> Optional.ofNullable(el.getChild("title", CSL_NAMESPACE)))
