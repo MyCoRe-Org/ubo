@@ -8,6 +8,7 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +36,7 @@ abstract class AbstractScopusQuery {
     AbstractScopusQuery(){
     }
 
-    public abstract List<String> resolveIDs() throws JDOMException,IOException,SAXException;
+    public abstract List<String> resolveIDs() throws JDOMException, IOException, SAXException, URISyntaxException;
 
 
     protected List<String> getEntryScopusIDs(Document response) {
