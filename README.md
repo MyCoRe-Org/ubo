@@ -3,7 +3,7 @@
 ## Setup
 
 ### Checkout source code from GitHub
-```git clone https://github.com/MyCoRe-Org/ubo.git```
+`git clone git@github.com:MyCoRe-Org/ubo.git`
 
 ### Build the web application
 `mvn install`
@@ -13,21 +13,26 @@
 ubo-cli/target/bin/ubo.sh create configuration directory
 ```
 
-- TODO: Build a database and edit persistence.xml
+- TODO: Create a database and edit mycore.properties
 - For example, in MySQL, do
 ```
 CREATE DATABASE ubo;
 GRANT ALL PRIVELEGES ON ubo.* to ubo@localhost IDENTIFIED BY 'ubo';
 ```
-- setup your database and JDBC configuration in persistence.xml, update mappings with:
-
+- setup your database and JDBC configuration in `mycore.properties`
 ```
+MCR.JPA.Driver  = org.h2.Driver
+MCR.JPA.URL     = jdbc:h2:file:/path/to/configuration/.mycore/ubo/data/h2/mir;AUTO_SERVER=TRUE"
+MCR.JPA.dialect = org.hibernate.dialect.H2Dialect
+```
+
 - copy jdbc driver to ~/.mycore/ubo/lib, eg. for h2
 ```
 cd ~/.mycore/ubo/lib
 wget https://repo1.maven.org/maven2/com/h2database/h2/2.2.224/h2-2.2.224.jar
 cd -
 ```
+
 ## Solr 
 ### Setup SOLR 8 
 - described here:
