@@ -38,7 +38,7 @@ public class MODSPersonMigrationCommandsTest extends MCRStoreTestCase {
 
     @Test
     public void testMigration() {
-        String userName1 = String.valueOf(UUID.randomUUID());
+        String userName1 = "test1";
         String userName2 = "test2";
 
         MCRUser userLocal = new MCRUser(userName1, MCRRealmFactory.getLocalRealm());
@@ -124,7 +124,7 @@ public class MODSPersonMigrationCommandsTest extends MCRStoreTestCase {
         List<String> commands = MODSPersonMigrationCommands.migrateAllModsperson();
         assertEquals(30, commands.size());
         for (String command : commands) {
-            assertTrue(command.contains("ubo migrate user"));
+            assertTrue(command.contains("modsperson migration migrate user"));
             assertTrue(command.contains("in realm local to modsperson"));
             assertFalse(command.contains("Peter"));
         }

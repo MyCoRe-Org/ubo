@@ -43,7 +43,7 @@ public class MODSPersonMigrationCommands {
      * Doesn't check for duplicates or existent modsperson objects.
      */
     @MCRCommand(
-        syntax = "ubo migrate users to modsperson",
+        syntax = "modsperson migration migrate users to modsperson",
         help = "Creates modsperson objects for all database users. Command is part of a migration process and should "
             + "only be used once. Should only be used if no modsperson objects exist yet.",
         order = 1)
@@ -51,7 +51,7 @@ public class MODSPersonMigrationCommands {
         List<MCRUser> users = MCRUserManager.listUsers(null, null, null, null, CONNECTION_ATTRIBUTE_NAME, 0, Integer.MAX_VALUE);
         List<String> commands = new ArrayList<>(users.size());
         for (MCRUser user : users) {
-            commands.add("ubo migrate user " + user.getUserName() + " in realm "
+            commands.add("modsperson migration migrate user " + user.getUserName() + " in realm "
                 + user.getRealmID() + " to modsperson");
         }
         return commands;
@@ -63,7 +63,7 @@ public class MODSPersonMigrationCommands {
      * @param realmId the realm to search in
      */
     @MCRCommand(
-        syntax = "ubo migrate user {0} in realm {1} to modsperson",
+        syntax = "modsperson migration migrate user {0} in realm {1} to modsperson",
         help = "Creates a modsperson object for the specific database user {0} in realm {1} (user name, realm id). "
             + "Command is part of a migration process and should only be used if the corresponding modsperson object "
             + "doesn't exist yet.",
@@ -94,7 +94,7 @@ public class MODSPersonMigrationCommands {
      * Should be executed after migration using {@link MODSPersonMigrationCommands#migrateAllModsperson()} first.
      */
     @MCRCommand(
-        syntax = "ubo delete users from database",
+        syntax = "modsperson migration delete users from database",
         help = "Deletes all users from database that have no user account. Command is part of a migration process "
             + "and should only be used once.",
         order = 2)
@@ -118,7 +118,7 @@ public class MODSPersonMigrationCommands {
         for (MCRUser user : users) {
             MCRUserManager.deleteUser(user);
             count++;
-            if (count % 1000 == 0) {
+            if (count != 0 && count % 1000 == 0) {
                 LOGGER.info("Deleted {} users from database...", count);
             }
         }
@@ -133,7 +133,7 @@ public class MODSPersonMigrationCommands {
      * are already deleted then.
      */
     @MCRCommand(
-        syntax = "ubo delete connection ids",
+        syntax = "modsperson migration delete connection ids",
         help = "Deletes all connection ids from database and from publications. "
             + "Command is part of a migration process and should only be used once. Should be executed after "
             + "the deletion of artificial users for performance reasons.",
@@ -176,8 +176,13 @@ public class MODSPersonMigrationCommands {
             String newData = new MCRJDOMContent(xmlNew).asString();
             if (!oldData.equals(newData)) {
                 MCRObject objNew = new MCRObject(xmlNew);
-                MCRMetadataManager.update(objNew);
-                count++;
+                try {
+                    MCRMetadataManager.update(objNew);
+                    count++;
+                } catch (Exception e) {
+                    LOGGER.error("Error while processing object {}, "
+                        + "skipping deletion of connection-ID, please process manually: {}", id, e);
+                }
             }
             if (count != 0 && count % 1000 == 0) {
                 LOGGER.info("Deleted connection ids from {} publications...", count);
