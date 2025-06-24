@@ -208,6 +208,12 @@
       <label xml:lang="de" text="Forschungsdaten" />
       <label xml:lang="en" text="research data" />
       <label xml:lang="x-marcgt" text="database" />
-  </category>
+    </category>
+    <category ID="software">
+      <label xml:lang="x-hosts" text="standalone" />
+      <label xml:lang="de" text="Software" />
+      <label xml:lang="en" text="Software" />
+      <label xml:lang="x-marcgt" text="computer program" />
+    </category>
   </categories>
 </mycoreclass>

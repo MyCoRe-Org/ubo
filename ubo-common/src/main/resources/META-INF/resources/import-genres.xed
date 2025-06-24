@@ -244,6 +244,19 @@
   <xed:template id="genre.research_data">
     <xed:include uri="webapp:import-genres.xed" ref="genre.oer" />  
   </xed:template>
+  
+  <xed:template id="genre.software">
+    <xed:include uri="webapp:import-editor.xed" ref="title" />
+    <xed:include uri="webapp:import-editor.xed" ref="book.contributors" />
+    <xed:include uri="webapp:import-editor.xed" ref="place" />
+    <xed:include uri="webapp:import-editor.xed" ref="year" />
+    <xed:include uri="webapp:import-editor.xed" ref="publisher" />  
+    <xed:include uri="webapp:import-editor.xed" ref="size" />
+    <xed:include uri="webapp:import-editor.xed" ref="comment" />
+    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
+    <xed:include uri="webapp:import-editor.xed" ref="url" />
+    <xed:include uri="webapp:import-editor.xed" ref="relations" />
+  </xed:template>
 
   <xed:template id="genre.journal">
     <xed:include uri="webapp:import-editor.xed" ref="title" />
