@@ -44,7 +44,7 @@ public class MODSPersonMigrationCommands {
      */
     @MCRCommand(
         syntax = "modsperson migration migrate users to modsperson",
-        help = "Creates modsperson objects for all database users. Command is part of a migration process and should "
+        help = "FIRST migration command. Creates modsperson objects for all database users. Command is part of a migration process and should "
             + "only be used once. Should only be used if no modsperson objects exist yet.",
         order = 1)
     public static List<String> migrateAllModsperson() {
@@ -95,7 +95,7 @@ public class MODSPersonMigrationCommands {
      */
     @MCRCommand(
         syntax = "modsperson migration delete users from database",
-        help = "Deletes all users from database that have no user account. Command is part of a migration process "
+        help = "SECOND migration command. Deletes all users from database that have no user account. Command is part of a migration process "
             + "and should only be used once.",
         order = 2)
     public static void deleteUsersFromDatabase() {
@@ -134,7 +134,7 @@ public class MODSPersonMigrationCommands {
      */
     @MCRCommand(
         syntax = "modsperson migration delete connection ids",
-        help = "Deletes all connection ids from database and from publications. "
+        help = "THIRD migration command. Deletes all connection ids from database and from publications. "
             + "Command is part of a migration process and should only be used once. Should be executed after "
             + "the deletion of artificial users for performance reasons.",
         order = 4)
