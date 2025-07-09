@@ -228,6 +228,12 @@
             <xsl:value-of select="@value" />
           </a>
         </xsl:when>
+        <!-- display modsperson as link -->
+        <xsl:when test="$attrName = 'id_modsperson'">
+          <a href="{$WebApplicationBaseURL}servlets/DozBibEntryServlet?id={@value}" title="{$classNode/label[lang($CurrentLang)]/@text}: {@value}">
+            <xsl:value-of select="@value" />
+          </a>
+        </xsl:when>
         <xsl:otherwise>
           <!-- display as text -->
           <xsl:value-of select="@value" />

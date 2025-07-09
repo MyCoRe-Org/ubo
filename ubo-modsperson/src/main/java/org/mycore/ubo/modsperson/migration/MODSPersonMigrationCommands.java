@@ -22,6 +22,7 @@ import org.mycore.frontend.cli.MCRCommandUtils;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.mods.MCRMODSWrapper;
+import org.mycore.orcid2.user.MCRORCIDUser;
 import org.mycore.ubo.modsperson.MODSPersonLookup;
 import org.mycore.ubo.modsperson.MODSPersonUtils;
 import org.mycore.user2.MCRUser;
@@ -37,6 +38,8 @@ public class MODSPersonMigrationCommands {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String CONNECTION_ATTRIBUTE_NAME = "id_connection";
     protected static final String MODSPERSON_ATTRIBUTE_NAME = "id_modsperson";
+    protected static final String ORCID_AUTH_ATTRIBUTE_PREFIX = MCRORCIDUser.ATTR_ORCID_CREDENTIAL;
+    protected static final String ORCID_USER_PROPERTIES_ATTRIBUTE_PREFIX = MCRORCIDUser.ATTR_ORCID_USER_PROPERTIES;
 
     /**
      * Migrates all  {@link MCRUser users} with connection IDs to modsperson objects.
@@ -236,7 +239,7 @@ public class MODSPersonMigrationCommands {
         personName.addContent(givenNamePart);
 
         user.getAttributes().iterator().forEachRemaining(attribute -> {
-            if (!attribute.getName().equals(CONNECTION_ATTRIBUTE_NAME)) {
+            if (!isExcludedAttribute(attribute.getName())) {
                 final String typeName = attribute.getName().startsWith("id_") ? attribute.getName().substring(3)
                                                                               : attribute.getName();
                 Element nameIdentifier = new Element("nameIdentifier", MCRConstants.MODS_NAMESPACE)
@@ -262,6 +265,20 @@ public class MODSPersonMigrationCommands {
         return (user.getAttributes().stream()
             .noneMatch(attr -> "id_connection".equals(attr.getName())))
             && user.getRealmID().equals("local") && user.getLastLogin() == null;
+    }
+
+    /**
+     * True, if the attribute name pertains the connection id or the ORCID authentication,
+     * or describes the modsperson itself.
+     * Attribute name "id_orcid" will be migrated.
+     * @param attributeName the name of the tested attribute
+     * @return true, if excluded
+     */
+    private static boolean isExcludedAttribute(String attributeName) {
+        return attributeName.equals(CONNECTION_ATTRIBUTE_NAME)
+            || attributeName.startsWith(MODSPERSON_ATTRIBUTE_NAME)
+            || attributeName.startsWith(ORCID_AUTH_ATTRIBUTE_PREFIX)
+            || attributeName.startsWith(ORCID_USER_PROPERTIES_ATTRIBUTE_PREFIX);
     }
 
 }
