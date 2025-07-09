@@ -76,12 +76,16 @@ public class MODSPersonMigrationCommandsTest extends MCRStoreTestCase {
         user.setUserAttribute("id_connection", userName);
         user.setUserAttribute("id_orcid", "000-0001-2345-6789");
         user.setUserAttribute("id_scopus", "00011112222");
+        user.setUserAttribute("orcid_credential_000-0001-2345-6789", "{something}");
+        user.setUserAttribute("orcid_user_properties_000-0001-2345-6789", "{something}");
+        user.setUserAttribute("id_something", "12345");
+        user.setUserAttribute("somethingelse", "54321");
 
         MCRUserManager.createUser(user);
 
         MODSPersonMigrationCommands.migrateModsperson(userName, "local");
         user = MCRUserManager.getUser(userName, "local");
-        assertEquals(4, user.getAttributes().size());
+        assertEquals(8, user.getAttributes().size());
         assertTrue(user.getAttributes().stream().anyMatch(attr -> attr.getName().equals("id_modsperson")));
         String objId = user.getUserAttribute("id_modsperson");
 
@@ -98,9 +102,11 @@ public class MODSPersonMigrationCommandsTest extends MCRStoreTestCase {
         assertEquals("Peter", person.getGivenName());
         assertEquals("Tester", person.getFamilyName());
         Set<String> personKeys = person.getKeys();
-        assertEquals(2, personKeys.size());
+        assertEquals(4, personKeys.size());
         assertTrue(personKeys.contains("000-0001-2345-6789|orcid"));
         assertTrue(personKeys.contains("00011112222|scopus"));
+        assertTrue(personKeys.contains("12345|something"));
+        assertTrue(personKeys.contains("54321|somethingelse"));
     }
 
     @Test
