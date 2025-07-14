@@ -1185,6 +1185,7 @@
   <xsl:template match="mods:mods" mode="details_lines_modsperson">
     <xsl:apply-templates select="mods:name[@type='personal']/mods:namePart[@type='family']" />
     <xsl:apply-templates select="mods:name[@type='personal']/mods:namePart[@type='given']" />
+    <xsl:apply-templates select="mods:name[@type='personal']/mods:nameIdentifier" />
   </xsl:template>
 
   <!-- =========== Schlagworte =========== -->

@@ -60,6 +60,14 @@ public class MODSPersonSearchService implements IdentityService {
                 List<String> persons = (List) doc.getFieldValue("person");
                 if (persons != null && !persons.isEmpty()) {
                     result.displayName = persons.get(0);
+                    if (result.displayName.split(",").length > 1) {
+                        result.lastName = result.displayName.split(",")[0].trim();
+                        result.firstName = result.displayName.split(",")[1].trim();
+                    }
+                    else if (result.displayName.split(" ").length > 1) {
+                        result.firstName = result.displayName.split(" ")[0].trim();
+                        result.lastName = result.displayName.split(" ")[1].trim();
+                    }
                 }
                 List<String> pids = ((List<String>) doc.getFieldValue("nid_" + LEAD_ID));
                 if (pids != null && !pids.isEmpty()) {

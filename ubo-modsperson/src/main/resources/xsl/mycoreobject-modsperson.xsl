@@ -12,6 +12,7 @@
 >
 
     <xsl:template match="mycoreobject[contains(@ID,'_modsperson_')]" mode="pageTitle">
+        <script type="text/javascript" src="{$WebApplicationBaseURL}js/ModsDisplayUtils.js"/>
         <xsl:if test="$permission.admin">
             <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
                 <xsl:for-each select="mods:name[@type='personal'][1]">
@@ -20,6 +21,14 @@
                 </xsl:for-each>
             </xsl:for-each>
         </xsl:if>
+    </xsl:template>
+
+    <xsl:template name="steps.and.actions.modsperson">
+        <xsl:choose>
+            <xsl:when test="$step='ask.delete.modsperson'">
+                <xsl:call-template name="ask.delete" />
+            </xsl:when>
+        </xsl:choose>
     </xsl:template>
 
 
@@ -34,6 +43,16 @@
         <xsl:choose>
             <xsl:when test="$permission.admin">
                 <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
+                    <xsl:call-template name="steps.and.actions.modsperson" />
+                    <div class="section row m-1">
+                        <div class="col pl-0">
+                            <div class="row">
+                                <div class="col">
+                                    <xsl:apply-templates select="/mycoreobject/service/servflags/servflag[@type='status']" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="section">
                         <div class="ubo_details card mb-3">
                             <div class="card-body">
@@ -80,12 +99,12 @@
                     <xsl:if test="string-length($step) = 0">
                         <xsl:if test="not(/mycoreobject/structure/children/child)">
                             <a class="action btn btn-sm btn-outline-primary mb-1"
-                               href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.step=ask.delete">
+                               href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.step=ask.delete.modsperson">
                                 <xsl:value-of select="i18n:translate('button.delete')"/>
                             </a>
                         </xsl:if>
                         <a class="action btn btn-sm btn-outline-primary mb-1"
-                           href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.Style=structure">
+                           href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.Style=modsperson-structure">
                             <xsl:value-of select="i18n:translate('button.structure')"/>
                         </a>
                     </xsl:if>
@@ -165,10 +184,6 @@
                     <xsl:call-template name="numPublicationsModsperson" >
                         <xsl:with-param name="modsperson_id" select="$modsperson_id" />
                     </xsl:call-template>
-
-<!--                    <xsl:if test="$isCurrentUser">-->
-<!--                        <xsl:apply-templates select="attributes/attribute[contains(@name, 'orcid_credential')]" mode="publications" />-->
-<!--                    </xsl:if>-->
                 </ul>
             </div>
         </article>
