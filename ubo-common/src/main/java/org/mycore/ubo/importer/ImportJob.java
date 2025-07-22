@@ -13,7 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -31,6 +30,7 @@ import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mods.enrichment.MCREnricher;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.MCRSolrUtils;
@@ -128,23 +128,29 @@ public abstract class ImportJob {
             return false;
         }
 
+        if (!MCRXMLFunctions.isCategoryID("ubogenre", ubogenre.getText())) {
+            return false;
+        }
+
         for (Document publication : publications) {
             Element genreElement = XPATH_FACTORY
                 .compile("//mods:mods/mods:genre[@type='intern']", Filters.element(), null, MODS_NAMESPACE)
                 .evaluateFirst(publication);
 
+            // create new mods:genre element
             if (genreElement == null) {
-                return false;
+                genreElement = new Element("genre", MODS_NAMESPACE);
+                genreElement.setAttribute("type", "intern");
+                genreElement.setAttribute("authorityURI", MCRFrontendUtil.getBaseURL() + "classifications/ubogenre");
+
+                XPATH_FACTORY
+                    .compile("//mods:mods", Filters.element(), null, MODS_NAMESPACE)
+                    .evaluateFirst(publication)
+                    .addContent(genreElement);
             }
 
-            Attribute valueURI = genreElement.getAttribute("valueURI");
-            Attribute authorityURI = genreElement.getAttribute("authorityURI");
-            if (valueURI == null || authorityURI == null || !MCRXMLFunctions.isCategoryID("ubogenre",
-                ubogenre.getText())) {
-                return false;
-            }
-
-            valueURI.setValue(authorityURI.getValue() + "#" + ubogenre.getText());
+            genreElement.setAttribute("valueURI",
+                MCRFrontendUtil.getBaseURL() + "classifications/ubogenre#" + ubogenre.getText());
         }
         return true;
     }
