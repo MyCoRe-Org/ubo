@@ -14,8 +14,10 @@ import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.NameValuePair;
+import org.apache.hc.core5.http.io.HttpClientResponseHandler;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -26,6 +28,7 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.MCRStreamContent;
+import org.mycore.datamodel.niofs.MCRPath;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
@@ -67,16 +70,17 @@ public class EvalunaConnection {
         root.addContent(buildAuthElement());
         addAllRequests(root);
 
-        HttpPost post = postRequest(root);
-        CloseableHttpClient client = HttpClients.createDefault();
-        CloseableHttpResponse response = client.execute(post);
-        HttpEntity entity = response.getEntity();
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            MCRContent result = client.execute(postRequest(root), new HttpClientResponseHandler<MCRContent>() {
+                @Override
+                public MCRContent handleResponse(ClassicHttpResponse response) throws IOException {
+                    HttpEntity entity = response.getEntity();
+                    return new MCRStreamContent(entity.getContent());
+                }
+            });
 
-        MCRContent result = new MCRStreamContent(entity.getContent());
-        result = new MCRJDOMContent(result.asXML());
-        client.close();
-
-        return result;
+            return new MCRJDOMContent(result.asXML());
+        }
     }
 
     private void addAllRequests(Element root) {
