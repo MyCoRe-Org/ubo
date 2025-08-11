@@ -78,13 +78,16 @@ public class MailReportJob extends MCRCronjob {
             Map<String, String> configTuple = MCRConfiguration2.getSubPropertiesMap(CONFIG_PREFIX + prefix + ".");
             Set<String> expectedKeys = Set.of("uri", "to", "filetype");
             if (!configTuple.keySet().equals(expectedKeys)) {
-                LOGGER.warn("Property '" + CONFIG_PREFIX + prefix + "' is not properly configured. Please check "
-                    + "that each id only has the three values 'uri', 'to' and 'filetype'.");
+                LOGGER.warn("Property '" + CONFIG_PREFIX + prefix + "' is not properly configured. Please make sure "
+                    + "that each id has the three values 'uri', 'to' and 'filetype'.");
                 continue;
             }
             String emailBody = "Neuerscheinungen siehe Anhang";
             String attachment = resolveURI(configTuple.get("uri"), configTuple.get("filetype"));
-            preparedEmails.add(new PreparedEmail(CONFIG_MAILFROM, configTuple.get("to"), "Neuerscheinungen Bibliographie", emailBody, attachment));
+            String[] recipients = configTuple.get("to").split(",");
+            for (String recipient : recipients) {
+                preparedEmails.add(new PreparedEmail(CONFIG_MAILFROM, recipient, "Neuerscheinungen Bibliographie", emailBody, attachment));
+            }
         }
         return preparedEmails;
     }
@@ -93,7 +96,7 @@ public class MailReportJob extends MCRCronjob {
         MCRSourceContent content = MCRSourceContent.getInstance(uri);
 
         Path tempFile = Files.createTempFile("attachment_", "." + filetype);
-
+        // TODO send email if resultlist empty?
         try (InputStream inputStream = content.getContentInputStream();
             OutputStream outputStream = Files.newOutputStream(tempFile)) {
             byte[] buffer = new byte[8192];
