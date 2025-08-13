@@ -1,20 +1,20 @@
 <template>
-  <div class="card mb1" v-if="i18n['listWizard.info.text1'].length > 0">
+  <div class="card mb-1" v-if="i18n['listWizard.info.text1'].trim().length > 0">
     <div class="card-body">
       <section v-html="i18n['listWizard.info.text1']"></section>
     </div>
   </div>
-  <div class="card mb1" v-if="i18n['listWizard.info.text2'].length > 0">
+  <div class="card mb-1" v-if="i18n['listWizard.info.text2'].trim().length > 0">
     <div class="card-body">
       <section v-html="i18n['listWizard.info.text2']"></section>
     </div>
   </div>
-  <div class="card mb1" v-if="i18n['listWizard.info.text3'].length > 0">
+  <div class="card mb-1" v-if="i18n['listWizard.info.text3'].trim().length > 0">
     <div class="card-body">
       <section v-html="i18n['listWizard.info.text3']"></section>
     </div>
   </div>
-  <article class="card mb1">
+  <article class="card mb-1">
     <div class="card-body">
       <div class="ubo-vue-form">
         <section>
@@ -248,7 +248,7 @@
       </div>
     </div>
   </article>
-  <div class="card mb1" v-if="i18n['listWizard.info.text4'].length > 0">
+  <div class="card mb-1" v-if="i18n['listWizard.info.text4'].trim().length > 0">
     <div class="card-body">
       <section v-html="i18n['listWizard.info.text4']"></section>
     </div>

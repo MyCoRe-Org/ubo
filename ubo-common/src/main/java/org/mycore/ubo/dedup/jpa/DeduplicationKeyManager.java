@@ -27,8 +27,8 @@ public class DeduplicationKeyManager {
     }
 
     public static DeduplicationKeyManager getInstance() {
-        return MCRConfiguration2.getSingleInstanceOf("UBO.DeduplicationKeyManager", DeduplicationKeyManager.class)
-                .get();
+        return MCRConfiguration2.getSingleInstanceOf(DeduplicationKeyManager.class, "UBO.DeduplicationKeyManager")
+            .get();
     }
 
     private static SingularAttribute getOrderColumn(DeduplicationNoDuplicateOrderFields by) {

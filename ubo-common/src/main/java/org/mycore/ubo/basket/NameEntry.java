@@ -9,11 +9,11 @@
 
 package org.mycore.ubo.basket;
 
-import java.util.List;
-
 import org.jdom2.Element;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.config.MCRConfiguration2;
+
+import java.util.List;
 
 /**
  * Represents a name entry of a modsName.

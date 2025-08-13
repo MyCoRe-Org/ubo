@@ -9,20 +9,6 @@
 
 package org.mycore.ubo.lsf;
 
-import java.io.StringReader;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.text.Normalizer;
-import java.text.Normalizer.Form;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -38,6 +24,21 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.mods.merger.MCRHyphenNormalizer;
 import org.mycore.ubo.picker.IdentityService;
 import org.mycore.ubo.picker.PersonSearchResult;
+
+import java.io.StringReader;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Implements a Web Services client for HIS LSF.
@@ -76,10 +77,10 @@ public class LSFService implements IdentityService {
 
             String baseURL = MCRConfiguration2.getStringOrThrow("UBO.LSF.SOAP.BaseURL");
 
-            URL soapSearchEndpoint = new URL(baseURL + "/soapsearch");
+            URL soapSearchEndpoint = new URI(baseURL + "/soapsearch").toURL();
             soapsearch = new SOAPSearchServiceLocator().getsoapsearch(soapSearchEndpoint);
 
-            URL dbInterfaceEndpoint = new URL(baseURL + "/dbinterface");
+            URL dbInterfaceEndpoint = new URI(baseURL + "/dbinterface").toURL();
             dbinterface = new DBInterfaceServiceLocator().getdbinterface(dbInterfaceEndpoint);
         } catch (Exception ex) {
             String msg = "Could not locate HIS LSF WebService";
@@ -259,7 +260,8 @@ public class LSFService implements IdentityService {
                 if (doesFirstNameMatch(firstName, personResult.firstName)
                     && (personResult.pid != null)
                     && !retrievedIDs.contains(personResult.pid)) {
-                    personResult.displayName = personResult.lastName + ( personResult.firstName == null ? "" : ", " + personResult.firstName );
+                    personResult.displayName = personResult.lastName + (personResult.firstName == null ? "" : ", "
+                        + personResult.firstName);
                     results.add(personResult);
                     retrievedIDs.add(personResult.pid);
                     personResult.affiliation = new ArrayList<String>();
@@ -337,7 +339,7 @@ public class LSFService implements IdentityService {
     private void removeThoseWithNonMatchingFirstNames(String firstName, Element results) {
         String[] firstNameParts = getNormalizedNameParts(firstName);
 
-        for (Iterator<Element> iterator = results.getChildren().iterator(); iterator.hasNext();) {
+        for (Iterator<Element> iterator = results.getChildren().iterator(); iterator.hasNext(); ) {
             Element person = iterator.next();
             String vorname = person.getChildTextTrim("vorname");
             if (vorname == null) {
@@ -366,7 +368,8 @@ public class LSFService implements IdentityService {
     private String[] getNormalizedNameParts(String text) {
         text = text.toLowerCase(Locale.ROOT);
         text = new MCRHyphenNormalizer().normalize(text).replace("-", " ");
-        text = Normalizer.normalize(text, Form.NFD).replaceAll("\\p{M}", ""); // canonical decomposition, then remove accents
+        text = Normalizer.normalize(text, Form.NFD)
+            .replaceAll("\\p{M}", ""); // canonical decomposition, then remove accents
         text = text.replace("ue", "u").replace("oe", "o").replace("ae", "a").replace("ß", "s").replace("ss", "s");
         text = text.replaceAll("[^a-z0-9]\\s]", ""); //remove all non-alphabetic characters
         // text = text.replaceAll("\\b.{1,3}\\b", " ").trim(); // remove all words with fewer than four characters

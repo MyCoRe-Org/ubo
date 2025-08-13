@@ -15,7 +15,6 @@ import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRMailer;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.common.xml.MCRXMLFunctions;
@@ -24,13 +23,12 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mods.MCRMODSWrapper;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 import org.mycore.solr.MCRSolrUtils;
+import org.mycore.ubo.importer.ImportIdProvider;
 
 import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -56,6 +54,8 @@ class ScopusImporter {
 
     private static String MAIL_XSL;
 
+    private static Boolean MAIL_ALWAYS_SEND;
+
     private static XPathExpression<Element> MODS_XPATH = XPATH_FACTORY
         .compile(".//mods:mods", Filters.element(), null, MODS_NAMESPACE);
     private List<MCRObject> importedObjects = new ArrayList<>();
@@ -70,6 +70,15 @@ class ScopusImporter {
         MAIL_TO = MCRConfiguration2.getString(prefix + "To").get();
         MAIL_PARAM = MCRConfiguration2.getString(prefix + "Param").get();
         MAIL_XSL = MCRConfiguration2.getString(prefix + "XSL").get();
+        MAIL_ALWAYS_SEND = MCRConfiguration2.getBoolean(prefix + "AlwaysSend").orElse(false);
+    }
+
+
+    protected final ImportIdProvider importIdProvider;
+
+    public ScopusImporter() {
+        String className = MCRConfiguration2.getStringOrThrow("UBO.Importer.ImportIdProvider.Scopus");
+        importIdProvider = MCRConfiguration2.instantiateClass(className);
     }
 
     public MCRObject doImport(String scopusID) throws MCRPersistenceException, MCRAccessException {
@@ -92,7 +101,7 @@ class ScopusImporter {
     }
 
     private boolean isAlreadyStored(String scopusID) {
-        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+        SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
         SolrQuery query = new SolrQuery();
         query.setQuery(FIELD_TO_QUERY_ID + ":" + MCRSolrUtils.escapeSearchValue(scopusID));
         query.setRows(0);
@@ -107,7 +116,7 @@ class ScopusImporter {
 
     private Element retrieveAndConvertPublication(String externalID) {
         String uri = new MessageFormat(IMPORT_URI, Locale.ROOT).format(new Object[] { externalID });
-        return MCRURIResolver.instance().resolve(uri);
+        return MCRURIResolver.obtainInstance().resolve(uri);
     }
 
     /** If mods:genre was not mapped by conversion/import function, ignore this publication and do not import */
@@ -115,15 +124,13 @@ class ScopusImporter {
         return !publication.getDescendants(new ElementFilter("genre", MCRConstants.MODS_NAMESPACE)).hasNext();
     }
 
-    private final static SimpleDateFormat ID_BUILDER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT);
-
     private MCRObject buildMCRObject(Element publicationXML) {
         setPreconfiguredClasses(publicationXML);
 
         MCRObject obj = new MCRObject(new Document(publicationXML));
         MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
         wrapper.setServiceFlag("status", STATUS);
-        wrapper.setServiceFlag("importID","SCOPUS-" + getImportID());
+        wrapper.setServiceFlag("importID", importIdProvider.getImportId());
         MCRObjectID oid = MCRMetadataManager.getMCRObjectIDGenerator().getNextFreeId(PROJECT_ID, "mods");
         obj.setId(oid);
         return obj;
@@ -151,15 +158,11 @@ class ScopusImporter {
         });
     }
 
-    private String getImportID() {
-        return ID_BUILDER.format(new Date(MCRSessionMgr.getCurrentSession().getLoginTime()));
-    }
-
     public void sendNotification() throws Exception {
         int numPublicationsImported = importedObjects.size();
         LOGGER.info("imported {} publications.", numPublicationsImported);
 
-        if ((numPublicationsImported > 0) && (MAIL_XSL != null)) {
+        if (MAIL_XSL != null && (numPublicationsImported > 0 || MAIL_ALWAYS_SEND)) {
             Element xml = new Element(STATUS).setAttribute("source", "SCOPUS");
             for (MCRObject obj : importedObjects) {
                 xml.addContent(obj.createXML().detachRootElement());

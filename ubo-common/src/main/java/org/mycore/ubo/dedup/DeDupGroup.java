@@ -9,10 +9,10 @@
 
 package org.mycore.ubo.dedup;
 
+import org.jdom2.Element;
+
 import java.util.HashSet;
 import java.util.Set;
-
-import org.jdom2.Element;
 
 class DeDupGroup implements Comparable<DeDupGroup> {
 

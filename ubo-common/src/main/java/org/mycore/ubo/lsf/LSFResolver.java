@@ -9,18 +9,17 @@
 
 package org.mycore.ubo.lsf;
 
-import java.net.URLDecoder;
-import java.util.Hashtable;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.URIResolver;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.xml.MCRURIResolver;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
+import java.net.URLDecoder;
+import java.util.Map;
 
 /**
  * Implements MyCoRe URI Resolver to search HIS LSF for person data and retrieve entries.
@@ -34,7 +33,7 @@ import org.mycore.common.xml.MCRURIResolver;
  *    
  *   MCR.URIResolver.ModuleResolver.lsf=org.mycore.ubo.lsf.LSFResolver
  * 
- * @author Frank L\u00FCtzenkirchen
+ * @author Frank Lützenkirchen
  */
 
 public class LSFResolver implements URIResolver {
@@ -48,7 +47,7 @@ public class LSFResolver implements URIResolver {
 
     public Source resolve(String href, String base) throws TransformerException {
         String key = href.substring(href.indexOf(":") + 1);
-        Hashtable<String, String> params = MCRURIResolver.getParameterMap(key);
+        Map<String, String> params = MCRURIResolver.getParameterMap(key);
         LOGGER.info("PARAMS: " + params.toString());
         try {
             Element result = null;

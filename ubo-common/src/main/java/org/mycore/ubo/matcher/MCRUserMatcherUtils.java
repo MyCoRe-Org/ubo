@@ -1,14 +1,5 @@
 package org.mycore.ubo.matcher;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.UUID;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
@@ -27,6 +18,15 @@ import org.mycore.user2.MCRRealmFactory;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUser2Constants;
 import org.mycore.user2.MCRUserAttribute;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.UUID;
 
 import static org.mycore.common.MCRConstants.XPATH_FACTORY;
 
@@ -174,7 +174,7 @@ public class MCRUserMatcherUtils {
             for (Map.Entry<String, String> parameter : parametersMap.entrySet()) {
                 String encodedValue = null;
                 try {
-                    encodedValue = URLEncoder.encode(parameter.getValue(), "UTF-8");
+                    encodedValue = URLEncoder.encode(parameter.getValue(), "UTF-8").replace("+","%20");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }

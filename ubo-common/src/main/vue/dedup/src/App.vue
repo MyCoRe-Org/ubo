@@ -1,6 +1,6 @@
 <template>
 
-    <div class="card mb1">
+    <div class="card mb-1">
       <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs">
           <li class="nav-item">

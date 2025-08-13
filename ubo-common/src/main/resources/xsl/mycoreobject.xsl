@@ -34,6 +34,7 @@
 <!-- ============ Bearbeitungsrechte ========== -->
 
 <xsl:variable name="permission.admin" xmlns:check="xalan://org.mycore.ubo.AccessControl" select="check:currentUserIsAdmin()" />
+<xsl:variable name="permission.isSuperuser" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" select="mcrxml:isCurrentUserSuperUser()" />
 
 <!-- ============ Seitentitel ============ -->
 
@@ -115,6 +116,11 @@
         <a class="action btn btn-sm btn-outline-primary mb-1"
            href="{$WebApplicationBaseURL}servlets/MCRLockServlet?url=../edit-admin.xed&amp;id={/mycoreobject/@ID}">Admin
         </a>
+        <xsl:if test="$permission.isSuperuser">
+          <a class="action btn btn-sm btn-outline-primary mb-1"
+             href="{$WebApplicationBaseURL}modules/webtools/texteditor/objects/{/mycoreobject/@ID}">XML
+          </a>
+        </xsl:if>
         <a class="action btn btn-sm btn-outline-primary mb-1"
            href="{$WebApplicationBaseURL}servlets/MCRLockServlet?url=../edit-mods.xed&amp;id={/mycoreobject/@ID}">MODS
         </a>
@@ -211,6 +217,7 @@
           <div class="col">
             <xsl:call-template name="label-year" />
             <xsl:call-template name="pubtype" />
+            <xsl:call-template name="label-kdsf-pub-doc-type" />
             <xsl:call-template name="label-oa" />
             <xsl:call-template name="orcid-status" />
           </div>

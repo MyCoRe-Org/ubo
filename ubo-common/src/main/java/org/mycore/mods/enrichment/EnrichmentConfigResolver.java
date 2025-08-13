@@ -1,16 +1,15 @@
 package org.mycore.mods.enrichment;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
+import org.jdom2.Element;
+import org.jdom2.transform.JDOMSource;
+import org.mycore.common.config.MCRConfiguration2;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
-
-import org.jdom2.Element;
-import org.jdom2.transform.JDOMSource;
-import org.mycore.common.config.MCRConfiguration2;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /** 
  * URI Resolver that returns the enrichment resolver configuration

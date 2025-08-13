@@ -31,7 +31,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static org.mycore.common.MCRConstants.*;
+import static org.mycore.common.MCRConstants.XPATH_FACTORY;
 import static org.mycore.ubo.matcher.MCRUserMatcherUtils.MODS_NAMESPACE;
 
 /**
@@ -137,7 +137,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     @Override
     protected void handleObjectRepaired(MCREvent evt, MCRObject obj) {
         handlePublication(obj);
-        MCRXMLMetadataManager.instance().update(obj.getId(), obj.createXML(), new Date());
+        MCRXMLMetadataManager.getInstance().update(obj.getId(), obj.createXML(), new Date());
     }
 
     protected void handlePublication(MCRObject obj) {
