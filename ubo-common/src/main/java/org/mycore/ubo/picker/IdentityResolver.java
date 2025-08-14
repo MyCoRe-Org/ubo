@@ -1,12 +1,5 @@
 package org.mycore.ubo.picker;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.Hashtable;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.URIResolver;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
@@ -14,6 +7,12 @@ import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRUsageException;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.xml.MCRURIResolver;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.URIResolver;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.Map;
 
 public class IdentityResolver implements URIResolver {
 
@@ -46,7 +45,7 @@ public class IdentityResolver implements URIResolver {
                     e.printStackTrace();
                 }
 
-                Hashtable<String, String> params = MCRURIResolver.getParameterMap(decodedParamsString);
+                Map<String, String> params = MCRURIResolver.getParameterMap(decodedParamsString);
                 String strategy = readIdentityStrategy();
                 String serviceClassName = strategy + "Service";
                 LOGGER.info("PARAMS: " + params.toString());

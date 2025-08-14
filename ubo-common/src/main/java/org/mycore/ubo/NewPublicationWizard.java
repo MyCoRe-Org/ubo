@@ -31,7 +31,7 @@ import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 import org.mycore.solr.MCRSolrUtils;
 import org.mycore.ubo.dedup.DeDupCriteriaBuilder;
 import org.mycore.ubo.dedup.DeDupCriterion;
@@ -64,7 +64,7 @@ public class NewPublicationWizard extends MCRServlet {
                 if (hasEmptyTitle()) {
                     job.getRequest().setAttribute("XSL.Style", "wizard-notfound");
                     Element mods = getMODSfromSession();
-                    MCRLayoutService.instance().doLayout(job.getRequest(), job.getResponse(), new MCRJDOMContent(mods));
+                    MCRLayoutService.obtainInstance().doLayout(job.getRequest(), job.getResponse(), new MCRJDOMContent(mods));
                     return;
                 }
             }
@@ -92,7 +92,7 @@ public class NewPublicationWizard extends MCRServlet {
         Element mods = getMODSfromSession();
         mods.removeChildren("titleInfo", MCRConstants.MODS_NAMESPACE);
         mods.removeChildren("name", MCRConstants.MODS_NAMESPACE);
-        mods = MCRURIResolver.instance().resolve("xslStyle:" + FILTER_SUPPORTED + ":enrich:import:session:" + sessionKey);
+        mods = MCRURIResolver.obtainInstance().resolve("xslStyle:" + FILTER_SUPPORTED + ":enrich:import:session:" + sessionKey);
         MCRSessionMgr.getCurrentSession().put(sessionKey, mods);
     }
 
@@ -152,7 +152,7 @@ public class NewPublicationWizard extends MCRServlet {
     }
 
     private boolean publicationMayAlreadyExist(String q) throws SolrServerException, IOException {
-        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+        SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
         SolrQuery query = new SolrQuery();
         query.setQuery(q);
         query.setRows(0);

@@ -278,14 +278,6 @@
       <artifactId>commons-text</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpcore</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
     </dependency>
@@ -338,6 +330,12 @@
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-webtools</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore.ubo</groupId>
+      <artifactId>ubo-modsperson</artifactId>
+      <version>dev-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

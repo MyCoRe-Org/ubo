@@ -20,7 +20,7 @@ import org.jdom2.filter.Filters;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.common.MCRTransactionHelper;
+import org.mycore.common.MCRTransactionManager;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
@@ -32,7 +32,7 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mods.enrichment.MCREnricher;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 import org.mycore.solr.MCRSolrUtils;
 import org.xml.sax.SAXException;
 
@@ -216,7 +216,7 @@ public abstract class ImportJob {
 
     public void saveAndIndex() throws MCRAccessException {
         savePublications();
-        MCRTransactionHelper.commitTransaction();
+        MCRTransactionManager.commitTransactions();
         tryToWaitUntilSolrIndexingFinished();
     }
 
@@ -229,7 +229,7 @@ public abstract class ImportJob {
     private static final int SECONDS_TO_WAIT_BETWEEN_SOLR_CHECKS = 2;
 
     private void tryToWaitUntilSolrIndexingFinished() {
-        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+        SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
         SolrQuery query = new SolrQuery();
         query.setQuery(getQueryString());
         query.setRows(0);

@@ -397,6 +397,18 @@
     </xsl:if>
   </xsl:template>
 
+  <!-- ========== Zitierform Modsperson ========== -->
+
+  <xsl:template match="mods:mods" mode="showmodsperson">
+    <xsl:param name="mode">plain</xsl:param>
+    <xsl:call-template name="output.line">
+      <xsl:with-param name="selected" select="mods:name[@type='personal']" />
+      <xsl:with-param name="before"> - </xsl:with-param>
+      <xsl:with-param name="mode" select="$mode" />
+      <xsl:with-param name="class" select="'person'" />
+    </xsl:call-template>
+  </xsl:template>
+
   <!-- for typical publications: "Name: Title" -->
   <xsl:template match="mods:mods|mods:relatedItem" mode="cite.title.name">
     <xsl:param name="mode">plain</xsl:param>
@@ -544,7 +556,7 @@
         <div class="col-9">
           <xsl:for-each select="$list">
             <xsl:variable name="is-corresponding-author" select="contains(mods:role/mods:roleTerm/@valueURI, 'author_roles#corresponding_author')" />
-            <xsl:variable name="is-connected-author" select="count(mods:nameIdentifier[@type='connection']) &gt; 0" />
+            <xsl:variable name="is-connected-author" select="count(@xlink:href) &gt; 0" />
             <xsl:variable name="popId" select="generate-id()"/>
 
             <span>
@@ -587,11 +599,13 @@
                 <span id="{$popId}-content" class="d-none">
                   <dl>
                     <xsl:choose>
-                      <xsl:when test="count(mods:nameIdentifier[@type='connection']) &gt;0">
-                        <xsl:apply-templates select="mods:nameIdentifier[@type='connection']" />
+                      <xsl:when test="@xlink:href">
+                        <xsl:call-template name="modsperson" >
+                          <xsl:with-param name="modsperson_id" select="@xlink:href" />
+                        </xsl:call-template>
                       </xsl:when>
                       <xsl:otherwise>
-                        <xsl:apply-templates select="mods:nameIdentifier[not(@type='connection')]" />
+                        <xsl:apply-templates select="mods:nameIdentifier" />
                       </xsl:otherwise>
                     </xsl:choose>
                     <xsl:if test="mods:affiliation and check:currentUserIsAdmin()">
@@ -640,50 +654,52 @@
         </div>
       </xsl:if>
     </xsl:if>
+
   </xsl:template>
 
-  <xsl:template match="mods:affiliation" mode="details" >
-    <xsl:value-of select="text()" />
-    <xsl:if test="position() != last()"> / </xsl:if>
-  </xsl:template>
-
-  <xsl:template match="mods:nameIdentifier[@type='connection']">
-    <xsl:variable name="userXML" select="document(concat('userconnection:', text()))"/>
+  <xsl:template name="modsperson">
+    <xsl:param name="modsperson_id" />
+    <xsl:variable name="userXML" select="document(concat('mcrobject:',$modsperson_id))/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods"/>
     <xsl:variable name="userAttributeClassification" select="document('xslStyle:nameIDs2UserAttr:classification:metadata:-1:children:nameIdentifier')"/>
-
-    <xsl:if test="count($userXML/user/attributes/attribute) &gt; 0">
-      <xsl:for-each select="$userXML/user/attributes/attribute">
-        <xsl:variable name="attrName" select="@name"/>
-        <xsl:variable name="classNode" select="$userAttributeClassification/.//category[@ID=$attrName]"/>
+    <xsl:if test="count($userXML/mods:name[@type='personal']/mods:nameIdentifier) &gt; 0">
+      <xsl:for-each select="$userXML/mods:name[@type='personal']/mods:nameIdentifier">
+        <xsl:variable name="attrName" select="@type"/>
+        <xsl:variable name="classNode" select="$userAttributeClassification/.//category[@ID=concat('id_',$attrName)]"/>
         <xsl:if test="count($classNode)&gt;0 and count($classNode/label[@xml:lang='x-display' and @text='true'])&gt;0">
           <dt>
             <xsl:value-of select="$classNode/label[lang($CurrentLang)]/@text"/>
           </dt>
           <dd>
+            <xsl:variable name="id_value" select="." />
             <xsl:choose>
-              <xsl:when test="$attrName='id_orcid'">
+              <xsl:when test="$attrName='orcid'">
                 <!-- special display code for orcid -->
-                <xsl:variable name="url" select="concat($MCR.ORCID2.LinkURL,@value)" />
-                <a href="{$url}" title="ORCID iD: {@value}">
-                  <xsl:value-of select="@value" />
+                <xsl:variable name="url" select="concat($MCR.ORCID2.LinkURL,$id_value)" />
+                <a href="{$url}" title="ORCID iD: {$id_value}">
+                  <xsl:value-of select="$id_value" />
                   <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
                 </a>
               </xsl:when>
               <xsl:when test="count($classNode/label[@xml:lang='x-uri'])  &gt;0">
                 <!-- display as link -->
-                <a href="{$classNode/label[@xml:lang='x-uri']/@text}{@value}" title="{$classNode/label[lang($CurrentLang)]/@text}: {@value}">
-                  <xsl:value-of select="@value" />
+                <a href="{$classNode/label[@xml:lang='x-uri']/@text}{$id_value}" title="{$classNode/label[lang($CurrentLang)]/@text}: {$id_value}">
+                  <xsl:value-of select="$id_value" />
                 </a>
               </xsl:when>
               <xsl:otherwise>
                 <!-- display as text -->
-                <xsl:value-of select="@value" />
+                <xsl:value-of select="$id_value" />
               </xsl:otherwise>
             </xsl:choose>
           </dd>
         </xsl:if>
       </xsl:for-each>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="mods:affiliation" mode="details" >
+    <xsl:value-of select="text()" />
+    <xsl:if test="position() != last()"> / </xsl:if>
   </xsl:template>
 
   <xsl:variable name="nameIdentifierClassification" select="document('classification:metadata:-1:children:nameIdentifier')"/>
@@ -698,26 +714,9 @@
             <xsl:value-of select="$classNode/label[lang($CurrentLang)]/@text"/>
           </dt>
           <dd>
-            <xsl:choose>
-              <xsl:when test="@type='orcid'">
-                <!-- special display code for orcid -->
-                <xsl:variable name="url" select="concat($MCR.ORCID2.LinkURL, .)" />
-                <a href="{$url}" title="ORCID iD: {.}">
-                  <xsl:value-of select="." />
-                  <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
-                </a>
-              </xsl:when>
-              <xsl:when test="count($classNode/label[@xml:lang='x-uri']) &gt;0">
-                <!-- display as link -->
-                <a href="{$classNode/label[@xml:lang='x-uri']/@text}{.}" title="{$classNode/label[lang($CurrentLang)]/@text}: {.}">
-                  <xsl:value-of select="." />
-                </a>
-              </xsl:when>
-              <xsl:otherwise>
-                <!-- display as text -->
-                <xsl:value-of select="." />
-              </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="." mode="value">
+              <xsl:with-param name="classNode" select="$classNode" />
+            </xsl:apply-templates>
           </dd>
         </xsl:when>
         <xsl:otherwise>
@@ -739,6 +738,31 @@
           </dd>
         </xsl:otherwise>
       </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template match="mods:nameIdentifier" mode="value">
+    <xsl:param name="classNode" />
+    
+    <xsl:choose>
+      <xsl:when test="@type='orcid'">
+        <!-- special display code for orcid -->
+        <xsl:variable name="url" select="concat($MCR.ORCID2.LinkURL, .)" />
+        <a href="{$url}" title="ORCID iD: {.}">
+          <xsl:value-of select="." />
+          <img alt="ORCID iD" src="{$WebApplicationBaseURL}images/orcid_icon.svg" class="orcid-icon" />
+        </a>
+      </xsl:when>
+      <xsl:when test="$classNode[label[@xml:lang='x-uri']]">
+        <!-- display as link -->
+        <a href="{$classNode/label[@xml:lang='x-uri']/@text}{.}" title="{$classNode/label[lang($CurrentLang)]/@text}: {.}">
+          <xsl:value-of select="." />
+        </a>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- display as text -->
+        <xsl:value-of select="." />
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!-- ========== Konferenz ========== -->
@@ -1175,6 +1199,13 @@
     </xsl:apply-templates>
     <xsl:apply-templates select="mods:abstract/@xlink:href" mode="details" />
     <xsl:apply-templates select="mods:abstract[string-length(.) &gt; 0]" mode="details" />
+  </xsl:template>
+
+  <!-- ========== details_lines_modsperson ========== -->
+  <xsl:template match="mods:mods" mode="details_lines_modsperson">
+    <xsl:apply-templates select="mods:name[@type='personal']/mods:namePart[@type='family']" />
+    <xsl:apply-templates select="mods:name[@type='personal']/mods:namePart[@type='given']" />
+    <xsl:apply-templates select="mods:name[@type='personal']/mods:nameIdentifier" />
   </xsl:template>
 
   <!-- =========== Schlagworte =========== -->
@@ -1729,6 +1760,7 @@
     </xsl:if>
     <xsl:text>)</xsl:text>
   </xsl:template>
+
 
   <!-- ========== Rest ignorieren ========== -->
   <xsl:template match="*|@*|text()" />

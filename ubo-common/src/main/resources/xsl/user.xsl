@@ -214,27 +214,37 @@
 <xsl:template match="attribute[starts-with(@name, 'id_')]">
   <xsl:variable name="attrName" select="@name"/>
   <xsl:variable name="classNode" select="$userAttributeClassification/.//category[@ID=$attrName]"/>
-  
-  <tr>
-    <th scope="row">
-      <xsl:value-of select="$classNode/label[lang($CurrentLang)]/@text"/>
-      <xsl:text>:</xsl:text>
-    </th>
-    <td>
-      <xsl:choose>
-        <xsl:when test="count($classNode/label[@xml:lang='x-uri'])  &gt;0">
-          <!-- display as link -->
-          <a href="{$classNode/label[@xml:lang='x-uri']/@text}{@value}" title="{$classNode/label[lang($CurrentLang)]/@text}: {@value}">
+  <xsl:variable name="isUserAdmin" select="acl:checkPermission(const:getUserAdminPermission())" />
+
+  <!-- only display modsperson attribute for admins -->
+  <xsl:if test="not($attrName = 'id_modsperson') or $isUserAdmin">
+    <tr>
+      <th scope="row">
+        <xsl:value-of select="$classNode/label[lang($CurrentLang)]/@text"/>
+        <xsl:text>:</xsl:text>
+      </th>
+      <td>
+        <xsl:choose>
+          <xsl:when test="count($classNode/label[@xml:lang='x-uri'])  &gt;0">
+            <!-- display as link -->
+            <a href="{$classNode/label[@xml:lang='x-uri']/@text}{@value}" title="{$classNode/label[lang($CurrentLang)]/@text}: {@value}">
+              <xsl:value-of select="@value" />
+            </a>
+          </xsl:when>
+          <!-- display modsperson as link -->
+          <xsl:when test="$attrName = 'id_modsperson'">
+            <a href="{$WebApplicationBaseURL}servlets/DozBibEntryServlet?id={@value}" title="{$classNode/label[lang($CurrentLang)]/@text}: {@value}">
+              <xsl:value-of select="@value" />
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <!-- display as text -->
             <xsl:value-of select="@value" />
-          </a>
-        </xsl:when>
-        <xsl:otherwise>
-          <!-- display as text -->
-          <xsl:value-of select="@value" />
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-  </tr>
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+    </tr>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="orcid">
