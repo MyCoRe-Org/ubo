@@ -12,7 +12,6 @@
 >
 
     <xsl:template match="mycoreobject[contains(@ID,'_modsperson_')]" mode="pageTitle">
-        <script type="text/javascript" src="{$WebApplicationBaseURL}js/ModsDisplayUtils.js"/>
         <xsl:if test="$permission.admin">
             <xsl:for-each select="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
                 <xsl:for-each select="mods:name[@type='personal'][1]">

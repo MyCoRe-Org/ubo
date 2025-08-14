@@ -2,30 +2,23 @@ package org.mycore.ubo.modsperson;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
-import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
+import org.mycore.datamodel.common.MCRLinkTableManager;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mods.MCRMODSWrapper;
-import org.mycore.solr.MCRSolrClientFactory;
 
-import java.io.IOException;
+import java.util.List;
 
 /**
  * Handles updates and removals of modsperson-objects. When deleting a modsperson-object, references to this object
  * need to also be deleted from mods-objects. This happens in
  * {@link MODSPersonEventHandler#removeReferencesInMods(String)}.
- * TODO: WIP
  */
 public class MODSPersonEventHandler extends MCREventHandlerBase {
 
@@ -46,12 +39,9 @@ public class MODSPersonEventHandler extends MCREventHandlerBase {
             return;
         }
         MODSPersonLookup.remove(obj);
-        try {
-            int removed = removeReferencesInMods(obj.getId().toString());
-            LOGGER.debug("Removed " + removed + " references in mods objects.");
-        } catch (SolrServerException | IOException e) {
-            throw new MCRException("There was an error while removing references for " + obj.getId().toString(), e);
-        }
+
+        int removed = removeReferencesInMods(obj.getId().toString());
+        LOGGER.debug("Removed " + removed + " references in mods objects.");
         LOGGER.info("Deleted modsperson " + obj.getId().toString() + " from cache and in mods references");
     }
 
@@ -59,19 +49,14 @@ public class MODSPersonEventHandler extends MCREventHandlerBase {
      * For a given modsperson-ID, remove references to this ID in all mods-Documents.
      * @param modspersonId ID of modsperson that was deleted
      * @return number of references in mods-documents found and deleted
-     * @throws SolrServerException In case of an error inside the SOLR-Server
-     * @throws IOException  If there is a low-level I/O error
      */
-    private int removeReferencesInMods(String modspersonId) throws SolrServerException, IOException {
-        final SolrQuery query = new SolrQuery("ref_person:" + modspersonId)
-            .setFields("id").setRows(1000).setParam("wt", "json");
-
-        QueryResponse queryResponse = MCRSolrClientFactory.getMainSolrClient().query(query);
-        SolrDocumentList results = queryResponse.getResults();
-
-        for (SolrDocument doc : results) {
-            MCRObjectID modsId = MCRObjectID.getInstance((String) doc.getFieldValue("id"));
+    private int removeReferencesInMods(String modspersonId) {
+            MCRLinkTableManager linkTableManager = MCRLinkTableManager.getInstance();
+            MCRObjectID modspersonObjectId = MCRObjectID.getInstance(modspersonId);
+            List<String> modsReferenceIds = (List) linkTableManager.getSourceOf(modspersonObjectId);
+            for (String modsReferenceId : modsReferenceIds) {
             try {
+                MCRObjectID modsId = MCRObjectID.getInstance(modsReferenceId);
                 MCRObject obj = MCRMetadataManager.retrieveMCRObject(modsId);
                 MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
                 wrapper.getElements("mods:name[@type='personal']").forEach(modsName -> {
@@ -86,11 +71,12 @@ public class MODSPersonEventHandler extends MCREventHandlerBase {
                     }
                 });
             } catch (MCRPersistenceException e) {
-                LOGGER.warn("Error while trying to access object " + modsId.toString(), e);
+                LOGGER.warn("Error while trying to access object " + modsReferenceId, e);
             }
         }
 
-        return (int) results.getNumFound();
+            linkTableManager.deleteReferenceLink(modspersonObjectId);
+            return modsReferenceIds.size();
     }
 
 }

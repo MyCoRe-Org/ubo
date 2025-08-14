@@ -10,7 +10,7 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.mycore.common.events.MCRStartupHandler;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -65,7 +65,7 @@ public class MODSPersonCachingStartupHandler implements MCRStartupHandler.AutoEx
         throws SolrServerException, IOException {
         query.setStart(offset);
 
-        QueryResponse queryResponse = MCRSolrClientFactory.getMainSolrClient().query(query);
+        QueryResponse queryResponse = MCRSolrCoreManager.getMainSolrClient().query(query);
         SolrDocumentList results = queryResponse.getResults();
 
         for (SolrDocument doc : results) {

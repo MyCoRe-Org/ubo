@@ -8,7 +8,7 @@ import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Element;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration2;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 import org.mycore.solr.MCRSolrUtils;
 import org.mycore.ubo.picker.IdentityService;
 import org.mycore.ubo.picker.PersonSearchResult;
@@ -89,7 +89,7 @@ public class MODSPersonSearchService implements IdentityService {
         final SolrQuery query = new SolrQuery("objectType:modsperson AND person:\"" + MCRSolrUtils.escapeSearchValue(searchName) + "\"")
             .setFields("nid_lsf, person").setRows(100).setParam("wt", "json");
 
-        QueryResponse queryResponse = MCRSolrClientFactory.getMainSolrClient().query(query);
+        QueryResponse queryResponse = MCRSolrCoreManager.getMainSolrClient().query(query);
         return queryResponse.getResults();
     }
 

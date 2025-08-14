@@ -29,7 +29,7 @@ import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.mods.merger.MCRMergeTool;
 import org.mycore.mods.merger.MCRMerger;
 import org.mycore.mods.merger.MCRMergerFactory;
-import org.mycore.ubo.modsperson.merger.MCRNameMerger;
+import org.mycore.mods.merger.MCRNameMerger;
 
 /**
  * EventHandler to connect personal information in mods objects to the corresponding information in modsperson
@@ -55,7 +55,7 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
     protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {
         boolean wasModified = handleObject(obj);
         if (wasModified) {
-            MCRXMLMetadataManager.instance().update(obj.getId(), obj.createXML(), new Date());
+            MCRXMLMetadataManager.getInstance().update(obj.getId(), obj.createXML(), new Date());
         }
     }
 
@@ -63,7 +63,7 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
     protected void handleObjectRepaired(MCREvent evt, MCRObject obj) {
         boolean wasModified = handleObject(obj);
         if (wasModified) {
-            MCRXMLMetadataManager.instance().update(obj.getId(), obj.createXML(), new Date());
+            MCRXMLMetadataManager.getInstance().update(obj.getId(), obj.createXML(), new Date());
         }
     }
 

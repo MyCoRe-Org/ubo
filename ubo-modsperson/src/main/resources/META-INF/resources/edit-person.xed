@@ -103,6 +103,7 @@
                                             <input id="{xed:generate-id()}"
                                                    class="{$xed-validation-marker} mycore-form-input"
                                                    type="text"/>
+                                            <xed:controls>insert remove</xed:controls>
                                         </div>
                                     </xed:bind>
 
@@ -115,7 +116,6 @@
                                             <input id="{xed:generate-id()}"
                                                    class="{$xed-validation-marker} mycore-form-input"
                                                    type="text"/>
-                                            <xed:controls>insert remove</xed:controls>
                                         </div>
 
                                     </xed:bind>
