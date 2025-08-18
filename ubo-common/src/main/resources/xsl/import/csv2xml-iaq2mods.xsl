@@ -35,7 +35,7 @@
         <mods:relatedItem type="host">
           <xsl:apply-templates select="typ" mode="host" />
           <xsl:apply-templates select="buchtitel" />
-          <xsl:apply-templates select="beditor" />
+          <xsl:apply-templates select="beditoralt" />
           <xsl:call-template name="originInfo" />
           <mods:part>
             <xsl:apply-templates select="seiten" />
@@ -76,7 +76,7 @@
     <xsl:apply-templates select="doi" />
     <xsl:apply-templates select="datei" />
     <xsl:apply-templates select="volltext" />
-    <xsl:call-template name="schwerpunkt" />
+    <xsl:call-template name="abteilung" />
     <xsl:call-template name="fach" />
     <xsl:call-template name="projekt" />
   </mods:mods>
@@ -86,6 +86,7 @@
   <xsl:choose>
     <xsl:when test="contains(.,'Rezension')">article</xsl:when>
     <xsl:when test="contains(.,'Zeitschriftenaufsatz')">article</xsl:when>
+    <xsl:when test="contains(.,'Zeitungsartikel')">article</xsl:when>
     <xsl:when test="contains(.,'Internet-Dokument')">article</xsl:when>
     <xsl:when test="contains(.,'Dissertation')">book</xsl:when>
     <xsl:when test="contains(.,'IAQ-Reihe')">book</xsl:when>
@@ -94,6 +95,7 @@
     <xsl:when test="contains(.,'Sammelband')">book</xsl:when>
     <xsl:when test="contains(.,'Sammelwerk')">book</xsl:when>
     <xsl:when test="contains(.,'Tagungsdokumentation')">book</xsl:when>
+    <xsl:when test="contains(.,'Working Paper')">book</xsl:when>
     <xsl:when test="contains(.,'Buchaufsatz')">chapter</xsl:when>
     <xsl:when test="contains(.,'Buchaufsatz-Tagung')">chapter</xsl:when>
     <xsl:when test="contains(.,'Lexikoneintrag')">chapter</xsl:when>
@@ -107,8 +109,9 @@
     <xsl:attribute name="valueURI">
       <xsl:value-of select="concat($WebApplicationBaseURL, 'classifications/ubogenre#')"/>
       <xsl:choose>
-        <xsl:when test="contains(.,'Rezension')">article</xsl:when>
+        <xsl:when test="contains(.,'Rezension')">review</xsl:when>
         <xsl:when test="contains(.,'Zeitschriftenaufsatz')">article</xsl:when>
+        <xsl:when test="contains(.,'Zeitungsartikel')">article</xsl:when>
         <xsl:when test="contains(.,'Internet-Dokument')">article</xsl:when>
         <xsl:when test="contains(.,'Dissertation')">dissertation</xsl:when>
         <xsl:when test="contains(.,'IAQ-Reihe')">series</xsl:when>
@@ -117,6 +120,7 @@
         <xsl:when test="contains(.,'Sammelband')">collection</xsl:when>
         <xsl:when test="contains(.,'Sammelwerk')">collection</xsl:when>
         <xsl:when test="contains(.,'Tagungsdokumentation')">proceedings</xsl:when>
+        <xsl:when test="contains(.,'Working Paper')">workingpaper</xsl:when>
         <xsl:when test="contains(.,'Buchaufsatz-Tagung')">chapter</xsl:when>
         <xsl:when test="contains(.,'Buchaufsatz')">chapter</xsl:when>
         <xsl:when test="contains(.,'Lexikoneintrag')">entry</xsl:when>
@@ -133,10 +137,10 @@
       <xsl:choose>
         <xsl:when test="contains(.,'Rezension')">journal</xsl:when>
         <xsl:when test="contains(.,'Zeitschriftenaufsatz')">journal</xsl:when>
+        <xsl:when test="contains(.,'Zeitungsartikel')">newspaper</xsl:when>
         <xsl:when test="contains(.,'Buchaufsatz-Tagung')">proceedings</xsl:when>
         <xsl:when test="contains(.,'Buchaufsatz')">collection</xsl:when>
         <xsl:when test="contains(.,'Lexikoneintrag')">lexicon</xsl:when>
-        <xsl:when test="contains(.,'Internet-Dokument')">article</xsl:when>
         <xsl:otherwise>collection</xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
@@ -147,17 +151,16 @@
   <mods:titleInfo>
     <mods:title>
       <xsl:value-of select="text()" />
-      <xsl:if test="(name()='titel') and (../typ='Rezension')"> [Rezension]</xsl:if>
     </mods:title>
   </mods:titleInfo>
 </xsl:template>
 
-<xsl:template match="autor|editor|beditor|mitarbeiter">
+<xsl:template match="autor|editor|beditoralt|mitarbeiter">
   <xsl:variable name="role">
     <xsl:choose>
       <xsl:when test="name()='autor'">aut</xsl:when>
       <xsl:when test="name()='mitarbeiter'">ctb</xsl:when>
-      <xsl:when test="name()='beditor'">edt</xsl:when>
+      <xsl:when test="name()='beditoralt'">edt</xsl:when>
       <xsl:when test="name()='editor'">edt</xsl:when>
     </xsl:choose>
   </xsl:variable>
@@ -265,11 +268,11 @@
   <xsl:copy-of select="pages:buildExtentPagesNodeSet(text())" />
 </xsl:template>
 
-<xsl:template name="schwerpunkt">
+<xsl:template name="abteilung">
   <xsl:variable name="uri">https://bibliographie.ub.uni-due.de/classifications/ORIGIN</xsl:variable>
   <xsl:choose>
-    <xsl:when test="schwerpunkt">
-      <xsl:for-each select="xalan:tokenize(schwerpunkt,',')">
+    <xsl:when test="abteilung">
+      <xsl:for-each select="xalan:tokenize(abteilung,',')">
         <mods:classification valueURI="{$uri}#{normalize-space(.)}" authorityURI="{$uri}" />
       </xsl:for-each>
     </xsl:when>
