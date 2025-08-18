@@ -1691,7 +1691,7 @@
   <!-- ========== Sprache eines Eintrages ========== -->
   <xsl:template match="@xml:lang">
     <xsl:text> in </xsl:text>
-    <xsl:value-of select="document(concat('language:',.))/language/label[@xml:lang=$CurrentLang]" />
+    <xsl:value-of select="document(concat('notnull:callJava:org.mycore.common.xml.MCRXMLFunctions:getDisplayName:rfc5646:', .,':', $CurrentLang))" />
   </xsl:template>
 
   <!-- ========== Sprache der Publikation ========== -->
