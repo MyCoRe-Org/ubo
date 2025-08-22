@@ -27,6 +27,7 @@
   <xsl:param name="UBO.URI.gbv.de.ppn.redirect" />
   <xsl:param name="UBO.CreatorRoles" select="'cre aut tch pht prg'" />   <!-- Rollen, die als DC.Creator betrachtet werden -->
   <xsl:param name="UBO.DESTATIS.omit.ID"/>
+  <xsl:param name="UBO.Affiliation.Suppress.ConnectedIndicator"/>
 
   <!-- Expect one more author to be displayed as the last author is always getting displayed -->
   <xsl:param name="UBO.Initially.Visible.Authors" select="14" />
@@ -567,6 +568,21 @@
 
               <xsl:apply-templates select="." />
 
+              <xsl:variable name="show-connected-indicator-icon">
+                <xsl:choose>
+                  <xsl:when test="$UBO.Affiliation.Suppress.ConnectedIndicator = 'true'">
+                    <xsl:choose>
+                      <xsl:when test="$is-connected-author = true() and not(mods:affiliation[contains(@valueURI, 'isAffiliated#false')])">
+                        <xsl:value-of select="'true'"/>
+                      </xsl:when>
+                    </xsl:choose>
+                  </xsl:when>
+                  <xsl:when test="$is-connected-author = true()">
+                    <xsl:value-of select="'true'"/>
+                  </xsl:when>
+                </xsl:choose>
+              </xsl:variable>
+
               <xsl:if test="mods:nameIdentifier or $is-corresponding-author = true()">
                 <span id="{$popId}" title="{i18n:translate('person.information')}">
                   <xsl:attribute name="class">
@@ -574,14 +590,16 @@
                     <xsl:if test="$is-corresponding-author = true()">
                       <xsl:text>-edit</xsl:text>
                     </xsl:if>
-                    <xsl:if test="$is-connected-author = true()">
+                    <xsl:if test="$show-connected-indicator-icon = 'true'">
                       <xsl:text> ubo-person-connected</xsl:text>
                     </xsl:if>
                   </xsl:attribute>
                 </span>
 
-                <xsl:if test="$is-connected-author = true()">
-                  <sup><xsl:value-of select="i18n:translate('ubo.person.connected.sup')" /></sup>
+                <xsl:if test="$show-connected-indicator-icon = 'true'">
+                  <sup>
+                    <xsl:value-of select="i18n:translate('ubo.person.connected.sup')"/>
+                  </sup>
                 </xsl:if>
 
                 <span id="{$popId}-content" class="d-none">
@@ -602,18 +620,18 @@
                         <xsl:apply-templates select="mods:affiliation" mode="details" />
                       </dd>
                     </xsl:if>
-                    <xsl:if test="$is-connected-author = true() or $is-corresponding-author = true()">
+                    <xsl:if test="$show-connected-indicator-icon = 'true' or $is-corresponding-author = true()">
                       <dt>
                         <xsl:value-of select="i18n:translate('ubo.person.other')" />
                       </dt>
                       <dd>
-                        <xsl:if test="$is-connected-author = true()">
+                        <xsl:if test="$show-connected-indicator-icon = 'true'">
                           <xsl:value-of select="i18n:translate('ubo.person.connected')" />
                         </xsl:if>
-                        <xsl:if test="$is-connected-author = true() and $is-corresponding-author = true()">
+                        <xsl:if test="$show-connected-indicator-icon = 'true' and $is-corresponding-author = true()">
                           <br />
                         </xsl:if>
-                        <xsl:if test="$is-corresponding-author = true()">
+                        <xsl:if test="$show-connected-indicator-icon = 'true'">
                           <xsl:value-of select="i18n:translate('ubo.person.corresponding')" />
                         </xsl:if>
                       </dd>
