@@ -99,6 +99,7 @@
     <xsl:when test="contains(.,'Buchaufsatz')">chapter</xsl:when>
     <xsl:when test="contains(.,'Buchaufsatz-Tagung')">chapter</xsl:when>
     <xsl:when test="contains(.,'Lexikoneintrag')">chapter</xsl:when>
+    <xsl:when test="contains(.,'Sonstige')">book</xsl:when>
     <xsl:otherwise>article</xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -124,6 +125,7 @@
         <xsl:when test="contains(.,'Buchaufsatz-Tagung')">chapter</xsl:when>
         <xsl:when test="contains(.,'Buchaufsatz')">chapter</xsl:when>
         <xsl:when test="contains(.,'Lexikoneintrag')">entry</xsl:when>
+        <xsl:when test="contains(.,'Sonstige')">book</xsl:when>
         <xsl:otherwise>article</xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>

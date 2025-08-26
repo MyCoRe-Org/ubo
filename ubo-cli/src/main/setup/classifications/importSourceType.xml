@@ -22,5 +22,9 @@
       <label xml:lang="de" text="Literaturliste im DOI-Listenformat"/>
       <label xml:lang="en" text="Bibliography in DOI list format"/>
     </category>
+    <category ID="IAQ">
+      <label xml:lang="de" text="IAQ-Literaturliste im CSV-Format"/>
+      <label xml:lang="en" text="IAQ Bibliography in CSV format"/>
+    </category>
   </categories>
 </mycoreclass>
