@@ -563,7 +563,7 @@
     </xsl:for-each>
   </xsl:template>
   
-  <xsl:template match="mods:location/mods:url">
+  <xsl:template match="mods:location/mods:url" mode="solrField">
     <field name="url">
       <xsl:value-of select="." />
     </field>
