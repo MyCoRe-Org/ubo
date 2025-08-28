@@ -118,7 +118,7 @@
       <xsl:if test="position() = 1"><xsl:value-of select="string-length(text())"/></xsl:if>
     </xsl:for-each>
   </xsl:variable>
-  <article class="card mb-3">
+  <article class="card mb-3 ubo-facet-card-{translate(@name, '.', '-')}">
     <div class="card-body">
       <hgroup>
         <h3>
