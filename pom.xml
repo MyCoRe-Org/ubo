@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.mycore</groupId>
     <artifactId>mycore-parent</artifactId>
-    <version>57-SNAPSHOT</version>
+    <version>57</version>
   </parent>
 
   <groupId>org.mycore.ubo</groupId>
@@ -51,7 +51,7 @@
     <jquery.ui.version>1.13.2</jquery.ui.version>
     <jquery.version>3.5.1</jquery.version>
     <maven-dependency-plugin.version>3.5.0</maven-dependency-plugin.version>
-    <mycore.version>2023.06.3-SNAPSHOT</mycore.version>
+    <mycore.version>2023.06.4-SNAPSHOT</mycore.version>
     <node.version>v20.11.0</node.version>
     <pica2mods.version>2.12</pica2mods.version>
     <sortpom.sortDeps>scope,groupId,artifactId</sortpom.sortDeps>
