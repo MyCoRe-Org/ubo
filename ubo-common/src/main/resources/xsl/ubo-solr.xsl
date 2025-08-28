@@ -57,6 +57,7 @@
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:titleInfo[not(@type)]" mode="solrField.host" />
     <xsl:apply-templates select="mods:relatedItem[@type='host'][substring-after(mods:genre/@valueURI, '#') = 'journal']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:part" mode="solrField" />
+    <xsl:apply-templates select="mods:location/mods:url|mods:relatedItem[@type='host']/mods:location/mods:url" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:originInfo" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:relatedItem[@type='series']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:name[@type='conference'][not(ancestor::mods:relatedItem[@type='references'])][1]" mode="solrField" />
@@ -560,6 +561,12 @@
         <xsl:value-of select="mods:number" />
       </field>
     </xsl:for-each>
+  </xsl:template>
+  
+  <xsl:template match="mods:location/mods:url" mode="solrField">
+    <field name="url">
+      <xsl:value-of select="." />
+    </field>
   </xsl:template>
 
   <xsl:template match="mods:*[@authority or @authorityURI]|mods:typeOfResource|mods:accessCondition" mode="category">

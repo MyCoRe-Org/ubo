@@ -715,6 +715,15 @@
   },
   {
     "add-field": {
+      "name": "url",
+      "type": "ubo_id",
+      "multiValued": true,
+      "indexed": true,
+      "stored": false
+    }
+  },
+  {
+    "add-field": {
       "name": "destatis",
       "type": "ubo_id",
       "multiValued": true,
