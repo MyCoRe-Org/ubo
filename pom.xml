@@ -47,7 +47,6 @@
     <bootstrap.version>4.4.1</bootstrap.version>
     <font-awesome.version>5.13.0</font-awesome.version>
     <jakarta.xml.bind.version>3.0.1</jakarta.xml.bind.version>
-    <java.target.version>17</java.target.version>
     <jquery.ui.version>1.13.2</jquery.ui.version>
     <jquery.version>3.5.1</jquery.version>
     <maven-dependency-plugin.version>3.5.0</maven-dependency-plugin.version>
