@@ -16,7 +16,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.mods.merger.MCRMerger;
 import org.mycore.mods.merger.MCRMergerFactory;
-import org.mycore.mods.merger.MCRNameMerger;
+import org.mycore.ubo.modsperson.merger.MCRNameMerger;
 
 public class MODSPersonLookup {
 

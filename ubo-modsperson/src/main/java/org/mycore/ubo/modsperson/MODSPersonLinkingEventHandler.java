@@ -29,7 +29,7 @@ import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.mods.merger.MCRMergeTool;
 import org.mycore.mods.merger.MCRMerger;
 import org.mycore.mods.merger.MCRMergerFactory;
-import org.mycore.mods.merger.MCRNameMerger;
+import org.mycore.ubo.modsperson.merger.MCRNameMerger;
 
 /**
  * EventHandler to connect personal information in mods objects to the corresponding information in modsperson

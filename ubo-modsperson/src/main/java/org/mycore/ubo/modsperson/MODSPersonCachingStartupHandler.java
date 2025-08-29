@@ -40,6 +40,10 @@ public class MODSPersonCachingStartupHandler implements MCRStartupHandler.AutoEx
 
     @Override
     public void startUp(jakarta.servlet.ServletContext servletContext) {
+        if (servletContext == null) { // only run in WebApp
+            return;
+        }
+
         AtomicInteger counter = new AtomicInteger(0);
         int offset = 0;
         int blockSize = 1000;

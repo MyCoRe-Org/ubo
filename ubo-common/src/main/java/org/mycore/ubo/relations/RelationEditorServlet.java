@@ -20,10 +20,10 @@ import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.mods.merger.MCRMergeTool;
 import org.mycore.mods.merger.MCRMerger;
 import org.mycore.mods.merger.MCRMergerFactory;
-import org.mycore.mods.merger.MCRNameMerger;
 import org.mycore.ubo.AccessControl;
 import org.mycore.ubo.DozBibEntryServlet;
 import org.mycore.ubo.dedup.jpa.DeduplicationKeyManager;
+import org.mycore.ubo.modsperson.merger.MCRNameMerger;
 
 import java.io.IOException;
 import java.util.Date;
