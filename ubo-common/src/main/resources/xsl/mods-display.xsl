@@ -631,7 +631,7 @@
                         <xsl:if test="$show-connected-indicator-icon = 'true' and $is-corresponding-author = true()">
                           <br />
                         </xsl:if>
-                        <xsl:if test="$show-connected-indicator-icon = 'true'">
+                        <xsl:if test="$is-corresponding-author = true()">
                           <xsl:value-of select="i18n:translate('ubo.person.corresponding')" />
                         </xsl:if>
                       </dd>
