@@ -94,8 +94,8 @@ class OrcidProfile {
         }
         const tokenObject = await OrcidProfile.getJWTTokenObject(baseURL);
         const authHeader = OrcidProfile.getAuthorizationHeader(tokenObject);
-        const requestURL = `${baseURL}api/orcid/v1/revoke/${orcid}`;
-        const response = await fetch(requestURL, {headers: {Authorization: authHeader}, method: "POST"});
+        const requestURL = `${baseURL}rsc/orcid/oauth/${orcid}`;
+        const response = await fetch(requestURL, {headers: {Authorization: authHeader}, method: "DELETE"});
         if (!response.ok) {
             console.warn(`HTTP error! status: ${response.status}`);
         }
