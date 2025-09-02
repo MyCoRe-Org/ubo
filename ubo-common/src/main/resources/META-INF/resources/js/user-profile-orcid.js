@@ -117,7 +117,7 @@ class OrcidProfile {
         }
         const tokenObject = await OrcidProfile.getJWTTokenObject(baseURL);
         const authHeader = OrcidProfile.getAuthorizationHeader(tokenObject);
-        const requestURL = `${baseURL}api/orcid/v1/${orcid}/user-properties`;
+        const requestURL = `${baseURL}api/orcid/v1/user-properties/${orcid}`;
         const response = await fetch(requestURL, {headers: {Authorization: authHeader}});
         return await response.json();
     }
@@ -142,7 +142,7 @@ class OrcidProfile {
         }
         const tokenObject = await OrcidProfile.getJWTTokenObject(baseURL);
         const authHeader = OrcidProfile.getAuthorizationHeader(tokenObject);
-        const requestURL = `${baseURL}api/orcid/v1/${orcid}/user-properties`;
+        const requestURL = `${baseURL}api/orcid/v1/user-properties/${orcid}`;
         const response = await fetch(requestURL, {
             headers: {
                 Authorization: authHeader,
