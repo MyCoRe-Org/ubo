@@ -57,6 +57,8 @@ class ScopusImporter {
 
     private static String MAIL_XSL;
 
+    private static Boolean MAIL_ALWAYS_SEND;
+
     private static XPathExpression<Element> MODS_XPATH = XPATH_FACTORY
         .compile(".//mods:mods", Filters.element(), null, MODS_NAMESPACE);
     private List<MCRObject> importedObjects = new ArrayList<>();
@@ -71,6 +73,7 @@ class ScopusImporter {
         MAIL_TO = MCRConfiguration2.getString(prefix + "To").get();
         MAIL_PARAM = MCRConfiguration2.getString(prefix + "Param").get();
         MAIL_XSL = MCRConfiguration2.getString(prefix + "XSL").get();
+        MAIL_ALWAYS_SEND = MCRConfiguration2.getBoolean(prefix + "AlwaysSend").orElse(false);
     }
 
 
@@ -162,7 +165,7 @@ class ScopusImporter {
         int numPublicationsImported = importedObjects.size();
         LOGGER.info("imported {} publications.", numPublicationsImported);
 
-        if ((numPublicationsImported > 0) && (MAIL_XSL != null)) {
+        if (MAIL_XSL != null && (numPublicationsImported > 0 || MAIL_ALWAYS_SEND)) {
             Element xml = new Element(STATUS).setAttribute("source", "SCOPUS");
             for (MCRObject obj : importedObjects) {
                 xml.addContent(obj.createXML().detachRootElement());

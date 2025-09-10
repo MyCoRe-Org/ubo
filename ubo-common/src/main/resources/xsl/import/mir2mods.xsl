@@ -105,7 +105,7 @@
                 <!-- TODO: only do that for his?-->
                 <xsl:variable name="uri" select="@valueURI"/>
                 <xsl:variable name="type" select="substring-after($uri, '#')"/>
-                <mods:classification valueURI="{$WebApplicationBaseURL}classifications/ORIGIN/ORIGIN#{$type}"
+                <mods:classification valueURI="{$WebApplicationBaseURL}classifications/ORIGIN#{$type}"
                                      authorityURI="{$WebApplicationBaseURL}classifications/ORIGIN"/>
             </xsl:when>
             <xsl:otherwise>
