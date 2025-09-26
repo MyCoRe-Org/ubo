@@ -17,6 +17,7 @@ import org.jdom2.Document;
 import org.mycore.common.MCRMailer;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.datamodel.common.MCRLinkTableManager;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -29,8 +30,10 @@ import org.mycore.frontend.support.MCRObjectIDLockTable;
 import org.mycore.mods.MCRMODSWrapper;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class DozBibEntryServlet extends MCRServlet {
 
@@ -107,6 +110,15 @@ public class DozBibEntryServlet extends MCRServlet {
         List<MCRMetaLinkID> children = obj.getStructure().getChildren();
         if (!children.isEmpty()) {
             res.sendError(HttpServletResponse.SC_CONFLICT, "entry has " + children.size() + " child(ren)");
+            return;
+        }
+
+        MCRLinkTableManager linkTableManager = MCRLinkTableManager.getInstance();
+        if (linkTableManager.countReferenceLinkTo(oid) > 0) {
+            Collection<String> linkedIds = linkTableManager.getSourceOf(oid);
+            String message = String.format(Locale.ROOT, "Entry still has %d linked entries: %s",
+                linkedIds.size(), String.join(", ", linkedIds));
+            res.sendError(HttpServletResponse.SC_CONFLICT, message);
             return;
         }
 
