@@ -86,7 +86,11 @@ public class MODSPersonEventHandlerTest extends MCRStoreTestCase {
         assertEquals(1, destinations.size());
         assertEquals("junit_modsperson_00000016", destinations.getFirst());
 
+        assertThrows(MCRActiveLinkException.class, () -> MCRMetadataManager.delete(person1));
+
+        linkTableManager.deleteReferenceLink(obj1.getId());
         MCRMetadataManager.delete(person1);
+
         assertEquals(0, linkTableManager.countReferenceLinkTo("junit_modsperson_00000016"));
         destinations = (List) linkTableManager
             .getDestinationOf("junit_mods_00000017", "reference");
@@ -98,5 +102,7 @@ public class MODSPersonEventHandlerTest extends MCRStoreTestCase {
         wrapper = new MCRMODSWrapper(obj1);
         modsName = wrapper.getMODS().getChild("name", MCRConstants.MODS_NAMESPACE);
         assertNull(modsName.getAttribute("href", MCRConstants.XLINK_NAMESPACE));
+
+        // TODO delete person1 and check for no error
     }
 }

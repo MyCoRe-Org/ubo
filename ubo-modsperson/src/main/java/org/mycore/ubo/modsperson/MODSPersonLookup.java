@@ -1,7 +1,6 @@
 package org.mycore.ubo.modsperson;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -14,9 +13,8 @@ import org.mycore.common.MCRConstants;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mods.MCRMODSWrapper;
-import org.mycore.mods.merger.MCRMerger;
-import org.mycore.mods.merger.MCRMergerFactory;
-import org.mycore.ubo.modsperson.merger.MCRNameMerger;
+
+import static org.mycore.ubo.modsperson.MODSPersonUtils.hasSameNames;
 
 public class MODSPersonLookup {
 
@@ -27,11 +25,13 @@ public class MODSPersonLookup {
     public static void add(MCRObject person) {
         Element mods = new MCRMODSWrapper(person).getMODS().clone();
         PersonCache personCache = PersonCache.newPersonCacheFromMCRObject(person);
-        id2person.put(person.getId().toString(), personCache);
-        getNameIdentifiers(mods).forEach(nameID -> {
-            String key = buildKey(nameID);
-            nameId2person.computeIfAbsent(key, k -> new HashSet<>()).add(personCache);
-        });
+        if (personCache != null) {
+            id2person.put(person.getId().toString(), personCache);
+            getNameIdentifiers(mods).forEach(nameID -> {
+                String key = buildKey(nameID);
+                nameId2person.computeIfAbsent(key, k -> new HashSet<>()).add(personCache);
+            });
+        }
     }
 
     public static void add(PersonCache personCache) {
@@ -75,8 +75,11 @@ public class MODSPersonLookup {
     }
 
     private static List<Element> getNameIdentifiers(Element mods) {
-        return mods.getChild("name", MCRConstants.MODS_NAMESPACE).getChildren("nameIdentifier",
-            MCRConstants.MODS_NAMESPACE);
+        if (mods != null && mods.getChild("name", MCRConstants.MODS_NAMESPACE) != null) {
+            return mods.getChild("name", MCRConstants.MODS_NAMESPACE).getChildren("nameIdentifier",
+                MCRConstants.MODS_NAMESPACE);
+        }
+        return new ArrayList<>();
     }
 
     public static Set<PersonCache> lookup(Element modsName) {
@@ -89,51 +92,6 @@ public class MODSPersonLookup {
             .filter(savedPerson -> savedPerson == null || !hasSameNames(modsName, savedPerson))
             .count() == nameId2person.get(key).size());
         return keys2lookup.isEmpty() ? null : nameId2person.get(keys2lookup.iterator().next());
-    }
-
-    /**
-     * Compares a modsName Element with a given cached person for same names.
-     * @param elementToCompare modsName Element to compare to person in cache
-     * @param cache Element from cache that is compared
-     * @return true if the names are the same or if the cache has an alternative name matching the elementToCompare
-     */
-    private static boolean hasSameNames(Element elementToCompare, PersonCache cache) {
-        Element savedElement = new Element("name", MCRConstants.MODS_NAMESPACE);
-        savedElement.setAttribute("type", "personal");
-
-        List<Element> innerNameElements = new ArrayList<>();
-
-        Element familyNameElement = new Element("namePart", MCRConstants.MODS_NAMESPACE);
-        familyNameElement.setAttribute("type", "family");
-        familyNameElement.setText(cache.getFamilyName());
-        innerNameElements.add(familyNameElement);
-
-        Element givenNameElement = new Element("namePart", MCRConstants.MODS_NAMESPACE);
-        givenNameElement.setAttribute("type", "given");
-        givenNameElement.setText(cache.getGivenName());
-        innerNameElements.add(givenNameElement);
-
-
-        for (Map.Entry<String, String> entry : cache.getAlternativeNames()) {
-            Element altNameElement = new Element("alternativeName", MCRConstants.MODS_NAMESPACE);
-
-            Element altFamilyNameElement = new Element("namePart", MCRConstants.MODS_NAMESPACE);
-            altFamilyNameElement.setAttribute("type", "family");
-            altFamilyNameElement.setText(entry.getKey());
-
-            Element altGivenNameElement = new Element("namePart", MCRConstants.MODS_NAMESPACE);
-            altGivenNameElement.setAttribute("type", "given");
-            altGivenNameElement.setText(entry.getValue());
-
-            altNameElement.setContent(Arrays.asList(altFamilyNameElement, altGivenNameElement));
-            innerNameElements.add(altNameElement);
-        }
-
-        savedElement.setContent(innerNameElements);
-
-        MCRMerger merger1 = MCRMergerFactory.buildFrom(elementToCompare);
-        MCRMerger merger2 = MCRMergerFactory.buildFrom(savedElement);
-        return merger1.isProbablySameAs(merger2) || ((MCRNameMerger) merger2).hasAlternativeNameSameAs(merger1);
     }
 
     /**
@@ -165,6 +123,9 @@ public class MODSPersonLookup {
         public static PersonCache newPersonCacheFromMCRObject(MCRObject obj) {
             MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
             Element modsName = wrapper.getMODS().getChild("name", MCRConstants.MODS_NAMESPACE);
+            if (modsName == null) {
+                return null;
+            }
 
             String familyNameString = modsName
                 .getChildren().stream().filter(e -> "family".equals(e.getAttributeValue("type")))

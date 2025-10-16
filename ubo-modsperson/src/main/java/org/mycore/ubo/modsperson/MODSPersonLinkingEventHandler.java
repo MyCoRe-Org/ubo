@@ -15,6 +15,7 @@ import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
+import org.mycore.common.MCRXlink;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.events.MCREvent;
@@ -30,6 +31,8 @@ import org.mycore.mods.merger.MCRMergeTool;
 import org.mycore.mods.merger.MCRMerger;
 import org.mycore.mods.merger.MCRMergerFactory;
 import org.mycore.ubo.modsperson.merger.MCRNameMerger;
+
+import static org.mycore.ubo.modsperson.MODSPersonUtils.hasSameNames;
 
 /**
  * EventHandler to connect personal information in mods objects to the corresponding information in modsperson
@@ -48,7 +51,10 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
 
     @Override
     protected void handleObjectCreated(MCREvent evt, MCRObject obj) {
-        handleObject(obj);
+        boolean wasModified = handleObject(obj);
+        if (wasModified) {
+            MCRXMLMetadataManager.getInstance().update(obj.getId(), obj.createXML(), new Date());
+        }
     }
 
     @Override
@@ -108,7 +114,7 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
     }
 
     private MCRObject getPersonReferencedIn(Element modsName) {
-        String personID = modsName.getAttributeValue("href", MCRConstants.XLINK_NAMESPACE);
+        String personID = modsName.getAttributeValue(MCRXlink.HREF, MCRConstants.XLINK_NAMESPACE);
         if (!StringUtils.isEmpty(personID)) {
             LOGGER.debug("Retrieving person object already referenced in publication: " + personID);
             MCRObjectID oid = MCRObjectID.getInstance(personID);
@@ -117,17 +123,17 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
                 return MCRMetadataManager.retrieveMCRObject(oid);
             } catch (MCRPersistenceException ex) {
                 LOGGER.warn("Modsperson object " + personID + " not found, remove reference link: " + ex.getMessage());
-                modsName.removeAttribute("href", MCRConstants.XLINK_NAMESPACE);
+                modsName.removeAttribute(MCRXlink.HREF, MCRConstants.XLINK_NAMESPACE);
             }
         }
         return null;
     }
 
     private void setReferencedPerson(Element modsName, MCRObject person) {
-        if (modsName.getAttribute("href", MCRConstants.XLINK_NAMESPACE) == null) {
+        if (modsName.getAttribute(MCRXlink.HREF, MCRConstants.XLINK_NAMESPACE) == null) {
             String personID = person.getId().toString();
             LOGGER.info("Linking mods:name in publication to " + personID);
-            modsName.setAttribute("href", personID, MCRConstants.XLINK_NAMESPACE);
+            modsName.setAttribute(MCRXlink.HREF, personID, MCRConstants.XLINK_NAMESPACE);
             modsName.getParentElement().setAttribute("modified", "true");
             MCRMODSSorter.sort(modsName);
         }
@@ -145,14 +151,27 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
         if (cachedPersons == null || cachedPersons.isEmpty()) {
             return null;
         }
-        MODSPersonLookup.PersonCache firstMatch = cachedPersons.iterator().next();
-        if (cachedPersons.size() > 1) {
-            String allIDs = cachedPersons.stream()
-                .map(o -> o.getPersonmodsId().toString()).collect(Collectors.joining(", "));
 
-            LOGGER.warn("There are multiple modsperson-objects matching the person in publication "
-                + publicationID + ": ["+ allIDs +"]. Chosing " + firstMatch.getPersonmodsId().toString() + ".");
+        if (cachedPersons.size() == 1) {
+            MODSPersonLookup.PersonCache only = cachedPersons.iterator().next();
+            return MCRMetadataManager.retrieveMCRObject(only.getPersonmodsId());
         }
+
+        for (MODSPersonLookup.PersonCache pc : cachedPersons) {
+            if (hasSameNames(modsName, pc)) {
+                return MCRMetadataManager.retrieveMCRObject(pc.getPersonmodsId());
+            }
+        }
+
+        // Fallback
+        MODSPersonLookup.PersonCache firstMatch = cachedPersons.iterator().next();
+        String allIDs = cachedPersons.stream()
+            .map(o -> o.getPersonmodsId().toString()).collect(Collectors.joining(", "));
+
+        LOGGER.warn("There are multiple modsperson-objects matching the person in publication "
+            + publicationID + ": [" + allIDs + "]. No name-match found, chosing "
+            + firstMatch.getPersonmodsId().toString() + ".");
+
         return MCRMetadataManager.retrieveMCRObject(firstMatch.getPersonmodsId());
     }
 
@@ -210,7 +229,7 @@ public class MODSPersonLinkingEventHandler extends MCREventHandlerBase {
 
     private Element filterMODS(Element modsName) {
         Element cloned = modsName.clone();
-        cloned.removeAttribute("href", MCRConstants.XLINK_NAMESPACE);
+        cloned.removeAttribute(MCRXlink.HREF, MCRConstants.XLINK_NAMESPACE);
         cloned.removeChildren("displayForm", MCRConstants.MODS_NAMESPACE);
         cloned.removeChildren("alternativeName", MCRConstants.MODS_NAMESPACE);
         cloned.removeChildren("role", MCRConstants.MODS_NAMESPACE);

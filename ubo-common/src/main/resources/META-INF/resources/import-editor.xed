@@ -506,6 +506,14 @@
             <xed:output i18n="ubo.corresponding_author" />
           </div>
         </xed:bind>
+        <xed:if test="@xlink:href">
+            <xed:bind xpath="@xlink:href" name="modsperson_ref">
+                <div class="form-group form-inline col-12 px-0">
+                    <label class="mycore-form-label">Verknüpfte Person:</label>
+                    <a href="/servlets/DozBibEntryServlet?id={$modsperson_ref}"><xed:output /></a>
+                </div>
+            </xed:bind>
+        </xed:if>
       </div>
     </xed:repeat>
   </xed:template>

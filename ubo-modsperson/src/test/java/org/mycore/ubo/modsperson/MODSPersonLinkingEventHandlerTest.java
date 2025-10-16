@@ -127,8 +127,7 @@ public class MODSPersonLinkingEventHandlerTest extends MCRStoreTestCase {
     }
 
     /**
-     * Tests the case that a lookup returns multiple person-objects. This needs a constellation of test data
-     * that is unlikely to occur in production.
+     * Tests the case that a lookup returns multiple person-objects.
      * @throws IOException in case of error
      * @throws JDOMException in case of error
      * @throws MCRAccessException in case of error
@@ -169,12 +168,11 @@ public class MODSPersonLinkingEventHandlerTest extends MCRStoreTestCase {
             .filter(ni -> "lsf".equals(ni.getAttributeValue("type")))
             .map(Element::getText).toList();
 
-        if (lsfs.size() == 1) {
-            assertTrue(lsfs.get(0).equals("77766") || lsfs.get(0).equals("10101"));
-        } else if (lsfs.size() == 2) {
-            assertTrue(lsfs.get(0).equals("77788") || lsfs.get(1).equals("77788"));
+        if (lsfs.size() == 2) {
+            assertTrue(lsfs.get(0).equals("77766") && lsfs.get(1).equals("77788") ||
+                lsfs.get(0).equals("77788") && lsfs.get(1).equals("77766"));
         } else {
-            fail(modsperson1.getId().toString() + " is expected to have either one or two LSF-IDs");
+            fail(modsperson1.getId().toString() + " is expected to have two LSF-IDs");
         }
 
         MCRObject modsperson2 = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(modspersons.get(1)));
@@ -186,11 +184,9 @@ public class MODSPersonLinkingEventHandlerTest extends MCRStoreTestCase {
             .map(Element::getText).toList();
 
         if (lsfs.size() == 1) {
-            assertTrue(lsfs.get(0).equals("77766") || lsfs.get(0).equals("10101"));
-        } else if (lsfs.size() == 2) {
-            assertTrue(lsfs.get(0).equals("77788") || lsfs.get(1).equals("77788"));
+            assertEquals("10101", lsfs.get(0));
         } else {
-            fail(modsperson2.getId().toString() + " is expected to have either one or two LSF-IDs");
+            fail(modsperson2.getId().toString() + " is expected to have one LSF-ID");
         }
     }
 
