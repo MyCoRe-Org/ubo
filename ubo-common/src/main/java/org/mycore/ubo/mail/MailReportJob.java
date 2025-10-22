@@ -2,6 +2,7 @@ package org.mycore.ubo.mail;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.mycore.common.MCRException;
 import org.mycore.common.MCRMailer;
 import org.mycore.common.MCRSystemUserInformation;
 import org.mycore.common.config.MCRConfiguration2;
@@ -84,9 +85,11 @@ public class MailReportJob extends MCRCronjob {
             }
             String emailBody = "Neuerscheinungen siehe Anhang";
             String attachment = resolveURI(configTuple.get("uri"), configTuple.get("filetype"));
-            String[] recipients = configTuple.get("to").split(",");
-            for (String recipient : recipients) {
-                preparedEmails.add(new PreparedEmail(CONFIG_MAILFROM, recipient, "Neuerscheinungen Bibliographie", emailBody, attachment));
+            if (attachment != null) {
+                String[] recipients = configTuple.get("to").split(",");
+                for (String recipient : recipients) {
+                    preparedEmails.add(new PreparedEmail(CONFIG_MAILFROM, recipient, "Neuerscheinungen Bibliographie", emailBody, attachment));
+                }
             }
         }
         return preparedEmails;
