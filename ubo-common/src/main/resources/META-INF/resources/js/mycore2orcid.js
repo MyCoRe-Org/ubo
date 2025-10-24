@@ -116,7 +116,8 @@ function updateORCIDPublishOrUpdateButton(div, objectStatus, headers) {
             $(this).attr("disabled", "disabled");
             div = this;
 
-            const resp = await fetch(orcidPublishURL.replace("{orcid}", userStatus.trustedOrcids[0]) + id, headers('POST'));
+            const resp = await fetch(orcidPublishURL.replace("{orcid}", userStatus.trustedOrcids[0]) + id, (isInProfile ? headers('PUT') : headers('POST')));
+
             if (resp.ok) {
                 $("#notification-dialog-success").modal('show');
                 await updateUI(headers);
