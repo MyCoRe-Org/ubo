@@ -85,7 +85,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
     /** If the matched MCRUser has this ID set in its attributes, enrich the publication with it */
     private String leadIDName;
 
-    /** Matcher to lookup a matching local user **/
+    /** Matcher to look up a matching local user **/
     private MCRUserMatcher localMatcher;
 
     /** A chain of implemented user matchers */
@@ -147,7 +147,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
         LOGGER.debug("Final document: {}", new XMLOutputter(Format.getPrettyFormat()).outputString(obj.createXML()));
     }
 
-    private void handleName(Element modsNameElement) {
+    protected void handleName(Element modsNameElement) {
         MCRUser userFromModsName = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(modsNameElement);
         MCRUserMatcherDTO matcherDTO = new MCRUserMatcherDTO(userFromModsName);
 
@@ -187,7 +187,7 @@ public class PublicationEventHandler extends MCREventHandlerBase {
             .stream().anyMatch(element -> leadIDName.equals(element.getAttributeValue("type")));
     }
 
-    private void handleUser(Element modsName, MCRUser user) {
+    protected void handleUser(Element modsName, MCRUser user) {
         connectModsNameElementWithMCRUser(modsName, user);
 
         MCRUser storedUser = MCRUserManager.getUser(user.getUserName() + "@" + user.getRealmID());
