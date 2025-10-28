@@ -31,7 +31,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static org.mycore.common.MCRConstants.*;
+import static org.mycore.common.MCRConstants.XPATH_FACTORY;
 import static org.mycore.ubo.matcher.MCRUserMatcherUtils.MODS_NAMESPACE;
 
 /**
@@ -162,12 +162,14 @@ public class PublicationEventHandler extends MCREventHandlerBase {
         MCRUserMatcherDTO localMatcherDTO = localMatcher.matchUser(matcherDTO);
         if (localMatcherDTO.wasMatchedOrEnriched()) {
             handleUser(modsNameElement, localMatcherDTO.getMCRUser());
-        } else if (containsLeadID(modsNameElement)) {
+        } else if (localMatcherDTO.getMCRUser() != null && containsLeadID(modsNameElement)) {
             MCRUser newLocalUser = MCRUserMatcherUtils.createNewMCRUserFromModsNameElement(
                 modsNameElement, MCRRealmFactory.getLocalRealm().getID());
             newLocalUser.setRealName(buildPersonNameFromMODS(modsNameElement).orElse(newLocalUser.getUserID()));
             connectModsNameElementWithMCRUser(modsNameElement, newLocalUser);
             MCRUserManager.updateUser(newLocalUser);
+        } else {
+            LOGGER.warn("No matching user found for for name element {}", userFromModsName.getRealName());
         }
 
         MCRConfiguration2.getBoolean(CONFIG_SKIP_LEAD_ID)
