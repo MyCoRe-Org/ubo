@@ -36,7 +36,7 @@ import java.util.List;
 public class MODSPersonMigrationCommands {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String CONNECTION_ATTRIBUTE_NAME = "id_connection";
+    protected static final String CONNECTION_ATTRIBUTE_NAME = "id_connection";
     protected static final String MODSPERSON_ATTRIBUTE_NAME = "id_modsperson";
     protected static final String ORCID_AUTH_ATTRIBUTE_PREFIX = MCRORCIDUser.ATTR_ORCID_CREDENTIAL;
     protected static final String ORCID_USER_PROPERTIES_ATTRIBUTE_PREFIX = MCRORCIDUser.ATTR_ORCID_USER_PROPERTIES;
@@ -263,7 +263,7 @@ public class MODSPersonMigrationCommands {
      */
     private static boolean isArtificialUser(MCRUser user) {
         return (user.getAttributes().stream()
-            .noneMatch(attr -> "id_connection".equals(attr.getName())))
+            .anyMatch(attr -> "id_connection".equals(attr.getName())))
             && user.getRealmID().equals("local") && user.getLastLogin() == null;
     }
 

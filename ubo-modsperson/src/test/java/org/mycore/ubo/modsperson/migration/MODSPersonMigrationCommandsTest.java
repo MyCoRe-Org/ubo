@@ -22,6 +22,8 @@ import org.mycore.user2.MCRUserManager;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -43,6 +45,7 @@ public class MODSPersonMigrationCommandsTest extends MCRStoreTestCase {
 
         MCRUser userLocal = new MCRUser(userName1, MCRRealmFactory.getLocalRealm());
         userLocal.setRealName("Tester, Peter");
+        userLocal.setUserAttribute("id_connection", "123");
         MCRUser userOther = new MCRUser(userName2, MCRRealmFactory.getRealm("test-realm"));
         userOther.setRealName("Petra Tester");
 
@@ -53,7 +56,9 @@ public class MODSPersonMigrationCommandsTest extends MCRStoreTestCase {
         MODSPersonMigrationCommands.migrateModsperson(userName2, "test-realm");
 
         userLocal = MCRUserManager.getUser(userName1, "local");
-        assertEquals(0, userLocal.getAttributes().size());
+        assertEquals(1, userLocal.getAttributes().size());
+        assertEquals(MODSPersonMigrationCommands.CONNECTION_ATTRIBUTE_NAME, userLocal.getAttributes().first().getName());
+        assertEquals("123", userLocal.getAttributes().first().getValue());
 
         userOther = MCRUserManager.getUser(userName2, "test-realm");
         assertEquals(1, userOther.getAttributes().size());
@@ -73,6 +78,7 @@ public class MODSPersonMigrationCommandsTest extends MCRStoreTestCase {
         String userName = "username";
         MCRUser user = new MCRUser(userName, MCRRealmFactory.getLocalRealm());
         user.setRealName("Tester, Peter");
+        user.setLastLogin(Date.from(Instant.now()));
         user.setUserAttribute("id_connection", userName);
         user.setUserAttribute("id_orcid", "000-0001-2345-6789");
         user.setUserAttribute("id_scopus", "00011112222");
