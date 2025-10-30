@@ -26,8 +26,7 @@
     <cargo.tomcat.ajp.port>8292</cargo.tomcat.ajp.port>
     <cargo.version>1.10.15</cargo.version>
     <jetty.version>9.4.51.v20230217</jetty.version>
-    <solr-runner.solrMirrorURL>https://archive.apache.org/dist/lucene/solr/</solr-runner.solrMirrorURL>
-    <solr-runner.solrVersionString>8.6.2</solr-runner.solrVersionString>
+    <solr-runner.solrVersionString>9.7.0</solr-runner.solrVersionString>
     <solr.home>${user.config.dir}/${MCR.AppName}/data/solr</solr.home>
     <tomcat.version>10.1.2</tomcat.version>
   </properties>
@@ -58,12 +57,12 @@
       <plugin>
         <groupId>org.mycore.plugins</groupId>
         <artifactId>solr-runner-maven-plugin</artifactId>
-        <version>1.2</version>
+        <version>1.4</version>
         <configuration>
-          <solrMirrorURL>${solr-runner.solrMirrorURL}</solrMirrorURL>
           <solrVersionString>${solr-runner.solrVersionString}</solrVersionString>
-          <solrHomeTemplate>${project.basedir}/src/main/setup/solr</solrHomeTemplate>
+          <solrHomeTemplate>${project.basedir}/src/main/solr</solrHomeTemplate>
           <solrHome>${solr.home}</solrHome>
+          <cloudMode>true</cloudMode>
         </configuration>
       </plugin>
     </plugins>

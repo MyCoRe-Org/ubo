@@ -15,7 +15,10 @@ import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.util.NamedList;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
@@ -33,6 +36,9 @@ import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.solr.MCRSolrCoreManager;
 import org.mycore.solr.MCRSolrUtils;
+import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
+import org.mycore.solr.auth.MCRSolrAuthenticationManager;
+import org.mycore.solr.auth.MCRSolrPropertyAuthenticationManager;
 import org.mycore.ubo.dedup.DeDupCriteriaBuilder;
 import org.mycore.ubo.dedup.DeDupCriterion;
 import org.mycore.ubo.dedup.jpa.DeduplicationKey;
@@ -156,7 +162,10 @@ public class NewPublicationWizard extends MCRServlet {
         SolrQuery query = new SolrQuery();
         query.setQuery(q);
         query.setRows(0);
-        SolrDocumentList results = solrClient.query(query).getResults();
+        QueryRequest queryRequest = new QueryRequest(query);
+        MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest, MCRSolrAuthenticationLevel.SEARCH);
+        QueryResponse response = queryRequest.process(solrClient);
+        SolrDocumentList results = response.getResults();
         return results.getNumFound() > 0;
     }
 

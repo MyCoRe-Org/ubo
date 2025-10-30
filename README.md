@@ -22,7 +22,7 @@ GRANT ALL PRIVELEGES ON ubo.* to ubo@localhost IDENTIFIED BY 'ubo';
 - setup your database and JDBC configuration in `mycore.properties`
 ```
 MCR.JPA.Driver  = org.h2.Driver
-MCR.JPA.URL     = jdbc:h2:file:/path/to/configuration/.mycore/ubo/data/h2/mir;AUTO_SERVER=TRUE"
+MCR.JPA.URL     = jdbc:h2:file:/path/to/configuration/.mycore/ubo/data/h2/mir;AUTO_SERVER=TRUE
 MCR.JPA.dialect = org.hibernate.dialect.H2Dialect
 ```
 
@@ -34,7 +34,7 @@ cd -
 ```
 
 ## Solr 
-### Setup SOLR 8 
+### Setup SOLR 9
 - described here:
   - https://www.mycore.de/documentation/getting_started/gs_solr8/
   - https://www.mycore.de/documentation/search/search_solr_use/
@@ -51,6 +51,18 @@ vi ~/.mycore/ubo/mycore.properties
 MCR.Solr.ServerURL=http://localhost:8983/
 MCR.Solr.Core.main.Name=ubo
 MCR.Solr.Core.classification.Name=ubo-classifications
+MCR.Solr.Core.project.Name=ubo-projects
+
+# with cloud
+MCR.Solr.Server.Auth.Admin.Class=org.mycore.solr.auth.MCRSolrBasicPropertyAuthentication
+MCR.Solr.Server.Auth.Admin.Password=alleswirdgut
+MCR.Solr.Server.Auth.Admin.Username=admin
+MCR.Solr.Server.Auth.Index.Class=org.mycore.solr.auth.MCRSolrBasicPropertyAuthentication
+MCR.Solr.Server.Auth.Index.Password=alleswirdgut
+MCR.Solr.Server.Auth.Index.Username=indexer
+MCR.Solr.Server.Auth.Search.Class=org.mycore.solr.auth.MCRSolrBasicPropertyAuthentication
+MCR.Solr.Server.Auth.Search.Password=alleswirdgut
+MCR.Solr.Server.Auth.Search.Username=searcher
 ```
 ## Setup Superuser
 
@@ -77,13 +89,22 @@ ubo-cli/target/bin/ubo.sh update permission read for id restapi:/classifications
 
 ## MyCoRe-Solr-Configuration
 ```
+# only with solr cloud (ingore errors until MCR-3543 is fixed)
+ubo-cli/target/bin/ubo.sh upload local config set for main
+ubo-cli/target/bin/ubo.sh upload local config set for classification
+ubo-cli/target/bin/ubo.sh upload local config set for project
+ubo-cli/target/bin/ubo.sh create collection for core main
+ubo-cli/target/bin/ubo.sh create collection for core classification
+ubo-cli/target/bin/ubo.sh create collection for core project
+
+# for all solr installations
 ubo-cli/target/bin/ubo.sh reload solr configuration main in core main
 ```
 
 ## Run 
 - local web application on port 8080 with tomcat 10:
 ```
-mvn cargo:run -Dtomcat=9 -pl ubo-webapp
+mvn cargo:run -Dtomcat -pl ubo-webapp
 ```
 - or jetty: (does not work currently)
 ```

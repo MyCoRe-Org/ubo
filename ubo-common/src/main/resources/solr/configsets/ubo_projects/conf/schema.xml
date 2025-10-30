@@ -28,15 +28,15 @@
   <!-- Field type for text such as title, abstract, comment -->
   <fieldType name="text" class="solr.TextField" positionIncrementGap="100">
     <analyzer>
-      <tokenizer class="solr.StandardTokenizerFactory" />
-      <filter class="solr.GermanNormalizationFilterFactory"/>
-      <filter class="solr.ICUNormalizer2FilterFactory" name="nfkc_cf" mode="compose"/>
-      <filter class="solr.ICUFoldingFilterFactory"/>
-      <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_de.txt" format="snowball" />
-      <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_en.txt" format="snowball" />
-      <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_fr.txt" format="snowball" />
-      <filter class="solr.GermanMinimalStemFilterFactory"/> 
-      <filter class="solr.EnglishMinimalStemFilterFactory"/>
+      <tokenizer name="standard"/>
+      <filter name="germanNormalization" />
+      <filter name="icuNormalizer2" form="nfkc_cf" mode="compose"/>
+      <filter name="icuFolding"/>
+      <filter name="stop" ignoreCase="true" words="lang/stopwords_de.txt" format="snowball" />
+      <filter name="stop" ignoreCase="true" words="lang/stopwords_en.txt" format="snowball" />
+      <filter name="stop" ignoreCase="true" words="lang/stopwords_fr.txt" format="snowball" />
+      <filter name="germanMinimalStem" />
+      <filter name="englishMinimalStem" />
     </analyzer>
   </fieldType>
 
