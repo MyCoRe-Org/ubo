@@ -58,6 +58,10 @@ public class UBOMODSLinksEventHandler extends MCREventHandlerBase {
         if (!MCRMODSWrapper.isSupported(obj)) {
             return;
         }
+        MCRLinkTableManager linkTableManager = MCRLinkTableManager.getInstance();
+        // delete all links and add the still existing ones back later
+        linkTableManager.deleteReferenceLink(obj.getId());
+
         MCRMODSWrapper modsWrapper = new MCRMODSWrapper(obj);
         final Set<MCRCategoryID> categories = new HashSet<>(modsWrapper.getMcrCategoryIDs());
         if (!categories.isEmpty()) {
@@ -68,7 +72,6 @@ public class UBOMODSLinksEventHandler extends MCREventHandlerBase {
         List<Element> linkingPersons = modsWrapper.getElements(LINKED_PERSONS);
         List<Element> joinedNodes = Stream.concat(linkingNodes.stream(), linkingPersons.stream()).toList();
         if (!joinedNodes.isEmpty()) {
-            MCRLinkTableManager linkTableManager = MCRLinkTableManager.getInstance();
             for (Element linkingNode : joinedNodes) {
                 String targetID = linkingNode.getAttributeValue(MCRXlink.HREF, MCRConstants.XLINK_NAMESPACE);
                 if (targetID == null) {
@@ -91,9 +94,6 @@ public class UBOMODSLinksEventHandler extends MCREventHandlerBase {
      */
     @Override
     protected void handleObjectUpdated(final MCREvent evt, final MCRObject obj) {
-        if (!MCRMODSWrapper.isSupported(obj)) {
-            return;
-        }
         handleObjectCreated(evt, obj);
     }
 

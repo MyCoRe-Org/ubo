@@ -27,20 +27,20 @@ public class MODSPersonORCIDLinkingEventHandlerTest extends MCRStoreTestCase {
     @Test
     public void testDoHandleEvent() throws IOException, JDOMException, MCRAccessException {
         URL url = MCRObjectMetadataTest.class.getResource(
-            "/MODSPersonORCIDLinkingEventHandlerTest/junit_modsperson_00000018.xml");
+            "/MODSPersonORCIDLinkingEventHandlerTest/junit_modsperson_00000019.xml");
         Document doc1 = new MCRURLContent(url).asXML();
         MCRObject person1 = new MCRObject(doc1);
         MCRMetadataManager.create(person1);
 
         MCRUser mcrUser = new MCRUser("userName", "local");
-        mcrUser.setUserAttribute("id_modsperson", "junit_modsperson_00000018");
+        mcrUser.setUserAttribute("id_modsperson", "junit_modsperson_00000019");
         mcrUser.setUserAttribute("orcid_credential_0000-0000-0000-0001", "{}");
         mcrUser.setUserAttribute("orcid_credential_0000-0000-0000-0002", "{}");
 
         MCRUserManager.createUser(mcrUser);
 
         MCRObject modsperson = MCRMetadataManager.retrieveMCRObject(MCRObjectID
-            .getInstance("junit_modsperson_00000018"));
+            .getInstance("junit_modsperson_00000019"));
         MCRMODSWrapper wrapper = new MCRMODSWrapper(modsperson);
         Element name = wrapper.getElement("mods:name[@type='personal']");
         List<Element> nameIdentifiers = name.getChildren("nameIdentifier", MODS_NAMESPACE);

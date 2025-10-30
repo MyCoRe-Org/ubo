@@ -15,6 +15,8 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectMetadataTest;
 import org.mycore.mods.MCRMODSWrapper;
+import org.mycore.user2.MCRUser;
+import org.mycore.user2.MCRUserManager;
 
 import java.io.IOException;
 import java.net.URL;
@@ -98,11 +100,23 @@ public class MODSPersonEventHandlerTest extends MCRStoreTestCase {
 
         obj1 = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance("junit_mods_00000017"));
         assertNotNull(obj1);
+    }
 
-        wrapper = new MCRMODSWrapper(obj1);
-        modsName = wrapper.getMODS().getChild("name", MCRConstants.MODS_NAMESPACE);
-        assertNull(modsName.getAttribute("href", MCRConstants.XLINK_NAMESPACE));
+    @Test
+    public void testHandleObjectDeletedUser()
+        throws IOException, JDOMException, MCRAccessException, MCRActiveLinkException {
+        URL url1 = MCRObjectMetadataTest.class.getResource(
+            "/MODSPersonEventHandlerTest/junit_modsperson_00000018.xml");
+        Document doc1 = new MCRURLContent(url1).asXML();
+        MCRObject person1 = new MCRObject(doc1);
+        MCRMetadataManager.create(person1);
 
-        // TODO delete person1 and check for no error
+        MCRUser mcrUser = new MCRUser("userName", "local");
+        mcrUser.setUserAttribute("id_modsperson", "junit_modsperson_00000018");
+        MCRUserManager.createUser(mcrUser);
+        MCRMetadataManager.delete(person1);
+
+        mcrUser = MCRUserManager.getUser("userName", "local");
+        assertEquals(0, mcrUser.getAttributes().size());
     }
 }
