@@ -39,6 +39,7 @@ public class MCRUserMatcherLocal implements MCRUserMatcher {
         MCRUser mcrUser = matcherDTO.getMCRUser();
         List<MCRUser> matchingUsers = new ArrayList<>(getUsersForGivenAttributes(mcrUser.getAttributes()));
 
+        // TODO - this must be removed, name differences lead to new users although identifiers are matching
         MCRMerger nameThatShouldMatch = buildNameMergerFrom(mcrUser);
         matchingUsers.removeIf(userToTest -> !buildNameMergerFrom(userToTest).isProbablySameAs(nameThatShouldMatch));
 
