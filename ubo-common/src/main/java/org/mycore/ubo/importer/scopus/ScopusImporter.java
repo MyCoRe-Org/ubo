@@ -15,7 +15,6 @@ import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRMailer;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.common.xml.MCRXMLFunctions;
@@ -29,9 +28,7 @@ import org.mycore.solr.MCRSolrUtils;
 import org.mycore.ubo.importer.ImportIdProvider;
 
 import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -85,8 +82,13 @@ class ScopusImporter {
     }
 
     public MCRObject doImport(String scopusID) throws MCRPersistenceException, MCRAccessException {
-        if (isAlreadyStored(scopusID)) {
-            LOGGER.info("publication with ID {} already existing, will not import.", scopusID);
+        try {
+            if (isAlreadyStored(scopusID)) {
+                LOGGER.info("publication with ID {} already existing, will not import.", scopusID);
+                return null;
+            }
+        } catch (MCRException e) {
+            LOGGER.warn("publication with ID {} could not be imported: ", scopusID, e);
             return null;
         }
 
