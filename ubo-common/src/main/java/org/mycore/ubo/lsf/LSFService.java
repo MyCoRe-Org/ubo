@@ -70,8 +70,8 @@ public class LSFService implements IdentityService {
 
     private static final String PARAM_ENCODING = "UTF-8";
 
-    /** timeout for lsf request in milliseconds, default value 10 seconds */
-    private static final Integer CONFIG_TIMEOUT = MCRConfiguration2.getInt("UBO.LSF.Timeout").orElse(10000);
+    /** timeout for lsf request in milliseconds */
+    private static final Integer CONFIG_TIMEOUT = MCRConfiguration2.getInt("UBO.LSF.Timeout").orElseThrow();
 
     public LSFService() {
         try {
