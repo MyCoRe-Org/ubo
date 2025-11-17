@@ -2,12 +2,12 @@ package org.mycore.ubo.mail;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.common.MCRException;
 import org.mycore.common.MCRMailer;
 import org.mycore.common.MCRSystemUserInformation;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRSourceContent;
 import org.mycore.mcr.cronjob.MCRCronjob;
+import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.util.concurrent.MCRFixedUserCallable;
 
 import javax.xml.transform.TransformerException;
@@ -31,7 +31,7 @@ public class MailReportJob extends MCRCronjob {
 
     private static final String CONFIG_MAILFROM = MCRConfiguration2.getString("UBO.Mail.From").orElse(null);
 
-    private record PreparedEmail(String from, String to, String subject, String body, String uri) {}
+    private record PreparedEmail(String from, String to, String uri) {}
 
     @Override
     public String getDescription() {
@@ -47,18 +47,26 @@ public class MailReportJob extends MCRCronjob {
                     return null;
                 }
 
+                final String configSubject = MCRTranslation.translate("ubo.mailreport.subject");
+                final String configBody = MCRTranslation.translate("ubo.mailreport.body");
+
+                if (configSubject.startsWith("???") || configBody.startsWith("???")) {
+                    LOGGER.warn("Cannot execute mailing job, configuration subject or body not properly configured");
+                    return null;
+                }
+
                 LOGGER.info("Sending emails to configured recipients...");
                 List<PreparedEmail> preparedEmails = prepareEmails();
 
                 for (PreparedEmail mail : preparedEmails) {
-                    MCRMailer.send(mail.from, mail.to, mail.subject, mail.body, List.of(mail.uri));
+                    MCRMailer.send(mail.from, mail.to, configSubject, configBody, List.of(mail.uri));
                 }
 
                 LOGGER.info("{} emails sent", preparedEmails.size());
                 return null;
             }, MCRSystemUserInformation.getSystemUserInstance()).call();
         } catch (Exception e) {
-            LOGGER.error("Failed to send emails: ", e);
+            LOGGER.error("Failed to send emails: {}", e.getMessage());
         }
     }
 
@@ -83,12 +91,16 @@ public class MailReportJob extends MCRCronjob {
                     + "that each id has the three values 'uri', 'to' and 'filetype'.");
                 continue;
             }
-            String emailBody = "Neuerscheinungen siehe Anhang";
-            String attachment = resolveURI(configTuple.get("uri"), configTuple.get("filetype"));
+            String attachment = null;
+            try {
+                attachment = resolveURI(configTuple.get("uri"), configTuple.get("filetype"));
+            } catch (Exception e) {
+                LOGGER.warn("Couldn't create attachment for uri {}, {}", configTuple.get("uri"), e);
+            }
             if (attachment != null) {
                 String[] recipients = configTuple.get("to").split(",");
                 for (String recipient : recipients) {
-                    preparedEmails.add(new PreparedEmail(CONFIG_MAILFROM, recipient, "Neuerscheinungen Bibliographie", emailBody, attachment));
+                    preparedEmails.add(new PreparedEmail(CONFIG_MAILFROM, recipient, attachment));
                 }
             }
         }
