@@ -22,6 +22,7 @@
 <xsl:include href="mods-highwire.xsl" />
 <xsl:include href="mods-display.xsl" />
 <xsl:include href="coreFunctions.xsl" />
+<xsl:include href="ubo-orcid.xsl" />
 
 <xsl:param name="Referer" select="concat($ServletsBaseURL,'DozBibEntryServlet?id=',/mycoreobject/@ID)" />
 <xsl:param name="CurrentUserPID" />

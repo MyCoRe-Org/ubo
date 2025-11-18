@@ -15,10 +15,10 @@
         xmlns:basket="xalan://org.mycore.ubo.basket.BasketUtils"
         exclude-result-prefixes="xsl xalan i18n mods mcr mcrxml encoder str basket">
 
-<xsl:include href="mods-display.xsl" />
 <xsl:include href="resource:xsl/response-get-handler.xsl"/>
 <xsl:include href="response-facets.xsl" />
 <xsl:include href="ubo-dialog.xsl" />
+<xsl:include href="ubo-orcid.xsl" />
 <xsl:include href="coreFunctions.xsl" />
 <xsl:include href="csl-export-gui.xsl" />
 
@@ -27,6 +27,12 @@
 <xsl:param name="MCR.ORCID2.OAuth.Scope" select="''" />
 
 <xsl:decimal-format name="WesternEurope" decimal-separator="," grouping-separator="."/>
+
+<xsl:variable name="fq">
+  <xsl:if test="not(mcrxml:isCurrentUserInRole('admin'))">
+    <xsl:value-of select="'+status:&quot;confirmed&quot; '"/>
+  </xsl:if>
+</xsl:variable>
 
 <!-- ==================== Trefferliste Metadaten ==================== -->
 
@@ -257,7 +263,6 @@
       </a>
     </span>
    </div>
-
   </div>
  </xsl:if>
 </xsl:template>
@@ -299,66 +304,98 @@
 
 <xsl:template match="doc">
   <xsl:param name="start" />
-  <xsl:variable name="hitNo" select="$start + position()" />
 
   <div class="result mt-2 mb-2">
     <div class="hit card">
       <xsl:variable name="id" select="str[@name='id']" />
-      <xsl:variable name="mycoreobject" select="document(concat('mcrobject:',$id))/mycoreobject" />
-      <xsl:for-each select="$mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
-        <div class="labels card-header ">
-          <xsl:call-template name="label-year" />
-          <xsl:call-template name="pubtype" />
-          <xsl:call-template name="label-oa" />
-          <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update')">
-            <xsl:call-template name="orcid-status" />
+
+      <xsl:variable name="cite" select="str[@name='cite']"/>
+      <xsl:variable name="label-year" select="int[@name='year']"/>
+      <xsl:variable name="pub-type-categid" select="str[@name='genre']"/>
+      <xsl:variable name="pub-type-host-categid" select="str[@name='host_genre']"/>
+      <xsl:variable name="oa-exact-categid" select="str[@name='oa_exact']"/>
+
+      <div class="labels card-header ">
+        <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.search.year')}" onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+year:', $label-year))}')">
+          <xsl:value-of select="$label-year" />
+        </span>
+
+        <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.genre')}"  onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+genre:&quot;', $pub-type-categid, '&quot;'))}')">
+          <xsl:value-of select="mcrxml:getDisplayName('ubogenre', $pub-type-categid)"/>
+
+          <xsl:if test="$pub-type-host-categid">
+            <xsl:text> in </xsl:text>
+            <xsl:value-of select="mcrxml:getDisplayName('ubogenre', $pub-type-host-categid)"/>
           </xsl:if>
-        </div>
-        <div class="content bibentry card-body">
-          <xsl:apply-templates select="." mode="cite">
-            <xsl:with-param name="mode">divs</xsl:with-param>
-          </xsl:apply-templates>
-        </div>
-        <div class="footer card-footer">
-          <xsl:call-template name="bibentry.show.details" />
-          <xsl:if test="basket:hasSpace() and not(basket:contains(string(ancestor::mycoreobject/@ID)))">
-            <xsl:call-template name="bibentry.add.to.basket" />
+        </span>
+
+        <xsl:if test="$oa-exact-categid">
+          <span class="badge oa-badge oa-badge-{$oa-exact-categid} ubo-hover-pointer mr-1" onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+oa_exact:', $oa-exact-categid))}')">
+            <xsl:value-of select="mcrxml:getDisplayName('oa', $oa-exact-categid)"/>
+          </span>
+        </xsl:if>
+
+        <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update')">
+          <xsl:call-template name="orcid-status">
+          <xsl:with-param name="mcrid" select="$id"/>
+          </xsl:call-template>
+        </xsl:if>
+      </div>
+
+      <div class="content bibentry card-body">
+        <xsl:value-of select="$cite" disable-output-escaping="yes"/>
+      </div>
+
+      <div class="footer card-footer">
+        <a class="btn btn-sm btn-outline-primary" href="{$ServletsBaseURL}DozBibEntryServlet?mode=show&amp;id={$id}" target="_self">
+          <xsl:value-of select="i18n:translate('result.dozbib.info')"/>
+        </a>
+
+        <xsl:if test="basket:hasSpace() and not(basket:contains($id))">
+          <xsl:call-template name="bibentry.add.to.basket">
+            <xsl:with-param name="id" select="$id"/>
+          </xsl:call-template>
+        </xsl:if>
+
+        <xsl:call-template name="bibentry.subselect.return">
+          <xsl:with-param name="id" select="$id"/>
+        </xsl:call-template>
+
+        <xsl:if test="not(mcrxml:isCurrentUserGuestUser() = 'true')">
+          <xsl:if  test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update')">
+            <xsl:call-template name="orcid-publish">
+              <xsl:with-param name="mcrid" select="$id"/>
+            </xsl:call-template>
           </xsl:if>
-          <xsl:call-template name="bibentry.subselect.return" />
-          <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update')">
-            <xsl:call-template name="orcid-publish" />
-          </xsl:if>
-          <span class="float-right"># <xsl:value-of select="$hitNo"/></span>
-        </div>
-      </xsl:for-each>
+        </xsl:if>
+        <span class="float-right">
+          <xsl:value-of select="concat('# ', $start + position())"/>
+        </span>
+      </div>
     </div>
   </div>
 </xsl:template>
 
 <xsl:template name="bibentry.add.to.basket">
+  <xsl:param name="id"/>
   <form action="{$ServletsBaseURL}MCRBasketServlet" method="get" class="d-inline">
     <input type="hidden" name="action" value="add"/>
     <input type="hidden" name="type" value="objects"/>
     <input type="hidden" name="resolve" value="true"/>
-    <input type="hidden" name="id" value="{ancestor::mycoreobject/@ID}"/>
-    <input type="hidden" name="uri" value="mcrobject:{ancestor::mycoreobject/@ID}"/>
+    <input type="hidden" name="id" value="{$id}"/>
+    <input type="hidden" name="uri" value="mcrobject:{$id}"/>
     <input type="submit" class="btn btn-sm btn-outline-primary" value="{i18n:translate('button.basketAdd')}" />
   </form>
 </xsl:template>
 
-<xsl:template name="bibentry.show.details">
-   <a class="btn btn-sm btn-outline-primary" href="{$ServletsBaseURL}DozBibEntryServlet?mode=show&amp;id={ancestor::mycoreobject/@ID}" target="_self">
-      <xsl:value-of select="i18n:translate('result.dozbib.info')"/>
-   </a>
-</xsl:template>
-
 <!-- Return from subselect to choose related item (host) in editor form -->
 <xsl:template name="bibentry.subselect.return">
+  <xsl:param name="id"/>
   <xsl:if test="starts-with($mask,'_xed_subselect_session')">
     <form action="{$ServletsBaseURL}XEditor" method="get">
       <input type="hidden" name="_xed_submit_return" value=""/>
       <input type="hidden" name="_xed_session" value="{substring-after($mask,'=')}"/>
-      <input type="hidden" name="." value="{ancestor::mycoreobject/@ID}"/>
+      <input type="hidden" name="." value="{$id}"/>
       <input type="submit" class="btn btn-sm btn-primary" value="{i18n:translate('ubo.relatedItem.host.selectAs')}" />
     </form>
     <form action="{$ServletsBaseURL}XEditor" method="get">

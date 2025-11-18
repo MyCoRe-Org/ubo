@@ -260,16 +260,16 @@
         <xsl:value-of select="document($url)/mycoreclass/categories/category[1]/label[@xml:lang=$CurrentLang]/@text"/>
       </xsl:when>
       <xsl:when test="$type='oa'">
-        <xsl:value-of select="$oa//category[@ID=$value]/label[lang($CurrentLang)]/@text"/>
+        <xsl:value-of select="mcrxml:getDisplayName('oa', $value)"/>
       </xsl:when>
       <xsl:when test="$type='genre'">
-        <xsl:value-of select="$genres//category[@ID=$value]/label[lang($CurrentLang)]/@text"/>
+        <xsl:value-of select="mcrxml:getDisplayName('ubogenre', $value)"/>
       </xsl:when>
       <xsl:when test="$type='origin_exact'">
-        <xsl:value-of select="$origin//category[@ID=$value]/label[lang($CurrentLang)]/@text"/>
+        <xsl:value-of select="mcrxml:getDisplayName('origin', $value)"/>
       </xsl:when>
       <xsl:when test="$type='status'">
-        <xsl:value-of select="i18n:translate(concat('search.dozbib.status.',$value))"/>
+        <xsl:value-of select="i18n:translate(concat('search.dozbib.status.', $value))"/>
       </xsl:when>
       <xsl:when test="$type='partOf'">
         <xsl:value-of select="i18n:translate(concat('search.dozbib.partOf.', $value))"/>
@@ -281,16 +281,16 @@
         <xsl:value-of select="mcrxml:getDisplayName('fundingType', $value)"/>
       </xsl:when>
       <xsl:when test="$type='peerreviewed'">
-          <xsl:value-of select="$peerreviewed//category[@ID=$value]/label[lang($DefaultLang)]/@text"/>
+        <xsl:value-of select="mcrxml:getDisplayName('peerreviewed', $value)"/>
       </xsl:when>
       <xsl:when test="$type='accessrights'">
-          <xsl:value-of select="$accessrights//category[@ID=$value]/label[lang($CurrentLang)]/@text"/>
+        <xsl:value-of select="mcrxml:getDisplayName('accessrights', $value)"/>
       </xsl:when>
       <xsl:when test="$type='mediaType'">
-          <xsl:value-of select="$mediaType//category[@ID=$value]/label[lang($CurrentLang)]/@text"/>
+        <xsl:value-of select="mcrxml:getDisplayName('mediaType', $value)"/>
       </xsl:when>
       <xsl:when test="$type='destatis'">
-        <xsl:value-of select="$destatis//category[@ID=$value]/label[lang('de')]/@text"/>
+        <xsl:value-of select="mcrxml:getDisplayName('destatis', $value)"/>
       </xsl:when>
       <xsl:when test="$type='licenses_facet'">
         <xsl:value-of select="$licenses//category[@ID=$value]/label[lang('de')]/@text"/>
@@ -312,10 +312,10 @@
           <xsl:value-of select="document($url)/mycoreclass/categories/category[1]/label[@xml:lang=$DefaultLang]/@text"/>
         </xsl:when>
         <xsl:when test="$type='oa'">
-          <xsl:value-of select="$oa//category[@ID=$value]/label[lang($DefaultLang)]/@text"/>
+          <xsl:value-of select="mcrxml:getDisplayName('oa', $value)"/>
         </xsl:when>
         <xsl:when test="$type='genre'">
-          <xsl:value-of select="$genres//category[@ID=$value]/label[lang($DefaultLang)]/@text"/>
+          <xsl:value-of select="mcrxml:getDisplayName('ubogenre', $value)"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="$value"/>
