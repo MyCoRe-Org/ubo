@@ -10,12 +10,14 @@
 
   <xsl:import href="xslImport:solr-document:ubo-solr.xsl" />
   <xsl:include href="coreFunctions.xsl"/>
+  <xsl:include href="mycoreobject-mods2text.xsl" />
   
   <xsl:key use="substring-after(@valueURI,'#')" name="destatisByCategory" match="//mods:mods/mods:classification[contains(@authorityURI,'destatis')]"></xsl:key>
   <xsl:variable name="origin"                   select="document('classification:metadata:-1:children:ORIGIN')/mycoreclass/categories" />
 
   <xsl:template match="mycoreobject">
     <xsl:apply-templates select="." mode="baseFields" />
+    <xsl:apply-templates select="." mode="citeFields" />
     <xsl:apply-templates select="structure/parents/parent[@xlink:href]" mode="solrField" />
     <xsl:apply-templates select="service/servflags/servflag[@type='importID']" mode="solrField" />
     <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" mode="solrField" />
@@ -74,6 +76,20 @@
     <xsl:call-template name="partOf" />
     <xsl:call-template name="year" />
     <xsl:call-template name="destatis" />
+  </xsl:template>
+
+  <xsl:template match="mycoreobject" mode="citeFields">
+    <field name="cite">
+      <xsl:apply-templates select="document(concat('xslTransform:mods2citation:mcrobject:', @ID))" mode="serialize"/>
+    </field>
+
+    <field name="cite.de">
+      <xsl:apply-templates select="document(concat('xslTransform:mods2citation?lang=de:mcrobject:', @ID))" mode="serialize"/>
+    </field>
+
+    <field name="cite.en">
+      <xsl:apply-templates select="document(concat('xslTransform:mods2citation?lang=en:mcrobject:', @ID))" mode="serialize"/>
+    </field>
   </xsl:template>
 
   <xsl:template name="sortby_person">
