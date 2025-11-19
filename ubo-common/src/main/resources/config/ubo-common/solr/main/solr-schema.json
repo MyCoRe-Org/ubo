@@ -771,6 +771,24 @@
     }
   },
   {
+    "add-field": {
+      "name": "cite.de",
+      "type": "string",
+      "multiValued": false,
+      "indexed": false,
+      "stored": true
+    }
+  },
+  {
+    "add-field": {
+      "name": "cite.en",
+      "type": "string",
+      "multiValued": false,
+      "indexed": false,
+      "stored": true
+    }
+  },
+  {
     "add-dynamic-field": {
       "name": "host_id_*",
       "type": "ubo_id",

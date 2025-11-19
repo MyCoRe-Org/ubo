@@ -23,9 +23,9 @@
   <locale xml:lang="de">
     <terms>
       <term name="accessed">Download vom</term>
-      <term name="anonymous" form="short">o. V.</term>
+      <term name="anonymous" form="short">o. V.</term>
       <term name="available at">URL</term>
-      <term name="et-al">[u. a.]</term>
+      <term name="et-al">[u. a.]</term>
       <term name="issue">Heft</term>
       <term name="number">Artikel</term>
       <term name="number" form="short">Art.</term>
@@ -36,7 +36,7 @@
   <locale xml:lang="en">
     <terms>
       <term name="anonymous" form="short">anon.</term>
-      <term name="et-al">[et al.]</term>
+      <term name="et-al">[et al.]</term>
       <term name="issue">number</term>
       <term name="issue" form="short">no.</term>
       <term name="number">article</term>

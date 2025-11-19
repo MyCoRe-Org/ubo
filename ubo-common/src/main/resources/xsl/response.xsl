@@ -22,6 +22,7 @@
 <xsl:include href="coreFunctions.xsl" />
 <xsl:include href="csl-export-gui.xsl" />
 
+<xsl:param name="CurrentLang" />
 <xsl:param name="RequestURL" />
 <xsl:param name="MCR.ORCID2.OAuth.ClientSecret" select="''" />
 <xsl:param name="MCR.ORCID2.OAuth.Scope" select="''" />
@@ -309,7 +310,17 @@
     <div class="hit card">
       <xsl:variable name="id" select="str[@name='id']" />
 
-      <xsl:variable name="cite" select="str[@name='cite']"/>
+      <xsl:variable name="cite">
+        <xsl:choose>
+          <xsl:when test="str[@name=concat('cite.', $CurrentLang)]">
+            <xsl:value-of select="str[@name=concat('cite.', $CurrentLang)]"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="str[@name='cite']"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+
       <xsl:variable name="label-year" select="int[@name='year']"/>
       <xsl:variable name="pub-type-categid" select="str[@name='genre']"/>
       <xsl:variable name="pub-type-host-categid" select="str[@name='host_genre']"/>

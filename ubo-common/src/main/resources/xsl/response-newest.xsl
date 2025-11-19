@@ -7,10 +7,10 @@
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   exclude-result-prefixes="xsl mods xalan i18n">
 
-  <xsl:include href="mods-display.xsl" />
   <xsl:include href="coreFunctions.xsl" />
 
   <xsl:param name="ServletsBaseURL" />
+  <xsl:param name="CurrentLang" />
 
   <xsl:template match="/response">
     <xsl:variable name="originalQuery" select="lst[@name='responseHeader']/lst[@name='params']/str[@name='q']"/>
@@ -23,21 +23,29 @@
         <xsl:for-each select="result[@name='response']">
           <ul class="list-group">
             <xsl:for-each select="doc">
+              <xsl:variable name="cite">
+                <xsl:choose>
+                  <xsl:when test="str[@name=concat('cite.', $CurrentLang)]">
+                    <xsl:value-of select="str[@name=concat('cite.', $CurrentLang)]"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="str[@name='cite']"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+
               <li class="list-group-item">
                 <xsl:variable name="id" select="str[@name='id']" />
-                <xsl:variable name="mycoreobject" select="document(concat('mcrobject:',$id))/mycoreobject" />
                 <div class="content bibentry ubo-hover-pointer" title="{i18n:translate('button.show')}" onclick="location.assign('{$WebApplicationBaseURL}servlets/DozBibEntryServlet?mode=show&amp;id={$id}');">
-                  <xsl:apply-templates select="$mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods" mode="cite">
-                    <xsl:with-param name="mode">divs</xsl:with-param>
-                  </xsl:apply-templates>
+                  <xsl:value-of select="$cite" disable-output-escaping="yes"/>
                 </div>
               </li>
             </xsl:for-each>
           </ul>
           <xsl:variable name="year" select="doc[1]/int[@name='year']" />
           <p>
-          <a href="{$ServletsBaseURL}solr/select?q={$originalQuery}+AND+year:%5B{$year - 1}+TO+*%5D&amp;sort=year+desc,created+desc">
-              <xsl:value-of select="i18n:translate('ubo.more')" />...
+            <a href="{$ServletsBaseURL}solr/select?q={$originalQuery}+AND+year:%5B{$year - 1}+TO+*%5D&amp;sort=year+desc,created+desc">
+              <xsl:value-of select="i18n:translate('ubo.more')"/>...
             </a>
           </p>
         </xsl:for-each>
