@@ -70,6 +70,9 @@ public class LSFService implements IdentityService {
 
     private static final String PARAM_ENCODING = "UTF-8";
 
+    /** timeout for lsf request in milliseconds */
+    private static final Integer CONFIG_TIMEOUT = MCRConfiguration2.getInt("UBO.LSF.Timeout").orElseThrow();
+
     public LSFService() {
         try {
             cache = LSFServiceCache.instance();
@@ -78,6 +81,10 @@ public class LSFService implements IdentityService {
 
             URL soapSearchEndpoint = new URL(baseURL + "/soapsearch");
             soapsearch = new SOAPSearchServiceLocator().getsoapsearch(soapSearchEndpoint);
+
+            if (soapsearch instanceof org.apache.axis.client.Stub axisStub) {
+                axisStub.setTimeout(CONFIG_TIMEOUT);
+            }
 
             URL dbInterfaceEndpoint = new URL(baseURL + "/dbinterface");
             dbinterface = new DBInterfaceServiceLocator().getdbinterface(dbInterfaceEndpoint);
