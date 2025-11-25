@@ -80,15 +80,15 @@
 
   <xsl:template match="mycoreobject" mode="citeFields">
     <field name="cite">
-      <xsl:apply-templates select="document(concat('xslTransform:mods2csl:mcrobject:', @ID))" mode="serialize"/>
+      <xsl:apply-templates select="document(concat('xslTransform:mods2citation:mcrobject:', @ID))" mode="serialize"/>
     </field>
 
     <field name="cite.de">
-      <xsl:apply-templates select="document(concat('xslTransform:mods2csl?lang=de:mcrobject:', @ID))" mode="serialize"/>
+      <xsl:apply-templates select="document(concat('xslTransform:mods2citation?lang=de:mcrobject:', @ID))" mode="serialize"/>
     </field>
 
     <field name="cite.en">
-      <xsl:apply-templates select="document(concat('xslTransform:mods2csl?lang=en:mcrobject:', @ID))" mode="serialize"/>
+      <xsl:apply-templates select="document(concat('xslTransform:mods2citation?lang=en:mcrobject:', @ID))" mode="serialize"/>
     </field>
   </xsl:template>
 
