@@ -111,7 +111,6 @@ public class MailReportJob extends MCRCronjob {
         MCRSourceContent content = MCRSourceContent.getInstance(uri);
 
         Path tempFile = Files.createTempFile("attachment_", "." + filetype);
-        // TODO send email if resultlist empty?
         try (InputStream inputStream = content.getContentInputStream();
             OutputStream outputStream = Files.newOutputStream(tempFile)) {
             byte[] buffer = new byte[8192];
