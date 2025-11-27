@@ -18,8 +18,6 @@
 
 package org.mycore.ubo.resources;
 
-import javax.naming.OperationNotSupportedException;
-
 import com.google.gson.Gson;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -29,6 +27,8 @@ import org.mycore.access.MCRAccessManager;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.ubo.picker.IdentityService;
 import org.mycore.ubo.picker.PersonSearchResult;
+
+import javax.naming.OperationNotSupportedException;
 
 @Path(UBOPersonSearchResource.PATH)
 public class UBOPersonSearchResource {

@@ -8,6 +8,7 @@ import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
+import org.mycore.orcid2.rest.resources.MCRORCIDResource;
 import org.mycore.orcid2.user.MCRORCIDSessionUtils;
 import org.mycore.orcid2.user.MCRORCIDUser;
 import org.mycore.orcid2.user.MCRORCIDUserUtils;
@@ -21,7 +22,7 @@ import java.util.SortedSet;
 
 /**
  * Servlet removes all orcid access tokens of the current user. If you want to remove a single access token for
- * a given orcid please see {@link org.mycore.orcid2.rest.resources.MCRORCIDResource#revoke(String)} )}
+ * a given orcid please see {@link MCRORCIDResource}
  *
  * @author shermann
  * */
@@ -44,7 +45,7 @@ public class DozBibORCIDUserServlet extends MCRServlet {
         MCRORCIDUser orcidUser;
         try {
             orcidUser = MCRORCIDSessionUtils.getCurrentUser();
-        }catch(Exception e){
+        } catch (Exception e) {
             LOGGER.error("Could not get orcid user for user {}", MCRUserManager.getCurrentUser(), e);
             redirectToProfile(job);
             return;

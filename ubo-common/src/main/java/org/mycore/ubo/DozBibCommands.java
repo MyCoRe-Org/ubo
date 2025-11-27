@@ -9,29 +9,14 @@
 
 package org.mycore.ubo;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.zip.Deflater;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Attribute;
 import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.filter.Filters;
 import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.XMLReaders;
 import org.mycore.access.MCRAccessException;
@@ -55,14 +40,15 @@ import org.mycore.mods.MCRMODSCommands;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.ubo.importer.scopus.ScopusInitialImporter;
-import org.xml.sax.SAXException;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -172,7 +158,7 @@ public class DozBibCommands extends MCRAbstractCommands {
         zip.putNextEntry(ze);
 
         LOGGER.info("Collecting object IDs...");
-        List<String> oids = MCRXMLMetadataManager.instance().listIDsOfType("mods");
+        List<String> oids = MCRXMLMetadataManager.getInstance().listIDsOfType("mods");
 
         LOGGER.info("Collecting all entries...");
         Element collection = new Element("modsCollection", MCRConstants.MODS_NAMESPACE);
@@ -200,7 +186,7 @@ public class DozBibCommands extends MCRAbstractCommands {
     /** Transforms existing entries using XSL stylesheet **/
     public static List<String> transformEntries(String xslFile) throws Exception {
         List<String> commands = new ArrayList<String>();
-        for (String oid : MCRXMLMetadataManager.instance().listIDsOfType("mods")) {
+        for (String oid : MCRXMLMetadataManager.getInstance().listIDsOfType("mods")) {
             commands.add("xslt " + oid + " with file " + xslFile);
         }
         return commands;
@@ -321,6 +307,7 @@ public class DozBibCommands extends MCRAbstractCommands {
      * @param arguments a comma-separated list of arguments
      * */
     public static String translate(String i18n, String arguments) {
-        return MCRTranslation.translateToLocale(i18n, MCRTranslation.getCurrentLocale(), arguments.split(","));
+        return MCRTranslation.translateToLocale(i18n, MCRTranslation.getCurrentLocale(),
+            Arrays.stream(arguments.split(",")).toArray());
     }
 }

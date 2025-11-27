@@ -4,6 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -23,8 +25,10 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mods.MCRMODSWrapper;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 import org.mycore.solr.MCRSolrUtils;
+import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
+import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 import org.mycore.ubo.importer.ImportIdProvider;
 
 import java.text.MessageFormat;
@@ -106,13 +110,16 @@ class ScopusImporter {
     }
 
     private boolean isAlreadyStored(String scopusID) {
-        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+        SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
         SolrQuery query = new SolrQuery();
         query.setQuery(FIELD_TO_QUERY_ID + ":" + MCRSolrUtils.escapeSearchValue(scopusID));
         query.setRows(0);
         SolrDocumentList results;
         try {
-            results = solrClient.query(query).getResults();
+            QueryRequest queryRequest = new QueryRequest(query);
+            MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest, MCRSolrAuthenticationLevel.SEARCH);
+            QueryResponse response = queryRequest.process(solrClient);
+            results = response.getResults();
             return (results.getNumFound() > 0);
         } catch (Exception ex) {
             throw new MCRException(ex);
@@ -121,7 +128,7 @@ class ScopusImporter {
 
     private Element retrieveAndConvertPublication(String externalID) {
         String uri = new MessageFormat(IMPORT_URI, Locale.ROOT).format(new Object[] { externalID });
-        return MCRURIResolver.instance().resolve(uri);
+        return MCRURIResolver.obtainInstance().resolve(uri);
     }
 
     /** If mods:genre was not mapped by conversion/import function, ignore this publication and do not import */

@@ -9,15 +9,6 @@
 
 package org.mycore.ubo.basket;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.URIResolver;
-
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.ElementFilter;
@@ -25,6 +16,14 @@ import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRConstants;
 import org.mycore.frontend.basket.MCRBasket;
 import org.mycore.frontend.basket.MCRBasketEntry;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * URIResolver that outputs a list of name entries of all

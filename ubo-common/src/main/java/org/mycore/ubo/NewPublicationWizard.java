@@ -15,7 +15,10 @@ import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.util.NamedList;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
@@ -31,8 +34,11 @@ import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 import org.mycore.solr.MCRSolrUtils;
+import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
+import org.mycore.solr.auth.MCRSolrAuthenticationManager;
+import org.mycore.solr.auth.MCRSolrPropertyAuthenticationManager;
 import org.mycore.ubo.dedup.DeDupCriteriaBuilder;
 import org.mycore.ubo.dedup.DeDupCriterion;
 import org.mycore.ubo.dedup.jpa.DeduplicationKey;
@@ -64,7 +70,7 @@ public class NewPublicationWizard extends MCRServlet {
                 if (hasEmptyTitle()) {
                     job.getRequest().setAttribute("XSL.Style", "wizard-notfound");
                     Element mods = getMODSfromSession();
-                    MCRLayoutService.instance().doLayout(job.getRequest(), job.getResponse(), new MCRJDOMContent(mods));
+                    MCRLayoutService.obtainInstance().doLayout(job.getRequest(), job.getResponse(), new MCRJDOMContent(mods));
                     return;
                 }
             }
@@ -92,7 +98,7 @@ public class NewPublicationWizard extends MCRServlet {
         Element mods = getMODSfromSession();
         mods.removeChildren("titleInfo", MCRConstants.MODS_NAMESPACE);
         mods.removeChildren("name", MCRConstants.MODS_NAMESPACE);
-        mods = MCRURIResolver.instance().resolve("xslStyle:" + FILTER_SUPPORTED + ":enrich:import:session:" + sessionKey);
+        mods = MCRURIResolver.obtainInstance().resolve("xslStyle:" + FILTER_SUPPORTED + ":enrich:import:session:" + sessionKey);
         MCRSessionMgr.getCurrentSession().put(sessionKey, mods);
     }
 
@@ -152,11 +158,14 @@ public class NewPublicationWizard extends MCRServlet {
     }
 
     private boolean publicationMayAlreadyExist(String q) throws SolrServerException, IOException {
-        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+        SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
         SolrQuery query = new SolrQuery();
         query.setQuery(q);
         query.setRows(0);
-        SolrDocumentList results = solrClient.query(query).getResults();
+        QueryRequest queryRequest = new QueryRequest(query);
+        MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest, MCRSolrAuthenticationLevel.SEARCH);
+        QueryResponse response = queryRequest.process(solrClient);
+        SolrDocumentList results = response.getResults();
         return results.getNumFound() > 0;
     }
 

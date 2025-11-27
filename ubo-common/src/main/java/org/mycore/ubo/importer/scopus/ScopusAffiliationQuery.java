@@ -9,15 +9,18 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class ScopusAffiliationQuery extends AbstractScopusQuery{
+public class ScopusAffiliationQuery extends AbstractScopusQuery {
 
-    private static final String AFFILIATION_QUERY_PATTERN = "/affiliation/affiliation_id/%1$s?&apikey=%2$s&insttoken=%3$s&count=%4$s&start=%5$s&view=DOCUMENTS";
+    private static final String AFFILIATION_QUERY_PATTERN
+        = "/affiliation/affiliation_id/%1$s?&apikey=%2$s&insttoken=%3$s&count=%4$s&start=%5$s&view=DOCUMENTS";
     protected static final int MAX_COUNT = 200;
 
     public String getAffiliation() {
@@ -54,41 +57,41 @@ public class ScopusAffiliationQuery extends AbstractScopusQuery{
         setStart(start);
     }
 
-    public ScopusAffiliationQuery(String affiliation){
+    public ScopusAffiliationQuery(String affiliation) {
         setAffiliation(affiliation);
         setCount(MAX_COUNT);
     }
 
-    protected URL buildAffiliationQuery() throws MalformedURLException {
+    protected URL buildAffiliationQuery() throws MalformedURLException, URISyntaxException {
         String queryString = String.format(Locale.ROOT, AFFILIATION_QUERY_PATTERN, getAffiliation(), API_KEY,
             INST_TOKEN, getCount(), getStart());
-        return new URL(API_URL + queryString);
+        return new URI(API_URL + queryString).toURL();
     }
 
     @Override
-    public List<String> resolveIDs() throws JDOMException, IOException, SAXException {
+    public List<String> resolveIDs() throws JDOMException, IOException, SAXException, URISyntaxException {
         return resolveDocuments().stream()
-                .map(Document::getRootElement)
-                .map(this::getScopusIDFromContainer)
-                .collect(Collectors.toList());
+            .map(Document::getRootElement)
+            .map(this::getScopusIDFromContainer)
+            .collect(Collectors.toList());
 
     }
 
-    public List<Document> resolveDocuments() throws IOException, JDOMException, SAXException {
+    public List<Document> resolveDocuments() throws IOException, JDOMException, SAXException, URISyntaxException {
         Document response = new MCRURLContent(buildAffiliationQuery()).asXML();
         return response.getRootElement()
-                .getChild("documents")
-                .getChildren("abstract-document")
-                .stream()
-                .map(Element::clone)
-                .map(Element::detach)
-                .map(Document::new)
-                .collect(Collectors.toList());
+            .getChild("documents")
+            .getChildren("abstract-document")
+            .stream()
+            .map(Element::clone)
+            .map(Element::detach)
+            .map(Document::new)
+            .collect(Collectors.toList());
     }
 
-    public void resolveAllIDs(Consumer<String> onResolve){
+    public void resolveAllIDs(Consumer<String> onResolve) {
         try {
-            int totalAvailable=-1;
+            int totalAvailable = -1;
             this.setStart(0);
             do {
                 Document response = new MCRURLContent(buildAffiliationQuery()).asXML();
@@ -96,17 +99,16 @@ public class ScopusAffiliationQuery extends AbstractScopusQuery{
                 final Element documents = rootElement.getChild("documents");
 
                 documents.getChildren("abstract-document")
-                        .stream()
-                        .map(this::getScopusIDFromContainer)
-                        .forEach(onResolve);
+                    .stream()
+                    .map(this::getScopusIDFromContainer)
+                    .forEach(onResolve);
                 totalAvailable = Integer.parseInt(documents.getAttributeValue("total-available"));
-                this.setStart(getStart()+getCount());
-            } while (getStart()<totalAvailable);
+                this.setStart(getStart() + getCount());
+            } while (getStart() < totalAvailable);
 
-        } catch (JDOMException|IOException e) {
+        } catch (JDOMException | IOException | URISyntaxException e) {
             throw new MCRException("Error while Streaming all documents!");
         }
     }
-
 
 }

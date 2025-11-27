@@ -120,7 +120,7 @@ public class DozBibEntryServlet extends MCRServlet {
 
     public static boolean isValidID(String id) throws IOException {
         return id != null && MCRObjectID.isValid(id)
-            && MCRXMLMetadataManager.instance().exists(MCRObjectID.getInstance(id));
+            && MCRXMLMetadataManager.getInstance().exists(MCRObjectID.getInstance(id));
     }
 
     private void sendNotificationMail(Document doc) throws Exception {
@@ -139,7 +139,7 @@ public class DozBibEntryServlet extends MCRServlet {
         MCRObjectID oid = MCRObjectID.getInstance(id);
         MCRObject obj = new MCRObject(doc);
 
-        if (MCRXMLMetadataManager.instance().exists(oid)) {
+        if (MCRXMLMetadataManager.getInstance().exists(oid)) {
             if (AccessControl.currentUserIsAdmin()) {
                 try {
                     MCRMetadataManager.update(obj);
