@@ -3,14 +3,14 @@
 <xed:template xmlns:xed="http://www.mycore.de/xeditor">
 
   <xed:template id="validation">
-    <xed:include uri="webapp:import-editor.xed" ref="displayValidationMessages" />
+    <xed:include ref="displayValidationMessages" />
    
     <xed:validate xpath="//mods:classification[@classID='fachreferate']" required="true" i18n="condition.subject" display="global" />
     <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:titleInfo/mods:title" required="true" i18n="ubo.title.validation" display="global" />
     <xed:validate xpath="//mods:mods[not(mods:genre='journal' or mods:genre='series' or mods:genre='blog' or mods:genre='newspaper') and string-length(mods:name[@type='corporate']/mods:namePart/text())=0]/mods:name[@type='personal'][1]" test="string-length(mods:namePart[@type='family']) &gt; 0" i18n="ubo.role.author.validation" display="global" />
     <xed:validate xpath="//mods:nameIdentifier[@type='orcid']" matches="\d{4}\-\d{4}\-\d{4}\-\d{3}[0-9X]" i18n="ubo.nameIdentifier.orcid.validation" display="global" />
 
-    <xed:include uri="webapp:import-editor.xed" ref="validationRules4Identifiers" />
+    <xed:include ref="validationRules4Identifiers" />
 
     <xed:validate xpath="//mods:location/mods:url" matches="(f|ht)tp(s?)://[\w\d.]+\S*" i18n="ubo.link.validation" display="global" />
     <xed:validate xpath="//mods:location/mods:url" matches="^((?!doi.org/10).)*$" i18n="ubo.link.validation.not.doi" display="global" />
@@ -331,7 +331,7 @@
         <label for="{xed:generate-id()}" class="col-sm-3 justify-content-sm-end pl-0 mr-3 ubo-mandatory">
           <xed:output value="concat(i18n:translate('ubo.role.author'), ': ')" />
         </label>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />
+        <xed:include ref="person" />
       </div>
     </xed:repeat>
   </xed:template>
@@ -351,7 +351,7 @@
             </label>
           </xed:otherwise>
         </xed:choose>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />  
+        <xed:include ref="person" />  
       </div>
     </xed:repeat>
   </xed:template>
@@ -362,7 +362,7 @@
         <label for="{xed:generate-id()}" class="mycore-form-label ubo-mandatory">
           <xed:output value="concat(i18n:translate('ubo.role.interviewee'), ': ')" />
         </label>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />
+        <xed:include ref="person" />
       </div>
     </xed:repeat>
   </xed:template>
@@ -373,7 +373,7 @@
         <label for="{xed:generate-id()}" class="mycore-form-label ubo-mandatory">
           <xed:output value="concat(i18n:translate('ubo.role.interviewer'), ': ')" />
         </label>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />
+        <xed:include ref="person" />
       </div>
     </xed:repeat>
   </xed:template>
@@ -384,7 +384,7 @@
         <label for="{xed:generate-id()}" class="mycore-form-label">
           <xed:output value="concat(i18n:translate('ubo.role.honoree'), ': ')" />
         </label>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />
+        <xed:include ref="person" />
       </div>
     </xed:repeat>
   </xed:template>
@@ -395,7 +395,7 @@
         <label for="{xed:generate-id()}" class="mycore-form-label">
           <xed:output value="concat(i18n:translate('ubo.role.inventor'), ': ')" />
         </label>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />
+        <xed:include ref="person" />
       </div>
     </xed:repeat>
   </xed:template>
@@ -471,7 +471,7 @@
             <div class="ml-1">:</div>
           </label>
         </xed:bind>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />
+        <xed:include ref="person" />
       </div>
     </xed:repeat>
   </xed:template>
@@ -487,7 +487,7 @@
             <div class="ml-1">:</div>
           </label>
         </xed:bind>
-        <xed:include uri="webapp:import-editor.xed" ref="person" />
+        <xed:include ref="person" />
         <xed:bind xpath="mods:role/mods:roleTerm[@type='text'][@classID='author_roles']" >
           <div class="form-group form-inline col-12 px-0">
             <label class="mycore-form-label"></label>

@@ -3,386 +3,386 @@
 <xed:template xmlns:xed="http://www.mycore.de/xeditor">
 
   <xed:template id="genre.book">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="book.contributors" />
-    <xed:include uri="webapp:import-editor.xed" ref="place" />
-    <xed:include uri="webapp:import-editor.xed" ref="year" />
-    <xed:include uri="webapp:import-editor.xed" ref="publisher" />
-    <xed:include uri="webapp:import-editor.xed" ref="edition" />
-    <xed:include uri="webapp:import-editor.xed" ref="series" />
-    <xed:include uri="webapp:import-editor.xed" ref="size" />
-    <xed:include uri="webapp:import-editor.xed" ref="comment" />
-    <xed:include uri="webapp:import-editor.xed" ref="isbn" />
-    <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />
+    <xed:include ref="title" />
+    <xed:include ref="book.contributors" />
+    <xed:include ref="place" />
+    <xed:include ref="year" />
+    <xed:include ref="publisher" />
+    <xed:include ref="edition" />
+    <xed:include ref="series" />
+    <xed:include ref="size" />
+    <xed:include ref="comment" />
+    <xed:include ref="isbn" />
+    <xed:include ref="shelfmark" />
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />
   </xed:template>
 
   <xed:template id="genre.dissertation">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="book.contributors" />    
-    <xed:include uri="webapp:import-editor.xed" ref="place" />    
-    <xed:include uri="webapp:import-editor.xed" ref="year" />
-    <xed:include uri="webapp:import-editor.xed" ref="publisher" />    
-    <xed:include uri="webapp:import-editor.xed" ref="edition" />
-    <xed:include uri="webapp:import-editor.xed" ref="series" />    
-    <xed:include uri="webapp:import-editor.xed" ref="size" />    
-    <xed:include uri="webapp:import-editor.xed" ref="comment" />    
-    <xed:include uri="webapp:import-editor.xed" ref="isbn" />    
-    <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />    
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />
+    <xed:include ref="title" />
+    <xed:include ref="book.contributors" />    
+    <xed:include ref="place" />    
+    <xed:include ref="year" />
+    <xed:include ref="publisher" />    
+    <xed:include ref="edition" />
+    <xed:include ref="series" />    
+    <xed:include ref="size" />    
+    <xed:include ref="comment" />    
+    <xed:include ref="isbn" />    
+    <xed:include ref="shelfmark" />    
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />
   </xed:template>
   
   <xed:template id="genre.habilitation">
-    <xed:include uri="webapp:import-genres.xed" ref="genre.dissertation" /> 
+    <xed:include ref="genre.dissertation" /> 
   </xed:template>
 
   <xed:template id="genre.article">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="author" />
-    <xed:include uri="webapp:import-editor.xed" ref="year" />
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />
+    <xed:include ref="title" />
+    <xed:include ref="author" />
+    <xed:include ref="year" />
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />
   </xed:template>
   
   <xed:template id="genre.abstract">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="author" />
+    <xed:include ref="title" />
+    <xed:include ref="author" />
     <xed:if test="not($host_intern='proceedings')">      
-      <xed:include uri="webapp:import-editor.xed" ref="year" />
+      <xed:include ref="year" />
     </xed:if>
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />
   </xed:template>
   
   <xed:template id="genre.poster_abstract">
-    <xed:include uri="webapp:import-genres.xed" ref="genre.abstract" />  
+    <xed:include ref="genre.abstract" />  
   </xed:template>
   
   <xed:template id="genre.chapter">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="author" />
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />
+    <xed:include ref="title" />
+    <xed:include ref="author" />
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />
   </xed:template>
 
   <xed:template id="genre.preface">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="author" />
+    <xed:include ref="title" />
+    <xed:include ref="author" />
     <xed:if test="$host_intern='journal'">      
-      <xed:include uri="webapp:import-editor.xed" ref="year" />
+      <xed:include ref="year" />
     </xed:if>
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />    
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />    
   </xed:template>
   
   <xed:template id="genre.review">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="author" />
+    <xed:include ref="title" />
+    <xed:include ref="author" />
     <xed:if test="$host_intern='journal'">      
-      <xed:include uri="webapp:import-editor.xed" ref="year" />
+      <xed:include ref="year" />
     </xed:if>
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />    
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />    
   </xed:template>
   
   <xed:template id="genre.review_article">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="author" />          
-    <xed:include uri="webapp:import-editor.xed" ref="year" />    
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />    
+    <xed:include ref="title" />
+    <xed:include ref="author" />          
+    <xed:include ref="year" />    
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />    
   </xed:template>
   
   <xed:template id="genre.erratum">
-    <xed:include uri="webapp:import-genres.xed" ref="genre.article" />  
+    <xed:include ref="genre.article" />  
   </xed:template>
   
   <xed:template id="genre.comment">
-    <xed:include uri="webapp:import-genres.xed" ref="genre.article" />  
+    <xed:include ref="genre.article" />  
   </xed:template>
   
   <xed:template id="genre.preprint">
-    <xed:include uri="webapp:import-genres.xed" ref="genre.article" />  
+    <xed:include ref="genre.article" />  
   </xed:template>
       
   <xed:template id="genre.entry">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="author" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />
+    <xed:include ref="title" />
+    <xed:include ref="author" />
+    <xed:include ref="url" />
   </xed:template>
 
   <xed:template id="genre.speech">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="author" />
+    <xed:include ref="title" />
+    <xed:include ref="author" />
     <xed:if test="$host_intern='standalone'">
-      <xed:include uri="webapp:import-editor.xed" ref="conference" />
-      <xed:include uri="webapp:import-editor.xed" ref="place" />
-      <xed:include uri="webapp:import-editor.xed" ref="year" />
+      <xed:include ref="conference" />
+      <xed:include ref="place" />
+      <xed:include ref="year" />
     </xed:if>
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />
   </xed:template>
 
   <xed:template id="genre.poster">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="author" />
+    <xed:include ref="title" />
+    <xed:include ref="author" />
     <xed:if test="$host_intern='standalone'">
-      <xed:include uri="webapp:import-editor.xed" ref="conference" />
-      <xed:include uri="webapp:import-editor.xed" ref="place" />
-      <xed:include uri="webapp:import-editor.xed" ref="year" />
+      <xed:include ref="conference" />
+      <xed:include ref="place" />
+      <xed:include ref="year" />
     </xed:if>
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />
   </xed:template>
 
   <xed:template id="genre.interview">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="author" />
-    <xed:include uri="webapp:import-editor.xed" ref="interviewee" />
-    <xed:include uri="webapp:import-editor.xed" ref="year" />    
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />
+    <xed:include ref="title" />
+    <xed:include ref="author" />
+    <xed:include ref="interviewee" />
+    <xed:include ref="year" />    
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />
   </xed:template>
 
   <xed:template id="genre.collection">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="editor" />
-    <xed:include uri="webapp:import-editor.xed" ref="place" />
-    <xed:include uri="webapp:import-editor.xed" ref="year" />
-    <xed:include uri="webapp:import-editor.xed" ref="publisher" />
-    <xed:include uri="webapp:import-editor.xed" ref="edition" />
-    <xed:include uri="webapp:import-editor.xed" ref="series" />
-    <xed:include uri="webapp:import-editor.xed" ref="size" />
-    <xed:include uri="webapp:import-editor.xed" ref="comment" />
-    <xed:include uri="webapp:import-editor.xed" ref="isbn" />
-    <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />
+    <xed:include ref="title" />
+    <xed:include ref="editor" />
+    <xed:include ref="place" />
+    <xed:include ref="year" />
+    <xed:include ref="publisher" />
+    <xed:include ref="edition" />
+    <xed:include ref="series" />
+    <xed:include ref="size" />
+    <xed:include ref="comment" />
+    <xed:include ref="isbn" />
+    <xed:include ref="shelfmark" />
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />
   </xed:template>
 
   <xed:template id="genre.festschrift">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="editor" />
-    <xed:include uri="webapp:import-editor.xed" ref="honoree" />
-    <xed:include uri="webapp:import-editor.xed" ref="place" />
-    <xed:include uri="webapp:import-editor.xed" ref="year" />
-    <xed:include uri="webapp:import-editor.xed" ref="publisher" />
-    <xed:include uri="webapp:import-editor.xed" ref="edition" />
-    <xed:include uri="webapp:import-editor.xed" ref="series" />
-    <xed:include uri="webapp:import-editor.xed" ref="size" />
-    <xed:include uri="webapp:import-editor.xed" ref="comment" />
-    <xed:include uri="webapp:import-editor.xed" ref="isbn" />
-    <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />
+    <xed:include ref="title" />
+    <xed:include ref="editor" />
+    <xed:include ref="honoree" />
+    <xed:include ref="place" />
+    <xed:include ref="year" />
+    <xed:include ref="publisher" />
+    <xed:include ref="edition" />
+    <xed:include ref="series" />
+    <xed:include ref="size" />
+    <xed:include ref="comment" />
+    <xed:include ref="isbn" />
+    <xed:include ref="shelfmark" />
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />
   </xed:template>
 
   <xed:template id="genre.lexicon">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="editor" />
-    <xed:include uri="webapp:import-editor.xed" ref="place" />
-    <xed:include uri="webapp:import-editor.xed" ref="year" />
-    <xed:include uri="webapp:import-editor.xed" ref="publisher" />
-    <xed:include uri="webapp:import-editor.xed" ref="edition" />
-    <xed:include uri="webapp:import-editor.xed" ref="series" />
-    <xed:include uri="webapp:import-editor.xed" ref="size" />
-    <xed:include uri="webapp:import-editor.xed" ref="comment" />
-    <xed:include uri="webapp:import-editor.xed" ref="isbn" />
-    <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />
+    <xed:include ref="title" />
+    <xed:include ref="editor" />
+    <xed:include ref="place" />
+    <xed:include ref="year" />
+    <xed:include ref="publisher" />
+    <xed:include ref="edition" />
+    <xed:include ref="series" />
+    <xed:include ref="size" />
+    <xed:include ref="comment" />
+    <xed:include ref="isbn" />
+    <xed:include ref="shelfmark" />
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />
   </xed:template>
 
   <xed:template id="genre.proceedings">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="conference" />
-    <xed:include uri="webapp:import-editor.xed" ref="editor" />
-    <xed:include uri="webapp:import-editor.xed" ref="place" />
-    <xed:include uri="webapp:import-editor.xed" ref="year" />
-    <xed:include uri="webapp:import-editor.xed" ref="publisher" />
-    <xed:include uri="webapp:import-editor.xed" ref="edition" />
-    <xed:include uri="webapp:import-editor.xed" ref="series" />
-    <xed:include uri="webapp:import-editor.xed" ref="size" />
-    <xed:include uri="webapp:import-editor.xed" ref="comment" />
-    <xed:include uri="webapp:import-editor.xed" ref="isbn" />
-    <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />
+    <xed:include ref="title" />
+    <xed:include ref="conference" />
+    <xed:include ref="editor" />
+    <xed:include ref="place" />
+    <xed:include ref="year" />
+    <xed:include ref="publisher" />
+    <xed:include ref="edition" />
+    <xed:include ref="series" />
+    <xed:include ref="size" />
+    <xed:include ref="comment" />
+    <xed:include ref="isbn" />
+    <xed:include ref="shelfmark" />
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />
   </xed:template>
   
   <xed:template id="genre.special_issue">
-    <xed:include uri="webapp:import-genres.xed" ref="genre.collection" /> 
+    <xed:include ref="genre.collection" /> 
   </xed:template>
   
   <xed:template id="genre.workingpaper">
-   <xed:include uri="webapp:import-genres.xed" ref="genre.book" /> 
+   <xed:include ref="genre.book" /> 
   </xed:template>
   
   <xed:template id="genre.researchpaper">
-   <xed:include uri="webapp:import-genres.xed" ref="genre.book" /> 
+   <xed:include ref="genre.book" /> 
   </xed:template>
   
   <xed:template id="genre.report">
-    <xed:include uri="webapp:import-genres.xed" ref="genre.book" /> 
+    <xed:include ref="genre.book" /> 
   </xed:template>
   
   <xed:template id="genre.oer">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="book.contributors" />
-    <xed:include uri="webapp:import-editor.xed" ref="place" />
-    <xed:include uri="webapp:import-editor.xed" ref="year" />
-    <xed:include uri="webapp:import-editor.xed" ref="publisher" />    
-    <xed:include uri="webapp:import-editor.xed" ref="series" />
-    <xed:include uri="webapp:import-editor.xed" ref="size" />
-    <xed:include uri="webapp:import-editor.xed" ref="comment" />
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />
+    <xed:include ref="title" />
+    <xed:include ref="book.contributors" />
+    <xed:include ref="place" />
+    <xed:include ref="year" />
+    <xed:include ref="publisher" />    
+    <xed:include ref="series" />
+    <xed:include ref="size" />
+    <xed:include ref="comment" />
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />
   </xed:template>
   
   <xed:template id="genre.research_data">
-    <xed:include uri="webapp:import-genres.xed" ref="genre.oer" />  
+    <xed:include ref="genre.oer" />  
   </xed:template>
   
   <xed:template id="genre.software">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="book.contributors" />
-    <xed:include uri="webapp:import-editor.xed" ref="place" />
-    <xed:include uri="webapp:import-editor.xed" ref="year" />
-    <xed:include uri="webapp:import-editor.xed" ref="publisher" />  
-    <xed:include uri="webapp:import-editor.xed" ref="size" />
-    <xed:include uri="webapp:import-editor.xed" ref="comment" />
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />
-    <xed:include uri="webapp:import-editor.xed" ref="relations" />
+    <xed:include ref="title" />
+    <xed:include ref="book.contributors" />
+    <xed:include ref="place" />
+    <xed:include ref="year" />
+    <xed:include ref="publisher" />  
+    <xed:include ref="size" />
+    <xed:include ref="comment" />
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />
+    <xed:include ref="relations" />
   </xed:template>
 
   <xed:template id="genre.journal">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="editor" />
-    <xed:include uri="webapp:import-editor.xed" ref="issn" />
-    <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />
+    <xed:include ref="title" />
+    <xed:include ref="editor" />
+    <xed:include ref="issn" />
+    <xed:include ref="shelfmark" />
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />
   </xed:template>
   
   <xed:template id="genre.newspaper">
-    <xed:include uri="webapp:import-genres.xed" ref="genre.journal" />  
+    <xed:include ref="genre.journal" />  
   </xed:template>
 
   <xed:template id="genre.series">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="editor" />
-    <xed:include uri="webapp:import-editor.xed" ref="issn" />
-    <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />
+    <xed:include ref="title" />
+    <xed:include ref="editor" />
+    <xed:include ref="issn" />
+    <xed:include ref="shelfmark" />
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />
   </xed:template>
   
   <xed:template id="genre.blog">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="editor" />
-    <xed:include uri="webapp:import-editor.xed" ref="issn" />
-    <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />
+    <xed:include ref="title" />
+    <xed:include ref="editor" />
+    <xed:include ref="issn" />
+    <xed:include ref="shelfmark" />
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />
   </xed:template>
 
   <xed:template id="host.journal">
-    <xed:include uri="webapp:import-editor.xed" ref="host.title" />
-    <xed:include uri="webapp:import-editor.xed" ref="volume" />
-    <xed:include uri="webapp:import-editor.xed" ref="issue" />
-    <xed:include uri="webapp:import-editor.xed" ref="pages" />
-    <xed:include uri="webapp:import-editor.xed" ref="issn" />
-    <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
+    <xed:include ref="host.title" />
+    <xed:include ref="volume" />
+    <xed:include ref="issue" />
+    <xed:include ref="pages" />
+    <xed:include ref="issn" />
+    <xed:include ref="shelfmark" />
   </xed:template>
 
   <xed:template id="host.journal.linked">
-    <xed:include uri="webapp:import-editor.xed" ref="volume" />
-    <xed:include uri="webapp:import-editor.xed" ref="issue" />
-    <xed:include uri="webapp:import-editor.xed" ref="pages" />
+    <xed:include ref="volume" />
+    <xed:include ref="issue" />
+    <xed:include ref="pages" />
   </xed:template>
   
   <xed:template id="host.newspaper">  
-    <xed:include uri="webapp:import-genres.xed" ref="host.journal" />    
+    <xed:include ref="host.journal" />    
   </xed:template>
   
   <xed:template id="host.blog">
-    <xed:include uri="webapp:import-editor.xed" ref="host.title" />
-    <xed:include uri="webapp:import-editor.xed" ref="editor" />    
-    <xed:include uri="webapp:import-editor.xed" ref="issn" />
-    <xed:include uri="webapp:import-editor.xed" ref="doi.urn.duepublico" />
-    <xed:include uri="webapp:import-editor.xed" ref="url" />
+    <xed:include ref="host.title" />
+    <xed:include ref="editor" />    
+    <xed:include ref="issn" />
+    <xed:include ref="doi.urn.duepublico" />
+    <xed:include ref="url" />
   </xed:template>
 
   <xed:template id="host.collection">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="editor" />
-    <xed:include uri="webapp:import-editor.xed" ref="place" />
-    <xed:include uri="webapp:import-editor.xed" ref="year" />
-    <xed:include uri="webapp:import-editor.xed" ref="publisher" />
-    <xed:include uri="webapp:import-editor.xed" ref="edition" />
-    <xed:include uri="webapp:import-editor.xed" ref="series" />
-    <xed:include uri="webapp:import-editor.xed" ref="pages" />
-    <xed:include uri="webapp:import-editor.xed" ref="isbn" />
-    <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
+    <xed:include ref="title" />
+    <xed:include ref="editor" />
+    <xed:include ref="place" />
+    <xed:include ref="year" />
+    <xed:include ref="publisher" />
+    <xed:include ref="edition" />
+    <xed:include ref="series" />
+    <xed:include ref="pages" />
+    <xed:include ref="isbn" />
+    <xed:include ref="shelfmark" />
   </xed:template>
 
   <xed:template id="host.collection.linked">
-    <xed:include uri="webapp:import-editor.xed" ref="pages" />
+    <xed:include ref="pages" />
   </xed:template>
 
   <xed:template id="host.proceedings">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="conference" />
-    <xed:include uri="webapp:import-editor.xed" ref="editor" />
-    <xed:include uri="webapp:import-editor.xed" ref="place" />
-    <xed:include uri="webapp:import-editor.xed" ref="year" />
-    <xed:include uri="webapp:import-editor.xed" ref="publisher" />
-    <xed:include uri="webapp:import-editor.xed" ref="edition" />
-    <xed:include uri="webapp:import-editor.xed" ref="series" />
-    <xed:include uri="webapp:import-editor.xed" ref="pages" />
-    <xed:include uri="webapp:import-editor.xed" ref="isbn" />
-    <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
+    <xed:include ref="title" />
+    <xed:include ref="conference" />
+    <xed:include ref="editor" />
+    <xed:include ref="place" />
+    <xed:include ref="year" />
+    <xed:include ref="publisher" />
+    <xed:include ref="edition" />
+    <xed:include ref="series" />
+    <xed:include ref="pages" />
+    <xed:include ref="isbn" />
+    <xed:include ref="shelfmark" />
   </xed:template>
 
   <xed:template id="host.proceedings.linked">
-    <xed:include uri="webapp:import-editor.xed" ref="pages" />
+    <xed:include ref="pages" />
   </xed:template>
 
   <xed:template id="host.festschrift">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="editor" />
-    <xed:include uri="webapp:import-editor.xed" ref="honoree" />
-    <xed:include uri="webapp:import-editor.xed" ref="place" />
-    <xed:include uri="webapp:import-editor.xed" ref="year" />
-    <xed:include uri="webapp:import-editor.xed" ref="publisher" />
-    <xed:include uri="webapp:import-editor.xed" ref="series" />
-    <xed:include uri="webapp:import-editor.xed" ref="pages" />
-    <xed:include uri="webapp:import-editor.xed" ref="isbn" />
-    <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
+    <xed:include ref="title" />
+    <xed:include ref="editor" />
+    <xed:include ref="honoree" />
+    <xed:include ref="place" />
+    <xed:include ref="year" />
+    <xed:include ref="publisher" />
+    <xed:include ref="series" />
+    <xed:include ref="pages" />
+    <xed:include ref="isbn" />
+    <xed:include ref="shelfmark" />
   </xed:template>
 
   <xed:template id="host.festschrift.linked">
-    <xed:include uri="webapp:import-editor.xed" ref="pages" />
+    <xed:include ref="pages" />
   </xed:template>
 
   <xed:template id="host.lexicon">
-    <xed:include uri="webapp:import-editor.xed" ref="title" />
-    <xed:include uri="webapp:import-editor.xed" ref="editor" />
-    <xed:include uri="webapp:import-editor.xed" ref="place" />
-    <xed:include uri="webapp:import-editor.xed" ref="year" />
-    <xed:include uri="webapp:import-editor.xed" ref="publisher" />
-    <xed:include uri="webapp:import-editor.xed" ref="edition" />
-    <xed:include uri="webapp:import-editor.xed" ref="series" />
-    <xed:include uri="webapp:import-editor.xed" ref="pages" />
-    <xed:include uri="webapp:import-editor.xed" ref="isbn" />
-    <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
+    <xed:include ref="title" />
+    <xed:include ref="editor" />
+    <xed:include ref="place" />
+    <xed:include ref="year" />
+    <xed:include ref="publisher" />
+    <xed:include ref="edition" />
+    <xed:include ref="series" />
+    <xed:include ref="pages" />
+    <xed:include ref="isbn" />
+    <xed:include ref="shelfmark" />
   </xed:template>
 
   <xed:template id="host.lexicon.linked">
-    <xed:include uri="webapp:import-editor.xed" ref="pages" />
+    <xed:include ref="pages" />
   </xed:template>  
   
 </xed:template>
