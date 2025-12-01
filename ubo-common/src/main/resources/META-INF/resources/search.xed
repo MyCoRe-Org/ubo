@@ -8,7 +8,9 @@
    <div class="card-body">
     <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
     
-      <xed:include uri="webapp:import-search.xed" ref="submit_enter" />
+      <xed:preload uri="webapp:import-search.xed" />
+    
+      <xed:include ref="submit_enter" />
 
       <xed:cancel url="servlets/XEditor?_xed_submit_return_cancel=&amp;_xed_session={$_xed_subselect_session}" />
       <xed:cancel url="index.xed" />
@@ -18,7 +20,7 @@
           <xed:output i18n="search.dozbib" />
         </legend>
 
-        <xed:include uri="webapp:import-search.xed" ref="validation" />
+        <xed:include ref="validation" />
 
         <div class="mb-2">
           <xed:multi-lang>
@@ -79,7 +81,7 @@
               </div>
             </xed:bind>
 
-            <xed:include uri="webapp:import-search.xed" ref="name" />
+            <xed:include ref="name" />
 
             <xed:repeat xpath="condition3[@operator='=']">
               <div class="form-group form-inline">
@@ -167,7 +169,7 @@
               </script>
             </xed:bind>
 
-            <xed:include uri="webapp:import-search.xed" ref="year" />
+            <xed:include ref="year" />
 
             <xed:choose>
               <xed:when test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
@@ -247,8 +249,8 @@
 
           </xed:bind>
 
-          <xed:include uri="webapp:import-search.xed" ref="sortby" />
-          <xed:include uri="webapp:import-search.xed" ref="numPerPage" />
+          <xed:include ref="sortby" />
+          <xed:include ref="numPerPage" />
 
           <div class="form-group form-inline">
             <label for="{xed:generate-id()}" class="mycore-form-label">
