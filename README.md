@@ -92,10 +92,10 @@ ubo-cli/target/bin/ubo.sh update permission read for id restapi:/classifications
 # only with solr cloud (ingore errors until MCR-3543 is fixed)
 ubo-cli/target/bin/ubo.sh upload local config set for main
 ubo-cli/target/bin/ubo.sh upload local config set for classification
-ubo-cli/target/bin/ubo.sh upload local config set for project
+ubo-cli/target/bin/ubo.sh upload local config set for projects
 ubo-cli/target/bin/ubo.sh create collection for core main
 ubo-cli/target/bin/ubo.sh create collection for core classification
-ubo-cli/target/bin/ubo.sh create collection for core project
+ubo-cli/target/bin/ubo.sh create collection for core projects
 
 # for all solr installations
 ubo-cli/target/bin/ubo.sh reload solr configuration main in core main
