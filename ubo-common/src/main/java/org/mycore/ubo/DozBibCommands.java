@@ -34,12 +34,14 @@ import org.mycore.datamodel.ifs2.MCRStoreManager;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.frontend.cli.MCRAbstractCommands;
-import org.mycore.frontend.cli.MCRCommand;
+import org.mycore.frontend.cli.annotation.MCRCommand;
+import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.mods.MCRMODSCommands;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.services.i18n.MCRTranslation;
+import org.mycore.ubo.dedup.DeDupCommands;
 import org.mycore.ubo.importer.scopus.ScopusInitialImporter;
+import org.mycore.ubo.importer.scopus.ScopusUpdater;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -60,52 +62,47 @@ import java.util.zip.ZipOutputStream;
 import static org.mycore.common.MCRConstants.MODS_NAMESPACE;
 import static org.mycore.common.MCRConstants.XPATH_FACTORY;
 
-public class DozBibCommands extends MCRAbstractCommands {
+@MCRCommandGroup(name = "DozBibCommands")
+public class DozBibCommands {
 
-    private static final Logger LOGGER = LogManager.getLogger(DozBibCommands.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private static final String PROJECT_ID = MCRConfiguration2.getString("UBO.projectid.default").get();
 
-    /** Commands for the MyCoRe Command Line Interface */
-    public DozBibCommands() {
-        addCommand(new MCRCommand("ubo mods export all entries to directory {0}",
-            "org.mycore.ubo.DozBibCommands.exportMODS String",
-            "exports all entries as MODS dump to a zipped xml file in local directory {0}"));
-        addCommand(new MCRCommand("ubo transform entries using xsl {0}",
-            "org.mycore.ubo.DozBibCommands.transformEntries String",
-            "Transforms persistent xml of all bibentries using XSL stylesheet"));
-        addCommand(new MCRCommand("ubo find gnds", "org.mycore.ubo.DozBibGNDCommands.findGNDs", "Find GNDs"));
-        addCommand(new MCRCommand("ubo migrate to mcrobject", "org.mycore.ubo.DozBibCommands.migrate2mcrobject",
-            "migrates all bibentries to mycoreobject persistence"));
-        addCommand(new MCRCommand("ubo build duplicates report to directory {0}",
-            "org.mycore.ubo.dedup.DeDupCommands.buildDuplicatesReport String",
-            "builds report on possibly duplicate entries and writes it as xml to file duplicates.xml in directory {0}"));
-        addCommand(new MCRCommand("print possible duplicates", "org.mycore.ubo.dedup.DeDupCommands.printDuplicates","Prints possible duplicate objects"));
-        addCommand(new MCRCommand("ubo import mods collection from file {0}",
-            "org.mycore.ubo.DozBibCommands.importMODSCollection String",
-            "import mods:modsCollection from xml file {0}"));
-        addCommand(new MCRCommand("ubo update from scopus for affiliation IDs {0} last {1} days max {2}",
-            "org.mycore.ubo.importer.scopus.ScopusUpdater.update String int int",
-            "Queries Scopus for new publications of comma-separated affiliation IDs {0} added within last {1} days," +
-                "retrieves max {2} publications and imports them if not already present"));
-        addCommand(new MCRCommand("ubo update from scopus for query {0}",
-                "org.mycore.ubo.importer.scopus.ScopusUpdater.update String",
-                "Queries Scopus and imports them if not already present"));
-        addCommand(new MCRCommand(ScopusInitialImporter.IMPORT_BATCH_COMMAND,
-                "org.mycore.ubo.importer.scopus.ScopusInitialImporter.initialImport String int",
-                "Queries all affiliation IDs and imports all documents {0} = afid {1} = start point should be 0"));
-        addCommand(new MCRCommand(ScopusInitialImporter.IMPORT_SINGLE_COMMAND,
-            "org.mycore.ubo.importer.scopus.ScopusInitialImporter.doImport String",
-            "{0] = ID of object"));
-        addCommand(
-            new MCRCommand("migrate http uris matching {0} to https in {1}",
-                "org.mycore.ubo.DozBibCommands.migrateURItoHttps String String",
-                "Migrates http protocol of uris to https if they match the pattern given in {0} "
-                    + "(xpath will be '//mods:identifier[@type = 'uri'][contains(text(), {0})]'). "
-                    + "The mycore object id must be provided in {1}"));
-        addCommand(new MCRCommand("ubo migrate mods:genre for object {0}",
-            "org.mycore.ubo.DozBibCommands.migrateGenre String",
-            "Migrates mods:genre to mods:genre with authorityURI and valueURI"));
+    @MCRCommand(syntax = ScopusInitialImporter.IMPORT_SINGLE_COMMAND, help = "{0] = ID of object")
+    public static void doImport(String s) throws Exception {
+        ScopusInitialImporter.doImport(s);
+    }
+
+    @MCRCommand(syntax = ScopusInitialImporter.IMPORT_BATCH_COMMAND, help="Queries all affiliation IDs and imports all documents {0} = afid {1} = start point should be 0")
+    public static void initialImport(String s, int i) throws Exception {
+        ScopusInitialImporter.initialImport(s, i);
+    }
+
+    @MCRCommand(syntax = "ubo update from scopus for query {0}", help = "Queries Scopus and imports them if not already present")
+    public static void update(String s) throws Exception {
+        ScopusUpdater.update(s);
+    }
+
+    @MCRCommand(syntax = "ubo update from scopus for affiliation IDs {0} last {1} days max {2}",
+    help = "Queries Scopus for new publications of comma-separated affiliation IDs {0} added within last {1} days, retrieves max {2} publications and imports them if not already present")
+    public static void update(String s, int int1, int int2) throws Exception {
+        ScopusUpdater.update(s, int1, int2);
+    }
+
+    @MCRCommand(syntax = "print possible duplicates", help = "Prints possible duplicate objects")
+    public static void printDuplicates() {
+        DeDupCommands.printDuplicates();
+    }
+
+    @MCRCommand(syntax = "ubo build duplicates report to directory {0}",help = "builds report on possibly duplicate entries and writes it as xml to file duplicates.xml in directory {0}")
+    public static void buildDuplicatesReport(String s) throws Exception {
+        DeDupCommands.buildDuplicatesReport(s);
+    }
+
+    @MCRCommand(syntax = "ubo find gnds", help = "Find GNDs")
+    public static void findGNDs() throws Exception {
+        DozBibGNDCommands.findGNDs();
     }
 
     /**
@@ -115,6 +112,7 @@ public class DozBibCommands extends MCRAbstractCommands {
      *
      * @return true if the migration was successful, false otherwise
      * */
+    @MCRCommand(syntax = "ubo migrate mods:genre for object {0}", help="Migrates mods:genre to mods:genre with authorityURI and valueURI")
     public static boolean migrateGenre(String objId) {
         if (!MCRObjectID.isValid(objId)) {
             LOGGER.error("ID {} is not a valid {} ", objId, MCRObjectID.class.getSimpleName());
@@ -139,7 +137,7 @@ public class DozBibCommands extends MCRAbstractCommands {
         }
     }
 
-    /** Exports all entries as MODS dump to a zipped xml file in the given directory */
+    @MCRCommand(syntax = "ubo mods export all entries to directory {0}", help = "exports all entries as MODS dump to a zipped xml file in local directory {0}")
     public static void exportMODS(String dir) throws Exception {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.ROOT);
         Date now = new Date();
@@ -184,6 +182,7 @@ public class DozBibCommands extends MCRAbstractCommands {
     }
 
     /** Transforms existing entries using XSL stylesheet **/
+    @MCRCommand(syntax="ubo transform entries using xsl {0}", help="Transforms persistent xml of all bibentries using XSL stylesheet")
     public static List<String> transformEntries(String xslFile) throws Exception {
         List<String> commands = new ArrayList<String>();
         for (String oid : MCRXMLMetadataManager.getInstance().listIDsOfType("mods")) {
@@ -192,6 +191,7 @@ public class DozBibCommands extends MCRAbstractCommands {
         return commands;
     }
 
+    @MCRCommand(syntax = "ubo migrate to mcrobject", help = "migrates all bibentries to mycoreobject persistence")
     public static void migrate2mcrobject() throws Exception {
         MCRMetadataStore store = MCRStoreManager.createStore("ubo", MCRMetadataStore.class);
         for (Iterator<Integer> IDs = store.listIDs(MCRStore.ASCENDING); IDs.hasNext(); ) {
@@ -244,6 +244,7 @@ public class DozBibCommands extends MCRAbstractCommands {
         }
     }
 
+    @MCRCommand(syntax = "ubo import mods collection from file {0}", help = "import mods:modsCollection from xml file {0}")
     public static void importMODSCollection(String fileName) throws Exception {
         File file = new File(fileName);
         if (!file.isFile()) {
@@ -272,6 +273,10 @@ public class DozBibCommands extends MCRAbstractCommands {
         }
     }
 
+    @MCRCommand(syntax = "migrate http uris matching {0} to https in {1}",
+        help = "Migrates http protocol of uris to https if they match the pattern given in {0} "
+            + "(xpath will be '//mods:identifier[@type = 'uri'][contains(text(), {0})]'). "
+            + "The mycore object id must be provided in {1}")
     public static void migrateURItoHttps(String uriContains, String id) {
         MCRObjectID mcrObjectID = MCRObjectID.getInstance(id);
         if (!MCRMetadataManager.exists(mcrObjectID)) {
