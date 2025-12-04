@@ -166,7 +166,7 @@ public class DozBibCommands extends MCRAbstractCommands {
         for (String oid : oids) {
             MCRObject obj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(oid));
             MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
-            if ("confirmed".equals(wrapper.getServiceFlag("status"))) {
+            if ("confirmed".equals(obj.getService().getState().getId())) {
                 MCRContent src = new MCRJDOMContent(obj.createXML());
                 MCRXSLTransformer transformer = new MCRXSLTransformer("xsl/mycoreobject-mods.xsl");
                 MCRContent mods = transformer.transform(src);
@@ -235,9 +235,9 @@ public class DozBibCommands extends MCRAbstractCommands {
             }
 
             MCRMODSWrapper wrapper = new MCRMODSWrapper();
-            wrapper.setServiceFlag("status", root.getAttributeValue("status"));
             wrapper.setMODS(mods.detach());
             MCRObject obj = wrapper.getMCRObject();
+            obj.getService().setState(root.getAttributeValue("status"));
 
             obj.setId(oid);
             MCRMetadataManager.create(obj);
@@ -263,9 +263,9 @@ public class DozBibCommands extends MCRAbstractCommands {
         }
         for (Element mods : root.getChildren("mods", MCRConstants.MODS_NAMESPACE)) {
             MCRMODSWrapper wrapper = new MCRMODSWrapper();
-            wrapper.setServiceFlag("status", "imported");
             wrapper.setMODS(mods.clone());
             MCRObject obj = wrapper.getMCRObject();
+            obj.getService().setState("imported");
 
             obj.setId(MCRMetadataManager.getMCRObjectIDGenerator().getNextFreeId(PROJECT_ID + "_mods"));
             MCRMetadataManager.create(obj);
