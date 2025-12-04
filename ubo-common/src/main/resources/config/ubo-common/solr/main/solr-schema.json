@@ -601,6 +601,12 @@
     }
   },
   {
+    "add-copy-field": {
+      "source": "state",
+      "dest": "status"
+    }
+  },
+  {
     "add-field": {
       "name": "subject",
       "type": "ubo_id",
