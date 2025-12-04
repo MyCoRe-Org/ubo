@@ -19,6 +19,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.XMLReaders;
+import org.jdom2.xpath.XPathExpression;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
@@ -26,6 +27,7 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRXSLTransformer;
+import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.common.xml.MCRXMLHelper;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs2.MCRMetadataStore;
@@ -69,7 +71,61 @@ public class DozBibCommands {
 
     private static final String PROJECT_ID = MCRConfiguration2.getString("UBO.projectid.default").get();
 
-    @MCRCommand(syntax = ScopusInitialImporter.IMPORT_SINGLE_COMMAND, help = "{0] = ID of object")
+    private static XPathExpression<Element> SERVFLAG_XPATH = XPATH_FACTORY.compile("//servflag[@type='status']",
+        Filters.element(), null, MODS_NAMESPACE);
+
+    @MCRCommand(syntax = "migrate status to state classification of {0}", help = "Migrates the status servflag to a servstate")
+    public static void migrateState(String objectId) {
+        if (!MCRObjectID.isValid(objectId)) {
+            LOGGER.error("'{}' is not a valid MCRObjectID", objectId);
+            return;
+        }
+
+        MCRObjectID mcrObjectID = MCRObjectID.getInstance(objectId);
+        if (!MCRMetadataManager.exists(mcrObjectID)) {
+            LOGGER.error("'{}' does not exist", objectId);
+            return;
+        }
+
+        LOGGER.info("Migrating status servflag of '{}'", objectId);
+        Document xml = MCRMetadataManager.retrieveMCRObject(mcrObjectID).createXML();
+        List<Element> servflags = SERVFLAG_XPATH.evaluate(xml);
+
+        if (servflags.isEmpty()) {
+            LOGGER.info("No servflags found for '{}'", objectId);
+            return;
+        }
+
+        for (Element flag : servflags) {
+            flag.detach();
+        }
+
+        String value = servflags.get(0).getValue();
+        if (!MCRXMLFunctions.isCategoryID("state", value)) {
+            LOGGER.error("'state:{}' is not valid with respect to state classification", value);
+            return;
+        }
+
+        MCRObject mcrObject = new MCRObject(xml);
+        mcrObject.getService().setState(value);
+        try {
+            MCRMetadataManager.update(mcrObject);
+        } catch (MCRAccessException e) {
+            LOGGER.error("Error while updating MCRObject '{}'", objectId, e);
+        }
+    }
+
+    @MCRCommand(syntax = "migrate status to state classification", help = "Migrates the status servflag to a servstate for all objects")
+    public static List<String> migrateState() {
+        List<String> commandList = new ArrayList<>();
+        List<String> mcrids = MCRXMLMetadataManager.getInstance().listIDsOfType("mods");
+        for (String mcrid : mcrids) {
+            commandList.add("migrate status to state classification of " + mcrid);
+        }
+        return commandList;
+    }
+
+    @MCRCommand(syntax = ScopusInitialImporter.IMPORT_SINGLE_COMMAND, help = "{0} = ID of object")
     public static void doImport(String s) throws Exception {
         ScopusInitialImporter.doImport(s);
     }
