@@ -88,9 +88,10 @@
   </xed:template>
 
   <xed:template id="status">
-    <xed:bind xpath="../../../../service/servstates[@class='MCRMetaClassification']/servstate[@classid='state']/@categid" default="submitted">
+    <xed:bind xpath="../../../../service/servstates[@class='MCRMetaClassification']/servstate[@classid='state']/@categid">
       <xed:choose>
         <xed:when test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
+          <xed:bind xpath="." default="confirmed" />
           <div class="form-inline form-group">
             <label for="{xed:generate-id()}" class="mycore-form-label">
               <xed:output value="concat(i18n:translate('ubo.status'), ': ')"/>
@@ -105,7 +106,7 @@
           </div>
         </xed:when>
         <xed:otherwise>
-          <xed:bind xpath="."/>
+          <xed:bind xpath="." default="submitted"/>
         </xed:otherwise>
       </xed:choose>
     </xed:bind>
