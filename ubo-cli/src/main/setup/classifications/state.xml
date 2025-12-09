@@ -24,5 +24,9 @@
       <label xml:lang="de" text="importiert"/>
       <label xml:lang="en" text="imported"/>
     </category>
+    <category ID="deleted">
+      <label xml:lang="de" text="gelöscht"/>
+      <label xml:lang="en" text="deleted"/>
+    </category>
   </categories>
 </mycoreclass>
