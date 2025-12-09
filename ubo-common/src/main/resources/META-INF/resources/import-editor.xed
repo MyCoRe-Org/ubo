@@ -88,24 +88,25 @@
   </xed:template>
 
   <xed:template id="status">
-    <xed:bind xpath="../../../../service/servflags[@class='MCRMetaLangText']/servflag[@type='status']">
+    <xed:bind xpath="../../../../service/servstates[@class='MCRMetaClassification']/servstate[@classid='state']/@categid">
       <xed:choose>
         <xed:when test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
           <xed:bind xpath="." default="confirmed" />
           <div class="form-inline form-group">
             <label for="{xed:generate-id()}" class="mycore-form-label">
-              <xed:output value="concat(i18n:translate('ubo.status'), ': ')" />
+              <xed:output value="concat(i18n:translate('ubo.status'), ': ')"/>
             </label>
             <select id="{xed:generate-id()}" class="mycore-form-input custom-select">
-              <xed:include uri="xslStyle:items2options:resource:status.xml" />
+              <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:state"/>
             </select>
-            <a tabindex="0" class="btn btn-secondary info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:ubo.help.status}">
-              <i class="fas fa-info"></i>
+            <a tabindex="0" class="btn btn-secondary info-button" role="button" data-toggle="popover"
+               data-placement="right" data-content="{i18n:ubo.help.status}">
+              <i class="fas fa-info"/>
             </a>
           </div>
         </xed:when>
         <xed:otherwise>
-          <xed:bind xpath="." default="submitted" />
+          <xed:bind xpath="." default="submitted"/>
         </xed:otherwise>
       </xed:choose>
     </xed:bind>

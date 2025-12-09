@@ -140,8 +140,9 @@ class ScopusImporter {
         setPreconfiguredClasses(publicationXML);
 
         MCRObject obj = new MCRObject(new Document(publicationXML));
+        obj.getService().setState(STATUS);
+
         MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
-        wrapper.setServiceFlag("status", STATUS);
         wrapper.setServiceFlag("importID", importIdProvider.getImportId());
         MCRObjectID oid = MCRMetadataManager.getMCRObjectIDGenerator().getNextFreeId(PROJECT_ID, "mods");
         obj.setId(oid);
