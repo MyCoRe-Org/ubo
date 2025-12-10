@@ -74,7 +74,7 @@ public class DozBibCommands {
     private static XPathExpression<Element> SERVFLAG_XPATH = XPATH_FACTORY.compile("//servflag[@type='status']",
         Filters.element(), null, MODS_NAMESPACE);
 
-    @MCRCommand(syntax = "migrate status to state classification of {0}", help = "Migrates the status servflag to a servstate")
+    @MCRCommand(syntax = "migrate status to state classification of {0}", help = "Migrates the status servflag to a servstate", order = 1)
     public static void migrateState(String objectId) {
         if (!MCRObjectID.isValid(objectId)) {
             LOGGER.error("'{}' is not a valid MCRObjectID", objectId);
@@ -115,7 +115,7 @@ public class DozBibCommands {
         }
     }
 
-    @MCRCommand(syntax = "migrate status to state classification", help = "Migrates the status servflag to a servstate for all objects")
+    @MCRCommand(syntax = "migrate status to state classification", help = "Migrates the status servflag to a servstate for all objects", order = 2)
     public static List<String> migrateState() {
         List<String> commandList = new ArrayList<>();
         List<String> mcrids = MCRXMLMetadataManager.getInstance().listIDsOfType("mods");
