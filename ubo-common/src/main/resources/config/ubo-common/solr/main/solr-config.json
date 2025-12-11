@@ -11,7 +11,7 @@
 				"q.op": "AND",
 				"df": "all",
 				"rows": 10,
-				"fl": "id cite cite.de cite.en year genre host_genre oa_exact",
+				"fl": "id cite cite.de cite.en year genre host_genre oa_exact nid_connection",
 				"facet": "true",
 				"facet.mincount": "1",
 				"facet.field": [

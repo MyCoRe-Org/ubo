@@ -347,9 +347,7 @@
         </xsl:if>
 
         <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update')">
-          <xsl:call-template name="orcid-status">
-          <xsl:with-param name="mcrid" select="$id"/>
-          </xsl:call-template>
+          <xsl:call-template name="orcid-status"/>
         </xsl:if>
       </div>
 

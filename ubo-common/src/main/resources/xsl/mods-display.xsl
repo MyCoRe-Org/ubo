@@ -29,8 +29,6 @@
   <xsl:param name="UBO.DESTATIS.omit.ID"/>
   <xsl:param name="UBO.Affiliation.Suppress.ConnectedIndicator"/>
 
-  <xsl:param name="current-user" select="document('notnull:user:current')/user"/>
-
   <!-- Expect one more author to be displayed as the last author is always getting displayed -->
   <xsl:param name="UBO.Initially.Visible.Authors" select="14" />
 
@@ -332,25 +330,6 @@
           onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat('+year:', text()))}')">
       <xsl:value-of select="text()" />
     </span>
-  </xsl:template>
-
-  <!-- ========== ORCID status and publish button ========== -->
-  <xsl:variable name="current-user-connection-id" select="$current-user/attributes/attribute[@name='id_connection']/@value"/>
-
-  <xsl:template name="orcid-status">
-    <xsl:variable name="publication-connection-ids" select="ancestor::mycoreobject//mods:nameIdentifier[@type='connection']"/>
-
-    <xsl:if test="$publication-connection-ids = $current-user-connection-id">
-      <div class="orcid-status" data-id="{ancestor::mycoreobject/@ID}"/>
-    </xsl:if>
-  </xsl:template>
-
-  <xsl:template name="orcid-publish">
-    <xsl:variable name="publication-connection-ids" select="ancestor::mycoreobject//mods:nameIdentifier[@type='connection']"/>
-
-    <xsl:if test="$publication-connection-ids = $current-user-connection-id">
-      <div class="orcid-publish d-inline" data-id="{ancestor::mycoreobject/@ID}"/>
-    </xsl:if>
   </xsl:template>
 
   <!-- ========== URI bauen, um Dubletten zu finden ========== -->
