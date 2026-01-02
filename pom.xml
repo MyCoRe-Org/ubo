@@ -298,7 +298,7 @@
     <dependencies>
       <dependency>
         <groupId>org.mycore</groupId>
-        <artifactId>mycore-bom</artifactId>
+        <artifactId>mycore</artifactId>
         <version>${mycore.version}</version>
         <type>pom</type>
         <scope>import</scope>
@@ -307,11 +307,6 @@
         <groupId>com.bucket4j</groupId>
         <artifactId>bucket4j-core</artifactId>
         <version>8.9.0</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-codec</groupId>
-        <artifactId>commons-codec</artifactId>
-        <version>1.18.0</version>
       </dependency>
       <dependency>
         <groupId>commons-discovery</groupId>
@@ -323,11 +318,6 @@
             <artifactId>commons-logging</artifactId>
           </exclusion>
         </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>jakarta.xml.bind</groupId>
-        <artifactId>jakarta.xml.bind-api</artifactId>
-        <version>${jakarta.xml.bind.version}</version>
       </dependency>
       <dependency>
         <groupId>jakarta.xml.ws</groupId>
