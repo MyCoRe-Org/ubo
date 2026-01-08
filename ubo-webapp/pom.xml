@@ -57,12 +57,13 @@
       <plugin>
         <groupId>org.mycore.plugins</groupId>
         <artifactId>solr-runner-maven-plugin</artifactId>
-        <version>1.4</version>
+        <version>1.5</version>
         <configuration>
           <solrVersionString>${solr-runner.solrVersionString}</solrVersionString>
           <solrHomeTemplate>${project.basedir}/src/main/solr</solrHomeTemplate>
           <solrHome>${solr.home}</solrHome>
           <cloudMode>true</cloudMode>
+          <additionalParams>-Dsolr.config.lib.enabled=true</additionalParams>
         </configuration>
       </plugin>
     </plugins>
