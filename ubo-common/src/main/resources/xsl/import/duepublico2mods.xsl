@@ -60,9 +60,9 @@
       <xsl:copy-of select="mods:role" />
       <xsl:copy-of select="mods:namePart" />
       <xsl:apply-templates select="@valueURI" />
-      <xsl:copy-of select="mods:nameIdentifier[@type='lsf']" />
-      <xsl:copy-of select="mods:nameIdentifier[@type='gnd']" />
-      <xsl:copy-of select="mods:nameIdentifier[@type='orcid']" />
+      <xsl:apply-templates select="mods:nameIdentifier[@type='lsf']" />
+      <xsl:apply-templates select="mods:nameIdentifier[@type='gnd']" />
+      <xsl:apply-templates select="mods:nameIdentifier[@type='orcid']" />
     </mods:name>
   </xsl:template>
   
@@ -120,6 +120,12 @@
     </xsl:copy>
   </xsl:template>
   
+  <xsl:template match="mods:nameIdentifier">
+     <xsl:copy>
+        <xsl:copy-of select="@type|text()" />
+     </xsl:copy>
+  </xsl:template>
+
   <xsl:template match="mods:abstract">
     <xsl:if test="string-length(text()) &gt; 0">
       <xsl:copy>

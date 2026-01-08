@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreobject xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-mods.xsd" ID="duepublico_mods_00000001">
+    <metadata>
+        <def.modsContainer class="MCRMetaXML" heritable="false" notinherit="true">
+            <modsContainer inherited="0">
+                <mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+                    <mods:name type="personal" xlink:type="simple">
+                        <mods:nameIdentifier type="gnd" typeURI="http://d-nb.info/gnd/">1000000000</mods:nameIdentifier>
+                        <mods:nameIdentifier type="viaf" typeURI="http://www.viaf.org/">0000000000000000000001</mods:nameIdentifier>
+                        <mods:nameIdentifier type="lsf" typeURI="https://www.uni-due.de/">00000</mods:nameIdentifier>
+                        <mods:nameIdentifier type="orcid" typeURI="http://orcid.org/">0000-0000-0000-0001</mods:nameIdentifier>
+                        <mods:namePart type="family">Müller</mods:namePart>
+                        <mods:namePart type="given">Peter</mods:namePart>
+                    </mods:name>
+                </mods:mods>
+            </modsContainer>
+        </def.modsContainer>
+    </metadata>
+</mycoreobject>
