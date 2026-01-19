@@ -765,6 +765,14 @@
     }
   },
   {
+    "add-field": {
+      "name": "groupValue_name_id_connection",
+      "type": "string",
+      "indexed": false,
+      "stored": false
+    }
+  },
+  {
     "add-dynamic-field": {
       "name": "person_*",
       "type": "ubo_name",
