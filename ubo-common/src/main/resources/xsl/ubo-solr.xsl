@@ -515,7 +515,7 @@
     </field>
 
     <xsl:if test="@type = 'connection'">
-      <field name="groupValue_name_id_{@type}">
+      <field name="groupable_name_id_{@type}">
         <xsl:value-of select="text()"/>
       </field>
     </xsl:if>

@@ -766,7 +766,7 @@
   },
   {
     "add-field": {
-      "name": "groupValue_name_id_connection",
+      "name": "groupable_name_id_connection",
       "type": "string",
       "indexed": false,
       "stored": false
