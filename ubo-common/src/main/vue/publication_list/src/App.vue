@@ -561,13 +561,13 @@ const searchSolrForPerson = async (name: string): Promise<User[]> => {
   const nameReversed = nameSearch.split('*').reverse().join("*");
   const roleQuery = getRoleQuery();
   const response = await
-    fetch(`${getWebApplicationBaseURL()}servlets/solr/select?q=name_id_connection:* AND (name:*${nameSearch}* OR name:*${nameReversed}* OR name_id_${propResponse["MCR.user2.matching.lead_id"]}:*${name}*)${roleQuery}&group=true&group.field=name_id_connection&fl=*&wt=json`);
+    fetch(`${getWebApplicationBaseURL()}servlets/solr/select?q=name_id_connection:* AND (name:*${nameSearch}* OR name:*${nameReversed}* OR name_id_${propResponse["MCR.user2.matching.lead_id"]}:*${name}*)${roleQuery}&group=true&group.field=groupable_name_id_connection&fl=*&wt=json`);
   if (response.ok) {
     const json = await response.json();
     searchModel.searching = false;
 
     const results = [];
-    for (const {doclist} of json.grouped.name_id_connection.groups) {
+    for (const {doclist} of json.grouped.groupable_name_id_connection.groups) {
       const doc = doclist.docs[0];
 
       const otherIds: Identifier = {};
@@ -580,7 +580,7 @@ const searchSolrForPerson = async (name: string): Promise<User[]> => {
         }
       }
 
-      const result: User = {name: doc.name, pid: doc.name_id_connection[0], otherIds: otherIds};
+      const result: User = {name: doc.name, pid: doc.groupable_name_id_connection, otherIds: otherIds};
       if (result.name && result.pid) {
         results.push(result);
       }

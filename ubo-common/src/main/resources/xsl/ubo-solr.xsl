@@ -513,6 +513,12 @@
     <field name="name_id_{@type}">
       <xsl:value-of select="text()" />
     </field>
+
+    <xsl:if test="@type = 'connection'">
+      <field name="groupable_name_id_{@type}">
+        <xsl:value-of select="text()"/>
+      </field>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="mods:part" mode="solrField">
