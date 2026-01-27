@@ -43,7 +43,7 @@
           <input class="mycore-form-input" size="6" type="text" :readonly="!props.isAdmin"
                  v-model="internModel.person.pid"
                  id="pid" :placeholder="i18n['editor.identity.picker.lead_id']">
-          <button v-if="props.isAdmin" type="button" class="btn btn-outline-secondary"
+          <button v-if="props.isAdmin && props.isGenerateIdEnabled" type="button" class="btn btn-outline-secondary"
                   id="generate" :title="i18n['index.person.generate.id']" @click="generateId">
             <i class="fas fa-random fa-flip-both"/>
           </button>
@@ -76,6 +76,7 @@ const props = defineProps<{
   person: { firstName: string, lastName: string, pid: string },
   baseurl: string,
   isAdmin: boolean,
+  isGenerateIdEnabled: boolean,
   searched: boolean
 }>();
 
