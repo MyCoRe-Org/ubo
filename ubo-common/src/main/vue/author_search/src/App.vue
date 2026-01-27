@@ -105,8 +105,8 @@ const resolveConfig = async () =>{
   }
   config["MCR.user2.matching.lead_id"] = jsonRepsponse["MCR.user2.matching.lead_id"];
 
-  if (jsonRepsponse["UBO.IdentityPicker.generate.button.show"]) {
-    config["UBO.IdentityPicker.generate.button.show"] = jsonRepsponse["UBO.IdentityPicker.generate.button.show"];
+  if (jsonRepsponse["UBO.IdentityPicker.generate.id.enabled"]) {
+    config["UBO.IdentityPicker.generate.id.enabled"] = jsonRepsponse["UBO.IdentityPicker.generate.id.enabled"];
   }
 };
 
@@ -147,8 +147,8 @@ const getPidTypeFromConfig = () => {
 };
 
 const getGenerateIdButtonEnabledFromConfig = () => {
-  console.log("UBO.IdentityPicker.generate.button.show: " + config["UBO.IdentityPicker.generate.button.show"])
-  return config["UBO.IdentityPicker.generate.button.show"] || false;
+  console.log("UBO.IdentityPicker.generate.id.enabled: " + config["UBO.IdentityPicker.generate.id.enabled"])
+  return config["UBO.IdentityPicker.generate.id.enabled"] || false;
 };
 
 const getSessionIdFromURL = () => {
