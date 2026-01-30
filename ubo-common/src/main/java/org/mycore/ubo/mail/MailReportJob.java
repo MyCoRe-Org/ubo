@@ -93,7 +93,7 @@ public class MailReportJob extends MCRCronjob {
             }
             String attachment = null;
             try {
-                attachment = resolveURI(configTuple.get("uri"), configTuple.get("filetype"));
+                attachment = resolveURI(configTuple.get("uri"), configTuple.get("filetype"), prefix);
             } catch (Exception e) {
                 LOGGER.warn("Couldn't create attachment for uri {}, {}", configTuple.get("uri"), e);
             }
@@ -107,10 +107,10 @@ public class MailReportJob extends MCRCronjob {
         return preparedEmails;
     }
 
-    private String resolveURI(String uri, String filetype) throws IOException, TransformerException {
+    private String resolveURI(String uri, String filetype, String prefix) throws IOException, TransformerException {
         MCRSourceContent content = MCRSourceContent.getInstance(uri);
 
-        Path tempFile = Files.createTempFile("attachment_", "." + filetype);
+        Path tempFile = Files.createTempFile("att_" + prefix + "_", "." + filetype);
         try (InputStream inputStream = content.getContentInputStream();
             OutputStream outputStream = Files.newOutputStream(tempFile)) {
             byte[] buffer = new byte[8192];
