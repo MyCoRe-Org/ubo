@@ -24,11 +24,9 @@
     <cargo.servlet.uriencoding>UTF-8</cargo.servlet.uriencoding>
     <cargo.start.jvmargs />
     <cargo.tomcat.ajp.port>8292</cargo.tomcat.ajp.port>
-    <cargo.version>1.10.15</cargo.version>
-    <jetty.version>9.4.51.v20230217</jetty.version>
+    <cargo.version>1.10.26</cargo.version>
     <solr-runner.solrVersionString>9.8.1</solr-runner.solrVersionString>
     <solr.home>${user.config.dir}/${MCR.AppName}/data/solr</solr.home>
-    <tomcat.version>10.1.2</tomcat.version>
   </properties>
   <build>
     <plugins>
