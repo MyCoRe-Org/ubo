@@ -102,16 +102,14 @@ ubo-cli/target/bin/ubo.sh reload solr configuration main in core main
 ```
 
 ## Run 
-- local web application on port 8080 with tomcat 10:
+-local web application on port 8080 with tomcat 10:
+
 ```
-mvn cargo:run -Dtomcat -pl ubo-webapp
+mvn cargo:run -pl ubo-webapp
 ```
-- or jetty: (does not work currently)
-```
-mvn cargo:run -Djetty -pl ubo-webapp
-```
+
 ## Rebuild & Run (root directory)
 ```
-mvn clean && mvn install -am -pl ubo-webapp && mvn -Dtomcat=9 org.codehaus.cargo:cargo-maven2-plugin:run -pl ubo-webapp -DskipTests
+mvn clean && mvn install -am -pl ubo-webapp && mvn cargo:run -pl ubo-webapp -DskipTests
 ```
 
