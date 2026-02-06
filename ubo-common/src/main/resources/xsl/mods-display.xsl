@@ -1204,6 +1204,7 @@
     </xsl:apply-templates>
     <xsl:apply-templates select="mods:abstract/@xlink:href" mode="details" />
     <xsl:apply-templates select="mods:abstract[string-length(.) &gt; 0]" mode="details" />
+    <xsl:apply-templates select="//servflag[@type='importID']" mode="details" />
   </xsl:template>
 
   <!-- =========== Schlagworte =========== -->
@@ -1223,6 +1224,22 @@
             <xsl:if test="position() != last()"> ; </xsl:if>
           </xsl:for-each>
           <xsl:apply-templates select="." />
+        </div>
+      </div>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="//servflag[@type='importID']" mode="details">
+    <xsl:if test="check:currentUserIsAdmin()">
+      <div class="row">
+        <div class="col-3">
+          <xsl:value-of select="i18n:translate('ubo.identifier.importID')" />
+          <xsl:text>:</xsl:text>
+        </div>
+        <div class="col-9">
+          <a href="{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+importID:&quot;', ., '&quot;'))}">
+            <xsl:value-of select="." />
+          </a>
         </div>
       </div>
     </xsl:if>
