@@ -51,7 +51,7 @@ vi ~/.mycore/ubo/mycore.properties
 MCR.Solr.ServerURL=http://localhost:8983/
 MCR.Solr.Core.main.Name=ubo
 MCR.Solr.Core.classification.Name=ubo-classifications
-MCR.Solr.Core.project.Name=ubo-projects
+MCR.Solr.Core.projects.Name=ubo-projects
 
 # with cloud
 MCR.Solr.Server.Auth.Admin.Class=org.mycore.solr.auth.MCRSolrBasicPropertyAuthentication
