@@ -232,15 +232,23 @@
               <div class="jumbotron">
                 <!-- when the format is html, we will show the link (which is a iframe) as code -->
                 <p class="text-primary" v-if="exportModel.format==='html'">
-                  {{ i18n["listWizard.code"] }}</p>
-                <code v-if="exportModel.format==='html'">&lt;iframe scrolling=&quot;yes&quot; width=&quot;90%&quot;
-                  height=&quot;300&quot;
-                  src=&quot;{{ result.link }}&quot;/&gt;</code>
+                  {{ i18n["listWizard.code"] }}
+                  <sup>
+                    <i class="far fa-copy ubo-hover-pointer" @click="copySnippetToClipboard('ubo-publist-html')"/>
+                  </sup>
+                </p>
+                <code id="ubo-publist-html" v-if="exportModel.format==='html'">
+                  &lt;iframe scrolling=&quot;yes&quot; width=&quot;90%&quot; height=&quot;300&quot; src=&quot;{{ result.link }}&quot;/&gt;
+                </code>
 
                 <!-- when format is not html, we just show it as link -->
                 <p class="text-primary" v-if="exportModel.format!=='html'">
-                  {{ i18n["listWizard.link"] }}</p>
-                <a v-if="exportModel.format!=='html'" :href="result.link">{{ result.link }}</a>
+                  {{ i18n["listWizard.link"] }}
+                  <sup>
+                    <i class="far fa-copy ubo-hover-pointer" @click="copySnippetToClipboard('ubo-publist-other')"/>
+                  </sup>
+                </p>
+                <a id="ubo-publist-other" v-if="exportModel.format!=='html'" :href="result.link">{{ result.link }}</a>
               </div>
             </div>
           </div>
@@ -600,6 +608,16 @@ const getRoleQuery = () => {
   return "";
 }
 
+const copySnippetToClipboard = (htmlId: string) => {
+  const text = document.getElementById(htmlId)?.innerHTML;
+  if (text == null) {
+    return;
+  }
+  const parsed = new DOMParser().parseFromString(text, "text/html").documentElement.textContent;
+  if (parsed != null) {
+    navigator.clipboard.writeText(parsed);
+  }
+}
 
 
 </script>
