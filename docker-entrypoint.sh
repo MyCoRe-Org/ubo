@@ -93,8 +93,8 @@ function setDockerValues() {
       setOrAddProperty "MCR.Solr.Core.classification.Name" "${SOLR_CLASSIFICATION_CORE}"
     fi
 
-    if [ -n "${SOLR_PROJECT_CORE}" ]; then
-      setOrAddProperty "MCR.Solr.Core.project.Name" "${SOLR_PROJECT_CORE}"
+    if [ -n "${SOLR_PROJECTS_CORE}" ]; then
+      setOrAddProperty "MCR.Solr.Core.projects.Name" "${SOLR_PROJECTS_CORE}"
     fi
 
     if [ -n "${JDBC_NAME}" ]; then
@@ -149,8 +149,8 @@ function setDockerValues() {
     fi
 
     setOrAddProperty "MCR.JPA.Hbm2ddlAuto" "update"
-    setOrAddProperty "MCR.JPA.PersistenceUnit.ubo.Class" "org.mycore.backend.jpa.MCRSimpleConfigPersistenceUnitDescriptor"
-    setOrAddProperty "MCR.JPA.PersistenceUnitName" "ubo"
+    setOrAddProperty "MCR.JPA.PersistenceUnit.MyCoRe.Class" "org.mycore.backend.jpa.MCRSimpleConfigPersistenceUnitDescriptor"
+    setOrAddProperty "MCR.JPA.PersistenceUnitName" "MyCoRe"
 
     setOrAddProperty "MCR.datadir" "${MCR_DATA_DIR}"
     setOrAddProperty "MCR.Solr.NestedDocuments" "true"
@@ -206,10 +206,10 @@ function setUpMyCoRe {
     then
       echo "upload local config set for main" >> "${MCR_CONFIG_DIR}setup-solr-cloud.txt"
       echo "upload local config set for classification" >> "${MCR_CONFIG_DIR}setup-solr-cloud.txt"
-      echo "upload local config set for project" >> "${MCR_CONFIG_DIR}setup-solr-cloud.txt"
+      echo "upload local config set for projects" >> "${MCR_CONFIG_DIR}setup-solr-cloud.txt"
       echo "create collection for core main" >> "${MCR_CONFIG_DIR}setup-solr-cloud.txt"
       echo "create collection for core classification" >> "${MCR_CONFIG_DIR}setup-solr-cloud.txt"
-      echo "create collection for core project" >> "${MCR_CONFIG_DIR}setup-solr-cloud.txt"
+      echo "create collection for core projects" >> "${MCR_CONFIG_DIR}setup-solr-cloud.txt"
       /opt/ubo/ubo-cli/target/bin/ubo.sh process /mcr/home/setup-solr-cloud.txt
     fi
 
