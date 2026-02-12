@@ -99,6 +99,7 @@ ubo-cli/target/bin/ubo.sh create collection for core projects
 
 # for all solr installations
 ubo-cli/target/bin/ubo.sh reload solr configuration main in core main
+ubo-cli/target/bin/ubo.sh reload solr configuration classification in core classification
 ```
 
 ## Run 
