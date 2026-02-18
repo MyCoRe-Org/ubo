@@ -1202,9 +1202,9 @@
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'destatis')]" mode="details">
       <xsl:sort select="@valueURI"/>
     </xsl:apply-templates>
+    <xsl:apply-templates select="../../../../service/servflags/servflag[@type='importID']" mode="details" />
     <xsl:apply-templates select="mods:abstract/@xlink:href" mode="details" />
     <xsl:apply-templates select="mods:abstract[string-length(.) &gt; 0]" mode="details" />
-    <xsl:apply-templates select="//servflag[@type='importID']" mode="details" />
   </xsl:template>
 
   <!-- =========== Schlagworte =========== -->
@@ -1229,7 +1229,7 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="//servflag[@type='importID']" mode="details">
+  <xsl:template match="servflag[@type='importID']" mode="details">
     <xsl:if test="check:currentUserIsAdmin()">
       <div class="row">
         <div class="col-3">
