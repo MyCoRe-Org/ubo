@@ -24,6 +24,10 @@
       <label xml:lang="de" text="importiert"/>
       <label xml:lang="en" text="imported"/>
     </category>
+    <category ID="retracted">
+	  <label xml:lang="de" text="zurückgezogen"/>
+	  <label xml:lang="en" text="retracted"/>
+	</category>    
     <category ID="deleted">
       <label xml:lang="de" text="gelöscht"/>
       <label xml:lang="en" text="deleted"/>
