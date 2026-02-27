@@ -18,7 +18,9 @@
 
   <xed:post-processor xsl="mods-postprocessor.xsl" />
   
-  <xed:preload uri="webapp:import-editor.xed" />    
+  <xed:preload uri="webapp:edit-admin.xed" />
+  <xed:preload uri="webapp:import-editor.xed" />
+  <xed:preload uri="{$UBO.EditorForms.CustomIncludes}" />
   
   <xed:bind xpath="/mycoreobject">
     <xed:include ref="common.metafields" />
