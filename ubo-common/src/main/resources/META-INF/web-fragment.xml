@@ -176,7 +176,7 @@
     <servlet-class>org.mycore.frontend.servlets.MCRConfigHelperServlet</servlet-class>
     <init-param>
       <param-name>Properties</param-name>
-      <param-value>MCR.user2.matching.lead_id</param-value>
+      <param-value>MCR.user2.matching.lead_id,UBO.IdentityPicker.generate.id.enabled</param-value>
     </init-param>
   </servlet>
   <servlet-mapping>

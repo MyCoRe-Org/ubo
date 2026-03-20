@@ -3,7 +3,7 @@ version: '3.1'
 services:
   db:
     container_name: ${NAME}-db
-    image: postgres:12
+    image: postgres:17
     restart: unless-stopped
     environment:
       - POSTGRES_USER=${DB_USER}
@@ -15,12 +15,19 @@ services:
       - ${DB_PORT}:5432
   solr:
     container_name: ${NAME}-solr
-    build: ubo-webapp/src/main/setup/solr/
+    build: ubo-webapp/src/main/solr/
     restart: unless-stopped
     volumes:
       - ${SOLR_DATA}:/var/solr/data
     ports:
       - ${SOLR_HTTP}:8983
+    environment:
+      - SOLR_ADMIN_USER=${SOLR_ADMIN_USER}
+      - SOLR_ADMIN_PASSWORD=${SOLR_ADMIN_PASSWORD}
+      - SOLR_SEARCH_USER=${SOLR_SEARCH_USER}
+      - SOLR_SEARCH_PASSWORD=${SOLR_SEARCH_PASSWORD}
+      - SOLR_INDEX_USER=${SOLR_INDEX_USER}
+      - SOLR_INDEX_PASSWORD=${SOLR_INDEX_PASSWORD}
   ubo:
     container_name: ${NAME}-ubo
     build: ./
@@ -31,12 +38,22 @@ services:
       - JDBC_PASSWORD=${DB_PASSWORD}
       - JDBC_DRIVER=org.postgresql.Driver
       - JDBC_URL=jdbc:postgresql://db:5432/ubo
+      - JDBC_SCHEMA=${DB_SCHEMA}
       - SOLR_URL=http://solr:8983
       - SOLR_CORE=ubo
       - SOLR_CLASSIFICATION_CORE=ubo-classifications
+      - SOLR_PROJECT_CORE=ubo-projects
+      - ENABLE_SOLR_CLOUD=true
+      - SOLR_ADMIN_USER=${SOLR_ADMIN_USER}
+      - SOLR_ADMIN_PASSWORD=${SOLR_ADMIN_PASSWORD}
+      - SOLR_SEARCH_USER=${SOLR_SEARCH_USER}
+      - SOLR_SEARCH_PASSWORD=${SOLR_SEARCH_PASSWORD}
+      - SOLR_INDEX_USER=${SOLR_INDEX_USER}
+      - SOLR_INDEX_PASSWORD=${SOLR_INDEX_PASSWORD}
       - XMX=${APP_XMX}
       - XMS=${APP_XMS}
       - APP_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8295
+      - FIX_FILE_SYSTEM_RIGHTS=true
     volumes:
       - ${APP_HOME}:/mcr/home/
       - ${APP_DATA}:/mcr/data/

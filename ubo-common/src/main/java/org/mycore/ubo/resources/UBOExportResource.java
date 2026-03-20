@@ -18,17 +18,6 @@
 
 package org.mycore.ubo.resources;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.google.gson.Gson;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -44,6 +33,17 @@ import org.jdom2.Namespace;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.frontend.MCRFrontendUtil;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Path("export")
 public class UBOExportResource {
@@ -72,7 +72,7 @@ public class UBOExportResource {
 
         List<CSLEntry> result = new ArrayList<>(styles.length);
         for (String style : styles) {
-            Element element = MCRURIResolver.instance().resolve("resource:" + style + ".csl");
+            Element element = MCRURIResolver.obtainInstance().resolve("resource:" + style + ".csl");
 
             String title = Optional.ofNullable(element.getChild("info", CSL_NAMESPACE))
                 .map(el -> Optional.ofNullable(el.getChild("title", CSL_NAMESPACE)))

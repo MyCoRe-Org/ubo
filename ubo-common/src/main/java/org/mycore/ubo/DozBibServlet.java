@@ -9,17 +9,14 @@
 
 package org.mycore.ubo;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -34,8 +31,15 @@ import org.mycore.parsers.bool.MCRSetCondition;
 import org.mycore.services.fieldquery.MCRQuery;
 import org.mycore.services.fieldquery.MCRQueryCondition;
 import org.mycore.services.fieldquery.MCRQueryParser;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
+import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
+import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 import org.mycore.solr.search.MCRSolrSearchUtils;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class DozBibServlet extends MCRServlet {
 
@@ -89,8 +93,11 @@ public class DozBibServlet extends MCRServlet {
 
         SolrQuery solrQuery = MCRSolrSearchUtils.getSolrQuery(q, doc, req);
         solrQuery.setRows(0);
-        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
-        SolrDocumentList results = solrClient.query(solrQuery).getResults();
+        SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
+        QueryRequest queryRequest = new QueryRequest(solrQuery);
+        MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest, MCRSolrAuthenticationLevel.SEARCH);
+        QueryResponse response = queryRequest.process(solrClient);
+        SolrDocumentList results = response.getResults();
         long numFound = results.getNumFound();
 
         String format = job.getRequest().getParameter("format");

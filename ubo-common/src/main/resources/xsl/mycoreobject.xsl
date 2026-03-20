@@ -219,7 +219,7 @@
         </xsl:if>
         <div class="row">
           <div class="col">
-            <xsl:apply-templates select="/mycoreobject/service/servflags/servflag[@type='status']" />
+            <xsl:apply-templates select="/mycoreobject/service/servstates/servstate[@classid='state']" />
             <xsl:call-template name="printRelatedItem" />
             <xsl:if test="$permission.admin">
               <xsl:call-template name="linkToDuplicates" />
@@ -360,11 +360,11 @@
   </div>
 </xsl:template>
 
-<xsl:template match="servflag[@type='status']">
+<xsl:template match="servstate[@classid='state']">
  <xsl:if test="$permission.admin">
   <p>
     <strong>
-      <xsl:value-of select="i18n:translate(concat('result.dozbib.status.detailed.',.))" />
+      <xsl:value-of select="i18n:translate(concat('result.dozbib.status.detailed.', @categid))" />
     </strong>
   </p>
  </xsl:if>

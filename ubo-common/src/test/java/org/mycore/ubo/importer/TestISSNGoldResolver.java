@@ -24,7 +24,7 @@ public class TestISSNGoldResolver extends MCRTestCase {
 
     @Test
     public void testGoldISSN() throws IOException {
-        Element mods = MCRURIResolver.instance().resolve("gold:2074-9023");
+        Element mods = MCRURIResolver.obtainInstance().resolve("gold:2074-9023");
 
         String title = mods.getChild("titleInfo", MCRConstants.MODS_NAMESPACE)
             .getChildText("title", MCRConstants.MODS_NAMESPACE);
@@ -36,7 +36,7 @@ public class TestISSNGoldResolver extends MCRTestCase {
 
     @Test
     public void testNonGoldISSN() throws IOException {
-        Element mods = MCRURIResolver.instance().resolve("gold:1234-5678");
+        Element mods = MCRURIResolver.obtainInstance().resolve("gold:1234-5678");
         assertEquals(0, mods.getChildren().size());
     }
 }

@@ -1,9 +1,5 @@
 package org.mycore.ubo.relations;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
@@ -17,6 +13,10 @@ import org.mycore.datamodel.metadata.MCRObjectStructure;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.mods.MCRMODSWrapper;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Checks the parent and child relations for the given object.
@@ -38,7 +38,7 @@ public class ParentChildRelationChecker {
         help = "Checks parent-child relations in both structure and relatedItem[@type='host'], repair=[true|false]",
         order = 1)
     public static void checkAllRelations(String sRepair) {
-        for (String id : MCRXMLMetadataManager.instance().listIDs()) {
+        for (String id : MCRXMLMetadataManager.getInstance().listIDs()) {
             checkRelations(id, sRepair);
         }
     }

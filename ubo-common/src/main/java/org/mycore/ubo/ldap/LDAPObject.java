@@ -1,8 +1,8 @@
 package org.mycore.ubo.ldap;
 
-import javax.naming.directory.SearchResult;
-
 import com.google.common.collect.Multimap;
+
+import javax.naming.directory.SearchResult;
 
 /**
  * Abstraction class of an LDAP entity.

@@ -1,10 +1,10 @@
 package org.mycore.ubo.login;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.user2.MCRUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Checks the given user ID and password combination against multiple other
@@ -31,7 +31,7 @@ public class CascadingAuthenticationHandler extends AuthenticationHandler {
 
         String[] realmIDs = MCRConfiguration2.getString(CONFIG_PREFIX + "Realms").get().split("\\s");
         for (String realmID : realmIDs) {
-            AuthenticationHandler handler = (AuthenticationHandler)(MCRConfiguration2.getInstanceOf(CONFIG_PREFIX + realmID).get());
+            AuthenticationHandler handler = MCRConfiguration2.getInstanceOf(AuthenticationHandler.class,CONFIG_PREFIX + realmID).get();
             handler.init(realmID);
             authenticationHandlers.add(handler);
         }

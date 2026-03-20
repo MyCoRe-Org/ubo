@@ -17,7 +17,6 @@
   <xsl:template match="mycoreobject">
     <xsl:apply-templates select="." mode="baseFields" />
     <xsl:apply-templates select="structure/parents/parent[@xlink:href]" mode="solrField" />
-    <xsl:apply-templates select="service/servflags/servflag[@type='status']" mode="solrField" />
     <xsl:apply-templates select="service/servflags/servflag[@type='importID']" mode="solrField" />
     <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" mode="solrField" />
 
@@ -87,12 +86,6 @@
         </xsl:for-each>
       </field>
     </xsl:if>
-  </xsl:template>
-
-  <xsl:template match="servflag[@type='status']" mode="solrField">
-    <field name="status">
-      <xsl:value-of select="text()" />
-    </field>
   </xsl:template>
 
   <xsl:template match="servflag[@type='importID']" mode="solrField">
@@ -520,6 +513,12 @@
     <field name="name_id_{@type}">
       <xsl:value-of select="text()" />
     </field>
+
+    <xsl:if test="@type = 'connection'">
+      <field name="groupable_name_id_{@type}">
+        <xsl:value-of select="text()"/>
+      </field>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="mods:part" mode="solrField">

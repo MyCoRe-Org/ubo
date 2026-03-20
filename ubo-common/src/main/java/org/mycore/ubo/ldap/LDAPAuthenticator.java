@@ -1,18 +1,17 @@
 package org.mycore.ubo.ldap;
 
-import java.util.Hashtable;
-import java.util.Locale;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mycore.common.config.MCRConfiguration2;
+import org.mycore.user2.MCRUser2Constants;
 
 import javax.naming.AuthenticationException;
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.ldap.InitialLdapContext;
 import javax.naming.ldap.LdapContext;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mycore.common.config.MCRConfiguration2;
-import org.mycore.user2.MCRUser2Constants;
+import java.util.Hashtable;
+import java.util.Locale;
 
 /**
  * Manages the authentication and connection to a configured LDAP server.

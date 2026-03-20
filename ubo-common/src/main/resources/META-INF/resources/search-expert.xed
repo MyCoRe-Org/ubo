@@ -9,6 +9,9 @@
  <article class="card">
    <div class="card-body">
      <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form"> 
+     
+       <xed:preload uri="webapp:import-search.xed" />
+     
        <fieldset>
          <legend>
            <xed:output i18n="search.dozbib" />
@@ -89,9 +92,9 @@
              </div>
            </div>
 
-           <xed:include uri="webapp:import-search.xed" ref="sortby" /> 
-           <xed:include uri="webapp:import-search.xed" ref="numPerPage" />
-           <xed:include uri="webapp:import-search.xed" ref="submit" />  
+           <xed:include ref="sortby" /> 
+           <xed:include ref="numPerPage" />
+           <xed:include ref="submit" />  
 
          </xed:bind>
          

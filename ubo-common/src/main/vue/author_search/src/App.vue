@@ -18,6 +18,7 @@
       <div class="col-12 col-lg-6">
         <PersonEditForm :person="model.personModel"
                         :is-admin="model.isAdmin"
+                        :is-generate-id-enabled="model.isGenerateIdEnabled"
                         :searched="model.searched"
                         v-on:submit="personSubmitted"
                         v-on:cancel="cancel"
@@ -58,6 +59,7 @@ const model = reactive({
     pid: ""
   },
   isAdmin: false,
+  isGenerateIdEnabled: false,
   pidType: null as string | null,
   sessionID: null as string | null
 });
@@ -84,6 +86,7 @@ onMounted(async () => {
   model.personModel.firstName = getFirstNameFromURL();
   model.personModel.lastName = getLastNameFromURL();
   model.personModel.pid = getPidFromURL();
+  model.isGenerateIdEnabled = getGenerateIdButtonEnabledFromConfig();
 
   console.log(model.personModel);
   console.log(getFlattenedParamsFromURL());
@@ -96,10 +99,15 @@ const getWebApplicationBaseURL = () => {
 const resolveConfig = async () =>{
   const response = await fetch(getWebApplicationBaseURL() + "author-search-config.json");
   const jsonRepsponse = await response.json();
+
   if(!jsonRepsponse["MCR.user2.matching.lead_id"]) {
     throw new Error("Missing MCR.user2.matching.lead_id in config");
   }
   config["MCR.user2.matching.lead_id"] = jsonRepsponse["MCR.user2.matching.lead_id"];
+
+  if (jsonRepsponse["UBO.IdentityPicker.generate.id.enabled"]) {
+    config["UBO.IdentityPicker.generate.id.enabled"] = jsonRepsponse["UBO.IdentityPicker.generate.id.enabled"];
+  }
 };
 
 const getFlattenedParamsFromURL = () => {
@@ -136,6 +144,11 @@ const getPidFromURL = () => {
 
 const getPidTypeFromConfig = () => {
   return config["MCR.user2.matching.lead_id"] || "";
+};
+
+const getGenerateIdButtonEnabledFromConfig = () => {
+  console.log("UBO.IdentityPicker.generate.id.enabled: " + config["UBO.IdentityPicker.generate.id.enabled"])
+  return config["UBO.IdentityPicker.generate.id.enabled"] || false;
 };
 
 const getSessionIdFromURL = () => {

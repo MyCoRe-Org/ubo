@@ -45,20 +45,22 @@
     <axis1.version>1.4</axis1.version>
     <bootstrap-select.version>1.13.18</bootstrap-select.version>
     <bootstrap.version>4.4.1</bootstrap.version>
+    <cargo.container>tomcat10x</cargo.container>
     <font-awesome.version>5.13.0</font-awesome.version>
     <jakarta.xml.bind.version>3.0.1</jakarta.xml.bind.version>
-    <java.target.version>17</java.target.version>
     <jquery.ui.version>1.13.2</jquery.ui.version>
     <jquery.version>3.5.1</jquery.version>
-    <maven-dependency-plugin.version>3.5.0</maven-dependency-plugin.version>
-    <mycore.version>2023.06.4-SNAPSHOT</mycore.version>
+    <maven.compiler.release>21</maven.compiler.release>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+    <mycore.version>2024.06.3-SNAPSHOT</mycore.version>
     <node.version>v20.11.0</node.version>
-    <pica2mods.version>2.12</pica2mods.version>
+    <pica2mods.version>2.13</pica2mods.version>
     <sortpom.sortDeps>scope,groupId,artifactId</sortpom.sortDeps>
     <sortpom.sortFile>https://gist.githubusercontent.com/yagee-de/dfd3698c1b49173dbf251f74eb6a9297/raw/406460c088ff3cb6354e4ae6b40535e6f841607d/mycore_sort.xml</sortpom.sortFile>
     <sortpom.sortProps>true</sortpom.sortProps>
     <timestamp>${maven.build.timestamp}</timestamp>
-    <tomcat.version>10.1.11</tomcat.version>
+    <tomcat.version>10.1.52</tomcat.version>
     <yarn.version>v1.22.19</yarn.version>
   </properties>
 
@@ -69,6 +71,33 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <configuration>
             <doclint>all,-missing</doclint>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.cargo</groupId>
+          <artifactId>cargo-maven3-plugin</artifactId>
+          <configuration>
+            <container>
+              <containerId>${cargo.container}</containerId>
+              <artifactInstaller>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>tomcat</artifactId>
+                <version>${tomcat.version}</version>
+                <type>tar.gz</type>
+              </artifactInstaller>
+            </container>
+            <configuration>
+              <home>${project.build.directory}/catalina-base</home>
+              <properties>
+                <cargo.rmi.port>${cargo.rmi.port}</cargo.rmi.port>
+                <cargo.servlet.port>${cargo.servlet.port}</cargo.servlet.port>
+                <cargo.tomcat.ajp.port>${cargo.tomcat.ajp.port}</cargo.tomcat.ajp.port>
+                <cargo.tomcat.uriencoding>UTF-8</cargo.tomcat.uriencoding>
+                <cargo.tomcat.connector.maxHttpHeaderSize>${cargo.tomcat.connector.maxHttpHeaderSize}</cargo.tomcat.connector.maxHttpHeaderSize>
+                <!-- fixes IIIF identifier encoding issues -->
+                <cargo.start.jvmargs>-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true ${cargo.start.jvmargs}</cargo.start.jvmargs>
+              </properties>
+            </configuration>
           </configuration>
         </plugin>
       </plugins>
@@ -190,89 +219,6 @@
       </properties>
     </profile>
     <profile>
-      <id>jetty</id>
-      <activation>
-        <property>
-          <name>jetty</name>
-        </property>
-      </activation>
-      <properties>
-        <cargo.container>jetty12x</cargo.container>
-      </properties>
-      <build>
-        <pluginManagement>
-          <plugins>
-            <plugin>
-              <groupId>org.codehaus.cargo</groupId>
-              <artifactId>cargo-maven3-plugin</artifactId>
-              <configuration>
-                <container>
-                  <containerId>${cargo.container}</containerId>
-                  <artifactInstaller>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-distribution</artifactId>
-                    <version>${jetty.version}</version>
-                  </artifactInstaller>
-                </container>
-                <configuration>
-                  <home>${project.build.directory}/jetty-home</home>
-                  <properties>
-                    <cargo.servlet.port>${cargo.servlet.port}</cargo.servlet.port>
-                    <cargo.jetty.modules>server,ext,http,http2c,ee10-annotations,ee10-plus,ee10-jsp,ee10-deploy,ee10-websocket-jakarta</cargo.jetty.modules>
-                    <cargo.jetty.realm.name>Restricted</cargo.jetty.realm.name>
-                  </properties>
-                </configuration>
-              </configuration>
-            </plugin>
-          </plugins>
-        </pluginManagement>
-      </build>
-    </profile>
-    <profile>
-      <id>tomcat</id>
-      <activation>
-        <property>
-          <name>tomcat</name>
-        </property>
-      </activation>
-      <properties>
-        <cargo.container>tomcat${tomcat}x</cargo.container>
-      </properties>
-      <build>
-        <pluginManagement>
-          <plugins>
-            <plugin>
-              <groupId>org.codehaus.cargo</groupId>
-              <artifactId>cargo-maven3-plugin</artifactId>
-              <configuration>
-                <container>
-                  <containerId>${cargo.container}</containerId>
-                  <artifactInstaller>
-                    <groupId>org.apache.tomcat</groupId>
-                    <artifactId>tomcat</artifactId>
-                    <version>${tomcat.version}</version>
-                    <type>tar.gz</type>
-                  </artifactInstaller>
-                </container>
-                <configuration>
-                  <home>${project.build.directory}/catalina-base</home>
-                  <properties>
-                    <cargo.rmi.port>${cargo.rmi.port}</cargo.rmi.port>
-                    <cargo.servlet.port>${cargo.servlet.port}</cargo.servlet.port>
-                    <cargo.tomcat.ajp.port>${cargo.tomcat.ajp.port}</cargo.tomcat.ajp.port>
-                    <cargo.tomcat.uriencoding>UTF-8</cargo.tomcat.uriencoding>
-                    <cargo.tomcat.connector.maxHttpHeaderSize>${cargo.tomcat.connector.maxHttpHeaderSize}</cargo.tomcat.connector.maxHttpHeaderSize>
-                    <!-- fixes IIIF identifier encoding issues -->
-                    <cargo.start.jvmargs>-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true ${cargo.start.jvmargs}</cargo.start.jvmargs>
-                  </properties>
-                </configuration>
-              </configuration>
-            </plugin>
-          </plugins>
-        </pluginManagement>
-      </build>
-    </profile>
-    <profile>
       <id>deploy-to-sonatype</id>
       <build>
         <plugins>
@@ -297,7 +243,7 @@
     <dependencies>
       <dependency>
         <groupId>org.mycore</groupId>
-        <artifactId>mycore-bom</artifactId>
+        <artifactId>mycore</artifactId>
         <version>${mycore.version}</version>
         <type>pom</type>
         <scope>import</scope>
@@ -306,11 +252,6 @@
         <groupId>com.bucket4j</groupId>
         <artifactId>bucket4j-core</artifactId>
         <version>8.9.0</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-codec</groupId>
-        <artifactId>commons-codec</artifactId>
-        <version>1.10</version>
       </dependency>
       <dependency>
         <groupId>commons-discovery</groupId>
@@ -322,11 +263,6 @@
             <artifactId>commons-logging</artifactId>
           </exclusion>
         </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>jakarta.xml.bind</groupId>
-        <artifactId>jakarta.xml.bind-api</artifactId>
-        <version>${jakarta.xml.bind.version}</version>
       </dependency>
       <dependency>
         <groupId>jakarta.xml.ws</groupId>
@@ -349,9 +285,14 @@
         <version>1.5</version>
       </dependency>
       <dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bcprov-jdk18on</artifactId>
+        <version>1.83</version>
+      </dependency>
+      <dependency>
         <groupId>org.mycore</groupId>
         <artifactId>mycore-classifications</artifactId>
-        <version>1.2-SNAPSHOT</version>
+        <version>1.2</version>
       </dependency>
       <dependency>
         <groupId>org.mycore</groupId>

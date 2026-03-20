@@ -3,30 +3,27 @@
 ## Setup
 
 ### Checkout source code from GitHub
-```
-git clone https://github.com/MyCoRe-Org/ubo.git
-```
+`git clone git@github.com:MyCoRe-Org/ubo.git`
+
 ### Build the web application
-```
-mvn install
-```
+`mvn install`
+
 ### Create configuration directory
 ```
 ubo-cli/target/bin/ubo.sh create configuration directory
 ```
 
-- TODO: Build a database and edit persistence.xml
+- TODO: Create a database and edit mycore.properties
 - For example, in MySQL, do
 ```
-create database ubo;
-grant all privileges on ubo.* to ubo@localhost identified by 'ubo';
+CREATE DATABASE ubo;
+GRANT ALL PRIVELEGES ON ubo.* to ubo@localhost IDENTIFIED BY 'ubo';
 ```
-- setup your database and JDBC configuration in persistence.xml, update mappings with:
+- setup your database and JDBC configuration in `mycore.properties`
 ```
-ubo-cli/target/bin/ubo.sh reload mappings in jpa configuration file
-```
-```
-vi ~/.mycore/ubo/resources/META-INF/persistence.xml
+MCR.JPA.Driver  = org.h2.Driver
+MCR.JPA.URL     = jdbc:h2:file:/path/to/configuration/.mycore/ubo/data/h2/mir;AUTO_SERVER=TRUE
+MCR.JPA.dialect = org.hibernate.dialect.H2Dialect
 ```
 
 - copy jdbc driver to ~/.mycore/ubo/lib, eg. for h2
@@ -35,8 +32,9 @@ cd ~/.mycore/ubo/lib
 wget https://repo1.maven.org/maven2/com/h2database/h2/2.2.224/h2-2.2.224.jar
 cd -
 ```
+
 ## Solr 
-### Setup SOLR 8 
+### Setup SOLR 9
 - described here:
   - https://www.mycore.de/documentation/getting_started/gs_solr8/
   - https://www.mycore.de/documentation/search/search_solr_use/
@@ -53,6 +51,18 @@ vi ~/.mycore/ubo/mycore.properties
 MCR.Solr.ServerURL=http://localhost:8983/
 MCR.Solr.Core.main.Name=ubo
 MCR.Solr.Core.classification.Name=ubo-classifications
+MCR.Solr.Core.projects.Name=ubo-projects
+
+# with cloud
+MCR.Solr.Server.Auth.Admin.Class=org.mycore.solr.auth.MCRSolrBasicPropertyAuthentication
+MCR.Solr.Server.Auth.Admin.Password=alleswirdgut
+MCR.Solr.Server.Auth.Admin.Username=admin
+MCR.Solr.Server.Auth.Index.Class=org.mycore.solr.auth.MCRSolrBasicPropertyAuthentication
+MCR.Solr.Server.Auth.Index.Password=alleswirdgut
+MCR.Solr.Server.Auth.Index.Username=indexer
+MCR.Solr.Server.Auth.Search.Class=org.mycore.solr.auth.MCRSolrBasicPropertyAuthentication
+MCR.Solr.Server.Auth.Search.Password=alleswirdgut
+MCR.Solr.Server.Auth.Search.Username=searcher
 ```
 ## Setup Superuser
 
@@ -79,20 +89,28 @@ ubo-cli/target/bin/ubo.sh update permission read for id restapi:/classifications
 
 ## MyCoRe-Solr-Configuration
 ```
+# only with solr cloud (ingore errors until MCR-3543 is fixed)
+ubo-cli/target/bin/ubo.sh upload local config set for main
+ubo-cli/target/bin/ubo.sh upload local config set for classification
+ubo-cli/target/bin/ubo.sh upload local config set for projects
+ubo-cli/target/bin/ubo.sh create collection for core main
+ubo-cli/target/bin/ubo.sh create collection for core classification
+ubo-cli/target/bin/ubo.sh create collection for core projects
+
+# for all solr installations
 ubo-cli/target/bin/ubo.sh reload solr configuration main in core main
+ubo-cli/target/bin/ubo.sh reload solr configuration classification in core classification
 ```
 
 ## Run 
 - local web application on port 8080 with tomcat 10:
+
 ```
-mvn cargo:run -Dtomcat=9 -pl ubo-webapp
+mvn cargo:run -pl ubo-webapp
 ```
-- or jetty: (does not work currently)
-```
-mvn cargo:run -Djetty -pl ubo-webapp
-```
+
 ## Rebuild & Run (root directory)
 ```
-mvn clean && mvn install -am -pl ubo-webapp && mvn -Dtomcat=9 org.codehaus.cargo:cargo-maven2-plugin:run -pl ubo-webapp -DskipTests
+mvn clean && mvn install -am -pl ubo-webapp && mvn cargo:run -pl ubo-webapp -DskipTests
 ```
 

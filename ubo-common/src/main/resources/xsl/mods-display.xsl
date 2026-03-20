@@ -29,6 +29,8 @@
   <xsl:param name="UBO.DESTATIS.omit.ID"/>
   <xsl:param name="UBO.Affiliation.Suppress.ConnectedIndicator"/>
 
+  <xsl:param name="current-user" select="document('notnull:user:current')/user"/>
+
   <!-- Expect one more author to be displayed as the last author is always getting displayed -->
   <xsl:param name="UBO.Initially.Visible.Authors" select="14" />
 
@@ -338,13 +340,22 @@
   </xsl:template>
 
   <!-- ========== ORCID status and publish button ========== -->
+  <xsl:variable name="current-user-connection-id" select="$current-user/attributes/attribute[@name='id_connection']/@value"/>
 
   <xsl:template name="orcid-status">
-    <div class="orcid-status" data-id="{ancestor::mycoreobject/@ID}" />
+    <xsl:variable name="publication-connection-ids" select="ancestor::mycoreobject//mods:nameIdentifier[@type='connection']"/>
+
+    <xsl:if test="$publication-connection-ids = $current-user-connection-id">
+      <div class="orcid-status" data-id="{ancestor::mycoreobject/@ID}"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="orcid-publish">
-    <div class="orcid-publish d-inline" data-id="{ancestor::mycoreobject/@ID}" />
+    <xsl:variable name="publication-connection-ids" select="ancestor::mycoreobject//mods:nameIdentifier[@type='connection']"/>
+
+    <xsl:if test="$publication-connection-ids = $current-user-connection-id">
+      <div class="orcid-publish d-inline" data-id="{ancestor::mycoreobject/@ID}"/>
+    </xsl:if>
   </xsl:template>
 
   <!-- ========== URI bauen, um Dubletten zu finden ========== -->
@@ -1191,6 +1202,7 @@
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'destatis')]" mode="details">
       <xsl:sort select="@valueURI"/>
     </xsl:apply-templates>
+    <xsl:apply-templates select="../../../../service/servflags/servflag[@type='importID']" mode="details" />
     <xsl:apply-templates select="mods:abstract/@xlink:href" mode="details" />
     <xsl:apply-templates select="mods:abstract[string-length(.) &gt; 0]" mode="details" />
   </xsl:template>
@@ -1212,6 +1224,22 @@
             <xsl:if test="position() != last()"> ; </xsl:if>
           </xsl:for-each>
           <xsl:apply-templates select="." />
+        </div>
+      </div>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="servflag[@type='importID']" mode="details">
+    <xsl:if test="check:currentUserIsAdmin()">
+      <div class="row">
+        <div class="col-3">
+          <xsl:value-of select="i18n:translate('ubo.identifier.importID')" />
+          <xsl:text>:</xsl:text>
+        </div>
+        <div class="col-9">
+          <a href="{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+importID:&quot;', ., '&quot;'))}">
+            <xsl:value-of select="." />
+          </a>
         </div>
       </div>
     </xsl:if>
