@@ -34,7 +34,7 @@
   <xsl:template match="mods:mods" mode="solrField">
     <xsl:apply-templates select="mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:name[@type='personal']/mods:role/mods:roleTerm[@type='code']" mode="solrField" />
-    <xsl:apply-templates select="mods:name/mods:nameIdentifier" mode="solrField" />
+    <xsl:apply-templates select="descendant::mods:name/mods:nameIdentifier" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:name[mods:nameIdentifier[@type='lsf']]" mode="solrField.lsf" />
     <xsl:apply-templates select="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][contains('aut cre tch pht prg edt',text())]]/mods:nameIdentifier[@type='lsf']" mode="solrField.ae" />
     <xsl:apply-templates select="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][contains('aut cre tch pht prg edt ivr ive hnr',text())]]/mods:nameIdentifier[@type='lsf']" mode="solrField.aeplus" />
@@ -190,13 +190,26 @@
 
   <xsl:template match="mods:name/mods:nameIdentifier" mode="solrField">
     <field name="nid_{@type}">
-      <xsl:value-of select="text()" />
+      <xsl:value-of select="text()"/>
     </field>
 
     <field name="{@type}_nid_text">
-      <xsl:value-of select="../mods:namePart[@type='family']" />
+      <xsl:value-of select="../mods:namePart[@type='family']"/>
       <xsl:for-each select="../mods:namePart[@type='given'][1]">
-        <xsl:value-of select="concat(', ',text())" />
+        <xsl:value-of select="concat(', ',text())"/>
+      </xsl:for-each>
+    </field>
+  </xsl:template>
+
+  <xsl:template match="mods:name/mods:nameIdentifier[ancestor::mods:relatedItem]" mode="solrField">
+    <field name="ri_nid_{@type}">
+      <xsl:value-of select="text()"/>
+    </field>
+
+    <field name="ri_{@type}_nid_text">
+      <xsl:value-of select="../mods:namePart[@type='family']"/>
+      <xsl:for-each select="../mods:namePart[@type='given'][1]">
+        <xsl:value-of select="concat(', ',text())"/>
       </xsl:for-each>
     </field>
   </xsl:template>
