@@ -801,6 +801,15 @@
   },
   {
     "add-dynamic-field": {
+      "name": "ri_nid_*",
+      "type": "ubo_id",
+      "multiValued": true,
+      "indexed": true,
+      "stored": true
+    }
+  },
+  {
+    "add-dynamic-field": {
       "name": "*_nid_text",
       "type": "string",
       "multiValued": true,
