@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<webpage lastModified="$Date: 2017-02-10 07:55:23 +0100 (Fr, 10 Feb 2017) $" id="dozbib.stats">
+<webpage lastModified="$Date: 2017-02-10 07:55:23 +0100 (Fr, 10 Feb 2017) $" id="dozbib.stats"  xmlns:i18n="http://www.mycore.org/i18n">
   <title xml:lang="de">Statistiken über alle verzeichneten Publikationen</title>
   <title xml:lang="en">Statistics for all publications listed here</title>
 
@@ -37,30 +37,21 @@
   <xinclude uri="xslStyle:charts/bar-chart?facet=subject:solr:requestHandler:select:q=status%3Aconfirmed&amp;rows=0&amp;facet.field=subject"/>
   <xinclude uri="xslStyle:charts/pie-chart?classification=ubogenre&amp;facet=genre:solr:requestHandler:select:q=status%3Aconfirmed&amp;rows=0&amp;facet.field=genre"/>
 
-  <article class="card mb-3" xml:lang="de">
+  <article class="card mb-3">
     <div class="card-body">
-      <h3>Am häufigsten verzeichnete Personen (nur mit UDE LSF Zuordnung, Top 50, in Publikationen ab 2015):</h3>
-    <xinclude uri="xslStyle:statistics:solr:q=status%3Aconfirmed+AND+year%3A%5B2015+TO+*%5D&amp;rows=0&amp;facet.field=nid_connection&amp;facet.limit=50" />
-    </div>
-  </article>
-  <article class="card mb-3" xml:lang="en">
-    <div class="card-body">
-      <h3>Most frequently listed staff (University members only that are linked to HIS LSF, top 50, in publications from 2015):</h3>
-    <xinclude uri="xslStyle:statistics:solr:q=status%3Aconfirmed+AND+year%3A%5B2015+TO+*%5D&amp;rows=0&amp;facet.field=nid_connection&amp;facet.limit=50" />
+      <h3>
+        <i18n:code>ChartsCommon.chart.title.nid_connection.headline</i18n:code>:
+      </h3>
+      <xinclude uri="xslStyle:charts/bar-chart?facet=nid_connection&amp;labelsFromPivot=true:solr:requestHandler:select:q=status%3Aconfirmed+AND+year%3A%5B2015+TO+*%5D&amp;rows=0&amp;facet.field=nid_connection&amp;facet.limit=50"/>
     </div>
   </article>
 
-  <article class="card" xml:lang="de">
+  <article class="card">
     <div class="card-body">
-      <h3>In Publikationen verwendete Autoren-Identifikatoren:</h3>
-      <xinclude uri="xslStyle:statistics:solr:q=objectKind%3Aname&amp;rows=0&amp;facet.pivot=name_id_type,name_id_type" />
+      <h3>
+        <i18n:code>ChartsCommon.chart.title.name_id_type.headline</i18n:code>:
+      </h3>
+      <xinclude uri="xslStyle:statistics:solr:requestHandler:select:q=objectKind%3Aname&amp;rows=0&amp;facet.pivot=name_id_type,name_id_type"/>
     </div>
   </article>
-  <article class="card" xml:lang="en">
-    <div class="card-body">
-      <h3>Author identifier schemes used in publications:</h3>
-      <xinclude uri="xslStyle:statistics:solr:q=objectKind%3Aname&amp;rows=0&amp;facet.pivot=name_id_type,name_id_type" />
-    </div>
-  </article>
-
- </webpage>
+</webpage>
