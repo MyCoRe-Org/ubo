@@ -4,8 +4,6 @@
   <title xml:lang="de">Statistiken über alle verzeichneten Publikationen</title>
   <title xml:lang="en">Statistics for all publications listed here</title>
 
-  <script src="webjars/highcharts/5.0.1/highcharts.src.js" type="text/javascript"></script>
-  <script src="webjars/highcharts/5.0.1/themes/grid.js" type="text/javascript"></script>
   <script src="assets/echarts/dist/echarts.js"/>
 
   <div id="chartDialog" />
