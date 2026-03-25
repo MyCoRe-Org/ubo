@@ -472,11 +472,6 @@
     </dependency>
     <dependency>
       <groupId>org.webjars</groupId>
-      <artifactId>highcharts</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
       <artifactId>highlightjs</artifactId>
       <scope>runtime</scope>
     </dependency>

@@ -74,7 +74,8 @@
 				"mm": "100%",
 				"q.op": "AND",
 				"df": "all",
-				"wt": "xml"
+				"wt": "xml",
+				"sort":"year desc"
 			},
 			"appends": {
 				"facet.field": [
