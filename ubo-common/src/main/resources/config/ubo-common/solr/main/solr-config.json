@@ -82,7 +82,9 @@
 					"subject",
 					"genre",
 					"facet_person",
-					"oa"
+					"oa",
+					"connection_nid_text",
+					"nid_connection"
 				]
 			},
 			"invariants": {

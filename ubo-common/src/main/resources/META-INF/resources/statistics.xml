@@ -44,12 +44,5 @@
     </div>
   </article>
 
-  <article class="card">
-    <div class="card-body">
-      <h3>
-        <i18n:code>ChartsCommon.chart.title.name_id_type.headline</i18n:code>:
-      </h3>
-      <xinclude uri="xslStyle:statistics:solr:requestHandler:select:q=objectKind%3Aname&amp;rows=0&amp;facet.pivot=name_id_type,name_id_type"/>
-    </div>
-  </article>
+  <xinclude uri="xslStyle:statistics:solr:requestHandler:select:q=objectKind%3Aname&amp;rows=0&amp;facet.pivot=name_id_type,name_id_type"/>
 </webpage>
