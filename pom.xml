@@ -46,7 +46,7 @@
     <bootstrap-select.version>1.13.18</bootstrap-select.version>
     <bootstrap.version>4.4.1</bootstrap.version>
     <cargo.container>tomcat10x</cargo.container>
-    <charts.common.version>2.2-SNAPSHOT</charts.common.version>
+    <charts.common.version>2.2</charts.common.version>
     <font-awesome.version>5.13.0</font-awesome.version>
     <jakarta.xml.bind.version>3.0.1</jakarta.xml.bind.version>
     <jquery.ui.version>1.13.2</jquery.ui.version>
