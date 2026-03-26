@@ -70,11 +70,12 @@
 			"defaults": {
 				"echoParams": "explicit",
 				"defType": "edismax",
+				"q.alt": "*:*",
 				"qs": "5",
 				"mm": "100%",
-				"q.op": "AND",
 				"df": "all",
 				"wt": "xml",
+				"f.year.facet.limit": -1,
 				"sort":"year desc"
 			},
 			"appends": {
@@ -86,7 +87,8 @@
 					"oa",
 					"connection_nid_text",
 					"nid_connection"
-				]
+				],
+				"fq": "+objectType:mods"
 			},
 			"invariants": {
 				"fl": "",
