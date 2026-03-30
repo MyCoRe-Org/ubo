@@ -1,7 +1,6 @@
 const orcidObjectStatusURL = webApplicationBaseURL + "api/orcid/v1/member/{orcid}/works/object/";
 const orcidUserStatusURL = webApplicationBaseURL + "api/orcid/v1/user-status/";
 const orcidPublishURL = webApplicationBaseURL + "api/orcid/v1/member/{orcid}/works/object/";
-const orcidIcon = "<img alt='ORCID iD' src='" + webApplicationBaseURL + "images/orcid_icon.svg' class='orcid-icon' />";
 
 let orcidI18n;
 let userStatus = {orcids: [], trustedOrcids: []};
@@ -69,17 +68,17 @@ async function getORCIDPublicationStatus(div, headers) {
 
 function setORCIDPublicationStatus(id, div, objectStatus) {
     console.debug(id + " Setting publication status icon");
-
-    $(div).empty();
-
-    let html = "<span class='orcid-info' title='" + orcidI18n[
-        (objectStatus.hasOwnProperty("own")? 'orcid.publication.inProfile.true' : 'orcid.publication.inProfile.false')
-        ] + "'>";
-    html += orcidIcon;
-    html += "<span class='far fa-thumbs-" + (objectStatus.hasOwnProperty("own") ? "up" : "down")
-        + " orcid-in-profile-" + objectStatus.hasOwnProperty("own") + "' aria-hidden='true' />";
-    html += "</span>";
-    $(div).html(html);
+    div.innerHTML = '';
+    let text = orcidI18n[(objectStatus.hasOwnProperty("own")? 'orcid.publication.inProfile.true' : 'orcid.publication.inProfile.false')];
+    let span = document.createElement("span");
+    span.title = text;
+    span.textContent = text;
+    span.classList.add('orcid-info');
+    span.classList.add('orcid-in-profile-' + objectStatus.hasOwnProperty("own"));
+    span.classList.add('badge');
+    span.classList.add('badge-' + (objectStatus.hasOwnProperty("own") ? "success" : "secondary"));
+    span.classList.add('badge-orcid-in-profile-' + objectStatus.hasOwnProperty("own"));
+    div.appendChild(span);
 }
 
 async function showORCIDPublishButton(div, headers) {
