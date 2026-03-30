@@ -49,6 +49,7 @@
   <xsl:variable name="partOf"                select="document('notnull:classification:metadata:-1:children:partOf')/mycoreclass/categories" />
   <xsl:variable name="mediaType"             select="document('notnull:classification:metadata:-1:children:mediaType')/mycoreclass/categories" />
   <xsl:variable name="destatis"              select="document('notnull:classification:metadata:-1:children:destatis')/mycoreclass/categories" />
+  <xsl:variable name="licenses"              select="document('notnull:classification:metadata:-1:children:licenses')/mycoreclass/categories" />
 
   <xsl:variable name="fq">
     <xsl:if test="not(check:currentUserIsAdmin())">

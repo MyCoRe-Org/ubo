@@ -721,6 +721,21 @@
   },
   {
     "add-field": {
+      "name": "licenses_facet",
+      "type": "string",
+      "multiValued": true,
+      "indexed": true,
+      "stored": true
+    }
+  },
+  {
+    "add-copy-field": {
+      "source": "license",
+      "dest": "licenses_facet"
+    }
+  },
+  {
+    "add-field": {
       "name": "url",
       "type": "ubo_id",
       "multiValued": true,
