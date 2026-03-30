@@ -292,6 +292,9 @@
       <xsl:when test="$type='destatis'">
         <xsl:value-of select="$destatis//category[@ID=$value]/label[lang('de')]/@text"/>
       </xsl:when>
+      <xsl:when test="$type='licenses_facet'">
+        <xsl:value-of select="$licenses//category[@ID=$value]/label[lang('de')]/@text"/>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$value"/>
       </xsl:otherwise>
