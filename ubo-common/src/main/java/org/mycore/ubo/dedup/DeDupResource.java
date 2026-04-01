@@ -44,7 +44,7 @@ public class DeDupResource {
                     default -> throw new BadRequestException("Invalid sort order: " + typeSortStr);
                 };
 
-        List<PossibleDuplicate> duplicates = DeduplicationKeyManager.getInstance().getDuplicates(idSort, typeSort, type);
+        List<PossibleDuplicate> duplicates = DeduplicationKeyManager.obtainInstance().getDuplicates(idSort, typeSort, type);
         String json = new Gson().toJson(duplicates.toArray(), PossibleDuplicate[].class);
         return Response.ok(json)
                 .header("Access-Control-Allow-Origin", "*")
@@ -63,7 +63,7 @@ public class DeDupResource {
             throw new BadRequestException("Invalid id: " + id);
         }
 
-        DeduplicationKeyManager.getInstance().removeNoDuplicate(id);
+        DeduplicationKeyManager.obtainInstance().removeNoDuplicate(id);
         return Response.ok().build();
     }
 
@@ -92,7 +92,7 @@ public class DeDupResource {
                     default -> throw new BadRequestException("Invalid sort direction: " + sortOrderStr);
                 };
 
-        List<DeduplicationNoDuplicate> noDuplicates = DeduplicationKeyManager.getInstance().getNoDuplicates(sortOrder, sortBy);
+        List<DeduplicationNoDuplicate> noDuplicates = DeduplicationKeyManager.obtainInstance().getNoDuplicates(sortOrder, sortBy);
 
         List<NoDuplicate> noDuplicatesList = noDuplicates.stream()
                 .map(nd -> new NoDuplicate(nd.getId(), nd.getMcrId1(), nd.getMcrId2(), nd.getCreator(), nd.getCreationDate()))

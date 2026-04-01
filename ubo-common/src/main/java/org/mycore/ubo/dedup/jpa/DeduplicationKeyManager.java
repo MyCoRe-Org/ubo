@@ -22,7 +22,7 @@ public class DeduplicationKeyManager {
     public DeduplicationKeyManager() {
     }
 
-    public static DeduplicationKeyManager getInstance() {
+    public static DeduplicationKeyManager obtainInstance() {
         return MCRConfiguration2.getSingleInstanceOf(DeduplicationKeyManager.class, "UBO.DeduplicationKeyManager")
             .get();
     }

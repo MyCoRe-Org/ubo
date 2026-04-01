@@ -66,7 +66,7 @@
 
   <article class="card mb-3" xml:lang="de">
     <div class="card-body">
-      <div class="text-right mb-3">
+      <div class="text-end mb-3">
         <div id="buttons" class="btn-group">
           <xsl:apply-templates select="." mode="actions" />
         </div>

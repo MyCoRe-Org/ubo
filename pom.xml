@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.mycore</groupId>
     <artifactId>mycore-parent</artifactId>
-    <version>57</version>
+    <version>58</version>
   </parent>
 
   <groupId>org.mycore.ubo</groupId>
@@ -45,17 +45,18 @@
     <MCR.AppName>ubo</MCR.AppName>
     <axis1.version>1.4</axis1.version>
     <bootstrap-select.version>1.13.18</bootstrap-select.version>
-    <bootstrap.version>4.4.1</bootstrap.version>
+    <bootstrap.version>5.3.8</bootstrap.version>
     <cargo.container>tomcat10x</cargo.container>
     <charts.common.version>2.4-SNAPSHOT</charts.common.version>
     <font-awesome.version>5.13.0</font-awesome.version>
     <jakarta.xml.bind.version>3.0.1</jakarta.xml.bind.version>
     <jquery.ui.version>1.13.2</jquery.ui.version>
     <jquery.version>3.5.1</jquery.version>
+    <maven.compiler.arg />
     <maven.compiler.release>21</maven.compiler.release>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
-    <mycore.version>2024.06.3-SNAPSHOT</mycore.version>
+    <mycore.version>2025.12.2-SNAPSHOT</mycore.version>
     <node.version>v20.11.0</node.version>
     <pica2mods.version>2.13</pica2mods.version>
     <sortpom.sortDeps>scope,groupId,artifactId</sortpom.sortDeps>
@@ -302,6 +303,11 @@
         <version>1.83</version>
       </dependency>
       <dependency>
+        <groupId>org.dspace</groupId>
+        <artifactId>orcid-model-jakarta</artifactId>
+        <version>3.3.0</version>
+      </dependency>
+      <dependency>
         <groupId>org.mycore</groupId>
         <artifactId>mycore-classifications</artifactId>
         <version>1.2</version>
@@ -365,6 +371,18 @@
         <groupId>xml-apis</groupId>
         <artifactId>xml-apis</artifactId>
         <version>1.4.01</version>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.13.2</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.mycore</groupId>
+        <artifactId>mycore-junit4</artifactId>
+        <version>${mycore.version}</version>
+        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>

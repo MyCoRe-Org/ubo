@@ -81,9 +81,9 @@ public class LocalService implements IdentityService {
                         personSearchResult.lastName = attrVal;
                     });
 
-                if (user.getEMailAddress() != null) {
+                if (user.getEMail() != null) {
                     personSearchResult.information = new ArrayList<>();
-                    personSearchResult.information.add(user.getEMailAddress());
+                    personSearchResult.information.add(user.getEMail());
                 }
 
                 return personSearchResult;
