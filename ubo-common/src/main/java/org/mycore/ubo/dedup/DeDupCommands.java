@@ -122,7 +122,7 @@ public class DeDupCommands {
     }
 
     public static void printDuplicates(){
-        for (PossibleDuplicate duplicate : DeduplicationKeyManager.getInstance().getDuplicates(DeduplicationKeyManager.SortOrder.ASC, DeduplicationKeyManager.SortOrder.NONE, null)) {
+        for (PossibleDuplicate duplicate : DeduplicationKeyManager.obtainInstance().getDuplicates(DeduplicationKeyManager.SortOrder.ASC, DeduplicationKeyManager.SortOrder.NONE, null)) {
             LOGGER.info(duplicate);
         }
 

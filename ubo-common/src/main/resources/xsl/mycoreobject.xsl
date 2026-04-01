@@ -146,7 +146,7 @@
       </div>
     </div>
     <div class="section row m-1">
-      <div class="col pl-0">
+      <div class="col pe-0">
         <div class="row">
           <div class="col">
             <xsl:apply-templates select="." mode="badges"/>
@@ -175,7 +175,7 @@
           </div>
         </div>
       </div>
-      <div class="col align-self-center pr-0">
+      <div class="col align-self-center pe-0">
         <xsl:call-template name="altmetrics" />
       </div>
     </div>
