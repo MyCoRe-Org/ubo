@@ -207,7 +207,7 @@
             <xsl:value-of select="i18n:translate('button.basketAdd')" />
           </a>
         </span>
-        <span class="pageLink pl-1 d-inline">
+        <span class="pageLink pe-1 d-inline">
           <xsl:variable name="result-copy-to-clipboard-id" select="concat('result-copy-to-clipboard-', $position)"/>
           <button id="{$result-copy-to-clipboard-id}" class="btn btn-sm btn-secondary"
                   title="{i18n:translate('result.copy.link.to.clipboard')}"
@@ -250,7 +250,7 @@
       </nav>
     </div>
 
-   <div class="col text-right">
+   <div class="col text-end">
     <span class="pageLink">
       <a class="btn btn-sm btn-secondary" href="{$solrStatisticRequestHandler}{$exportParams}&amp;XSL.Style=statistics" title="{i18n:translate('button.statistics.tooltip')}">
         <xsl:value-of select="i18n:translate('button.statistics')"/>

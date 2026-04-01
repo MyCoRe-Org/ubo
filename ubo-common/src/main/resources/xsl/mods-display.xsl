@@ -435,7 +435,7 @@
     <xsl:call-template name="output.line">
       <xsl:with-param name="selected" select="mods:titleInfo[1]" />
       <xsl:with-param name="mode" select="$mode" />
-      <xsl:with-param name="class" select="'title font-weight-bold'" />
+      <xsl:with-param name="class" select="'title fw-bold'" />
     </xsl:call-template>
   </xsl:template>
 
