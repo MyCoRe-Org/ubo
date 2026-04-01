@@ -103,7 +103,7 @@ public class RelationEditorServlet extends MCRServlet {
         LOGGER.info("UBO delete entry " + oid);
         MCRObject obj = MCRMetadataManager.retrieveMCRObject(oid);
 
-        if (!obj.getStructure().getChildren().isEmpty()) {
+        if (!MCRMetadataManager.retrieveMCRExpandedObject(obj.getId()).getStructure().getChildren().isEmpty()) {
             res.sendError(HttpServletResponse.SC_CONFLICT, "entry has child(ren), wont delete");
         } else {
             new ParentChildRelationChecker(oid, false).check();
@@ -178,7 +178,7 @@ public class RelationEditorServlet extends MCRServlet {
 
         String userID = MCRSessionMgr.getCurrentSession().getUserInformation().getUserID();
 
-        DeduplicationKeyManager.getInstance().addNoDuplicate(id.toString(), duplicateOf.toString(), userID, new Date());
+        DeduplicationKeyManager.obtainInstance().addNoDuplicate(id.toString(), duplicateOf.toString(), userID, new Date());
     }
 
 
@@ -211,7 +211,8 @@ public class RelationEditorServlet extends MCRServlet {
 
         MCRObject objFrom = MCRMetadataManager.retrieveMCRObject(fromID);
 
-        List<MCRMetaLinkID> childrenToAdopt = objFrom.getStructure().getChildren();
+        List<MCRMetaLinkID> childrenToAdopt = MCRMetadataManager.retrieveMCRExpandedObject(objFrom.getId())
+            .getStructure().getChildren();
         while (!childrenToAdopt.isEmpty()) {
             MCRMetaLinkID childLink = childrenToAdopt.get(0);
             childrenToAdopt.remove(childLink);
