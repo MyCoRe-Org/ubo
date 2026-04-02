@@ -62,7 +62,7 @@
   <!-- ============ Ausgabe Fach ============ -->
 
   <xsl:template match="mods:mods/mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info">
-    <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('facets.facet.subject')}"
+    <span class="label-info badge bg-secondary me-1 ubo-hover-pointer" title="{i18n:translate('facets.facet.subject')}"
           onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+subject:&quot;', substring-after(@valueURI,'#'),'&quot;'))}')">
       <xsl:call-template name="output.category">
         <xsl:with-param name="classID" select="'fachreferate'" />
@@ -74,7 +74,7 @@
   <!-- ========== Ausgabe Fakultät ========== -->
 
   <xsl:template match="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info">
-    <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.department')}"
+    <span class="label-info badge bg-secondary me-1 ubo-hover-pointer" title="{i18n:translate('ubo.department')}"
           onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+origin:&quot;', substring-after(@valueURI,'#'), '&quot;'))}')">
       <xsl:call-template name="output.category">
         <xsl:with-param name="classID" select="'ORIGIN'" />

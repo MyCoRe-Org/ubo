@@ -150,7 +150,7 @@
         </xsl:variable>
         <xsl:variable name="facets-toggle-more-link-text" select="concat($numMore,' ',i18n:translate('facets.toggle.more'))"/>
 
-        <div class="float-right mycore-slidetoggle">
+        <div class="float-end mycore-slidetoggle">
           <a class="mycore-facets-toggle" id="tg{generate-id(.)}" title="{$facet-human-readable}: {$facets-toggle-more-link-text}" role="button"
              onclick="$('ul#{generate-id(.)} li:gt({$maxFacetValuesDisplayed - 1})').slideToggle(); $('a#tg{generate-id(.)} span').toggle();">
             <span>

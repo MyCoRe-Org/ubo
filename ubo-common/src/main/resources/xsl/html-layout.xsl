@@ -120,7 +120,7 @@
             </h3>
           </div>
           <div class="col">
-            <div class="nav nav-pills float-right">
+            <div class="nav nav-pills float-end">
               <xsl:call-template name="layout.login"/>
             </div>
           </div>
@@ -138,7 +138,7 @@
             Universitätsbibliographie
           </div>
           <div class="col">
-            <span class="float-right">
+            <span class="float-end">
               <a href="https://www.uni-due.de/" id="ude-logo" class="containsimage"><img alt="Logo" src="https://bibliographie.ub.uni-due.de/images/ude-logo.png"/></a>
             </span>
           </div>
@@ -151,12 +151,12 @@
     <div id="basket-info" class="card my-3 w-100">
       <div class="card-body">
 	<a href="{$ServletsBaseURL}MCRBasketServlet?action=show&amp;type=objects">
-          <span class="fas fa-bookmark mr-1" aria-hidden="true" />
-          <span class="mr-1"><xsl:value-of select="i18n:translate('basket')" />:</span>
-          <span class="mr-1" id="basket-info-num">
+          <span class="fas fa-bookmark me-1" aria-hidden="true" />
+          <span class="me-1"><xsl:value-of select="i18n:translate('basket')" />:</span>
+          <span class="me-1" id="basket-info-num">
             <xsl:value-of xmlns:basket="xalan://org.mycore.ubo.basket.BasketUtils" select="basket:size()" />
           </span>
-          <span class="mr-1"><xsl:value-of select="i18n:translate('ubo.publications')" /></span>
+          <span class="me-1"><xsl:value-of select="i18n:translate('ubo.publications')" /></span>
 	</a>
       </div>
     </div>
@@ -223,7 +223,7 @@
   <!-- current user and login formular-->
   <xsl:template name="layout.login">
 
-    <div class="nav-item mr-2">
+    <div class="nav-item me-2">
       <xsl:choose>
         <xsl:when test="$CurrentUser = $MCR.Users.Guestuser.UserName">
           <span class="user btn p-0" style="cursor: default;">
@@ -231,7 +231,7 @@
           </span>
         </xsl:when>
         <xsl:otherwise>
-          <a aria-expanded="false" aria-haspopup="true" data-toggle="dropdown"
+          <a aria-expanded="false" aria-haspopup="true" data-bs-toggle="dropdown"
              role="button" id="mcrFunctionsDropdown" href="#"
              class="user nav-link dropdown-toggle p-0" style="cursor: default;">
             <xsl:choose>
@@ -251,7 +251,7 @@
       <xsl:call-template name="orcidUser"/>
 
     </div>
-    <div class="nav-item mr-2">
+    <div class="nav-item me-2">
       <xsl:choose>
         <xsl:when test="/html/@id='login'" />
         <xsl:when test="$CurrentUser = $MCR.Users.Guestuser.UserName">
@@ -302,7 +302,7 @@
   <xsl:template name="layout.mainnavigation">
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light" role="navigation" id="hauptnavigation">
-      <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler ml-auto" type="button" data-bs-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
