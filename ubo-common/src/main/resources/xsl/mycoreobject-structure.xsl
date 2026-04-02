@@ -116,7 +116,7 @@
 
   <xsl:template match="structure/children" mode="badge">
     <div>
-      <span class="ubo-badge-children badge badge-light">
+      <span class="ubo-badge-children badge bg-light">
         <a href="solr/select?q=parent:{ancestor::mycoreobject/@ID}&amp;sort=id+desc">
           <xsl:value-of select="count(child)" />
           <xsl:value-of select="i18n:translate('structure.editor.linked')"/>
@@ -198,7 +198,7 @@
 
       <xsl:if test="$numOrphans &gt; 0">
         <div class="ubo-orphans">
-          <span class="ubo-badge-orphans badge badge-light">
+          <span class="ubo-badge-orphans badge bg-light">
             <a href="solr/select?{$solrURI}&amp;sort=id+desc">
               <xsl:value-of select="$numOrphans" />
               <xsl:value-of select="i18n:translate('structure.editor.orphans')"/>
@@ -315,17 +315,17 @@
       <xsl:call-template name="pubtype" />
     </xsl:for-each>
     <xsl:for-each select="service/servstates/servstate[@classid='state']">
-      <span class="label-info ubo-badge-status badge badge-light">
+      <span class="label-info ubo-badge-status badge bg-light">
         <xsl:value-of select="i18n:translate(concat('search.dozbib.status.', @categid))" />
       </span>
     </xsl:for-each>
     <xsl:if test="$role='duplicate'">
-      <span class="label-info ubo-badge-dublicate badge badge-primary">Evtl. Dublette</span>
+      <span class="label-info ubo-badge-dublicate badge bg-primary">Evtl. Dublette</span>
     </xsl:if>
   </xsl:template>
 
   <xsl:template match="@ID" mode="badge">
-    <span class="label-info ubo-badge-id badge badge-light">
+    <span class="label-info ubo-badge-id badge bg-light">
       <a href="{$ServletsBaseURL}DozBibEntryServlet?id={.}">
         <xsl:value-of select="concat('ID ',number(substring-after(.,'_mods_')))" />
       </a>
@@ -352,7 +352,7 @@
     <xsl:param name="duplicateOfID" />
 
     <div class="ubo-actions">
-      <a role="button" class="ubo-btn-details btn btn-primary btn-sm" href="#details-{@ID}" data-toggle="collapse"
+      <a role="button" class="ubo-btn-details btn btn-primary btn-sm" href="#details-{@ID}" data-bs-toggle="collapse"
         aria-expanded="false" aria-controls="details-{@ID}">
         <i class="fa fa-info" />
         <xsl:text> Details</xsl:text>
@@ -461,7 +461,7 @@
     <xsl:param name="preview" select="false()" />
 
     <xsl:if test="$if">
-      <a role="button" class="ubo-btn-dialog btn btn-primary btn-sm" data-toggle="modal" data-target="#{$action}-{/mycoreobject/@ID}" href="#">
+      <a role="button" class="ubo-btn-dialog btn btn-primary btn-sm" data-bs-toggle="modal" data-target="#{$action}-{/mycoreobject/@ID}" href="#">
         <i class="fa fa-{$icon}" aria-hidden="true" />
         <xsl:text> </xsl:text>
         <xsl:value-of select="$button" />
@@ -513,17 +513,17 @@
 
               <div class="modal-footer">
                 <button type="button" class="ubo-btn-cancel btn btn-secondary" data-dismiss="modal">
-                  <i class="fa fa-times mr-1" aria-hidden="true" />
+                  <i class="fa fa-times me-1" aria-hidden="true" />
                   <xsl:value-of select="i18n:translate('button.cancel')"/>
                 </button>
                 <xsl:if test="$preview">
                   <button type="submit" name="preview" value="true" class="ubo-btn-preview btn btn-secondary">
-                    <i class="fa fa-{$icon} mr-1" aria-hidden="true" />
+                    <i class="fa fa-{$icon} me-1" aria-hidden="true" />
                     <xsl:value-of select="i18n:translate('button.preview')"/>
                   </button>
                 </xsl:if>
                 <button type="submit" class="ubo-btn-submit btn btn-primary structure-action">
-                  <i class="fa fa-{$icon} mr-1" aria-hidden="true" />
+                  <i class="fa fa-{$icon} me-1" aria-hidden="true" />
                   <xsl:value-of select="$button" />
                 </button>
               </div>

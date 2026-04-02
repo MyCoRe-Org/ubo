@@ -155,7 +155,7 @@
         </div>
         <div class="footer card-footer">
           <xsl:call-template name="bibentry.show.details" />
-          <span class="float-right"># <xsl:value-of select="$hitNo"/></span>
+          <span class="float-end"># <xsl:value-of select="$hitNo"/></span>
         </div>
       </xsl:for-each>
     </div>
