@@ -49,6 +49,9 @@ $body-color:  $ubo-gray  !default;
 
 $border-radius: .2rem !default;
 
+$link-decoration: none !default;
+$link-hover-decoration: underline !default;
+
 $grid-breakpoints: (
   xs: 0,
   sm: 576px,

@@ -34,7 +34,7 @@
         });
 
         $(document).popover({
-          selector: "[data-toggle=popover]",
+          selector: "[data-bs-toggle=popover]",
           container: "body",
           html: true,
           trigger: "focus"
@@ -99,7 +99,7 @@
             <select id="{xed:generate-id()}" class="mycore-form-input custom-select">
               <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:state"/>
             </select>
-            <a tabindex="0" class="btn btn-secondary info-button" role="button" data-toggle="popover"
+            <a tabindex="0" class="btn btn-secondary info-button" role="button" data-bs-toggle="popover"
                data-placement="right" data-content="{i18n:ubo.help.status}">
               <i class="fas fa-info"/>
             </a>
@@ -161,7 +161,7 @@
           <option value=""><xed:output i18n="search.select.autocomplete" /></option>
           <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:ORIGIN" />
         </select>
-        <a tabindex="0" class="btn btn-secondary info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:ubo.help.department}">
+        <a tabindex="0" class="btn btn-secondary info-button" role="button" data-bs-toggle="popover" data-placement="right" data-content="{i18n:ubo.help.department}">
           <i class="fas fa-info"></i>
         </a>
         <xed:controls />
@@ -179,7 +179,7 @@
           <option value=""><xed:output i18n="search.select" /></option>
           <xed:include uri="xslStyle:items2options:classification:editor:-1:children:oa" />
         </select>
-        <a tabindex="0" class="btn btn-secondary info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:ubo.help.oa}">
+        <a tabindex="0" class="btn btn-secondary info-button" role="button" data-bs-toggle="popover" data-placement="right" data-content="{i18n:ubo.help.oa}">
           <i class="fas fa-info"></i>
         </a>
       </div>
@@ -199,7 +199,7 @@
           <option value=""><xed:output i18n="search.select" /></option>
           <xed:include uri="xslStyle:items2options:classification:editor:-1:children:partOf" />
         </select>
-        <a tabindex="0" class="btn btn-secondary info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:ubo.help.partOf}">
+        <a tabindex="0" class="btn btn-secondary info-button" role="button" data-bs-toggle="popover" data-placement="right" data-content="{i18n:ubo.help.partOf}">
           <i class="fas fa-info"></i>
         </a>
       </div>
@@ -901,7 +901,7 @@
           <option value=""><xed:output i18n="search.select" /></option>
           <xed:include uri="xslStyle:items2options:classification:editor:-1:children:peerreviewed" />
         </select>
-        <a tabindex="0" class="btn btn-secondary info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:ubo.help.peerreviewed}">
+        <a tabindex="0" class="btn btn-secondary info-button" role="button" data-bs-toggle="popover" data-placement="right" data-content="{i18n:ubo.help.peerreviewed}">
           <i class="fas fa-info"></i>
         </a>
       </div>
@@ -916,7 +916,7 @@
           <option value=""><xed:output i18n="search.select" /></option>
           <xed:include uri="xslStyle:items2options:classification:editor:-1:children:accessrights" />
         </select>
-        <a tabindex="0" class="btn btn-secondary info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:ubo.help.accessrights}">
+        <a tabindex="0" class="btn btn-secondary info-button" role="button" data-bs-toggle="popover" data-placement="right" data-content="{i18n:ubo.help.accessrights}">
           <i class="fas fa-info"></i>
         </a>
       </div>
@@ -932,7 +932,7 @@
         <select id="{xed:generate-id()}" class="{$xed-validation-marker} mycore-form-input">
           <xed:include uri="xslStyle:items2options:classification:editor:-1:children:typeOfResource" />
         </select>
-        <a tabindex="0" class="btn btn-secondary info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:ubo.help.typeOfResource}">
+        <a tabindex="0" class="btn btn-secondary info-button" role="button" data-bs-toggle="popover" data-placement="right" data-content="{i18n:ubo.help.typeOfResource}">
           <i class="fas fa-info"></i>
         </a>
       </div>

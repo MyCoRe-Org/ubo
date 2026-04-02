@@ -208,7 +208,7 @@
             <xsl:value-of select="i18n:translate('button.basketAdd')" />
           </a>
         </span>
-        <span class="pageLink pe-1 d-inline">
+        <span class="pageLink ps-1 d-inline">
           <xsl:variable name="result-copy-to-clipboard-id" select="concat('result-copy-to-clipboard-', $position)"/>
           <button id="{$result-copy-to-clipboard-id}" class="btn btn-sm btn-secondary"
                   title="{i18n:translate('result.copy.link.to.clipboard')}"
@@ -322,7 +322,7 @@
           </xsl:if>
           <xsl:call-template name="bibentry.subselect.return" />
           <xsl:call-template name="orcid-publish" />
-          <span class="float-right"># <xsl:value-of select="$hitNo"/></span>
+          <span class="float-end"># <xsl:value-of select="$hitNo"/></span>
         </div>
       </xsl:for-each>
     </div>

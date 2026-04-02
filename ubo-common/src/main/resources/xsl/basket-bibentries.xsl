@@ -181,7 +181,7 @@
   <xsl:param name="last"/>
   <xsl:param name="ancestor_id"/>
 
-  <div class="buttons float-right">
+  <div class="buttons float-end">
     <xsl:call-template name="button">
       <xsl:with-param name="image">pmud-up.png</xsl:with-param>
       <xsl:with-param name="action">up</xsl:with-param>
