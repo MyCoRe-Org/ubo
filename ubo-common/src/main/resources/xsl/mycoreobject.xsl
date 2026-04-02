@@ -255,7 +255,7 @@
   <xsl:variable name="numlinks" select="count(document($linkURI)/response/result[@name='response']/doc)" />
 
   <xsl:if test="$numlinks &gt; 0">
-  <span class="badge badge-alternative mr-1">
+  <span class="badge bg-alternative me-1">
     <a href="solr/select?q=link:{/mycoreobject/@ID}&amp;sort=year+desc">
       <xsl:value-of select="concat(i18n:translate('ubo.relatedItem.link'),': ', $numlinks, ' ', i18n:translate('ubo.relatedItem.host.contains.publications'))"/>
     </a>
@@ -268,7 +268,7 @@
 
 <xsl:template match="mods:extension/tag">
   <span class="mycore-tag">
-    <a class="badge badge-primary" href="{$ServletsBaseURL}solr/select?q=status:confirmed+AND+tag:{encoder:encode(concat($quotes,text(),$quotes),'UTF-8')}">
+    <a class="badge bg-primary" href="{$ServletsBaseURL}solr/select?q=status:confirmed+AND+tag:{encoder:encode(concat($quotes,text(),$quotes),'UTF-8')}">
       <xsl:value-of select="text()" />
     </a>
   </span>
@@ -282,7 +282,7 @@
   <xsl:variable name="numDuplicates" select="count(document($duplicates)/result/duplicate)" />
   
   <xsl:if test="$numDuplicates &gt; 0">
-    <span class="badge badge-alternative ml-1 mr-1">
+    <span class="badge bg-alternative ml-1 me-1">
       <a href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.Style=structure">
         <xsl:variable name="extro">
           <xsl:choose>
@@ -376,7 +376,7 @@
 <xsl:template name="altmetrics">
   <xsl:if test="mods:identifier[contains('doi urn isbn pubmed',@type)]">
     <script type='text/javascript' src='{$WebApplicationBaseURL}js/altmetrics.js' />
-    <div class="altmetric-embed float-right" data-badge-type="donut" data-badge-popover="left" data-hide-no-mentions="true">
+    <div class="altmetric-embed float-end" data-badge-type="donut" data-badge-popover="left" data-hide-no-mentions="true">
       <xsl:choose>
         <xsl:when test="mods:identifier[@type='doi']">
           <xsl:attribute name="data-doi">

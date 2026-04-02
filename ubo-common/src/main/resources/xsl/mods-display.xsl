@@ -62,7 +62,7 @@
   <xsl:template name="pubtype">
     <xsl:variable name="genre" select="substring-after(mods:genre[@type='intern']/@valueURI, '#')"/>
 
-    <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.genre')}"
+    <span class="label-info badge bg-secondary me-1 ubo-hover-pointer" title="{i18n:translate('ubo.genre')}"
           onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+genre:&quot;', $genre, '&quot;'))}')">
       <xsl:apply-templates select="mods:genre[@type='intern']"/>
       <xsl:for-each select="mods:relatedItem[@type='host']/mods:genre[@type='intern']">
@@ -76,7 +76,7 @@
     <xsl:if test="check:currentUserIsAdmin()">
       <xsl:variable name="kdsf-pubtype" select="mods:classification[@generator='xpathmapping2kdsfPublicationType-mycore']"/>
       <xsl:for-each select="$kdsf-pubtype">
-        <span class="label-info badge badge-warning text-white mr-1" title="{i18n:translate('ubo.publication.type.kdsf')}">
+        <span class="label-info badge bg-warning text-white me-1" title="{i18n:translate('ubo.publication.type.kdsf')}">
           <xsl:variable name="categid" select="substring-after(@valueURI, '#')"/>
           <xsl:value-of select="mcrxsl:getDisplayName('kdsfPublicationType', $categid)"/>
         </span>
@@ -84,7 +84,7 @@
 
       <xsl:variable name="kdsf-doctype" select="mods:classification[@generator='xpathmapping2kdsfDocumentType-mycore']"/>
       <xsl:for-each select="$kdsf-doctype">
-        <span class="label-info badge badge-info text-white mr-1" title="{i18n:translate('ubo.document.type.kdsf')}">
+        <span class="label-info badge bg-info text-white me-1" title="{i18n:translate('ubo.document.type.kdsf')}">
           <xsl:variable name="categid" select="substring-after(@valueURI, '#')"/>
           <xsl:value-of select="mcrxsl:getDisplayName('kdsfDocumentType', $categid)"/>
         </span>
@@ -95,7 +95,7 @@
   <!-- ============ Ausgabe Fach ============ -->
 
   <xsl:template match="mods:mods/mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info">
-    <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('facets.facet.subject')}"
+    <span class="label-info badge bg-secondary me-1 ubo-hover-pointer" title="{i18n:translate('facets.facet.subject')}"
           onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+subject:&quot;', substring-after(@valueURI,'#'),'&quot;'))}')">
       <xsl:call-template name="output.category">
         <xsl:with-param name="classID" select="'fachreferate'" />
@@ -107,7 +107,7 @@
   <!-- ========== Ausgabe Fakultät ========== -->
 
   <xsl:template match="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info">
-    <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.department')}"
+    <span class="label-info badge bg-secondary me-1 ubo-hover-pointer" title="{i18n:translate('ubo.department')}"
           onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+origin:&quot;', substring-after(@valueURI,'#'), '&quot;'))}')">
       <xsl:call-template name="output.category">
         <xsl:with-param name="classID" select="'ORIGIN'" />
@@ -161,7 +161,7 @@
 
   <xsl:template match="mods:classification[contains(@authorityURI,'oa')]" mode="label-info">
     <xsl:variable name="category" select="$oa//category[@ID=substring-after(current()/@valueURI,'#')]" />
-    <span class="badge oa-badge oa-badge-{$category/@ID} ubo-hover-pointer mr-1"
+    <span class="badge oa-badge oa-badge-{$category/@ID} ubo-hover-pointer me-1"
           onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+oa_exact:', $category/@ID))}')">
       <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
     </span>
@@ -334,7 +334,7 @@
   </xsl:template>
 
   <xsl:template match="mods:dateIssued" mode="label-year-badge">
-    <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.search.year')}"
+    <span class="label-info badge bg-secondary me-1 ubo-hover-pointer" title="{i18n:translate('ubo.search.year')}"
           onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+year:', text()))}')">
       <xsl:value-of select="text()" />
     </span>

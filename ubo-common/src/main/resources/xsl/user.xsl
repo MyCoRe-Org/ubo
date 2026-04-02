@@ -301,7 +301,7 @@
   <script src="{$WebApplicationBaseURL}modules/orcid2/js/orcid-auth.js"/>
 
   <h3>
-    <span class="far fa-hand-point-right mr-1" aria-hidden="true" />
+    <span class="far fa-hand-point-right me-1" aria-hidden="true" />
     <xsl:text> </xsl:text>
     <xsl:value-of select="i18n:translate('orcid.integration.pending.headline')" />
   </h3>

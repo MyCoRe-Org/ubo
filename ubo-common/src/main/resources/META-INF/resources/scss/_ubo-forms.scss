@@ -20,8 +20,8 @@
     @extend .col-md-3;
     @extend .col-sm-3;
     @extend .justify-content-sm-end;
-    @extend .pl-0;
-    @extend .mr-3;
+    @extend .ps-0;
+    @extend .me-3;
   }
 
   // actually used for input AND select AND textarea
@@ -75,7 +75,7 @@
 
   .ubo-tags-group {
     .ubo-repeater-button-box {
-      @extend .mb-1, .mr-1;
+      @extend .mb-1, .me-1;
       margin-left: 0;
     }
   }
@@ -87,11 +87,11 @@
   }
 
   .ubo-pl-deluser {
-    @extend .text-danger;
+    color: $danger;
   }
 
   .ubo-pl-adduser {
-    @extend .text-success;
+    color: $success;
   }
 
   .ubo-input-invalid,
