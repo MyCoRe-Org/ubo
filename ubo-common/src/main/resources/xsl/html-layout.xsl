@@ -83,7 +83,7 @@
                 <xsl:call-template name="layout.pageTitle"/>
                 <xsl:call-template name="layout.breadcrumbPath"/>
               </div>
-              <div class="col-lg-3 pe-lg-0 d-flex">
+              <div class="col-lg-3 ps-lg-0 d-flex">
                 <xsl:call-template name="layout.basket.info"/>
               </div>
             </div>
@@ -92,7 +92,7 @@
                 <xsl:call-template name="layout.inhalt" />
               </div>
               <xsl:if test="body/aside[@id='sidebar']">
-                <div class="col-lg-3 pe-lg-0">
+                <div class="col-lg-3 ps-lg-0">
                   <xsl:copy-of select="body/aside[@id='sidebar']" />
                 </div>
               </xsl:if>
@@ -131,7 +131,7 @@
         <xsl:call-template name="layout.mainnavigation"/>
     </div>
 
-    <div class="jumbotron m-0">
+    <div class="jumbotron m-0 p-5 rounded-3">
       <div class="container">
         <div class="row">
           <div class="col">
