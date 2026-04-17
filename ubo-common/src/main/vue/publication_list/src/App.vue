@@ -229,7 +229,7 @@
         <section v-if="result.link.length>0">
           <div class="row">
             <div class="col-12">
-              <div class="jumbotron">
+              <div class="jumbotron p-5 rounded-3 m-3">
                 <!-- when the format is html, we will show the link (which is a iframe) as code -->
                 <p class="text-primary" v-if="exportModel.format==='html'">
                   {{ i18n["listWizard.code"] }}
