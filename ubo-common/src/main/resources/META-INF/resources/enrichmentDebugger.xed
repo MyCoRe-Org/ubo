@@ -35,7 +35,7 @@
                     <!-- 2. Bind to a common parent's attribute so all radio buttons get same name -->
                     <xed:bind xpath="@id" name="id" />
                     <xed:bind xpath="../@selected">
-                      <input type="radio" value="{$id}" class="ml-2" style="transform:scale(1.5);" />
+                      <input type="radio" value="{$id}" class="ms-2" style="transform:scale(1.5);" />
                     </xed:bind>
                     
                   </label>
@@ -109,10 +109,10 @@
             
           <div class="form-inline form-group mb-4">
             <label class="mycore-form-label" />
-            <button class="btn btn-sm btn-primary mr-2" type="submit" xed:target="servlet" xed:href="EnrichmentDebuggerServlet">
+            <button class="btn btn-sm btn-primary me-2" type="submit" xed:target="servlet" xed:href="EnrichmentDebuggerServlet">
               <xed:output i18n="button.submit" />
             </button>
-            <button class="ml-2 btn btn-sm btn-primary" type="submit" xed:target="debug">Debug</button>
+            <button class="ms-2 btn btn-sm btn-primary" type="submit" xed:target="debug">Debug</button>
           </div>
       
           <!-- List all supported data sources and identifiers -->

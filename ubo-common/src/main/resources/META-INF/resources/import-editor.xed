@@ -115,9 +115,9 @@
   <xed:template id="tags">
     <div class="form-inline form-group ubo-repeat-group ubo-tags-group">
       <label for="{xed:generate-id()}" class="mycore-form-label">Tags:</label>
-      <div class="col-6 pl-0 form-group form-inline">
+      <div class="col-6 ps-0 form-group form-inline">
         <xed:repeat xpath="mods:extension/tag" min="3">
-          <input type="text" placeholder="Tag" class="form-control ml-1 col-2" />
+          <input type="text" placeholder="Tag" class="form-control ms-1 col-2" />
           <xed:controls>append</xed:controls>
         </xed:repeat>
       </div>
@@ -329,7 +329,7 @@
   <xed:template id="author">
     <xed:repeat xpath="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']='aut']" max="99">
       <div class="form-inline form-group ubo-repeat-group">
-        <label for="{xed:generate-id()}" class="col-sm-3 justify-content-sm-end pl-0 mr-3 ubo-mandatory">
+        <label for="{xed:generate-id()}" class="col-sm-3 justify-content-sm-end ps-0 me-3 ubo-mandatory">
           <xed:output value="concat(i18n:translate('ubo.role.author'), ': ')" />
         </label>
         <xed:include ref="person" />
@@ -419,7 +419,7 @@
           </xed:when>
           <!-- do not search and display results if person is already linked, but lead_id was deleted -->
           <xed:when test="count(mods:nameIdentifier[@type='connection'])&gt;0">
-            <span class="fas fa-user ml-1"></span>
+            <span class="fas fa-user ms-1"></span>
           </xed:when>
           <xed:when test="string-length(mods:namePart[@type='family']) &gt; 0">
             <xed:load-resource uri="ires:search:{xed:call-java('org.mycore.ubo.matcher.MCRUserMatcherUtils', 'getAttributesAsURLString', .)}" name="searchResults"/>
@@ -429,8 +429,8 @@
           </xed:when>
         </xed:choose>
       </span>
-      <div class="ml-auto pb-1">
-        <button id="{xed:generate-id()}" class="btn btn-xs btn-primary mr-1" type="submit" xed:target="subselect" xed:href="../identitypicker.html?{xed:call-java('org.mycore.ubo.matcher.MCRUserMatcherUtils', 'getAttributesAsURLString', .)}&amp;xEditorHook={xed:generate-id()}">
+      <div class="ms-auto pb-1">
+        <button id="{xed:generate-id()}" class="btn btn-xs btn-primary me-1" type="submit" xed:target="subselect" xed:href="../identitypicker.html?{xed:call-java('org.mycore.ubo.matcher.MCRUserMatcherUtils', 'getAttributesAsURLString', .)}&amp;xEditorHook={xed:generate-id()}">
           <xed:output i18n="search.select" />
         </button>
       </div>
@@ -469,7 +469,7 @@
             <select class="form-control custom-select">
               <xed:include uri="xslStyle:items2options:webapp:rollen.xml" />
             </select>
-            <div class="ml-1">:</div>
+            <div class="ms-1">:</div>
           </label>
         </xed:bind>
         <xed:include ref="person" />
@@ -485,7 +485,7 @@
             <select class="form-control custom-select">
               <xed:include uri="xslStyle:items2options:classification:editor:-1:children:marcrelator" />
             </select>
-            <div class="ml-1">:</div>
+            <div class="ms-1">:</div>
           </label>
         </xed:bind>
         <xed:include ref="person" />
@@ -508,7 +508,7 @@
             <select class="form-control custom-select">
               <xed:include uri="xslStyle:items2options:classification:editor:-1:children:marcrelator" />
             </select>
-            <div class="ml-1">:</div>
+            <div class="ms-1">:</div>
           </label>
         </xed:bind>
         <xed:bind xpath="mods:namePart">
@@ -763,7 +763,7 @@
           <xed:output value="concat(i18n:translate('ubo.shelfmark'), ': ')" />
         </label>
         <input id="{xed:generate-id()}" class="{$xed-validation-marker} mycore-form-input-double" type="text" />
-        <a class="ml-1 align-self-center" target="_blank" href="https://primo.uni-due.de/">
+        <a class="ms-1 align-self-center" target="_blank" href="https://primo.uni-due.de/">
           <xed:output i18n="ubo.shelfmark.search" />
         </a>
       </div>
@@ -1020,13 +1020,13 @@
   <xed:template id="cancel.submit">
     <div class="form-inline form-group ubo-sticky-editor-buttons">
       <label class="mycore-form-label"></label>
-      <button class="btn btn-sm btn-primary mr-2" type="submit" xed:target="servlet" xed:href="DozBibEntryServlet">
+      <button class="btn btn-sm btn-primary me-2" type="submit" xed:target="servlet" xed:href="DozBibEntryServlet">
         <xed:output i18n="button.submit" />
       </button>
       <button class="btn btn-sm btn-primary" type="submit" xed:target="cancel">
         <xed:output i18n="button.cancel" />
       </button>
-      <!-- <button class="ml-2 btn btn-sm btn-primary" type="submit" xed:target="debug">Debug</button> -->
+      <!-- <button class="ms-2 btn btn-sm btn-primary" type="submit" xed:target="debug">Debug</button> -->
     </div>
   </xed:template>
 
