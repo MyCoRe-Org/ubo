@@ -130,7 +130,7 @@
                 <label for="{generate-id()}" class="mycore-form-label text-nowrap">
                   <xed:output i18n="ubo.import.list.label.sourceFormat" />:
                 </label>
-                <select id="{generate-id()}" class="form-control  mycore-form-input mr-1 custom-select" onchange="UBOImportList.toggleEnrichment(this)">
+                <select id="{generate-id()}" class="form-control  mycore-form-input me-1 custom-select" onchange="UBOImportList.toggleEnrichment(this)">
                   <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:importSourceType" />
                 </select>
               </div>
@@ -176,8 +176,8 @@
                 <label class="mycore-form-label text-nowrap">
                   <xed:output i18n="ubo.import.list.label.enrich" />:
                 </label>
-                <input type="radio" value="true"  class="form-control ml-2 mr-2" id="enrich-yes" /><label for="enrich-yes">Ja</label>
-                <input type="radio" value="false" class="form-control ml-4 mr-2" id="enrich-no"  /><label for="enrich-no" >Nein</label>
+                <input type="radio" value="true"  class="form-control ms-2 me-2" id="enrich-yes" /><label for="enrich-yes">Ja</label>
+                <input type="radio" value="false" class="form-control ms-4 me-2" id="enrich-no"  /><label for="enrich-no" >Nein</label>
               </div>
             </xed:bind>
 
@@ -196,7 +196,7 @@
               </button>
 
               <xed:bind xpath="@async" initially="false">
-                <div class="form-group form-inline ml-3" title="{i18n:ubo.import.list.tooltip.async}">
+                <div class="form-group form-inline ms-3" title="{i18n:ubo.import.list.tooltip.async}">
                   <input type="checkbox" value="true" class="form-check-input my-auto" id="async-yes" onchange="UBOImportList.toggleSelect('import-list-output-format-select', 'import')"/>
                   <label class="my-auto">
                     <xed:output i18n="ubo.import.list.label.async" />

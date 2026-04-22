@@ -57,7 +57,7 @@
 			<xed:validate required="true" display="here"><br/>Nachname muss eingegeben werden!</xed:validate>
                       </xed:bind>
                       <xed:bind xpath="mods:namePart[@type='given']">
-			<input type="text" class="form-control col-sm-4 ml-auto"/>
+			<input type="text" class="form-control col-sm-4 ms-auto"/>
                       </xed:bind>
                       <br/>
                       <xed:output value="../@key" />
