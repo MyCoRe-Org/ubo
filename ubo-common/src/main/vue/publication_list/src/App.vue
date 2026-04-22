@@ -18,26 +18,27 @@
     <div class="card-body">
       <div class="ubo-vue-form">
         <section>
-          <div class="form-group form-inline">
-            <label class="mycore-form-label"
-                   for="personSearch">{{ i18n["listWizard.search"] }}</label>
-            <input id="personSearch" class="mycore-form-input" type="text"
-                   v-model="searchModel.text"
-                   v-on:keypress.enter.prevent="startSearch">
-            <span class="input-group-btn">
-          <button class="btn btn-secondary" v-on:click.prevent="startSearch">
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-                  v-if="searchModel.searching"></span>
-            {{ i18n["button.search"] }}
-          </button>
-        </span>
+          <div class="row mb-3">
+            <label class="col-12 col-sm-2 col-form-label" for="personSearch">{{ i18n["listWizard.search"] }}</label>
+
+            <div class="col-12 col-sm-6">
+              <div class="input-group">
+                <input id="personSearch" class="form-group mycore-form-input" type="text" v-model="searchModel.text" v-on:keypress.enter.prevent="startSearch">
+                <button class="btn btn-secondary" v-on:click.prevent="startSearch">
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-if="searchModel.searching"></span>
+                  {{ i18n["button.search"] }}
+                </button>
+              </div>
+            </div>
           </div>
         </section>
+
         <section v-if="searchModel.errored">
           <div class="ubo-input-error">
             {{ i18n["error.occurred"] }}
           </div>
         </section>
+
         <section v-if="searchModel.searchResultUsers.length>0 || searchModel.noresults">
           <div class="ubo-pl-noresults">
             <b>{{ i18n["result.dozbib.results"] }}</b>
@@ -71,6 +72,7 @@
             </transition-group>
           </div>
         </section>
+
         <section v-if="users.length>0">
           <div class="ubo-pl-userlist">
             <b>{{ i18n["listWizard.users"] }}</b>
@@ -98,25 +100,26 @@
             </transition-group>
           </div>
         </section>
+
         <section>
-          <div class="form-group row">
-            <label class="mycore-form-label" for="yearIssued">
+          <div class="row">
+            <label class="col-12 col-sm-2 col-form-label" for="yearIssued">
               {{ i18n["search.dozbib.year.publication"] }}
             </label>
-            <div class="col-8 form-check mycore-list list-group list-group-flush">
-              <div class="list-group-item d-flex align-items-center">
-                <div class="col-4">
-                  <input id="dateRangeLabel" v-model="exportModel.yearPeriod"
-                         class="form-check-input" type="checkbox" v-on:change="yearChange">
-                  <label class="form-check-label"
-                         for="dateRangeLabel">{{ i18n["search.dozbib.year.period"] }}</label>
+
+            <div class="col-12 col-sm-6">
+              <div class="row mb-3">
+                <div class="col-2 d-flex align-items-center">
+                  <input id="dateRangeLabel" v-model="exportModel.yearPeriod" class="form-check-input" type="checkbox" v-on:change="yearChange">
+                  <label class="form-check-label ms-2" for="dateRangeLabel">{{ i18n["search.dozbib.year.period"] }}</label>
                 </div>
-                <div class="col-8">
+
+                <div class="col">
                   <input
                     v-if="!exportModel.yearPeriod"
                     id="yearIssued"
                     v-model="exportModel.year"
-                    class="mycore-form-input"
+                    class="form-control"
                     type="number"
                     min="1900"
                     max="2099"
@@ -140,11 +143,13 @@
                 </div>
               </div>
             </div>
+
             <div class="ubo-input-invalid invalid-feedback">
               {{ i18n["search.dozbib.year.invalid"] }}
             </div>
           </div>
         </section>
+
         <section v-if="isPartOfEnabled()">
           <div class="form-group row form-linline">
             <label class="mycore-form-label" for="partOf">{{ i18n["ubo.partOf"] }}</label>
