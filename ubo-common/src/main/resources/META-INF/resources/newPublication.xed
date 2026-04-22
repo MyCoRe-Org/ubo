@@ -29,80 +29,86 @@
               </p>
             </div>
 
-            <xed:bind xpath="mods:identifier">
-              <div class="form-group form-inline">
-		<div class="mycore-form-label">
-                  <xed:bind xpath="@type">
-                    <select class="form-control custom-select">
-                      <option value="doi">DOI</option>
-                      <option value="pubmed">PubMed ID</option>
-                      <option value="scopus">Scopus ID</option>
-                      <option value="ieee">IEEE Article No.</option>
-                      <option value="arxiv">arXiv.org ID</option>
-                      <option value="isbn">ISBN</option>
-                      <xed:if test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
-                        <option value="duepublico">DuEPublico ID</option>
-                        <option value="duepublico2">DuEPublico 2 ID</option>
-                        <option value="evaluna">EVALuna Biblio ID</option>
-                        <option value="zdb">ZDB ID</option>
-                        <option value="ppn">GBV/SWB PPN</option>
-                        <option value="hbz">HBZ HT-Nummer</option>
-                        <option value="mms">Alma MMS ID</option>
-                        <option value="issn">ISSN</option>
-                      </xed:if>
+            <div class="row">
+              <xed:bind xpath="mods:identifier">
+                <div class="col-12 col-sm-2">
+                  <div class="form-label">
+                    <xed:bind xpath="@type">
+                      <select class="form-control form-select">
+                        <option value="doi">DOI</option>
+                        <option value="pubmed">PubMed ID</option>
+                        <option value="scopus">Scopus ID</option>
+                        <option value="ieee">IEEE Article No.</option>
+                        <option value="arxiv">arXiv.org ID</option>
+                        <option value="isbn">ISBN</option>
+                        <xed:if test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
+                          <option value="duepublico">DuEPublico ID</option>
+                          <option value="duepublico2">DuEPublico 2 ID</option>
+                          <option value="evaluna">EVALuna Biblio ID</option>
+                          <option value="zdb">ZDB ID</option>
+                          <option value="ppn">GBV/SWB PPN</option>
+                          <option value="hbz">HBZ HT-Nummer</option>
+                          <option value="mms">Alma MMS ID</option>
+                          <option value="issn">ISSN</option>
+                        </xed:if>
                       </select>:
-                  </xed:bind>
-		</div>
-                <input id="identifier" class="{$xed-validation-marker} mycore-form-input"/>
-              </div>
-            </xed:bind>
+                    </xed:bind>
+                  </div>
+                </div>
 
-            <xed:validate xpath="//mods:identifier[@type='doi']" matches="10\.\d+.*" i18n="ubo.identifier.doi.validation" display="global" />
-            <xed:validate xpath="//mods:identifier[@type='issn']" matches="[0-9X]{4}\-[0-9X]{4}" i18n="ubo.identifier.issn.validation" display="global" />
-            <xed:validate xpath="//mods:identifier[@type='isbn']" matches="^((978|979)-?)?([\d -]{12}|\d{9})(\d|X)$" i18n="ubo.identifier.isbn.validation" display="global" />
-            <xed:validate xpath="//mods:identifier[@type='duepublico']" matches="\d+" display="global" />
-          <xed:validate xpath="//mods:identifier[@type='duepublico2']" matches="duepublico_mods_\d\d\d\d\d\d\d\d" display="global" />
+                <div class="col-12 col-sm-6">
+                  <input id="identifier" class="{$xed-validation-marker} form-control"/>
+                </div>
+              </xed:bind>
+            </div>
+
+            <xed:validate xpath="//mods:identifier[@type='doi']" matches="10\.\d+.*" i18n="ubo.identifier.doi.validation" display="global"/>
+            <xed:validate xpath="//mods:identifier[@type='issn']" matches="[0-9X]{4}\-[0-9X]{4}" i18n="ubo.identifier.issn.validation" display="global"/>
+            <xed:validate xpath="//mods:identifier[@type='isbn']" matches="^((978|979)-?)?([\d -]{12}|\d{9})(\d|X)$" i18n="ubo.identifier.isbn.validation" display="global"/>
+            <xed:validate xpath="//mods:identifier[@type='duepublico']" matches="\d+" display="global"/>
+            <xed:validate xpath="//mods:identifier[@type='duepublico2']" matches="duepublico_mods_\d\d\d\d\d\d\d\d" display="global"/>
 
             <xed:if test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
               <xed:include uri="webapp:import-editor.xed" ref="shelfmark" />
               <xed:validate xpath="//mods:location/mods:shelfLocator" matches="(\d\d\/\d\d\s[A-Za-z]+\s\d+.*)|([A-Z]{3,4}\d+[A-Z_d\-+,()\d]*)" i18n="ubo.shelfmark.validation" display="global" />
             </xed:if>
 
-            <div>
-              <p>
-                <xed:output i18n="ubo.newPublicationWizard.titleAuthor" />
-              </p>
+            <div class="row mb-3">
+              <div class="col">
+                <xed:output i18n="ubo.newPublicationWizard.titleAuthor"/>
+              </div>
             </div>
 
             <xed:bind xpath="mods:titleInfo/mods:title">
-              <div class="form-group form-inline">
-                <label for="title" class="mycore-form-label">
-                  <xed:output i18n="ubo.title" />:
+              <div class="row mb-3">
+                <label for="title" class="col-12 col-sm-2 col-form-label">
+                  <xed:output i18n="ubo.title"/>:
                 </label>
-                <input id="title" class="{$xed-validation-marker} mycore-form-input" placeholder="{i18n:ubo.newPublicationWizard.title.placeholder}" />
+                <div class="col-12 col-sm-6">
+                  <input id="title" class="form-control {$xed-validation-marker}" placeholder="{i18n:ubo.newPublicationWizard.title.placeholder}"/>
+                </div>
               </div>
             </xed:bind>
 
             <xed:bind xpath="mods:name[@type='personal']">
               <xed:bind xpath="mods:namePart[@type='family']">
-                <div class="form-group form-inline">
-                  <label for="author" class="mycore-form-label">
-                    <xed:output i18n="ubo.role.author" />:
+                <div class="row mb-3">
+                  <label for="author" class="col-12 col-sm-2 col-form-label">
+                    <xed:output i18n="ubo.role.author"/>:
                   </label>
-                  <input id="author" class="{$xed-validation-marker} mycore-form-input" placeholder="{i18n:ubo.newPublicationWizard.author.placeholder}" />
+                  <div class="col-12 col-sm-6">
+                    <input id="author" class="{$xed-validation-marker} form-control" placeholder="{i18n:ubo.newPublicationWizard.author.placeholder}"/>
+                  </div>
                 </div>
               </xed:bind>
-              <xed:bind xpath="mods:role[mods:roleTerm[@authority='marcrelator'][@type='code']='aut']" />
+              <xed:bind xpath="mods:role[mods:roleTerm[@authority='marcrelator'][@type='code']='aut']"/>
             </xed:bind>
 
-            <xed:validate test="(string-length(mods:identifier) &gt; 0) or (string-length(mods:location/mods:shelfLocator) &gt; 0) or ( (string-length(mods:titleInfo/mods:title) &gt; 0) and (string-length(mods:name/mods:namePart) &gt; 0) )" display="global" i18n="ubo.newPublicationWizard.required" />
+            <xed:validate test="(string-length(mods:identifier) &gt; 0) or (string-length(mods:location/mods:shelfLocator) &gt; 0) or ( (string-length(mods:titleInfo/mods:title) &gt; 0) and (string-length(mods:name/mods:namePart) &gt; 0))" display="global" i18n="ubo.newPublicationWizard.required"/>
+            <xed:cleanup-rule xpath="//mods:*" relevant-if="(string-length(normalize-space(text())) &gt; 0) or *"/>
 
-            <xed:cleanup-rule xpath="//mods:*" relevant-if="(string-length(normalize-space(text())) &gt; 0) or *" />
-
-            <div class="form-group form-inline">
-              <label class="mycore-form-label">
-	      </label>
-              <div class="cancel-submit">
+            <div class="row">
+              <div class="offset-md-2 col cancel-submit">
                 <button class="btn btn-primary" type="submit" xed:target="servlet" xed:href="NewPublicationWizard">
                   <xed:output i18n="button.next" />
                 </button>
