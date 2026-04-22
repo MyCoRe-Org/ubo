@@ -758,14 +758,16 @@
 
   <xed:template id="shelfmark">
     <xed:bind xpath="mods:location/mods:shelfLocator">
-      <div class="form-group form-inline">
-        <label for="{xed:generate-id()}" class="mycore-form-label">
-          <xed:output value="concat(i18n:translate('ubo.shelfmark'), ': ')" />
+      <div class="row mb-3">
+        <label for="{xed:generate-id()}" class="col-12 col-sm-2 col-form-label">
+          <xed:output value="concat(i18n:translate('ubo.shelfmark'), ': ')"/>
         </label>
-        <input id="{xed:generate-id()}" class="{$xed-validation-marker} mycore-form-input-double" type="text" />
-        <a class="ms-1 align-self-center" target="_blank" href="https://primo.uni-due.de/">
-          <xed:output i18n="ubo.shelfmark.search" />
-        </a>
+        <div class="col-12 col-sm-6">
+          <input id="{xed:generate-id()}" class="{$xed-validation-marker} form-control" type="text"/>
+          <a class="ms-1 align-self-center" target="_blank" href="https://primo.uni-due.de/">
+            <xed:output i18n="ubo.shelfmark.search"/>
+          </a>
+        </div>
       </div>
     </xed:bind>
   </xed:template>
