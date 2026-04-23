@@ -109,7 +109,7 @@
 
             <div class="col-12 col-sm-6">
               <div class="row mb-3">
-                <div class="col-5 d-flex align-items-center">
+                <div class="col-12 col-sm-5 d-flex align-items-center">
                   <input id="dateRangeLabel" v-model="exportModel.yearPeriod" class="form-check-input" type="checkbox" v-on:change="yearChange">
                   <label class="form-check-label ms-2" for="dateRangeLabel">{{ i18n["search.dozbib.year.period"] }}</label>
                 </div>
@@ -162,13 +162,15 @@
 
         <section>
           <div class="row mb-3">
-            <label class="col col-sm-2 col-form-label">{{ i18n["search.sort"] }}</label>
+            <label class="col-12 col-sm col-sm-2 col-form-label">
+              {{ i18n["search.sort"] }}
+            </label>
 
-            <div class="col">
-              <transition-group name="plSort" tag="div" class="?">
+            <div class="col-12 col-sm">
+              <transition-group name="plSort" tag="div">
                 <div v-for="(sort,i) in exportModel.sort" :key="sort.field" class="row mb-3">
 
-                    <div class="col-3">
+                    <div class="col-12 col-sm-3 d-flex align-items-center">
                       <input class="form-check-input" :id="'ps_select_' + sort.field"
                              v-on:change="sortChange" type="checkbox" v-model="sort.active">
                       <label class="form-check-label ms-2" :for="'ps_select_' + sort.field">
@@ -176,7 +178,7 @@
                       </label>
                     </div>
 
-                    <div class="col-3">
+                    <div class="col-8 col-sm-3">
                       <select class="form-select" :id="'ps_radio_' + sort.field" v-model="sort.asc"
                               v-on:change="sortChange">
                         <option v-bind:value="true">{{ i18n["search.sort.asc"] }}</option>
