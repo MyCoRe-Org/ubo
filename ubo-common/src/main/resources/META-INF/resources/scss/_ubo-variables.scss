@@ -6,7 +6,7 @@
 // modify theme colors
 $theme-colors: map-merge(
   (
-    "alternative": $body-bg
+    "alternative": $alternative
   ),
   $theme-colors
 );
