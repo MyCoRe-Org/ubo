@@ -109,7 +109,7 @@
 
             <div class="col-12 col-sm-6">
               <div class="row mb-3">
-                <div class="col-2 d-flex align-items-center">
+                <div class="col-5 d-flex align-items-center">
                   <input id="dateRangeLabel" v-model="exportModel.yearPeriod" class="form-check-input" type="checkbox" v-on:change="yearChange">
                   <label class="form-check-label ms-2" for="dateRangeLabel">{{ i18n["search.dozbib.year.period"] }}</label>
                 </div>
@@ -126,7 +126,7 @@
                     step="1"
                     v-bind:class="{ 'is-invalid' : isInvalidYear(exportModel.year) }"
                     v-on:change="yearChange">
-                  <div v-else class="input-group yearRange">
+                  <div v-else class="input-group w-100 yearRange">
                     <input id="searchDate" v-model="exportModel.yearFrom"
                            class="form-control" placeholder="" type="number" min="1900" max="2099"
                            step="1"
@@ -151,86 +151,96 @@
         </section>
 
         <section v-if="isPartOfEnabled()">
-          <div class="form-group row form-linline">
-            <label class="mycore-form-label" for="partOf">{{ i18n["ubo.partOf"] }}</label>
-            <div class="input-group col-8">
-              <input id="partOf" v-model="exportModel.partOf"
-                     type="checkbox"
+          <div class="row mb-3">
+            <label class="col-12 col-sm-2 col-form-label" for="partOf">{{ i18n["ubo.partOf"] }}</label>
+            <div class="input-group col-12 col-6">
+              <input id="partOf" v-model="exportModel.partOf" type="checkbox"
                      v-on:change="partOfChange">
             </div>
           </div>
         </section>
+
         <section>
-          <div class="form-group row">
-            <label class="mycore-form-label">{{ i18n["search.sort"] }}</label>
-            <transition-group name="plSort" tag="div"
-                              class="col-8 mycore-list list-group list-group-flush">
-              <div v-for="(sort,i) in exportModel.sort" :key="sort.field"
-                   class="list-group-item d-flex align-items-center">
-                <div class="col">
-                  <input class="form-check-input" :id="'ps_select_' + sort.field"
-                         v-on:change="sortChange" type="checkbox"
-                         v-model="sort.active">
-                  <label class="form-check-label"
-                         :for="'ps_select_' + sort.field">{{ i18n[sort.i18nKey] }}</label>
+          <div class="row mb-3">
+            <label class="col col-sm-2 col-form-label">{{ i18n["search.sort"] }}</label>
+
+            <div class="col">
+              <transition-group name="plSort" tag="div" class="?">
+                <div v-for="(sort,i) in exportModel.sort" :key="sort.field" class="row mb-3">
+
+                    <div class="col-3">
+                      <input class="form-check-input" :id="'ps_select_' + sort.field"
+                             v-on:change="sortChange" type="checkbox" v-model="sort.active">
+                      <label class="form-check-label ms-2" :for="'ps_select_' + sort.field">
+                        {{ i18n[sort.i18nKey] }}
+                      </label>
+                    </div>
+
+                    <div class="col-3">
+                      <select class="form-select" :id="'ps_radio_' + sort.field" v-model="sort.asc"
+                              v-on:change="sortChange">
+                        <option v-bind:value="true">{{ i18n["search.sort.asc"] }}</option>
+                        <option v-bind:value="false">{{ i18n["search.sort.desc"] }}</option>
+                      </select>
+                    </div>
+
+                    <div class="col">
+                      <div class="btn-group">
+                        <button v-bind:disabled="i<=0" v-on:click.prevent="moveSortUp(sort)"
+                                class="btn btn-primary up"
+                                tabindex="999">
+                          <i class="fas fa-arrow-up"/>
+                        </button>
+                        <button v-bind:disabled="!(i<exportModel.sort.length-1)"
+                                v-on:click.prevent="moveSortDown(sort)"
+                                class="btn btn-primary down">
+                          <i class="fas fa-arrow-down"/>
+                        </button>
+                      </div>
+                    </div>
+
                 </div>
-                <div class="col">
-                  <select class="mycore-form-input custom-select"
-                          :id="'ps_radio_' + sort.field"
-                          v-on:change="sortChange"
-                          v-model="sort.asc">
-                    <option v-bind:value="true">{{ i18n["search.sort.asc"] }}</option>
-                    <option v-bind:value="false">{{ i18n["search.sort.desc"] }}</option>
-                  </select>
-                </div>
-                <div class="col">
-                  <div class="btn-group">
-                    <button v-bind:disabled="i<=0" v-on:click.prevent="moveSortUp(sort)"
-                            class="btn btn-primary up"
-                            tabindex="999">
-                      <i class="fas fa-arrow-up"></i>
-                    </button>
-                    <button v-bind:disabled="!(i<exportModel.sort.length-1)"
-                            v-on:click.prevent="moveSortDown(sort)"
-                            class="btn btn-primary down">
-                      <i class="fas fa-arrow-down"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </transition-group>
+              </transition-group>
+            </div>
           </div>
-          <div class="form-group form-inline">
-            <label class="mycore-form-label" for="formatSelect">{{
-                i18n["listWizard.format"]
-              }}</label>
-            <select id="formatSelect" class="mycore-form-input custom-select"
-                    v-on:change="formatChange" v-model="exportModel.format">
-              <option v-bind:value="''">{{ i18n["search.select"] }}</option>
-              <option v-bind:value="'pdf'">PDF</option>
-              <option v-bind:value="'html'">HTML</option>
-              <option v-bind:value="'mods'">MODS</option>
-              <option v-bind:value="'bibtex'">BibTex</option>
-              <option v-bind:value="'endnote'">Endnote</option>
-              <option v-bind:value="'ris'">RIS</option>
-              <option v-bind:value="'isi'">ISI</option>
-              <option v-bind:value="'mods2csv2'">CSV</option>
-            </select>
+
+          <div class="row mb-3">
+            <label class="col-12 col-sm-2 col-form-label" for="formatSelect">
+              {{ i18n["listWizard.format"] }}
+            </label>
+
+            <div class="col-12 col-sm-6">
+              <select id="formatSelect" class="form-select" v-on:change="formatChange" v-model="exportModel.format">
+                <option v-bind:value="''">{{ i18n["search.select"] }}</option>
+                <option v-bind:value="'pdf'">PDF</option>
+                <option v-bind:value="'html'">HTML</option>
+                <option v-bind:value="'mods'">MODS</option>
+                <option v-bind:value="'bibtex'">BibTex</option>
+                <option v-bind:value="'endnote'">Endnote</option>
+                <option v-bind:value="'ris'">RIS</option>
+                <option v-bind:value="'isi'">ISI</option>
+                <option v-bind:value="'mods2csv2'">CSV</option>
+              </select>
+            </div>
           </div>
-          <div class="form-group form-inline"
-               v-if="exportModel.format==='html' || exportModel.format==='pdf'">
-            <label class="mycore-form-label" for="styleSelect">{{
+
+          <div class="row mb-3" v-if="exportModel.format==='html' || exportModel.format==='pdf'">
+            <label class="col-12 col-sm-2 col-form-label" for="styleSelect">{{
                 i18n["listWizard.citation"]
               }}</label>
-            <select id="styleSelect" class="mycore-form-input custom-select"
-                    v-on:change="styleChanged" v-model="exportModel.style">
-              <option v-bind:value="''"></option>
-              <option v-for="style in styles" v-bind:key="style.id" v-bind:value="style.id">
-                {{ style.title }}
-              </option>
-            </select>
+
+            <div class="col-12 col-sm-6">
+              <select id="styleSelect" class="form-select" v-on:change="styleChanged"
+                      v-model="exportModel.style">
+                <option v-bind:value="''"></option>
+                <option v-for="style in styles" v-bind:key="style.id" v-bind:value="style.id">
+                  {{ style.title }}
+                </option>
+              </select>
+            </div>
           </div>
         </section>
+
         <section v-if="result.link.length>0">
           <div class="row">
             <div class="col-12">
@@ -261,6 +271,7 @@
       </div>
     </div>
   </article>
+
   <div class="card mb-1" v-if="i18n['listWizard.info.text4'].trim().length > 0">
     <div class="card-body">
       <section v-html="i18n['listWizard.info.text4']"></section>
