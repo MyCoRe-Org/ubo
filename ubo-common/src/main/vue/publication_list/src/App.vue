@@ -144,8 +144,10 @@
               </div>
             </div>
 
-            <div class="ubo-input-invalid invalid-feedback">
-              {{ i18n["search.dozbib.year.invalid"] }}
+            <div class="row">
+              <div class="col ubo-input-invalid invalid-feedback">
+                {{ i18n["search.dozbib.year.invalid"] }}
+              </div>
             </div>
           </div>
         </section>
@@ -168,8 +170,12 @@
 
             <div class="col-12 col-sm">
               <transition-group name="plSort" tag="div">
-                <div v-for="(sort,i) in exportModel.sort" :key="sort.field" class="row mb-3">
+                <div v-for="(sort,i) in exportModel.sort" :key="sort.field">
+                  <div v-if="i < 3" class="row">
+                    <hr class="col-12 col-sm-7"/>
+                  </div>
 
+                  <div class="row mb-3">
                     <div class="col-12 col-sm-3 d-flex align-items-center">
                       <input class="form-check-input" :id="'ps_select_' + sort.field"
                              v-on:change="sortChange" type="checkbox" v-model="sort.active">
@@ -200,7 +206,7 @@
                         </button>
                       </div>
                     </div>
-
+                  </div>
                 </div>
               </transition-group>
             </div>
