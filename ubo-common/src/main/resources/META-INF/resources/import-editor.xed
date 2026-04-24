@@ -759,7 +759,7 @@
   <xed:template id="shelfmark">
     <xed:bind xpath="mods:location/mods:shelfLocator">
       <div class="row mb-3">
-        <label for="{xed:generate-id()}" class="col-12 col-sm-2 col-form-label">
+        <label for="{xed:generate-id()}" class="col-12 col-sm-3 col-form-label text-sm-end">
           <xed:output value="concat(i18n:translate('ubo.shelfmark'), ': ')"/>
         </label>
         <div class="col-12 col-sm-6">
