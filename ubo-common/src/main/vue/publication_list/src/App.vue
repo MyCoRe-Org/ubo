@@ -19,7 +19,7 @@
       <div class="ubo-vue-form">
         <section>
           <div class="row mb-3">
-            <label class="col-12 col-sm-2 col-form-label" for="personSearch">{{ i18n["listWizard.search"] }}</label>
+            <label class="col-12 col-sm-3 col-form-label text-end" for="personSearch">{{ i18n["listWizard.search"] }}</label>
 
             <div class="col-12 col-sm-6">
               <div class="input-group">
@@ -103,7 +103,7 @@
 
         <section>
           <div class="row">
-            <label class="col-12 col-sm-2 col-form-label" for="yearIssued">
+            <label class="col-12 col-sm-3 col-form-label text-end" for="yearIssued">
               {{ i18n["search.dozbib.year.publication"] }}
             </label>
 
@@ -154,7 +154,7 @@
 
         <section v-if="isPartOfEnabled()">
           <div class="row mb-3">
-            <label class="col-12 col-sm-2 col-form-label" for="partOf">{{ i18n["ubo.partOf"] }}</label>
+            <label class="col-12 col-sm-3 col-form-label text-end" for="partOf">{{ i18n["ubo.partOf"] }}</label>
             <div class="input-group col-12 col-6">
               <input id="partOf" v-model="exportModel.partOf" type="checkbox"
                      v-on:change="partOfChange">
@@ -164,7 +164,7 @@
 
         <section>
           <div class="row mb-3">
-            <label class="col-12 col-sm col-sm-2 col-form-label">
+            <label class="col-12 col-sm-3 col-form-label text-end">
               {{ i18n["search.sort"] }}
             </label>
 
@@ -172,7 +172,7 @@
               <transition-group name="plSort" tag="div">
                 <div v-for="(sort,i) in exportModel.sort" :key="sort.field">
                   <div v-if="i < 3" class="row">
-                    <hr class="col-12 col-sm-7"/>
+                    <hr class="col-12 col-sm-8"/>
                   </div>
 
                   <div class="row mb-3">
@@ -184,16 +184,16 @@
                       </label>
                     </div>
 
-                    <div class="col-8 col-sm-3">
-                      <select class="form-select" :id="'ps_radio_' + sort.field" v-model="sort.asc"
-                              v-on:change="sortChange">
-                        <option v-bind:value="true">{{ i18n["search.sort.asc"] }}</option>
-                        <option v-bind:value="false">{{ i18n["search.sort.desc"] }}</option>
-                      </select>
-                    </div>
+                    <div class="col-8 col-sm-5">
+                      <div class="input-group">
+                        <select class="form-select" :id="'ps_radio_' + sort.field"
+                                v-model="sort.asc"
+                                v-on:change="sortChange">
+                          <option v-bind:value="true">{{ i18n["search.sort.asc"] }}</option>
+                          <option v-bind:value="false">{{ i18n["search.sort.desc"] }}</option>
+                        </select>
 
-                    <div class="col">
-                      <div class="btn-group">
+
                         <button v-bind:disabled="i<=0" v-on:click.prevent="moveSortUp(sort)"
                                 class="btn btn-primary up"
                                 tabindex="999">
@@ -213,7 +213,7 @@
           </div>
 
           <div class="row mb-3">
-            <label class="col-12 col-sm-2 col-form-label" for="formatSelect">
+            <label class="col-12 col-sm-3 col-form-label text-end" for="formatSelect">
               {{ i18n["listWizard.format"] }}
             </label>
 
@@ -233,7 +233,7 @@
           </div>
 
           <div class="row mb-3" v-if="exportModel.format==='html' || exportModel.format==='pdf'">
-            <label class="col-12 col-sm-2 col-form-label" for="styleSelect">{{
+            <label class="col-12 col-sm-3 col-form-label text-end" for="styleSelect">{{
                 i18n["listWizard.citation"]
               }}</label>
 
