@@ -42,24 +42,30 @@
 
   <xed:template id="year">
     <xed:repeat xpath="condition5[@field='year']">
-      <div class="form-group form-inline">
-        <label for="{xed:generate-id()}" class="mycore-form-label">
-          <xed:output i18n="search.dozbib.year" />
+      <div class="row mb-3">
+        <label for="{xed:generate-id()}" class="col-12 col-sm-3 col-form-label text-end">
+          <xed:output i18n="search.dozbib.year"/>
         </label>
-        <xed:bind xpath="@operator" initially="&gt;=">
-          <select class="form-control col-sm-1 me-3 custom-select">
-            <option>=</option>
-            <option>&gt;</option>
-            <option>&gt;=</option>
-            <option>&lt;</option>
-            <option>&lt;=</option>
-          </select>
-        </xed:bind>
-        <xed:bind xpath="@value">
-          <input type="text" class="{$xed-validation-marker} form-control col-sm-1" placeholder="{i18n:edit.year.placeholder}" />
-          <xed:validate matches="[\d]{4}" display="global" i18n="condition.yearDoz" />
-        </xed:bind>
-        <xed:controls>insert remove</xed:controls>
+        <div class="col-12 col-sm-1">
+          <xed:bind xpath="@operator" initially="&gt;=">
+            <select class="form-select">
+              <option>=</option>
+              <option>&gt;</option>
+              <option>&gt;=</option>
+              <option>&lt;</option>
+              <option>&lt;=</option>
+            </select>
+          </xed:bind>
+        </div>
+        <div class="col-2">
+          <div class="input-group">
+            <xed:bind xpath="@value">
+              <input type="text" class="{$xed-validation-marker} form-control" placeholder="{i18n:edit.year.placeholder}"/>
+              <xed:validate matches="[\d]{4}" display="global" i18n="condition.yearDoz"/>
+            </xed:bind>
+            <xed:controls>insert remove</xed:controls>
+          </div>
+        </div>
       </div>
     </xed:repeat>
   </xed:template>
