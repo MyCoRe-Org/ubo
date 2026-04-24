@@ -114,13 +114,15 @@
                   <xed:output i18n="ubo.subject" />:
                 </label>
                 <div class="col-12 col-sm-6">
-                  <select class="autocomplete {$xed-validation-marker} autocomplete w-100 mycore-form-input custom-select" data-container="form-group" data-display="static">
-                    <option value="">
-                      <xed:output i18n="search.select" />
-                    </option>
-                    <xed:include uri="xslStyle:mycoreclass-options?omitSubtext={$UBO.Editor.import-list.omitSubtext}:classification:metadata:-1:children:fachreferate" />
-                  </select>
-                  <xed:controls />
+                  <div class="input-group">
+                    <select class="autocomplete {$xed-validation-marker} autocomplete mycore-form-input custom-select" data-container="form-group" data-display="static">
+                      <option value="">
+                        <xed:output i18n="search.select" />
+                      </option>
+                      <xed:include uri="xslStyle:mycoreclass-options?omitSubtext={$UBO.Editor.import-list.omitSubtext}:classification:metadata:-1:children:fachreferate" />
+                    </select>
+                    <xed:controls />
+                  </div>
                 </div>
               </div>
             </xed:repeat>
