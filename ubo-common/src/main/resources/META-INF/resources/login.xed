@@ -31,7 +31,7 @@
 
             <div class="row mb-3">
               <xed:bind xpath="uid">
-                <label for="uid" class="col-12 col-sm-3 col-form-label text-end">
+                <label for="uid" class="col-12 col-sm-3 col-form-label text-sm-end">
                   <xed:output i18n="login.userAccount"/>:
                 </label>
 
@@ -43,7 +43,7 @@
 
             <div class="row mb-3 ">
               <xed:bind xpath="pwd">
-                <label for="pwd" class="col col-sm-3 col-form-label text-end">
+                <label for="pwd" class="col col-sm-3 col-form-label text-sm-end">
                   <xed:output i18n="login.userAccount.password" />:
                 </label>
                 <div class="col-12 col-sm-6">

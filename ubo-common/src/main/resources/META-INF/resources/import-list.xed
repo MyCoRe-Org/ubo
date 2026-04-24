@@ -56,7 +56,7 @@
 
             <xed:bind xpath="partOf">
               <div class="row mb-3 ubo-import-list-select-partOf">
-                <label for="{generate-id()}" class="col-12 col-sm-3 col-form-label text-nowrap text-end">
+                <label for="{generate-id()}" class="col-12 col-sm-3 col-form-label text-nowrap text-sm-end">
                   <xed:output i18n="ubo.partOf" />:
                 </label>
 
@@ -73,7 +73,7 @@
 
             <xed:bind xpath="status">
               <div class="row mb-3 ubo-import-list-select-status">
-                <label for="{generate-id()}" class="col-12 col-sm-3 col-form-label text-nowrap text-end">
+                <label for="{generate-id()}" class="col-12 col-sm-3 col-form-label text-nowrap text-sm-end">
                   <xed:output i18n="search.dozbib.status" />:
                 </label>
 
@@ -90,7 +90,7 @@
 
             <xed:bind xpath="ubogenre">
               <div class="row mb-3 ubo-import-list-select-ubogenre">
-                <label for="{generate-id()}" class="col-12 col-sm-3 col-form-label text-nowrap text-end">
+                <label for="{generate-id()}" class="col-12 col-sm-3 col-form-label text-nowrap text-sm-end">
                   <xed:output i18n="ubo.genre" />:
                 </label>
                 <div class="col-12 col-sm-6">
@@ -110,7 +110,7 @@
 
             <xed:repeat xpath="subject" max="5">
               <div class="row mb-3 ubo-import-list-select-fachreferate">
-                <label for="subject" class="col-12 col-sm-3 col-form-label text-nowrap text-end">
+                <label for="subject" class="col-12 col-sm-3 col-form-label text-nowrap text-sm-end">
                   <xed:output i18n="ubo.subject" />:
                 </label>
                 <div class="col-12 col-sm-6">
@@ -127,7 +127,7 @@
 
             <xed:bind xpath="origin">
               <div class="row mb-3 ubo-import-list-select-origin">
-                <label for="{generate-id()}" class="col-12 col-sm-3 col-form-label text-nowrap text-end">
+                <label for="{generate-id()}" class="col-12 col-sm-3 col-form-label text-nowrap text-sm-end">
                   <xed:output i18n="ubo.department" />:
                 </label>
                 <div class="col-12 col-sm-6">
@@ -141,7 +141,7 @@
 
             <xed:bind xpath="@sourceType">
               <div class="row mb-3">
-                <label for="{generate-id()}" class="col-12 col-sm-3 col-form-label text-nowrap text-end">
+                <label for="{generate-id()}" class="col-12 col-sm-3 col-form-label text-nowrap text-sm-end">
                   <xed:output i18n="ubo.import.list.label.sourceFormat" />:
                 </label>
                 <div class="col-12 col-sm-6">
@@ -154,7 +154,7 @@
 
             <xed:bind xpath="@targetType">
               <div class="row mb-3">
-                <label for="{generate-id()}" class="col-12 col-sm-3 col-form-label text-nowrap text-end">
+                <label for="{generate-id()}" class="col-12 col-sm-3 col-form-label text-nowrap text-sm-end">
                   <xed:output i18n="ubo.import.list.label.outputFormat"/>:
                 </label>
                 <div class="col-12 col-sm-6">
@@ -172,7 +172,7 @@
             </div>
 
             <div class="row mb-3">
-              <label class="col-12 col-sm-3 col-form-label text-nowrap text-end">
+              <label class="col-12 col-sm-3 col-form-label text-nowrap text-sm-end">
                 <xed:output i18n="ubo.import.list.label.dataSources"/>:
               </label>
 
@@ -202,7 +202,7 @@
 
             <xed:bind xpath="@enrich" initially="false">
               <div class="row mb-3">
-                <label class="col-12 col-sm-3 col-form-label text-nowrap text-end">
+                <label class="col-12 col-sm-3 col-form-label text-nowrap text-sm-end">
                   <xed:output i18n="ubo.import.list.label.enrich"/>:
                 </label>
 
