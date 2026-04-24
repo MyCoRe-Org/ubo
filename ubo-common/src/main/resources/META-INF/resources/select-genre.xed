@@ -21,57 +21,66 @@
             </p>
           </div>
 
-          <div class="form-inline form-group">
-            <label class="mycore-form-label" for="publication">
+          <div class="row mb-3">
+            <label class="col-12 col-sm-3 col-form-label text-sm-end" for="publication">
               <xed:output i18n="ubo.publication" />:
             </label>
-            <div id="publication" class="col-sm-4 px-0">
+
+            <div id="publication" class="col-12 col-sm-6">
               <xed:include uri="xslStyle:mods-wizard-display:session:ubo.submission" />
             </div>
           </div>
 
           <xed:bind xpath="mods:genre[@type='intern']">
-            <div class="form-inline form-group">
-              <label class="mycore-form-label" for="genre">
+            <div class="row mb-3">
+              <label class="col-12 col-sm-3 col-form-label text-sm-end" for="genre">
                 <xed:output i18n="ubo.genre" />:
               </label>
-              <select class="mycore-form-input custom-select" id="genre" size="1">
-                <xed:include uri="xslStyle:genre-filter,items2options:classification:editor:-1:children:ubogenre" />
-              </select>
+
+              <div class="col-12 col-sm-6">
+                <select class="form-select" id="genre" size="1">
+                  <xed:include uri="xslStyle:genre-filter,items2options:classification:editor:-1:children:ubogenre" />
+                </select>
+              </div>
             </div>
           </xed:bind>
 
           <xed:bind xpath="mods:relatedItem[@type='host']/mods:genre[@type='intern']">
-            <div class="form-inline form-group">
-              <label class="mycore-form-label" for="host"><xed:output i18n="ubo.newPublicationWizard.publishedIn" />:</label>
-              <select class="mycore-form-input custom-select" id="host" size="1">
-                <option value=""><xed:output i18n="search.select" /></option>
-                <xed:include uri="xslStyle:host-filter,items2options:classification:editor:-1:children:ubogenre" />
-              </select>
+            <div class="row mb-3">
+              <label class="col-12 col-sm-3 col-form-label text-sm-end" for="host"><xed:output i18n="ubo.newPublicationWizard.publishedIn" />:</label>
+
+              <div class="col-12 col-sm-6">
+                <select class="form-select" id="host" size="1">
+                  <option value=""><xed:output i18n="search.select" /></option>
+                  <xed:include uri="xslStyle:host-filter,items2options:classification:editor:-1:children:ubogenre" />
+                </select>
+              </div>
             </div>
           </xed:bind>
 
           <xed:bind xpath="@form" default="edit-publication.xed">
-            <xed:if test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
-              <div class="form-inline form-group">
-                <label for="form" class="mycore-form-label">
+            <xed:if test="xed:call-java('org.mycore.ubo.AccessControl', 'currentUserIsAdmin')">
+              <div class="row mb-3">
+                <label for="form" class="col-12 col-sm-3 col-form-label text-sm-end">
                   <xed:output i18n="ubo.newPublicationWizard.targetForm" />
                 </label>
-                <select id="form" class="mycore-form-input custom-select">
-                  <option value="edit-publication.xed"><xed:output i18n="ubo.newPublicationWizard.selectForm.standard" /></option>
-                  <option value="edit-admin.xed"><xed:output i18n="ubo.newPublicationWizard.selectForm.admin" /></option>
-                </select>
+                <div class="col-12 col-sm-6">
+                  <select id="form" class="mycore-form-input custom-select">
+                    <option value="edit-publication.xed"><xed:output i18n="ubo.newPublicationWizard.selectForm.standard" /></option>
+                    <option value="edit-admin.xed"><xed:output i18n="ubo.newPublicationWizard.selectForm.admin" /></option>
+                  </select>
+                </div>
               </div>
             </xed:if>
           </xed:bind>
 
           <div class="cancel-submit">
-            <div class="form-inline form-group">
-              <label class="mycore-form-label">
-              </label>
-              <button class="btn btn-sm btn-primary" type="submit" xed:target="servlet" xed:href="NewPublicationWizard">
-                <xed:output i18n="button.next" />
-              </button>
+            <div class="row">
+              <div class="col offset-sm-3">
+                <button class="btn btn-sm btn-primary" type="submit" xed:target="servlet" xed:href="NewPublicationWizard">
+                  <xed:output i18n="button.next" />
+                </button>
+              </div>
             </div>
           </div>
 
