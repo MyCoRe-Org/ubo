@@ -114,7 +114,7 @@
                   <xed:output i18n="ubo.subject" />:
                 </label>
                 <div class="col-12 col-sm-6">
-                  <select class="autocomplete {$xed-validation-marker} form-select" data-container="form-group" data-display="static">
+                  <select class="autocomplete {$xed-validation-marker} autocomplete w-100 mycore-form-input custom-select" data-container="form-group" data-display="static">
                     <option value="">
                       <xed:output i18n="search.select" />
                     </option>
@@ -131,7 +131,7 @@
                   <xed:output i18n="ubo.department" />:
                 </label>
                 <div class="col-12 col-sm-6">
-                  <select id="{generate-id()}" class="autocomplete {$xed-validation-marker} w-100" data-container="form-group" data-display="static">
+                  <select id="{generate-id()}" class="autocomplete {$xed-validation-marker} autocomplete w-100 mycore-form-input custom-select" data-container="form-group" data-display="static">
                     <option value=""><xed:output i18n="search.select" /></option>
                     <xed:include uri="xslStyle:mycoreclass-options?omitSubtext={$UBO.Editor.import-list.omitSubtext}:classification:metadata:-1:children:ORIGIN" />
                   </select>
