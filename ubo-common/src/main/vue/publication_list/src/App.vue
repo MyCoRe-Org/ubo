@@ -19,7 +19,7 @@
       <div class="ubo-vue-form">
         <section>
           <div class="row mb-3">
-            <label class="col-12 col-sm-3 col-form-label text-end" for="personSearch">{{ i18n["listWizard.search"] }}</label>
+            <label class="col-12 col-sm-3 col-form-label text-sm-end" for="personSearch">{{ i18n["listWizard.search"] }}</label>
 
             <div class="col-12 col-sm-6">
               <div class="input-group">
@@ -103,7 +103,7 @@
 
         <section>
           <div class="row">
-            <label class="col-12 col-sm-3 col-form-label text-end" for="yearIssued">
+            <label class="col-12 col-sm-3 col-form-label text-sm-end" for="yearIssued">
               {{ i18n["search.dozbib.year.publication"] }}
             </label>
 
@@ -154,7 +154,7 @@
 
         <section v-if="isPartOfEnabled()">
           <div class="row mb-3">
-            <label class="col-12 col-sm-3 col-form-label text-end" for="partOf">{{ i18n["ubo.partOf"] }}</label>
+            <label class="col-12 col-sm-3 col-form-label text-sm-end" for="partOf">{{ i18n["ubo.partOf"] }}</label>
             <div class="input-group col-12 col-6">
               <input id="partOf" v-model="exportModel.partOf" type="checkbox"
                      v-on:change="partOfChange">
@@ -164,7 +164,7 @@
 
         <section>
           <div class="row mb-3">
-            <label class="col-12 col-sm-3 col-form-label text-end">
+            <label class="col-12 col-sm-3 col-form-label text-sm-end">
               {{ i18n["search.sort"] }}
             </label>
 
@@ -213,7 +213,7 @@
           </div>
 
           <div class="row mb-3">
-            <label class="col-12 col-sm-3 col-form-label text-end" for="formatSelect">
+            <label class="col-12 col-sm-3 col-form-label text-sm-end" for="formatSelect">
               {{ i18n["listWizard.format"] }}
             </label>
 
@@ -233,7 +233,7 @@
           </div>
 
           <div class="row mb-3" v-if="exportModel.format==='html' || exportModel.format==='pdf'">
-            <label class="col-12 col-sm-3 col-form-label text-end" for="styleSelect">{{
+            <label class="col-12 col-sm-3 col-form-label text-sm-end" for="styleSelect">{{
                 i18n["listWizard.citation"]
               }}</label>
 
