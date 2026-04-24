@@ -9,7 +9,7 @@
   <xed:template id="name">
     <xed:repeat xpath="condition2[@operator='phrase']">
       <div class="row mb-3">
-        <div class="col-12 col-sm-2">
+        <div class="col-12 col-sm-3">
           <xed:bind xpath="@field">
             <select id="ubo-search-person" class="form-select">
               <option value="person">Person</option>
