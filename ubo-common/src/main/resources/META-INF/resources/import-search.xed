@@ -46,7 +46,7 @@
         <label for="{xed:generate-id()}" class="col-12 col-sm-3 col-form-label text-end">
           <xed:output i18n="search.dozbib.year"/>
         </label>
-        <div class="col-12 col-sm-1">
+        <div class="col col-sm-1">
           <xed:bind xpath="@operator" initially="&gt;=">
             <select class="form-select">
               <option>=</option>
@@ -57,7 +57,7 @@
             </select>
           </xed:bind>
         </div>
-        <div class="col-2">
+        <div class="col col-sm-2">
           <div class="input-group">
             <xed:bind xpath="@value">
               <input type="text" class="{$xed-validation-marker} form-control" placeholder="{i18n:edit.year.placeholder}"/>
@@ -76,7 +76,7 @@
         <xed:output i18n="search.sort" />
       </label>
 
-      <div class="col">
+      <div class="col-12 col-sm">
         <xed:repeat xpath="sortBy/field" max="3">
           <div class="row">
             <div class="col-1 d-flex align-items-center justify-content-end">
@@ -84,7 +84,7 @@
             </div>
 
             <xed:bind xpath="@name">
-              <div class="col-2">
+              <div class="col col-sm-1">
                 <select class="form-select">
                   <option value="year"         ><xed:output i18n="search.sort.year" /></option>
                   <option value="sortby_person"><xed:output i18n="document.creators.one" /></option>
@@ -93,7 +93,7 @@
               </div>
             </xed:bind>
 
-            <div class="col-3">
+            <div class="col-12 col-sm-2">
               <div class="input-group">
                 <xed:bind xpath="@order">
                   <select class="form-select">
@@ -117,7 +117,7 @@
       <label class="col-12 col-sm-3 col-form-label text-end">
         <xed:output i18n="search.hits.numPerPage"/>
       </label>
-      <div class="col-1">
+      <div class="col-12 col-sm-1">
         <xed:bind xpath="@numPerPage">
           <select class="form-select">
             <option>10</option>
