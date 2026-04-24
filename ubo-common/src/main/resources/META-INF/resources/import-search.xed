@@ -43,7 +43,7 @@
   <xed:template id="year">
     <xed:repeat xpath="condition5[@field='year']">
       <div class="row mb-3">
-        <label for="{xed:generate-id()}" class="col-12 col-sm-3 col-form-label text-end">
+        <label for="{xed:generate-id()}" class="col-12 col-sm-3 col-form-label text-sm-end">
           <xed:output i18n="search.dozbib.year"/>
         </label>
         <div class="col col-sm-1">
@@ -72,7 +72,7 @@
 
   <xed:template id="sortby">
     <div class="row mb-3">
-      <label class="col-12 col-sm-3 col-form-label text-end">
+      <label class="col-12 col-sm-3 col-form-label text-sm-end">
         <xed:output i18n="search.sort" />
       </label>
 
@@ -114,7 +114,7 @@
 
   <xed:template id="numPerPage">
     <div class="row mb-3">
-      <label class="col-12 col-sm-3 col-form-label text-end">
+      <label class="col-12 col-sm-3 col-form-label text-sm-end">
         <xed:output i18n="search.hits.numPerPage"/>
       </label>
       <div class="col-12 col-sm-1">
