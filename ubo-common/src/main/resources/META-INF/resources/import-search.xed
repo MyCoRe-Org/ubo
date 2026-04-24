@@ -79,21 +79,21 @@
       <div class="col-12 col-sm">
         <xed:repeat xpath="sortBy/field" max="3">
           <div class="row">
-            <div class="col-1 d-flex align-items-center justify-content-end">
+            <div class="col-12 col-sm-1 d-flex align-items-center justify-content-end">
               <xed:output i18n="search.sort.by" />
             </div>
 
             <xed:bind xpath="@name">
-              <div class="col col-sm-1">
+              <div class="col col-sm-3">
                 <select class="form-select">
-                  <option value="year"         ><xed:output i18n="search.sort.year" /></option>
+                  <option value="year"         ><xed:output i18n="search.dozbib.year" /></option>
                   <option value="sortby_person"><xed:output i18n="document.creators.one" /></option>
                   <option value="sortby_title" ><xed:output i18n="document.title" /></option>
                 </select>
               </div>
             </xed:bind>
 
-            <div class="col-12 col-sm-2">
+            <div class="col-12 col-sm-4">
               <div class="input-group">
                 <xed:bind xpath="@order">
                   <select class="form-select">
