@@ -12,8 +12,9 @@
         <xed:post-processor xsl="mods-postprocessor.xsl" />
 
         <xed:bind xpath="/mods:mods">
-
-          <legend><xed:output i18n="ubo.newPublicationWizard.choosePublicationType" />:</legend>
+          <legend>
+            <xed:output value="concat(i18n:translate('ubo.newPublicationWizard.choosePublicationType'), ':')" />
+          </legend>
 
           <div>
             <p>
@@ -34,7 +35,7 @@
           <xed:bind xpath="mods:genre[@type='intern']">
             <div class="row mb-3">
               <label class="col-12 col-sm-3 col-form-label text-sm-end" for="genre">
-                <xed:output i18n="ubo.genre" />:
+                <xed:output value="concat(i18n:translate('ubo.genre'), ':')" />
               </label>
 
               <div class="col-12 col-sm-6">
@@ -47,8 +48,9 @@
 
           <xed:bind xpath="mods:relatedItem[@type='host']/mods:genre[@type='intern']">
             <div class="row mb-3">
-              <label class="col-12 col-sm-3 col-form-label text-sm-end" for="host"><xed:output i18n="ubo.newPublicationWizard.publishedIn" />:</label>
-
+              <label class="col-12 col-sm-3 col-form-label text-sm-end" for="host">
+                <xed:output value="concat(i18n:translate('ubo.newPublicationWizard.publishedIn'), ':')" />
+              </label>
               <div class="col-12 col-sm-6">
                 <select class="form-select" id="host" size="1">
                   <option value=""><xed:output i18n="search.select" /></option>
@@ -62,10 +64,10 @@
             <xed:if test="xed:call-java('org.mycore.ubo.AccessControl', 'currentUserIsAdmin')">
               <div class="row mb-3">
                 <label for="form" class="col-12 col-sm-3 col-form-label text-sm-end">
-                  <xed:output i18n="ubo.newPublicationWizard.targetForm" />
+                  <xed:output value="concat(i18n:translate('ubo.newPublicationWizard.targetForm'), ':')" />
                 </label>
                 <div class="col-12 col-sm-6">
-                  <select id="form" class="mycore-form-input custom-select">
+                  <select id="form" class="form-select">
                     <option value="edit-publication.xed"><xed:output i18n="ubo.newPublicationWizard.selectForm.standard" /></option>
                     <option value="edit-admin.xed"><xed:output i18n="ubo.newPublicationWizard.selectForm.admin" /></option>
                   </select>
