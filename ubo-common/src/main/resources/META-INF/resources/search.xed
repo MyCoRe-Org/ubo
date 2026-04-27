@@ -184,7 +184,7 @@
               <xed:bind xpath="condition[@field='origin'][@operator='=']/value">
                 <div class="row mb-3">
                   <label for="{xed:generate-id()}" class="col-12 col-sm-3 col-form-label text-sm-end">
-                    <xed:output i18n="ubo.department"/>:
+                    <xed:output i18n="ubo.department"/>
                   </label>
                   <div class="col-12 col-sm-6">
                     <select id="{xed:generate-id()}" class="autocomplete w-100 mycore-form-input custom-select">
