@@ -54,11 +54,11 @@
                  v-if="!searched&&person.pid.length===0"
                  disabled
                  :value="i18n['lsf.selectPerson']"
-                 class="btn btn-secondary mr-2" type="submit">
+                 class="btn btn-secondary me-2" type="submit">
           <input :title="i18n['index.person.datatoeditor']"
                  v-if="searched||person.pid.trim().length>0"
                  :value="i18n['lsf.selectPerson']"
-                 class="btn btn-secondary mr-2"
+                 class="btn btn-secondary me-2"
                  type="submit">
           <input :value="i18n['button.cancel']" class="btn btn-primary" type="button"
                  v-on:click="$emit('cancel')">

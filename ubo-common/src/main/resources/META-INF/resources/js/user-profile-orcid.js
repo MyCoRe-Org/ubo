@@ -453,7 +453,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         cl.add("btn");
         cl.add("btn-primary");
         cl.add("btn-xs");
-        cl.add("ml-2");
+        cl.add("ms-2");
 
         revokeButton.textContent = revokeText;
         revokeButton.addEventListener("click", async () => {
@@ -481,7 +481,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         cl.add("btn");
         cl.add("btn-secondary");
         cl.add("btn-xs");
-        cl.add("ml-2");
+        cl.add("ms-2");
 
         orcidListElement.appendChild(settingsButton);
         settingsButton.textContent = settingsText;
