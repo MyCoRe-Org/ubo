@@ -242,7 +242,6 @@ class LanguageSearchInput {
         this.searchInput.type = 'text';
         this.searchInput.classList.add('form-control');
         this.searchInput.classList.add('language-search-input');
-        this.searchInput.classList.add('mycore-form-input');
         this.searchInput.setAttribute('list', 'language-search-list');
         this.root.append(this.searchInput);
 
