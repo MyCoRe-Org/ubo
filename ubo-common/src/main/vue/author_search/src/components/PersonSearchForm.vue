@@ -18,23 +18,29 @@
       <form class="ubo-vue-form" role="form"
             v-on:submit.prevent="emit('search', {term:searchModel.term})">
         <input name="_xed_subselect_session" type="hidden">
-        <div class="form-group form-inline">
-          <label class="mycore-form-label" for="lastName">
+
+        <div class="row mb-3">
+          <label class="col-12 col-md-3 col-form-label text-md-end" for="lastName">
             {{ i18n["lsf.searchFor"] }}
           </label>
-          <input class="mycore-form-input"
-                 v-bind:class="{'is-invalid': !searchModel.validated }"
-                 v-model="searchModel.term" size="40"
-                 v-on:keypress="searchModel.validated=true"
-                 type="text" name="term"
-                 id="lastName">
-          <div class="invalid-feedback">
-            {{ i18n["person.search.invalid.search"] }}
+
+          <div class="col-12 col-md">
+            <input class="form-control"
+                   v-bind:class="{'is-invalid': !searchModel.validated }"
+                   v-model="searchModel.term" size="40"
+                   v-on:keypress="searchModel.validated=true"
+                   type="text" name="term"
+                   id="lastName">
+            <div class="invalid-feedback">
+              {{ i18n["person.search.invalid.search"] }}
+            </div>
           </div>
         </div>
-        <div class="cancel-submit form-group form-inline">
-          <label class="mycore-form-label"></label>
-          <input :value="i18n['button.search']" name="search" class="btn btn-primary" type="submit">
+
+        <div class="row mb-3 cancel-submit">
+          <div class="col offset-sm-3">
+            <input :value="i18n['button.search']" name="search" class="btn btn-sm btn-primary" type="submit">
+          </div>
         </div>
       </form>
     </div>
