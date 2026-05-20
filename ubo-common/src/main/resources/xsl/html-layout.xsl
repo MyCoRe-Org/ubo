@@ -115,9 +115,9 @@
     <div class="container bg-white">
       <div class="row">
           <div class="col">
-            <h3 class="text-muted">
+            <h1 class="h3 text-muted">
               <a href="https://www.uni-due.de/">Universität Duisburg-Essen</a>
-            </h3>
+            </h1>
           </div>
           <div class="col">
             <div class="nav nav-pills float-end">
@@ -171,9 +171,9 @@
           <xsl:copy-of select="body/*[not(@id='sidebar')][not(@id='breadcrumb')]" />
         </xsl:when>
         <xsl:otherwise>
-          <h3>
+          <h1 class="h3">
             <xsl:value-of select="i18n:translate('navigation.notAllowedToSeeThisPage')" />
-          </h3>
+          </h1>
         </xsl:otherwise>
       </xsl:choose>
     </section>
