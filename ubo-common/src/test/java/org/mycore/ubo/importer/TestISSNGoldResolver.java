@@ -9,21 +9,22 @@
 
 package org.mycore.ubo.importer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.jdom2.Element;
+import org.junit.jupiter.api.Test;
+import org.mycore.common.MCRConstants;
+import org.mycore.common.xml.MCRURIResolver;
+import org.mycore.test.MyCoReTest;
 
 import java.io.IOException;
 
-import org.jdom2.Element;
-import org.junit.Test;
-import org.mycore.common.MCRConstants;
-import org.mycore.common.MCRTestCase;
-import org.mycore.common.xml.MCRURIResolver;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TestISSNGoldResolver extends MCRTestCase {
+@MyCoReTest
+public class TestISSNGoldResolver {
 
     @Test
-    public void testGoldISSN() throws IOException {
+    public void testGoldISSN() {
         Element mods = MCRURIResolver.obtainInstance().resolve("gold:2074-9023");
 
         String title = mods.getChild("titleInfo", MCRConstants.MODS_NAMESPACE)
