@@ -29,7 +29,7 @@
           <button class="btn btn-primary" type="submit" xed:target="servlet" xed:href="BasketName2PIDEditor">
             Änderungen speichern
           </button>
-          <button class="btn btn-primary" type="submit" xed:target="cancel">
+          <button class="btn btn-secondary" type="submit" xed:target="cancel">
             <xed:output i18n="button.cancel"/>
           </button>
         </div>
