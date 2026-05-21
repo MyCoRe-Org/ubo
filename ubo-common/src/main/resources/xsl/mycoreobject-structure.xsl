@@ -461,7 +461,7 @@
     <xsl:param name="preview" select="false()" />
 
     <xsl:if test="$if">
-      <a role="button" class="ubo-btn-dialog btn btn-primary btn-sm" data-bs-toggle="modal" data-target="#{$action}-{/mycoreobject/@ID}" href="#">
+      <a role="button" class="ubo-btn-dialog btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#{$action}-{/mycoreobject/@ID}" href="#">
         <i class="fa fa-{$icon}" aria-hidden="true" />
         <xsl:text> </xsl:text>
         <xsl:value-of select="$button" />
