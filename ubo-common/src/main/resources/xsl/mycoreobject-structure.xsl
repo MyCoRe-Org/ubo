@@ -11,7 +11,8 @@
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  exclude-result-prefixes="xsl xalan encoder mods xlink i18n">
+  xmlns:solrutils="xalan://org.mycore.solr.MCRSolrUtils"
+  exclude-result-prefixes="xsl xalan encoder mods xlink i18n solrutils">
 
   <xsl:include href="mods-display.xsl" />
   <xsl:include href="coreFunctions.xsl" />
@@ -189,9 +190,9 @@
     <xsl:if test="not(//mods:mods/mods:relatedItem[@type='host'])">
 
       <xsl:variable name="solrURI">
-        <xsl:text>q=-parent%3A*+AND+facet_host_title%3A"</xsl:text>
-        <xsl:value-of select="encoder:encode(//mods:mods/mods:titleInfo[not(@type)][1]/mods:title,'UTF-8')" />
-        <xsl:text>"</xsl:text>
+        <xsl:text>q=-parent%3A*%20AND%20facet_host_title%3A%22</xsl:text>
+        <xsl:value-of select="encoder:encode(solrutils:escapeSearchValue(//mods:mods/mods:titleInfo[not(@type)][1]/mods:title),'UTF-8')" />
+        <xsl:text>%22</xsl:text>
       </xsl:variable>
 
       <xsl:variable name="numOrphans" select="document(concat('notnull:solr:rows=0&amp;',$solrURI))/response/result[@name='response']/@numFound" />
@@ -217,9 +218,9 @@
     <xsl:if test="not(//mods:mods/mods:relatedItem[@type='host'])">
 
       <xsl:variable name="solrURI">
-        <xsl:text>notnull:solr:fl=id&amp;rows=999&amp;sort%3Aid+desc&amp;q=-parent%3A*+AND+facet_host_title%3A"</xsl:text>
-        <xsl:value-of select="encoder:encode(//mods:mods/mods:titleInfo[not(@type)][1]/mods:title,'UTF-8')" />
-        <xsl:text>"</xsl:text>
+        <xsl:text>notnull:solr:fl=id&amp;rows=999&amp;sort%3Aid%20desc&amp;q=-parent%3A*%20AND%20facet_host_title%3A%22</xsl:text>
+        <xsl:value-of select="encoder:encode(solrutils:escapeSearchValue(//mods:mods/mods:titleInfo[not(@type)][1]/mods:title), 'UTF-8')" />
+        <xsl:text>%22</xsl:text>
       </xsl:variable>
 
       <xsl:for-each select="document($solrURI)/response/result[@name='response']/doc">
