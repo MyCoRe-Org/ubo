@@ -2,47 +2,48 @@ package org.mycore.ubo.publication;
 
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mycore.access.MCRAccessException;
-import org.mycore.common.MCRStoreTestCase;
 import org.mycore.common.content.MCRURLContent;
 import org.mycore.common.events.MCREvent;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectMetadataTest;
-import org.mycore.user2.*;
+import org.mycore.test.MCRJPAExtension;
+import org.mycore.test.MCRMetadataExtension;
+import org.mycore.test.MyCoReTest;
+import org.mycore.user2.MCRUser;
+import org.mycore.user2.MCRUserAttribute;
+import org.mycore.user2.MCRUserManager;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import java.io.IOException;
 import java.net.URL;
-
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class PublicationEventHandlerTest extends MCRStoreTestCase {
-
-    @Before
-    public void before() {
-        MCRRoleManager.addRole(new MCRRole("admin", new HashSet<>()));
-        MCRRoleManager.addRole(new MCRRole("submitter", new HashSet<>()));
-    }
+@MyCoReTest
+@ExtendWith({ MCRJPAExtension.class, MCRMetadataExtension.class })
+public class PublicationEventHandlerTest {
 
     /**
      * Tests the behavior of {@link PublicationEventHandler#handleObjectRepaired(MCREvent, MCRObject)},
      * especially the case of incorrectly matched {@link MCRUserAttribute attributes} and
      * non-unique correlation-IDS. See UBO-295.
-     * @throws SAXParseException in case of error
+
      * @throws MCRAccessException in case of error
+     * @throws IOException in case of error
+     * @throws JDOMException in case of error
      */
     @Test
-    public void testHandleObjectRepaired() throws SAXException, MCRAccessException, IOException, JDOMException {
+    public void testHandleObjectRepaired() throws MCRAccessException, IOException, JDOMException {
         // Arrange
         URL url1 = MCRObjectMetadataTest.class.getResource("/PublicationEventHandlerTest/junit_mods_00000001.xml");
         Document doc1 = new MCRURLContent(url1).asXML();
@@ -66,7 +67,7 @@ public class PublicationEventHandlerTest extends MCRStoreTestCase {
 
         // Assert
         List<MCRUser> users = MCRUserManager.listUsers(null, null, null, null);
-        Assert.assertEquals(2, users.size());
+        assertEquals(2, users.size());
 
         SortedSet<MCRUserAttribute> attributesUserMueller = users.get(0).getRealName().contains("Müller")
             ? users.get(0).getAttributes() : users.get(1).getAttributes();
@@ -74,22 +75,22 @@ public class PublicationEventHandlerTest extends MCRStoreTestCase {
         SortedSet<MCRUserAttribute> attributesUserMeyer = users.get(0).getRealName().contains("Meyer")
             ? users.get(0).getAttributes() : users.get(1).getAttributes();
 
-        Assert.assertEquals(4, attributesUserMueller.size());
+        assertEquals(4, attributesUserMueller.size());
         assertSingleAttribute(attributesUserMueller, "id_connection");
         MCRUserAttribute lsf = assertSingleAttribute(attributesUserMueller, "id_lsf");
-        Assert.assertEquals(lsf.getValue(), "11111");
-        Assert.assertEquals(2, attributesUserMueller.stream()
+        assertEquals(lsf.getValue(), "11111");
+        assertEquals(2, attributesUserMueller.stream()
             .filter(attr -> attr.getName().equals("id_scopus")).toList().size());
 
-        Assert.assertEquals(3, attributesUserMeyer.size());
+        assertEquals(3, attributesUserMeyer.size());
 
         assertSingleAttribute(attributesUserMeyer, "id_connection");
 
         lsf = assertSingleAttribute(attributesUserMeyer, "id_lsf");
-        Assert.assertEquals(lsf.getValue(), "12345");
+        assertEquals(lsf.getValue(), "12345");
 
         MCRUserAttribute scopus = assertSingleAttribute(attributesUserMeyer, "id_scopus");
-        Assert.assertEquals(scopus.getValue(), "1112222444");
+        assertEquals(scopus.getValue(), "1112222444");
     }
 
     /**
@@ -109,8 +110,8 @@ public class PublicationEventHandlerTest extends MCRStoreTestCase {
         MCRMetadataManager.fireRepairEvent(obj);
 
         List<MCRUser> users = MCRUserManager.listUsers(null, null, null, null);
-        Assert.assertEquals(1, users.size());
-        Assert.assertEquals("O'Reilly", users.get(0).getRealName());
+        assertEquals(1, users.size());
+        assertEquals("O'Reilly", users.get(0).getRealName());
     }
 
     /**
