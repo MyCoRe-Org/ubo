@@ -473,7 +473,7 @@
 
             <div class="modal-header">
               <h5 class="modal-title">
-                <xsl:value-of select="concat($button,' ?')" />
+                <xsl:value-of select="concat($button, '?')" />
               </h5>
             </div>
 
@@ -508,23 +508,22 @@
                 </xsl:for-each>
               </div>
 
-              <div class="modal-footer">
-                <button type="button" class="ubo-btn-cancel btn btn-secondary" data-bs-dismiss="modal">
-                  <i class="fa fa-times me-1" aria-hidden="true" />
-                  <xsl:value-of select="i18n:translate('button.cancel')"/>
+              <div class="modal-footer bg-light">
+                <button type="submit" class="ubo-btn-submit btn btn-sm btn-primary structure-action">
+                  <i class="fa fa-{$icon} me-1" aria-hidden="true" />
+                  <xsl:value-of select="$button" />
                 </button>
                 <xsl:if test="$preview">
-                  <button type="submit" name="preview" value="true" class="ubo-btn-preview btn btn-secondary">
+                  <button type="submit" name="preview" value="true" class="ubo-btn-preview btn btn-sm btn-secondary">
                     <i class="fa fa-{$icon} me-1" aria-hidden="true" />
                     <xsl:value-of select="i18n:translate('button.preview')"/>
                   </button>
                 </xsl:if>
-                <button type="submit" class="ubo-btn-submit btn btn-primary structure-action">
-                  <i class="fa fa-{$icon} me-1" aria-hidden="true" />
-                  <xsl:value-of select="$button" />
+                <button type="button" class="ubo-btn-cancel btn btn-sm btn-secondary" data-bs-dismiss="modal">
+                  <i class="fa fa-times me-1" aria-hidden="true" />
+                  <xsl:value-of select="i18n:translate('button.cancel')"/>
                 </button>
               </div>
-
             </form>
           </div>
         </div>
