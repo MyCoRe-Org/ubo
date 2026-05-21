@@ -475,9 +475,6 @@
               <h5 class="modal-title">
                 <xsl:value-of select="concat($button,' ?')" />
               </h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
-                <i class="fa fa-times" aria-hidden="true" />
-              </button>
             </div>
 
             <form action="{$ServletsBaseURL}RelationEditorServlet" method="post">
@@ -512,7 +509,7 @@
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="ubo-btn-cancel btn btn-secondary" data-dismiss="modal">
+                <button type="button" class="ubo-btn-cancel btn btn-secondary" data-bs-dismiss="modal">
                   <i class="fa fa-times me-1" aria-hidden="true" />
                   <xsl:value-of select="i18n:translate('button.cancel')"/>
                 </button>

@@ -28,7 +28,7 @@
             </p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               <xsl:value-of select="$button.cancel.text"/>
             </button>
             <button type="button" class="btn btn-primary" onclick="{$action}">
@@ -60,7 +60,7 @@
             </p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
               <xsl:value-of select="$button.confirm.text"/>
             </button>
           </div>
