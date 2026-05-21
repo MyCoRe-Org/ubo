@@ -129,7 +129,7 @@
     </xsl:if>
     <xsl:if test="$step = 'deleted'">
       <div class="section alert alert-success alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+        <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
           <xsl:text disable-output-escaping="yes">&amp;times;</xsl:text>
         </button>
         <p>
@@ -141,7 +141,7 @@
     </xsl:if>
     <xsl:if test="$step = 'changedPassword'">
       <div class="section alert alert-success alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+        <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
           <xsl:text disable-output-escaping="yes">&amp;times;</xsl:text>
         </button>
         <p>
