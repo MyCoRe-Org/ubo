@@ -1,11 +1,11 @@
 package org.mycore.ubo.local;
 
 import org.jdom2.Element;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mycore.common.MCRJPATestCase;
-import org.mycore.common.MCRTestCase;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mycore.test.MCRJPAExtension;
+import org.mycore.test.MyCoReTest;
 import org.mycore.user2.MCRRealmFactory;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserManager;
@@ -13,26 +13,16 @@ import org.mycore.user2.MCRUserManager;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class LocalSearcherTest extends MCRJPATestCase {
+@MyCoReTest
+@ExtendWith({ MCRJPAExtension.class })
+public class LocalSearcherTest {
 
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
+    static MCRUser u1, u2, u3;
 
-        createTestUsers();
-        endTransaction();
-        beginTransaction();
-    }
-
-    MCRUser u1;
-
-    MCRUser u2;
-
-    MCRUser u3;
-
-    private void createTestUsers() {
+    private static void createTestUsers() {
         u1 = new MCRUser("test1", MCRRealmFactory.getLocalRealm());
         u1.setRealName("Daniel Reimann");
 
@@ -47,6 +37,7 @@ public class LocalSearcherTest extends MCRJPATestCase {
 
     @Test
     public void search() {
+        createTestUsers();
         testWith("Daniel Reim", u1);
         testWith("Christian Schlösser", u2);
         testWith("Olga", u3);
@@ -57,17 +48,12 @@ public class LocalSearcherTest extends MCRJPATestCase {
         final LocalSearcher localSearcher = new LocalSearcher();
 
         final Element search = localSearcher.search(term);
-        Assert.assertTrue("Expect the user to appear in list", search.getChildren("person").stream()
+        assertTrue(search.getChildren("person").stream()
             .map(el -> el.getChild("id"))
             .filter(Objects::nonNull)
             .map(Element::getText)
             .anyMatch(id -> u1.getUserName().equals(id)));
 
-        Assert.assertEquals("Expect just one person as result", 1, search.getChildren("person").size());
-    }
-
-    @Override
-    public void tearDown() throws Exception {
-        super.tearDown();
+        assertEquals(1, search.getChildren("person").size());
     }
 }
