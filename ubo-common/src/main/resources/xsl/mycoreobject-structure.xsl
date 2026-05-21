@@ -117,7 +117,7 @@
 
   <xsl:template match="structure/children" mode="badge">
     <div>
-      <span class="ubo-badge-children badge bg-light">
+      <span class="ubo-badge-children badge bg-secondary">
         <a href="solr/select?q=parent:{ancestor::mycoreobject/@ID}&amp;sort=id+desc">
           <xsl:value-of select="count(child)" />
           <xsl:value-of select="i18n:translate('structure.editor.linked')"/>
@@ -199,7 +199,7 @@
 
       <xsl:if test="$numOrphans &gt; 0">
         <div class="ubo-orphans">
-          <span class="ubo-badge-orphans badge bg-light">
+          <span class="ubo-badge-orphans badge bg-secondary">
             <a href="solr/select?{$solrURI}&amp;sort=id+desc">
               <xsl:value-of select="$numOrphans" />
               <xsl:value-of select="i18n:translate('structure.editor.orphans')"/>
@@ -316,7 +316,7 @@
       <xsl:apply-templates select="." mode="badges"/>
     </xsl:for-each>
     <xsl:for-each select="service/servstates/servstate[@classid='state']">
-      <span class="label-info ubo-badge-status badge bg-light">
+      <span class="label-info ubo-badge-status badge bg-secondary">
         <xsl:value-of select="i18n:translate(concat('search.dozbib.status.', @categid))" />
       </span>
     </xsl:for-each>
@@ -326,7 +326,7 @@
   </xsl:template>
 
   <xsl:template match="@ID" mode="badge">
-    <span class="label-info ubo-badge-id badge bg-light">
+    <span class="label-info ubo-badge-id badge bg-secondary">
       <a href="{$ServletsBaseURL}DozBibEntryServlet?id={.}">
         <xsl:value-of select="concat('ID ',number(substring-after(.,'_mods_')))" />
       </a>
