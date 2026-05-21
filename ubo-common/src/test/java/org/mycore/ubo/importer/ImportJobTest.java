@@ -3,11 +3,11 @@ package org.mycore.ubo.importer;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mycore.common.MCRConstants;
-import org.mycore.common.MCRTestCase;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.common.xsl.MCRLazyStreamSource;
+import org.mycore.test.MyCoReTest;
 
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
@@ -15,10 +15,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class ImportJobTest extends MCRTestCase {
+@MyCoReTest
+public class ImportJobTest {
 
     public static final String DUEPUBLICO_IMPORT_CALL = "xslStyle:import/duepublico2mods:resource:ImportJobTest/duepublico_mods_00000001.xml";
 

@@ -9,17 +9,14 @@
 
 package org.mycore.ubo.dedup;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.mycore.test.MyCoReTest;
 
-import junit.framework.TestCase;
-import org.mycore.common.MCRJPATestCase;
-import org.mycore.ubo.dedup.DeDupCriteriaBuilder;
-import org.mycore.ubo.dedup.DeDupCriterion;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
-public class TestDeDupCriteriaBuilder extends MCRJPATestCase {
+@MyCoReTest
+public class TestDeDupCriteriaBuilder {
 
     private static DeDupCriteriaBuilder builder = new DeDupCriteriaBuilder();
 
