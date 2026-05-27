@@ -399,13 +399,13 @@
         <xsl:with-param name="selected" select="mods:relatedItem[@type='series']" />
         <xsl:with-param name="before"> - </xsl:with-param>
         <xsl:with-param name="mode" select="$mode" />
-        <xsl:with-param name="class" select="'in.series in-series'" />
+        <xsl:with-param name="class" select="concat('in-series in-series-', substring-after(mods:relatedItem[@type='host']/mods:genre/@valueURI, '#'))" />
       </xsl:call-template>
       <xsl:call-template name="output.line">
         <xsl:with-param name="selected" select="mods:relatedItem[@type='host']" />
         <xsl:with-param name="before"> - </xsl:with-param>
         <xsl:with-param name="mode" select="$mode" />
-        <xsl:with-param name="class" select="concat('in.host in-host-', substring-after(mods:relatedItem[@type='host']/mods:genre/@valueURI, '#'))" />
+        <xsl:with-param name="class" select="concat('in-host in-host-', substring-after(mods:relatedItem[@type='host']/mods:genre/@valueURI, '#'))" />
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
