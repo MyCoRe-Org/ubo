@@ -1122,7 +1122,7 @@
         </div>
         <div class="col-9">
           <a href="{$ServletsBaseURL}DozBibEntryServlet?id={@xlink:href}">
-            <xsl:apply-templates select="document(concat('notnull:mcrobject:',@xlink:href))//mods:mods" mode="cite" />
+            <xsl:apply-templates select="document(concat('notnull:mcrobject:', @xlink:href, '?expanded=true'))//mods:mods" mode="cite" />
           </a>
         </div>
       </div>

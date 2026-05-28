@@ -174,11 +174,11 @@ public class DozBibGNDCommands {
         return true; // (distance <= maxDistance);
     }
 
-    private void readPublications() throws IOException, JDOMException, SAXException, Exception {
+    private void readPublications() {
         LOGGER.info("Reading in all publications...");
 
         for (String oid : MCRXMLMetadataManager.getInstance().listIDsOfType("mods")) {
-            Element publication = MCRURIResolver.obtainInstance().resolve("mcrobject:" + oid);
+            Element publication = MCRURIResolver.obtainInstance().resolve("mcrobject:" + oid + "?expanded=true");
             publications.add(publication);
         }
     }
