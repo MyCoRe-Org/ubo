@@ -175,7 +175,7 @@
     <body>
       <xsl:call-template name="breadcrumb" />
       <xsl:call-template name="actions" />
-      <xsl:apply-templates select="mycoreobject" />
+      <xsl:apply-templates select="document(concat('notnull:mcrobject:', mycoreobject/@ID, '?expanded=true'))/mycoreobject" />
     </body>
   </html>
 </xsl:template>

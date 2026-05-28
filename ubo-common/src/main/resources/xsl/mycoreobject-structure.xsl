@@ -55,7 +55,7 @@
       <body>
         <xsl:call-template name="breadcrumb" />
         <div class="section ubo-structure">
-          <xsl:apply-templates select="mycoreobject" />
+          <xsl:apply-templates select="document(concat('notnull:mcrobject:', mycoreobject/@ID, '?expanded=true'))/mycoreobject" />
         </div>
         <xsl:call-template name="javascript" />
       </body>
@@ -94,7 +94,7 @@
   <xsl:template match="structure/parents/parent">
     <xsl:variable name="id" select="@xlink:href" />
 
-    <xsl:for-each select="document(concat('notnull:mcrobject:',$id))">
+    <xsl:for-each select="document(concat('notnull:mcrobject:',$id, '?expanded=true'))">
       <xsl:for-each select="mycoreobject">
         <xsl:call-template name="duplicates">
           <xsl:with-param name="id" select="$id"/>
@@ -139,7 +139,7 @@
     <xsl:variable name="id" select="@xlink:href" />
     <xsl:variable name="pos" select="position()" />
 
-    <xsl:for-each select="document(concat('notnull:mcrobject:',$id))">
+    <xsl:for-each select="document(concat('notnull:mcrobject:', $id, '?expanded=true'))">
       <xsl:if test="$pos &lt;= $displayLimit">
         <xsl:apply-templates select="mycoreobject" mode="pub-info">
           <xsl:with-param name="role">child</xsl:with-param>
@@ -177,7 +177,7 @@
         <xsl:variable name="duplicates" select="document(concat('dedup:search:', $from ,':', $id))"/>
 
         <xsl:for-each select="document($duplicates)/result/duplicate">
-            <xsl:apply-templates select="document(concat('mcrobject:',@id))/mycoreobject" mode="pub-info">
+            <xsl:apply-templates select="document(concat('mcrobject:', @id, '?expanded=true'))/mycoreobject" mode="pub-info">
                 <xsl:with-param name="role">duplicate</xsl:with-param>
                 <xsl:with-param name="from" select="$from"/>
                 <xsl:with-param name="duplicateOfID" select="$id"/>
@@ -227,7 +227,7 @@
         <xsl:sort select="number(substring-after(str[@name='id'],'_mods_'))" data-type="number" order="descending" />
 
         <xsl:if test="position() &lt;= $displayLimit">
-          <xsl:apply-templates select="document(concat('mcrobject:',str[@name='id']))/mycoreobject" mode="pub-info">
+          <xsl:apply-templates select="document(concat('mcrobject:', str[@name='id'], '?expanded=true'))/mycoreobject" mode="pub-info">
             <xsl:with-param name="role">orphan</xsl:with-param>
           </xsl:apply-templates>
         </xsl:if>
@@ -493,7 +493,7 @@
                         <xsl:variable name="id" select="substring-after(.,'=')" />
                         <input type="hidden" name="{$name}" value="{$id}" />
 
-                        <xsl:for-each select="document(concat('notnull:mcrobject:',$id))/mycoreobject">
+                        <xsl:for-each select="document(concat('notnull:mcrobject:', $id, '?expanded=true'))/mycoreobject">
                           <xsl:call-template name="badges">
                             <xsl:with-param name="role" select="'current'" />
                           </xsl:call-template>
