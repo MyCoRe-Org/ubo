@@ -122,7 +122,7 @@
       </xsl:when>
       <xsl:when test="string-length($obj_id)&gt;0">
         <!-- handle old way which may cause a double parsing of mcrobject: -->
-        <xsl:variable name="mcrobj" select="document(concat('mcrobject:',$obj_id))/mycoreobject" />
+        <xsl:variable name="mcrobj" select="document(concat('mcrobject:', $obj_id, '?expanded=true'))/mycoreobject" />
         <xsl:choose>
           <xsl:when test="acl:checkPermission($obj_id,'read')">
             <a href="{$WebApplicationBaseURL}receive/{$obj_id}{$HttpSession}">

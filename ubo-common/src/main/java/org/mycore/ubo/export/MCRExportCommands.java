@@ -45,7 +45,7 @@ public class MCRExportCommands {
     private static MCRContent buildExportCollection(List<String> objectIDs) {
         MCRBasket basket = MCRBasketManager.getOrCreateBasketInSession("objects");
         objectIDs.forEach(objectID -> {
-            basket.add(new MCRBasketEntry(objectID, "mcrobject:" + objectID));
+            basket.add(new MCRBasketEntry(objectID, "mcrobject:" + objectID + "?expanded=true"));
         });
 
         MCRExportCollection collection = new MCRExportCollection();
