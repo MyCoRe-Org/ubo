@@ -256,7 +256,7 @@
 
   <xsl:if test="$numlinks &gt; 0">
   <span class="badge bg-alternative me-1">
-    <a href="solr/select?q=link:{/mycoreobject/@ID}&amp;sort=year+desc">
+    <a href="{$ServletsBaseURL}solr/select?q=link:{/mycoreobject/@ID}&amp;sort=year+desc">
       <xsl:value-of select="concat(i18n:translate('ubo.relatedItem.link'),': ', $numlinks, ' ', i18n:translate('ubo.relatedItem.host.contains.publications'))"/>
     </a>
   </span>

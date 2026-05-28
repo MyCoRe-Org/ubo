@@ -118,7 +118,7 @@
   <xsl:template match="structure/children" mode="badge">
     <div>
       <span class="ubo-badge-children badge bg-secondary">
-        <a href="solr/select?q=parent:{ancestor::mycoreobject/@ID}&amp;sort=id+desc">
+        <a href="{$ServletsBaseURL}solr/select?q=parent:{ancestor::mycoreobject/@ID}&amp;sort=id+desc">
           <xsl:value-of select="count(child)" />
           <xsl:value-of select="i18n:translate('structure.editor.linked')"/>
         </a>
@@ -200,7 +200,7 @@
       <xsl:if test="$numOrphans &gt; 0">
         <div class="ubo-orphans">
           <span class="ubo-badge-orphans badge bg-secondary">
-            <a href="solr/select?{$solrURI}&amp;sort=id+desc">
+            <a href="{$ServletsBaseURL}solr/select?{$solrURI}&amp;sort=id+desc">
               <xsl:value-of select="$numOrphans" />
               <xsl:value-of select="i18n:translate('structure.editor.orphans')"/>
             </a>
