@@ -299,8 +299,12 @@
       <xsl:when test="mods:classification[contains(@authorityURI,'oa')]">
         <xsl:apply-templates select="mods:classification[contains(@authorityURI,'oa')][1]" mode="solrField" />
       </xsl:when>
-      <xsl:otherwise>
+      <xsl:when test="count(mods:relatedItem[@type='host']/mods:classification[contains(@authorityURI,'oa')][1]) &gt; 0">
         <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:classification[contains(@authorityURI,'oa')][1]" mode="solrField" />
+      </xsl:when>
+      <xsl:otherwise>
+        <field name="oa">unset</field>
+        <field name="oa_exact">unset</field>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
