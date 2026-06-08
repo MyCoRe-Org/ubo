@@ -303,8 +303,8 @@
         <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:classification[contains(@authorityURI,'oa')][1]" mode="solrField" />
       </xsl:when>
       <xsl:otherwise>
-        <field name="oa">unset</field>
-        <field name="oa_exact">unset</field>
+        <field name="oa">unchecked</field>
+        <field name="oa_exact">unchecked</field>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
