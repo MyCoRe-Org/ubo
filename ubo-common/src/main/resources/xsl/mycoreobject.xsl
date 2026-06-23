@@ -18,6 +18,7 @@
   exclude-result-prefixes="xsl xalan ubo mods xlink i18n dc mcr mcrxml encoder"
 >
 
+<xsl:import href="xslImport:additional"/>
 <xsl:include href="mods-dc-meta.xsl" />
 <xsl:include href="mods-highwire.xsl" />
 <xsl:include href="mods-display.xsl" />
@@ -235,12 +236,14 @@
     <div class="section">
       <div class="ubo_details card">
         <div class="card-body">
-          <xsl:apply-templates select="." mode="details_lines" />
+          <xsl:apply-templates select="." mode="details_lines"/>
+          <xsl:apply-templates select="." mode="additional-metadata"/>
         </div>
       </div>
     </div>
-
   </xsl:for-each>
+
+  <xsl:apply-templates select="." mode="additional-metadata-card"/>
 </xsl:template>
 
 <xsl:template name="printRelatedItem">
