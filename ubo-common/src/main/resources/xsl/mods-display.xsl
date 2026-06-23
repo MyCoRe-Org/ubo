@@ -29,8 +29,6 @@
   <xsl:param name="UBO.DESTATIS.omit.ID"/>
   <xsl:param name="UBO.Affiliation.Suppress.ConnectedIndicator"/>
 
-  <xsl:param name="current-user" select="document('notnull:user:current')/user"/>
-
   <!-- Expect one more author to be displayed as the last author is always getting displayed -->
   <xsl:param name="UBO.Initially.Visible.Authors" select="14" />
 
@@ -51,19 +49,13 @@
   <xsl:variable name="destatis"              select="document('notnull:classification:metadata:-1:children:destatis')/mycoreclass/categories" />
   <xsl:variable name="licenses"              select="document('notnull:classification:metadata:-1:children:licenses')/mycoreclass/categories" />
 
-  <xsl:variable name="fq">
-    <xsl:if test="not(check:currentUserIsAdmin())">
-      <xsl:value-of select="'+status:&quot;confirmed&quot; '"/>
-    </xsl:if>
-  </xsl:variable>
-
   <!-- ============ Ausgabe Publikationsart ============ -->
 
   <xsl:template name="pubtype">
     <xsl:variable name="genre" select="substring-after(mods:genre[@type='intern']/@valueURI, '#')"/>
 
     <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.genre')}"
-          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+genre:&quot;', $genre, '&quot;'))}')">
+          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat('+genre:&quot;', $genre, '&quot;'))}')">
       <xsl:apply-templates select="mods:genre[@type='intern']"/>
       <xsl:for-each select="mods:relatedItem[@type='host']/mods:genre[@type='intern']">
         <xsl:text> in </xsl:text>
@@ -96,7 +88,7 @@
 
   <xsl:template match="mods:mods/mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info">
     <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('facets.facet.subject')}"
-          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+subject:&quot;', substring-after(@valueURI,'#'),'&quot;'))}')">
+          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat('+subject:&quot;', substring-after(@valueURI,'#'),'&quot;'))}')">
       <xsl:call-template name="output.category">
         <xsl:with-param name="classID" select="'fachreferate'" />
         <xsl:with-param name="categID" select="substring-after(@valueURI,'#')" />
@@ -108,7 +100,7 @@
 
   <xsl:template match="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info">
     <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.department')}"
-          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+origin:&quot;', substring-after(@valueURI,'#'), '&quot;'))}')">
+          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat('+origin:&quot;', substring-after(@valueURI,'#'), '&quot;'))}')">
       <xsl:call-template name="output.category">
         <xsl:with-param name="classID" select="'ORIGIN'" />
         <xsl:with-param name="categID" select="substring-after(@valueURI,'#')" />
@@ -162,7 +154,7 @@
   <xsl:template match="mods:classification[contains(@authorityURI,'oa')]" mode="label-info">
     <xsl:variable name="category" select="$oa//category[@ID=substring-after(current()/@valueURI,'#')]" />
     <span class="badge oa-badge oa-badge-{$category/@ID} ubo-hover-pointer mr-1"
-          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+oa_exact:', $category/@ID))}')">
+          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat('+oa_exact:', $category/@ID))}')">
       <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
     </span>
   </xsl:template>
@@ -335,28 +327,9 @@
 
   <xsl:template match="mods:dateIssued" mode="label-year-badge">
     <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.search.year')}"
-          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+year:', text()))}')">
+          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat('+year:', text()))}')">
       <xsl:value-of select="text()" />
     </span>
-  </xsl:template>
-
-  <!-- ========== ORCID status and publish button ========== -->
-  <xsl:variable name="current-user-connection-id" select="$current-user/attributes/attribute[@name='id_connection']/@value"/>
-
-  <xsl:template name="orcid-status">
-    <xsl:variable name="publication-connection-ids" select="ancestor::mycoreobject//mods:nameIdentifier[@type='connection']"/>
-
-    <xsl:if test="$publication-connection-ids = $current-user-connection-id">
-      <div class="orcid-status" data-id="{ancestor::mycoreobject/@ID}"/>
-    </xsl:if>
-  </xsl:template>
-
-  <xsl:template name="orcid-publish">
-    <xsl:variable name="publication-connection-ids" select="ancestor::mycoreobject//mods:nameIdentifier[@type='connection']"/>
-
-    <xsl:if test="$publication-connection-ids = $current-user-connection-id">
-      <div class="orcid-publish d-inline" data-id="{ancestor::mycoreobject/@ID}"/>
-    </xsl:if>
   </xsl:template>
 
   <!-- ========== URI bauen, um Dubletten zu finden ========== -->

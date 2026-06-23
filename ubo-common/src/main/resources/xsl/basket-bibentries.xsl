@@ -12,6 +12,7 @@
 >
 
 <xsl:include href="mods-display.xsl" />
+<xsl:include href="ubo-orcid.xsl" />
 <xsl:include href="coreFunctions.xsl" />
 <xsl:include href="csl-export-gui.xsl" />
 
@@ -152,7 +153,10 @@
       <div class="col">
         <xsl:call-template name="label-year" />
         <xsl:call-template name="pubtype" />
-        <xsl:call-template name="orcid-status" />
+        <xsl:call-template name="orcid-status">
+          <xsl:with-param name="mycore-id" select="@ID"/>
+          <xsl:with-param name="publication-connection-ids" select="//mods:mods//mods:nameIdentifier[@type='connection']"/>
+        </xsl:call-template>
       </div>
       <div class="col">
         <xsl:call-template name="buttons">
