@@ -64,7 +64,7 @@ public class MailReportJob extends MCRCronjob {
 
                 LOGGER.info("{} emails sent", preparedEmails.size());
                 return null;
-            }, MCRSystemUserInformation.getSystemUserInstance()).call();
+            }, MCRSystemUserInformation.SYSTEM_USER).call();
         } catch (Exception e) {
             LOGGER.error("Failed to send emails: {}", e.getMessage());
         }
@@ -108,7 +108,7 @@ public class MailReportJob extends MCRCronjob {
     }
 
     private String resolveURI(String uri, String filetype, String prefix) throws IOException, TransformerException {
-        MCRSourceContent content = MCRSourceContent.getInstance(uri);
+        MCRSourceContent content = MCRSourceContent.createInstance(uri);
 
         Path tempFile = Files.createTempFile("att_" + prefix + "_", "." + filetype);
         try (InputStream inputStream = content.getContentInputStream();

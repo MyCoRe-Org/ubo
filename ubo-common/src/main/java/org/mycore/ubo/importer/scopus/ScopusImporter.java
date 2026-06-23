@@ -82,7 +82,7 @@ class ScopusImporter {
 
     public ScopusImporter() {
         String className = MCRConfiguration2.getStringOrThrow("UBO.Importer.ImportIdProvider.Scopus");
-        importIdProvider = MCRConfiguration2.instantiateClass(className);
+        importIdProvider = MCRConfiguration2.instantiateClass(ImportIdProvider.class, className);
     }
 
     public MCRObject doImport(String scopusID) throws MCRPersistenceException, MCRAccessException {

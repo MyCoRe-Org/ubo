@@ -4,11 +4,19 @@
  * - source of generic ubo-bootstrap.css
  */
 
-// override bootstrap sass variables
+// set ubo default variables
+@import "ubo-default-variables";
+
+// set bootstrap sass variables and functions
+@import "../webjars/bootstrap/5.3.8/scss/functions";
+@import "../webjars/bootstrap/5.3.8/scss/variables";
+
+
+// override bootstrap sass variables and functions
 @import "ubo-variables";
 
 // current stable bootstrap version
-@import "../webjars/bootstrap/4.4.1/scss/bootstrap";
+@import "../webjars/bootstrap/5.3.8/scss/bootstrap";
 
 // ubo specific settings
 @import "ubo-buttons";

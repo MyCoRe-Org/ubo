@@ -80,7 +80,7 @@ public class DeduplicationCriterionResolver implements URIResolver {
         if(Objects.equals("base", relation) || Objects.equals("parent", relation)) {
             Set<DeDupCriterion> criteria = deDupCriteriaBuilder.buildFromMODS(mods);
             criteria.forEach(criterion -> {
-                possibleDuplicates.addAll(DeduplicationKeyManager.getInstance().getDuplicates(id.toString(), criterion.getType(), criterion.getKey()));
+                possibleDuplicates.addAll(DeduplicationKeyManager.obtainInstance().getDuplicates(id.toString(), criterion.getType(), criterion.getKey()));
             });
         } else {
             for (Element host : deDupCriteriaBuilder.getNodes(mods, "mods:relatedItem[@type='host']")) {
@@ -90,7 +90,7 @@ public class DeduplicationCriterionResolver implements URIResolver {
                     continue;
                 }
                deDupCriteriaBuilder.buildFromMODS(host).forEach(criterion -> {
-                   possibleDuplicates.addAll(DeduplicationKeyManager.getInstance().getDuplicates(id.toString(), criterion.getType(), criterion.getKey()));
+                   possibleDuplicates.addAll(DeduplicationKeyManager.obtainInstance().getDuplicates(id.toString(), criterion.getType(), criterion.getKey()));
                });
             }
         }

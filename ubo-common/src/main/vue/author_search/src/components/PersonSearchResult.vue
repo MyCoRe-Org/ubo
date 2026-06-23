@@ -39,7 +39,7 @@
         <table class="table table-sm">
           <tbody>
           <tr v-for="person in searchresults.personList" :key="person.pid">
-            <td class="align-top" >
+            <td>
               <i v-bind:class="'fas ubo-picker-service-' + person.service" v-bind:title="person.service"/>
 
               {{ person.displayName }}
@@ -56,12 +56,12 @@
                 </template>
               </ul>
             </td>
-            <td class="align-top">
-              <button :title="i18n['index.person.datatoeditor']" class="btn btn-secondary" v-on:click.prevent="submit(person)">
+            <td class="align-middle text-end">
+              <button :title="i18n['index.person.datatoeditor']" class="btn btn-sm btn-secondary" v-on:click.prevent="submit(person)">
                 {{ i18n['lsf.selectPerson']}}
               </button>
             </td>
-            <td class="align-top">
+            <td class="align-middle">
               <a :title="i18n['index.person.datatoform']" href="#" class="roundedButton text-secondary"
                  v-on:click.prevent="apply(person)">
                 <i class="far fa-arrow-alt-circle-right fa-lg"></i>

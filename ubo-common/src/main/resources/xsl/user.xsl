@@ -66,7 +66,7 @@
 
   <article class="card mb-3" xml:lang="de">
     <div class="card-body">
-      <div class="text-right mb-3">
+      <div class="text-end mb-3">
         <div id="buttons" class="btn-group">
           <xsl:apply-templates select="." mode="actions" />
         </div>
@@ -129,7 +129,7 @@
     </xsl:if>
     <xsl:if test="$step = 'deleted'">
       <div class="section alert alert-success alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+        <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
           <xsl:text disable-output-escaping="yes">&amp;times;</xsl:text>
         </button>
         <p>
@@ -141,7 +141,7 @@
     </xsl:if>
     <xsl:if test="$step = 'changedPassword'">
       <div class="section alert alert-success alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+        <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
           <xsl:text disable-output-escaping="yes">&amp;times;</xsl:text>
         </button>
         <p>
@@ -301,7 +301,7 @@
   <script src="{$WebApplicationBaseURL}modules/orcid2/js/orcid-auth.js"/>
 
   <h3>
-    <span class="far fa-hand-point-right mr-1" aria-hidden="true" />
+    <span class="far fa-hand-point-right me-1" aria-hidden="true" />
     <xsl:text> </xsl:text>
     <xsl:value-of select="i18n:translate('orcid.integration.pending.headline')" />
   </h3>

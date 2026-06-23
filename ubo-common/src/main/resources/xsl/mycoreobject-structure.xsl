@@ -11,7 +11,8 @@
   xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  exclude-result-prefixes="xsl xalan encoder mods xlink i18n">
+  xmlns:solrutils="xalan://org.mycore.solr.MCRSolrUtils"
+  exclude-result-prefixes="xsl xalan encoder mods xlink i18n solrutils">
 
   <xsl:include href="mods-display.xsl" />
   <xsl:include href="coreFunctions.xsl" />
@@ -54,7 +55,7 @@
       <body>
         <xsl:call-template name="breadcrumb" />
         <div class="section ubo-structure">
-          <xsl:apply-templates select="mycoreobject" />
+          <xsl:apply-templates select="document(concat('notnull:mcrobject:', mycoreobject/@ID, '?expanded=true'))/mycoreobject" />
         </div>
         <xsl:call-template name="javascript" />
       </body>
@@ -93,7 +94,7 @@
   <xsl:template match="structure/parents/parent">
     <xsl:variable name="id" select="@xlink:href" />
 
-    <xsl:for-each select="document(concat('notnull:mcrobject:',$id))">
+    <xsl:for-each select="document(concat('notnull:mcrobject:',$id, '?expanded=true'))">
       <xsl:for-each select="mycoreobject">
         <xsl:call-template name="duplicates">
           <xsl:with-param name="id" select="$id"/>
@@ -116,8 +117,8 @@
 
   <xsl:template match="structure/children" mode="badge">
     <div>
-      <span class="ubo-badge-children badge badge-light">
-        <a href="solr/select?q=parent:{ancestor::mycoreobject/@ID}&amp;sort=id+desc">
+      <span class="ubo-badge-children badge bg-secondary">
+        <a href="{$ServletsBaseURL}solr/select?q=parent:{ancestor::mycoreobject/@ID}&amp;sort=id+desc">
           <xsl:value-of select="count(child)" />
           <xsl:value-of select="i18n:translate('structure.editor.linked')"/>
         </a>
@@ -138,7 +139,7 @@
     <xsl:variable name="id" select="@xlink:href" />
     <xsl:variable name="pos" select="position()" />
 
-    <xsl:for-each select="document(concat('notnull:mcrobject:',$id))">
+    <xsl:for-each select="document(concat('notnull:mcrobject:', $id, '?expanded=true'))">
       <xsl:if test="$pos &lt;= $displayLimit">
         <xsl:apply-templates select="mycoreobject" mode="pub-info">
           <xsl:with-param name="role">child</xsl:with-param>
@@ -176,7 +177,7 @@
         <xsl:variable name="duplicates" select="document(concat('dedup:search:', $from ,':', $id))"/>
 
         <xsl:for-each select="document($duplicates)/result/duplicate">
-            <xsl:apply-templates select="document(concat('mcrobject:',@id))/mycoreobject" mode="pub-info">
+            <xsl:apply-templates select="document(concat('mcrobject:', @id, '?expanded=true'))/mycoreobject" mode="pub-info">
                 <xsl:with-param name="role">duplicate</xsl:with-param>
                 <xsl:with-param name="from" select="$from"/>
                 <xsl:with-param name="duplicateOfID" select="$id"/>
@@ -189,17 +190,17 @@
     <xsl:if test="not(//mods:mods/mods:relatedItem[@type='host'])">
 
       <xsl:variable name="solrURI">
-        <xsl:text>q=-parent%3A*+AND+facet_host_title%3A"</xsl:text>
-        <xsl:value-of select="encoder:encode(//mods:mods/mods:titleInfo[not(@type)][1]/mods:title,'UTF-8')" />
-        <xsl:text>"</xsl:text>
+        <xsl:text>q=-parent%3A*%20AND%20facet_host_title%3A%22</xsl:text>
+        <xsl:value-of select="encoder:encode(solrutils:escapeSearchValue(//mods:mods/mods:titleInfo[not(@type)][1]/mods:title),'UTF-8')" />
+        <xsl:text>%22</xsl:text>
       </xsl:variable>
 
       <xsl:variable name="numOrphans" select="document(concat('notnull:solr:rows=0&amp;',$solrURI))/response/result[@name='response']/@numFound" />
 
       <xsl:if test="$numOrphans &gt; 0">
         <div class="ubo-orphans">
-          <span class="ubo-badge-orphans badge badge-light">
-            <a href="solr/select?{$solrURI}&amp;sort=id+desc">
+          <span class="ubo-badge-orphans badge bg-secondary">
+            <a href="{$ServletsBaseURL}solr/select?{$solrURI}&amp;sort=id+desc">
               <xsl:value-of select="$numOrphans" />
               <xsl:value-of select="i18n:translate('structure.editor.orphans')"/>
             </a>
@@ -217,16 +218,16 @@
     <xsl:if test="not(//mods:mods/mods:relatedItem[@type='host'])">
 
       <xsl:variable name="solrURI">
-        <xsl:text>notnull:solr:fl=id&amp;rows=999&amp;sort%3Aid+desc&amp;q=-parent%3A*+AND+facet_host_title%3A"</xsl:text>
-        <xsl:value-of select="encoder:encode(//mods:mods/mods:titleInfo[not(@type)][1]/mods:title,'UTF-8')" />
-        <xsl:text>"</xsl:text>
+        <xsl:text>notnull:solr:fl=id&amp;rows=999&amp;sort%3Aid%20desc&amp;q=-parent%3A*%20AND%20facet_host_title%3A%22</xsl:text>
+        <xsl:value-of select="encoder:encode(solrutils:escapeSearchValue(//mods:mods/mods:titleInfo[not(@type)][1]/mods:title), 'UTF-8')" />
+        <xsl:text>%22</xsl:text>
       </xsl:variable>
 
       <xsl:for-each select="document($solrURI)/response/result[@name='response']/doc">
         <xsl:sort select="number(substring-after(str[@name='id'],'_mods_'))" data-type="number" order="descending" />
 
         <xsl:if test="position() &lt;= $displayLimit">
-          <xsl:apply-templates select="document(concat('mcrobject:',str[@name='id']))/mycoreobject" mode="pub-info">
+          <xsl:apply-templates select="document(concat('mcrobject:', str[@name='id'], '?expanded=true'))/mycoreobject" mode="pub-info">
             <xsl:with-param name="role">orphan</xsl:with-param>
           </xsl:apply-templates>
         </xsl:if>
@@ -315,17 +316,17 @@
       <xsl:call-template name="pubtype" />
     </xsl:for-each>
     <xsl:for-each select="service/servstates/servstate[@classid='state']">
-      <span class="label-info ubo-badge-status badge badge-light">
+      <span class="label-info ubo-badge-status badge bg-secondary">
         <xsl:value-of select="i18n:translate(concat('search.dozbib.status.', @categid))" />
       </span>
     </xsl:for-each>
     <xsl:if test="$role='duplicate'">
-      <span class="label-info ubo-badge-dublicate badge badge-primary">Evtl. Dublette</span>
+      <span class="label-info ubo-badge-dublicate badge bg-primary">Evtl. Dublette</span>
     </xsl:if>
   </xsl:template>
 
   <xsl:template match="@ID" mode="badge">
-    <span class="label-info ubo-badge-id badge badge-light">
+    <span class="label-info ubo-badge-id badge bg-secondary">
       <a href="{$ServletsBaseURL}DozBibEntryServlet?id={.}">
         <xsl:value-of select="concat('ID ',number(substring-after(.,'_mods_')))" />
       </a>
@@ -352,7 +353,7 @@
     <xsl:param name="duplicateOfID" />
 
     <div class="ubo-actions">
-      <a role="button" class="ubo-btn-details btn btn-primary btn-sm" href="#details-{@ID}" data-toggle="collapse"
+      <a role="button" class="ubo-btn-details btn btn-primary btn-sm" href="#details-{@ID}" data-bs-toggle="collapse"
         aria-expanded="false" aria-controls="details-{@ID}">
         <i class="fa fa-info" />
         <xsl:text> Details</xsl:text>
@@ -461,7 +462,7 @@
     <xsl:param name="preview" select="false()" />
 
     <xsl:if test="$if">
-      <a role="button" class="ubo-btn-dialog btn btn-primary btn-sm" data-toggle="modal" data-target="#{$action}-{/mycoreobject/@ID}" href="#">
+      <a role="button" class="ubo-btn-dialog btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#{$action}-{/mycoreobject/@ID}" href="#">
         <i class="fa fa-{$icon}" aria-hidden="true" />
         <xsl:text> </xsl:text>
         <xsl:value-of select="$button" />
@@ -473,11 +474,8 @@
 
             <div class="modal-header">
               <h5 class="modal-title">
-                <xsl:value-of select="concat($button,' ?')" />
+                <xsl:value-of select="concat($button, '?')" />
               </h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
-                <i class="fa fa-times" aria-hidden="true" />
-              </button>
             </div>
 
             <form action="{$ServletsBaseURL}RelationEditorServlet" method="post">
@@ -495,7 +493,7 @@
                         <xsl:variable name="id" select="substring-after(.,'=')" />
                         <input type="hidden" name="{$name}" value="{$id}" />
 
-                        <xsl:for-each select="document(concat('notnull:mcrobject:',$id))/mycoreobject">
+                        <xsl:for-each select="document(concat('notnull:mcrobject:', $id, '?expanded=true'))/mycoreobject">
                           <xsl:call-template name="badges">
                             <xsl:with-param name="role" select="'current'" />
                           </xsl:call-template>
@@ -511,23 +509,22 @@
                 </xsl:for-each>
               </div>
 
-              <div class="modal-footer">
-                <button type="button" class="ubo-btn-cancel btn btn-secondary" data-dismiss="modal">
-                  <i class="fa fa-times mr-1" aria-hidden="true" />
-                  <xsl:value-of select="i18n:translate('button.cancel')"/>
+              <div class="modal-footer bg-light">
+                <button type="submit" class="ubo-btn-submit btn btn-sm btn-primary structure-action">
+                  <i class="fa fa-{$icon} me-1" aria-hidden="true" />
+                  <xsl:value-of select="$button" />
                 </button>
                 <xsl:if test="$preview">
-                  <button type="submit" name="preview" value="true" class="ubo-btn-preview btn btn-secondary">
-                    <i class="fa fa-{$icon} mr-1" aria-hidden="true" />
+                  <button type="submit" name="preview" value="true" class="ubo-btn-preview btn btn-sm btn-secondary">
+                    <i class="fa fa-{$icon} me-1" aria-hidden="true" />
                     <xsl:value-of select="i18n:translate('button.preview')"/>
                   </button>
                 </xsl:if>
-                <button type="submit" class="ubo-btn-submit btn btn-primary structure-action">
-                  <i class="fa fa-{$icon} mr-1" aria-hidden="true" />
-                  <xsl:value-of select="$button" />
+                <button type="button" class="ubo-btn-cancel btn btn-sm btn-secondary" data-bs-dismiss="modal">
+                  <i class="fa fa-times me-1" aria-hidden="true" />
+                  <xsl:value-of select="i18n:translate('button.cancel')"/>
                 </button>
               </div>
-
             </form>
           </div>
         </div>
