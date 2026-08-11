@@ -47,7 +47,7 @@
           </xed:bind>
 
           <xed:bind xpath="mods:relatedItem[@type='host']/mods:genre[@type='intern']">
-            <div class="row mb-3">
+            <div id="ubo-select-host" class="row mb-3">
               <label class="col-12 col-sm-3 col-form-label text-sm-end" for="host">
                 <xed:output value="concat(i18n:translate('ubo.newPublicationWizard.publishedIn'), ':')" />
               </label>
@@ -112,6 +112,7 @@
 
               jQuery('#host').empty();
               jQuery('#host').parent().show();
+              jQuery('#ubo-select-host').show();
 
               var id = jQuery('#genre option:selected')[0].value;
               var category = findCategory(id);
@@ -127,10 +128,10 @@
                   }
                 });
                 if (hosts.length == '1' &amp;&amp; hosts[0] == 'standalone') {
-                  jQuery('#host').parent().hide();
+                  jQuery('#ubo-select-host').hide();
                 }
               } else {
-                jQuery('#host').parent().hide();
+                jQuery('#ubo-select-host').hide();
               }
             }
 
