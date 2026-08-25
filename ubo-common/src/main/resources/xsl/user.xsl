@@ -25,6 +25,7 @@
 <xsl:param name="UBO.LSF.Link" />
 <xsl:param name="UBO.Scopus.Author.Link" />
 <xsl:param name="UBO.ORCID2.InfoURL" />
+<xsl:param name="UBO.Additional.Displayed.Attributes" />
 <xsl:param name="MCR.ORCID2.LinkURL" />
 <xsl:param name="MCR.ORCID2.OAuth.ClientSecret" select="''"/>
 <xsl:param name="MCR.ORCID2.OAuth.Scope" select="''"/>
@@ -78,7 +79,7 @@
         <xsl:apply-templates select="realName" />
         <xsl:apply-templates select="eMail" />
         <xsl:apply-templates select="@name" />
-        <xsl:apply-templates select="attributes/attribute[starts-with(@name, 'id_')]" />
+        <xsl:apply-templates select="attributes/attribute" />
       </table>
     </div>
   </article>
@@ -236,6 +237,28 @@
     </td>
   </tr>
 </xsl:template>
+
+  <xsl:template match="attribute[contains($UBO.Additional.Displayed.Attributes, @name)]">
+    <xsl:variable name="label">
+      <xsl:choose>
+        <xsl:when test="i18n:exists(concat('user.profile.attribute.label.', @name))">
+          <xsl:value-of select="i18n:translate(concat('user.profile.attribute.label.', @name))"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="@name"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <tr>
+      <th scope="row">
+        <xsl:value-of select="concat($label, ':')"/>
+      </th>
+      <td>
+        <xsl:value-of select="@value"/>
+      </td>
+    </tr>
+  </xsl:template>
 
 <xsl:template name="orcid">
   <article class="card mb-3" xml:lang="de">
