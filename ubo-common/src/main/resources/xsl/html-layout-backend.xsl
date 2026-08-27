@@ -273,7 +273,7 @@
                 <xsl:value-of select="concat('nav-item dropdown', $class_active, ' ', @class)"/>
               </xsl:attribute>
             </xsl:if>
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false">
               <xsl:call-template name="output.label.for.lang" />
             </a>

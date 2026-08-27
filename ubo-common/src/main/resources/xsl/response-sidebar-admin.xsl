@@ -100,7 +100,7 @@
         <table class="table table-borderless w-100 mb-0">
           <tbody>
             <tr>
-              <td class="w-75 py-0 text-right">
+              <td class="w-75 py-0 text-end">
                 <xsl:value-of select="$label"/>:
               </td>
               <td class="py-0" align="left">

@@ -57,8 +57,8 @@
              <label class="mycore-form-label">
 	       Syntax:
 	     </label>
-             <div class="col-sm pl-0"> 
-               <ul class="pl-3">
+             <div class="col-sm ps-0">
+               <ul class="ps-3">
                  <xed:multi-lang>
                    <xed:lang xml:lang="de">
                      <li>Suchfeld Operator Zielwert</li>
@@ -81,8 +81,8 @@
                  <xed:lang xml:lang="en">Examples:</xed:lang>
                </xed:multi-lang>
              </label>
-             <div class="col-sm pl-0">
-               <ul class="pl-3">
+             <div class="col-sm ps-0">
+               <ul class="ps-3">
                  <li>title contains Faktoren</li>
                  <li>(title contains Faktoren) or (nid_lsf = 2809)</li>
                  <li>((title contains Faktoren) or (nid_lsf = 2809)) <br/> and (year = 2006)</li>

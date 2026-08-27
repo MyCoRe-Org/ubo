@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<webpage lastModified="$Date: 2009-07-09 12:25:56 +0200 (Do, 09 Jul 2009) $" id="dozbib.import.list" xmlns:i18n="http://www.mycore.org/i18n">
+<webpage lastModified="$Date: 2026-04-23 10:06:56 +0200 (Do, 23 Apr 2026) $" id="dozbib.import.list" xmlns:i18n="http://www.mycore.org/i18n">
   <title>
     <i18n:de>
       Literaturliste importieren
@@ -55,150 +55,191 @@
             </legend>
 
             <xed:bind xpath="partOf">
-              <div class="form-group form-inline ubo-import-list-select-partOf">
-                <label for="{generate-id()}" class="mycore-form-label text-nowrap">
+              <div class="row mb-3 ubo-import-list-select-partOf">
+                <label for="{generate-id()}" class="col-12 col-sm-3 col-form-label text-nowrap text-sm-end">
                   <xed:output i18n="ubo.partOf" />:
                 </label>
-                <select id="{generate-id()}" class="{$xed-validation-marker} mycore-form-input form-control custom-select">
-                  <option value="">
-                    <xed:output i18n="search.select"/>
-                  </option>
-                  <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:partOf" />
-                </select>
+
+                <div class="col-12 col-sm-6">
+                  <select id="{generate-id()}" class="{$xed-validation-marker} form-control form-select">
+                    <option value="">
+                      <xed:output i18n="search.select"/>
+                    </option>
+                    <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:partOf" />
+                  </select>
+                </div>
               </div>
             </xed:bind>
 
             <xed:bind xpath="status">
-              <div class="form-group form-inline ubo-import-list-select-status">
-                <label for="{generate-id()}" class="mycore-form-label text-nowrap">
+              <div class="row mb-3 ubo-import-list-select-status">
+                <label for="{generate-id()}" class="col-12 col-sm-3 col-form-label text-nowrap text-sm-end">
                   <xed:output i18n="search.dozbib.status" />:
                 </label>
-                <select id="{generate-id()}" class="{$xed-validation-marker}  mycore-form-input form-control custom-select">
-                  <option value="">
-                    <xed:output i18n="search.select"/>
-                  </option>
-                  <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:state"/>
-                </select>
+
+                <div class="col-12 col-sm-6">
+                  <select id="{generate-id()}" class="{$xed-validation-marker} form-control form-select">
+                    <option value="">
+                      <xed:output i18n="search.select"/>
+                    </option>
+                    <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:state"/>
+                  </select>
+                </div>
               </div>
             </xed:bind>
 
             <xed:bind xpath="ubogenre">
-              <div class="form-group form-inline ubo-import-list-select-ubogenre">
-                <label for="{generate-id()}" class="mycore-form-label text-nowrap">
+              <div class="row mb-3 ubo-import-list-select-ubogenre">
+                <label for="{generate-id()}" class="col-12 col-sm-3 col-form-label text-nowrap text-sm-end">
                   <xed:output i18n="ubo.genre" />:
                 </label>
-                <select id="{generate-id()}" class="{$xed-validation-marker}  mycore-form-input form-control custom-select">
-                  <option value="">
-                    <xed:output i18n="search.select"/>
-                  </option>
-                  <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:ubogenre" />
-                </select>
+                <div class="col-12 col-sm-6">
+                  <select id="{generate-id()}" class="{$xed-validation-marker} form-control form-select">
+                    <option value="">
+                      <xed:output i18n="search.select"/>
+                    </option>
+                    <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:ubogenre" />
+                  </select>
+                </div>
               </div>
             </xed:bind>
 
-            <hr/>
+            <div class="row mb-3">
+              <hr class="col-12 col-sm-9"/>
+            </div>
 
             <xed:repeat xpath="subject" max="5">
-              <div class="form-group form-inline ubo-import-list-select-fachreferate">
-                <label for="subject" class="mycore-form-label text-nowrap">
+              <div class="row mb-3 ubo-import-list-select-fachreferate">
+                <label for="subject" class="col-12 col-sm-3 col-form-label text-nowrap text-sm-end">
                   <xed:output i18n="ubo.subject" />:
                 </label>
-                <select class="autocomplete {$xed-validation-marker} mycore-form-input" data-container="form-group" data-display="static">
-                  <option value="">
-                    <xed:output i18n="search.select" />
-                  </option>
-                  <xed:include uri="xslStyle:mycoreclass-options?omitSubtext={$UBO.Editor.import-list.omitSubtext}:classification:metadata:-1:children:fachreferate" />
-                </select>
-                <xed:controls />
+                <div class="col-12 col-sm-6">
+                  <div class="input-group">
+                    <select class="autocomplete {$xed-validation-marker} autocomplete mycore-form-input custom-select" data-container="form-group" data-display="static">
+                      <option value="">
+                        <xed:output i18n="search.select" />
+                      </option>
+                      <xed:include uri="xslStyle:mycoreclass-options?omitSubtext={$UBO.Editor.import-list.omitSubtext}:classification:metadata:-1:children:fachreferate" />
+                    </select>
+                    <xed:controls />
+                  </div>
+                </div>
               </div>
             </xed:repeat>
 
             <xed:bind xpath="origin">
-              <div class="form-group form-inline ubo-import-list-select-origin">
-                <label for="{generate-id()}" class="mycore-form-label text-nowrap">
+              <div class="row mb-3 ubo-import-list-select-origin">
+                <label for="{generate-id()}" class="col-12 col-sm-3 col-form-label text-nowrap text-sm-end">
                   <xed:output i18n="ubo.department" />:
                 </label>
-                <select id="{generate-id()}" class="autocomplete {$xed-validation-marker} mycore-form-input" data-container="form-group" data-display="static">
-                  <option value=""><xed:output i18n="search.select" /></option>
-                  <xed:include uri="xslStyle:mycoreclass-options?omitSubtext={$UBO.Editor.import-list.omitSubtext}:classification:metadata:-1:children:ORIGIN" />
-                </select>
+                <div class="col-12 col-sm-6">
+                  <select id="{generate-id()}" class="autocomplete {$xed-validation-marker} autocomplete w-100 mycore-form-input custom-select" data-container="form-group" data-display="static">
+                    <option value=""><xed:output i18n="search.select" /></option>
+                    <xed:include uri="xslStyle:mycoreclass-options?omitSubtext={$UBO.Editor.import-list.omitSubtext}:classification:metadata:-1:children:ORIGIN" />
+                  </select>
+                </div>
               </div>
             </xed:bind>
 
             <xed:bind xpath="@sourceType">
-              <div class="form-group form-inline">
-                <label for="{generate-id()}" class="mycore-form-label text-nowrap">
+              <div class="row mb-3">
+                <label for="{generate-id()}" class="col-12 col-sm-3 col-form-label text-nowrap text-sm-end">
                   <xed:output i18n="ubo.import.list.label.sourceFormat" />:
                 </label>
-                <select id="{generate-id()}" class="form-control  mycore-form-input mr-1 custom-select" onchange="UBOImportList.toggleEnrichment(this)">
-                  <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:importSourceType" />
-                </select>
+                <div class="col-12 col-sm-6">
+                  <select id="{generate-id()}" class="me-1 form-select" onchange="UBOImportList.toggleEnrichment(this)">
+                    <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:importSourceType" />
+                  </select>
+                </div>
               </div>
             </xed:bind>
 
             <xed:bind xpath="@targetType">
-              <div class="form-group form-inline">
-                <label for="{generate-id()}" class="mycore-form-label text-nowrap">
-                  <xed:output i18n="ubo.import.list.label.outputFormat" />:
+              <div class="row mb-3">
+                <label for="{generate-id()}" class="col-12 col-sm-3 col-form-label text-nowrap text-sm-end">
+                  <xed:output i18n="ubo.import.list.label.outputFormat"/>:
                 </label>
-                <select id="import-list-output-format-select" class="form-control  mycore-form-input custom-select">
-                  <option value="preview-html">Vorschau (HTML)</option>
-                  <option value="preview-mods-raw">Vorschau (MODS)</option>
-                  <option value="import">direkt importieren</option>
-                </select>
+                <div class="col-12 col-sm-6">
+                  <select id="import-list-output-format-select" class="form-select">
+                    <option value="preview-html">Vorschau (HTML)</option>
+                    <option value="preview-mods-raw">Vorschau (MODS)</option>
+                    <option value="import">direkt importieren</option>
+                  </select>
+                </div>
               </div>
             </xed:bind>
 
-            <hr/>
+            <div class="row mb-3">
+              <hr class="col-12 col-sm-9"/>
+            </div>
 
-            <div class="form-inline">
-              <label class="mycore-form-label text-nowrap">
+            <div class="row mb-3">
+              <label class="col-12 col-sm-3 col-form-label text-nowrap text-sm-end">
                 <xed:output i18n="ubo.import.list.label.dataSources"/>:
               </label>
 
+            <div class="col-12 col-sm-6">
               <xed:bind xpath="DataSources[@type='provided']">
-                <select id="datasource-source-select" class="form-control mycore-form-input custom-select" onchange="UBOImportList.toggleDataSources(this)">
-                  <option value="">
-                    <xed:output i18n="search.select"/>
-                  </option>
-                  <xed:include uri="xslStyle:enrichers2options:enrichmentConfig:custom" />
-                </select>
+                <div class="row">
+                  <div class="col">
+                    <select id="datasource-source-select" class="form-select" onchange="UBOImportList.toggleDataSources(this)">
+                      <option value="">
+                        <xed:output i18n="search.select"/>
+                      </option>
+                      <xed:include uri="xslStyle:enrichers2options:enrichmentConfig:custom"/>
+                    </select>
+                  </div>
+                </div>
               </xed:bind>
 
-              <label class="mycore-form-label text-nowrap pt-1"/>
               <xed:bind xpath="DataSources[@type='custom']">
-                <input id="datasource-input-custom" type="text" class="form-control mycore-form-input custom-select mt-3" placeholder="{i18n:ubo.import.list.placeholder.dataSources.custom}" oninput="UBOImportList.toggleDataSources(this)"/>
+                <div class="row">
+                  <div class="col">
+                    <input id="datasource-input-custom" type="text" class="form-control mt-3" placeholder="{i18n:ubo.import.list.placeholder.dataSources.custom}" oninput="UBOImportList.toggleDataSources(this)"/>
+                  </div>
+                </div>
               </xed:bind>
+              </div>
             </div>
 
             <xed:bind xpath="@enrich" initially="false">
-              <div class="form-group form-inline">
-                <label class="mycore-form-label text-nowrap">
-                  <xed:output i18n="ubo.import.list.label.enrich" />:
+              <div class="row mb-3">
+                <label class="col-12 col-sm-3 col-form-label text-nowrap text-sm-end">
+                  <xed:output i18n="ubo.import.list.label.enrich"/>:
                 </label>
-                <input type="radio" value="true"  class="form-control ml-2 mr-2" id="enrich-yes" /><label for="enrich-yes">Ja</label>
-                <input type="radio" value="false" class="form-control ml-4 mr-2" id="enrich-no"  /><label for="enrich-no" >Nein</label>
+
+                <div class="col-12 col-sm d-flex align-items-center">
+                  <input type="radio" value="true" class="form-check-input ms-2 me-2" id="enrich-yes"/>
+                  <label class="form-check-label" for="enrich-yes">Ja</label>
+
+                  <input type="radio" value="false" class="form-check-input ms-4 me-2" id="enrich-no"/>
+                  <label class="form-check-label" for="enrich-no">Nein</label>
+                </div>
               </div>
             </xed:bind>
 
             <xed:bind xpath="source">
-              <div class="form-group form-inline">
-                <textarea id="{xed:generate-id()}" class="{$xed-validation-marker} form-control col" type="text"
-                          placeholder="{i18n:ubo.import.list.textarea.placeholder}" rows="10"
-                          oninput="UBOImportList.toggleSubmit()"/>
+              <div class="row mb-3">
+                <div class="col-12 col-sm-9">
+                  <textarea id="{xed:generate-id()}" class="{$xed-validation-marker} form-control col" type="text"
+                            placeholder="{i18n:ubo.import.list.textarea.placeholder}" rows="10"
+                            oninput="UBOImportList.toggleSubmit()"/>
+                </div>
               </div>
-              <xed:validate required="true" display="global" />
+              <xed:validate required="true" display="global"/>
             </xed:bind>
 
-            <div class="form-group form-inline">
-              <button id="submitBtn" class="btn btn-sm btn-primary" disabled="disabled" type="submit" xed:target="servlet" xed:href="DozBibImportServlet">
-                <xed:output i18n="button.submit" />
-              </button>
+            <div class="row">
+              <div class="col-12 col-sm-1">
+                <button id="submitBtn" class="btn btn-sm btn-primary" disabled="disabled" type="submit" xed:target="servlet" xed:href="DozBibImportServlet">
+                  <xed:output i18n="button.submit" />
+                </button>
+              </div>
 
               <xed:bind xpath="@async" initially="false">
-                <div class="form-group form-inline ml-3" title="{i18n:ubo.import.list.tooltip.async}">
-                  <input type="checkbox" value="true" class="form-check-input my-auto" id="async-yes" onchange="UBOImportList.toggleSelect('import-list-output-format-select', 'import')"/>
-                  <label class="my-auto">
+                <div class="col d-flex align-items-center" title="{i18n:ubo.import.list.tooltip.async}">
+                  <input type="checkbox" value="true" class="form-check-input" id="async-yes" onchange="UBOImportList.toggleSelect('import-list-output-format-select', 'import')"/>
+                  <label class="form-check-label ms-2">
                     <xed:output i18n="ubo.import.list.label.async" />
                   </label>
                 </div>

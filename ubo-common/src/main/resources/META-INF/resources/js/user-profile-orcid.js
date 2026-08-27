@@ -218,7 +218,7 @@ class OrcidProfileGUI {
                 modalCancelButton.classList.add("btn");
                 modalCancelButton.classList.add("btn-secondary");
                 modalCancelButton.setAttribute("type", "button");
-                modalCancelButton.setAttribute("data-dismiss", "modal");
+                modalCancelButton.setAttribute("data-bs-dismiss", "modal");
                 modalCancelButton.textContent = cancelButtonText;
                 modalFooter.appendChild(modalCancelButton);
                 modalCancelButton.addEventListener("click", () => {
@@ -327,7 +327,7 @@ class OrcidProfileGUI {
             </div>
             <!-- Footer -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary cancel" data-dismiss="modal">${cancel}</button>
+                <button type="button" class="btn btn-secondary cancel" data-bs-dismiss="modal">${cancel}</button>
                 <button type="button" class="btn btn-primary save">${save}</button>
             </div>
         </div>
@@ -453,7 +453,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         cl.add("btn");
         cl.add("btn-primary");
         cl.add("btn-xs");
-        cl.add("ml-2");
+        cl.add("ms-2");
 
         revokeButton.textContent = revokeText;
         revokeButton.addEventListener("click", async () => {
@@ -481,7 +481,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         cl.add("btn");
         cl.add("btn-secondary");
         cl.add("btn-xs");
-        cl.add("ml-2");
+        cl.add("ms-2");
 
         orcidListElement.appendChild(settingsButton);
         settingsButton.textContent = settingsText;

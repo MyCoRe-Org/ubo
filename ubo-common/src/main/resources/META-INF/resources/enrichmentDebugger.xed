@@ -8,6 +8,7 @@
 
 <webpage id="ubo.enrichmentDebugger">
   <title xml:lang="de">Enrichment Resolver Debugger</title>
+  <title xml:lang="en">Enrichment Resolver Debugger</title>
 
   <article class="card mb-1">
     <div class="card-body">
@@ -26,28 +27,29 @@
               <xed:bind xpath="enricher[@id='custom']" /> <!-- Empty placeholder for custom enrichment -->
 
               <xed:repeat xpath="enricher">
-                <div class="form-group form-inline">
-                  <label class="mycore-form-label">
+                <div class="row mb-3">
+                  <label class="col-12 col-sm-3 col-form-label text-sm-end">
                     <xed:output value="@id" />
-                    
+
                     <!-- Workaround to choose the ID via radio buttons: -->
                     <!-- 1. Remember the current enricher/@id in a variable -->
                     <!-- 2. Bind to a common parent's attribute so all radio buttons get same name -->
                     <xed:bind xpath="@id" name="id" />
                     <xed:bind xpath="../@selected">
-                      <input type="radio" value="{$id}" class="ml-2" style="transform:scale(1.5);" />
+                      <input type="radio" value="{$id}" class="ms-2" style="transform:scale(1.5);" />
                     </xed:bind>
-                    
                   </label>
-                  <xed:choose>
-                    <xed:when test="@id='custom'">
-                      <input type="text" class="mycore-form-input {$xed-validation-marker}" style="flex: 0 0 70%; max-width: 70%;" />
-                    </xed:when>
-                    <xed:otherwise>
-                      <input type="text" class="mycore-form-input" style="flex: 0 0 70%; max-width: 70%;" disabled="disabled" />
-                    </xed:otherwise>
-                  </xed:choose>
-                  
+
+                  <div class="col-12 col-sm-6">
+                    <xed:choose>
+                      <xed:when test="@id='custom'">
+                        <input type="text" class="form-control {$xed-validation-marker}" />
+                      </xed:when>
+                      <xed:otherwise>
+                        <input type="text" class="form-control" disabled="disabled" />
+                      </xed:otherwise>
+                    </xed:choose>
+                  </div>
                 </div>
               </xed:repeat>
 
@@ -65,12 +67,9 @@
             <legend>Aufzulösende Identifier als Ausgangsbasis:</legend>
             
             <xed:bind xpath="mods:mods">
-                      
               <xed:bind xpath="mods:identifier">
-              
-                <div class="form-group form-inline">
-      
-                  <div class="mycore-form-label">
+                <div class="row mb-3">
+                  <div class="col-12 col-sm-3">
                     <xed:bind xpath="@type" default="doi">
                       <select class="form-control w-100 custom-select">
                         <option value="doi">DOI (10. ...):</option>
@@ -89,43 +88,46 @@
                       </select>
                     </xed:bind>
                   </div>
-      
-                  <input type="text" class="mycore-form-input {$xed-validation-marker}" />
+                  <div class="col-12 col-sm-6">
+                    <input type="text" class="form-control {$xed-validation-marker}"/>
+                  </div>
                 </div>
               </xed:bind>
               
               <xed:include uri="webapp:import-editor.xed" ref="validationRules4Identifiers" />
-              
+
               <xed:bind xpath="mods:location/mods:shelfLocator">
-                <div class="form-group form-inline">
-                  <label class="mycore-form-label">Signatur der UB:</label>
-                  <input type="text" class="mycore-form-input {$xed-validation-marker}" />
+                <div class="row mb-3">
+                  <label class="col-12 col-sm-3 col-form-label text-sm-end">Signatur der UB:</label>
+                  <div class="col-12 col-sm-6">
+                    <input type="text" class="form-control {$xed-validation-marker}"/>
+                  </div>
                 </div>
               </xed:bind>
-              
             </xed:bind>
 
           </fieldset>
             
-          <div class="form-inline form-group mb-4">
-            <label class="mycore-form-label" />
-            <button class="btn btn-sm btn-primary mr-2" type="submit" xed:target="servlet" xed:href="EnrichmentDebuggerServlet">
-              <xed:output i18n="button.submit" />
-            </button>
-            <button class="ml-2 btn btn-sm btn-primary" type="submit" xed:target="debug">Debug</button>
+          <div class="row mb-3">
+            <div class="col-12 offset-sm-3 col-sm-6">
+              <button class="btn btn-sm btn-primary me-2" type="submit" xed:target="servlet" xed:href="EnrichmentDebuggerServlet">
+                <xed:output i18n="button.submit" />
+              </button>
+              <button class="ms-2 btn btn-sm btn-primary" type="submit" xed:target="debug">Debug</button>
+            </div>
           </div>
       
           <!-- List all supported data sources and identifiers -->
           <xed:bind xpath="dataSources">
             <table class="table table-sm table-hover mt-4">
               <thead>
-                <th class="text-right" scope="col">Datenquelle</th>
+                <th class="text-end" scope="col">Datenquelle</th>
                 <th scope="col">Unterstütze Identifier</th>
               </thead>
               <tbody>
                 <xed:repeat xpath="dataSource">
                   <tr>
-                    <th class="text-right" scope="row">
+                    <th class="text-end" scope="row">
                       <xed:output value="@id" />
                     </th>
                     <td>
@@ -136,11 +138,8 @@
               </tbody>
             </table>
           </xed:bind>          
-          
         </xed:bind>
-
       </xed:form>
     </div>
   </article>
-
 </webpage>
