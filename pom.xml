@@ -38,8 +38,8 @@
   <scm>
     <connection>scm:git:https://github.com/MyCoRe-Org/ubo.git</connection>
     <developerConnection>scm:git:https://github.com/MyCoRe-Org/ubo.git</developerConnection>
-    <url>https://github.com/MyCoRe-Org/ubo/tree/develop</url>
-    <tag>2024.06.x</tag>
+    <url>https://github.com/MyCoRe-Org/ubo/tree/2024.06.x</url>
+    <tag>HEAD</tag>
   </scm>
 
   <properties>

@@ -93,10 +93,11 @@ jobs:
       # the maven-release-plugin refuses to release with snapshot dependencies,
       # so mycore.version has to point at a released version first. This is a
       # commit of its own because release:prepare aborts on a dirty working copy.
-      - name: Pin mycore.version for the release
+      - name: Pin mycore.version and scm.url for the release
         id: pin
         env:
           MYCORE_VERSION: ${{ inputs.mycoreVersion }}
+          RELEASE_VERSION: ${{ inputs.releaseVersion }}
         run: |
           set -euo pipefail
           case "$MYCORE_VERSION" in
@@ -115,7 +116,32 @@ jobs:
           echo "mycore.version ${PREVIOUS} -> ${MYCORE_VERSION}"
           sed -i -E "s|<mycore\.version>[^<]*</mycore\.version>|<mycore.version>${MYCORE_VERSION}</mycore.version>|" pom.xml
           grep -qF "<mycore.version>${MYCORE_VERSION}</mycore.version>" pom.xml
-          git commit -am "Set mycore.version to ${MYCORE_VERSION} for the release"
+
+          # child modules inherit scm.url with their path appended, so it has to
+          # carry a /tree/<ref> part. Without it the inherited url is a 404.
+          # For the released poms that ref is the tag, not the branch.
+          PREVIOUS_URL="$(sed -n -E '/<scm>/,/<\/scm>/ s|.*<url>([^<]*)</url>.*|\1|p' pom.xml)"
+          if [ -z "$PREVIOUS_URL" ]; then
+            echo "::error::no scm url found in pom.xml"
+            exit 1
+          fi
+          echo "previous-url=$PREVIOUS_URL" >> "$GITHUB_OUTPUT"
+
+          # release:prepare in batch mode drops -SNAPSHOT when no version is
+          # given, so the tag name is known before prepare runs
+          if [ -n "$RELEASE_VERSION" ]; then
+            REL="$RELEASE_VERSION"
+          else
+            REL="$(mvn --batch-mode --no-transfer-progress -q \
+              help:evaluate -Dexpression=project.version -DforceStdout)"
+            REL="${REL%-SNAPSHOT}"
+          fi
+          TAG_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/v${REL}"
+          sed -i -E "/<scm>/,/<\/scm>/ s|<url>[^<]*</url>|<url>${TAG_URL}</url>|" pom.xml
+          grep -qF "<url>${TAG_URL}</url>" pom.xml
+          echo "scm.url ${PREVIOUS_URL} -> ${TAG_URL}"
+
+          git commit -am "Set mycore.version to ${MYCORE_VERSION} and scm.url to v${REL} for the release"
 
       - name: Prepare release (set version, commit, tag)
         id: prepare
@@ -142,13 +168,16 @@ jobs:
       # folded into the commit release:prepare just made, so the branch ends up
       # with one clean 'next development iteration' commit. The tag points at
       # HEAD~1 and is not touched by the amend.
-      - name: Set mycore.version for the next development iteration
+      - name: Restore mycore.version and scm.url for the next development iteration
         env:
           MYCORE_DEV_VERSION: ${{ inputs.mycoreDevelopmentVersion }}
         run: |
           set -euo pipefail
           sed -i -E "s|<mycore\.version>[^<]*</mycore\.version>|<mycore.version>${MYCORE_DEV_VERSION}</mycore.version>|" pom.xml
           grep -qF "<mycore.version>${MYCORE_DEV_VERSION}</mycore.version>" pom.xml
+          BRANCH_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/${GITHUB_REF_NAME}"
+          sed -i -E "/<scm>/,/<\/scm>/ s|<url>[^<]*</url>|<url>${BRANCH_URL}</url>|" pom.xml
+          grep -qF "<url>${BRANCH_URL}</url>" pom.xml
           git add pom.xml
           git commit --amend --no-edit
 
@@ -184,6 +213,7 @@ jobs:
         env:
           VERSION: ${{ steps.prepare.outputs.version }}
           MYCORE_PREVIOUS: ${{ steps.pin.outputs.previous }}
+          PREVIOUS_URL: ${{ steps.pin.outputs.previous-url }}
         run: |
           set -euo pipefail
           mvn --batch-mode --no-transfer-progress release:rollback
@@ -193,6 +223,12 @@ jobs:
           if [ -n "${MYCORE_PREVIOUS:-}" ]; then
             sed -i -E "s|<mycore\.version>[^<]*</mycore\.version>|<mycore.version>${MYCORE_PREVIOUS}</mycore.version>|" pom.xml
             grep -qF "<mycore.version>${MYCORE_PREVIOUS}</mycore.version>" pom.xml
+          fi
+          if [ -n "${PREVIOUS_URL:-}" ]; then
+            sed -i -E "/<scm>/,/<\/scm>/ s|<url>[^<]*</url>|<url>${PREVIOUS_URL}</url>|" pom.xml
+            grep -qF "<url>${PREVIOUS_URL}</url>" pom.xml
+          fi
+          if [ -n "${MYCORE_PREVIOUS:-}" ] || [ -n "${PREVIOUS_URL:-}" ]; then
             git add pom.xml
             git commit --amend --no-edit
           fi
