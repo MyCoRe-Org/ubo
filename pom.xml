@@ -14,6 +14,7 @@
   <packaging>pom</packaging>
 
   <name>Universitätsbibliographie</name>
+  <description>MyCoRe based university bibliography for publications and research data</description>
   <url>https://bibliographie.ub.uni-due.de/</url>
   <inceptionYear>1998</inceptionYear>
 
@@ -37,7 +38,7 @@
   <scm>
     <connection>scm:git:https://github.com/MyCoRe-Org/ubo.git</connection>
     <developerConnection>scm:git:https://github.com/MyCoRe-Org/ubo.git</developerConnection>
-    <url>https://github.com/MyCoRe-Org/ubo/tree/master</url>
+    <url>https://github.com/MyCoRe-Org/ubo/tree/develop</url>
     <tag>2024.06.x</tag>
   </scm>
 

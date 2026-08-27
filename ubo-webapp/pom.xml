@@ -10,6 +10,7 @@
   <artifactId>ubo-webapp</artifactId>
   <packaging>war</packaging>
   <name>Universitätsbibliographie - WAR Module</name>
+  <description>UBO web application that bundles all parts in a single artifact</description>
   <properties>
     <cargo.container.zipUrlInstaller.downloadDir>${settings.localRepository}/../cargo/containers</cargo.container.zipUrlInstaller.downloadDir>
     <cargo.debug.address>8295</cargo.debug.address>

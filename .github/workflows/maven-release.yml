@@ -1,0 +1,301 @@
+# Performs a full Maven release (maven-release-plugin: prepare + perform),
+# publishes the release artifacts to Sonatype Central and pushes the
+# versioned Docker images. Triggered manually via the Actions UI; run it
+# from the branch you want to release (e.g. 2024.06.x).
+#
+# If release:perform fails, release:rollback undoes the prepared release and
+# the rollback is pushed, so the branch ends up where it started.
+#
+# Required secrets (MAVEN_GPG_* are stored in the 'release' environment):
+#   OSSRH_USERNAME / OSSRH_TOKEN      Sonatype Central portal token
+#   MAVEN_GPG_PRIVATE_KEY             armored secret key, its public key must
+#                                     be available on a public keyserver
+#   MAVEN_GPG_PASSPHRASE              passphrase of that key
+#   DOCKERHUB_USERNAME / DOCKERHUB_TOKEN
+#   RELEASE_TOKEN                     optional, PAT that may push to the
+#                                     protected release branch. Only needed if
+#                                     the github-actions app loses its bypass
+#                                     allowance in the branch protection.
+name: Maven Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      mycoreVersion:
+        description: 'MyCoRe version for the release, must not be a snapshot (e.g. 2024.06.4)'
+        required: true
+      mycoreDevelopmentVersion:
+        description: 'MyCoRe version for the next development iteration (e.g. 2024.06.5-SNAPSHOT)'
+        required: true
+      releaseVersion:
+        description: 'Release version (leave empty to use the maven default, e.g. 2024.06.0)'
+        required: false
+        default: ''
+      developmentVersion:
+        description: 'Next development version (leave empty for maven default, e.g. 2024.06.1-SNAPSHOT)'
+        required: false
+        default: ''
+      pushDockerImages:
+        description: 'Build and push the release Docker images'
+        type: boolean
+        required: false
+        default: true
+
+concurrency:
+  group: maven-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    # the 'release' environment holds the MAVEN_GPG_* secrets and restricts the
+    # workflow to protected branches. Required reviewers are NOT configured at
+    # the moment; add them under Settings -> Environments if the release should
+    # be gated by an approval.
+    environment: release
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # full history + tags are required by the maven-release-plugin,
+          # persisted credentials let us push the release commits/tag back.
+          fetch-depth: 0
+          # the release branches require pull request reviews. The
+          # github-actions app is listed in the bypass allowances of the branch
+          # protection, so the default GITHUB_TOKEN may push. If that bypass is
+          # ever removed, store a PAT of a MCRAdmin member as RELEASE_TOKEN.
+          token: ${{ secrets.RELEASE_TOKEN || github.token }}
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          # Sonatype Central credentials (writes ~/.m2/settings.xml).
+          # server-id must match publishingServerId 'central' from mycore-parent.
+          server-id: 'central'
+          server-username: SONATYPE_USERNAME
+          server-password: SONATYPE_TOKEN
+          # import the signing key into the gpg keyring. mycore-parent sets
+          # gpg.bestPractices=true, so maven-gpg-plugin ignores the settings.xml
+          # entry and reads the passphrase from MAVEN_GPG_PASSPHRASE instead.
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+
+      - name: Configure Git author
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+
+      # the maven-release-plugin refuses to release with snapshot dependencies,
+      # so mycore.version has to point at a released version first. This is a
+      # commit of its own because release:prepare aborts on a dirty working copy.
+      - name: Pin mycore.version for the release
+        id: pin
+        env:
+          MYCORE_VERSION: ${{ inputs.mycoreVersion }}
+        run: |
+          set -euo pipefail
+          case "$MYCORE_VERSION" in
+            *-SNAPSHOT)
+              echo "::error::mycoreVersion ${MYCORE_VERSION} is a snapshot, the release would fail"
+              exit 1
+              ;;
+          esac
+          # remembered so a rollback can put the original value back
+          PREVIOUS="$(sed -n -E 's|.*<mycore\.version>([^<]*)</mycore\.version>.*|\1|p' pom.xml)"
+          if [ -z "$PREVIOUS" ]; then
+            echo "::error::no mycore.version property found in pom.xml"
+            exit 1
+          fi
+          echo "previous=$PREVIOUS" >> "$GITHUB_OUTPUT"
+          echo "mycore.version ${PREVIOUS} -> ${MYCORE_VERSION}"
+          sed -i -E "s|<mycore\.version>[^<]*</mycore\.version>|<mycore.version>${MYCORE_VERSION}</mycore.version>|" pom.xml
+          grep -qF "<mycore.version>${MYCORE_VERSION}</mycore.version>" pom.xml
+          git commit -am "Set mycore.version to ${MYCORE_VERSION} for the release"
+
+      - name: Prepare release (set version, commit, tag)
+        id: prepare
+        env:
+          RELEASE_VERSION: ${{ inputs.releaseVersion }}
+          DEV_VERSION: ${{ inputs.developmentVersion }}
+        run: |
+          set -euo pipefail
+          ARGS="--batch-mode --no-transfer-progress release:prepare"
+          if [ -n "$RELEASE_VERSION" ]; then ARGS="$ARGS -DreleaseVersion=$RELEASE_VERSION"; fi
+          if [ -n "$DEV_VERSION" ]; then ARGS="$ARGS -DdevelopmentVersion=$DEV_VERSION"; fi
+          mvn $ARGS
+          # capture the released version from the generated release.properties.
+          # the tag format v@{project.version} comes from the 'git' profile of
+          # mycore-parent, which also disables pushChanges.
+          VERSION="$(sed -n 's/^scm\.tag=v//p' release.properties)"
+          if [ -z "$VERSION" ]; then
+            echo "::error::could not read scm.tag from release.properties"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Prepared release v$VERSION"
+
+      # folded into the commit release:prepare just made, so the branch ends up
+      # with one clean 'next development iteration' commit. The tag points at
+      # HEAD~1 and is not touched by the amend.
+      - name: Set mycore.version for the next development iteration
+        env:
+          MYCORE_DEV_VERSION: ${{ inputs.mycoreDevelopmentVersion }}
+        run: |
+          set -euo pipefail
+          sed -i -E "s|<mycore\.version>[^<]*</mycore\.version>|<mycore.version>${MYCORE_DEV_VERSION}</mycore.version>|" pom.xml
+          grep -qF "<mycore.version>${MYCORE_DEV_VERSION}</mycore.version>" pom.xml
+          git add pom.xml
+          git commit --amend --no-edit
+
+      - name: Push release commits and tag
+        id: push
+        env:
+          VERSION: ${{ steps.prepare.outputs.version }}
+        run: |
+          set -euo pipefail
+          git push origin "HEAD:${{ github.ref_name }}"
+          git push origin "refs/tags/v${VERSION}"
+
+      - name: Perform release (build, sign, deploy to Sonatype Central)
+        id: perform
+        env:
+          SONATYPE_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          SONATYPE_TOKEN: ${{ secrets.OSSRH_TOKEN }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+        run: |
+          # deploy via the parent's auto-active 'deploy-to-central' profile.
+          # sign-artifacts is activated by id (not via -Dgpg.keyname) so the
+          # gpg-plugin signs with the single imported key (no empty --local-user)
+          mvn --batch-mode --no-transfer-progress release:perform \
+            -DlocalCheckout=true \
+            -Darguments="-Psign-artifacts -DskipTests"
+
+      # release:rollback restores the poms, commits the rollback and removes the
+      # tag. It needs release.properties and the pom backups from the prepare
+      # run, which is why this lives in the same job.
+      # https://maven.apache.org/maven-release/maven-release-plugin/rollback-mojo.html
+      - name: Roll back the release
+        if: failure() && steps.perform.outcome == 'failure'
+        env:
+          VERSION: ${{ steps.prepare.outputs.version }}
+          MYCORE_PREVIOUS: ${{ steps.pin.outputs.previous }}
+        run: |
+          set -euo pipefail
+          mvn --batch-mode --no-transfer-progress release:rollback
+          # release:rollback restores the poms from the backups prepare wrote,
+          # and those already had mycore.version pinned. Put the original value
+          # back and fold it into the rollback commit.
+          if [ -n "${MYCORE_PREVIOUS:-}" ]; then
+            sed -i -E "s|<mycore\.version>[^<]*</mycore\.version>|<mycore.version>${MYCORE_PREVIOUS}</mycore.version>|" pom.xml
+            grep -qF "<mycore.version>${MYCORE_PREVIOUS}</mycore.version>" pom.xml
+            git add pom.xml
+            git commit --amend --no-edit
+          fi
+          # the 'git' profile of mycore-parent sets pushChanges=false, so the
+          # rollback commit and the tag removal are local and get pushed here
+          git push origin "HEAD:${{ github.ref_name }}"
+          if git ls-remote --exit-code --tags origin "v${VERSION}" > /dev/null 2>&1; then
+            git push origin ":refs/tags/v${VERSION}"
+          fi
+          echo "::warning::Rolled back v${VERSION}. If the deployment already reached Central, that version stays taken and must not be released again."
+
+      - name: Login to Docker Hub
+        if: ${{ success() && inputs.pushDockerImages }}
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push release Docker images
+        if: ${{ success() && inputs.pushDockerImages }}
+        env:
+          VERSION: ${{ steps.prepare.outputs.version }}
+        run: |
+          set -euo pipefail
+          # build the released war from the tag so the image holds the exact release
+          git checkout "v${VERSION}"
+          mvn --batch-mode --no-transfer-progress -DskipTests install
+          docker build . --file Dockerfile --tag mycoreorg/ubo:${VERSION}
+          docker build ubo-webapp/src/main/solr/ --file ubo-webapp/src/main/solr/Dockerfile --tag mycoreorg/ubo-solr:${VERSION}
+          docker push mycoreorg/ubo:${VERSION}
+          docker push mycoreorg/ubo-solr:${VERSION}
+
+      - name: Create the GitHub release
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.prepare.outputs.version }}
+        run: |
+          set -euo pipefail
+          TAG="v${VERSION}"
+
+          # release:perform left its checkout behind, so the artifacts it built
+          # are reused instead of building them again. The depth bounds keep out
+          # ubo-cli/target/lib, which holds every dependency.
+          mapfile -t ASSETS < <(find target/checkout -mindepth 3 -maxdepth 3 -type f \
+            \( -name '*.jar' -o -name '*.war' \) -path '*/target/*' 2>/dev/null | sort)
+          if [ ${#ASSETS[@]} -eq 0 ]; then
+            echo "::error::no jars or wars found under target/checkout"
+            exit 1
+          fi
+          printf 'attaching %s\n' "${ASSETS[@]}"
+
+          # generated by the API rather than by 'gh release --generate-notes',
+          # so the changelog can go above the maven snippet instead of below.
+          #
+          # git describe --abbrev=0 walks the ancestry of the tag, it does not
+          # sort by tag date. So a release on 2024.06.x gets the previous
+          # 2024.06.x tag even when a 2025.06.x tag was created in between.
+          NOTES_ARGS=(-f "tag_name=${TAG}")
+          if PREV="$(git describe --tags --abbrev=0 --match 'v[0-9]*' "${TAG}^" 2>/dev/null)"; then
+            echo "changelog starts after ${PREV}"
+            NOTES_ARGS+=(-f "previous_tag_name=${PREV}")
+          fi
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/releases/generate-notes" \
+            "${NOTES_ARGS[@]}" --jq '.body' > release-notes.md
+
+          CENTRAL="https://repo1.maven.org/maven2/org/mycore/ubo"
+
+          cat >> release-notes.md <<NOTES
+
+          ## Maven
+
+          \`\`\`xml
+          <dependency>
+            <groupId>org.mycore.ubo</groupId>
+            <artifactId>ubo-common</artifactId>
+            <version>${VERSION}</version>
+          </dependency>
+
+          <dependency>
+            <groupId>org.mycore.ubo</groupId>
+            <artifactId>ubo-webapp</artifactId>
+            <version>${VERSION}</version>
+            <type>war</type>
+          </dependency>
+          \`\`\`
+
+          ## Download
+
+          | Artifact | Binary | Sources | Javadoc | POM |
+          | --- | --- | --- | --- | --- |
+          | ubo-common | [jar](${CENTRAL}/ubo-common/${VERSION}/ubo-common-${VERSION}.jar) | [sources](${CENTRAL}/ubo-common/${VERSION}/ubo-common-${VERSION}-sources.jar) | [javadoc](${CENTRAL}/ubo-common/${VERSION}/ubo-common-${VERSION}-javadoc.jar) | [pom](${CENTRAL}/ubo-common/${VERSION}/ubo-common-${VERSION}.pom) |
+          | ubo-webapp | [war](${CENTRAL}/ubo-webapp/${VERSION}/ubo-webapp-${VERSION}.war) | | | [pom](${CENTRAL}/ubo-webapp/${VERSION}/ubo-webapp-${VERSION}.pom) |
+          | ubo-cli | | | | [pom](${CENTRAL}/ubo-cli/${VERSION}/ubo-cli-${VERSION}.pom) |
+
+          Browse on [Maven Central](https://central.sonatype.com/artifact/org.mycore.ubo/ubo-common/${VERSION}).
+
+          ## Docker
+
+          \`mycoreorg/ubo:${VERSION}\` and \`mycoreorg/ubo-solr:${VERSION}\`
+          NOTES
+
+          gh release create "$TAG" \
+            --title "$TAG" \
+            --notes-file release-notes.md \
+            "${ASSETS[@]}"

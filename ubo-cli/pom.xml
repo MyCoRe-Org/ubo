@@ -9,6 +9,7 @@
   <artifactId>ubo-cli</artifactId>
   <packaging>pom</packaging>
   <name>Universitätsbibliographie - CLI Module</name>
+  <description>Command line interface distribution for UBO</description>
   <build>
     <plugins>
       <plugin>
