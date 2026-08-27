@@ -1745,7 +1745,7 @@
 
   <!-- ========== Sprache der Publikation ========== -->
   <xsl:template match="mods:languageTerm[@type='code']">
-    <xsl:variable name="lang" select="document(concat('notnull:language:', .))/language/label[@xml:lang=$CurrentLang]" />
+    <xsl:variable name="lang" select="document(concat('notnull:callJava:org.mycore.common.xml.MCRXMLFunctions:getDisplayName:rfc5646:', .,':', $CurrentLang))" />
 
     <xsl:choose>
       <xsl:when test="string-length($lang) &gt; 0">

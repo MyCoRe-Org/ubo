@@ -14,6 +14,7 @@
   <packaging>pom</packaging>
 
   <name>Universitätsbibliographie</name>
+  <description>MyCoRe based university bibliography for publications and research data</description>
   <url>https://bibliographie.ub.uni-due.de/</url>
   <inceptionYear>1998</inceptionYear>
 
@@ -37,7 +38,7 @@
   <scm>
     <connection>scm:git:https://github.com/MyCoRe-Org/ubo.git</connection>
     <developerConnection>scm:git:https://github.com/MyCoRe-Org/ubo.git</developerConnection>
-    <url>https://github.com/MyCoRe-Org/ubo/tree/master</url>
+    <url>https://github.com/MyCoRe-Org/ubo/tree/main</url>
     <tag>HEAD</tag>
   </scm>
 
@@ -47,7 +48,7 @@
     <bootstrap-select.version>1.13.18</bootstrap-select.version>
     <bootstrap.version>4.4.1</bootstrap.version>
     <cargo.container>tomcat10x</cargo.container>
-    <charts.common.version>2.4-SNAPSHOT</charts.common.version>
+    <charts.common.version>2.4.1</charts.common.version>
     <font-awesome.version>5.13.0</font-awesome.version>
     <jakarta.xml.bind.version>3.0.1</jakarta.xml.bind.version>
     <jquery.ui.version>1.13.2</jquery.ui.version>
@@ -55,7 +56,7 @@
     <maven.compiler.release>21</maven.compiler.release>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
-    <mycore.version>2024.06.3-SNAPSHOT</mycore.version>
+    <mycore.version>2024.06.4-SNAPSHOT</mycore.version>
     <node.version>v20.11.0</node.version>
     <pica2mods.version>2.13</pica2mods.version>
     <sortpom.sortDeps>scope,groupId,artifactId</sortpom.sortDeps>
@@ -150,11 +151,6 @@
       <id>central-portal-snapshots</id>
       <name>Central Portal Snapshots</name>
       <url>https://central.sonatype.com/repository/maven-snapshots/</url>
-    </repository>
-    <repository>
-      <id>gitlab-maven-releases</id>
-      <name>git.thulb.uni-jena.de</name>
-      <url>https://git.thulb.uni-jena.de/api/v4/projects/98/packages/maven</url>
     </repository>
   </repositories>
 

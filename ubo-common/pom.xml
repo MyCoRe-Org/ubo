@@ -10,6 +10,7 @@
   <artifactId>ubo-common</artifactId>
   <packaging>jar</packaging>
   <name>Universitätsbibliographie - Common Jar Module</name>
+  <description>Common Java classes and resources shared by all UBO modules</description>
   <build>
     <plugins>
       <plugin>
