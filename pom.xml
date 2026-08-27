@@ -10,7 +10,7 @@
 
   <groupId>org.mycore.ubo</groupId>
   <artifactId>ubo</artifactId>
-  <version>2024.06.0</version>
+  <version>2024.06.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Universitätsbibliographie</name>
@@ -38,8 +38,8 @@
   <scm>
     <connection>scm:git:https://github.com/MyCoRe-Org/ubo.git</connection>
     <developerConnection>scm:git:https://github.com/MyCoRe-Org/ubo.git</developerConnection>
-    <url>https://github.com/MyCoRe-Org/ubo/tree/v2024.06.0</url>
-    <tag>v2024.06.0</tag>
+    <url>https://github.com/MyCoRe-Org/ubo/tree/2024.06.x</url>
+    <tag>HEAD</tag>
   </scm>
 
   <properties>
@@ -56,7 +56,7 @@
     <maven.compiler.release>21</maven.compiler.release>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
-    <mycore.version>2024.06.3</mycore.version>
+    <mycore.version>2024.06.4-SNAPSHOT</mycore.version>
     <node.version>v20.11.0</node.version>
     <pica2mods.version>2.13</pica2mods.version>
     <sortpom.sortDeps>scope,groupId,artifactId</sortpom.sortDeps>
