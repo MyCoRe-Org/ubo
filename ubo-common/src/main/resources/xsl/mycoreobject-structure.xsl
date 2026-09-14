@@ -13,6 +13,7 @@
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   exclude-result-prefixes="xsl xalan encoder mods xlink i18n">
 
+  <xsl:import href="xslImport:badges"/>
   <xsl:include href="mods-display.xsl" />
   <xsl:include href="coreFunctions.xsl" />
 
@@ -312,7 +313,7 @@
 
     <xsl:apply-templates select="@ID" mode="badge" />
     <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
-      <xsl:call-template name="pubtype" />
+      <xsl:apply-templates select="." mode="badges"/>
     </xsl:for-each>
     <xsl:for-each select="service/servstates/servstate[@classid='state']">
       <span class="label-info ubo-badge-status badge badge-light">

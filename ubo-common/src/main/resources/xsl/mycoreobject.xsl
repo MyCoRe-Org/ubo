@@ -20,6 +20,7 @@
 
 <xsl:import href="xslImport:additional"/>
 <xsl:import href="xslImport:uboActionButtons"/>
+<xsl:import href="xslImport:badges"/>
 <xsl:include href="mods-dc-meta.xsl" />
 <xsl:include href="mods-highwire.xsl" />
 <xsl:include href="mods-display.xsl" />
@@ -148,10 +149,7 @@
       <div class="col pl-0">
         <div class="row">
           <div class="col">
-            <xsl:call-template name="label-year" />
-            <xsl:call-template name="pubtype" />
-            <xsl:call-template name="label-kdsf-pub-doc-type" />
-            <xsl:call-template name="label-oa" />
+            <xsl:apply-templates select="." mode="badges"/>
             <xsl:call-template name="orcid-status" />
           </div>
         </div>

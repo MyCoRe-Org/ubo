@@ -15,6 +15,7 @@
         xmlns:basket="xalan://org.mycore.ubo.basket.BasketUtils"
         exclude-result-prefixes="xsl xalan i18n mods mcr mcrxml encoder str basket">
 
+<xsl:import href="xslImport:badges"/>
 <xsl:include href="mods-display.xsl" />
 <xsl:include href="resource:xsl/response-get-handler.xsl"/>
 <xsl:include href="response-facets.xsl" />
@@ -307,9 +308,7 @@
       <xsl:variable name="mycoreobject" select="document(concat('mcrobject:',$id))/mycoreobject" />
       <xsl:for-each select="$mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
         <div class="labels card-header ">
-          <xsl:call-template name="label-year" />
-          <xsl:call-template name="pubtype" />
-          <xsl:call-template name="label-oa" />
+          <xsl:apply-templates select="." mode="badges"/>
           <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update')">
             <xsl:call-template name="orcid-status" />
           </xsl:if>

@@ -11,6 +11,7 @@
   exclude-result-prefixes="xsl xalan i18n mcrxml mods java"
 >
 
+<xsl:import href="xslImport:badges"/>
 <xsl:include href="mods-display.xsl" />
 <xsl:include href="coreFunctions.xsl" />
 <xsl:include href="csl-export-gui.xsl" />
@@ -150,8 +151,7 @@
 
     <div class="row">
       <div class="col">
-        <xsl:call-template name="label-year" />
-        <xsl:call-template name="pubtype" />
+        <xsl:apply-templates select="." mode="badges"/>
         <xsl:call-template name="orcid-status" />
       </div>
       <div class="col">
