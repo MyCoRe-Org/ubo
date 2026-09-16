@@ -38,6 +38,8 @@
   <xsl:param name="UBO.Primo.Search.Link" />
   <xsl:param name="UBO.ISBN.Search.Link" />
   <xsl:param name="MCR.ORCID2.LinkURL"/>
+  <xsl:param name="MCR.ORCID2.OAuth.ClientSecret" select="''" />
+  <xsl:param name="MCR.ORCID2.OAuth.Scope" select="''" />
 
   <xsl:variable name="genres"                select="document('classification:metadata:-1:children:ubogenre')/mycoreclass/categories" />
   <xsl:variable name="origin"                select="document('classification:metadata:-1:children:ORIGIN')/mycoreclass/categories" />
@@ -265,10 +267,12 @@
   <xsl:variable name="current-user-connection-id" select="$current-user/attributes/attribute[@name='id_connection']/@value"/>
 
   <xsl:template name="orcid-publish">
-    <xsl:variable name="publication-connection-ids" select="ancestor::mycoreobject//mods:nameIdentifier[@type='connection']"/>
+    <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update')">
+      <xsl:variable name="publication-connection-ids" select="ancestor::mycoreobject//mods:nameIdentifier[@type='connection']"/>
 
-    <xsl:if test="$publication-connection-ids = $current-user-connection-id">
-      <div class="orcid-publish d-inline" data-id="{ancestor::mycoreobject/@ID}"/>
+      <xsl:if test="$publication-connection-ids = $current-user-connection-id">
+        <div class="orcid-publish d-inline" data-id="{ancestor::mycoreobject/@ID}"/>
+      </xsl:if>
     </xsl:if>
   </xsl:template>
 

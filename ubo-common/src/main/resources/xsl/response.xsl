@@ -321,9 +321,7 @@
             <xsl:call-template name="bibentry.add.to.basket" />
           </xsl:if>
           <xsl:call-template name="bibentry.subselect.return" />
-          <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update')">
-            <xsl:call-template name="orcid-publish" />
-          </xsl:if>
+          <xsl:call-template name="orcid-publish" />
           <span class="float-right"># <xsl:value-of select="$hitNo"/></span>
         </div>
       </xsl:for-each>

@@ -170,6 +170,7 @@
         <a class="btn btn-sm btn-primary" href="{$ServletsBaseURL}DozBibEntryServlet?id={ancestor::mycoreobject/@ID}">
           <xsl:value-of select="i18n:translate('result.dozbib.info')" />
         </a>
+        <xsl:call-template name="orcid-publish" />
       </div>
     </div>
   </xsl:for-each>
