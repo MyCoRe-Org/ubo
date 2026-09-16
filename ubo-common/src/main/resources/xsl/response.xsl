@@ -309,9 +309,6 @@
       <xsl:for-each select="$mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
         <div class="labels card-header ">
           <xsl:apply-templates select="." mode="badges"/>
-          <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update')">
-            <xsl:call-template name="orcid-status" />
-          </xsl:if>
         </div>
         <div class="content bibentry card-body">
           <xsl:apply-templates select="." mode="cite">

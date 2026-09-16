@@ -264,14 +264,6 @@
   <!-- ========== ORCID status and publish button ========== -->
   <xsl:variable name="current-user-connection-id" select="$current-user/attributes/attribute[@name='id_connection']/@value"/>
 
-  <xsl:template name="orcid-status">
-    <xsl:variable name="publication-connection-ids" select="ancestor::mycoreobject//mods:nameIdentifier[@type='connection']"/>
-
-    <xsl:if test="$publication-connection-ids = $current-user-connection-id">
-      <div class="orcid-status" data-id="{ancestor::mycoreobject/@ID}"/>
-    </xsl:if>
-  </xsl:template>
-
   <xsl:template name="orcid-publish">
     <xsl:variable name="publication-connection-ids" select="ancestor::mycoreobject//mods:nameIdentifier[@type='connection']"/>
 

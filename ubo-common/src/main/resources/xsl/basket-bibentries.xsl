@@ -152,7 +152,6 @@
     <div class="row">
       <div class="col">
         <xsl:apply-templates select="." mode="badges"/>
-        <xsl:call-template name="orcid-status" />
       </div>
       <div class="col">
         <xsl:call-template name="buttons">
