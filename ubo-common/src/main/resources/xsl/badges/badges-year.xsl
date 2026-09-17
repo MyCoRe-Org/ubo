@@ -28,7 +28,7 @@
   </xsl:template>
 
   <xsl:template match="mods:dateIssued" mode="label-year-badge">
-    <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.search.year')}"
+    <span class="label-info badge badge-secondary me-1 ubo-hover-pointer" title="{i18n:translate('ubo.search.year')}"
           onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+year:', text()))}')">
       <xsl:value-of select="text()"/>
     </span>

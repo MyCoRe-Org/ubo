@@ -119,7 +119,7 @@
 
   <xsl:choose>
     <xsl:when test="$condition">
-      <a href="MCRBasketServlet?action={$action}&amp;type={/basket/@type}&amp;id={$ancestor_id}" class="btn btn-sm btn-primary ml-1">
+      <a href="MCRBasketServlet?action={$action}&amp;type={/basket/@type}&amp;id={$ancestor_id}" class="btn btn-sm btn-primary ms-1">
         <img alt="{$alt}" src="{$WebApplicationBaseURL}images/{$image}" />
       </a>
     </xsl:when>

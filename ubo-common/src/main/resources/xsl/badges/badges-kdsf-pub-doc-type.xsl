@@ -18,7 +18,7 @@
     <xsl:if test="check:currentUserIsAdmin()">
       <xsl:variable name="kdsf-pubtype" select="mods:classification[@generator='xpathmapping2kdsfPublicationType-mycore']"/>
       <xsl:for-each select="$kdsf-pubtype">
-        <span class="label-info badge badge-warning text-white mr-1" title="{i18n:translate('ubo.publication.type.kdsf')}">
+        <span class="label-info badge badge-warning text-white me-1" title="{i18n:translate('ubo.publication.type.kdsf')}">
           <xsl:variable name="categid" select="substring-after(@valueURI, '#')"/>
           <xsl:value-of select="mcrxsl:getDisplayName('kdsfPublicationType', $categid)"/>
         </span>
@@ -26,7 +26,7 @@
 
       <xsl:variable name="kdsf-doctype" select="mods:classification[@generator='xpathmapping2kdsfDocumentType-mycore']"/>
       <xsl:for-each select="$kdsf-doctype">
-        <span class="label-info badge badge-info text-white mr-1" title="{i18n:translate('ubo.document.type.kdsf')}">
+        <span class="label-info badge badge-info text-white me-1" title="{i18n:translate('ubo.document.type.kdsf')}">
           <xsl:variable name="categid" select="substring-after(@valueURI, '#')"/>
           <xsl:value-of select="mcrxsl:getDisplayName('kdsfDocumentType', $categid)"/>
         </span>
