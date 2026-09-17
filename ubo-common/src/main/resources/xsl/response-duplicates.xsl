@@ -13,6 +13,7 @@
   exclude-result-prefixes="xsl xalan i18n mods mcr encoder str basket" 
 >
 
+<xsl:import href="xslImport:badges"/>
 <xsl:include href="mods-display.xsl" />
 <xsl:include href="coreFunctions.xsl" />
 
@@ -145,8 +146,7 @@
       <xsl:variable name="mycoreobject" select="document(concat('mcrobject:',$id))/mycoreobject" />
       <xsl:for-each select="$mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
         <div class="labels card-header">
-          <xsl:call-template name="label-year" />
-          <xsl:call-template name="pubtype" />
+          <xsl:apply-templates select="." mode="badges"/>
         </div>
         <div class="content bibentry card-body">
           <xsl:apply-templates select="." mode="cite"> 
