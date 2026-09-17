@@ -22,9 +22,7 @@
   <xsl:template name="print.writeProtectionMessage">
     <xsl:if test="$writeProtectedWebsite">
       <div class="alert alert-warning alert-dismissable">
-        <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
-          <xsl:value-of select="'&#215;'" />
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true"/>
         <strong>
           <xsl:copy-of select="websiteWriteProtection:getMessage()" />
         </strong>
