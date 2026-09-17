@@ -130,9 +130,7 @@
     </xsl:if>
     <xsl:if test="$step = 'deleted'">
       <div class="section alert alert-success alert-dismissable">
-        <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
-          <xsl:text disable-output-escaping="yes">&amp;times;</xsl:text>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true"/>
         <p>
           <strong>
             <xsl:value-of select="i18n:translate('component.user2.admin.userDeleteConfirm')" />
@@ -142,9 +140,7 @@
     </xsl:if>
     <xsl:if test="$step = 'changedPassword'">
       <div class="section alert alert-success alert-dismissable">
-        <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
-          <xsl:text disable-output-escaping="yes">&amp;times;</xsl:text>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true"/>
         <p>
           <strong>
             <xsl:value-of select="i18n:translate('component.user2.admin.passwordChangeConfirm')" />
