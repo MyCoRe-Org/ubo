@@ -229,7 +229,7 @@
   <xsl:variable name="numDuplicates" select="count(document($duplicates)/result/duplicate)" />
   
   <xsl:if test="$numDuplicates &gt; 0">
-    <span class="badge bg-alternative ml-1 me-1">
+    <span class="badge bg-alternative ms-1 me-1">
       <a href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.Style=structure">
         <xsl:variable name="extro">
           <xsl:choose>
