@@ -11,6 +11,7 @@
   exclude-result-prefixes="xsl xalan i18n mcrxml mods java"
 >
 
+<xsl:import href="xslImport:badges"/>
 <xsl:include href="mods-display.xsl" />
 <xsl:include href="coreFunctions.xsl" />
 <xsl:include href="csl-export-gui.xsl" />
@@ -150,9 +151,7 @@
 
     <div class="row">
       <div class="col">
-        <xsl:call-template name="label-year" />
-        <xsl:call-template name="pubtype" />
-        <xsl:call-template name="orcid-status" />
+        <xsl:apply-templates select="." mode="badges"/>
       </div>
       <div class="col">
         <xsl:call-template name="buttons">
@@ -171,6 +170,7 @@
         <a class="btn btn-sm btn-primary" href="{$ServletsBaseURL}DozBibEntryServlet?id={ancestor::mycoreobject/@ID}">
           <xsl:value-of select="i18n:translate('result.dozbib.info')" />
         </a>
+        <xsl:call-template name="orcid-publish" />
       </div>
     </div>
   </xsl:for-each>

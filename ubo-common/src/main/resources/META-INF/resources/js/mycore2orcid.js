@@ -40,7 +40,7 @@ async function updateUI(headers) {
         return;
     }
 
-    $('div.orcid-status').each(function () {
+    $('span.orcid-status').each(function () {
         getORCIDPublicationStatus(this, headers);
     });
 
@@ -49,8 +49,8 @@ async function updateUI(headers) {
     });
 }
 
-async function getORCIDPublicationStatus(div, headers) {
-    let id = $(div).data('id');
+async function getORCIDPublicationStatus(span, headers) {
+    let id = $(span).data('id');
     let url = orcidObjectStatusURL.replace("{orcid}", userStatus.trustedOrcids[0]) + id;
 
     console.debug(id + " Fetching publication/object status");
@@ -63,12 +63,12 @@ async function getORCIDPublicationStatus(div, headers) {
     const objectStatus = await response.json();
     console.debug(id + " Publication/object status is: ");
     console.debug(objectStatus);
-    setORCIDPublicationStatus(id, div, objectStatus);
+    setORCIDPublicationStatus(id, span, objectStatus);
 }
 
-function setORCIDPublicationStatus(id, div, objectStatus) {
+function setORCIDPublicationStatus(id, spanContainer, objectStatus) {
     console.debug(id + " Setting publication status icon");
-    div.innerHTML = '';
+    spanContainer.innerHTML = '';
     let text = orcidI18n[(objectStatus.hasOwnProperty("own")? 'orcid.publication.inProfile.true' : 'orcid.publication.inProfile.false')];
     let span = document.createElement("span");
     span.title = text;
@@ -78,7 +78,7 @@ function setORCIDPublicationStatus(id, div, objectStatus) {
     span.classList.add('badge');
     span.classList.add('badge-' + (objectStatus.hasOwnProperty("own") ? "success" : "secondary"));
     span.classList.add('badge-orcid-in-profile-' + objectStatus.hasOwnProperty("own"));
-    div.appendChild(span);
+    spanContainer.appendChild(span);
 }
 
 async function showORCIDPublishButton(div, headers) {

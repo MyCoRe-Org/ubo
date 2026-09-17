@@ -38,6 +38,8 @@
   <xsl:param name="UBO.Primo.Search.Link" />
   <xsl:param name="UBO.ISBN.Search.Link" />
   <xsl:param name="MCR.ORCID2.LinkURL"/>
+  <xsl:param name="MCR.ORCID2.OAuth.ClientSecret" select="''" />
+  <xsl:param name="MCR.ORCID2.OAuth.Scope" select="''" />
 
   <xsl:variable name="genres"                select="document('classification:metadata:-1:children:ubogenre')/mycoreclass/categories" />
   <xsl:variable name="origin"                select="document('classification:metadata:-1:children:ORIGIN')/mycoreclass/categories" />
@@ -56,41 +58,6 @@
       <xsl:value-of select="'+status:&quot;confirmed&quot; '"/>
     </xsl:if>
   </xsl:variable>
-
-  <!-- ============ Ausgabe Publikationsart ============ -->
-
-  <xsl:template name="pubtype">
-    <xsl:variable name="genre" select="substring-after(mods:genre[@type='intern']/@valueURI, '#')"/>
-
-    <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.genre')}"
-          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+genre:&quot;', $genre, '&quot;'))}')">
-      <xsl:apply-templates select="mods:genre[@type='intern']"/>
-      <xsl:for-each select="mods:relatedItem[@type='host']/mods:genre[@type='intern']">
-        <xsl:text> in </xsl:text>
-        <xsl:apply-templates select="." />
-      </xsl:for-each>
-    </span>
-  </xsl:template>
-
-  <xsl:template name="label-kdsf-pub-doc-type">
-    <xsl:if test="check:currentUserIsAdmin()">
-      <xsl:variable name="kdsf-pubtype" select="mods:classification[@generator='xpathmapping2kdsfPublicationType-mycore']"/>
-      <xsl:for-each select="$kdsf-pubtype">
-        <span class="label-info badge badge-warning text-white mr-1" title="{i18n:translate('ubo.publication.type.kdsf')}">
-          <xsl:variable name="categid" select="substring-after(@valueURI, '#')"/>
-          <xsl:value-of select="mcrxsl:getDisplayName('kdsfPublicationType', $categid)"/>
-        </span>
-      </xsl:for-each>
-
-      <xsl:variable name="kdsf-doctype" select="mods:classification[@generator='xpathmapping2kdsfDocumentType-mycore']"/>
-      <xsl:for-each select="$kdsf-doctype">
-        <span class="label-info badge badge-info text-white mr-1" title="{i18n:translate('ubo.document.type.kdsf')}">
-          <xsl:variable name="categid" select="substring-after(@valueURI, '#')"/>
-          <xsl:value-of select="mcrxsl:getDisplayName('kdsfDocumentType', $categid)"/>
-        </span>
-      </xsl:for-each>
-    </xsl:if>
-  </xsl:template>
 
   <!-- ============ Ausgabe Fach ============ -->
 
@@ -147,26 +114,6 @@
   </xsl:template>
 
   <!-- ============ Ausgabe Open Access ============ -->
-
-  <xsl:template name="label-oa">
-    <xsl:choose>
-      <xsl:when test="mods:classification[contains(@authorityURI,'oa')]">
-        <xsl:apply-templates select="mods:classification[contains(@authorityURI,'oa')]" mode="label-info" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:classification[contains(@authorityURI,'oa')]" mode="label-info" />
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template match="mods:classification[contains(@authorityURI,'oa')]" mode="label-info">
-    <xsl:variable name="category" select="$oa//category[@ID=substring-after(current()/@valueURI,'#')]" />
-    <span class="badge oa-badge oa-badge-{$category/@ID} ubo-hover-pointer mr-1"
-          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+oa_exact:', $category/@ID))}')">
-      <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
-    </span>
-  </xsl:template>
-
   <xsl:template match="mods:classification[contains(@authorityURI,'oa')]" mode="details">
     <div class="row">
       <div class="col-3"><xsl:value-of select="i18n:translate('ubo.oa')" /><xsl:text>:</xsl:text></div>
@@ -316,46 +263,16 @@
     </div>
   </xsl:template>
 
-  <!-- ========== Ausgabe Jahr ========== -->
-
-  <xsl:template name="label-year">
-    <xsl:choose>
-      <xsl:when test="descendant-or-self::mods:dateIssued[not(ancestor::mods:relatedItem[@type='host'])][1]">
-        <xsl:for-each select="descendant-or-self::mods:dateIssued[not(ancestor::mods:relatedItem[@type='host'])][1]">
-          <xsl:apply-templates select="." mode="label-year-badge"/>
-        </xsl:for-each>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:for-each select="descendant-or-self::mods:dateIssued[(ancestor::mods:relatedItem[(@type='host')])][1]">
-          <xsl:apply-templates select="." mode="label-year-badge"/>
-        </xsl:for-each>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template match="mods:dateIssued" mode="label-year-badge">
-    <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.search.year')}"
-          onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+year:', text()))}')">
-      <xsl:value-of select="text()" />
-    </span>
-  </xsl:template>
-
   <!-- ========== ORCID status and publish button ========== -->
   <xsl:variable name="current-user-connection-id" select="$current-user/attributes/attribute[@name='id_connection']/@value"/>
 
-  <xsl:template name="orcid-status">
-    <xsl:variable name="publication-connection-ids" select="ancestor::mycoreobject//mods:nameIdentifier[@type='connection']"/>
-
-    <xsl:if test="$publication-connection-ids = $current-user-connection-id">
-      <div class="orcid-status" data-id="{ancestor::mycoreobject/@ID}"/>
-    </xsl:if>
-  </xsl:template>
-
   <xsl:template name="orcid-publish">
-    <xsl:variable name="publication-connection-ids" select="ancestor::mycoreobject//mods:nameIdentifier[@type='connection']"/>
+    <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update')">
+      <xsl:variable name="publication-connection-ids" select="ancestor::mycoreobject//mods:nameIdentifier[@type='connection']"/>
 
-    <xsl:if test="$publication-connection-ids = $current-user-connection-id">
-      <div class="orcid-publish d-inline" data-id="{ancestor::mycoreobject/@ID}"/>
+      <xsl:if test="$publication-connection-ids = $current-user-connection-id">
+        <div class="orcid-publish d-inline" data-id="{ancestor::mycoreobject/@ID}"/>
+      </xsl:if>
     </xsl:if>
   </xsl:template>
 
