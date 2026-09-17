@@ -17,8 +17,13 @@
     <xsl:apply-imports/>
 
     <xsl:if test="string-length($MCR.ORCID2.OAuth.ClientSecret) &gt; 0 and contains($MCR.ORCID2.OAuth.Scope,'update') and not(mcrxml:isCurrentUserGuestUser())">
-      <xsl:variable name="publication-connection-ids" select="//mods:nameIdentifier[@type='connection']"/>
-      <xsl:if test="$publication-connection-ids = $current-user-connection-id">
+      <xsl:variable name="publication-connection-ids">
+        <xsl:for-each select=".//mods:nameIdentifier[@type='connection']">
+          <xsl:value-of select="concat(., ' ')"/>
+        </xsl:for-each>
+      </xsl:variable>
+
+      <xsl:if test="contains($publication-connection-ids, $current-user-connection-id)">
         <span class="orcid-status" data-id="{ancestor::mycoreobject/@ID}"/>
       </xsl:if>
     </xsl:if>
