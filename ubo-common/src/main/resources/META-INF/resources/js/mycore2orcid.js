@@ -76,7 +76,7 @@ function setORCIDPublicationStatus(id, spanContainer, objectStatus) {
     span.classList.add('orcid-info');
     span.classList.add('orcid-in-profile-' + objectStatus.hasOwnProperty("own"));
     span.classList.add('badge');
-    span.classList.add('badge-' + (objectStatus.hasOwnProperty("own") ? "success" : "secondary"));
+    span.classList.add('bg-' + (objectStatus.hasOwnProperty("own") ? "success" : "secondary"));
     span.classList.add('badge-orcid-in-profile-' + objectStatus.hasOwnProperty("own"));
     spanContainer.appendChild(span);
 }
