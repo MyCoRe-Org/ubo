@@ -1996,7 +1996,7 @@ a.ubo-facet-add, a.ubo-facet-add:hover {
 	cursor: pointer;
 }
 
-div.orcid-status, div.orcid-publish {
+span.orcid-status, div.orcid-publish {
 	margin: 0;
 	padding: 0;
 	display: inline-block;

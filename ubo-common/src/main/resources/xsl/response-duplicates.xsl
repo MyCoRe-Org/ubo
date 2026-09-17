@@ -10,9 +10,11 @@
   xmlns:encoder="xalan://java.net.URLEncoder"
   xmlns:str="xalan://java.lang.String"
   xmlns:basket="xalan://org.mycore.ubo.basket.BasketUtils"
-  exclude-result-prefixes="xsl xalan i18n mods mcr encoder str basket" 
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+  exclude-result-prefixes="mcrxml xsl xalan i18n mods mcr encoder str basket"
 >
 
+<xsl:import href="xslImport:badges"/>
 <xsl:include href="mods-display.xsl" />
 <xsl:include href="coreFunctions.xsl" />
 
@@ -26,6 +28,11 @@
       <title>
         <xsl:call-template name="page.title" />
       </title>
+
+      <!-- Required for display of ORCID badge-->
+      <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
+        <script src="{$WebApplicationBaseURL}js/mycore2orcid.js" />
+      </xsl:if>
     </head>
     <body>
       <xsl:call-template name="breadcrumb" />
@@ -143,10 +150,10 @@
     <div class="hit card">
       <xsl:variable name="id" select="str[@name='id']" />
       <xsl:variable name="mycoreobject" select="document(concat('mcrobject:',$id))/mycoreobject" />
+
       <xsl:for-each select="$mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
         <div class="labels card-header">
-          <xsl:call-template name="label-year" />
-          <xsl:call-template name="pubtype" />
+          <xsl:apply-templates select="." mode="badges"/>
         </div>
         <div class="content bibentry card-body">
           <xsl:apply-templates select="." mode="cite"> 
