@@ -28,7 +28,7 @@
               <div class="col-md-3">
                 <div class="controls">
                   <xed:bind xpath="@name">
-                    <select class="form-control form-control-inline">
+                    <select class="form-control form-select">
                       <option value="">
                         <xed:multi-lang>
                           <xed:lang xml:lang="de">bitte wählen</xed:lang>
