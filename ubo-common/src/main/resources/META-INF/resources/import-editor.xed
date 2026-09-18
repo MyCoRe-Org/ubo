@@ -638,16 +638,29 @@
 
   <xed:template id="book.contributors">
     <xed:repeat xpath="mods:name[@type='personal']">
-      <div class="form-group form-inline ubo-repeat-group">
+      <div class="row mb-3 ubo-repeat-group">
         <xed:bind xpath="mods:role/mods:roleTerm[@type='code'][@authority='marcrelator']" initially="aut">
-          <label class="mycore-form-label d-flex align-items-center mt-0 ubo-mandatory">
-            <select class="form-control custom-select">
+          <label for="{xed:generate-id()}" class="col-12 col-sm-3 col-form-label text-sm-end">
+            <select class="form-select">
               <xed:include uri="xslStyle:items2options:webapp:rollen.xml" />
             </select>
             <div class="ms-1">:</div>
           </label>
         </xed:bind>
-        <xed:include ref="person" />
+
+        <div class="col col-sm-6 pe-0">
+          <div class="row">
+            <div class="col">
+              <xed:include ref="person"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="col col-sm-3 ps-0">
+          <div class="input-group">
+            <xed:controls/>
+          </div>
+        </div>
       </div>
     </xed:repeat>
   </xed:template>
