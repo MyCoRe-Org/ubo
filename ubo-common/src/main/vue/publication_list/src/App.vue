@@ -23,7 +23,7 @@
 
             <div class="col-12 col-sm-6">
               <div class="input-group">
-                <input id="personSearch" class="form-group mycore-form-input" type="text" v-model="searchModel.text" v-on:keypress.enter.prevent="startSearch">
+                <input id="personSearch" class="form-control" type="text" v-model="searchModel.text" v-on:keypress.enter.prevent="startSearch">
                 <button class="btn btn-secondary" v-on:click.prevent="startSearch">
                   <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-if="searchModel.searching"></span>
                   {{ i18n["button.search"] }}
