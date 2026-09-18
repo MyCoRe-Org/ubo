@@ -20,6 +20,9 @@
       <xsl:variable name="publication-connection-ids">
         <xsl:for-each select=".//mods:nameIdentifier[@type='connection']">
           <xsl:value-of select="."/>
+          <xsl:if test="not(position() = last())">
+            <xsl:value-of select="' '"/>
+          </xsl:if>
         </xsl:for-each>
       </xsl:variable>
 

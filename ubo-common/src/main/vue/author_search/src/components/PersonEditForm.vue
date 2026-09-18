@@ -12,56 +12,71 @@
             {{ i18n["person.search.help1"] }}</p>
         </div>
       </div>
+
       <form class="ubo-vue-form" role="form" v-on:submit.prevent="apply()">
-        <div class="form-group form-inline">
-          <label class="mycore-form-label" for="firstName">
+        <div class="row mb-3">
+          <label class="col-12 col-md-2 col-form-label text-md-end" for="firstName">
             {{ i18n["lsf.nameFirst"] }}
           </label>
-          <input class="mycore-form-input" type="text"
-                 :class="{ 'is-invalid': firstNameInvalid  }"
-                 v-model="internModel.person.firstName"
-                 id="firstName">
-          <div class="invalid-feedback">
-            {{ i18n["person.search.invalid.firstName"] }}
+
+          <div class="col col-md-7">
+            <input class="form-control" type="text"
+                   :class="{ 'is-invalid': firstNameInvalid  }"
+                   v-model="internModel.person.firstName"
+                   id="firstName">
+            <div class="invalid-feedback">
+              {{ i18n["person.search.invalid.firstName"] }}
+            </div>
           </div>
         </div>
-        <div class="form-group form-inline">
-          <label class="mycore-form-label" for="lastName">
+
+        <div class="row mb-3">
+          <label class="col-12 col-md-2 col-form-label text-md-end" for="lastName">
             {{ i18n["lsf.name"] }}
           </label>
-          <input class="mycore-form-input" type="text"
-                 :class="{ 'is-invalid': lastNameInvalid  }"
-                 v-model="internModel.person.lastName" id="lastName">
-          <div class="invalid-feedback">
-            {{ i18n["person.search.invalid.lastName"] }}
+          <div class="col col-md-7">
+            <input class="form-control" type="text"
+                   :class="{ 'is-invalid': lastNameInvalid  }"
+                   v-model="internModel.person.lastName" id="lastName">
+            <div class="invalid-feedback">
+              {{ i18n["person.search.invalid.lastName"] }}
+            </div>
           </div>
         </div>
-        <div class="form-group form-inline">
-          <label class="mycore-form-label" for="pid">
+
+        <div class="row mb-3">
+          <label class="col-12 col-md-2 col-form-label text-md-end" for="pid">
             {{ i18n["editor.identity.picker.lead_id"] }}:
           </label>
-          <input class="mycore-form-input" size="6" type="text" :readonly="!props.isAdmin"
-                 v-model="internModel.person.pid"
-                 id="pid" :placeholder="i18n['editor.identity.picker.lead_id']">
-          <button v-if="props.isAdmin && props.isGenerateIdEnabled" type="button" class="btn btn-outline-secondary"
-                  id="generate" :title="i18n['index.person.generate.id']" @click="generateId">
-            <i class="fas fa-random fa-flip-both"/>
-          </button>
+
+          <div class="col col-md-7">
+            <div class="input-group">
+              <input class="form-control" size="6" type="text" :readonly="!props.isAdmin"
+                     v-model="internModel.person.pid"
+                     id="pid" :placeholder="i18n['editor.identity.picker.lead_id']">
+              <button v-if="props.isAdmin && props.isGenerateIdEnabled" type="button" class="btn btn-sm btn-outline-secondary"
+                      id="generate" :title="i18n['index.person.generate.id']" @click="generateId">
+                <i class="fas fa-random fa-flip-both"/>
+              </button>
+            </div>
+          </div>
         </div>
-        <div class="cancel-submit form-group form-inline">
-          <label class="mycore-form-label"></label>
-          <input :title="i18n['index.person.datatoeditor.try.search']"
-                 v-if="!searched&&person.pid.length===0"
-                 disabled
-                 :value="i18n['lsf.selectPerson']"
-                 class="btn btn-secondary mr-2" type="submit">
-          <input :title="i18n['index.person.datatoeditor']"
-                 v-if="searched||person.pid.trim().length>0"
-                 :value="i18n['lsf.selectPerson']"
-                 class="btn btn-secondary mr-2"
-                 type="submit">
-          <input :value="i18n['button.cancel']" class="btn btn-primary" type="button"
-                 v-on:click="$emit('cancel')">
+
+        <div class="row mb-3 cancel-submit">
+          <div class="col offset-md-2">
+            <input :title="i18n['index.person.datatoeditor.try.search']"
+                   v-if="!searched&&person.pid.length===0"
+                   disabled
+                   :value="i18n['lsf.selectPerson']"
+                   class="btn btn-sm btn-secondary me-2" type="submit">
+            <input :title="i18n['index.person.datatoeditor']"
+                   v-if="searched||person.pid.trim().length>0"
+                   :value="i18n['lsf.selectPerson']"
+                   class="btn btn-sm btn-secondary me-2"
+                   type="submit">
+            <input :value="i18n['button.cancel']" class="btn btn-sm btn-primary" type="button"
+                   v-on:click="$emit('cancel')">
+          </div>
         </div>
       </form>
     </div>

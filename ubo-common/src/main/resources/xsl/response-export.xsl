@@ -9,7 +9,7 @@
   <xsl:template match="response">
     <export>
       <xsl:for-each select="result[@name='response']/doc">
-        <xsl:copy-of select="document(concat('mcrobject:',str[@name='id']))/mycoreobject" />
+        <xsl:copy-of select="document(concat('mcrobject:', str[@name='id'], '?expanded=true'))/mycoreobject" />
       </xsl:for-each>
     </export>
   </xsl:template>

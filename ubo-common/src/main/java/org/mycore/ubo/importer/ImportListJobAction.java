@@ -93,7 +93,7 @@ public class ImportListJobAction extends MCRJobAction {
             return;
         }
 
-        String eMailAddress = mcrUser.getEMailAddress();
+        String eMailAddress = mcrUser.getEMail();
 
         if (eMailAddress == null) {
             LOGGER.warn("Cannot send e-mail to user {} as user has no e-mail address", userName);
