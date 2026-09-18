@@ -259,12 +259,7 @@
                   <xed:bind xpath="condition[@field='objectType'][@operator='='][@value='mods']"/>
                 </xed:when>
                 <xed:otherwise>
-                  <xed:bind xpath="boolean[@operator='or']">
-                    <xed:bind xpath="condition[@field='status'][@operator='='][@value='confirmed']"/>
-                    <xed:bind xpath="condition[@field='status'][@operator='='][@value='reviewPending']"/>
-                    <xed:bind xpath="condition[@field='status'][@operator='='][@value='unchecked']"/>
-                  </xed:bind>
-
+                  <xed:bind xpath="condition[@field='status'][@operator='='][@value='confirmed']" />
                 </xed:otherwise>
               </xed:choose>
 
