@@ -302,7 +302,7 @@
   <xsl:template name="layout.mainnavigation">
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light" role="navigation" id="hauptnavigation">
-      <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
