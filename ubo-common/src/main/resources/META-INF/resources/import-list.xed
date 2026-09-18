@@ -61,7 +61,7 @@
                 </label>
 
                 <div class="col-12 col-sm-6">
-                  <select id="{generate-id()}" class="{$xed-validation-marker} form-control form-select">
+                  <select id="{generate-id()}" class="{$xed-validation-marker} form-select">
                     <option value="">
                       <xed:output i18n="search.select"/>
                     </option>
@@ -78,7 +78,7 @@
                 </label>
 
                 <div class="col-12 col-sm-6">
-                  <select id="{generate-id()}" class="{$xed-validation-marker} form-control form-select">
+                  <select id="{generate-id()}" class="{$xed-validation-marker} form-select">
                     <option value="">
                       <xed:output i18n="search.select"/>
                     </option>
@@ -94,7 +94,7 @@
                   <xed:output i18n="ubo.genre" />:
                 </label>
                 <div class="col-12 col-sm-6">
-                  <select id="{generate-id()}" class="{$xed-validation-marker} form-control form-select">
+                  <select id="{generate-id()}" class="{$xed-validation-marker} form-select">
                     <option value="">
                       <xed:output i18n="search.select"/>
                     </option>
