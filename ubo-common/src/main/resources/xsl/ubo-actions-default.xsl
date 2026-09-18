@@ -28,7 +28,8 @@
         </a>
       </xsl:if>
       <xsl:if test="string-length($step) = 0">
-        <xsl:if test="not(/mycoreobject/structure/children/child)">
+        <xsl:variable name="expandedObject" select="document(concat('notnull:mcrobject:', /mycoreobject/@ID, '?expanded=true'))/mycoreobject"/>
+        <xsl:if test="not(count($expandedObject/structure/children/child) &gt; 0)">
           <a class="action btn btn-sm btn-outline-primary mb-1" href="{$ServletsBaseURL}DozBibEntryServlet?id={/mycoreobject/@ID}&amp;XSL.step=ask.delete">
             <xsl:value-of select="i18n:translate('button.delete')" />
           </a>
