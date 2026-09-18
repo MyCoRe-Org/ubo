@@ -146,7 +146,7 @@
       </div>
     </div>
     <div class="section row m-1">
-      <div class="col pe-0">
+      <div class="col ps-0">
         <div class="row">
           <div class="col">
             <xsl:apply-templates select="." mode="badges"/>
