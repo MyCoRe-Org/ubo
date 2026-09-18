@@ -234,7 +234,7 @@
   </tr>
 </xsl:template>
 
-  <xsl:template match="attribute[contains($UBO.Additional.Displayed.Attributes, @name)]">
+  <xsl:template match="attribute[contains(concat(',', translate($UBO.Additional.Displayed.Attributes, ' ', ''), ','), concat(',', @name, ','))]">
     <xsl:variable name="label">
       <xsl:choose>
         <xsl:when test="i18n:exists(concat('user.profile.attribute.label.', @name))">
