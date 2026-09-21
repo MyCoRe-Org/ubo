@@ -208,7 +208,7 @@
             <xsl:value-of select="i18n:translate('button.basketAdd')" />
           </a>
         </span>
-        <span class="pageLink pl-1 d-inline">
+        <span class="pageLink ps-1 d-inline">
           <xsl:variable name="result-copy-to-clipboard-id" select="concat('result-copy-to-clipboard-', $position)"/>
           <button id="{$result-copy-to-clipboard-id}" class="btn btn-sm btn-secondary"
                   title="{i18n:translate('result.copy.link.to.clipboard')}"
@@ -251,7 +251,7 @@
       </nav>
     </div>
 
-   <div class="col text-right">
+   <div class="col text-end">
     <span class="pageLink">
       <a class="btn btn-sm btn-secondary" href="{$solrStatisticRequestHandler}{$exportParams}&amp;XSL.Style=statistics" title="{i18n:translate('button.statistics.tooltip')}">
         <xsl:value-of select="i18n:translate('button.statistics')"/>
@@ -305,7 +305,7 @@
   <div class="result mt-2 mb-2">
     <div class="hit card">
       <xsl:variable name="id" select="str[@name='id']" />
-      <xsl:variable name="mycoreobject" select="document(concat('mcrobject:',$id))/mycoreobject" />
+      <xsl:variable name="mycoreobject" select="document(concat('notnull:mcrobject:', $id, '?expanded=true'))/mycoreobject" />
       <xsl:for-each select="$mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
         <div class="labels card-header ">
           <xsl:apply-templates select="." mode="badges"/>
@@ -322,7 +322,7 @@
           </xsl:if>
           <xsl:call-template name="bibentry.subselect.return" />
           <xsl:call-template name="orcid-publish" />
-          <span class="float-right"># <xsl:value-of select="$hitNo"/></span>
+          <span class="float-end"># <xsl:value-of select="$hitNo"/></span>
         </div>
       </xsl:for-each>
     </div>

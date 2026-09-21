@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.mycore.common.MCRConstants;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.metadata.MCRExpandedObjectStructure;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -75,9 +76,9 @@ public class ParentChildRelationChecker {
     public ParentChildRelationChecker(MCRObjectID oid, boolean shouldRepair) {
         this.oid = oid;
         this.obj = MCRMetadataManager.retrieveMCRObject(oid);
-        this.structure = obj.getStructure();
+        this.structure = MCRMetadataManager.retrieveMCRExpandedObject(obj.getId()).getStructure();
         this.parentID = obj.getParent();
-        this.childLinks = structure.getChildren();
+        this.childLinks = MCRMetadataManager.retrieveMCRExpandedObject(obj.getId()).getStructure().getChildren();
         this.hosts = getHostRelations(obj);
         this.shouldRepair = shouldRepair;
     }
@@ -159,7 +160,8 @@ public class ParentChildRelationChecker {
 
     private void checkForParentMissingChild() {
         MCRObject parent = MCRMetadataManager.retrieveMCRObject(parentID);
-        MCRObjectStructure parentStructure = parent.getStructure();
+        MCRExpandedObjectStructure parentStructure = MCRMetadataManager.retrieveMCRExpandedObject(parent.getId())
+            .getStructure();
 
         if (!parentStructure.getChildren().stream().anyMatch(c -> c.getXLinkHrefID().equals(oid))) {
             if (shouldRepair) {

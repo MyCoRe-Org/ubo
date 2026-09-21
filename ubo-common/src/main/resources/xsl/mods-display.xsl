@@ -62,7 +62,7 @@
   <!-- ============ Ausgabe Fach ============ -->
 
   <xsl:template match="mods:mods/mods:classification[contains(@authorityURI,'fachreferate')]" mode="label-info">
-    <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('facets.facet.subject')}"
+    <span class="label-info badge bg-secondary me-1 ubo-hover-pointer" title="{i18n:translate('facets.facet.subject')}"
           onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+subject:&quot;', substring-after(@valueURI,'#'),'&quot;'))}')">
       <xsl:call-template name="output.category">
         <xsl:with-param name="classID" select="'fachreferate'" />
@@ -74,7 +74,7 @@
   <!-- ========== Ausgabe Fakultät ========== -->
 
   <xsl:template match="mods:classification[contains(@authorityURI,'ORIGIN')]" mode="label-info">
-    <span class="label-info badge badge-secondary mr-1 ubo-hover-pointer" title="{i18n:translate('ubo.department')}"
+    <span class="label-info badge bg-secondary me-1 ubo-hover-pointer" title="{i18n:translate('ubo.department')}"
           onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+origin:&quot;', substring-after(@valueURI,'#'), '&quot;'))}')">
       <xsl:call-template name="output.category">
         <xsl:with-param name="classID" select="'ORIGIN'" />
@@ -352,7 +352,7 @@
     <xsl:call-template name="output.line">
       <xsl:with-param name="selected" select="mods:titleInfo[1]" />
       <xsl:with-param name="mode" select="$mode" />
-      <xsl:with-param name="class" select="'title font-weight-bold'" />
+      <xsl:with-param name="class" select="'title fw-bold'" />
     </xsl:call-template>
   </xsl:template>
 
@@ -515,7 +515,7 @@
               <xsl:if test="mods:nameIdentifier or $is-corresponding-author = true()">
                 <span id="{$popId}" title="{i18n:translate('person.information')}">
                   <xsl:attribute name="class">
-                    <xsl:text>ubo-person-popover ml-1 fas fa-user</xsl:text>
+                    <xsl:text>ubo-person-popover ms-1 fas fa-user</xsl:text>
                     <xsl:if test="$is-corresponding-author = true()">
                       <xsl:text>-edit</xsl:text>
                     </xsl:if>
@@ -1039,7 +1039,7 @@
         </div>
         <div class="col-9">
           <a href="{$ServletsBaseURL}DozBibEntryServlet?id={@xlink:href}">
-            <xsl:apply-templates select="document(concat('notnull:mcrobject:',@xlink:href))//mods:mods" mode="cite" />
+            <xsl:apply-templates select="document(concat('notnull:mcrobject:', @xlink:href, '?expanded=true'))//mods:mods" mode="cite" />
           </a>
         </div>
       </div>
