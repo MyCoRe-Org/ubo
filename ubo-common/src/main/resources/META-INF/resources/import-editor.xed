@@ -644,7 +644,6 @@
             <select class="form-select">
               <xed:include uri="xslStyle:items2options:webapp:rollen.xml" />
             </select>
-            <div class="ms-1">:</div>
           </label>
         </xed:bind>
 
