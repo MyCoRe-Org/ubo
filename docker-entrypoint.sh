@@ -158,7 +158,7 @@ function setDockerValues() {
 
     # s/(<\/properties>)/<property name=\"hibernate.hikari.maximumPoolSize\" value=\"30\" \/>\n<property name=\"hibernate.hikari.minimumIdle\" value=\"2\" \/>\n<property name=\"hibernate.hikari.idleTimeout\" value=\"30000\" \/>\n<property name=\"hibernate.hikari.maxLifetime\" value=\"1800000\" \/>\n<property name=\"hibernate.hikari.leakDetectionThreshold\" value=\"9000\" \/>\n<property name=\"\" value=\"true\" \/>
     setOrAddProperty "MCR.JPA.Connection.ProviderClass" "org.hibernate.hikaricp.internal.HikariCPConnectionProvider"
-    setOrAddProperty "MCR.JPA.Connection.MaximumPoolSize" "30"
+    setOrAddProperty "MCR.JPA.Connection.MaximumPoolSize" "${JDBC_CONNECTION_POOL_SIZE:-30}"
     setOrAddProperty "MCR.JPA.Connection.MinimumIdle" "2"
     setOrAddProperty "MCR.JPA.Connection.IdleTimeout" "30000"
     setOrAddProperty "MCR.JPA.Connection.MaxLifetime" "180000"
