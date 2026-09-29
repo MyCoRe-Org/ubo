@@ -38,6 +38,23 @@ export function getMODSTitle (obj: MODSMyCoReObject) {
   }
 }
 
+export function getMODSPersonName(obj: MODSMyCoReObject) {
+  const mods = obj.metadata["def.modsContainer"].modsContainer["mods"];
+  const modsPersons = mods["name"];
+  if (modsPersons && modsPersons.length > 0) {
+    const modsPerson = modsPersons[0];
+    const givenPart = modsPerson.namePart.find(
+      (part) => part["@type"] === "given"
+    );
+    const givenName = givenPart?.text ?? "";
+    const familyPart = modsPerson.namePart.find(
+      (part) => part["@type"] === "family"
+    );
+    const familyName = familyPart?.text ?? "";
+    return familyName + ", " + givenName;
+  }
+}
+
 
 export function getShortID(mcrId: string) {
   return parseInt(mcrId.split("_")[2]).toString();

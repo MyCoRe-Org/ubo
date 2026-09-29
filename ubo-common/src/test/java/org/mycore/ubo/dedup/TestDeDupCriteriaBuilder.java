@@ -9,15 +9,13 @@
 
 package org.mycore.ubo.dedup;
 
+import org.jdom2.Element;
 import org.junit.Test;
 
-import junit.framework.TestCase;
+import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRJPATestCase;
-import org.mycore.ubo.dedup.DeDupCriteriaBuilder;
-import org.mycore.ubo.dedup.DeDupCriterion;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 public class TestDeDupCriteriaBuilder extends MCRJPATestCase {
 
@@ -30,7 +28,7 @@ public class TestDeDupCriteriaBuilder extends MCRJPATestCase {
         assertEquals(c1, c2);
         
         DeDupCriterion c3 = builder.buildFromIdentifier("doi", "10.1002/0470841559.ch1");
-        assertFalse(c1.equals(c3));
+        assertNotEquals(c1, c3);
         
         DeDupCriterion c4 = builder.buildFromIdentifier("isbn", "978-1-56619-909-4" );
         DeDupCriterion c5 = builder.buildFromIdentifier("isbn", "9781566199094" );
@@ -42,7 +40,7 @@ public class TestDeDupCriteriaBuilder extends MCRJPATestCase {
         DeDupCriterion c0 = builder.buildFromTitleAuthor("A different short title","Meier");
         DeDupCriterion c1 = builder.buildFromTitleAuthor("This is a short title","Meier");
         DeDupCriterion c2 = builder.buildFromTitleAuthor("THIS is a SHORT Title","Meier");
-        assertFalse(c0.equals(c1));
+        assertNotEquals(c0, c1);
         assertEquals(c1, c2);
 
         DeDupCriterion c3 = builder.buildFromTitleAuthor("Der Moiré-Effekt im Zusammenhang mit Hühneraugen","Meier");
@@ -51,10 +49,56 @@ public class TestDeDupCriteriaBuilder extends MCRJPATestCase {
 
         DeDupCriterion c5 = builder.buildFromTitleAuthor("Horizon-Report 2015","Meier");
         DeDupCriterion c6 = builder.buildFromTitleAuthor("Horizon-Report 2016","Meier");
-        assertFalse(c5.equals(c6));
+        assertNotEquals(c5, c6);
 
         DeDupCriterion c7 = builder.buildFromTitleAuthor("Hier ist Augenmaß gefragt","Meier");
         DeDupCriterion c8 = builder.buildFromTitleAuthor("Hier ist Augenmass gefragt","Meier");
         assertEquals(c7, c8);
+    }
+
+    @Test
+    public void testNames() {
+        Element firstName1 = createElement("Peter", "given", "namePart");
+        Element firstName2 = createElement("Hans", "given", "namePart");
+        Element firstName3 = createElement("Hans P.", "given", "namePart");
+        Element familyName1 = createElement("Müller", "family", "namePart");
+        Element familyName2 = createElement("Mueller", "family", "namePart");
+        Element familyName3 = createElement("Mueller-Meyer", "family", "namePart");
+
+        DeDupCriterion c1 = builder.buildFromFullName(firstName1, familyName1);
+        DeDupCriterion c2 = builder.buildFromFullName(firstName1, familyName2);
+        DeDupCriterion c3 = builder.buildFromFullName(firstName1, familyName3);
+        DeDupCriterion c4 = builder.buildFromFullName(firstName2, familyName1);
+        DeDupCriterion c5 = builder.buildFromFullName(firstName3, familyName1);
+
+        assertEquals(c1, c2);
+        assertNotEquals(c2, c3);
+        assertNotEquals(c1, c4);
+        assertNotEquals(c4, c5);
+    }
+
+    @Test
+    public void testNameIdentifiers() {
+        Element identifier1 = createElement("12345", "lsf", "nameIdentifier");
+        Element identifier2 = createElement("12345", "lsf", "nameIdentifier");
+        Element identifier3 = createElement("54321", "lsf", "nameIdentifier");
+        Element identifier4 = createElement("12345", "scopus", "nameIdentifier");
+
+        DeDupCriterion c1 = builder.buildFromNameIdentifier(identifier1);
+        DeDupCriterion c2 = builder.buildFromNameIdentifier(identifier2);
+        DeDupCriterion c3 = builder.buildFromNameIdentifier(identifier3);
+        DeDupCriterion c4 = builder.buildFromNameIdentifier(identifier4);
+
+        assertEquals(c1, c2);
+        assertNotEquals(c1, c3);
+        assertNotEquals(c1, c4);
+        assertNotEquals(c3, c4);
+    }
+
+    public static Element createElement(String value, String type, String elementName) {
+        Element element = new Element(elementName, MCRConstants.MODS_NAMESPACE);
+        element.setAttribute("type", type);
+        element.setText(value);
+        return element;
     }
 }

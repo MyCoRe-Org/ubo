@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import DedupListView from '../views/DedupListView.vue'
 import {getWebApplicationBaseURL} from "@/api/Utils.ts";
 import NoDuplicateListView from "@/views/NoDuplicateListView.vue";
+import DedupPersonListView from "@/views/DedupPersonListView.vue";
 
 export function getContext(): string {
   if (import.meta.env.DEV) {
@@ -24,6 +25,11 @@ const router = createRouter({
       path: '/no-duplicates',
       name: 'noDuplicates',
       component: NoDuplicateListView
+    },
+    {
+      path: '/person-duplicates',
+      name: 'personDuplicates',
+      component: DedupPersonListView
     }
   ],
 })

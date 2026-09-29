@@ -113,6 +113,12 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>${project.parent.groupId}</groupId>
+      <artifactId>ubo-modsperson</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-ocfl</artifactId>
       <scope>runtime</scope>

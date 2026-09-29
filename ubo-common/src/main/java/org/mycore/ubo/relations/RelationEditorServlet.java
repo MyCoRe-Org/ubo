@@ -18,9 +18,16 @@ import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.mods.merger.MCRMergeTool;
+import org.mycore.mods.merger.MCRMerger;
+import org.mycore.mods.merger.MCRMergerFactory;
 import org.mycore.ubo.AccessControl;
 import org.mycore.ubo.DozBibEntryServlet;
 import org.mycore.ubo.dedup.jpa.DeduplicationKeyManager;
+import org.mycore.ubo.modsperson.merger.MCRNameMerger;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 import java.io.IOException;
 import java.util.Date;
@@ -62,7 +69,11 @@ public class RelationEditorServlet extends MCRServlet {
 
             if (!res.isCommitted()) {
                 String base = req.getParameter("base");
-                res.sendRedirect("DozBibEntryServlet?id=" + base + "&XSL.Style=structure");
+                if (base.contains("_mods_")) {
+                    res.sendRedirect("DozBibEntryServlet?id=" + base + "&XSL.Style=structure");
+                } else {
+                    res.sendRedirect("DozBibEntryServlet?id=" + base + "&XSL.Style=modsperson-structure");
+                }
             }
         }
     }
@@ -190,10 +201,20 @@ public class RelationEditorServlet extends MCRServlet {
         MCRObject objInto = MCRMetadataManager.retrieveMCRObject(intoID);
         MCRObject objFrom = MCRMetadataManager.retrieveMCRObject(fromID);
 
-        Element modsToMergeInto = new MCRMODSWrapper(objInto).getMODS();
-        Element modsToMergeFrom = new MCRMODSWrapper(objFrom).getMODS();
-        MCRMergeTool.merge(modsToMergeInto, modsToMergeFrom);
-
+        Element modsToMergeFrom, modsToMergeInto;
+        if (objFrom.getId().getTypeId().equals("mods")) {
+            modsToMergeInto = new MCRMODSWrapper(objInto).getMODS();
+            modsToMergeFrom = new MCRMODSWrapper(objFrom).getMODS();
+            MCRMergeTool.merge(modsToMergeInto, modsToMergeFrom);
+        } else { // modsperson
+            modsToMergeInto = new MCRMODSWrapper(objInto).getElements("mods:name[@type='personal']").get(0);
+            modsToMergeFrom = new MCRMODSWrapper(objFrom).getElements("mods:name[@type='personal']").get(0);
+            MCRMergeTool.merge(modsToMergeInto, modsToMergeFrom);
+            // Set name from mergeFrom as alternativeName in mergeInto
+            MCRMerger mergeInto = MCRMergerFactory.buildFrom(modsToMergeInto);
+            MCRMerger mergeFrom = MCRMergerFactory.buildFrom(modsToMergeFrom);
+            ((MCRNameMerger) mergeInto).mergeAsAlternativeName(mergeFrom);
+        }
         boolean preview = "true".equals(req.getParameter("preview"));
         if (preview) {
             MCRContent output = new MCRJDOMContent( objInto.createXML() );
