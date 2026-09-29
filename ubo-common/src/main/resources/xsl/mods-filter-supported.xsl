@@ -7,6 +7,8 @@
   exclude-result-prefixes="xsl"
 >
 
+<xsl:include href="xslInclude:mods-filter-supported"/>
+
 <xsl:template name="copy-and-apply"> <!-- copy supported elements and attributes calling this template -->
   <xsl:copy>
     <xsl:apply-templates select="@*|node()"/>

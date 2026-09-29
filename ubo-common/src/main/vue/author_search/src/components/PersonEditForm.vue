@@ -43,6 +43,10 @@
           <input class="mycore-form-input" size="6" type="text" :readonly="!props.isAdmin"
                  v-model="internModel.person.pid"
                  id="pid" :placeholder="i18n['editor.identity.picker.lead_id']">
+          <button v-if="props.isAdmin && props.isGenerateIdEnabled" type="button" class="btn btn-outline-secondary"
+                  id="generate" :title="i18n['index.person.generate.id']" @click="generateId">
+            <i class="fas fa-random fa-flip-both"/>
+          </button>
         </div>
         <div class="cancel-submit form-group form-inline">
           <label class="mycore-form-label"></label>
@@ -72,6 +76,7 @@ const props = defineProps<{
   person: { firstName: string, lastName: string, pid: string },
   baseurl: string,
   isAdmin: boolean,
+  isGenerateIdEnabled: boolean,
   searched: boolean
 }>();
 
@@ -95,6 +100,7 @@ const i18n = reactive({
   "person.search.instruction1": "",
   "person.search.help1": "",
   "index.person.datatoeditor": "",
+  "index.person.generate.id": "",
   "lsf.name": "",
   "lsf.nameFirst": "",
   "editor.identity.picker.lead_id": "",
@@ -129,6 +135,10 @@ const apply = () => {
 }
 
 internModel.person = props.person;
+
+const generateId = function() {
+  internModel.person.pid = crypto.randomUUID().replace(/-/g, "");
+}
 
 </script>
 

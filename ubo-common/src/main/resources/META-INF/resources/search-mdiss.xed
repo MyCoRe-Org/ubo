@@ -29,12 +29,15 @@
   <article class="card">
     <div class="card-body">
       <xed:form xmlns:xed="http://www.mycore.de/xeditor" method="post" role="form">
+      
+        <xed:preload uri="webapp:import-search.xed" />
+        
 	<fieldset>
           <legend>
             <xed:output i18n="search.dozbib.mdiss" />
           </legend>
 
-          <xed:include uri="webapp:import-search.xed" ref="validation" />
+          <xed:include ref="validation" />
 
           <xed:bind xpath="/query">
             <xed:bind xpath="@mask" default="index.xed" />
@@ -68,7 +71,7 @@
               </xed:bind>
 
               <xed:bind xpath="condition2[@operator='contains']/@field" initially="person_ths" />
-              <xed:include uri="webapp:import-search.xed" ref="name" />
+              <xed:include ref="name" />
 
               <xed:bind xpath="condition4[@field='title'][@operator='contains']/@value">
                 <div class="form-group form-inline">
@@ -79,15 +82,15 @@
                 </div>
               </xed:bind>
 
-              <xed:include uri="webapp:import-search.xed" ref="year" />
+              <xed:include ref="year" />
 
               <xed:bind xpath="condition7[@field='genre'][@operator='='][@value='dissertation']" />
               <xed:bind xpath="condition[@field='status'][@operator='='][@value='confirmed']" />
             </xed:bind>
 
-            <xed:include uri="webapp:import-search.xed" ref="sortby" />
-            <xed:include uri="webapp:import-search.xed" ref="numPerPage" />
-            <xed:include uri="webapp:import-search.xed" ref="submit" />
+            <xed:include ref="sortby" />
+            <xed:include ref="numPerPage" />
+            <xed:include ref="submit" />
 
           </xed:bind>
 	</fieldset>

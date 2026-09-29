@@ -13,11 +13,13 @@
       <xed:cancel url="servlets/MCRLockServlet?action=unlock&amp;id={$id}&amp;url=DozBibEntryServlet%3Fid={$id}" />
       
       <xed:post-processor xsl="mycoreobject-text2mods.xsl" /> 
+      
+      <xed:preload uri="webapp:import-editor.xed" />
         
       <xed:bind xpath="/mycoreobject">
         <xed:choose>
           <xed:when test="xed:call-java('org.mycore.ubo.AccessControl','currentUserIsAdmin')">
-            <xed:include uri="webapp:edit-mods.xed" ref="editor" />
+            <xed:include ref="editor-form" />
           </xed:when>
           <xed:otherwise>
             <p>Sie sind nicht berechtigt, dieses Formular zu verwenden.</p>
@@ -25,7 +27,7 @@
         </xed:choose>
       </xed:bind>
       
-      <xed:template id="editor">
+      <xed:template id="editor-form">
         <input type="hidden" name="mode" value="save" />
         <fieldset>
           <legend>MODS bearbeiten:</legend>
@@ -49,8 +51,8 @@
           </div>
         </fieldset>
         
-        <xed:include uri="webapp:import-editor.xed" ref="fix.structure.parent" />
-        <xed:include uri="webapp:import-editor.xed" ref="cleanup" />
+        <xed:include ref="fix.structure.parent" />
+        <xed:include ref="cleanup" />
         
       </xed:template>      
     

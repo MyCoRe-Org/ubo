@@ -6,6 +6,10 @@
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   exclude-result-prefixes="xsl xalan i18n">
 
+  <xsl:import href="resource:xsl/charts/bar-chart.xsl"/>
+  <xsl:import href="resource:xsl/charts/oa-chart.xsl" />
+  <xsl:import href="resource:xsl/charts/pie-chart.xsl"/>
+
   <xsl:include href="statistics.xsl" />
 
   <xsl:param name="WebApplicationBaseURL" />
@@ -16,6 +20,8 @@
         <title>
           <xsl:call-template name="page.title" />
         </title>
+
+        <script src="{$WebApplicationBaseURL}assets/echarts/dist/echarts.js"/>
       </head>
       <body>
         <xsl:apply-templates select="response" />
@@ -32,18 +38,36 @@
   </xsl:template>
 
   <xsl:template match="response" priority="1">
-    <script src="{$WebApplicationBaseURL}webjars/highcharts/5.0.1/highcharts.src.js" type="text/javascript"></script>
-    <script src="{$WebApplicationBaseURL}webjars/highcharts/5.0.1/themes/grid.js" type="text/javascript"></script>
-    
-    <div id="chartDialog" />
-    
-    <xsl:for-each select="lst[@name='facet_counts']/lst[@name='facet_fields']">
-      <xsl:apply-templates select="lst[@name='year']" />
-      <xsl:apply-templates select="lst[@name='subject']" />
-      <xsl:apply-templates select="lst[@name='genre']" />
-      <xsl:apply-templates select="lst[@name='oa']" />
-      <xsl:apply-templates select="lst[@name='facet_person']" />
-    </xsl:for-each>
-  </xsl:template>
 
+    <xsl:apply-templates select="." mode="bar-chart">
+      <xsl:with-param name="chart-title" select="document('notnull:i18n:ChartsCommon.chart.title.year')/i18n/text()"/>
+      <xsl:with-param name="facet-name" select="'year'"/>
+      <xsl:with-param name="horizontal-bars" select="'false'"/>
+    </xsl:apply-templates>
+
+    <xsl:apply-templates select="." mode="bar-chart">
+      <xsl:with-param name="chart-title" select="document('notnull:i18n:ChartsCommon.chart.title.subject')/i18n/text()"/>
+      <xsl:with-param name="facet-name" select="'subject'"/>
+      <xsl:with-param name="height" select="800"/>
+    </xsl:apply-templates>
+
+    <xsl:apply-templates select="." mode="pie-chart">
+      <xsl:with-param name="chart-title" select="document('notnull:i18n:ChartsCommon.chart.title.genre')/i18n/text()"/>
+      <xsl:with-param name="classId" select="'ubogenre'"/>
+      <xsl:with-param name="facet-name" select="'genre'"/>
+    </xsl:apply-templates>
+
+    <xsl:apply-templates select="." mode="pie-chart">
+      <xsl:with-param name="chart-title" select="document('notnull:i18n:ChartsCommon.chart.title.oa')/i18n/text()"/>
+      <xsl:with-param name="classId" select="'oa'"/>
+      <xsl:with-param name="facet-name" select="'oa'"/>
+    </xsl:apply-templates>
+
+    <xsl:apply-templates select="." mode="bar-chart">
+      <xsl:with-param name="chart-title" select="document('notnull:i18n:ChartsCommon.chart.title.nid_connection')/i18n/text()"/>
+      <xsl:with-param name="facet-name" select="'nid_connection'"/>
+      <xsl:with-param name="generate-labels-from-pivot" select="'true'"/>
+      <xsl:with-param name="height" select="1500"/>
+    </xsl:apply-templates>
+  </xsl:template>
 </xsl:stylesheet>

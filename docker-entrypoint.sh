@@ -55,119 +55,115 @@ function downloadDriver {
   fi
 }
 
-function migrateC3P0toHikari {
-    # check if c3p0 is used (if any c3p0-* file present)
-    if ls "${MCR_CONFIG_DIR}lib/c3p0-"*.jar 1> /dev/null 2>&1; then
-      echo "Migrate from c3p0 to HikariCP"
-      # delete old c3p0 drivers
-      rm "${MCR_CONFIG_DIR}lib/c3p0-"*.jar
-      rm "${MCR_CONFIG_DIR}lib/mchange-commons-java-"*.jar
-      rm "${MCR_CONFIG_DIR}lib/hibernate-c3p0-"*.jar
+function setOrAddProperty() {
+    KEY=$1
+    VALUE=$2
 
-      # delete old database drivers
-      rm "${MCR_CONFIG_DIR}lib/postgresql-42.2.9.jar"
-      rm "${MCR_CONFIG_DIR}lib/mariadb-java-client-2.5.4.jar"
-      rm "${MCR_CONFIG_DIR}lib/h2-1.4.200.jar"
-      rm "${MCR_CONFIG_DIR}lib/mysql-connector-java-8.0.19.jar"
+    if [ -z "$VALUE" ]; then
+      # remove property
+      sed -ri "/$KEY/d" "${MYCORE_PROPERTIES}"
+      return
+    elif [ -z "$KEY" ]; then
+      echo "No Key given. Skip setting property."
+      return
+    fi
 
-      # delete old configuration and add new configuration
-      if grep -q "hibernate.c3p0" "${PERSISTENCE_XML}"; then
-        sed -ri "s/.*hibernate.c3p0.*//" "${PERSISTENCE_XML}"
-        sed -ri "s/(<property name=\"hibernate.connection.provider_class\" value=\")(.*)(\" \/>)/\1org.hibernate.hikaricp.internal.HikariCPConnectionProvider\3/" "${PERSISTENCE_XML}"
-        sed -ri "s/(<\/properties>)/<property name=\"hibernate.hikari.maximumPoolSize\" value=\"30\" \/>\n<property name=\"hibernate.hikari.minimumIdle\" value=\"2\" \/>\n<property name=\"hibernate.hikari.idleTimeout\" value=\"30000\" \/>\n<property name=\"hibernate.hikari.maxLifetime\" value=\"1800000\" \/>\n<property name=\"hibernate.hikari.leakDetectionThreshold\" value=\"9000\" \/>\n<property name=\"hibernate.hikari.registerMbeans\" value=\"true\" \/>\n\1/" "${PERSISTENCE_XML}"
-      fi
-
-      /opt/ubo/ubo-cli/target/bin/ubo.sh reload mappings in jpa configuration file
+    if grep -q "$KEY=" "${MYCORE_PROPERTIES}" ; then
+      ESCAPED_KEY=$(echo "${KEY}" | sed 's/\//\\\//g')
+      ESCAPED_VALUE=$(echo "${VALUE}" | sed 's/\//\\\//g')
+      sed -ri "s/#*($ESCAPED_KEY=).+/\1$ESCAPED_VALUE/" "${MYCORE_PROPERTIES}"
     else
-      echo "No c3p0 driver found. Skip migration."
+      echo "$KEY=$VALUE">>"${MYCORE_PROPERTIES}"
     fi
 }
 
-function migrateJavaxPropertiesToJakarta() {
-  if grep -q "javax.persistence" "${PERSISTENCE_XML}"; then
-    echo "Migrate properties in persistence.xml from javax to jakarta"
-    sed -ri "s/(<property name=\")javax.persistence(.*\" value=\".*\" \/>)/\1jakarta.persistence\2/" "${PERSISTENCE_XML}"
-  fi
-  if grep -q "xmlns.jcp.org" "${PERSISTENCE_XML}"; then
-    echo "Migrate xmlns in persistence.xml from jcp.org to jakarta.ee"
-    sed -ri "s/xmlns=\".+persistence\"/xmlns=\"https:\/\/jakarta.ee\/xml\/ns\/persistence\"/" "${PERSISTENCE_XML}"
-    echo "Migrate schemaLocation in persistence.xml from jcp.org to jakarta.ee"
-    sed -ri "s/(xsi:schemaLocation=\").*jcp.org.*(\")/\1https:\/\/jakarta.ee\/xml\/ns\/persistence https:\/\/jakarta.ee\/xml\/ns\/persistence\/persistence_3_0.xsd\2/" "${PERSISTENCE_XML}"
-  fi
-  if grep -q "version=\"2" "${PERSISTENCE_XML}"; then
-    echo "Migrate version in persistence.xml from 2.* to 3.0"
-    sed -ri "s/version=\"2.*\"/version=\"3.0\"/" "${PERSISTENCE_XML}"
-  fi
-}
 
 function setDockerValues() {
     echo "Set Docker Values to Config!"
 
-    migrateJavaxPropertiesToJakarta
-
     if [ -n "${SOLR_URL}" ]; then
-      sed -ri "s/#?(MCR\.Solr\.ServerURL=).+/\1${SOLR_URL_ESCAPED}/" "${MYCORE_PROPERTIES}";
+      setOrAddProperty "MCR.Solr.ServerURL" "${SOLR_URL}"
     fi
 
     if [ -n "${SOLR_CORE}" ]; then
-      sed -ri "s/#?(MCR\.Solr\.Core\.main\.Name=).+/\1${SOLR_CORE_ESCAPED}/" "${MYCORE_PROPERTIES}";
+      setOrAddProperty "MCR.Solr.Core.main.Name" "${SOLR_CORE}"
     fi
 
     if [ -n "${SOLR_CLASSIFICATION_CORE}" ]; then
-      sed -ri "s/#?(MCR\.Solr\.Core\.classification\.Name=).+/\1${SOLR_CLASSIFICATION_CORE_ESCAPED}/" "${MYCORE_PROPERTIES}"
+      setOrAddProperty "MCR.Solr.Core.classification.Name" "${SOLR_CLASSIFICATION_CORE}"
+    fi
+
+    if [ -n "${SOLR_PROJECTS_CORE}" ]; then
+      setOrAddProperty "MCR.Solr.Core.projects.Name" "${SOLR_PROJECTS_CORE}"
     fi
 
     if [ -n "${JDBC_NAME}" ]; then
-      sed -ri "s/(name=\"jakarta.persistence.jdbc.user\" value=\").*(\")/\1${JDBC_NAME_ESCAPED}\2/" "${PERSISTENCE_XML}"
+      setOrAddProperty "MCR.JPA.User" "${JDBC_NAME}"
     fi
 
     if [ -n "${JDBC_PASSWORD}" ]; then
-      sed -ri "s/(name=\"jakarta.persistence.jdbc.password\" value=\").*(\")/\1${JDBC_PASSWORD_ESCAPED}\2/" "${PERSISTENCE_XML}"
+      setOrAddProperty "MCR.JPA.Password" "${JDBC_PASSWORD}"
     fi
 
     if [ -n "${JDBC_DRIVER}" ]; then
-      sed -ri "s/(name=\"jakarta.persistence.jdbc.driver\" value=\").*(\")/\1${JDBC_DRIVER_ESCAPED}\2/" "${PERSISTENCE_XML}"
+      setOrAddProperty "MCR.JPA.Driver" "${JDBC_DRIVER}"
     fi
 
     if [ -n "${JDBC_URL}" ]; then
-      sed -ri "s/(name=\"jakarta.persistence.jdbc.url\" value=\").*(\")/\1${JDBC_URL_ESCAPED}\2/" "${PERSISTENCE_XML}"
+      setOrAddProperty "MCR.JPA.URL" "${JDBC_URL}"
     fi
 
     if [ -n "${JDBC_SCHEMA}" ]; then
-      if grep -q "hibernate.default_schema" "${PERSISTENCE_XML}"; then
-        sed -ri "s/(name=\"hibernate.default_schema\" value=\").*(\")/\1${JDBC_SCHEMA_ESCAPED}\2/" "${PERSISTENCE_XML}"
-      else
-        sed -ri "s/(<\/properties>)/<property name=\"hibernate.default_schema\" value=\"${JDBC_SCHEMA_ESCAPED}\" \/>\n\1/" "${PERSISTENCE_XML}"
-      fi
-
-      if grep -q "hibernate.hbm2ddl.create_namespaces" "${PERSISTENCE_XML}"; then
-        sed -ri "s/(name=\"hibernate.hbm2ddl.create_namespaces\" value=\").*(\")/\1true\2/" "${PERSISTENCE_XML}"
-      else
-        sed -ri "s/(<\/properties>)/<property name=\"hibernate.hbm2ddl.create_namespaces\" value=\"true\" \/>\n\1/" "${PERSISTENCE_XML}"
-      fi
+      setOrAddProperty "MCR.JPA.DefaultSchema" "${JDBC_SCHEMA}"
     fi
 
-    sed -ri "s/(name=\"hibernate.hbm2ddl.auto\" value=\").*(\")/\1update\2/" "${PERSISTENCE_XML}"
-
-    if  grep -q "MCR.datadir=" "${MYCORE_PROPERTIES}" ; then
-          sed -ri "s/#?(MCR\.datadir=).+/\1${MCR_DATA_DIR_ESCAPED}/" "${MYCORE_PROPERTIES}"
+    if [ -n "${SOLR_ADMIN_USER}" ]; then
+          setOrAddProperty "MCR.Solr.Server.Auth.Admin.Class" "org.mycore.solr.auth.MCRSolrBasicPropertyAuthentication"
+          setOrAddProperty "MCR.Solr.Server.Auth.Admin.Username" "${SOLR_ADMIN_USER}"
+          setOrAddProperty "MCR.Solr.Server.Auth.Admin.Password" "${SOLR_ADMIN_PASSWORD}"
     else
-          echo "MCR.datadir=${MCR_DATA_DIR}">>"${MYCORE_PROPERTIES}"
+          setOrAddProperty "MCR.Solr.Server.Auth.Admin.Class"
+          setOrAddProperty "MCR.Solr.Server.Auth.Admin.Username"
+          setOrAddProperty "MCR.Solr.Server.Auth.Admin.Password"
     fi
 
-    if grep -q "MCR.Solr.NestedDocuments=" "${MYCORE_PROPERTIES}" ; then
-      sed -ri "s/#?(MCR\.Solr\.NestedDocuments=).+/\1true/" "${MYCORE_PROPERTIES}"
+
+    if [ -n "${SOLR_INDEX_USER}" ]; then
+          setOrAddProperty "MCR.Solr.Server.Auth.Index.Class" "org.mycore.solr.auth.MCRSolrBasicPropertyAuthentication"
+          setOrAddProperty "MCR.Solr.Server.Auth.Index.Username" "${SOLR_INDEX_USER}"
+          setOrAddProperty "MCR.Solr.Server.Auth.Index.Password" "${SOLR_INDEX_PASSWORD}"
     else
-      echo "MCR.Solr.NestedDocuments=true">>"${MYCORE_PROPERTIES}";
+          setOrAddProperty "MCR.Solr.Server.Auth.Index.Class"
+          setOrAddProperty "MCR.Solr.Server.Auth.Index.Username"
+          setOrAddProperty "MCR.Solr.Server.Auth.Index.Password"
     fi
 
-    if  grep -q "MCR.Save.FileSystem=" "${MYCORE_PROPERTIES}" ; then
-          sed -ri "s/#?(MCR\.Save\.FileSystem=).+/\1${MCR_SAVE_DIR_ESCAPED}/" "${MYCORE_PROPERTIES}"
+    if [ -n "${SOLR_SEARCH_USER}" ]; then
+          setOrAddProperty "MCR.Solr.Server.Auth.Search.Class" "org.mycore.solr.auth.MCRSolrBasicPropertyAuthentication"
+          setOrAddProperty "MCR.Solr.Server.Auth.Search.Username" "${SOLR_SEARCH_USER}"
+          setOrAddProperty "MCR.Solr.Server.Auth.Search.Password" "${SOLR_SEARCH_PASSWORD}"
     else
-          echo "MCR.Save.FileSystem=${MCR_SAVE_DIR}">>"${MYCORE_PROPERTIES}"
+          setOrAddProperty "MCR.Solr.Server.Auth.Search.Class"
+          setOrAddProperty "MCR.Solr.Server.Auth.Search.Username"
+          setOrAddProperty "MCR.Solr.Server.Auth.Search.Password"
     fi
 
-    migrateC3P0toHikari
+    setOrAddProperty "MCR.JPA.Hbm2ddlAuto" "update"
+    setOrAddProperty "MCR.JPA.PersistenceUnit.MyCoRe.Class" "org.mycore.backend.jpa.MCRSimpleConfigPersistenceUnitDescriptor"
+    setOrAddProperty "MCR.JPA.PersistenceUnitName" "MyCoRe"
+
+    setOrAddProperty "MCR.datadir" "${MCR_DATA_DIR}"
+    setOrAddProperty "MCR.Solr.NestedDocuments" "true"
+    setOrAddProperty "MCR.Save.FileSystem" "${MCR_SAVE_DIR}"
+
+    # s/(<\/properties>)/<property name=\"hibernate.hikari.maximumPoolSize\" value=\"30\" \/>\n<property name=\"hibernate.hikari.minimumIdle\" value=\"2\" \/>\n<property name=\"hibernate.hikari.idleTimeout\" value=\"30000\" \/>\n<property name=\"hibernate.hikari.maxLifetime\" value=\"1800000\" \/>\n<property name=\"hibernate.hikari.leakDetectionThreshold\" value=\"9000\" \/>\n<property name=\"\" value=\"true\" \/>
+    setOrAddProperty "MCR.JPA.Connection.ProviderClass" "org.hibernate.hikaricp.internal.HikariCPConnectionProvider"
+    setOrAddProperty "MCR.JPA.Connection.MaximumPoolSize" "30"
+    setOrAddProperty "MCR.JPA.Connection.MinimumIdle" "2"
+    setOrAddProperty "MCR.JPA.Connection.IdleTimeout" "30000"
+    setOrAddProperty "MCR.JPA.Connection.MaxLifetime" "180000"
+    setOrAddProperty "MCR.JPA.Connection.LeakDetectionThreshold" "9000"
+    setOrAddProperty "MCR.JPA.Connection.RegisterMbeans" "true"
 
     case $JDBC_DRIVER in
       org.postgresql.Driver) downloadDriver "https://jdbc.postgresql.org/download/postgresql-42.7.0.jar";;
@@ -177,15 +173,49 @@ function setDockerValues() {
     esac
 
     mkdir -p "${MCR_CONFIG_DIR}lib"
+
+    downloadDriver https://repo1.maven.org/maven2/com/zaxxer/HikariCP/5.1.0/HikariCP-5.1.0.jar
+
+    # iterate over all environment variables starting with MCR.JPA. and add them to the mycore.properties
+    for var in $(env | grep -E "^MCR.JPA."); do
+      key=$(echo $var | cut -d'=' -f1 | sed 's/MCR.JPA.//g')
+      value=$(echo $var | cut -d'=' -f2)
+      complete_key="MCR.JPA.$key"
+
+      setOrAddProperty "$complete_key" "$value"
+    done
+
+    # iterate over all environment variables prefixed with Property. and add them to the mycore.properties
+    for var in $(env | grep -E "^Property."); do
+      key=$(echo $var | cut -d'=' -f1 | sed 's/Property.//g')
+      value=$(echo $var | cut -d'=' -f2)
+
+      setOrAddProperty "$key" "$value"
+    done
+
+    rm -f "${PERSISTENCE_XML}"
 }
 
 function setUpMyCoRe {
     /opt/ubo/ubo-cli/target/bin/ubo.sh create configuration directory
     setDockerValues
     setupLog4jConfig
-    /opt/ubo/ubo-cli/target/bin/ubo.sh reload mappings in jpa configuration file
-    sed -ri "s/(<\/properties>)/<property name=\"hibernate.hikari.maximumPoolSize\" value=\"30\" \/>\n<property name=\"hibernate.hikari.minimumIdle\" value=\"2\" \/>\n<property name=\"hibernate.hikari.idleTimeout\" value=\"30000\" \/>\n<property name=\"hibernate.hikari.maxLifetime\" value=\"1800000\" \/>\n<property name=\"hibernate.hikari.leakDetectionThreshold\" value=\"9000\" \/>\n<property name=\"hibernate.hikari.registerMbeans\" value=\"true\" \/>\n\1/" "${MCR_CONFIG_DIR}resources/META-INF/persistence.xml"
+
+    # ENABLE_SOLR_CLOUD
+    if [[ "$ENABLE_SOLR_CLOUD" == "true" ]]
+    then
+      echo "upload local config set for main" >> "${MCR_CONFIG_DIR}setup-solr-cloud.txt"
+      echo "upload local config set for classification" >> "${MCR_CONFIG_DIR}setup-solr-cloud.txt"
+      echo "upload local config set for projects" >> "${MCR_CONFIG_DIR}setup-solr-cloud.txt"
+      echo "create collection for core main" >> "${MCR_CONFIG_DIR}setup-solr-cloud.txt"
+      echo "create collection for core classification" >> "${MCR_CONFIG_DIR}setup-solr-cloud.txt"
+      echo "create collection for core projects" >> "${MCR_CONFIG_DIR}setup-solr-cloud.txt"
+      /opt/ubo/ubo-cli/target/bin/ubo.sh process /mcr/home/setup-solr-cloud.txt
+    fi
+
     /opt/ubo/ubo-cli/target/bin/ubo.sh init superuser
+    /opt/ubo/ubo-cli/target/bin/ubo.sh reload solr configuration main in core main
+    /opt/ubo/ubo-cli/target/bin/ubo.sh reload solr configuration classification in core classification
     /opt/ubo/ubo-cli/target/bin/ubo.sh update all classifications from directory /opt/ubo/ubo-cli/src/main/setup/classifications
     /opt/ubo/ubo-cli/target/bin/ubo.sh update permission create-mods for id POOLPRIVILEGE with rulefile /opt/ubo/ubo-cli/src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
     /opt/ubo/ubo-cli/target/bin/ubo.sh update permission create-users for id POOLPRIVILEGE with rulefile /opt/ubo/ubo-cli/src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
@@ -195,7 +225,6 @@ function setUpMyCoRe {
     /opt/ubo/ubo-cli/target/bin/ubo.sh update permission read for id restapi:/ with rulefile /opt/ubo/ubo-cli/src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
     /opt/ubo/ubo-cli/target/bin/ubo.sh update permission read for id restapi:/classifications with rulefile /opt/ubo/ubo-cli/src/main/setup/acl/acl-rule-always-allowed.xml described by always allowed
     /opt/ubo/ubo-cli/target/bin/ubo.sh update permission deletedb for id default with rulefile /opt/ubo/ubo-cli/src/main/setup/acl/acl-rule-administrators-only.xml described by administrators only
-    /opt/ubo/ubo-cli/target/bin/ubo.sh reload solr configuration main in core main
 }
 
 sed -ri "s/(-DMCR.AppName=).+( \\\\)/\-DMCR.ConfigDir=${MCR_CONFIG_DIR_ESCAPED}\2/" /opt/ubo/ubo-cli/target/bin/ubo.sh

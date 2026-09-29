@@ -15,6 +15,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -30,6 +32,8 @@ import org.mycore.services.fieldquery.MCRQuery;
 import org.mycore.services.fieldquery.MCRQueryCondition;
 import org.mycore.services.fieldquery.MCRQueryParser;
 import org.mycore.solr.MCRSolrCoreManager;
+import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
+import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 import org.mycore.solr.search.MCRSolrSearchUtils;
 
 import java.util.Arrays;
@@ -90,7 +94,10 @@ public class DozBibServlet extends MCRServlet {
         SolrQuery solrQuery = MCRSolrSearchUtils.getSolrQuery(q, doc, req);
         solrQuery.setRows(0);
         SolrClient solrClient = MCRSolrCoreManager.getMainSolrClient();
-        SolrDocumentList results = solrClient.query(solrQuery).getResults();
+        QueryRequest queryRequest = new QueryRequest(solrQuery);
+        MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest, MCRSolrAuthenticationLevel.SEARCH);
+        QueryResponse response = queryRequest.process(solrClient);
+        SolrDocumentList results = response.getResults();
         long numFound = results.getNumFound();
 
         String format = job.getRequest().getParameter("format");

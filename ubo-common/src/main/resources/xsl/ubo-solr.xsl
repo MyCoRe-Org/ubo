@@ -17,7 +17,6 @@
   <xsl:template match="mycoreobject[contains(@ID,'_mods_')]">
     <xsl:apply-templates select="." mode="baseFields" />
     <xsl:apply-templates select="structure/parents/parent[@xlink:href]" mode="solrField" />
-    <xsl:apply-templates select="service/servflags/servflag[@type='status']" mode="solrField" />
     <xsl:apply-templates select="service/servflags/servflag[@type='importID']" mode="solrField" />
     <xsl:apply-templates select="metadata/def.modsContainer/modsContainer/mods:mods" mode="solrField" />
 
@@ -38,7 +37,7 @@
     <xsl:apply-templates select="descendant::mods:name/mods:nameIdentifier" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:name[mods:nameIdentifier[@type='lsf']]" mode="solrField.lsf" />
     <xsl:apply-templates select="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][contains('aut cre tch pht prg edt',text())]]/mods:nameIdentifier[@type='lsf']" mode="solrField.ae" />
-    <xsl:apply-templates select="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][contains('aut cre tch pht prg edt ivr ive hnr',text())]]/mods:nameIdentifier[@type='lsf']" mode="solrField.aeplus" />>
+    <xsl:apply-templates select="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][contains('aut cre tch pht prg edt ivr ive hnr',text())]]/mods:nameIdentifier[@type='lsf']" mode="solrField.aeplus" />
     <xsl:apply-templates select="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][contains('aut cre tch pht prg edt',text())]]/mods:nameIdentifier[@type='orcid']" mode="solrField.ae" />
     <xsl:apply-templates select="mods:name[@type='personal'][mods:role/mods:roleTerm[@type='code'][contains('aut cre tch pht prg edt',text())]]/mods:nameIdentifier[@type='connection']" mode="solrField.ae" />
     <xsl:apply-templates select="mods:name[@type='personal'][mods:role/mods:roleTerm[contains(@authorityURI,'author_roles')]]" mode="solrField.ar" />
@@ -57,6 +56,7 @@
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:titleInfo[not(@type)]" mode="solrField.host" />
     <xsl:apply-templates select="mods:relatedItem[@type='host'][substring-after(mods:genre/@valueURI, '#') = 'journal']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:part" mode="solrField" />
+    <xsl:apply-templates select="mods:location/mods:url|mods:relatedItem[@type='host']/mods:location/mods:url" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:originInfo" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:relatedItem[@type='series']/mods:titleInfo" mode="solrField" />
     <xsl:apply-templates select="descendant::mods:name[@type='conference'][not(ancestor::mods:relatedItem[@type='references'])][1]" mode="solrField" />
@@ -87,12 +87,6 @@
         </xsl:for-each>
       </field>
     </xsl:if>
-  </xsl:template>
-
-  <xsl:template match="servflag[@type='status']" mode="solrField">
-    <field name="status">
-      <xsl:value-of select="text()" />
-    </field>
   </xsl:template>
 
   <xsl:template match="servflag[@type='importID']" mode="solrField">
@@ -203,13 +197,26 @@
 
   <xsl:template match="mods:name/mods:nameIdentifier" mode="solrField">
     <field name="nid_{@type}">
-      <xsl:value-of select="text()" />
+      <xsl:value-of select="text()"/>
     </field>
 
     <field name="{@type}_nid_text">
-      <xsl:value-of select="../mods:namePart[@type='family']" />
+      <xsl:value-of select="../mods:namePart[@type='family']"/>
       <xsl:for-each select="../mods:namePart[@type='given'][1]">
-        <xsl:value-of select="concat(', ',text())" />
+        <xsl:value-of select="concat(', ',text())"/>
+      </xsl:for-each>
+    </field>
+  </xsl:template>
+
+  <xsl:template match="mods:name/mods:nameIdentifier[ancestor::mods:relatedItem]" mode="solrField">
+    <field name="ri_nid_{@type}">
+      <xsl:value-of select="text()"/>
+    </field>
+
+    <field name="ri_{@type}_nid_text">
+      <xsl:value-of select="../mods:namePart[@type='family']"/>
+      <xsl:for-each select="../mods:namePart[@type='given'][1]">
+        <xsl:value-of select="concat(', ',text())"/>
       </xsl:for-each>
     </field>
   </xsl:template>
@@ -299,8 +306,12 @@
       <xsl:when test="mods:classification[contains(@authorityURI,'oa')]">
         <xsl:apply-templates select="mods:classification[contains(@authorityURI,'oa')][1]" mode="solrField" />
       </xsl:when>
-      <xsl:otherwise>
+      <xsl:when test="count(mods:relatedItem[@type='host']/mods:classification[contains(@authorityURI,'oa')][1]) &gt; 0">
         <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:classification[contains(@authorityURI,'oa')][1]" mode="solrField" />
+      </xsl:when>
+      <xsl:otherwise>
+        <field name="oa">unchecked</field>
+        <field name="oa_exact">unchecked</field>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -526,6 +537,12 @@
     <field name="name_id_{@type}">
       <xsl:value-of select="text()" />
     </field>
+
+    <xsl:if test="@type = 'connection'">
+      <field name="groupable_name_id_{@type}">
+        <xsl:value-of select="text()"/>
+      </field>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="mods:part" mode="solrField">
@@ -567,6 +584,12 @@
         <xsl:value-of select="mods:number" />
       </field>
     </xsl:for-each>
+  </xsl:template>
+  
+  <xsl:template match="mods:location/mods:url" mode="solrField">
+    <field name="url">
+      <xsl:value-of select="." />
+    </field>
   </xsl:template>
 
   <xsl:template match="mods:*[@authority or @authorityURI]|mods:typeOfResource|mods:accessCondition" mode="category">

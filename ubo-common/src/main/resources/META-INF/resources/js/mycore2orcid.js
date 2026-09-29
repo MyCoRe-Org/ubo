@@ -1,7 +1,6 @@
-const orcidObjectStatusURL = webApplicationBaseURL + "api/orcid/v1/object-status/v3/";
+const orcidObjectStatusURL = webApplicationBaseURL + "api/orcid/v1/member/{orcid}/works/object/";
 const orcidUserStatusURL = webApplicationBaseURL + "api/orcid/v1/user-status/";
-const orcidPublishURL = webApplicationBaseURL + "api/orcid/v1/create-work/v3/";
-const orcidIcon = "<img alt='ORCID iD' src='" + webApplicationBaseURL + "images/orcid_icon.svg' class='orcid-icon' />";
+const orcidPublishURL = webApplicationBaseURL + "api/orcid/v1/member/{orcid}/works/object/";
 
 let orcidI18n;
 let userStatus = {orcids: [], trustedOrcids: []};
@@ -52,7 +51,7 @@ async function updateUI(headers) {
 
 async function getORCIDPublicationStatus(div, headers) {
     let id = $(div).data('id');
-    let url = orcidObjectStatusURL + id;
+    let url = orcidObjectStatusURL.replace("{orcid}", userStatus.trustedOrcids[0]) + id;
 
     console.debug(id + " Fetching publication/object status");
 
@@ -69,24 +68,22 @@ async function getORCIDPublicationStatus(div, headers) {
 
 function setORCIDPublicationStatus(id, div, objectStatus) {
     console.debug(id + " Setting publication status icon");
-
-    $(div).empty();
-
-    if (objectStatus.usersPublication) {
-        let html = "<span class='orcid-info' title='" + orcidI18n[
-            (objectStatus.inORCIDProfile ? 'orcid.publication.inProfile.true' : 'orcid.publication.inProfile.false')
-            ] + "'>";
-        html += orcidIcon;
-        html += "<span class='far fa-thumbs-" + (objectStatus.inORCIDProfile ? "up" : "down")
-            + " orcid-in-profile-" + objectStatus.inORCIDProfile + "' aria-hidden='true' />";
-        html += "</span>";
-        $(div).html(html);
-    }
+    div.innerHTML = '';
+    let text = orcidI18n[(objectStatus.hasOwnProperty("own")? 'orcid.publication.inProfile.true' : 'orcid.publication.inProfile.false')];
+    let span = document.createElement("span");
+    span.title = text;
+    span.textContent = text;
+    span.classList.add('orcid-info');
+    span.classList.add('orcid-in-profile-' + objectStatus.hasOwnProperty("own"));
+    span.classList.add('badge');
+    span.classList.add('badge-' + (objectStatus.hasOwnProperty("own") ? "success" : "secondary"));
+    span.classList.add('badge-orcid-in-profile-' + objectStatus.hasOwnProperty("own"));
+    div.appendChild(span);
 }
 
 async function showORCIDPublishButton(div, headers) {
     let id = $(div).data('id');
-    let url = orcidObjectStatusURL + id;
+    let url = orcidObjectStatusURL.replace("{orcid}", userStatus.trustedOrcids[0]) + id;
 
     console.debug(id + " Showing ORCID publish button");
 
@@ -97,11 +94,9 @@ async function showORCIDPublishButton(div, headers) {
 
     const objectStatus = await objectStatusResponse.json();
 
-    if (objectStatus.inORCIDProfile == true) {
+    if (objectStatus.hasOwnProperty("own") == true) {
         console.debug(id + " Publication is already in profile of current user");
-        return;
     }
-
     updateORCIDPublishOrUpdateButton(div, objectStatus, headers);
 }
 
@@ -109,9 +104,10 @@ function updateORCIDPublishOrUpdateButton(div, objectStatus, headers) {
     let id = $(div).data('id');
     $(div).empty();
 
-    if (userStatus.trustedOrcids.length > 0 && objectStatus.usersPublication) {
+    let isInProfile= objectStatus.hasOwnProperty("own");
+    if (userStatus.trustedOrcids.length > 0) {
         let html = "<button class='orcid-button btn btn-sm btn-outline-secondary'>" +
-            orcidI18n[(objectStatus.inORCIDProfile ? 'orcid.publication.action.update' : 'orcid.publication.action.create')] +
+            orcidI18n[(isInProfile ? 'orcid.publication.action.update' : 'orcid.publication.action.create')] +
             "</button>";
         $(div).html(html);
 
@@ -119,7 +115,8 @@ function updateORCIDPublishOrUpdateButton(div, objectStatus, headers) {
             $(this).attr("disabled", "disabled");
             div = this;
 
-            const resp = await fetch(orcidPublishURL + id, headers('POST'));
+            const resp = await fetch(orcidPublishURL.replace("{orcid}", userStatus.trustedOrcids[0]) + id, (isInProfile ? headers('PUT') : headers('POST')));
+
             if (resp.ok) {
                 $("#notification-dialog-success").modal('show');
                 await updateUI(headers);
@@ -128,4 +125,16 @@ function updateORCIDPublishOrUpdateButton(div, objectStatus, headers) {
             }
         });
     }
+}
+
+async function fetchJWT() {
+    const response = await fetch(`${webApplicationBaseURL}rsc/jwt`);
+    if (!response.ok) {
+        throw new Error(`Cannot fetch JWT: ${response.status}`);
+    }
+    const result = await response.json();
+    if (!result.login_success) {
+        throw new Error("Login failed");
+    }
+    return result.access_token;
 }

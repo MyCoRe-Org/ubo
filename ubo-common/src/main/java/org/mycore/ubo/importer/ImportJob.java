@@ -13,6 +13,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -34,6 +37,8 @@ import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mods.enrichment.MCREnricher;
 import org.mycore.solr.MCRSolrCoreManager;
 import org.mycore.solr.MCRSolrUtils;
+import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
+import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
@@ -239,7 +244,11 @@ public abstract class ImportJob {
             long numFound;
             do {
                 TimeUnit.SECONDS.sleep(SECONDS_TO_WAIT_BETWEEN_SOLR_CHECKS);
-                numFound = solrClient.query(query).getResults().getNumFound();
+                QueryRequest queryRequest = new QueryRequest(query);
+                MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest, MCRSolrAuthenticationLevel.SEARCH);
+                QueryResponse response = queryRequest.process(solrClient);
+                SolrDocumentList results = response.getResults();
+                numFound = results.getNumFound();
                 LOGGER.info("Check if SOLR indexed all publications: #" + numTries + " " + numFound + " / "
                     + getNumPublications());
             } while ((numFound < getNumPublications()) && (++numTries < MAX_SOLR_CHECKS));

@@ -314,9 +314,9 @@
     <xsl:for-each select="metadata/def.modsContainer/modsContainer/mods:mods">
       <xsl:call-template name="pubtype" />
     </xsl:for-each>
-    <xsl:for-each select="service/servflags/servflag[@type='status']">
+    <xsl:for-each select="service/servstates/servstate[@classid='state']">
       <span class="label-info ubo-badge-status badge badge-light">
-        <xsl:value-of select="i18n:translate(concat('search.dozbib.status.',text()))" />
+        <xsl:value-of select="i18n:translate(concat('search.dozbib.status.', @categid))" />
       </span>
     </xsl:for-each>
     <xsl:if test="$role='duplicate'">

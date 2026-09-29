@@ -122,7 +122,7 @@ public class DozBibEntryServlet extends MCRServlet {
             return;
         }
 
-        new MCRMODSWrapper(obj).setServiceFlag("status", "deleted");
+        obj.getService().setState("deleted");
         Document xml = obj.createXML();
 
         MCRMetadataManager.deleteMCRObject(oid);

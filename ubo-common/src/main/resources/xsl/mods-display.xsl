@@ -27,6 +27,9 @@
   <xsl:param name="UBO.URI.gbv.de.ppn.redirect" />
   <xsl:param name="UBO.CreatorRoles" select="'cre aut tch pht prg'" />   <!-- Rollen, die als DC.Creator betrachtet werden -->
   <xsl:param name="UBO.DESTATIS.omit.ID"/>
+  <xsl:param name="UBO.Affiliation.Suppress.ConnectedIndicator"/>
+
+  <xsl:param name="current-user" select="document('notnull:user:current')/user"/>
 
   <!-- Expect one more author to be displayed as the last author is always getting displayed -->
   <xsl:param name="UBO.Initially.Visible.Authors" select="14" />
@@ -46,6 +49,7 @@
   <xsl:variable name="partOf"                select="document('notnull:classification:metadata:-1:children:partOf')/mycoreclass/categories" />
   <xsl:variable name="mediaType"             select="document('notnull:classification:metadata:-1:children:mediaType')/mycoreclass/categories" />
   <xsl:variable name="destatis"              select="document('notnull:classification:metadata:-1:children:destatis')/mycoreclass/categories" />
+  <xsl:variable name="licenses"              select="document('notnull:classification:metadata:-1:children:licenses')/mycoreclass/categories" />
 
   <xsl:variable name="fq">
     <xsl:if test="not(check:currentUserIsAdmin())">
@@ -337,13 +341,22 @@
   </xsl:template>
 
   <!-- ========== ORCID status and publish button ========== -->
+  <xsl:variable name="current-user-connection-id" select="$current-user/attributes/attribute[@name='id_connection']/@value"/>
 
   <xsl:template name="orcid-status">
-    <div class="orcid-status" data-id="{ancestor::mycoreobject/@ID}" />
+    <xsl:variable name="publication-connection-ids" select="ancestor::mycoreobject//mods:nameIdentifier[@type='connection']"/>
+
+    <xsl:if test="$publication-connection-ids = $current-user-connection-id">
+      <div class="orcid-status" data-id="{ancestor::mycoreobject/@ID}"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="orcid-publish">
-    <div class="orcid-publish d-inline" data-id="{ancestor::mycoreobject/@ID}" />
+    <xsl:variable name="publication-connection-ids" select="ancestor::mycoreobject//mods:nameIdentifier[@type='connection']"/>
+
+    <xsl:if test="$publication-connection-ids = $current-user-connection-id">
+      <div class="orcid-publish d-inline" data-id="{ancestor::mycoreobject/@ID}"/>
+    </xsl:if>
   </xsl:template>
 
   <!-- ========== URI bauen, um Dubletten zu finden ========== -->
@@ -386,13 +399,13 @@
         <xsl:with-param name="selected" select="mods:relatedItem[@type='series']" />
         <xsl:with-param name="before"> - </xsl:with-param>
         <xsl:with-param name="mode" select="$mode" />
-        <xsl:with-param name="class" select="'in.series'" />
+        <xsl:with-param name="class" select="concat('in-series in-series-', substring-after(mods:relatedItem[@type='host']/mods:genre/@valueURI, '#'))" />
       </xsl:call-template>
       <xsl:call-template name="output.line">
         <xsl:with-param name="selected" select="mods:relatedItem[@type='host']" />
         <xsl:with-param name="before"> - </xsl:with-param>
         <xsl:with-param name="mode" select="$mode" />
-        <xsl:with-param name="class" select="'in.host'" />
+        <xsl:with-param name="class" select="concat('in-host in-host-', substring-after(mods:relatedItem[@type='host']/mods:genre/@valueURI, '#'))" />
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
@@ -579,6 +592,21 @@
 
               <xsl:apply-templates select="." />
 
+              <xsl:variable name="show-connected-indicator-icon">
+                <xsl:choose>
+                  <xsl:when test="$UBO.Affiliation.Suppress.ConnectedIndicator = 'true'">
+                    <xsl:choose>
+                      <xsl:when test="$is-connected-author = true() and not(mods:affiliation[contains(@valueURI, 'isAffiliated#false')])">
+                        <xsl:value-of select="'true'"/>
+                      </xsl:when>
+                    </xsl:choose>
+                  </xsl:when>
+                  <xsl:when test="$is-connected-author = true()">
+                    <xsl:value-of select="'true'"/>
+                  </xsl:when>
+                </xsl:choose>
+              </xsl:variable>
+
               <xsl:if test="mods:nameIdentifier or $is-corresponding-author = true()">
                 <span id="{$popId}" title="{i18n:translate('person.information')}">
                   <xsl:attribute name="class">
@@ -586,14 +614,16 @@
                     <xsl:if test="$is-corresponding-author = true()">
                       <xsl:text>-edit</xsl:text>
                     </xsl:if>
-                    <xsl:if test="$is-connected-author = true()">
+                    <xsl:if test="$show-connected-indicator-icon = 'true'">
                       <xsl:text> ubo-person-connected</xsl:text>
                     </xsl:if>
                   </xsl:attribute>
                 </span>
 
-                <xsl:if test="$is-connected-author = true()">
-                  <sup><xsl:value-of select="i18n:translate('ubo.person.connected.sup')" /></sup>
+                <xsl:if test="$show-connected-indicator-icon = 'true'">
+                  <sup>
+                    <xsl:value-of select="i18n:translate('ubo.person.connected.sup')"/>
+                  </sup>
                 </xsl:if>
 
                 <span id="{$popId}-content" class="d-none">
@@ -616,15 +646,15 @@
                         <xsl:apply-templates select="mods:affiliation" mode="details" />
                       </dd>
                     </xsl:if>
-                    <xsl:if test="$is-connected-author = true() or $is-corresponding-author = true()">
+                    <xsl:if test="$show-connected-indicator-icon = 'true' or $is-corresponding-author = true()">
                       <dt>
                         <xsl:value-of select="i18n:translate('ubo.person.other')" />
                       </dt>
                       <dd>
-                        <xsl:if test="$is-connected-author = true()">
+                        <xsl:if test="$show-connected-indicator-icon = 'true'">
                           <xsl:value-of select="i18n:translate('ubo.person.connected')" />
                         </xsl:if>
-                        <xsl:if test="$is-connected-author = true() and $is-corresponding-author = true()">
+                        <xsl:if test="$show-connected-indicator-icon = 'true' and $is-corresponding-author = true()">
                           <br />
                         </xsl:if>
                         <xsl:if test="$is-corresponding-author = true()">
@@ -1197,6 +1227,7 @@
     <xsl:apply-templates select="mods:classification[contains(@authorityURI,'destatis')]" mode="details">
       <xsl:sort select="@valueURI"/>
     </xsl:apply-templates>
+    <xsl:apply-templates select="../../../../service/servflags/servflag[@type='importID']" mode="details" />
     <xsl:apply-templates select="mods:abstract/@xlink:href" mode="details" />
     <xsl:apply-templates select="mods:abstract[string-length(.) &gt; 0]" mode="details" />
   </xsl:template>
@@ -1225,6 +1256,22 @@
             <xsl:if test="position() != last()"> ; </xsl:if>
           </xsl:for-each>
           <xsl:apply-templates select="." />
+        </div>
+      </div>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="servflag[@type='importID']" mode="details">
+    <xsl:if test="check:currentUserIsAdmin()">
+      <div class="row">
+        <div class="col-3">
+          <xsl:value-of select="i18n:translate('ubo.identifier.importID')" />
+          <xsl:text>:</xsl:text>
+        </div>
+        <div class="col-9">
+          <a href="{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+importID:&quot;', ., '&quot;'))}">
+            <xsl:value-of select="." />
+          </a>
         </div>
       </div>
     </xsl:if>
@@ -1550,10 +1597,12 @@
       <xsl:text>: </xsl:text>
     </xsl:if>
     <xsl:apply-templates select="mods:publisher" />
-    <xsl:if test="(mods:edition or mods:place or mods:publisher) and mods:dateIssued">
-      <xsl:text>, </xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="mods:dateIssued" />
+    <span class="ubo-date-part">
+      <xsl:if test="(mods:edition or mods:place or mods:publisher) and mods:dateIssued">
+        <xsl:text>, </xsl:text>
+      </xsl:if>
+      <xsl:apply-templates select="mods:dateIssued"/>
+    </span>
   </xsl:template>
 
   <!-- ========== Auflage ========== -->
@@ -1722,7 +1771,7 @@
   <!-- ========== Sprache eines Eintrages ========== -->
   <xsl:template match="@xml:lang">
     <xsl:text> in </xsl:text>
-    <xsl:value-of select="document(concat('language:',.))/language/label[@xml:lang=$CurrentLang]" />
+    <xsl:value-of select="document(concat('notnull:callJava:org.mycore.common.xml.MCRXMLFunctions:getDisplayName:rfc5646:', .,':', $CurrentLang))" />
   </xsl:template>
 
   <!-- ========== Sprache der Publikation ========== -->

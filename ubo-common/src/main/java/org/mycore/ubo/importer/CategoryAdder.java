@@ -47,11 +47,12 @@ class CategoryAdder {
         if (status == null || status.getText().isEmpty()) {
             return;
         }
-        Element statusElement = XPATH_FACTORY.compile("//service/servflags/servflag[@type='status']", Filters.element())
+        Element statusElement = XPATH_FACTORY
+            .compile("//service/servstates/servstate[@classid='state']", Filters.element())
             .evaluateFirst(publication);
 
-        if(statusElement != null) {
-            statusElement.setText(status.getText());
+        if (statusElement != null) {
+            statusElement.setAttribute("categid", status.getText());
         }
     }
 

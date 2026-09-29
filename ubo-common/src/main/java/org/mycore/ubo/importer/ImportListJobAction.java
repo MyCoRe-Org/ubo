@@ -69,6 +69,9 @@ public class ImportListJobAction extends MCRJobAction {
                 }
             }
 
+            // genre present after enrichment
+            importJob.setFixedGenre(formInput);
+
             try {
                 importJob.savePublications();
                 sendMail(importJob);

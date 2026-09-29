@@ -117,6 +117,7 @@
       <xsl:when test="$genre='dataset'">research_data</xsl:when>
       <xsl:when test="$genre='other'">book</xsl:when>
       <xsl:when test="$genre='preprint'">preprint</xsl:when>
+      <xsl:when test="$genre='software'">software</xsl:when>
     </xsl:choose>
     <xsl:text> </xsl:text>
   </xsl:template>

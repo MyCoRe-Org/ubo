@@ -34,9 +34,9 @@
          </def.modsContainer>
        </metadata>
        <service>
-         <servflags class="MCRMetaLangText">
-           <servflag type="status" inherited="0" form="plain">imported</servflag>
-         </servflags>
+         <servstates class="MCRMetaClassification">
+           <servstate classid="state" categid="imported"/>
+         </servstates>
        </service>
      </mycoreobject>
   </xsl:template>

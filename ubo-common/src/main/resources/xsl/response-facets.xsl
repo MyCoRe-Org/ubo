@@ -118,7 +118,7 @@
       <xsl:if test="position() = 1"><xsl:value-of select="string-length(text())"/></xsl:if>
     </xsl:for-each>
   </xsl:variable>
-  <article class="card mb-3">
+  <article class="card mb-3 ubo-facet-card-{translate(@name, '.', '-')}">
     <div class="card-body">
       <hgroup>
         <h3>
@@ -291,6 +291,9 @@
       </xsl:when>
       <xsl:when test="$type='destatis'">
         <xsl:value-of select="$destatis//category[@ID=$value]/label[lang('de')]/@text"/>
+      </xsl:when>
+      <xsl:when test="$type='licenses_facet'">
+        <xsl:value-of select="$licenses//category[@ID=$value]/label[lang('de')]/@text"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$value"/>

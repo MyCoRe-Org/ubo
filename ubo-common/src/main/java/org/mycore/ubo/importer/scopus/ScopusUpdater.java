@@ -1,5 +1,8 @@
 package org.mycore.ubo.importer.scopus;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -10,6 +13,8 @@ import java.util.stream.Collectors;
 
 public class ScopusUpdater {
 
+    private static final Logger LOGGER = LogManager.getLogger();
+
     public static void update(String strQuery) throws Exception {
         String encodedQueryStr = strQuery;
         AbstractScopusQuery query = new PaginatedScopusQuery(encodedQueryStr, 20, 0);
@@ -18,7 +23,11 @@ public class ScopusUpdater {
         List<String> scopusIDs = query.resolveIDs();
 
         for (String scopusID : scopusIDs) {
-            importer.doImport(scopusID);
+            try {
+                importer.doImport(scopusID);
+            } catch (Exception e) {
+                LOGGER.error("Could not import publication from Scopus by id {}", scopusID, e);
+            }
         }
         importer.sendNotification();
     }
@@ -35,7 +44,11 @@ public class ScopusUpdater {
         List<String> scopusIDs = query.resolveIDs();
 
         for (String scopusID : scopusIDs) {
-            importer.doImport(scopusID);
+            try {
+                importer.doImport(scopusID);
+            } catch (Exception e) {
+                LOGGER.error("Could not import publication from Scopus by id {}", scopusID, e);
+            }
         }
         importer.sendNotification();
     }

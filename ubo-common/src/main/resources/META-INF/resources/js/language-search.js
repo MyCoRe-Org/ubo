@@ -105,9 +105,8 @@ class LanguageSearchInput {
 
 
         this.initializeForm().then(() => {
-            console.log('Form initialized');
+            console.debug('Form initialized');
         });
-
     }
 
     /**
@@ -190,7 +189,6 @@ class LanguageSearchInput {
              */
             const data = await response.json();
 
-
             LanguageSearchInput.labelIdMap = /** @type {Map<string, string>} */ new Map();
 
             LanguageSearchInput.idLabelMap = /** @type {Map<string, string>} */ new Map();
@@ -199,19 +197,30 @@ class LanguageSearchInput {
              */
             const prependLater = [];
             data.categories.forEach(category => {
+                processLanguageCategory(category, this.preferredLanguages);
+            });
+
+            function processLanguageCategory(category, preferredLanguages) {
                 const optionElement = document.createElement("option");
                 const label = LanguageSearchInput.findBestMatchingLabel(category.labels).text;
                 optionElement.value = label;
                 optionElement.text = label;
                 LanguageSearchInput.labelIdMap.set(label, category.ID);
                 LanguageSearchInput.idLabelMap.set(category.ID, label);
-                const preferredLanguagePos = this.preferredLanguages.indexOf(category.ID);
+                const preferredLanguagePos = preferredLanguages.indexOf(category.ID);
+
                 if (preferredLanguagePos == -1) {
                     LanguageSearchInput.dataList.append(optionElement);
                 } else {
                     prependLater.push({el:optionElement , category:category});
                 }
-            });
+
+                if(category.categories !== undefined) {
+                    category.categories.forEach(category => {
+                        processLanguageCategory(category, preferredLanguages);
+                    })
+                }
+            }
 
             resolverList.forEach((resolve) => {
                 resolve({

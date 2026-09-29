@@ -4,6 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -25,6 +27,8 @@ import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mods.MCRMODSWrapper;
 import org.mycore.solr.MCRSolrCoreManager;
 import org.mycore.solr.MCRSolrUtils;
+import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
+import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 import org.mycore.ubo.importer.ImportIdProvider;
 
 import java.text.MessageFormat;
@@ -82,8 +86,13 @@ class ScopusImporter {
     }
 
     public MCRObject doImport(String scopusID) throws MCRPersistenceException, MCRAccessException {
-        if (isAlreadyStored(scopusID)) {
-            LOGGER.info("publication with ID {} already existing, will not import.", scopusID);
+        try {
+            if (isAlreadyStored(scopusID)) {
+                LOGGER.info("publication with ID {} already existing, will not import.", scopusID);
+                return null;
+            }
+        } catch (MCRException e) {
+            LOGGER.warn("publication with ID {} could not be imported: ", scopusID, e);
             return null;
         }
 
@@ -107,7 +116,10 @@ class ScopusImporter {
         query.setRows(0);
         SolrDocumentList results;
         try {
-            results = solrClient.query(query).getResults();
+            QueryRequest queryRequest = new QueryRequest(query);
+            MCRSolrAuthenticationManager.obtainInstance().applyAuthentication(queryRequest, MCRSolrAuthenticationLevel.SEARCH);
+            QueryResponse response = queryRequest.process(solrClient);
+            results = response.getResults();
             return (results.getNumFound() > 0);
         } catch (Exception ex) {
             throw new MCRException(ex);
@@ -128,8 +140,9 @@ class ScopusImporter {
         setPreconfiguredClasses(publicationXML);
 
         MCRObject obj = new MCRObject(new Document(publicationXML));
+        obj.getService().setState(STATUS);
+
         MCRMODSWrapper wrapper = new MCRMODSWrapper(obj);
-        wrapper.setServiceFlag("status", STATUS);
         wrapper.setServiceFlag("importID", importIdProvider.getImportId());
         MCRObjectID oid = MCRMetadataManager.getMCRObjectIDGenerator().getNextFreeId(PROJECT_ID, "mods");
         obj.setId(oid);

@@ -43,17 +43,20 @@
 	<xed:source uri="xslStyle:mods-preprocessor:mcrobject:{$id}" />
 	<xed:source uri="xslStyle:mods2mycoreobject,mods-preprocessor:session:{$key}" />
 
-    <xed:cancel url="servlets/MCRLockServlet?action=unlock&amp;id={$id}&amp;url=DozBibEntryServlet%3Fid={$id}" />
-	<xed:cancel url="newPublication.xed" />
+  <xed:cancel url="servlets/MCRLockServlet?action=unlock&amp;id={$id}&amp;url=DozBibEntryServlet%3Fid={$id}" />
+  <xed:cancel url="newPublication.xed" />
 	
 	<xed:post-processor xsl="mods-postprocessor.xsl" />    
 	
+  <xed:preload uri="webapp:import-editor.xed" />
+  <xed:preload uri="webapp:import-genres.xed" />
+  
 	<xed:bind xpath="/mycoreobject">
-	  <xed:include uri="webapp:import-editor.xed" ref="common.metafields" />
+	  <xed:include ref="common.metafields" />
 	  
 	  <input type="hidden" name="mode" value="save" />
 	  
-	  <xed:include uri="webapp:import-editor.xed" ref="validation" />
+	  <xed:include ref="validation" />
 
 	  <xed:bind xpath="metadata/def.modsContainer[@class='MCRMetaXML']/modsContainer/mods:mods">
 
@@ -91,25 +94,25 @@
             <fieldset>
 
               <legend>
-		<xed:include uri="webapp:import-editor.xed" ref="legend.ID" />
+		<xed:include ref="legend.ID" />
 		<xed:output value="$genres//category[@ID=$genre_intern]/label[lang($CurrentLang)]/@text" />
 		<xed:if test="not($host_intern='standalone')">
 		  <xed:output value="concat(' in ',$genres//category[@ID=$host_intern]/label[lang($CurrentLang)]/@text)" />
 		</xed:if>
               </legend>
 
-              <xed:include uri="webapp:import-editor.xed" ref="status" />
-              <xed:include uri="webapp:import-editor.xed" ref="partOf" />
-              <xed:include uri="webapp:import-editor.xed" ref="subject" />
-              <xed:include uri="webapp:import-editor.xed" ref="origin" />
-              <xed:include uri="webapp:import-editor.xed" ref="tags" />    
+              <xed:include ref="status" />
+              <xed:include ref="partOf" />
+              <xed:include ref="subject" />
+              <xed:include ref="origin" />
+              <xed:include ref="tags" />    
             </fieldset>
             
             <fieldset>
               <legend>
 		<xed:output value="concat($genres//category[@ID=$genre_intern]/label[lang($CurrentLang)]/@text,':')" />
               </legend>
-              <xed:include uri="webapp:import-genres.xed" ref="genre.{$genre_intern}" />
+              <xed:include ref="genre.{$genre_intern}" />
             </fieldset>
 
             <xed:if test="not($host_intern='standalone')">
@@ -120,11 +123,11 @@
 		<xed:bind xpath="mods:relatedItem[@type='host']">
 		  <xed:choose>
                     <xed:when test="@xlink:href">
-                      <xed:include uri="webapp:import-editor.xed" ref="linked.relatedItem" />
-                      <xed:include uri="webapp:import-genres.xed" ref="host.{$host_intern}.linked" />
+                      <xed:include ref="linked.relatedItem" />
+                      <xed:include ref="host.{$host_intern}.linked" />
                     </xed:when>
                     <xed:otherwise>
-                      <xed:include uri="webapp:import-genres.xed" ref="host.{$host_intern}" />
+                      <xed:include ref="host.{$host_intern}" />
                     </xed:otherwise>
 		  </xed:choose>
 		</xed:bind>
@@ -133,21 +136,21 @@
             </xed:if>
 
             <fieldset>
-              <xed:include uri="webapp:import-editor.xed" ref="languages" />    
-              <xed:include uri="webapp:import-editor.xed" ref="topics" />  
+              <xed:include ref="languages" />    
+              <xed:include ref="topics" />  
               <xed:if test="not($genre_intern='abstract')">   
-                <xed:include uri="webapp:import-editor.xed" ref="abstract" />    
+                <xed:include ref="abstract" />    
               </xed:if> 
             </fieldset>
             <fieldset>
               <legend><xed:output i18n="ubo.project.information"/>:</legend>
-              <xed:include uri="webapp:import-editor.xed" ref="projectInformation"/>
+              <xed:include ref="projectInformation"/>
             </fieldset>
         </xed:bind>
 
-          <xed:include uri="webapp:import-editor.xed" ref="cleanup" />
-          <xed:include uri="webapp:import-editor.xed" ref="cancel.submit" />
-          <xed:include uri="webapp:import-editor.xed" ref="javascript" />
+          <xed:include ref="cleanup" />
+          <xed:include ref="cancel.submit" />
+          <xed:include ref="javascript" />
         </xed:bind>
     
       </xed:form>
