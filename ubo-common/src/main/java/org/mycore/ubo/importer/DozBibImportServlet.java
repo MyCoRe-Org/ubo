@@ -87,7 +87,7 @@ public class DozBibImportServlet extends MCRServlet {
 
         String targetType = formInput.getAttributeValue("targetType");
         if (targetType.startsWith("preview")) {
-            doPreview(req, res, importJob, targetType);
+            doPreview(req, res, importJob, targetType, formInput);
         } else {
             doImport(req, res, importJob);
         }
@@ -98,9 +98,14 @@ public class DozBibImportServlet extends MCRServlet {
         return ("Evaluna".equals(sourceType) ? new EvalunaImportJob() : new ListImportJob(sourceType));
     }
 
-    private void doPreview(HttpServletRequest req, HttpServletResponse res, ImportJob importJob, String targetType)
+    private void doPreview(HttpServletRequest req, HttpServletResponse res, ImportJob importJob, String targetType, Element formInput)
         throws IOException, TransformerException, SAXException {
         Element export = new Element("export");
+
+        if (formInput != null) {
+            export.addContent(formInput);
+        }
+
         for (Document mcrObj : importJob.getPublications()) {
             export.addContent(mcrObj.getRootElement().detach());
         }
