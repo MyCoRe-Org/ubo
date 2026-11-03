@@ -102,10 +102,7 @@ public class DozBibImportServlet extends MCRServlet {
         Element formInput)
         throws IOException, TransformerException, SAXException {
         Element export = new Element("export");
-
-        if (formInput != null) {
-            export.addContent(formInput);
-        }
+        export.addContent(formInput);
 
         for (Document mcrObj : importJob.getPublications()) {
             export.addContent(mcrObj.getRootElement().detach());
