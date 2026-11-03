@@ -98,7 +98,8 @@ public class DozBibImportServlet extends MCRServlet {
         return ("Evaluna".equals(sourceType) ? new EvalunaImportJob() : new ListImportJob(sourceType));
     }
 
-    private void doPreview(HttpServletRequest req, HttpServletResponse res, ImportJob importJob, String targetType, Element formInput)
+    private void doPreview(HttpServletRequest req, HttpServletResponse res, ImportJob importJob, String targetType,
+        Element formInput)
         throws IOException, TransformerException, SAXException {
         Element export = new Element("export");
 
