@@ -167,9 +167,11 @@
   </xsl:template>
 
   <xsl:template match="issued">
-    <mods:dateIssued encoding="w3cdtf">
-      <xsl:value-of select="substring(date-parts,1,4)" />
-    </mods:dateIssued>
+    <xsl:if test="date-parts/entry">
+      <mods:dateIssued encoding="w3cdtf">
+        <xsl:value-of select="substring(date-parts/entry, 1, 4)"/>
+      </mods:dateIssued>
+    </xsl:if>
   </xsl:template>
   
   <xsl:template match="publisher">
