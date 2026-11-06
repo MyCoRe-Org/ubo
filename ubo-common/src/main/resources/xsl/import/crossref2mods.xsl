@@ -27,7 +27,16 @@
       <xsl:apply-templates select="isbn-type[../type='book']/entry/value" />
     </mods:mods>
   </xsl:template>
-  
+
+  <xsl:template match="published-print | published-online">
+    <xsl:if test="string-length(date-parts/entry) &gt;= 4">
+      <!-- year-->
+      <mods:dateIssued encoding="w3cdtf">
+        <xsl:value-of select="date-parts/entry[1]"/>
+      </mods:dateIssued>
+    </xsl:if>
+  </xsl:template>
+
   <xsl:template match="title|container-title">
     <mods:titleInfo>
       <mods:title>
@@ -151,6 +160,9 @@
     <mods:originInfo>
       <xsl:apply-templates select="issued" />
       <xsl:apply-templates select="publisher" />
+
+      <xsl:apply-templates select="published-print" />
+      <xsl:apply-templates select="published-online" />
     </mods:originInfo>
   </xsl:template>
 
