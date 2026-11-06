@@ -9,7 +9,8 @@ on:
       - 'main'
       - '2025.06.x'
       - '2024.06.x'
-
+  workflow_dispatch:   
+  
 jobs:
   build:
 
