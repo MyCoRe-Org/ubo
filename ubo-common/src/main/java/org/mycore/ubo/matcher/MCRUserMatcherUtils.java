@@ -233,7 +233,7 @@ public class MCRUserMatcherUtils {
 
     private static void setUserEMail(MCRUser user, String attributeID, String attributeValue) {
         String mapEMail = MCRConfiguration2.getString(CONFIG_PREFIX + "Mapping.E-Mail").get();
-        if (attributeID.equals(mapEMail) && (user.getEMailAddress() == null)) {
+        if (attributeID.equals(mapEMail) && (user.getEMail() == null)) {
             LOGGER.debug("User " + user.getUserName() + " e-mail = " + attributeValue);
             user.setEMail(attributeValue);
         }

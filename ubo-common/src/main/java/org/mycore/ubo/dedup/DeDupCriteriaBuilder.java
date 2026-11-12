@@ -55,7 +55,7 @@ public class DeDupCriteriaBuilder {
             }
         }
 
-        DeduplicationKeyManager deduplicationKeyManager = DeduplicationKeyManager.getInstance();
+        DeduplicationKeyManager deduplicationKeyManager = DeduplicationKeyManager.obtainInstance();
 
         if (mods.getName().equals("mods") || mods.getAttributeValue("href", MCRConstants.XLINK_NAMESPACE) != null) {
             deduplicationKeyManager.clearDeduplicationKeys(id.toString());

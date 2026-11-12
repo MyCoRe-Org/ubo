@@ -67,7 +67,7 @@
 
   <article class="card mb-3" xml:lang="de">
     <div class="card-body">
-      <div class="text-right mb-3">
+      <div class="text-end mb-3">
         <div id="buttons" class="btn-group">
           <xsl:apply-templates select="." mode="actions" />
         </div>
@@ -130,9 +130,7 @@
     </xsl:if>
     <xsl:if test="$step = 'deleted'">
       <div class="section alert alert-success alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-          <xsl:text disable-output-escaping="yes">&amp;times;</xsl:text>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true"/>
         <p>
           <strong>
             <xsl:value-of select="i18n:translate('component.user2.admin.userDeleteConfirm')" />
@@ -142,9 +140,7 @@
     </xsl:if>
     <xsl:if test="$step = 'changedPassword'">
       <div class="section alert alert-success alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-          <xsl:text disable-output-escaping="yes">&amp;times;</xsl:text>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true"/>
         <p>
           <strong>
             <xsl:value-of select="i18n:translate('component.user2.admin.passwordChangeConfirm')" />
@@ -238,7 +234,7 @@
   </tr>
 </xsl:template>
 
-  <xsl:template match="attribute[contains($UBO.Additional.Displayed.Attributes, @name)]">
+  <xsl:template match="attribute[contains(concat(',', translate($UBO.Additional.Displayed.Attributes, ' ', ''), ','), concat(',', @name, ','))]">
     <xsl:variable name="label">
       <xsl:choose>
         <xsl:when test="i18n:exists(concat('user.profile.attribute.label.', @name))">
@@ -324,7 +320,7 @@
   <script src="{$WebApplicationBaseURL}modules/orcid2/js/orcid-auth.js"/>
 
   <h3>
-    <span class="far fa-hand-point-right mr-1" aria-hidden="true" />
+    <span class="far fa-hand-point-right me-1" aria-hidden="true" />
     <xsl:text> </xsl:text>
     <xsl:value-of select="i18n:translate('orcid.integration.pending.headline')" />
   </h3>

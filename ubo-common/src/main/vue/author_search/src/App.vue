@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="row" v-if="guiReady">
     <template v-if="!model.formSend">
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-5">
         <PersonSearchForm v-on:search="search"
                           :firstname="model.personModel.firstName"
                           :lastname="model.personModel.lastName"
@@ -12,19 +12,16 @@
                             :baseurl="getWebApplicationBaseURL()"
                             v-on:person_submitted="personSubmitted"
                             v-on:person_applied="personResultApplied"
-                            v-on:id_applied="idApplied"
-        />
+                            v-on:id_applied="idApplied"/>
       </div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-6 offset-lg-1">
         <PersonEditForm :person="model.personModel"
                         :is-admin="model.isAdmin"
                         :is-generate-id-enabled="model.isGenerateIdEnabled"
                         :searched="model.searched"
                         v-on:submit="personSubmitted"
                         v-on:cancel="cancel"
-                        :baseurl="getWebApplicationBaseURL()"
-
-        />
+                        :baseurl="getWebApplicationBaseURL()"/>
       </div>
     </template>
     <div v-else class="col-12 d-flex justify-content-center">

@@ -22,6 +22,7 @@ import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectStructure;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
@@ -104,7 +105,8 @@ public class DozBibEntryServlet extends MCRServlet {
         MCRObject obj = MCRMetadataManager.retrieveMCRObject(oid);
 
         // do not delete entries that have linked children, otherwise the children would be deleted too
-        List<MCRMetaLinkID> children = obj.getStructure().getChildren();
+        List<MCRMetaLinkID> children = MCRMetadataManager.retrieveMCRExpandedObject(obj.getId()).getStructure().getChildren();
+
         if (!children.isEmpty()) {
             res.sendError(HttpServletResponse.SC_CONFLICT, "entry has " + children.size() + " child(ren)");
             return;

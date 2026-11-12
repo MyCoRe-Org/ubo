@@ -11,7 +11,7 @@ import org.mycore.ubo.dedup.jpa.DeduplicationKeyManager;
 
 public class DeDupEventHandler extends MCREventHandlerBase {
 
-    private final static Logger LOGGER = LogManager.getLogger(DeDupEventHandler.class);
+    private final static Logger LOGGER = LogManager.getLogger();
 
     @Override
     protected void handleObjectCreated(MCREvent evt, MCRObject obj) {
@@ -30,14 +30,13 @@ public class DeDupEventHandler extends MCREventHandlerBase {
 
     @Override
     protected void handleObjectDeleted(MCREvent evt, MCRObject obj) {
-        LOGGER.info("clearing deduplication keys and no duplicates for object " + obj.getId().toString());
-        DeduplicationKeyManager.getInstance().clearDeduplicationKeys(obj.getId().toString());
-        DeduplicationKeyManager.getInstance().clearNoDuplicates(obj.getId().toString());
-
+        LOGGER.info("Clearing deduplication keys and no duplicates for object {}", obj.getId());
+        DeduplicationKeyManager.obtainInstance().clearDeduplicationKeys(obj.getId().toString());
+        DeduplicationKeyManager.obtainInstance().clearNoDuplicates(obj.getId().toString());
     }
 
     private void updateDeDupCriteria(MCRObject obj) {
-        LOGGER.info("updating deduplication keys for object " + obj.getId().toString());
+        LOGGER.info("Updating deduplication keys for object {}", obj.getId());
         Element mods = new MCRMODSWrapper(obj).getMODS();
         new DeDupCriteriaBuilder().updateDeDupCriteria(mods, obj.getId());
     }

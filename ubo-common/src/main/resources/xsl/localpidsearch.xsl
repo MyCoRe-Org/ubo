@@ -105,7 +105,7 @@
                     <div class="cancel-submit form-group form-inline">
                         <label class="mycore-form-label">
                         </label>
-                        <input type="submit" class="btn btn-primary mr-2" name="search" value="{i18n:translate('button.search')}" />
+                        <input type="submit" class="btn btn-primary me-2" name="search" value="{i18n:translate('button.search')}" />
                         <input type="submit" class="btn btn-primary" name="cancel" value="{i18n:translate('button.cancel')}" />
                     </div>
                     <xsl:if test="results and not(contains(@referrer,'list-wizard'))">

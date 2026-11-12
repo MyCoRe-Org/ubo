@@ -25,7 +25,7 @@
 
   <xsl:template match="mods:classification[contains(@authorityURI,'oa')]" mode="label-info">
     <xsl:variable name="category" select="$oa//category[@ID=substring-after(current()/@valueURI,'#')]" />
-    <span class="badge oa-badge oa-badge-{$category/@ID} ubo-hover-pointer mr-1" onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+oa_exact:', $category/@ID))}')">
+    <span class="badge oa-badge oa-badge-{$category/@ID} ubo-hover-pointer me-1" onclick="location.assign('{$WebApplicationBaseURL}servlets/solr/select?sort=modified+desc&amp;q={encoder:encode(concat($fq, '+oa_exact:', $category/@ID))}')">
       <xsl:value-of select="$category/label[lang($CurrentLang)]/@text"/>
     </span>
   </xsl:template>
