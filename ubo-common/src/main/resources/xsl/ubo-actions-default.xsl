@@ -12,11 +12,11 @@
     <xsl:if test="$permission.admin and not($UBO.System.ReadOnly = 'true')">
       <xsl:if test="(string-length($step) = 0) or contains($step,'merged')">
         <a class="action btn btn-sm btn-outline-primary mb-1"
-           href="{$WebApplicationBaseURL}servlets/MCRLockServlet?url=../edit-publication.xed&amp;id={/mycoreobject/@ID}">
+           href="{$WebApplicationBaseURL}servlets/MCRLockServlet?url={$WebApplicationBaseURL}edit-publication.xed&amp;id={/mycoreobject/@ID}">
           <xsl:value-of select="i18n:translate('button.edit')"/>
         </a>
         <a class="action btn btn-sm btn-outline-primary mb-1"
-           href="{$WebApplicationBaseURL}servlets/MCRLockServlet?url=../edit-admin.xed&amp;id={/mycoreobject/@ID}">Admin
+           href="{$WebApplicationBaseURL}servlets/MCRLockServlet?url={$WebApplicationBaseURL}edit-admin.xed&amp;id={/mycoreobject/@ID}">Admin
         </a>
         <xsl:if test="$permission.isSuperuser">
           <a class="action btn btn-sm btn-outline-primary mb-1"
@@ -24,7 +24,7 @@
           </a>
         </xsl:if>
         <a class="action btn btn-sm btn-outline-primary mb-1"
-           href="{$WebApplicationBaseURL}servlets/MCRLockServlet?url=../edit-mods.xed&amp;id={/mycoreobject/@ID}">MODS
+           href="{$WebApplicationBaseURL}servlets/MCRLockServlet?url={$WebApplicationBaseURL}edit-mods.xed&amp;id={/mycoreobject/@ID}">MODS
         </a>
       </xsl:if>
       <xsl:if test="string-length($step) = 0">
