@@ -8,10 +8,10 @@
 
   <xed:template id="name">
     <xed:repeat xpath="condition2[@operator='phrase']">
-      <div class="form-group form-inline">
-        <div class="mycore-form-label">
+      <div class="row mb-3">
+        <div class="col-12 col-sm-3">
           <xed:bind xpath="@field">
-            <select id="ubo-search-person" class="form-control w-100 custom-select">
+            <select id="ubo-search-person" class="form-select">
               <option value="person">Person</option>
               <option value="person_aut">
                 <xed:output i18n="search.dozbib.author"/>
@@ -28,63 +28,84 @@
             </select>
           </xed:bind>
         </div>
-        <xed:bind xpath="@value">
-          <input type="text" class="mycore-form-input"/>
-        </xed:bind>
-        <xed:controls>insert remove</xed:controls>
+        <div class="col-12 col-sm-6">
+          <div class="input-group">
+            <xed:bind xpath="@value">
+              <input type="text" class="form-control"/>
+            </xed:bind>
+            <xed:controls>insert remove</xed:controls>
+          </div>
+        </div>
       </div>
     </xed:repeat>
   </xed:template>
 
   <xed:template id="year">
     <xed:repeat xpath="condition5[@field='year']">
-      <div class="form-group form-inline">
-        <label for="{xed:generate-id()}" class="mycore-form-label">
-          <xed:output i18n="search.dozbib.year" />
+      <div class="row mb-3">
+        <label for="{xed:generate-id()}" class="col-12 col-sm-3 col-form-label text-sm-end">
+          <xed:output i18n="search.dozbib.year"/>
         </label>
-        <xed:bind xpath="@operator" initially="&gt;=">
-          <select class="form-control col-sm-1 mr-3 custom-select">
-            <option>=</option>
-            <option>&gt;</option>
-            <option>&gt;=</option>
-            <option>&lt;</option>
-            <option>&lt;=</option>
-          </select>
-        </xed:bind>
-        <xed:bind xpath="@value">
-          <input type="text" class="{$xed-validation-marker} form-control col-sm-1" placeholder="{i18n:edit.year.placeholder}" />
-          <xed:validate matches="[\d]{4}" display="global" i18n="condition.yearDoz" />
-        </xed:bind>
-        <xed:controls>insert remove</xed:controls>
+        <div class="col col-sm-1">
+          <xed:bind xpath="@operator" initially="&gt;=">
+            <select class="form-select">
+              <option>=</option>
+              <option>&gt;</option>
+              <option>&gt;=</option>
+              <option>&lt;</option>
+              <option>&lt;=</option>
+            </select>
+          </xed:bind>
+        </div>
+        <div class="col col-sm-2">
+          <div class="input-group">
+            <xed:bind xpath="@value">
+              <input type="text" class="{$xed-validation-marker} form-control" placeholder="{i18n:edit.year.placeholder}"/>
+              <xed:validate matches="[\d]{4}" display="global" i18n="condition.yearDoz"/>
+            </xed:bind>
+            <xed:controls>insert remove</xed:controls>
+          </div>
+        </div>
       </div>
     </xed:repeat>
   </xed:template>
 
   <xed:template id="sortby">
-    <div class="form-group form-inline pt-3">
-      <label class="mycore-form-label mb-lg-3">
+    <div class="row mb-3">
+      <label class="col-12 col-sm-3 col-form-label text-sm-end">
         <xed:output i18n="search.sort" />
       </label>
-      <div class="col pl-0">
+
+      <div class="col-12 col-sm">
         <xed:repeat xpath="sortBy/field" max="3">
-          <div class="form-inline mb-lg-3 pt-0">
-            <div class="align-self-center mr-sm-2">
+          <div class="row">
+            <div class="col-12 col-sm-1 d-flex align-items-center justify-content-end">
               <xed:output i18n="search.sort.by" />
             </div>
+
             <xed:bind xpath="@name">
-              <select class="form-control mr-sm-3 custom-select">
-                <option value="year"         ><xed:output i18n="search.sort.year" /></option>
-                <option value="sortby_person"><xed:output i18n="document.creators.one" /></option>
-                <option value="sortby_title" ><xed:output i18n="document.title" /></option>
-              </select>
+              <div class="col col-sm-3">
+                <select class="form-select">
+                  <option value="year"         ><xed:output i18n="search.dozbib.year" /></option>
+                  <option value="sortby_person"><xed:output i18n="document.creators.one" /></option>
+                  <option value="sortby_title" ><xed:output i18n="document.title" /></option>
+                </select>
+              </div>
             </xed:bind>
-            <xed:bind xpath="@order">
-              <select class="form-control custom-select">
-                <option value="descending"><xed:output i18n="search.sort.desc" /></option>
-                <option value="ascending" ><xed:output i18n="search.sort.asc" /></option>
-              </select>
-            </xed:bind>
-            <xed:controls />
+
+            <div class="col-12 col-sm-4">
+              <div class="input-group">
+                <xed:bind xpath="@order">
+                  <select class="form-select">
+                    <option value="descending"><xed:output i18n="search.sort.desc"/>
+                    </option>
+                    <option value="ascending"><xed:output i18n="search.sort.asc"/>
+                    </option>
+                  </select>
+                </xed:bind>
+                <xed:controls/>
+              </div>
+            </div>
           </div>
         </xed:repeat>
       </div>
@@ -92,19 +113,21 @@
   </xed:template>
 
   <xed:template id="numPerPage">
-    <div class="form-group form-inline">
-      <label class="mycore-form-label">
-        <xed:output i18n="search.hits.numPerPage" />
+    <div class="row mb-3">
+      <label class="col-12 col-sm-3 col-form-label text-sm-end">
+        <xed:output i18n="search.hits.numPerPage"/>
       </label>
-      <xed:bind xpath="@numPerPage">
-        <select class="form-control custom-select">
-          <option>10</option>
-          <option>25</option>
-          <option>50</option>
-          <option>75</option>
-          <option>100</option>
-        </select>
-      </xed:bind>
+      <div class="col-12 col-sm-1">
+        <xed:bind xpath="@numPerPage">
+          <select class="form-select">
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+            <option>75</option>
+            <option>100</option>
+          </select>
+        </xed:bind>
+      </div>
     </div>
   </xed:template>
 
@@ -112,7 +135,7 @@
     <div class="cancel-submit form-group form-inline">
       <label class="mycore-form-label">
       </label>
-      <button class="btn btn-sm btn-primary mr-2" type="submit" xed:target="servlet" xed:href="MCRQLSearchServlet">
+      <button class="btn btn-sm btn-primary me-2" type="submit" xed:target="servlet" xed:href="MCRQLSearchServlet">
         <xed:output i18n="button.search" />
       </button>
       <button class="btn btn-sm btn-primary" type="reset">

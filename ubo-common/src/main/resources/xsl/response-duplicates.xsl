@@ -149,8 +149,7 @@
   <div class="result mt-2 mb-2">
     <div class="hit card">
       <xsl:variable name="id" select="str[@name='id']" />
-      <xsl:variable name="mycoreobject" select="document(concat('mcrobject:',$id))/mycoreobject" />
-
+      <xsl:variable name="mycoreobject" select="document(concat('mcrobject:', $id, '?expanded=true'))/mycoreobject" />
       <xsl:for-each select="$mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods">
         <div class="labels card-header">
           <xsl:apply-templates select="." mode="badges"/>
@@ -162,7 +161,7 @@
         </div>
         <div class="footer card-footer">
           <xsl:call-template name="bibentry.show.details" />
-          <span class="float-right"># <xsl:value-of select="$hitNo"/></span>
+          <span class="float-end"># <xsl:value-of select="$hitNo"/></span>
         </div>
       </xsl:for-each>
     </div>

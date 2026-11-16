@@ -15,21 +15,44 @@
  * You should have received a copy of the GNU General Public License
  * along with MyCoRe.  If not, see <http://www.gnu.org/licenses/>.
  */
-$( document ).ready(function() {
-    $(".ubo-person-popover").each(function (i, popoverElement) {
-        let id = popoverElement.getAttribute("id");
-        let contentID = id + "-content";
-        let content$ = $("#" + contentID);
-        content$.detach();
-        content$.removeClass("d-none");
-        popoverElement.setAttribute("title", popoverElement.getAttribute("title") + '<div class="ubo-person-popover-close btn btn-xs"><i class="fa fa-times"></i></div>');
-        $(popoverElement).popover({
-            content: content$,
+document.addEventListener('DOMContentLoaded', async function () {
+    document.querySelectorAll(".ubo-person-popover").forEach((popoverElement) => {
+        const contentElement = document.getElementById(popoverElement.id + "-content");
+        if (!contentElement) {
+            return;
+        }
+
+        contentElement.remove();
+        contentElement.classList.remove("d-none");
+
+        popoverElement.setAttribute(
+          "title",
+          popoverElement.getAttribute("title") +
+          '<div class="ubo-person-popover-close btn btn-xs">' +
+          '<i class="fa fa-times"/>' +
+          '</div>'
+        );
+
+        new bootstrap.Popover(popoverElement, {
+            content: contentElement,
             html: true
-        })
+        });
     });
 
-    $("body").on("click", ".ubo-person-popover-close", function(e){
-        $(this).parents(".popover").popover("hide");
+    /** Since the close button lives inside the popover markup — which Bootstrap builds and destroys on every show/hide
+     *  — you can't bind to it directly at init time. Use a delegated listener on the document instead
+     *  */
+    document.addEventListener("click", (event) => {
+        const closeBtn = event.target.closest(".ubo-person-popover-close");
+        if (!closeBtn) return;
+
+        const tip = closeBtn.closest(".popover");
+        if (!tip) return;
+
+        const trigger = document.querySelector('[aria-describedby="' + tip.id + '"]');
+        if (!trigger) {
+            return;
+        }
+        bootstrap.Popover.getInstance(trigger)?.hide();
     });
 });

@@ -18,7 +18,7 @@ public class SolrRequireResultsResolver implements URIResolver {
     public Source resolve(String href, String base) throws TransformerException {
         final String subHref = href.substring(href.indexOf(":") + 1);
 
-        Element solrResults = MCRURIResolver.instance().resolve(subHref);
+        Element solrResults = MCRURIResolver.obtainInstance().resolve(subHref);
         Element result = solrResults.getChild("result");
         if (result == null) {
             throw new MCRException("There were no search results for " + subHref);

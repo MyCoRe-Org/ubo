@@ -38,15 +38,15 @@
 <xsl:template name="actions">
   <xsl:for-each select="/basket[entry]">
     <div id="buttons" class="btn-group mb-3 flex-wrap">
-      <a class="action btn btn-sm btn-primary mb-1" href="{$ServletsBaseURL}MCRBasketServlet?type=objects&amp;action=clear">
-        <xsl:value-of select="i18n:translate('button.clear')" />
-      </a>
       <xsl:choose>
         <xsl:when test="$UBO.System.ReadOnly = 'true'" />
         <xsl:when xmlns:check="xalan://org.mycore.ubo.AccessControl" test="check:currentUserIsAdmin()">
           <a class="action btn btn-sm btn-primary mb-1" href="{$WebApplicationBaseURL}edit-contributors.xed">Personen zuordnen</a>
         </xsl:when>
       </xsl:choose>
+      <a class="action btn btn-sm btn-secondary mb-1" href="{$ServletsBaseURL}MCRBasketServlet?type=objects&amp;action=clear">
+        <xsl:value-of select="i18n:translate('button.clear')" />
+      </a>
     </div>
     <xsl:call-template name="exportGUI">
       <xsl:with-param name="type" select="'basket'" />
@@ -119,7 +119,7 @@
 
   <xsl:choose>
     <xsl:when test="$condition">
-      <a href="MCRBasketServlet?action={$action}&amp;type={/basket/@type}&amp;id={$ancestor_id}" class="btn btn-sm btn-primary ml-1">
+      <a href="MCRBasketServlet?action={$action}&amp;type={/basket/@type}&amp;id={$ancestor_id}" class="btn btn-sm btn-primary ms-1">
         <img alt="{$alt}" src="{$WebApplicationBaseURL}images/{$image}" />
       </a>
     </xsl:when>
@@ -181,7 +181,7 @@
   <xsl:param name="last"/>
   <xsl:param name="ancestor_id"/>
 
-  <div class="buttons float-right">
+  <div class="buttons float-end">
     <xsl:call-template name="button">
       <xsl:with-param name="image">pmud-up.png</xsl:with-param>
       <xsl:with-param name="action">up</xsl:with-param>

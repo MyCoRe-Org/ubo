@@ -48,7 +48,8 @@ public class UBOPersonSearchResource {
         }
 
         String classPrefix = MCRConfiguration2.getStringOrThrow(STRATEGY_CONFIG_STRING);
-        IdentityService service = (IdentityService) MCRConfiguration2.instantiateClass(classPrefix + STRATEGY_CLASS_SUFFIX);
+        IdentityService service = MCRConfiguration2.instantiateClass(IdentityService.class,
+            classPrefix + STRATEGY_CLASS_SUFFIX);
 
 
         try {

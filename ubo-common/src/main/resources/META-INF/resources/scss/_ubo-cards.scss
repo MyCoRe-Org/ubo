@@ -6,11 +6,11 @@
 // no (xl) media query necessary (desktop first)
 
   .bg-card-body1 {
-    @extend .bg-light;
+    background-color: $light;
   }
 
   .bg-card-body2 {
-    @extend .bg-white;
+    background-color: $white;
   }
 
   // change border position
