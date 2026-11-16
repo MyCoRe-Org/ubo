@@ -142,9 +142,7 @@
                   <xed:output i18n="ubo.import.list.label.outputFormat" />:
                 </label>
                 <select id="import-list-output-format-select" class="form-control  mycore-form-input custom-select">
-                  <option value="preview-html">Vorschau (HTML)</option>
-                  <option value="preview-mods-raw">Vorschau (MODS)</option>
-                  <option value="import">direkt importieren</option>
+                  <xed:include uri="xslStyle:mycoreclass-options:classification:metadata:-1:children:import-list-output-format" />
                 </select>
               </div>
             </xed:bind>

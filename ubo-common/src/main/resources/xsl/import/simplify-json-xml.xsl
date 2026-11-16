@@ -20,7 +20,13 @@
       <xsl:apply-templates select="*" />
     </entry>
   </xsl:template>
-  
+
+  <xsl:template match="xpf:array[not(@key)]/xpf:*">
+    <entry>
+      <xsl:value-of select="text()"/>
+    </entry>
+  </xsl:template>
+
   <xsl:template match="text()">
     <xsl:copy-of select="." />
   </xsl:template>

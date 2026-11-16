@@ -31,6 +31,7 @@ services:
       - JDBC_PASSWORD=${DB_PASSWORD}
       - JDBC_DRIVER=org.postgresql.Driver
       - JDBC_URL=jdbc:postgresql://db:5432/ubo
+      - JDBC_CONNECTION_POOL_SIZE=${DB_CONNECTION_POOL}
       - SOLR_URL=http://solr:8983
       - SOLR_CORE=ubo
       - SOLR_CLASSIFICATION_CORE=ubo-classifications

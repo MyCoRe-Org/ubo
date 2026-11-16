@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- Converts PubMed core format to MODS -->
-<!-- http://www.ebi.ac.uk/europepmc/webservices/rest/search/resulttype=core&query=ext_id:26063869 -->
+<!-- http://www.ebi.ac.uk/europepmc/webservices/rest/search?resulttype=core&query=ext_id:26063869 -->
 
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
