@@ -29,8 +29,6 @@
   <xsl:param name="UBO.DESTATIS.omit.ID"/>
   <xsl:param name="UBO.Affiliation.Suppress.ConnectedIndicator"/>
 
-  <xsl:param name="current-user" select="document('notnull:user:current')/user"/>
-
   <!-- Expect one more author to be displayed as the last author is always getting displayed -->
   <xsl:param name="UBO.Initially.Visible.Authors" select="14" />
 
