@@ -1,0 +1,16 @@
+name: Pull Request Checks
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    concurrency:
+      group: pr-checks-${{ github.repository }}-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    uses: MyCoRe-Org/github-workflows/.github/workflows/maven-build.yml@v1
+    with:
+      java-version: '21'
