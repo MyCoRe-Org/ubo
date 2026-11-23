@@ -1,0 +1,41 @@
+name: Maven Snapshot Deploy
+
+on:
+  push:
+    branches:
+      - 'main'
+      - '[0-9][0-9][0-9][0-9].[0-9][0-9].x'
+  # needed by dispatch-downstream and the weekly snapshot refresh
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    concurrency:
+      group: snapshot-deploy-${{ github.repository }}-${{ github.ref_name }}
+      cancel-in-progress: true
+    uses: MyCoRe-Org/github-workflows/.github/workflows/maven-deploy.yml@v1
+    with:
+      java-version: '21'
+      docker-images: |
+        mycoreorg/ubo . Dockerfile
+        mycoreorg/ubo-solr ubo-webapp/src/main/solr/
+    secrets:
+      MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+      MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  # Rebuilds dependent projects after a push, see
+  # https://github.com/MyCoRe-Org/github-workflows/blob/main/docs/dispatch-downstream.md
+  # downstream:
+  #   needs: deploy
+  #   if: github.event_name == 'push'
+  #   uses: MyCoRe-Org/github-workflows/.github/workflows/dispatch-downstream.yml@v1
+  #   with:
+  #     targets: |
+  #       MyCoRe-Org/<repository> maven-snapshot.yml
+  #   secrets:
+  #     DISPATCH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
