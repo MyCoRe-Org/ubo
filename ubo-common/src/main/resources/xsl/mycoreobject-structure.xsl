@@ -178,7 +178,7 @@
         <xsl:variable name="duplicates" select="document(concat('dedup:search:', $from ,':', $id))"/>
 
         <xsl:for-each select="document($duplicates)/result/duplicate">
-            <xsl:apply-templates select="document(concat('mcrobject:', @id, '?expanded=true'))/mycoreobject" mode="pub-info">
+            <xsl:apply-templates select="document(concat('notnull:mcrobject:', @id, '?expanded=true'))/mycoreobject" mode="pub-info">
                 <xsl:with-param name="role">duplicate</xsl:with-param>
                 <xsl:with-param name="from" select="$from"/>
                 <xsl:with-param name="duplicateOfID" select="$id"/>
